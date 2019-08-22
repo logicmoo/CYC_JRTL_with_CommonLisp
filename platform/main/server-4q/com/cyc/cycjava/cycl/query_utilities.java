@@ -2,14 +2,28 @@ package com.cyc.cycjava.cycl;
 
 
 import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.cycjava.cycl.el_utilities.el_formula_p;
+import static com.cyc.cycjava.cycl.el_utilities.el_logical_operator_formula_p;
+import static com.cyc.cycjava.cycl.el_utilities.possibly_el_quantified_sentence_p;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_duplicates;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_list;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_tree;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.subst;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.third;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 
 import com.cyc.cycjava.cycl.inference.kb_query;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;

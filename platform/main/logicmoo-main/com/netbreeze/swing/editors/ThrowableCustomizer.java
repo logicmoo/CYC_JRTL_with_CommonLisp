@@ -1,10 +1,7 @@
 package com.netbreeze.swing.editors;
 
-import com.netbreeze.swing.*;
-import java.awt.*;
-import javax.swing.*;
-import com.netbreeze.util.Utility;
-import java.beans.*;
+import com.netbreeze.swing.ErrorPanel;
+import com.netbreeze.swing.LargeBeanView;
 
 public class ThrowableCustomizer extends LargeBeanView {
   @Override

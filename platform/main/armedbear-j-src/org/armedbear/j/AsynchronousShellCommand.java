@@ -24,6 +24,7 @@ package org.armedbear.j;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
 import javax.swing.SwingUtilities;
 
 public final class AsynchronousShellCommand implements Constants, Runnable

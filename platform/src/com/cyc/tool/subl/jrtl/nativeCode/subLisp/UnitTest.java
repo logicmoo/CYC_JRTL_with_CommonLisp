@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.armedbear.lisp.Main;
-import org.jpl7.fli.Prolog;
 import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence;

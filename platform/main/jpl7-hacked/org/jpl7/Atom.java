@@ -2,7 +2,6 @@ package org.jpl7;
 
 import java.util.Map;
 
-import org.armedbear.lisp.Lisp;
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
 

@@ -1,10 +1,17 @@
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import com.netbreeze.util.*;
-import java.util.*;
-import java.io.*;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+
+import com.netbreeze.util.ClassFinder;
 /**
  * A ComboBox model for lists of classes. The list of classes
  * is limited by choosing an ancestor, a certain

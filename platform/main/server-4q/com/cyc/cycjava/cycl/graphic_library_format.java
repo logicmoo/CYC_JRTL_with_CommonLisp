@@ -2,20 +2,34 @@ package com.cyc.cycjava.cycl;
 
 
 import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.plusp;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.def_csetf;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.makeStructDeclNative;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.register_method;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.prin1;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.terpri;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.write_string;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.defconstant;
 
 import org.armedbear.lisp.Lisp;
 

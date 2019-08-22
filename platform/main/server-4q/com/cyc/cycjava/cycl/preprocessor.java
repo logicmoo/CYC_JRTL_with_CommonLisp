@@ -1,19 +1,36 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_S;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_s;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.alpha_char_p;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.digit_char_p;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.nconc;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.equal;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.position_if;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.reverse;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.last;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.third;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

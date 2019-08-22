@@ -1,16 +1,14 @@
 package com.netbreeze.swing;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.util.*;
-import java.lang.reflect.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.BorderLayout;
+import java.lang.reflect.Method;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.logicmoo.bb.BeansContext;
 
-import com.netbreeze.util.*;
+import com.netbreeze.util.Utility;
 
 /**
  * A GUI component showing the parameters of a method.

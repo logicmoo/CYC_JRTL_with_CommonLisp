@@ -1,6 +1,8 @@
 package com.cyc.cycjava.cycl.inference.browser;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 
 import com.cyc.cycjava.cycl.cb_utilities;
 import com.cyc.cycjava.cycl.utilities_macros;

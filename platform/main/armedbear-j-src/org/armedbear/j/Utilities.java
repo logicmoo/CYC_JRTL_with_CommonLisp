@@ -21,9 +21,6 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.REMatch;
-import gnu.regexp.UncheckedRE;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -37,8 +34,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +41,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipInputStream;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -53,8 +49,13 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 
 public final class Utilities implements Constants
 {

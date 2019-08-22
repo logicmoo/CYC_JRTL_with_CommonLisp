@@ -21,9 +21,6 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.REMatch;
-import gnu.regexp.UncheckedRE;
 import java.awt.AWTEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -33,6 +30,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 
 public final class ArchiveMode extends AbstractMode implements Constants, Mode
 {

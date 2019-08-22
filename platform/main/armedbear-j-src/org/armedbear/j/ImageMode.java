@@ -21,8 +21,6 @@
 
 package org.armedbear.j;
 
-import java.awt.Color;
-
 public final class ImageMode extends AbstractMode implements Constants, Mode
 {
     private static final String MENU_NAME = "ImageMode";

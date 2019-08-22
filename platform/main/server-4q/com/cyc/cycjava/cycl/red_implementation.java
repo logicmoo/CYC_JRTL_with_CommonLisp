@@ -3,7 +3,10 @@ package com.cyc.cycjava.cycl;
 
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Alien;

@@ -21,8 +21,9 @@
 
 package org.armedbear.j.mail;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
 import org.armedbear.j.FastStringBuffer;
 
 public final class Base64Encoder

@@ -26,8 +26,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Vector;
+
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
+
 import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
 import org.armedbear.j.FastStringBuffer;

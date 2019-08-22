@@ -1,18 +1,24 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.sublisp_throw;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.eq;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.apply;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.function_spec_p;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_tva_utilities;

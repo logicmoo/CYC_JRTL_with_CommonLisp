@@ -24,6 +24,7 @@ package org.armedbear.j;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JTextArea;

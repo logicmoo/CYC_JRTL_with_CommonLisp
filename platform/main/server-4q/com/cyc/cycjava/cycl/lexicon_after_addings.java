@@ -7,8 +7,10 @@ import static com.cyc.cycjava.cycl.utilities_macros.register_kb_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.eval;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

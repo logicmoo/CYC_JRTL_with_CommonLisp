@@ -53,11 +53,9 @@ import org.w3c.dom.NodeList;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSemaphore;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
 import eu.larkc.core.orchestrator.CycUtil;
-import eu.larkc.core.orchestrator.OwlToCycMapping;
 import eu.larkc.plugin.Plugin;
 import eu.larkc.plugin.decide.Decider;
 

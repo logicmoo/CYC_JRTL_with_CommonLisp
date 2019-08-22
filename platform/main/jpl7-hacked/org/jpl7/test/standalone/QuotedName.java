@@ -1,18 +1,25 @@
 package org.jpl7.test.standalone;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Map;
+
 import org.armedbear.lisp.Main;
-import org.jpl7.*;
+import org.jpl7.Atom;
+import org.jpl7.Compound;
+import org.jpl7.PrologException;
+import org.jpl7.Query;
+import org.jpl7.Term;
+import org.jpl7.Util;
+import org.jpl7.Variable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import static org.junit.Assert.*;
 
 public class QuotedName {
 	//    final Logger logger = LoggerFactory.getLogger(GetSolution.class);

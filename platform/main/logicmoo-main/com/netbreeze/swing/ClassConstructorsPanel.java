@@ -2,16 +2,18 @@
 
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import javax.swing.border.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Constructor;
+import java.util.Hashtable;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
 
 import org.logicmoo.bb.BeansContext;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.util.*;
-import java.lang.reflect.*;
 
 /**
  * A GUI component that shows all the constructors provided by a given class

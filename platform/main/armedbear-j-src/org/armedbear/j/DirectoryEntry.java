@@ -21,9 +21,10 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.REMatch;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import gnu.regexp.REMatch;
 
 public final class DirectoryEntry
 {

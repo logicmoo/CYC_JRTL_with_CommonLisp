@@ -20,9 +20,6 @@ package eu.larkc.core.pluginManager.local;
 
 import java.util.Collection;
 
-import org.openrdf.model.Statement;
-
-import eu.larkc.core.data.CloseableIterator;
 import eu.larkc.core.data.InformationSet;
 import eu.larkc.core.pluginManager.PluginManager;
 import eu.larkc.core.pluginManager.local.queue.Queue;

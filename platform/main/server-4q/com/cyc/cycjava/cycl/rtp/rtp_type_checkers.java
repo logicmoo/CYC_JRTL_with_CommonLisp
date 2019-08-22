@@ -2,14 +2,25 @@ package com.cyc.cycjava.cycl.rtp;
 
 
 import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.el_utilities.el_formula_p;
+import static com.cyc.cycjava.cycl.el_utilities.formula_arityE;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.third;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 
 import com.cyc.cycjava.cycl.cycl_grammar;
 import com.cyc.cycjava.cycl.cycl_utilities;

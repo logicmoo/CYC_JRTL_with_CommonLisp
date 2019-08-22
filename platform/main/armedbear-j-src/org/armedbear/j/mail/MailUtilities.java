@@ -22,6 +22,7 @@
 package org.armedbear.j.mail;
 
 import java.util.List;
+
 import org.armedbear.j.FastStringBuffer;
 import org.armedbear.j.Utilities;
 

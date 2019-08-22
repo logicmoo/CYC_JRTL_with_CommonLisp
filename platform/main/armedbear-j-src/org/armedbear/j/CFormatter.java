@@ -23,7 +23,6 @@ package org.armedbear.j;
 
 import gnu.regexp.RE;
 import gnu.regexp.UncheckedRE;
-import java.util.HashSet;
 
 public final class CFormatter extends Formatter implements Constants
 {

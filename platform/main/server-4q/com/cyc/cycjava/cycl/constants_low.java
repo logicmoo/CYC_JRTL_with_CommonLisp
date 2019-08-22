@@ -7,15 +7,41 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.constant_handles._csetf_c_name;
+import static com.cyc.cycjava.cycl.constant_handles.c_name;
+import static com.cyc.cycjava.cycl.constant_handles.constant_count;
+import static com.cyc.cycjava.cycl.constant_handles.constant_p;
+import static com.cyc.cycjava.cycl.constant_handles.constant_suid;
+import static com.cyc.cycjava.cycl.constant_handles.deregister_constant_suid;
+import static com.cyc.cycjava.cycl.constant_handles.deregister_invalid_constant_by_name;
+import static com.cyc.cycjava.cycl.constant_handles.find_constant_by_suid;
+import static com.cyc.cycjava.cycl.constant_handles.free_constant;
+import static com.cyc.cycjava.cycl.constant_handles.install_constant_suid;
+import static com.cyc.cycjava.cycl.constant_handles.make_constant_shell;
+import static com.cyc.cycjava.cycl.constant_handles.make_constant_suid;
+import static com.cyc.cycjava.cycl.constant_handles.new_constants_iterator;
+import static com.cyc.cycjava.cycl.constant_handles.next_constant_suid;
+import static com.cyc.cycjava.cycl.constant_handles.register_invalid_constant_by_name;
+import static com.cyc.cycjava.cycl.id_index.clear_id_index;
+import static com.cyc.cycjava.cycl.id_index.id_index_enter;
+import static com.cyc.cycjava.cycl.id_index.id_index_lookup;
+import static com.cyc.cycjava.cycl.id_index.id_index_p;
+import static com.cyc.cycjava.cycl.id_index.id_index_remove;
+import static com.cyc.cycjava.cycl.id_index.new_id_index;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.clrhash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.remhash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 
 import com.cyc.cycjava.cycl.inference.arete;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

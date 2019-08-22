@@ -2,9 +2,11 @@ package com.cyc.cycjava.cycl.sbhl;
 
 
 import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
+import static com.cyc.cycjava.cycl.el_utilities.make_ternary_formula;
 import static com.cyc.cycjava.cycl.utilities_macros.register_kb_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.cycjava.cycl.hlmt_relevance;

@@ -1,7 +1,22 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.PACKAGE_CYC;
+import static org.armedbear.lisp.Lisp.UNBOUND_VALUE;
+import static org.armedbear.lisp.Lisp.addFeature;
+import static org.armedbear.lisp.Lisp.checkSymbol;
+import static org.armedbear.lisp.Lisp.cold;
+import static org.armedbear.lisp.Lisp.getDotName;
+import static org.armedbear.lisp.Lisp.initialized;
+import static org.armedbear.lisp.Lisp.internKeyword;
+import static org.armedbear.lisp.Lisp.isTooSoon;
+import static org.armedbear.lisp.Lisp.list;
+import static org.armedbear.lisp.Lisp.quote;
+import static org.armedbear.lisp.Lisp.readObjectFromString;
+import static org.armedbear.lisp.Lisp.valueOfString;
+import static org.logicmoo.system.Startup.addObject;
+import static org.logicmoo.system.Startup.create_constant;
+import static org.logicmoo.system.Startup.find_constant_by_name;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -20,7 +35,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.armedbear.j.Debug;
 import org.armedbear.lisp.Cons;
 import org.armedbear.lisp.Go;
 import org.armedbear.lisp.JavaObject;
@@ -33,7 +47,6 @@ import org.armedbear.lisp.Symbol;
 import org.jpl7.Atom;
 import org.jpl7.Term;
 import org.jpl7.fli.term_t;
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
@@ -154,7 +167,7 @@ public class LispSync extends SubLTrampolineFile {
 			return;
 		addAnyTypeThing("SUBLFILE", file);
 		// TODO SLOW
-		BeanShellCntrl.addSingleton(file);
+		addSingleton(file);
 	}
 
 	private static void addStaticFields(String prefix, Class class1) {
@@ -181,10 +194,10 @@ public class LispSync extends SubLTrampolineFile {
 						if (true) {
 							continue;
 						}
-						value = new bsh.LHS(value, f.getName());
+						//value = new bsh.LHS(value, f.getName());
 					}
 
-					BeanShellCntrl.addObject(prefix + f.getName(), value);
+					addObject(prefix + f.getName(), value);
 				} catch (final Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -310,7 +323,7 @@ public class LispSync extends SubLTrampolineFile {
 	}
 
 	public static void bp() {
-		BeanShellCntrl.bp();
+		bp();
 	}
 
 	private static Atom checkReady(AbstractSubLStruct struct) {
@@ -415,10 +428,10 @@ public class LispSync extends SubLTrampolineFile {
 		 * if (fvs.isInteger()) { serial = fvs.longValue(); }
 		 * 
 		 * if (serial < 0) { serial = System.identityHashCode(struct); // final BeanBowl
-		 * guibowl = BeanShellCntrl.bowl; // serial =
+		 * guibowl = bowl; // serial =
 		 * guibowl.generateUniqueName(className, struct); // // if (!Main.noBSHGUI) { //
 		 * final String nthInstance = nthInstance(className, serial); //
-		 * BeanShellCntrl.addObject(nthInstance, struct); } addTypeThing(className,
+		 * addObject(nthInstance, struct); } addTypeThing(className,
 		 * struct);
 		 */
 		return extractedLisp(struct, className, serial);
@@ -746,9 +759,9 @@ public class LispSync extends SubLTrampolineFile {
 		SimpleString cs = str(constname);
 		if (true)
 			return cs;
-		SubLObject lo = BeanShellCntrl.find_constant_by_name(cs);
+		SubLObject lo = find_constant_by_name(cs);
 		if (lo == null || lo == NIL) {
-			lo = BeanShellCntrl.create_constant(cs, (SubLBoolean) NIL);
+			lo = create_constant(cs, (SubLBoolean) NIL);
 		}
 		return (LispObject) lo;
 	}
@@ -832,8 +845,8 @@ public class LispSync extends SubLTrampolineFile {
 
 	public static void initializeTypes() {
 		addStaticFields(null, LispSync.class);
-		// assert BeanShellCntrl.gui!=null;
-		addStaticFields(null, BeanShellCntrl.class);
+		// assert gui!=null;
+		///addStaticFields(null, class);
 	}
 
 	private static void lispCall(String assertRetract, String className, long serial, Term shouldBe) {
@@ -898,7 +911,7 @@ public class LispSync extends SubLTrampolineFile {
 		if (!Main.noBSH) {
 			addSingleton(this);
 		}
-		BeanShellCntrl.addObject("mapClass2Refs", mapClass2Refs);
+		addObject("mapClass2Refs", mapClass2Refs);
 		addStaticFields(null, LispSync.class);
 	}
 
@@ -1124,6 +1137,65 @@ public class LispSync extends SubLTrampolineFile {
 		return true;
 	}
 
+	/**
+	 * TODO Describe this type briefly. 
+	 * If necessary include a longer description and/or an example.
+	 * 
+	 * @author Administrator
+	 *
+	 */
+	private static final class ScannerThread extends Thread {
+		{
+			setName("LispSync.doReadyList");
+		}
+
+		@Override
+		public void run() {
+			// SystemCurrent.attachConsole();
+			while (true) {
+				if (needsDone == 0 || !lispReady) {
+					try {
+						Thread.sleep((long) 250);
+						if (Main.disableLispSync)
+							continue;
+						final int size;
+						synchronized (laterList) {
+							size = laterList.size();
+
+						}
+						if (size > 0) {
+							needsDone = size;
+						}
+						if (size < 1000) {
+							if (size <= lastSize + 100) {
+								continue;
+							}
+						} else if (size < 10000) {
+							if (size <= lastSize + 1000) {
+								continue;
+							}
+						} else {
+							if (size <= lastSize + 10000) {
+								continue;
+							}
+						}
+						lastSize = size;
+						// println("laterlist = " + size);
+					} catch (Throwable e) {
+						return;
+					}
+					continue;
+				}
+				try {
+					doReadyListNow();
+				} catch (Throwable t) {
+					t.printStackTrace();
+					continue;
+				}
+			}
+		}
+	}
+
 	protected static final class SyncSoon implements Map.Entry {
 		private final AbstractSubLStruct struct;
 
@@ -1260,60 +1332,15 @@ public class LispSync extends SubLTrampolineFile {
 
 	static int lastSize = 0;
 
-	private static Thread neddsDoneThread = new Thread() {
-		{
-			setName("LispSync.doReadyList");
-		}
-
-		@Override
-		public void run() {
-			// SystemCurrent.attachConsole();
-			while (true) {
-				if (needsDone == 0 || !lispReady) {
-					try {
-						Thread.sleep((long) 250);
-						if (Main.disableLispSync)
-							continue;
-						final int size;
-						synchronized (laterList) {
-							size = laterList.size();
-
-						}
-						if (size > 0) {
-							needsDone = size;
-						}
-						if (size < 1000) {
-							if (size <= lastSize + 100) {
-								continue;
-							}
-						} else if (size < 10000) {
-							if (size <= lastSize + 1000) {
-								continue;
-							}
-						} else {
-							if (size <= lastSize + 10000) {
-								continue;
-							}
-						}
-						lastSize = size;
-						// println("laterlist = " + size);
-					} catch (Throwable e) {
-						return;
-					}
-					continue;
-				}
-				try {
-					doReadyListNow();
-				} catch (Throwable t) {
-					t.printStackTrace();
-					continue;
-				}
-			}
-		};
-	};
+	private static Thread neddsDoneThread = null;//new ScannerThread();
 	static {
-		Debug.assertTrue("METHOD-COMBINATION".matches(".*-.*"));
-		neddsDoneThread.start();
+		//Debug.assertTrue("METHOD-COMBINATION".matches(".*-.*"));
+		if (!Main.disableLispSync) {
+			if (neddsDoneThread == null) {
+				neddsDoneThread = new ScannerThread();
+			}
+			neddsDoneThread.start();
+		}
 	}
 
 	public static void wasSetField(AbstractSubLStruct structureObject, int slotNum, int pingAt, Object was, Object value) {
@@ -1359,7 +1386,7 @@ public class LispSync extends SubLTrampolineFile {
 
 	static {
 		addStaticFields(null, LispSync.class);
-		BeanShellCntrl.addObject("mapClass2Refs", mapClass2Refs);
+		addObject("mapClass2Refs", mapClass2Refs);
 	}
 
 	public static LispObject cycL(String name, AbstractSubLStruct s, java.util.List l) {

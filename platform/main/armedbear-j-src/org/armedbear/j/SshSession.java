@@ -21,15 +21,17 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.REException;
-import gnu.regexp.REMatch;
-import gnu.regexp.UncheckedRE;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.SwingUtilities;
+
+import gnu.regexp.RE;
+import gnu.regexp.REException;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 
 public final class SshSession implements Constants
 {

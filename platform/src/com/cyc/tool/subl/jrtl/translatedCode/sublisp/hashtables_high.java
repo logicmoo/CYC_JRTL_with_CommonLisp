@@ -9,12 +9,10 @@
  */
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 
-
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeHashtableIterator;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-
-import org.logicmoo.system.BeanShellCntrl;
+import static org.logicmoo.system.Startup.addSubLFile;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -86,7 +84,7 @@ public class hashtables_high implements SubLFile {
     }
 
     public hashtables_high() {
-        BeanShellCntrl.addSubLFile(this);
+        addSubLFile(this);
     }
 }
 

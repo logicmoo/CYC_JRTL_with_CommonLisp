@@ -1,12 +1,16 @@
 package com.netbreeze.bbowl.gui;
 
-import javax.swing.*;
-import com.netbreeze.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.net.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 
-import org.apache.log4j.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import org.apache.log4j.Category;
 
 public class Icons {
   static Category cat = Category.getInstance(Icon.class);

@@ -18,24 +18,16 @@
  */
 package eu.larkc.core.pluginManager.distributed.GAT;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import eu.larkc.core.data.InformationSet;
-import eu.larkc.core.data.SetOfStatements;
+import eu.larkc.core.gatresource.GATResource;
 import eu.larkc.core.pluginManager.PluginManager;
-import eu.larkc.core.pluginManager.distributed.GAT.RemotePluginManager.RemoteContainerStub;
 import eu.larkc.core.pluginManager.local.queue.Queue;
-import eu.larkc.core.query.SPARQLQuery;
 import eu.larkc.plugin.Context;
 import eu.larkc.plugin.Contract;
-import eu.larkc.plugin.reason.Reasoner;
 import eu.larkc.plugin.transform.InformationSetTransformer;
-import eu.larkc.core.gatresource.GATResource;
 
 
 /**

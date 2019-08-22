@@ -34,7 +34,10 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.PACKAGE_CL;
+import static org.armedbear.lisp.Lisp._SOURCE_;
+import static org.armedbear.lisp.Lisp._WARN_ON_REDEFINITION_;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

@@ -2,16 +2,31 @@ package com.cyc.cycjava.cycl.sksi.sksi_infrastructure;
 
 
 import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.listp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
+import static com.cyc.tool.subl.util.SubLFiles.defvar;
 
 import com.cyc.cycjava.cycl.file_hash_table;
 import com.cyc.cycjava.cycl.format_nil;

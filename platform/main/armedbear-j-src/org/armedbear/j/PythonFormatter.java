@@ -21,9 +21,6 @@
 
 package org.armedbear.j;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public final class PythonFormatter extends Formatter
 {
     private static final int PYTHON_STATE_NEUTRAL       =  0;

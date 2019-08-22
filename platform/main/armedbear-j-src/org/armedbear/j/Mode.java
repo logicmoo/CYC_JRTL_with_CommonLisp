@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JPopupMenu;
 
 /**

@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry exported="true" kind="lib" path="C:/pf/Java/jdk1.8.0_162/lib/tools.jar"/>
 	<classpathentry kind="lib" path="lib/bcel-6.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1566461784979/source/bsh-2.0b5-sources.jar"/>
 	<classpathentry exported="true" kind="src" path="/spoon"/>
 	<classpathentry kind="src" path="main/cycjava-persistence-hacks"/>
 	<classpathentry excluding="bsh/|org/logicmoo/system/spoon/gen/|org/logicmoo/translate/spoon/gen/|org/logicmoo/translate/spoon/spoon_test.java|com/cyc/cycjava_2/cycl/" kind="src" path="main/logicmoo-main"/>
@@ -315,5 +316,5 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="target/classes"/>
+	<classpathentry kind="output" path="target/eclipse-classes"/>
 </classpath>

@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+
 import javax.swing.JPanel;
 
 public class ConfirmDialog extends MessageDialog implements Constants

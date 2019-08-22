@@ -18,18 +18,11 @@
  */
 package eu.larkc.core.orchestrator.servers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.StringBufferInputStream;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -51,8 +44,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.sun.net.httpserver.Headers;
 
 
 public class SPARQLServlet extends HttpServlet

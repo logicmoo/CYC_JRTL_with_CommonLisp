@@ -1,6 +1,8 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import static org.logicmoo.system.Startup.addSubLFile;
+
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,7 +14,6 @@ import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Main;
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.JVMImpl;
 import org.logicmoo.system.Startup;
 
@@ -408,6 +409,6 @@ public class Eval implements SubLFile {
 	}
 
 	public Eval() {
-		BeanShellCntrl.addSubLFile(this);
+		addSubLFile(this);
 	}
 }

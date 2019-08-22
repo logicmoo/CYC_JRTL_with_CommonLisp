@@ -1,7 +1,7 @@
 
 
 package com.netbreeze.swing;
-import java.awt.*;
+import java.awt.Component;
 
 public class InvalidComponentException extends Exception {
   Component component;

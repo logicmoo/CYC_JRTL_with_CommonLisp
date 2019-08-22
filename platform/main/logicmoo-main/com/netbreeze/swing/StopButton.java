@@ -2,8 +2,11 @@
 
 package com.netbreeze.swing;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 /**
 * A StatusButton that looks like the "stop" button
 * on a stereo (with a black square).

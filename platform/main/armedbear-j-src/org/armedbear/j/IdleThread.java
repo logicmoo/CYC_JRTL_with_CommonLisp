@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.util.Vector;
+
 import javax.swing.SwingUtilities;
 
 public class IdleThread extends Thread

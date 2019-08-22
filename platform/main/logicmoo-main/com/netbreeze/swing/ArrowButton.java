@@ -2,8 +2,15 @@
 
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 /**
  * A button showing an arrow point right, left, up, or down.

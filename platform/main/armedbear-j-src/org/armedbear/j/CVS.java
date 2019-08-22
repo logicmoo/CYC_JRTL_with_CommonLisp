@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.util.List;
+
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 

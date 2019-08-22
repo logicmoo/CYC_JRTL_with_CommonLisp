@@ -22,6 +22,7 @@
 package org.armedbear.j.mail;
 
 import java.awt.event.KeyEvent;
+
 import org.armedbear.j.Editor;
 import org.armedbear.j.Frame;
 import org.armedbear.j.KeyMap;

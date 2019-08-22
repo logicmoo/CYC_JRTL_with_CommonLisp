@@ -21,11 +21,12 @@
 
 package org.armedbear.j;
 
+import java.awt.AWTEvent;
+import java.awt.event.MouseEvent;
+
 import gnu.regexp.RE;
 import gnu.regexp.REMatch;
 import gnu.regexp.UncheckedRE;
-import java.awt.AWTEvent;
-import java.awt.event.MouseEvent;
 
 public final class GotoFile implements Constants
 {

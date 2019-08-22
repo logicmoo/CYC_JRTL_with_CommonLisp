@@ -21,12 +21,6 @@
 
 package org.armedbear.j.jdb;
 
-import com.sun.jdi.IncompatibleThreadStateException;
-import com.sun.jdi.Location;
-import com.sun.jdi.Method;
-import com.sun.jdi.StackFrame;
-import com.sun.jdi.ThreadReference;
-import com.sun.jdi.VirtualMachine;
 import java.awt.Component;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -34,16 +28,25 @@ import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
-import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.File;
 import org.armedbear.j.JavaSource;
 import org.armedbear.j.Log;
+
+import com.sun.jdi.IncompatibleThreadStateException;
+import com.sun.jdi.Location;
+import com.sun.jdi.Method;
+import com.sun.jdi.StackFrame;
+import com.sun.jdi.ThreadReference;
+import com.sun.jdi.VirtualMachine;
 
 public final class ThreadPanel implements ContextListener, MouseListener
 {

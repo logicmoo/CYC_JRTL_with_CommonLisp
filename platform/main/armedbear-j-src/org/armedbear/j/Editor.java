@@ -21,9 +21,6 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.REMatch;
-import gnu.regexp.UncheckedRE;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -56,6 +53,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.FocusManager;
@@ -65,6 +63,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
+
 import org.armedbear.j.mail.MailCommands;
 import org.armedbear.j.mail.MailboxURL;
 import org.armedbear.lisp.Condition;
@@ -75,7 +74,7 @@ import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Main;
 import org.logicmoo.system.BeanShellCntrl;
-import org.logicmoo.system.SystemCurrent;
+import org.logicmoo.system.Startup;
 
 import gnu.regexp.RE;
 import gnu.regexp.REMatch;
@@ -248,11 +247,11 @@ public final class Editor extends JPanel implements Constants,
             if (arg.startsWith("-")) {
                 if (arg.equals("-h") || arg.equals("-help") || arg.equals("--help")) {
                     usage();
-                    if(mayExit)BeanShellCntrl.exit(0);
+                    if(mayExit)Startup.exit(0);
                 }
                 if (arg.equals("-version")) {
                     version();
-                    if(mayExit)BeanShellCntrl.exit(0);
+                    if(mayExit)Startup.exit(0);
                 }
                 if (arg.equals("-d") || arg.equals("--debug")) {
                     debug = true;
@@ -480,12 +479,12 @@ public final class Editor extends JPanel implements Constants,
     public static final void fatal(String message)
     {
         System.err.println(message);
-        BeanShellCntrl.exit(1);
+        Startup.exit(1);
     }
     public static final void fatal(boolean mayExit, String message)
     {
         System.err.println(message);
-        if(mayExit)BeanShellCntrl.exit(1);
+        if(mayExit)Startup.exit(1);
     }
 
     private static final void unknown(String arg)
@@ -4383,7 +4382,7 @@ public final class Editor extends JPanel implements Constants,
         Server.stopServer();
         pendingOperations.run();
         setDefaultCursor();
-        BeanShellCntrl.exit(0);
+        Startup.exit(0);
     }
 
     public void killFrame()

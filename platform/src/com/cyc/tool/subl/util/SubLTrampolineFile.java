@@ -1,10 +1,11 @@
 /* For LarKC */
 package com.cyc.tool.subl.util;
 
+import static org.logicmoo.system.Startup.addSubLFile;
+
 import java.util.function.Supplier;
 
 import org.armedbear.lisp.Lisp;
-import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -91,7 +92,7 @@ public abstract class SubLTrampolineFile
 	// public static SubLList throwStack;
 
 	public SubLTrampolineFile() {
-		BeanShellCntrl.addSubLFile(this);
+		addSubLFile(this);
 	}
 
 	public static boolean assertCheckType(SubLObject obj, SubLObject typeSymbol) {

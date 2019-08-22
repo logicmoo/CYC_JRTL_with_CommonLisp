@@ -6,7 +6,6 @@ import org.jpl7.fli.Prolog;
 import org.jpl7.fli.atom_t;
 import org.jpl7.fli.functor_t;
 import org.jpl7.fli.term_t;
-import org.logicmoo.system.BeanShellCntrl;
 
 /**
  * A Compound represents a structured term, comprising a functor and one or more arguments (Terms). Direct instances of

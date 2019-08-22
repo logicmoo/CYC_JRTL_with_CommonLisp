@@ -21,9 +21,6 @@
 
 package org.armedbear.j.mail;
 
-import gnu.regexp.RE;
-import gnu.regexp.REMatch;
-import gnu.regexp.UncheckedRE;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -38,9 +35,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
+
 import org.armedbear.j.Buffer;
 import org.armedbear.j.BufferIterator;
 import org.armedbear.j.Debug;
@@ -48,8 +47,8 @@ import org.armedbear.j.Directories;
 import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
 import org.armedbear.j.Expansion;
-import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.File;
 import org.armedbear.j.Headers;
 import org.armedbear.j.Line;
 import org.armedbear.j.Log;
@@ -64,6 +63,10 @@ import org.armedbear.j.Sidebar;
 import org.armedbear.j.SimpleEdit;
 import org.armedbear.j.Utilities;
 import org.armedbear.j.Version;
+
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 
 public final class SendMail extends Buffer
 {

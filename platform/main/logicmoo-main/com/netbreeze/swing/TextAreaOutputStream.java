@@ -2,8 +2,10 @@
 
 package com.netbreeze.swing;
 
-import java.io.*;
-import javax.swing.*;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.swing.JTextArea;
 
 public class TextAreaOutputStream extends OutputStream {
   private JTextArea area;

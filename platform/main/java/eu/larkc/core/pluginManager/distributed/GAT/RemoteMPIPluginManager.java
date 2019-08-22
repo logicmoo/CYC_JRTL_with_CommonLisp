@@ -18,56 +18,22 @@
  */
 package eu.larkc.core.pluginManager.distributed.GAT;
 
-import eu.larkc.core.data.InformationSet;
-import eu.larkc.core.metadata.PluginRegistry;
-import eu.larkc.core.pluginManager.PluginManager;
-import eu.larkc.core.pluginManager.local.queue.Queue;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
-import java.net.InetAddress;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.gridlab.gat.GAT;
 import org.gridlab.gat.GATContext;
-import org.gridlab.gat.GATInvocationException;
-import org.gridlab.gat.GATObjectCreationException;
-import org.gridlab.gat.URI;
-import org.gridlab.gat.io.File;
-import org.gridlab.gat.io.FileInputStream;
-import org.gridlab.gat.io.FileOutputStream;
-import org.gridlab.gat.resources.JavaSoftwareDescription;
-import org.gridlab.gat.resources.JobDescription;
-import org.gridlab.gat.resources.ResourceBroker;
-import org.gridlab.gat.resources.Job.JobState;
-
-import eu.larkc.core.util.FileTraversal;
-import eu.larkc.plugin.Plugin;
-import eu.larkc.plugin.transform.InformationSetTransformer;
-
-import java.util.Hashtable;
 import org.gridlab.gat.Preferences;
-import org.gridlab.gat.GATContext;
-import org.gridlab.gat.GAT;
 import org.gridlab.gat.URI;
-import org.gridlab.gat.io.File;
-import org.gridlab.gat.resources.Job;
+import org.gridlab.gat.resources.Job.JobState;
 import org.gridlab.gat.resources.JobDescription;
 import org.gridlab.gat.resources.ResourceBroker;
 import org.gridlab.gat.resources.SoftwareDescription;
-import org.gridlab.gat.resources.Job.JobState;
-import org.gridlab.gat.resources.HardwareResourceDescription;
+
 import eu.larkc.core.gatresource.GATResource;
+import eu.larkc.core.pluginManager.PluginManager;
+import eu.larkc.core.pluginManager.local.queue.Queue;
 
 /**
  * RemotePluginManager is a particular implementation of LocalPluginManger that runs within a thread on a

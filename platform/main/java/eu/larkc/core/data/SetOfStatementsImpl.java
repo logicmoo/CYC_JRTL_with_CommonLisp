@@ -24,8 +24,6 @@ import java.util.Collection;
 import org.openrdf.model.Statement;
 import org.openrdf.model.impl.StatementImpl;
 
-import eu.larkc.core.data.CloseableIterator;
-import eu.larkc.core.data.SetOfStatements;
 import eu.larkc.core.data.iterator.SimpleCloseableIterator;
 
 /**

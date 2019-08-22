@@ -1,12 +1,20 @@
 package com.netbreeze.swing;
 
-import javax.swing.*;
 //import andrik.gui.VerticalLayout;
-import java.awt.*;
-import java.beans.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Enumeration;
+import java.util.Vector;
 
-import java.awt.event.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class ScrollButtonPanel extends JPanel implements ActionListener {
 

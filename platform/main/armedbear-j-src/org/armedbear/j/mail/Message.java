@@ -21,8 +21,8 @@
 
 package org.armedbear.j.mail;
 
-import java.util.List;
 import java.util.Vector;
+
 import org.armedbear.j.Headers;
 
 public final class Message extends MimePart

@@ -46,7 +46,6 @@ import org.logicmoo.system.SystemCurrent;
 import org.logicmoo.system.SystemCurrent.In;
 import org.logicmoo.system.UpdateZip;
 
-import com.cyc.cycjava.cycl.number_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -232,7 +231,7 @@ public final class Main {
 	public static boolean noProlog = false;
 	public static boolean noPrologJNI = false;
 	public static boolean disablePrologSync = true;
-	public static boolean disableLispSync = false;
+	public static boolean disableLispSync = true;
 
 	public static boolean trackStructs = true;
 	public static boolean noBSH = false;

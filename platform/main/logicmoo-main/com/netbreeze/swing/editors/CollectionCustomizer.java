@@ -1,12 +1,13 @@
 package com.netbreeze.swing.editors;
 
-import com.netbreeze.swing.*;
+import java.util.Collection;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.event.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import com.netbreeze.swing.CollectionContentsPanel;
+import com.netbreeze.swing.ErrorPanel;
+import com.netbreeze.swing.LargeBeanView;
 
 public class CollectionCustomizer extends LargeBeanView implements ChangeListener {
   CollectionContentsPanel contents;

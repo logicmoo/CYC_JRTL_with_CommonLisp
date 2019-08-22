@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.armedbear.lisp.Cons;
 import org.jpl7.fli.DoubleHolder;
 import org.jpl7.fli.Int64Holder;
 import org.jpl7.fli.IntHolder;

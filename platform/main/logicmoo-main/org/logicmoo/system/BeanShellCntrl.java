@@ -1,8 +1,17 @@
 
 package org.logicmoo.system;
 
-import static org.armedbear.lisp.Main.*;
+import static org.armedbear.lisp.Main.isNoDebug;
+import static org.armedbear.lisp.Main.lispInstances;
+import static org.armedbear.lisp.Main.needIOConsole;
+import static org.armedbear.lisp.Main.noBSHGUI;
+import static org.armedbear.lisp.Main.noExit;
+import static org.armedbear.lisp.Main.noGUI;
+import static org.armedbear.lisp.Main.passedArgs;
+import static org.armedbear.lisp.Main.setNoDebug;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,36 +19,58 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 import org.appdapter.core.convert.Converter.ConverterMethod;
 import org.armedbear.j.JLisp;
 import org.armedbear.j.Log;
 import org.armedbear.j.ReaderThread;
+import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
-import org.armedbear.lisp.Main;
+import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Pathname;
 import org.armedbear.lisp.Symbol;
+import org.armedbear.lisp.Version;
 import org.jpl7.JPLException;
 import org.jpl7.Term;
 import org.jpl7.Variable;
+import org.logicmoo.bb.BeansContextListener;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.util.IsolatedClassLoader;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
+import com.sun.el.parser.SimpleNode;
 
+import bsh.BshClassManager;
+import bsh.CallStack;
 import bsh.EvalError;
+import bsh.NameSpace;
+import bsh.Primitive;
+import bsh.This;
 import bsh.UtilEvalError;
 import bsh.util.JConsole;
+import bsh.util.NameCompletion;
 
 //import static org.slf4j.spi.LocationAwareLogger.log;
 public class BeanShellCntrl extends Startup {
+	final private static ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+	final private static ScriptEngine nashorn = scriptEngineManager.getEngineByName("nashorn");
 
 	public static void addConsole(bsh.This thiz, final JConsole console) throws UtilEvalError, EvalError, InterruptedException {
 		Object o = thiz.getNameSpace().getVariable("interpreter", false);
@@ -50,9 +81,9 @@ public class BeanShellCntrl extends Startup {
 			addObject(myName, thiz);
 			String myNameL = myName.toLowerCase();
 			if (myNameL.contains("lisp")) {
-				if (Main.needIOConsole) {
-					Main.needIOConsole = false;
-					thiz.invokeMethodVA("captureSysIO");
+				if (needIOConsole) {
+					needIOConsole = false;
+					thiz.invokeMethod("captureSysIO", new Object[0]);
 				}
 				connectLisp(myName, console);
 				return;
@@ -71,9 +102,9 @@ public class BeanShellCntrl extends Startup {
 		// }
 		// // setSingleton(thiz);
 		try {
-			if (Main.needIOConsole) {
-				Main.needIOConsole = false;
-				thiz.invokeMethodVA("captureSysIO");
+			if (needIOConsole) {
+				needIOConsole = false;
+				thiz.invokeMethod("captureSysIO", new Object[0]);
 			}
 		} catch (EvalError e) {
 			MsgBox.error(e);
@@ -84,9 +115,10 @@ public class BeanShellCntrl extends Startup {
 
 	public static JConsole connectProlog(String name, final JConsole console0) {
 		final JConsole console;
-		if (console0 == null)
-			console = new JConsole(name);
-		else
+		if (console0 == null) {
+			console = new JConsole();
+			console.setName(name);
+		} else
 			console = console0;
 		try {
 			init_swipl_server();
@@ -136,7 +168,7 @@ public class BeanShellCntrl extends Startup {
 
 		try {
 			final Class vmc = Class.forName("com.sun.tools.attach.VirtualMachine");
-			java.util.List descs = (List) BeanShellCntrl.invoke(vmc, "list");
+			java.util.List descs = (List) invoke(vmc, "list");
 			if (descs.size() == 0) {
 				return false;
 			}
@@ -171,12 +203,6 @@ public class BeanShellCntrl extends Startup {
 			e.printStackTrace();
 		}
 		return false;
-	}
-
-	public static void bp() {
-		if (false)
-			;
-		// BeanBowlGUI.startBeanBowl();
 	}
 
 	static JLisp jLispHeadless;
@@ -301,7 +327,7 @@ public class BeanShellCntrl extends Startup {
 		}, SystemCurrent.out, SystemCurrent.err, true, //
 				masterNamespace(), interp, "bsh_repl");
 		interp.setExitOnEOF(false);
-		Main.noExit = true;
+		noExit = true;
 		try {
 			interp.run();
 		} catch (Exception e) {
@@ -311,11 +337,60 @@ public class BeanShellCntrl extends Startup {
 		return true;
 	}
 
+	public static Object findDesktopPane(Object thiz) {
+		synchronized (StartupLock) {
+			if (desktop != null)
+				return desktop;
+		}
+		NameSpace ns = ((This) thiz).getNameSpace();
+		Object pane;
+		try {
+			pane = ns.getVariable("pane");
+			if (pane == null || pane == Primitive.VOID) {
+				Container container = introduced_appdapter(ns);
+				if (container != null) {
+					return container;
+				}
+				pane = desktop = new JDesktopPane();
+				ns.setVariable("pane", pane, false);
+			}
+			return pane;
+		} catch (Exception e) {
+			MsgBox.error(e);
+		}
+		return null;
+	}
+
+	public static bsh.Interpreter ensureBSH() {
+		synchronized (StartupLock) {
+			if (bshInterpreter == null) {
+				try {
+					bshInterpreter = new bsh.Interpreter();
+					bshMasterNamespace = bshInterpreter.getNameSpace();
+
+				} catch (Throwable e) {
+					Debug.trace(e);
+				}
+			}
+			return bshInterpreter;
+		}
+	}
+
+	public static bsh.Interpreter new_bsh_interpeter() throws EvalError {
+		bshInterpreter = ensureBSH();
+		return (bsh.Interpreter) bshInterpreter.eval("new bsh.Interpreter()");
+	}
+
+	public static bsh.NameSpace masterNamespace() {
+		ensureBSH();
+		return bshMasterNamespace;
+	}
+
 	@LispMethod
 	public static LispObject bsh_exec(LispObject arg) throws EvalError {
 		if (arg.isString())
-			return JavaObject.getInstance(BeanShellCntrl.bsh_eval(arg.getStringValue()), true, null);
-		return JavaObject.getInstance(BeanShellCntrl.bsh_eval((String) arg.javaInstance()), true, null);
+			return JavaObject.getInstance(bsh_eval(arg.getStringValue()), true, null);
+		return JavaObject.getInstance(bsh_eval((String) arg.javaInstance()), true, null);
 	}
 
 	@LispMethod
@@ -345,10 +420,10 @@ public class BeanShellCntrl extends Startup {
 				throw new JPLException("Stack Overflow!");
 			}
 		}
-		boolean wasNoDebug = Main.isNoDebug();
+		boolean wasNoDebug = isNoDebug();
 		try {
 			if (!wasNoDebug) {
-				Main.setNoDebug(true);
+				setNoDebug(true);
 			}
 			LispObject lo = call_lisp2(found, list.args());
 			if (!result.isVariable()) {
@@ -364,7 +439,7 @@ public class BeanShellCntrl extends Startup {
 			return t;
 		} catch (Throwable t) {
 			if (!wasNoDebug) {
-				Main.setNoDebug(false);
+				setNoDebug(false);
 			}
 			t.printStackTrace();
 			System.err.println("" + t.getMessage());
@@ -373,7 +448,7 @@ public class BeanShellCntrl extends Startup {
 			}
 			throw new JPLException(createStackTraceString(t));
 		} finally {
-			Main.setNoDebug(wasNoDebug);
+			setNoDebug(wasNoDebug);
 		}
 	}
 
@@ -390,4 +465,261 @@ public class BeanShellCntrl extends Startup {
 		return ret;
 	}
 
+	private static Container introduced_appdapter(NameSpace ns) throws UtilEvalError {
+		Object controlApp = bshInvoke("org.appdapter.gui.browse.Utility.controlApp");
+		if (false && controlApp != null) {
+			Component bpo = null;
+			// org.appdapter.gui.api.BoxPanelSwitchableView bpo;
+			bpo = (Container) bshInvoke("org.appdapter.gui.browse.Utility.controlApp.getBoxPanelTabPane()");
+			if (bpo != null) {
+				Container container = (Container) invoke(bpo, "getContainer()");
+				ns.setVariable("pane", container, false);
+				Container parent = container.getParent();
+				while (parent.getParent() != null) {
+					parent = parent.getParent();
+				}
+				ns.setVariable("frame", parent, false);
+				return container;
+			}
+		}
+		return null;
+	}
+
+	public static void showObject(Object o) {
+		try {
+			invoke(demoBrowserClass(), "showObject", o);
+		} catch (EvalError e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @return
+	 * @throws EvalError
+	 */
+	private static Class demoBrowserClass() throws EvalError {
+		return (Class) ensureBSH().eval("org.appdapter.gui.demo.DemoBrowser.class");
+	}
+
+	@LispMethod
+	public static void ui_inspector() {
+		try {
+			if (calledStartAppdatper) {
+				invokeDemoBrowser("show()");
+				return;
+			}
+			calledStartAppdatper = true;
+			if (true) {
+				invoke("com.netbreeze.bbowl.gui.BeanBowlGUI", "startBeanBowl", bowl);
+			}
+			// TODO
+			/*
+			 * 
+			 * import org.appdapter.gui.api.BoxPanelSwitchableView; import
+			 * org.appdapter.gui.browse.Utility; import org.appdapter.gui.demo.DemoBrowser;
+			 * 
+			 */
+			try {
+				invokeDemoBrowser("testLoggingSetup();");
+				invokeDemoBrowser("setLoggerTo(java.util.logging.Level.ALL);");
+			} catch (Throwable e1) {
+				// e1.printStackTrace();
+				// TODO Auto-generated catch block
+				// MsgBox.error(e1);
+			}
+			invokeDemoBrowser("defaultExampleCode = true;");
+			invokeDemoBrowser("ensureRunning(true, new String[0]);");
+			invokeDemoBrowser("show();");
+			JFrame appFrame = (JFrame) bshInvoke("org.appdapter.gui.browse.Utility.Utility.getAppFrame();");
+			appFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+			// some more test code
+			invokeDemoBrowser("addMoreExamples();");
+			dbrowser = invokeDemoBrowser("mainControl");
+			// TODO
+			bowl.addListener((BeansContextListener) dbrowser);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			// MsgBox.error(e);
+		}
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @param string
+	 * @return
+	 */
+	private static Object invokeDemoBrowser(String string) {
+		return bshInvoke("org.appdapter.gui.demo.DemoBrowser." + string);
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @param string
+	 * @param string2
+	 */
+	private static Object bshInvoke(String string) {
+		// TODO Auto-generated method stub
+		try {
+			return ensureBSH().eval(string);
+		} catch (EvalError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static Object invoke(Object o, String string, Object... objects) {
+		try {
+			Class bshReflect = Class.forName("bsh.Reflect");
+			final bsh.Interpreter ensureBSH = ensureBSH();
+			if (o instanceof String) {
+				try {
+					o = Class.forName((String) o);
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+			}
+			if (o instanceof Class) {
+
+				final Method method = bshReflect.getMethod("invokeStaticMethod", BshClassManager.class, Class.class, String.class, Object[].class);
+				return method //
+						.invoke(null, ensureBSH.getClassManager(), (Class) o, string, objects, null);
+			} else {
+				final Method method = bshReflect.getMethod("invokeObjectMethod", Object.class, String.class, Object[].class, bsh.Interpreter.class, CallStack.class, SimpleNode.class);
+				return method //
+						.invoke(null, o, string, objects, ensureBSH, null, null);
+			}
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e.getCause());
+		} catch (ReflectiveOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @param console
+	 * @throws InterruptedException
+	 * @throws IOException
+	 */
+	public static JConsole connectLisp(String myName, final JConsole console0) throws InterruptedException {
+		final JConsole console;
+		if (console0 == null) {
+			console = new JConsole();
+			console.setName(myName);
+		} else
+			console = console0;
+		if (lispInstances == 0) {
+			passedArgs = new String[] { "--load", "cyc" };
+			// Thread t = mainUnjoined(new String[] { "--load", "cyc" });
+			// t.start();
+			// return console;
+		}
+		SubLThreadPool.getDefaultPool().execute(new SubLProcess(myName) {
+			@Override
+			public void safeRun() {
+				try {
+					org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter.createNewLispInstance(console.getInputStream(), console.getOut(), new File("./").getCanonicalPath(), Version.getVersion(), false);
+					console.setNameCompletion(new LispNameCompletion());
+					interp.run();
+				} catch (IOException e) {
+					MsgBox.error(e);
+					throw doThrow(e);
+				}
+			}
+		});
+		return console;
+	}
+
+	private static NameSpace bshMasterNamespace;
+
+	@LispMethod
+	public static Object prolog_ui() throws EvalError {
+		JConsole console = (JConsole) bsh_eval("makeConsole(\"PrologUI\")");
+		return console;
+	}
+
+	@LispMethod
+	public static Object lisp_ui() throws EvalError {
+		JConsole console = (JConsole) bsh_eval("makeConsole(\"LispUI\")");
+		return console;
+	}
+
+	public static bsh.Interpreter bshInterpreter;
+	final public static Method multiMethod;
+
+	static public class LispNameCompletion implements NameCompletion {
+
+		String[] NO_RESULTS = new String[0];
+
+		@Override
+		public java.lang.String[] completeName(java.lang.String part) {
+
+			if (part.length() < 3)
+				return NO_RESULTS;
+			part = part.toUpperCase();
+			ArrayList results = null;
+			org.armedbear.lisp.Package currentPackage;
+			int idx = part.indexOf(":");
+			if (idx == 0) {
+				currentPackage = Lisp.PACKAGE_KEYWORD;
+				part = part.substring(1);
+			} else if (idx == -1) {
+				currentPackage = Lisp.getCurrentPackage();
+				part = part.substring(1);
+			} else {
+				String pn = part.substring(0, idx);
+				part = part.substring(0, idx + 1);
+				currentPackage = (Package) Package.findPackageNamed(pn);
+				if (currentPackage == null)
+					currentPackage = Lisp.getCurrentPackage();
+			}
+
+			if (part.length() <= 1)
+				return NO_RESULTS;
+
+			for (Symbol sym : currentPackage.getAccessibleSymbols()) {
+				String n = sym.getName();
+				if (n.startsWith(part)) {
+					if (results == null) {
+						results = new ArrayList();
+					}
+					results.add(n);
+				}
+			}
+
+			if (results != null)
+				return (String[]) results.toArray(new String[results.size()]);
+
+			return NO_RESULTS;
+
+		}
+
+	}
+
+	static {
+		try {
+			// DemoBrowser.testLoggingSetup();
+			multiMethod = IsolatedClassLoader.getDeclaredMethod(BeanShellCntrl.class, "bp");
+			// BeanBowlGUI.startBeanBowl();
+			// Debuggable.setIsTesting(true);
+			// Debuggable.setDebugging(false);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

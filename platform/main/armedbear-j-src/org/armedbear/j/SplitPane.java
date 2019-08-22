@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.awt.Component;
+
 import javax.swing.JSplitPane;
 
 public final class SplitPane extends JSplitPane

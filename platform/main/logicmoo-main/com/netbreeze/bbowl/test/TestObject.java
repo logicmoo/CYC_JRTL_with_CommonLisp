@@ -2,8 +2,9 @@
 
 package com.netbreeze.bbowl.test;
 
-import java.beans.*;
-import java.awt.*;
+import java.awt.Button;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
 * A general test-bean with some typical properties and events.

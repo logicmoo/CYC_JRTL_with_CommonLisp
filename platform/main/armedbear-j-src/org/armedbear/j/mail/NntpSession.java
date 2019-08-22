@@ -28,7 +28,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
-import javax.swing.SwingUtilities;
+
 import org.armedbear.j.Debug;
 import org.armedbear.j.Editor;
 import org.armedbear.j.FastStringBuffer;

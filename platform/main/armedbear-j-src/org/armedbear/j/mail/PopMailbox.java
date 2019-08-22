@@ -38,14 +38,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+
 import javax.swing.SwingUtilities;
+
 import org.armedbear.j.BackgroundProcess;
 import org.armedbear.j.Debug;
-import org.armedbear.j.Editor;
 import org.armedbear.j.Directories;
+import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
-import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.File;
 import org.armedbear.j.Log;
 import org.armedbear.j.PasswordDialog;
 import org.armedbear.j.Property;

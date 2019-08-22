@@ -35,7 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipEntry;
+
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CannotRedoException;

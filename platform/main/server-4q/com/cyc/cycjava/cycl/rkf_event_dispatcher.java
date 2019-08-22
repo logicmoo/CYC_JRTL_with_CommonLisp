@@ -1,15 +1,30 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.constant_handles.constant_p;
+import static com.cyc.cycjava.cycl.constant_handles.constant_suid;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.make_lock;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.release_lock;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.seize_lock;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.property_list_member;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.getf;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;

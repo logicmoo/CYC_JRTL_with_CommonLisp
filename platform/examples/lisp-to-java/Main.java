@@ -19,7 +19,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import org.armedbear.lisp.*;
+import org.armedbear.lisp.Function;
+import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.JavaObject;
+import org.armedbear.lisp.Packages;
+import org.armedbear.lisp.Symbol;
 
 class MainJ2L
 {

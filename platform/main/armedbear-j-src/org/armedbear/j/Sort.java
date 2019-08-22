@@ -24,6 +24,7 @@ package org.armedbear.j;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
 import javax.swing.undo.CompoundEdit;
 
 public final class Sort

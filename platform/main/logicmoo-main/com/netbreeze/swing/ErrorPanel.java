@@ -1,13 +1,22 @@
 
 package com.netbreeze.swing;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.logicmoo.bb.BeansContext;
-
-import java.awt.*;
-import java.io.*;
-import java.awt.event.*;
 
 public class ErrorPanel extends JPanel {
   Throwable error;

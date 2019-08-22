@@ -21,14 +21,16 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.REMatch;
-import gnu.regexp.UncheckedRE;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.CompoundEdit;
+
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 
 public class JavaMode extends AbstractMode implements Constants, Mode
 {

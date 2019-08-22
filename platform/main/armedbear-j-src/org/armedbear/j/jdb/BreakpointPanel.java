@@ -25,8 +25,10 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Vector;
+
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Editor;
 import org.armedbear.j.File;

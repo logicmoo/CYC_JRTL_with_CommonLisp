@@ -21,9 +21,10 @@
 
 package org.armedbear.j;
 
+import java.awt.event.KeyEvent;
+
 import gnu.regexp.RE;
 import gnu.regexp.UncheckedRE;
-import java.awt.event.KeyEvent;
 
 public final class PerlMode extends AbstractMode implements Constants, Mode
 {

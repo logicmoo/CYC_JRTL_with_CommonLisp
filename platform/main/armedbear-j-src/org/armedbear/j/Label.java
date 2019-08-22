@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.awt.Graphics;
+
 import javax.swing.JLabel;
 
 public final class Label extends JLabel

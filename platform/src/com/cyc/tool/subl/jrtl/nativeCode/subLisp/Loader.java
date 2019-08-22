@@ -17,6 +17,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ResumeException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.IsolatedClassLoader;
 import com.cyc.tool.subl.util.PatchFileLoader;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
@@ -408,7 +409,7 @@ public class Loader {
 		String superMethod = string.replace("|", shortName);
 		Method m;
 		try {
-			m = fileClass.getDeclaredMethod(superMethod);
+			m = IsolatedClassLoader.getDeclaredMethod(fileClass, superMethod);
 		} catch (NoSuchMethodException e) {
 			return false;
 		}
@@ -426,7 +427,7 @@ public class Loader {
 		String superMethod = string.replace("|", shortName);
 		Method m;
 		try {
-			m = fileClass.getDeclaredMethod(superMethod);
+			m = IsolatedClassLoader.getDeclaredMethod(fileClass, superMethod);
 		} catch (NoSuchMethodException e) {
 			return false;
 		}

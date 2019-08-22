@@ -1,12 +1,17 @@
 
 
 package com.netbreeze.swing;
-import com.netbreeze.swing.editors.*;
-import java.beans.*;
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.beans.Introspector;
+import java.beans.PropertyEditorManager;
+import java.util.Date;
 
 import org.logicmoo.bb.BeansContext;
+
+import com.netbreeze.swing.editors.BooleanEditor;
+import com.netbreeze.swing.editors.ColorEditor;
+import com.netbreeze.swing.editors.DateEditor;
+import com.netbreeze.swing.editors.IntEditor;
 
 public class BeanUtils {
   private static BeansContext context = null;

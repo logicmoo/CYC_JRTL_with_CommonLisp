@@ -18,7 +18,7 @@
  */
 package eu.larkc.core.orchestrator.servers;
 
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;

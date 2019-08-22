@@ -2,11 +2,17 @@ package com.cyc.cycjava.cycl;
 
 
 import static com.cyc.cycjava.cycl.access_macros.register_external_symbol;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.cycjava.cycl.utilities_macros.register_api_predefined_function;
+import static com.cyc.cycjava.cycl.utilities_macros.register_api_predefined_host_function;
+import static com.cyc.cycjava.cycl.utilities_macros.register_api_predefined_host_macro;
+import static com.cyc.cycjava.cycl.utilities_macros.register_api_predefined_macro;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.maybeMake;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;

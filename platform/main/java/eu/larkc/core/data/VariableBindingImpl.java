@@ -20,7 +20,9 @@ package eu.larkc.core.data;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.openrdf.model.Value;
+
 import eu.larkc.core.data.iterator.SimpleCloseableIterator;
 
 

@@ -14,8 +14,6 @@ import org.jpl7.Query;
 import org.jpl7.Term;
 import org.logicmoo.system.Startup;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
-
 import junit.framework.TestCase;
 
 /**

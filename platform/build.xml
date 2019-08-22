@@ -142,6 +142,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${env.CLASSPATH}" />
 		<pathelement location="bin-eclipse/" />
+		<pathelement location="${java.home}/lib/tools.jar" />
 		<pathelement location="${java.home}/../lib/tools.jar" />
 		<fileset dir="lib">
 			<include name="**/*.jar" />
@@ -216,6 +217,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 
 	<path id="lib.class.path">
 		<fileset dir="lib">
+			<include name="*.jar" />
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
@@ -232,10 +234,10 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 
 			<src path="${src.dir}" />
 			<src path="main/armedbear-j-src" />
+			<src path="main/beanshell" />
 			<src path="main/cycjava-persistence-hacks" />
 			<src path="main/jpl7-hacked" />
 			<src path="main/logicmoo-main" />
-			<src path="main/beanshell" />
 			<src path="main/objectweb-asm-src" />
 			<src path="main/server-4q" />
 			<src path="main/java/" />
@@ -322,12 +324,14 @@ from ${abcl.home.dir}
 			<delete>
 				<fileset dir="${abcl.home.dir}" includes="**/*.abcl **/*.cls **/*._" />
 			</delete>
-			<java classpath="${build.classes.dir}:bin-eclipse/:${env.CLASSPATH}" fork="${forked}" failonerror="true" inputstring="(handler-case (compile-system :zip nil :quit t :output-path &quot;${abcl.lisp.output}/&quot;) (t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))" classname="org.armedbear.lisp.Main">
+			<java classpath="${build.classes.dir}:bin-eclipse/:${env.CLASSPATH}" fork="${forked}" failonerror="true" 
+			    inputstring="(handler-case (compile-system :zip nil :quit t :output-path &quot;${abcl.lisp.output}/&quot;) (t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))" classname="org.armedbear.lisp.Main">
 				<jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}" />
 				<jvmarg value="-Dabcl.autoload.verbose=Y" />
 				<additional.jvmarg />
 				<arg value="--noinit" />
 				<arg value="--nosystem" />
+				<arg value="--lisp" />
 				<arg value="--eval" />
 				<arg value="(setf *load-verbose* t)" />
 			</java>

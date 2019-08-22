@@ -1,7 +1,8 @@
 
 
 package com.netbreeze.swing;
-import java.util.*;
+import java.util.Collection;
+import java.util.Vector;
 
 import org.logicmoo.bb.BeansContext;
 import org.logicmoo.bb.BeansContextListener;

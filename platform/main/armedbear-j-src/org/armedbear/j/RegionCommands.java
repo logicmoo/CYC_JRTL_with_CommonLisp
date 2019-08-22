@@ -21,13 +21,16 @@
 
 package org.armedbear.j;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.swing.undo.CompoundEdit;
+
+import org.armedbear.j.mail.Base64Decoder;
+
 import gnu.regexp.RE;
 import gnu.regexp.REMatch;
 import gnu.regexp.UncheckedRE;
-import java.io.IOException;
-import java.io.OutputStream;
-import javax.swing.undo.CompoundEdit;
-import org.armedbear.j.mail.Base64Decoder;
 
 public final class RegionCommands
 {

@@ -21,14 +21,9 @@
 
 package org.armedbear.j.jdb;
 
-import com.sun.jdi.InvalidTypeException;
-import com.sun.jdi.Location;
-import com.sun.jdi.Method;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.request.EventRequest;
-import com.sun.jdi.request.EventRequestManager;
 import java.util.Iterator;
 import java.util.List;
+
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Editor;
 import org.armedbear.j.FastStringBuffer;
@@ -37,6 +32,13 @@ import org.armedbear.j.Line;
 import org.armedbear.j.LocalTag;
 import org.armedbear.j.Log;
 import org.armedbear.j.Utilities;
+
+import com.sun.jdi.InvalidTypeException;
+import com.sun.jdi.Location;
+import com.sun.jdi.Method;
+import com.sun.jdi.ReferenceType;
+import com.sun.jdi.request.EventRequest;
+import com.sun.jdi.request.EventRequestManager;
 
 public final class MethodBreakpoint extends ResolvableBreakpoint
 {

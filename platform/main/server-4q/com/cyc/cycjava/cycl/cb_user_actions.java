@@ -1,17 +1,34 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
+import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
+import static com.cyc.cycjava.cycl.cb_parameters.cb_head_shortcut_icon;
+import static com.cyc.cycjava.cycl.cb_parameters.cyc_cgi_url_int;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_form;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_frame_name;
+import static com.cyc.cycjava.cycl.cb_utilities.setup_cb_link_method;
+import static com.cyc.cycjava.cycl.html_utilities.html_align;
+import static com.cyc.cycjava.cycl.html_utilities.html_char;
+import static com.cyc.cycjava.cycl.html_utilities.html_color;
+import static com.cyc.cycjava.cycl.html_utilities.html_copyright_notice;
+import static com.cyc.cycjava.cycl.html_utilities.html_glyph;
+import static com.cyc.cycjava.cycl.html_utilities.html_markup;
+import static com.cyc.cycjava.cycl.html_utilities.html_meta_robot_instructions;
+import static com.cyc.cycjava.cycl.html_utilities.html_princ;
+import static com.cyc.cycjava.cycl.html_utilities.html_simple_attribute;
+import static com.cyc.cycjava.cycl.html_utilities.html_source_readability_terpri;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.decode_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

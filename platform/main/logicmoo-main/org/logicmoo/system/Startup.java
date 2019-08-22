@@ -18,11 +18,21 @@
  */
 package org.logicmoo.system;
 
-import static org.armedbear.lisp.Lisp.*;
-import static org.armedbear.lisp.Main.*;
-import static org.logicmoo.system.BeanShellCntrl.*;
+import static org.armedbear.lisp.Lisp.PACKAGE_CL;
+import static org.armedbear.lisp.Lisp.PACKAGE_CL_USER;
+import static org.armedbear.lisp.Lisp.PACKAGE_CYC;
+import static org.armedbear.lisp.Lisp.PACKAGE_EXT;
+import static org.armedbear.lisp.Lisp.PACKAGE_JAVA;
+import static org.armedbear.lisp.Lisp.PACKAGE_SUBLISP;
+import static org.armedbear.lisp.Lisp.UNPROVIDED;
+import static org.armedbear.lisp.Main.disablePrologSync;
+import static org.armedbear.lisp.Main.noGUI;
+import static org.armedbear.lisp.Main.noProlog;
+import static org.armedbear.lisp.Main.noPrologJNI;
+import static org.logicmoo.system.BeanShellCntrl.bsh_desktop;
+import static org.logicmoo.system.BeanShellCntrl.multiMethod;
+import static org.logicmoo.system.BeanShellCntrl.showObject;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -41,6 +51,7 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,10 +59,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
 
 import org.appdapter.core.convert.Converter.ConverterMethod;
 import org.armedbear.j.Editor;
@@ -97,7 +105,6 @@ import org.jpl7.Variable;
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
 import org.logicmoo.bb.BeanBowl;
-import org.logicmoo.bb.BeansContextListener;
 
 import com.cyc.cycjava.cycl.constant_completion_high;
 import com.cyc.cycjava.cycl.constant_completion_low;
@@ -117,7 +124,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLReader;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -138,14 +144,6 @@ import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import bsh.EvalError;
-import bsh.NameSpace;
-import bsh.Primitive;
-import bsh.Reflect;
-import bsh.ReflectError;
-import bsh.This;
-import bsh.UtilEvalError;
-import bsh.util.JConsole;
 import eu.larkc.core.orchestrator.servers.LarKCHttpServer;
 import sun.misc.Unsafe;
 
@@ -157,6 +155,11 @@ import sun.misc.Unsafe;
  *
  */
 public class Startup {
+	public static void bp() {
+		if (false)
+			;
+		// BeanBowlGUI.startBeanBowl();
+	}
 
 	public static final Object StartupLock = new Object() {
 		@Override
@@ -187,10 +190,8 @@ public class Startup {
 	public static boolean inited_cyc_complete;
 	public static boolean inited_swipl_server;
 	// final public static BeanBowlGUI gui = BeanBowlGUI.getDefaultFrame();
-	public static bsh.Interpreter bshInterpreter;
 	private static Thread Owner;
 	final public static Map<String, Symbol> prologMethods = new HashMap();
-	final public static Method multiMethod;
 	final static Map<String, CreationInfo> singletons = new HashMap<String, CreationInfo>();
 	public static final LispObject[] EMPTY_LISP_OBJECT = new LispObject[0];
 	static {
@@ -295,39 +296,6 @@ public class Startup {
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL, true);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL_USER, true);
 		}
-	}
-
-	/**
-	 * @param console
-	 * @throws InterruptedException
-	 * @throws IOException
-	 */
-	public static JConsole connectLisp(String myName, final JConsole console0) throws InterruptedException {
-		final JConsole console;
-		if (console0 == null)
-			console = new JConsole(myName);
-		else
-			console = console0;
-		if (Main.lispInstances == 0) {
-			Main.passedArgs = new String[] { "--load", "cyc" };
-			// Thread t = Main.mainUnjoined(new String[] { "--load", "cyc" });
-			// t.start();
-			// return console;
-		}
-		SubLThreadPool.getDefaultPool().execute(new SubLProcess(myName) {
-			@Override
-			public void safeRun() {
-				try {
-					org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter.createNewLispInstance(console.getInputStream(), console.getOut(), new File("./").getCanonicalPath(), Version.getVersion(), false);
-					console.setNameCompletion(new LispNameCompletion());
-					interp.run();
-				} catch (IOException e) {
-					MsgBox.error(e);
-					throw doThrow(e);
-				}
-			}
-		});
-		return console;
 	}
 
 	static public String addObject(String named, Object value) {
@@ -510,8 +478,6 @@ public class Startup {
 	}
 
 	static boolean repl_in_bg = false;
-	private static NameSpace bshMasterNamespace;
-	private static Unsafe theUnsafe;
 
 	@LispMethod
 	public static LispObject bg_repl() throws InterruptedException {
@@ -619,31 +585,6 @@ public class Startup {
 		MsgBox.info(v);
 	}
 
-	public static bsh.Interpreter ensureBSH() {
-		synchronized (StartupLock) {
-			if (bshInterpreter == null) {
-				try {
-					bshInterpreter = new bsh.Interpreter();
-					bshMasterNamespace = bshInterpreter.getNameSpace();
-
-				} catch (Throwable e) {
-					Debug.trace(e);
-				}
-			}
-			return bshInterpreter;
-		}
-	}
-
-	public static bsh.Interpreter new_bsh_interpeter() throws EvalError {
-		bshInterpreter = ensureBSH();
-		return (bsh.Interpreter) bshInterpreter.eval("new bsh.Interpreter()");
-	}
-
-	public static bsh.NameSpace masterNamespace() {
-		ensureBSH();
-		return bshMasterNamespace;
-	}
-
 	// /**
 	// *
 	// */
@@ -670,30 +611,6 @@ public class Startup {
 		if (reexport)
 			Lisp.PACKAGE_EXT.export(symbol);
 		Lisp.PACKAGE_CL_USER.importSymbol(symbol);
-	}
-
-	public static Object findDesktopPane(Object thiz) {
-		synchronized (StartupLock) {
-			if (desktop != null)
-				return desktop;
-		}
-		NameSpace ns = ((This) thiz).getNameSpace();
-		Object pane;
-		try {
-			pane = ns.getVariable("pane");
-			if (pane == null || pane == Primitive.VOID) {
-				Container container = introduced_appdapter(ns);
-				if (container != null) {
-					return container;
-				}
-				pane = desktop = new JDesktopPane();
-				ns.setVariable("pane", pane, false);
-			}
-			return pane;
-		} catch (Exception e) {
-			MsgBox.error(e);
-		}
-		return null;
 	}
 
 	public static Method findMethod(Method[] staticMethods, Object[] javaArgs) {
@@ -796,19 +713,6 @@ public class Startup {
 				return null;
 			return (T) was.value;
 		}
-	}
-
-	public static Unsafe getUnsafe() {
-		if (theUnsafe == null) {
-			try {
-				Field field = Unsafe.class.getDeclaredField("theUnsafe");
-				field.setAccessible(true);
-				theUnsafe = (Unsafe) field.get(null);
-			} catch (Throwable e) {
-				throw doThrow(e);
-			}
-		}
-		return theUnsafe;
 	}
 
 	@LispMethod
@@ -1266,12 +1170,6 @@ public class Startup {
 		}
 	}
 
-	@LispMethod
-	public static Object lisp_ui() throws EvalError {
-		JConsole console = (JConsole) bsh_eval("makeConsole(\"LispUI\")");
-		return console;
-	}
-
 	@ConverterMethod
 	public static Term lobject_to_term(LispObject o) {
 		Term term = PrologSync.toProlog(o, new ArrayList());
@@ -1348,12 +1246,6 @@ public class Startup {
 		return oneSolution != null && oneSolution.size() > 0;
 	}
 
-	@LispMethod
-	public static Object prolog_ui() throws EvalError {
-		JConsole console = (JConsole) bsh_eval("makeConsole(\"PrologUI\")");
-		return console;
-	}
-
 	public static void registerMethod(Method m) {
 		boolean evalArgsFirst = true;
 		String js = m.getName();
@@ -1425,7 +1317,7 @@ public class Startup {
 		if (clz == Object.class || clz == null)
 			return;
 		for (java.lang.reflect.Method m : clz.getDeclaredMethods()) {
-			if (Reflect.isStatic(m)) {
+			if (Modifier.isStatic(m.getModifiers())) {
 				if (m.isAnnotationPresent(LispMethod.class)) {
 					registerMethod(m);
 					continue;
@@ -2083,8 +1975,23 @@ public class Startup {
 	public static Error throwException(Throwable exception) {
 		if (true)
 			getUnsafe().throwException(exception);
-		return BeanShellCntrl.<RuntimeException>throwException1(exception, null);
+		return Startup.<RuntimeException>throwException1(exception, null);
 	}
+
+	public static Unsafe getUnsafe() {
+		if (theUnsafe == null) {
+			try {
+				Field field = Unsafe.class.getDeclaredField("theUnsafe");
+				field.setAccessible(true);
+				theUnsafe = (Unsafe) field.get(null);
+			} catch (Throwable e) {
+				throw doThrow(e);
+			}
+		}
+		return theUnsafe;
+	}
+
+	private static Unsafe theUnsafe;
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Throwable> Error throwException1(final Throwable exception, Object dummy) throws T {
@@ -2103,159 +2010,6 @@ public class Startup {
 	public static LispObject ui_inspect(LispObject arg) {
 		addObject(null, arg);
 		return arg;
-	}
-
-	private static Container introduced_appdapter(NameSpace ns) throws UtilEvalError {
-		Object controlApp = bshInvoke("org.appdapter.gui.browse.Utility.controlApp");
-		if (false && controlApp != null) {
-			Component bpo = null;
-			// org.appdapter.gui.api.BoxPanelSwitchableView bpo;
-			bpo = (Container) bshInvoke("org.appdapter.gui.browse.Utility.controlApp.getBoxPanelTabPane()");
-			if (bpo != null) {
-				Container container = (Container) invoke(bpo, "getContainer()");
-				ns.setVariable("pane", container, false);
-				Container parent = container.getParent();
-				while (parent.getParent() != null) {
-					parent = parent.getParent();
-				}
-				ns.setVariable("frame", parent, false);
-				return container;
-			}
-		}
-		return null;
-	}
-
-	public static void showObject(Object o) {
-		try {
-			invoke(demoBrowserClass(), "showObject", o);
-		} catch (EvalError e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * TODO Describe the purpose of this method.
-	 * 
-	 * @return
-	 * @throws EvalError
-	 */
-	private static Class demoBrowserClass() throws EvalError {
-		return (Class) ensureBSH().eval("org.appdapter.gui.demo.DemoBrowser.class");
-	}
-
-	@LispMethod
-	public static void ui_inspector() {
-		try {
-			if (calledStartAppdatper) {
-				invokeDemoBrowser("show()");
-				return;
-			}
-			calledStartAppdatper = true;
-			if (true) {
-				invoke("com.netbreeze.bbowl.gui.BeanBowlGUI", "startBeanBowl", bowl);
-			}
-			// TODO
-			/*
-			 * 
-			 * import org.appdapter.gui.api.BoxPanelSwitchableView; import
-			 * org.appdapter.gui.browse.Utility; import org.appdapter.gui.demo.DemoBrowser;
-			 * 
-			 */
-			try {
-				invokeDemoBrowser("testLoggingSetup();");
-				invokeDemoBrowser("setLoggerTo(java.util.logging.Level.ALL);");
-			} catch (Throwable e1) {
-				// e1.printStackTrace();
-				// TODO Auto-generated catch block
-				// MsgBox.error(e1);
-			}
-			invokeDemoBrowser("defaultExampleCode = true;");
-			invokeDemoBrowser("ensureRunning(true, new String[0]);");
-			invokeDemoBrowser("show();");
-			JFrame appFrame = (JFrame) bshInvoke("org.appdapter.gui.browse.Utility.Utility.getAppFrame();");
-			appFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-			// some more test code
-			invokeDemoBrowser("addMoreExamples();");
-			dbrowser = invokeDemoBrowser("mainControl");
-			// TODO
-			bowl.addListener((BeansContextListener) dbrowser);
-		} catch (Throwable e) {
-			e.printStackTrace();
-			// TODO Auto-generated catch block
-			// MsgBox.error(e);
-		}
-	}
-
-	/**
-	 * TODO Describe the purpose of this method.
-	 * 
-	 * @param string
-	 * @return
-	 */
-	private static Object invokeDemoBrowser(String string) {
-		return bshInvoke("org.appdapter.gui.demo.DemoBrowser." + string);
-	}
-
-	/**
-	 * TODO Describe the purpose of this method.
-	 * 
-	 * @param string
-	 * @param string2
-	 */
-	private static Object bshInvoke(String string) {
-		// TODO Auto-generated method stub
-		try {
-			return ensureBSH().eval(string);
-		} catch (EvalError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static Object invoke(Object o, String string, Object... objects) {
-		try {
-			final bsh.Interpreter ensureBSH = ensureBSH();
-			if (o instanceof String) {
-				try {
-					o = Class.forName((String) o);
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				}
-			}
-			if (o instanceof Class) {
-				return bsh.Reflect.invokeStaticMethod(ensureBSH.getClassManager(), (Class) o, string, objects, null);
-			}
-			return bsh.Reflect.invokeObjectMethod(o, string, objects, ensureBSH, null, null);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
-		} catch (EvalError e) {
-			throw new RuntimeException(e);
-		} catch (ReflectError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} catch (UtilEvalError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	static {
-		try {
-			// DemoBrowser.testLoggingSetup();
-			multiMethod = BeanShellCntrl.class.getDeclaredMethod("bp");
-			// BeanBowlGUI.startBeanBowl();
-			// Debuggable.setIsTesting(true);
-			// Debuggable.setDebugging(false);
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	public static void start_prolog_from_lisp() {
@@ -2282,7 +2036,7 @@ public class Startup {
 		} else {
 			runnable = Main.mainRunnable(argsNew, null);
 		}
-		scanForExports(BeanShellCntrl.class);
+		scanForExports(Startup.class);
 		if (runnable != null) {
 			runnable.run();
 			scanForExports(BeanShellCntrl.class);

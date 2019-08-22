@@ -21,8 +21,8 @@
 
 package org.armedbear.j;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.SwingUtilities;
 
 public class FollowContextTask extends IdleThreadTask implements Constants

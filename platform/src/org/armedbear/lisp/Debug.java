@@ -38,10 +38,6 @@ import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
 import static org.armedbear.lisp.Lisp.T;
 import static org.armedbear.lisp.Lisp.exportSpecial;
 
-import java.io.PrintStream;
-
-import org.logicmoo.system.SystemCurrent;
-
 public final class Debug {
 
 	public static final void assertTrue(boolean b) {

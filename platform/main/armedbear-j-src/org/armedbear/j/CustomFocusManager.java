@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
+
 import javax.swing.DefaultFocusManager;
 import javax.swing.JDialog;
 

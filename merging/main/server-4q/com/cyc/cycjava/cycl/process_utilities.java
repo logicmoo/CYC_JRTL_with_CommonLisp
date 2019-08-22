@@ -1546,67 +1546,41 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        {
-            SubLObject v_new = new com.cyc.cycjava.cycl.process_utilities.$thinking_task_native();
-            SubLObject next = NIL;
-            for (next = arglist; NIL != next; next = cddr(next)) {
-                {
-                    SubLObject current_arg = next.first();
-                    SubLObject current_value = cadr(next);
-                    SubLObject pcase_var = current_arg;
+		final SubLObject v_new = new $thinking_task_native();
+		SubLObject next;
+		SubLObject current_arg;
+		SubLObject current_value;
+		SubLObject pcase_var;
+		for (next = NIL, next = arglist; NIL != next; next = cddr(next)) {
+			current_arg = next.first();
+			current_value = cadr(next);
+			pcase_var = current_arg;
                     if (pcase_var.eql($LOCK)) {
                         _csetf_t_task_lock(v_new, current_value);
-                    } else {
-                        if (pcase_var.eql($THREAD)) {
+			} else if (pcase_var.eql($THREAD)) {
                             _csetf_t_task_thread(v_new, current_value);
-                        } else {
-                            if (pcase_var.eql($NAME)) {
+			} else if (pcase_var.eql($NAME)) {
                                 _csetf_t_task_name(v_new, current_value);
-                            } else {
-                                if (pcase_var.eql($STATUS)) {
+			} else if (pcase_var.eql($STATUS)) {
                                     _csetf_t_task_status(v_new, current_value);
-                                } else {
-                                    if (pcase_var.eql($PROGRESS_MESSAGE)) {
+			} else if (pcase_var.eql($PROGRESS_MESSAGE)) {
                                         _csetf_t_task_progress_message(v_new, current_value);
-                                    } else {
-                                        if (pcase_var.eql($PROGRESS_SOFAR)) {
+			} else if (pcase_var.eql($PROGRESS_SOFAR)) {
                                             _csetf_t_task_progress_sofar(v_new, current_value);
-                                        } else {
-                                            if (pcase_var.eql($PROGRESS_TOTAL)) {
+			} else if (pcase_var.eql($PROGRESS_TOTAL)) {
                                                 _csetf_t_task_progress_total(v_new, current_value);
-                                            } else {
-                                                if (pcase_var.eql($START_TIME)) {
+			} else if (pcase_var.eql($START_TIME)) {
                                                     _csetf_t_task_start_time(v_new, current_value);
-                                                } else {
-                                                    if (pcase_var.eql($FINISH_TIME)) {
+			} else if (pcase_var.eql($FINISH_TIME)) {
                                                         _csetf_t_task_finish_time(v_new, current_value);
-                                                    } else {
-                                                        if (pcase_var.eql($RESULT)) {
+			} else if (pcase_var.eql($RESULT)) {
                                                             _csetf_t_task_result(v_new, current_value);
-                                                        } else {
-                                                            if (pcase_var.eql($ERROR_MESSAGE)) {
+			} else if (pcase_var.eql($ERROR_MESSAGE)) {
                                                                 _csetf_t_task_error_message(v_new, current_value);
-                                                            } else {
-                                                                if (pcase_var.eql($PROPERTIES)) {
+			} else if (pcase_var.eql($PROPERTIES)) {
                                                                     _csetf_t_task_properties(v_new, current_value);
                                                                 } else {
-                                                                    Errors.error($str_alt21$Invalid_slot__S_for_construction_, current_arg);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return v_new;
-        }
+				Errors.error($str28$Invalid_slot__S_for_construction_, current_arg);
     }
 
     public static SubLObject make_thinking_task(SubLObject arglist) {

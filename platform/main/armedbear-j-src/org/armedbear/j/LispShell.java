@@ -21,13 +21,16 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.REMatch;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
+
 import javax.swing.SwingUtilities;
-import org.armedbear.lisp.Site;
+
 import org.armedbear.lisp.LispThread;
+import org.armedbear.lisp.Site;
+
+import gnu.regexp.REMatch;
 
 public class LispShell extends Shell
 {

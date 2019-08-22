@@ -22,8 +22,6 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.ContextStatementImpl;
 
-import eu.larkc.core.data.CloseableIterator;
-import eu.larkc.core.data.SPARQLEndpoint;
 import eu.larkc.core.query.SPARQLQuery;
 import eu.larkc.core.query.SPARQLQueryImpl;
 

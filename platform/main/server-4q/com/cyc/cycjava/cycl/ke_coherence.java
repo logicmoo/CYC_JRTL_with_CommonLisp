@@ -7,8 +7,12 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.intersection;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.set_difference;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.union;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

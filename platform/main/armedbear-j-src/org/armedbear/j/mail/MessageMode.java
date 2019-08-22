@@ -22,6 +22,7 @@
 package org.armedbear.j.mail;
 
 import java.awt.event.KeyEvent;
+
 import org.armedbear.j.AbstractMode;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Constants;

@@ -1,11 +1,8 @@
 package com.netbreeze.swing;
 
-import javax.swing.*;
+import javax.swing.JMenu;
 
 import org.logicmoo.bb.BeansContext;
-
-import java.awt.*;
-import java.awt.event.*;
 
 /**
  * A menu showing the available actions for a bean.

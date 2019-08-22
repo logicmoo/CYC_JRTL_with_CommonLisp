@@ -4,9 +4,6 @@ import java.math.BigInteger;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.armedbear.lisp.Main;
 import org.jpl7.Atom;
 import org.jpl7.Compound;
@@ -19,6 +16,9 @@ import org.jpl7.Term;
 import org.jpl7.Util;
 import org.jpl7.Variable;
 import org.jpl7.fli.Prolog;
+
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 // This class defines all the tests which are run from Java.
 // It needs junit.framework.TestCase and junit.framework.TestSuite, which are not supplied with JPL.

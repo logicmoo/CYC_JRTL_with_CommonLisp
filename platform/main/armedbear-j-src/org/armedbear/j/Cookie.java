@@ -21,8 +21,8 @@
 
 package org.armedbear.j;
 
-import java.util.Vector;
 import java.net.URL;
+import java.util.Vector;
 
 public final class Cookie
 {

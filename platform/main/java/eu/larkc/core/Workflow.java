@@ -24,17 +24,16 @@ import java.util.Vector;
 
 import org.openrdf.model.URI;
 
-import eu.larkc.core.pluginManager.local.queue.Queue;
-import eu.larkc.core.pluginManager.local.queue.QueueListener;
 import eu.larkc.core.data.InformationSet;
 import eu.larkc.core.data.SetOfStatements;
 import eu.larkc.core.pluginManager.PluginManager;
 import eu.larkc.core.pluginManager.local.LocalCollectionInformationSetTransformManager;
 import eu.larkc.core.pluginManager.local.LocalIdentifyManager;
 import eu.larkc.core.pluginManager.local.LocalQueryTransformManager;
-import eu.larkc.core.pluginManager.local.LocalReasonManagerFromCollectionInformationSetManager;
 import eu.larkc.core.pluginManager.local.LocalReasonManagerFromSetOfStatementsManager;
 import eu.larkc.core.pluginManager.local.LocalSelectFromCollectionInformationSetManager;
+import eu.larkc.core.pluginManager.local.queue.Queue;
+import eu.larkc.core.pluginManager.local.queue.QueueListener;
 import eu.larkc.core.query.Query;
 import eu.larkc.plugin.Plugin;
 import eu.larkc.plugin.identify.Identifier;

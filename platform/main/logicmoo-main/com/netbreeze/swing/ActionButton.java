@@ -1,9 +1,13 @@
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JButton;
 
 /**
  * A button that represents a javax.swing.Action.

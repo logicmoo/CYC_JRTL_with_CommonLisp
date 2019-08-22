@@ -12,9 +12,9 @@ import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import abcl.DialogPromptStream;
-
 import javax.swing.JButton;
+
+import abcl.DialogPromptStream;
 
 public class AwtDialogPromptStream extends DialogPromptStream {
 

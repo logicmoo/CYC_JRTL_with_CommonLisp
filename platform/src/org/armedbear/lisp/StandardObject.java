@@ -32,8 +32,7 @@
  */
 
 package org.armedbear.lisp;
-
-import org.logicmoo.system.BeanShellCntrl;
+import static org.logicmoo.system.Startup.addThis;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -299,7 +298,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 			updateLayoutSync();
 		}
 		if(isTracked()) {
-			BeanShellCntrl.addThis(this);
+			addThis(this);
 		}
 	}
 

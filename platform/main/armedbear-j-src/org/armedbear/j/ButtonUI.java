@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;

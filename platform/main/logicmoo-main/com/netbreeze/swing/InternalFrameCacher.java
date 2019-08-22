@@ -1,9 +1,13 @@
 
 
 package com.netbreeze.swing;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.swing.JInternalFrame;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 public class InternalFrameCacher {
   private HashMap map = new HashMap();

@@ -1,12 +1,21 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.nth;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.set_nth;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.min;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.reverse;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.butlast;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_tree;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.last;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.princ;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 

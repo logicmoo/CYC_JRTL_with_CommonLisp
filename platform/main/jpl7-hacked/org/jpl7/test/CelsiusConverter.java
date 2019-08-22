@@ -5,9 +5,19 @@ package org.jpl7.test;
  * demonstrates the use of JButton, JTextField and
  * JLabel.  It requires no other files.
  */
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class CelsiusConverter implements ActionListener {
 	JFrame converterFrame;

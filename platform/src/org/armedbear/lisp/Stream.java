@@ -32,6 +32,7 @@
  */
 
 package org.armedbear.lisp;
+import static org.logicmoo.system.Startup.bp;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -54,7 +55,6 @@ import java.util.Set;
 import java.util.SortedMap;
 
 import org.armedbear.lisp.util.DecodingReader;
-import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.AbstractRandomAccessSubLStream;
@@ -2168,7 +2168,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 					}
 				}
 
-				BeanShellCntrl.bp();
+				bp();
 
 			}
 		}

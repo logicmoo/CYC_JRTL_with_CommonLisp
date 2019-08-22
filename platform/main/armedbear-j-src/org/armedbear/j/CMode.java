@@ -20,7 +20,6 @@
 package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
 
 public class CMode extends JavaMode implements Constants, Mode
 {

@@ -1,15 +1,38 @@
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import java.awt.*;
-import java.beans.*;
-import java.lang.reflect.*;
-import java.awt.event.*;
-import java.util.*;
-import java.awt.dnd.*;
-import java.awt.datatransfer.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collection;
 
-import org.apache.log4j.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
+
+import org.apache.log4j.Category;
 import org.logicmoo.bb.BeansContext;
 
 public class SmallBeanView extends BeanView implements PropertyChangeListener, MouseListener, ActionListener, DragGestureListener, Transferable, DragSourceListener {

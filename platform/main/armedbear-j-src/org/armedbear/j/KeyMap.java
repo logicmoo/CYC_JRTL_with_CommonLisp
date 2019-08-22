@@ -29,7 +29,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.KeyStroke;
+
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.LispObject;

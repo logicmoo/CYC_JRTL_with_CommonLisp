@@ -1,8 +1,11 @@
 package com.netbreeze.bbowl.gui;
 
-import org.apache.log4j.*;
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.net.URL;
+
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Category;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Manages logging configuration

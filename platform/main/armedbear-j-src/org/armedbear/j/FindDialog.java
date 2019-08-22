@@ -21,14 +21,16 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.REException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+
+import gnu.regexp.REException;
 
 public final class FindDialog extends AbstractDialog implements ActionListener,
     TextListener

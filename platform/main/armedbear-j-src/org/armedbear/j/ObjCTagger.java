@@ -21,8 +21,6 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.UncheckedRE;
 import java.util.ArrayList;
 
 public final class ObjCTagger extends JavaTagger

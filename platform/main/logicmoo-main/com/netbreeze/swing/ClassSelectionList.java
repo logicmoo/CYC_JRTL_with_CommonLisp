@@ -1,17 +1,40 @@
 package com.netbreeze.swing;
 
-import com.netbreeze.util.*;
-
-import java.beans.*;
-import javax.swing.*;
-import java.awt.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Point;
+import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 import java.lang.reflect.Modifier;
-import java.io.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.Vector;
 
-import org.apache.log4j.*;
+import javax.swing.AbstractListModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.ToolTipManager;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import org.apache.log4j.Category;
+
+import com.netbreeze.util.ClassFinder;
+import com.netbreeze.util.Utility;
 
 /**
  * A JavaBean-compatible GUI component consisting of list with name of the classes

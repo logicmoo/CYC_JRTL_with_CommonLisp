@@ -1,13 +1,14 @@
 package com.netbreeze.swing;
 
-import javax.swing.*;
+import java.util.Collection;
+import java.util.Iterator;
+
+import javax.swing.Action;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 
 import org.logicmoo.bb.BeansContext;
 import org.logicmoo.bb.BeansContextListener;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 
 /**
  * The controller class for a bean menu (JMenu or JPopupMenu), showing the list

@@ -1,13 +1,30 @@
 package com.cyc.cycjava.cycl.wordnet_import;
 
 
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
+import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
+import static com.cyc.cycjava.cycl.cb_parameters.cb_head_shortcut_icon;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_frame_name;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_help_preamble;
+import static com.cyc.cycjava.cycl.html_utilities.html_char;
+import static com.cyc.cycjava.cycl.html_utilities.html_color;
+import static com.cyc.cycjava.cycl.html_utilities.html_copyright_notice;
+import static com.cyc.cycjava.cycl.html_utilities.html_hidden_input;
+import static com.cyc.cycjava.cycl.html_utilities.html_indent;
+import static com.cyc.cycjava.cycl.html_utilities.html_markup;
+import static com.cyc.cycjava.cycl.html_utilities.html_meta_robot_instructions;
+import static com.cyc.cycjava.cycl.html_utilities.html_newline;
+import static com.cyc.cycjava.cycl.html_utilities.html_princ;
+import static com.cyc.cycjava.cycl.html_utilities.html_simple_attribute;
+import static com.cyc.cycjava.cycl.html_utilities.html_source_readability_terpri;
+import static com.cyc.cycjava.cycl.html_utilities.html_submit_input;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.listp;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.cycjava.cycl.cyc_file_dependencies;

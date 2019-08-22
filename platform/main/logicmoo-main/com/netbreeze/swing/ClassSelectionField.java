@@ -2,12 +2,16 @@
 
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.beans.*;
-import com.netbreeze.util.*;
-import javax.swing.event.*;
+import java.awt.BorderLayout;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import com.netbreeze.util.Utility;
 
 /**
   A GUI widget that lets you select a class.

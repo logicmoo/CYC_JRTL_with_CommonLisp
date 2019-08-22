@@ -31,8 +31,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+
 import org.armedbear.j.Directories;
-import org.armedbear.j.Editor;
 import org.armedbear.j.File;
 import org.armedbear.j.Log;
 import org.armedbear.j.Utilities;

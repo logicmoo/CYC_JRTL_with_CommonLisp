@@ -78,7 +78,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			return classLoader;
 		}
 		try {
-			Method method = ClassLoader.class.getDeclaredMethod("getPlatformClassLoader");
+			Method method = getDeclaredMethod(ClassLoader.class, "getPlatformClassLoader");
 			ClassLoader platformClassLoader = (ClassLoader) method.invoke(null);
 			method.setAccessible(true);
 			if (platformClassLoader instanceof URLClassLoader) {
@@ -86,8 +86,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			}
 			if (traceSearch)
 				System.err.println("Platform Classloader is not a URLClassLoader: " + platformClassLoader);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-				| SecurityException e) {
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			// TODO Auto-generated catch block
 		}
 		return null;
@@ -117,17 +116,42 @@ public class IsolatedClassLoader extends URLClassLoader {
 				return o;
 		}
 		try {
-			Class sysclass = o.getClass();
-			Method method = sysclass.getDeclaredMethod("addURL", URL.class);
+			Method method = getDeclaredMethod(o.getClass(), "addURL", URL.class);
 			method.setAccessible(true);
 			method.invoke(o, url);
+			return o;
 		} catch (NoSuchMethodException e) {
-			Errors.warn("Error, could not add URL to classloader " + o);
+			new IOException("No URL classloader", e).printStackTrace();
+			return o;
 		} catch (Throwable t) {
 			throw new IOException("Error, could not add URL to system classloader", t);
 		}
-		return o;
-		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param sysclass
+	 * @param string
+	 * @param class1
+	 * @return
+	 */
+	public static Method getDeclaredMethod(Class sysclass, String name, Class... paramClasses) throws NoSuchMethodException {
+		try {
+			return sysclass.getDeclaredMethod(name, paramClasses);
+		} catch (NoSuchMethodException poe) {
+			Class superClass = sysclass.getSuperclass();
+			while (superClass != null && superClass != Object.class && superClass != sysclass) {
+				sysclass = superClass;
+				try {
+					return sysclass.getDeclaredMethod(name, paramClasses);
+				} catch (NoSuchMethodException e) {
+					superClass = sysclass.getSuperclass();
+					continue;
+				}
+			}
+			throw poe;
+		}
+
 	}
 
 	public static String slashify(String path, boolean isDirectory) {

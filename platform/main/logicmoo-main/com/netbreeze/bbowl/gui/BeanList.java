@@ -1,18 +1,19 @@
 
 package com.netbreeze.bbowl.gui;
 
-import com.netbreeze.bbowl.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.Iterator;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.Border;
 
 import org.logicmoo.bb.BeansContextListener;
 
-import javax.swing.border.*;
-
-import java.util.*;
-import java.awt.*;
-import com.netbreeze.util.*;
-import com.netbreeze.swing.*;
+import com.netbreeze.swing.BeanView;
+import com.netbreeze.swing.SmallBeanView;
+import com.netbreeze.swing.VerticalLayout;
 
 /**
  * A GUI component showing the list of beans in the bowl

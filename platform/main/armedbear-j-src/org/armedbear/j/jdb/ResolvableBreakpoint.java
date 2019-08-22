@@ -21,15 +21,17 @@
 
 package org.armedbear.j.jdb;
 
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.VirtualMachine;
-import com.sun.jdi.request.EventRequest;
-import com.sun.jdi.request.EventRequestManager;
 import java.util.Iterator;
+
 import org.armedbear.j.Annotation;
 import org.armedbear.j.File;
 import org.armedbear.j.Line;
 import org.armedbear.j.Log;
+
+import com.sun.jdi.ReferenceType;
+import com.sun.jdi.VirtualMachine;
+import com.sun.jdi.request.EventRequest;
+import com.sun.jdi.request.EventRequestManager;
 
 public abstract class ResolvableBreakpoint
 {

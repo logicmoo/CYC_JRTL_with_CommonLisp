@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Stack;
+
 import javax.swing.SwingUtilities;
 
 public final class IList implements BackgroundProcess, Constants

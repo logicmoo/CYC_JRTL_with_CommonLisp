@@ -22,7 +22,6 @@
 package org.armedbear.j;
 
 import java.util.Iterator;
-import java.util.StringTokenizer;
 
 public final class FileHistoryEntry
 {

@@ -3,16 +3,8 @@ package org.jpl7;
 import java.math.BigInteger;
 import java.util.Map;
 
-import org.armedbear.lisp.Lisp;
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
-import org.logicmoo.system.BeanShellCntrl;
-
-import com.cyc.cycjava.cycl.variables;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLReader;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 
 /**
  * This class supports Java representations of Prolog variables.

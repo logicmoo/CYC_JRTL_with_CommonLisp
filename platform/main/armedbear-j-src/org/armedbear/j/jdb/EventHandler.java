@@ -21,14 +21,23 @@
 
 package org.armedbear.j.jdb;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.SwingUtilities;
+
+import org.armedbear.j.Buffer;
+import org.armedbear.j.Editor;
+import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.File;
+import org.armedbear.j.Log;
+import org.armedbear.j.Platform;
+
 import com.sun.jdi.IncompatibleThreadStateException;
 import com.sun.jdi.Method;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ReferenceType;
 import com.sun.jdi.StackFrame;
 import com.sun.jdi.ThreadReference;
 import com.sun.jdi.VMDisconnectedException;
-import com.sun.jdi.Value;
 import com.sun.jdi.event.BreakpointEvent;
 import com.sun.jdi.event.ClassPrepareEvent;
 import com.sun.jdi.event.ClassUnloadEvent;
@@ -49,16 +58,6 @@ import com.sun.jdi.event.VMStartEvent;
 import com.sun.jdi.event.WatchpointEvent;
 import com.sun.jdi.request.BreakpointRequest;
 import com.sun.jdi.request.EventRequest;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.swing.SwingUtilities;
-import org.armedbear.j.Buffer;
-import org.armedbear.j.Editor;
-import org.armedbear.j.FastStringBuffer;
-import org.armedbear.j.File;
-import org.armedbear.j.Log;
-import org.armedbear.j.Platform;
 
 public final class EventHandler implements Runnable
 {

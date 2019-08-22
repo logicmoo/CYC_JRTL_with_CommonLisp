@@ -2,8 +2,10 @@
 
 package com.netbreeze.swing;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Dimension;
+
+import javax.swing.Icon;
+import javax.swing.JButton;
 
 /**
 * A button with an image and three possible

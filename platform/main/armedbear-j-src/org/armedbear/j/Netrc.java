@@ -21,10 +21,10 @@
 
 package org.armedbear.j;
 
-import java.io.InputStream;
 import java.io.IOException;
-import java.util.Vector;
+import java.io.InputStream;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 public final class Netrc
 {

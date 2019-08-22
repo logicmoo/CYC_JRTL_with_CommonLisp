@@ -1,17 +1,17 @@
 package abcl_ae;
 
 import java.io.IOException;
-import javax.servlet.http.*;
-import javax.servlet.*;
 
-import org.armedbear.lisp.Interpreter;
-import org.armedbear.lisp.LispThread;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.armedbear.lisp.Lisp;
-import org.armedbear.lisp.Symbol;
-import org.armedbear.lisp.SpecialBinding;
+import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.SpecialBindingsMark;
-import org.armedbear.lisp.Load;
 import org.armedbear.lisp.Stream;
+import org.armedbear.lisp.Symbol;
 
 public class HelloWorldServlet extends HttpServlet {
 

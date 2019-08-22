@@ -33,7 +33,7 @@
 
 package org.armedbear.lisp;
 
-import org.logicmoo.system.BeanShellCntrl;
+import static org.logicmoo.system.Startup.addThis;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -771,7 +771,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 				setName(sym);
 		}
 		if (isTracked()) {
-			BeanShellCntrl.addThis(this);
+			addThis(this);
 		}
 	}
 

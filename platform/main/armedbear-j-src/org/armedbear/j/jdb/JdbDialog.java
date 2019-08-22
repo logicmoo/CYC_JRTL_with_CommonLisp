@@ -23,12 +23,14 @@ package org.armedbear.j.jdb;
 
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
 import org.armedbear.j.AbstractDialog;
 import org.armedbear.j.Editor;
 import org.armedbear.j.File;

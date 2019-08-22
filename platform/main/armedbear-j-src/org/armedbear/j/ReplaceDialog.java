@@ -21,16 +21,18 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.REException;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.undo.CompoundEdit;
+
+import gnu.regexp.REException;
 
 public final class ReplaceDialog extends AbstractDialog implements Constants,
     TextListener

@@ -21,17 +21,16 @@
 
 package org.armedbear.j.mail;
 
-import gnu.regexp.RE;
-import gnu.regexp.UncheckedRE;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Debug;
 import org.armedbear.j.DiffFormatter;
-import org.armedbear.j.Editor;
 import org.armedbear.j.FormatTable;
 import org.armedbear.j.Formatter;
 import org.armedbear.j.Line;
 import org.armedbear.j.LineSegmentList;
-import org.armedbear.j.Utilities;
+
+import gnu.regexp.RE;
+import gnu.regexp.UncheckedRE;
 
 public final class MessageFormatter extends Formatter
 {

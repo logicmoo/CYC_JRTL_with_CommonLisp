@@ -29,16 +29,16 @@
  */
 package org.objectweb.asm.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A {@link MethodAdapter} that checks that its methods are properly used. More

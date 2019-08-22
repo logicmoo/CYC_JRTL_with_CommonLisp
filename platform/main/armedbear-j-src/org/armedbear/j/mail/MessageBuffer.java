@@ -29,9 +29,10 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
+
 import org.armedbear.j.Annotation;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.BufferIterator;
@@ -39,9 +40,9 @@ import org.armedbear.j.Debug;
 import org.armedbear.j.Display;
 import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
-import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
 import org.armedbear.j.FastStringReader;
+import org.armedbear.j.File;
 import org.armedbear.j.Headers;
 import org.armedbear.j.ImageLine;
 import org.armedbear.j.ImageLoader;
@@ -60,7 +61,6 @@ import org.armedbear.j.TextLine;
 import org.armedbear.j.Utilities;
 import org.armedbear.j.WebBuffer;
 import org.armedbear.j.WebFormatter;
-import org.armedbear.j.WebLine;
 import org.armedbear.j.WebLoader;
 
 public class MessageBuffer extends Buffer

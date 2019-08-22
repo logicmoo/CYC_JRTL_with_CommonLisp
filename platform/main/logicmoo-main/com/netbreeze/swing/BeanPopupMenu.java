@@ -1,11 +1,8 @@
 package com.netbreeze.swing;
 
-import javax.swing.*;
+import javax.swing.JPopupMenu;
 
 import org.logicmoo.bb.BeansContext;
-
-import java.awt.*;
-import java.awt.event.*;
 
 /**
  * A Popup menu for a bean. The valid actions are

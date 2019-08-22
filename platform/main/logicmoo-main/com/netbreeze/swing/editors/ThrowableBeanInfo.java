@@ -1,6 +1,7 @@
 package com.netbreeze.swing.editors;
 
-import java.beans.*;
+import java.beans.BeanDescriptor;
+import java.beans.SimpleBeanInfo;
 
 public class ThrowableBeanInfo extends SimpleBeanInfo {
   @Override

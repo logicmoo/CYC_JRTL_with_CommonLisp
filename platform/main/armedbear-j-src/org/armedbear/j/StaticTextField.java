@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.awt.Graphics;
+
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 import javax.swing.UIManager;

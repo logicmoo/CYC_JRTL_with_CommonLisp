@@ -21,13 +21,15 @@
 
 package org.armedbear.j.mail;
 
-import gnu.regexp.RE;
-import gnu.regexp.REMatch;
-import gnu.regexp.UncheckedRE;
 import java.io.UnsupportedEncodingException;
+
 import org.armedbear.j.FastStringBuffer;
 import org.armedbear.j.Log;
 import org.armedbear.j.Utilities;
+
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 
 public final class RFC2047
 {

@@ -1,17 +1,33 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.cycjava.cycl.cb_parameters.$cb_default_term_frame$;
+import static com.cyc.cycjava.cycl.cb_parameters.cyc_cgi_url_int;
+import static com.cyc.cycjava.cycl.cb_utilities.$cb_default_naut_handler$;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_frame_name;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_naut_identifier;
+import static com.cyc.cycjava.cycl.cb_utilities.declare_cb_form_cons_method_always_active;
+import static com.cyc.cycjava.cycl.cb_utilities.register_cb_form_cons_method;
+import static com.cyc.cycjava.cycl.cb_utilities.setup_cb_link_method;
+import static com.cyc.cycjava.cycl.html_utilities.html_align;
+import static com.cyc.cycjava.cycl.html_utilities.html_char;
+import static com.cyc.cycjava.cycl.html_utilities.html_glyph_markup;
+import static com.cyc.cycjava.cycl.html_utilities.html_markup;
+import static com.cyc.cycjava.cycl.html_utilities.html_print_doc_string;
+import static com.cyc.cycjava.cycl.utilities_macros.register_html_interface_variable;
+import static com.cyc.cycjava.cycl.utilities_macros.register_html_state_variable;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;

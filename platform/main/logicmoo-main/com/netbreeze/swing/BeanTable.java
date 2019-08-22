@@ -2,14 +2,19 @@
 
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import java.util.*;
-import java.beans.*;
-import javax.swing.table.*;
-import java.lang.reflect.*;
-import com.netbreeze.util.*;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import org.apache.log4j.*;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+
+import org.apache.log4j.Category;
 import org.logicmoo.bb.BeansContext;
 
 public class BeanTable extends JTable {

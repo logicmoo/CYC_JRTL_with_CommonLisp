@@ -1,19 +1,29 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.constant_handles.constant_p;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
 import static com.cyc.cycjava.cycl.control_vars.$perform_unification_occurs_check$;
 import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.sublisp_throw;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.equal;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.mod;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numGE;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_tree;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
+import static com.cyc.tool.subl.util.SubLFiles.defvar;
 
 import com.cyc.cycjava.cycl.inference.harness.inference_metrics;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

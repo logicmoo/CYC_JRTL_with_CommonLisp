@@ -127,15 +127,11 @@
 						<include>src/**/*.java</include>
 						<include>main/cycjava-persistence-hacks/**/*.java</include>
 						<include>main/logicmoo-main**/*.java</include>
-						<include>main/opencyc-server-jsrc-in-progress/**/*.java</include>
 						<include>main/objectweb-asm-src/**/*.java</include>
 						<include>main/armedbear-j-src/**/*.java</include>
 						<include>main/server-4q/**/*.java</include>
-						<include>main/server-4u/**/*.java</include>
-						<include>main/server-4v/**/*.java</include>
 						<include>main/jpl7-hacked/**/*.java</include>
 						<include>main/java/**/*.java</include>
-						<include>main/platform-1.1/**/*.java</include>
 						<include>main/beanshell/**/*.java</include>
 					</includes>
 				</configuration>
@@ -157,15 +153,11 @@
 							<sources>
 								<source>main/cycjava-persistence-hacks</source>
 								<source>main/logicmoo-main</source>
-								<source>main/opencyc-server-jsrc-in-progress</source>
 								<source>main/objectweb-asm-src</source>
 								<source>main/armedbear-j-src</source>
 								<source>main/server-4q</source>
-								<source>main/server-4u</source>
-								<source>main/server-4v</source>
 								<source>main/jpl7-hacked</source>
 								<source>main/java</source>
-								<source>main/platform-1.1</source>
 								<source>main/beanshell</source>
 							</sources>
 						</configuration>
@@ -336,6 +328,13 @@
 			<version>2.0.0-alpha0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.beanshell/bsh -->
+		<dependency>
+			<groupId>org.beanshell</groupId>
+			<artifactId>bsh</artifactId>
+			<version>2.0b5</version>
+		</dependency>
+
 		<dependency>
 			<groupId>net.kencochrane.raven</groupId>
 			<artifactId>raven</artifactId>

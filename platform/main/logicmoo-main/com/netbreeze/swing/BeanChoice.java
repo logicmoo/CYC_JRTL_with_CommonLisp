@@ -1,15 +1,20 @@
 
 
 package com.netbreeze.swing;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.LinkedList;
+
+import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
 
 import org.logicmoo.bb.BeansContext;
 import org.logicmoo.bb.BeansContextListener;
-
-import java.beans.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
 
 /**
  * A GUI widget that lets you choose among a set of beans

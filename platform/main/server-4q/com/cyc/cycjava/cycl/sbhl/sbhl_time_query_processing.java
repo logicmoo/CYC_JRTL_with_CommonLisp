@@ -1,17 +1,37 @@
 package com.cyc.cycjava.cycl.sbhl;
 
 
-import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_form;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_show_assertion_readably;
 import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.el_utilities.el_negation_p;
+import static com.cyc.cycjava.cycl.el_utilities.literalP;
+import static com.cyc.cycjava.cycl.el_utilities.literal_arity;
+import static com.cyc.cycjava.cycl.el_utilities.literal_atomic_sentence;
 import static com.cyc.cycjava.cycl.html_utilities.html_newline;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryKey;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntrySetIterator;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryValue;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorHasNext;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorNextEntry;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.releaseEntrySetIterator;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_duplicates;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.fboundp;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.caar;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.third;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import java.util.Iterator;

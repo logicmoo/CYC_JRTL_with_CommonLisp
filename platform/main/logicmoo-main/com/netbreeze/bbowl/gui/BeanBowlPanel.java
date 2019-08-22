@@ -1,19 +1,22 @@
 
 package com.netbreeze.bbowl.gui;
-import com.netbreeze.bbowl.*;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.JButton;
+import javax.swing.JDesktopPane;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.logicmoo.bb.BeanBowl;
 
-import javax.swing.border.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import com.netbreeze.swing.editors.*;
-import java.util.*;
-import com.netbreeze.swing.*;
+import com.netbreeze.swing.BeanUtils;
 
 public class BeanBowlPanel extends JPanel implements ActionListener, DocumentListener {
   Class currentClass = null;

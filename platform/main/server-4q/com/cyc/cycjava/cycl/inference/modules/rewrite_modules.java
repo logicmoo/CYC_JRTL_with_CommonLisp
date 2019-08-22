@@ -4,8 +4,11 @@ package com.cyc.cycjava.cycl.inference.modules;
 import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
 import static com.cyc.cycjava.cycl.utilities_macros.register_kb_variable_initialization;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.defvar;
 
 import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.cycjava.cycl.hl_supports;

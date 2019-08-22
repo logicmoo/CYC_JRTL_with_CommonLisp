@@ -21,6 +21,38 @@
 
 package org.armedbear.j.jdb;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import javax.swing.Icon;
+import javax.swing.SwingUtilities;
+
+import org.armedbear.j.Annotation;
+import org.armedbear.j.Buffer;
+import org.armedbear.j.BufferIterator;
+import org.armedbear.j.Debug;
+import org.armedbear.j.Editor;
+import org.armedbear.j.EditorIterator;
+import org.armedbear.j.EditorList;
+import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.File;
+import org.armedbear.j.JavaMode;
+import org.armedbear.j.JavaSource;
+import org.armedbear.j.Line;
+import org.armedbear.j.Log;
+import org.armedbear.j.Platform;
+import org.armedbear.j.Position;
+import org.armedbear.j.ReaderThread;
+import org.armedbear.j.SimpleEdit;
+import org.armedbear.j.Utilities;
+
 import com.sun.jdi.AbsentInformationException;
 import com.sun.jdi.ArrayReference;
 import com.sun.jdi.Field;
@@ -44,35 +76,6 @@ import com.sun.jdi.request.ExceptionRequest;
 import com.sun.jdi.request.StepRequest;
 import com.sun.jdi.request.ThreadDeathRequest;
 import com.sun.jdi.request.ThreadStartRequest;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
-import javax.swing.Icon;
-import javax.swing.SwingUtilities;
-import org.armedbear.j.Annotation;
-import org.armedbear.j.Buffer;
-import org.armedbear.j.BufferIterator;
-import org.armedbear.j.Debug;
-import org.armedbear.j.Editor;
-import org.armedbear.j.EditorIterator;
-import org.armedbear.j.EditorList;
-import org.armedbear.j.File;
-import org.armedbear.j.FastStringBuffer;
-import org.armedbear.j.JavaMode;
-import org.armedbear.j.JavaSource;
-import org.armedbear.j.Line;
-import org.armedbear.j.Log;
-import org.armedbear.j.Platform;
-import org.armedbear.j.Position;
-import org.armedbear.j.ReaderThread;
-import org.armedbear.j.SimpleEdit;
-import org.armedbear.j.Utilities;
 
 public final class Jdb extends Buffer implements JdbConstants
 {

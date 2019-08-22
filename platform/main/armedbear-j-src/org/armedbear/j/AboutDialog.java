@@ -21,6 +21,7 @@ package org.armedbear.j;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.swing.Box;
 import javax.swing.JPanel;
 

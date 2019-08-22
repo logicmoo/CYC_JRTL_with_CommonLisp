@@ -24,6 +24,7 @@ package org.armedbear.j;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Vector;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;

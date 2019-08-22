@@ -1,9 +1,27 @@
 
 package com.netbreeze.bbowl.gui;
 
-import com.netbreeze.bbowl.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.beans.Customizer;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 import org.armedbear.lisp.Lisp;
 import org.logicmoo.bb.BeanBowl;
@@ -11,12 +29,9 @@ import org.logicmoo.bb.BeanWrapper;
 import org.logicmoo.bb.BeansContext;
 import org.logicmoo.bb.BeansContextListener;
 
-import com.netbreeze.util.*;
-import com.netbreeze.swing.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
+import com.netbreeze.swing.ErrorDialog;
+import com.netbreeze.swing.LargeBeanView;
+import com.netbreeze.util.PairTable;
 
 /**
  * A BeansContext implementation that uses a BeanBowlGUI.

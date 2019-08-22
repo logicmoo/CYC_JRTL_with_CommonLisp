@@ -21,9 +21,10 @@
 
 package org.armedbear.j;
 
+import java.util.ArrayList;
+
 import gnu.regexp.RE;
 import gnu.regexp.UncheckedRE;
-import java.util.ArrayList;
 
 public class CTagger extends JavaTagger
 {

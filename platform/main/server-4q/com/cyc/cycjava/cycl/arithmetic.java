@@ -5,10 +5,17 @@ import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.define_test_case_
 import static com.cyc.cycjava.cycl.utilities_macros.register_kb_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.minus;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numLE;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

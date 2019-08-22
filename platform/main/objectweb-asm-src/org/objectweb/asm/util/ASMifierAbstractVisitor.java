@@ -29,11 +29,11 @@
  */
 package org.objectweb.asm.util;
 
+import java.util.Map;
+
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
-
-import java.util.Map;
 
 /**
  * An abstract ASMifier visitor.

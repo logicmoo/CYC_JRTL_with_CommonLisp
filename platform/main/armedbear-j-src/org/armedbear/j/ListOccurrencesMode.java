@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
+
 import javax.swing.JPopupMenu;
 
 public final class ListOccurrencesMode extends AbstractMode implements Constants, Mode

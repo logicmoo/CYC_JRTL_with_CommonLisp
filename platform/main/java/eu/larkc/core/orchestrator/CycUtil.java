@@ -19,8 +19,10 @@
 package eu.larkc.core.orchestrator;
 
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static org.armedbear.lisp.Lisp.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp.UNPROVIDED;
 
 import java.io.IOException;
 import java.io.InputStream;

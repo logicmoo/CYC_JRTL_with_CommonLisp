@@ -21,17 +21,18 @@
 
 package org.armedbear.j.jdb;
 
+import java.util.Map;
+
+import org.armedbear.j.Debug;
+import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.Log;
+
 import com.sun.jdi.Bootstrap;
 import com.sun.jdi.VMDisconnectedException;
 import com.sun.jdi.VirtualMachine;
 import com.sun.jdi.VirtualMachineManager;
-import com.sun.jdi.connect.Connector.Argument;
 import com.sun.jdi.connect.Connector;
 import com.sun.jdi.connect.LaunchingConnector;
-import java.util.Map;
-import org.armedbear.j.Debug;
-import org.armedbear.j.FastStringBuffer;
-import org.armedbear.j.Log;
 
 public final class VMConnection
 {

@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.undo.CompoundEdit;
 
 public final class InsertTagDialog extends InputDialog implements Constants

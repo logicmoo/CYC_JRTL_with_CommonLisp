@@ -2,11 +2,12 @@
 
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.awt.event.*;
-import com.netbreeze.util.*;
+import java.awt.BorderLayout;
+
+import javax.swing.JDialog;
+import javax.swing.WindowConstants;
+
+import com.netbreeze.util.Utility;
 
 public class ErrorDialog extends JDialog {
 

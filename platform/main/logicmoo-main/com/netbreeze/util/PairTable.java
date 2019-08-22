@@ -1,8 +1,10 @@
 
 package com.netbreeze.util;
 
-import java.util.*;
-import java.io.*;
+import java.io.PrintStream;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class PairTable {
 	// Note: a "pair" is simply an array of 2 objects

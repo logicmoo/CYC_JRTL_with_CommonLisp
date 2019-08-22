@@ -47,6 +47,7 @@ import org.armedbear.lisp.TypeError;
 import org.armedbear.lisp.UndefinedFunction;
 import org.armedbear.lisp.WrongNumberOfArgumentsException;
 import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.Startup;
 
 import gnu.regexp.REException;
 
@@ -1933,7 +1934,7 @@ public static void invokeBufferActivatedHook(Buffer buffer)
 
 	static {
 
-		BeanShellCntrl.scanForExports(RemoteShell.class);
+		Startup.scanForExports(RemoteShell.class);
 
 	}
 }

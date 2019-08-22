@@ -1,13 +1,16 @@
 package com.netbreeze.swing;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.logicmoo.bb.BeansContext;
-
-import java.awt.*;
-import java.awt.event.*;
-import com.netbreeze.swing.*;
-import com.netbreeze.util.Utility;
 
 /**
  * A GUI component that lets you select any class and browse

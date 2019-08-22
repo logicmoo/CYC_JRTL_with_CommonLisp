@@ -1,12 +1,6 @@
 
 package com.netbreeze.swing.editors;
-import com.netbreeze.swing.*;
-import java.beans.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import com.netbreeze.util.*;
+import java.beans.PropertyEditorSupport;
 
 public class StringEditor extends PropertyEditorSupport {
   @Override

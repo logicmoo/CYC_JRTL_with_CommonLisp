@@ -4,17 +4,33 @@
 package com.cyc.cycjava.cycl.cyblack;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.sublisp_throw;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.make_lock;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.release_lock;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.seize_lock;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.divide;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.min;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.set_aref;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.defvar;
 
 import com.cyc.cycjava.cycl.V02;
 import com.cyc.cycjava.cycl.classes;

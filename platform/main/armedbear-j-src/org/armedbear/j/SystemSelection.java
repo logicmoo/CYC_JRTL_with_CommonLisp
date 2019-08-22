@@ -29,6 +29,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
+
 import javax.swing.undo.CompoundEdit;
 
 public final class SystemSelection implements ClipboardOwner, Constants

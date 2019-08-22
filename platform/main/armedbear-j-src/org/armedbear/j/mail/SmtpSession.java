@@ -33,10 +33,11 @@ import java.net.NoRouteToHostException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
+
 import org.armedbear.j.Debug;
 import org.armedbear.j.Editor;
-import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.File;
 import org.armedbear.j.Log;
 import org.armedbear.j.MessageDialog;
 import org.armedbear.j.Property;

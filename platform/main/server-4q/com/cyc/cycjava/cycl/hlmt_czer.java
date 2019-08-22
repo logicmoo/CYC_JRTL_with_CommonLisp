@@ -2,14 +2,29 @@ package com.cyc.cycjava.cycl;
 
 
 import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.cycjava.cycl.control_vars.within_assertP;
+import static com.cyc.cycjava.cycl.control_vars.within_queryP;
+import static com.cyc.cycjava.cycl.el_utilities.cyc_const_metric_tense_operator_p;
+import static com.cyc.cycjava.cycl.el_utilities.cyc_const_tense_operator_p;
+import static com.cyc.cycjava.cycl.el_utilities.el_conjunction_p;
+import static com.cyc.cycjava.cycl.el_utilities.el_existential_p;
+import static com.cyc.cycjava.cycl.el_utilities.el_negation_p;
+import static com.cyc.cycjava.cycl.el_utilities.make_negation;
+import static com.cyc.cycjava.cycl.el_utilities.make_unary_formula;
+import static com.cyc.cycjava.cycl.el_utilities.possibly_naut_p;
+import static com.cyc.cycjava.cycl.el_utilities.quantified_sub_sentence;
+import static com.cyc.cycjava.cycl.el_utilities.unmake_ternary_formula;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.eq;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.gensym;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

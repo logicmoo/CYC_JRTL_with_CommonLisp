@@ -21,10 +21,11 @@
 
 package org.armedbear.j;
 
+import javax.swing.undo.CompoundEdit;
+
 import gnu.regexp.RE;
 import gnu.regexp.REException;
 import gnu.regexp.REMatch;
-import javax.swing.undo.CompoundEdit;
 
 public final class AlignStrings
 {

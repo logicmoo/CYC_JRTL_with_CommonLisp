@@ -18,7 +18,14 @@
  */
 package org.logicmoo.system;
 
-import static org.logicmoo.system.BeanShellCntrl.*;
+import static org.logicmoo.system.BeanShellCntrl.multiMethod;
+import static org.logicmoo.system.BeanShellCntrl.object_to_term;
+import static org.logicmoo.system.Startup.EMPTY_LISP_OBJECT;
+import static org.logicmoo.system.Startup.bp;
+import static org.logicmoo.system.Startup.createStackTraceString;
+import static org.logicmoo.system.Startup.findMethod;
+import static org.logicmoo.system.Startup.invokeM;
+import static org.logicmoo.system.Startup.terms_to_lisp_objects;
 import static org.logicmoo.system.Startup.with_jpl_catcher;
 
 import java.lang.reflect.Method;
@@ -104,12 +111,12 @@ public class SpecialMethod extends SpecialOperator {
 		}
 		if (staticMethods == null)
 			staticMethods = new HashSet<Method>();
-		if (was == BeanShellCntrl.multiMethod) {
+		if (was == multiMethod) {
 			staticMethods.add(m);
 			methodCount++;
 			return;
 		}
-		methodByArity[paramLen] = BeanShellCntrl.multiMethod;
+		methodByArity[paramLen] = multiMethod;
 		methodCount++;
 		staticMethods.add(m);
 		staticMethods.add(was);
@@ -128,13 +135,13 @@ public class SpecialMethod extends SpecialOperator {
 				Class[] parameterTypes = m.getParameterTypes();
 				Class class1 = parameterTypes[1];
 				if (class1 == Environment.class || class1 == SubLEnvironment.class) {
-					final Object result = BeanShellCntrl.invokeM(m, null, args, env);
+					final Object result = invokeM(m, null, args, env);
 					return JavaObject.getInstance(result, true, m.getReturnType());
 				}
 			}
 		}
 		if (args == NIL) {
-			return executeEVA(env, BeanShellCntrl.EMPTY_LISP_OBJECT);
+			return executeEVA(env, EMPTY_LISP_OBJECT);
 		}
 		return executeEVA(env, args.copyToArray());
 	}
@@ -155,13 +162,13 @@ public class SpecialMethod extends SpecialOperator {
 
 	private LispObject executeEML(Environment env, int paramLen, boolean tryPTLArityFirst, LispObject[] args) {
 		Method[] methodsArray = methodByArity;
-		Method m = BeanShellCntrl.findMethod(methodsArray, args);
+		Method m = findMethod(methodsArray, args);
 		if (m == null) {
 			if (staticMethods != null && staticMethods.size() > 0) {
 				methodsArray = staticMethods.toArray(new Method[staticMethods.size()]);
-				m = BeanShellCntrl.findMethod(methodsArray, args);
+				m = findMethod(methodsArray, args);
 				if (m == null) {
-					m = BeanShellCntrl.findMethod(methodsArray, args);
+					m = findMethod(methodsArray, args);
 				}
 			}
 		}
@@ -175,7 +182,7 @@ public class SpecialMethod extends SpecialOperator {
 		if (methodByArity == null)
 			executeEML(env, paramLen, true, args);
 		Method m = methodByArity[paramLen];
-		if (m == BeanShellCntrl.multiMethod) {
+		if (m == multiMethod) {
 			return executeEML(env, paramLen, true, args);
 		}
 		if (m == null) {
@@ -196,7 +203,7 @@ public class SpecialMethod extends SpecialOperator {
 			} else {
 				invokeWith = Lisp.list(args);
 			}
-			return (LispObject) BeanShellCntrl.invokeM(m, null, invokeWith, env);
+			return (LispObject) invokeM(m, null, invokeWith, env);
 		}
 		Object[] methodArgs = new Object[argTypesLen];
 		for (int i = 0; i < usedLen; i++) {
@@ -214,14 +221,14 @@ public class SpecialMethod extends SpecialOperator {
 				if (type == LispObject.class) {
 					methodArgs[i] = arg;
 				} else if (type == Term.class) {
-					methodArgs[i] = BeanShellCntrl.object_to_term(arg);
+					methodArgs[i] = object_to_term(arg);
 				} else {
 					methodArgs[i] = arg.javaInstance(type);
 				}
 			}
 		}
 		m.setAccessible(true);
-		Object result = BeanShellCntrl.invokeM(m, null, methodArgs);
+		Object result = invokeM(m, null, methodArgs);
 		if (LispObject.class.isAssignableFrom(m.getReturnType()))
 			return (LispObject) result;
 		if (result instanceof Boolean)
@@ -264,7 +271,7 @@ public class SpecialMethod extends SpecialOperator {
 	@Override
 	public boolean isSpecial() {
 		if (evalArgs) {
-			BeanShellCntrl.bp();
+			bp();
 		}
 		return !evalArgs;
 	}
@@ -295,21 +302,21 @@ public class SpecialMethod extends SpecialOperator {
 			Object[] javaArgs = args;
 			do {
 				if (methodByArity != null) {
-					if ((m = BeanShellCntrl.findMethod(methodByArity, javaArgs)) != null)
+					if ((m = findMethod(methodByArity, javaArgs)) != null)
 						break;
 				}
 				Method[] methodsArray = null;
 				final boolean hasStaticMethods = staticMethods != null && staticMethods.size() > 0;
 				if (hasStaticMethods) {
 					methodsArray = staticMethods.toArray(new Method[staticMethods.size()]);
-					if ((m = BeanShellCntrl.findMethod(methodsArray, javaArgs)) != null)
+					if ((m = findMethod(methodsArray, javaArgs)) != null)
 						break;
 				}
-				javaArgs = BeanShellCntrl.terms_to_lisp_objects(args);
-				if ((m = BeanShellCntrl.findMethod(methodByArity, javaArgs)) != null)
+				javaArgs = terms_to_lisp_objects(args);
+				if ((m = findMethod(methodByArity, javaArgs)) != null)
 					break;
 				if (hasStaticMethods) {
-					if ((m = BeanShellCntrl.findMethod(methodsArray, javaArgs)) != null)
+					if ((m = findMethod(methodsArray, javaArgs)) != null)
 						break;
 				}
 				if ((m = macro) == null)
@@ -319,7 +326,7 @@ public class SpecialMethod extends SpecialOperator {
 			if (!wasNoDebug) {
 				Main.setNoDebug(true);
 			}
-			Object o = BeanShellCntrl.invokeM(m, null, javaArgs);
+			Object o = invokeM(m, null, javaArgs);
 			if (!result.isVariable()) {
 				return result;
 			}
@@ -342,7 +349,7 @@ public class SpecialMethod extends SpecialOperator {
 			if (e instanceof JPLException) {
 				throw (JPLException) e;
 			}
-			throw new JPLException(BeanShellCntrl.createStackTraceString(e));
+			throw new JPLException(createStackTraceString(e));
 		} finally {
 			Main.setNoDebug(wasNoDebug);
 		}

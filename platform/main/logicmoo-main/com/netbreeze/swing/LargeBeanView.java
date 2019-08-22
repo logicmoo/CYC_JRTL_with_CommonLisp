@@ -1,12 +1,16 @@
 package com.netbreeze.swing;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.beans.Customizer;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 
 import org.logicmoo.bb.BeansContext;
 
 import com.netbreeze.util.Utility;
-import java.beans.*;
 
 /**
  * A panel containing a complete GUI for a bean, including properties, methods,

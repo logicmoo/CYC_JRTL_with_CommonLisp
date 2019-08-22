@@ -34,6 +34,8 @@ import org.logicmoo.system.BeanShellCntrl;
 
 import gnu.regexp.REMatch;
 //import org.armedbear.prolog.PrologThread;
+import static org.logicmoo.system.Startup.*;
+import static org.logicmoo.system.BeanShellCntrl.*;
 
 public class PrologShell extends Shell
 {
@@ -107,9 +109,9 @@ public class PrologShell extends Shell
 	@Override
 	protected void startProcess()
 	{
-		if (!BeanShellCntrl.started_from_prolog)
+		if (!started_from_prolog)
 		{
-			BeanShellCntrl.init_swipl_server();
+			init_swipl_server();
 		}
 		if (shellCommand == null)
 		{

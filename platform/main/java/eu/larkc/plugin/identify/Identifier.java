@@ -19,6 +19,7 @@
 package eu.larkc.plugin.identify;
 
 import java.util.Collection;
+
 import eu.larkc.core.data.InformationSet;
 import eu.larkc.core.query.Query;
 import eu.larkc.plugin.Context;

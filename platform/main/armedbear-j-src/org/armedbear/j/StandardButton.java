@@ -21,6 +21,7 @@
 package org.armedbear.j;
 
 import java.awt.Dimension;
+
 import javax.swing.JButton;
 
 public final class StandardButton extends JButton

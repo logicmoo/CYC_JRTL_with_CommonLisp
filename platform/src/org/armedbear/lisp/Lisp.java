@@ -32,6 +32,7 @@
  */
 
 package org.armedbear.lisp;
+import static org.logicmoo.system.Startup.doThrow;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,14 +56,12 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jpl7.JPL;
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnitTest;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -387,7 +386,7 @@ abstract public class Lisp extends ABCLStatic {
 
 	public static final LispObject error(LispObject condition) {
 		if (Main.isNoDebug()) {
-			throw BeanShellCntrl.doThrow(conditionToSubLException(condition));
+			throw doThrow(conditionToSubLException(condition));
 		}
 		if (Main.isSubLisp()) {
 			if (SubLMain.commonSymbolsOK)

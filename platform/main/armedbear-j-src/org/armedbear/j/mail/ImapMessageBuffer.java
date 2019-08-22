@@ -22,6 +22,7 @@
 package org.armedbear.j.mail;
 
 import javax.swing.SwingUtilities;
+
 import org.armedbear.j.BackgroundProcess;
 import org.armedbear.j.Debug;
 import org.armedbear.j.Editor;

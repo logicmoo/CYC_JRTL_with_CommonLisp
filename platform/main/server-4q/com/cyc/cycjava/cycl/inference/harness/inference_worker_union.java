@@ -1,16 +1,33 @@
 package com.cyc.cycjava.cycl.inference.harness;
 
 
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
+import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
+import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
+import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
+import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
+import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
+import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.nth;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryKey;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntrySetIterator;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryValue;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorHasNext;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorNextEntry;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.releaseEntrySetIterator;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.intersection;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 
 import java.util.Iterator;
 import java.util.Map;

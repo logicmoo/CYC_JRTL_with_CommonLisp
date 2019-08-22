@@ -5,6 +5,11 @@
  */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import static org.logicmoo.system.Startup.cyc_repl;
+import static org.logicmoo.system.Startup.exit;
+import static org.logicmoo.system.Startup.lisp_repl;
+import static org.logicmoo.system.Startup.registerSelf;
+
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
@@ -33,7 +38,6 @@ import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Main;
 import org.jpl7.JPL;
 import org.jpl7.Query;
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
 // Internal imports
@@ -177,7 +181,7 @@ public class SubLMain {
 			Storage.room(SubLNil.NIL);
 		}
 		StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
-		BeanShellCntrl.registerSelf();
+		registerSelf();
 	}
 
 	public static final class RunnableMain implements Runnable {
@@ -193,12 +197,12 @@ public class SubLMain {
 				if (startInSubLisp) {
 					SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
 					// CycEval.CYC_REPL.execute();
-					BeanShellCntrl.cyc_repl();
+					cyc_repl();
 				} else {
 					// SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
 					SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
 					// CycEval.LISP_REPL.execute();
-					BeanShellCntrl.lisp_repl();
+					lisp_repl();
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -389,7 +393,7 @@ public class SubLMain {
 				if (me != null)
 					me.doSystemCleanupAndExit(exit_with_error ? 1 : 0);
 				else
-					BeanShellCntrl.exit(exit_with_error ? 1 : 0);
+					exit(exit_with_error ? 1 : 0);
 		}
 	}
 
@@ -839,7 +843,7 @@ public class SubLMain {
 			} catch (Exception ex) {
 			}
 		StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
-		BeanShellCntrl.exit(code);
+		exit(code);
 	}
 
 	public void processCommandLineArgs(String[] argsIn) {

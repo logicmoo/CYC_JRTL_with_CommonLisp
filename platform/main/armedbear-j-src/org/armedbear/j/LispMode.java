@@ -24,6 +24,7 @@ package org.armedbear.j;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;

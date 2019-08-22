@@ -2,8 +2,11 @@
 
 package com.netbreeze.swing;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Canvas;
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.Icon;
 
 /**
   A canvas that simply displays an Icon

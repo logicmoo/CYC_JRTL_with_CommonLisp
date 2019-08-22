@@ -2,12 +2,18 @@
 
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import java.beans.*;
-import java.util.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 
-import org.apache.log4j.*;
+import javax.swing.JPanel;
+
+import org.apache.log4j.Category;
 import org.armedbear.lisp.Main;
 import org.logicmoo.bb.BeansContext;
 

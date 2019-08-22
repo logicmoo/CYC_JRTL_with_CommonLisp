@@ -21,13 +21,15 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.REMatch;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.StringTokenizer;
+
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
+
+import gnu.regexp.REMatch;
 
 public class Shell extends CommandInterpreter implements Constants
 {

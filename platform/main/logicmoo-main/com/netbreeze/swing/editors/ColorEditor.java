@@ -2,13 +2,16 @@
 
 package com.netbreeze.swing.editors;
 
-import java.beans.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import com.netbreeze.util.*;
-import java.util.*;
-import javax.swing.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.beans.PropertyEditorSupport;
+import java.util.Vector;
+
+import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
+
+import com.netbreeze.util.PairTable;
 
 /**
 * JavaBeans PropertyEditor implementation for boolean values.

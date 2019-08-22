@@ -1,13 +1,16 @@
 
 
 package com.netbreeze.swing.editors;
-import com.netbreeze.swing.*;
-import java.beans.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import com.netbreeze.util.*;
+import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyEditorSupport;
+import java.util.Date;
+
+import javax.swing.JLabel;
+
+import com.netbreeze.swing.DateField;
+import com.netbreeze.util.Utility;
 
 public class DateEditor extends PropertyEditorSupport implements PropertyChangeListener {
   DateField field = null;

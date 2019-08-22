@@ -21,7 +21,6 @@
 
 package org.armedbear.j;
 
-import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;

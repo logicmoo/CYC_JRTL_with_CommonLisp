@@ -32,6 +32,7 @@
  */
 
 package org.armedbear.lisp;
+import static org.logicmoo.system.Startup.getStackTraceString;
 
 import java.io.PrintStream;
 import java.lang.ref.WeakReference;
@@ -41,7 +42,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrowImpl;
@@ -115,13 +115,13 @@ public abstract class LispThread extends SLispObject {
 			((SubLThread) javaThread).lispThread = this;
 		}
 		name = new SimpleString(javaThread.getName());
-		creator = BeanShellCntrl.getStackTraceString(new Throwable());
+		creator = getStackTraceString(new Throwable());
 	}
 
 	protected LispThread(Function fun, LispObject name, LispObject initialBindings0, long cstack, long vstack,
 			boolean daemon) {
 
-		creator = BeanShellCntrl.getStackTraceString(new Throwable());
+		creator = getStackTraceString(new Throwable());
 		this.name = name;
 		SafeRunnable r = new SafeRunnable() {
 			@Override

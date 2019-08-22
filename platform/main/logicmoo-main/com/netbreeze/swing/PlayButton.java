@@ -2,8 +2,12 @@
 
 package com.netbreeze.swing;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Polygon;
+
+import javax.swing.ImageIcon;
 
 /**
 * A StatusButton that looks like the "play" button

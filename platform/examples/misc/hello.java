@@ -1,4 +1,4 @@
-import org.armedbear.lisp.*;
+import org.armedbear.lisp.Interpreter;
 
 public class hello
 {

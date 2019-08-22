@@ -1,7 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 //
-import static com.cyc.cycjava.cycl.assertions_low.$assertion_content_native.*;
+import static com.cyc.cycjava.cycl.assertions_low.$assertion_content_native.structDecl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;

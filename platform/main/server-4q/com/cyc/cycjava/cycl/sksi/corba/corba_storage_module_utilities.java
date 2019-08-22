@@ -2,10 +2,12 @@ package com.cyc.cycjava.cycl.sksi.corba;
 
 
 import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.el_utilities.literal_arg0;
+import static com.cyc.cycjava.cycl.el_utilities.literal_args;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.equal;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.cycjava.cycl.arguments;

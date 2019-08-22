@@ -1,9 +1,14 @@
 package com.netbreeze.swing;
 
-import javax.swing.*;
-import java.util.*;
-import java.lang.reflect.*;
-import java.beans.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.AbstractListModel;
+import javax.swing.JList;
 
 /**
  * A GUI component that shows all the static methods for a given class, and

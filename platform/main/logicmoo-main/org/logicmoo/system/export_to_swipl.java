@@ -3,12 +3,22 @@
  */
 
 package org.logicmoo.system;
-
-import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
+import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
+import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
+import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
 //// 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.defvar;
+import static org.logicmoo.system.Startup.bp;
 
 import java.util.HashMap;
 
@@ -1576,7 +1586,7 @@ public final class export_to_swipl extends SubLTranslatedFile {
 			sym = makeSymbol(string);
 			foundSymbols.put(string, sym);
 			if (sym.getFunction() == null) {
-				BeanShellCntrl.bp();
+				bp();
 			}
 		}
 		return sym;

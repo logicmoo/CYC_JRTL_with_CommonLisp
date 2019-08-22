@@ -33,9 +33,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.util.AbstractVisitor;
 import org.xml.sax.ContentHandler;

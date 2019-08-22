@@ -22,10 +22,6 @@ import javax.swing.JComponent;
 
 import org.armedbear.lisp.Lisp;
 
-import java.io.*;
-import com.netbreeze.util.*;
-import java.net.*;
-
 public class Utility {
   private Utility() {
   }

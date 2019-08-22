@@ -1,10 +1,9 @@
 package com.netbreeze.swing.editors;
 
-import com.netbreeze.swing.*;
-import java.awt.*;
-import javax.swing.*;
-import com.netbreeze.util.Utility;
-import java.beans.*;
+import com.netbreeze.swing.ClassConstructorsPanel;
+import com.netbreeze.swing.ErrorPanel;
+import com.netbreeze.swing.LargeBeanView;
+import com.netbreeze.swing.StaticMethodsPanel;
 
 /**
  * A panel containing a complete GUI for a class, including properties, methods,

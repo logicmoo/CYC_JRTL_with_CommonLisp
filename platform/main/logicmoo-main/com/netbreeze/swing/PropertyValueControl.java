@@ -1,14 +1,33 @@
 package com.netbreeze.swing;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.beans.*;
-import java.lang.reflect.*;
-import com.netbreeze.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.beans.BeanInfo;
+import java.beans.EventSetDescriptor;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyDescriptor;
+import java.beans.PropertyEditor;
+import java.beans.PropertyEditorManager;
+import java.beans.PropertyEditorSupport;
+import java.lang.reflect.Method;
 
-import org.apache.log4j.*;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import org.apache.log4j.Category;
 import org.logicmoo.bb.BeansContext;
+
+import com.netbreeze.util.Utility;
 
 public class PropertyValueControl extends JPanel implements PropertyChangeListener {
   static Category cat = Category.getInstance(PropertyValueControl.class);

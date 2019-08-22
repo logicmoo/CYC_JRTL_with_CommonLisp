@@ -26,8 +26,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
+
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Debug;
 import org.armedbear.j.Dispatcher;

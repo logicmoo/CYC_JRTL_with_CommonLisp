@@ -1,7 +1,8 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.cfasl.cfasl_input;
+import static com.cyc.cycjava.cycl.cfasl.cfasl_output;
 import static com.cyc.cycjava.cycl.control_vars.cyc_image_id;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
@@ -9,13 +10,20 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.intern;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.kill_process;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.make_process;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.listp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.force_output;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

@@ -18,11 +18,11 @@
  */
 package eu.larkc.core.query;
 
+import java.io.Serializable;
+
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-
-import java.io.Serializable;
 
 public class TriplePattern implements Serializable {
 

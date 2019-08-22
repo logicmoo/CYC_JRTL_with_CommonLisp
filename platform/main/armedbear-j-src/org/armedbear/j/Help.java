@@ -28,10 +28,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import org.armedbear.lisp.Closure;
+
 import org.armedbear.lisp.LispObject;
 
 public final class Help

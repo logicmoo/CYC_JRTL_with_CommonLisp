@@ -22,7 +22,9 @@
 package org.armedbear.j;
 
 import java.util.ArrayList;
+
 import javax.swing.undo.CompoundEdit;
+
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 

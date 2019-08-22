@@ -21,15 +21,14 @@
 
 package org.armedbear.j.mail;
 
-import org.armedbear.j.Formatter;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Editor;
+import org.armedbear.j.FormatTable;
+import org.armedbear.j.Formatter;
 import org.armedbear.j.Line;
-import org.armedbear.j.LineSegment;
 import org.armedbear.j.LineSegmentList;
 import org.armedbear.j.Property;
 import org.armedbear.j.Utilities;
-import org.armedbear.j.FormatTable;
 
 public final class MailboxFormatter extends Formatter
 {

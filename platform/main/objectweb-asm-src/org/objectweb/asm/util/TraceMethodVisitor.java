@@ -29,16 +29,16 @@
  */
 package org.objectweb.asm.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
-import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.signature.SignatureReader;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A {@link MethodVisitor} that prints a disassembled view of the methods it

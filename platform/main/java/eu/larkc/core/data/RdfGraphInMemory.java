@@ -23,9 +23,6 @@ import java.util.Collection;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 
-import eu.larkc.core.data.CloseableIterator;
-import eu.larkc.core.data.SetOfStatements;
-
 /**
  * @author  vassil
  */

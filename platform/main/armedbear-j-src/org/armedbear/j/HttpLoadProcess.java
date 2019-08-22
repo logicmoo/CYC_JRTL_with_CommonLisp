@@ -28,7 +28,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.security.Provider;
 import java.security.Security;
-import java.util.List;
+
 import javax.swing.SwingUtilities;
 
 public final class HttpLoadProcess extends LoadProcess implements BackgroundProcess,

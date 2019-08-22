@@ -1,11 +1,13 @@
 
 
 package com.netbreeze.bbowl.gui;
-import com.netbreeze.bbowl.*;
+import java.awt.BorderLayout;
 
-import java.applet.*;
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JApplet;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 public class BeanBowlApplet extends JApplet {
   @Override

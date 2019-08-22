@@ -21,7 +21,6 @@
 
 package org.armedbear.j.mail;
 
-import java.util.List;
 import org.armedbear.j.Utilities;
 
 public final class GenericMailboxFilter extends MailboxFilter

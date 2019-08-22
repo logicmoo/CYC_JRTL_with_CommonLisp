@@ -1,13 +1,7 @@
 package abcl_ae;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import org.armedbear.lisp.Lisp;
-import org.armedbear.lisp.Load;
 import org.armedbear.lisp.Interpreter;
-import org.armedbear.lisp.Symbol;
-import org.armedbear.lisp.Pathname;
+import org.armedbear.lisp.Load;
 
 public final class AbclInit {
 	static private Object lock = new Object();

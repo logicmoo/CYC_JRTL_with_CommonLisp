@@ -1,6 +1,8 @@
 package org.jpl7.test.standalone;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.armedbear.lisp.Main;
 import org.jpl7.Atom;

@@ -22,7 +22,6 @@
 package org.armedbear.j;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public final class EditorIterator implements Iterator
 {

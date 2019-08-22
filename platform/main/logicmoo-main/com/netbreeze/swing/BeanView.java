@@ -1,7 +1,7 @@
 
 
 package com.netbreeze.swing;
-import javax.swing.*;
+import javax.swing.JPanel;
 
 /**
  * A GUI component used to render a bean in a user interface.

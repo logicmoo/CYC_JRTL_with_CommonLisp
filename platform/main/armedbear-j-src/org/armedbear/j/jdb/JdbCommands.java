@@ -21,11 +21,12 @@
 
 package org.armedbear.j.jdb;
 
-import com.sun.jdi.Bootstrap;
 import org.armedbear.j.Help;
 import org.armedbear.j.JavaMode;
 import org.armedbear.j.Log;
 import org.armedbear.j.MessageDialog;
+
+import com.sun.jdi.Bootstrap;
 
 public final class JdbCommands implements JdbConstants
 {

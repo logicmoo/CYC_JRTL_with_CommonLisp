@@ -28,6 +28,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.InputStream;
 import java.util.Hashtable;
+
 import javax.swing.SwingUtilities;
 
 public final class WebBuffer extends Buffer implements WebConstants

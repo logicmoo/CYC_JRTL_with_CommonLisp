@@ -29,7 +29,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.List;
+
 import javax.swing.SwingUtilities;
+
 import org.armedbear.j.BackgroundProcess;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Directories;

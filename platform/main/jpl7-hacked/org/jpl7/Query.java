@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.engine_t;
@@ -15,11 +16,6 @@ import org.jpl7.fli.predicate_t;
 import org.jpl7.fli.qid_t;
 import org.jpl7.fli.term_t;
 import org.logicmoo.system.Startup;
-
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A Query instance is created by an application in order to query the Prolog

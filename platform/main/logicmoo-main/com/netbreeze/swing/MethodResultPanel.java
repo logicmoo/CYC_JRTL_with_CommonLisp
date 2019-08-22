@@ -1,16 +1,14 @@
 package com.netbreeze.swing;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.util.*;
-import java.lang.reflect.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import com.netbreeze.util.*;
+import java.awt.BorderLayout;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.apache.log4j.Category;
 import org.logicmoo.bb.BeansContext;
+
+import com.netbreeze.util.Utility;
 
 /**
  * A panel showing the output of a method execution.

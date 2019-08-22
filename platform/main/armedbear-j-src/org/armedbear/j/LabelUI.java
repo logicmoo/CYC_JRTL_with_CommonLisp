@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.awt.Graphics;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.plaf.ComponentUI;

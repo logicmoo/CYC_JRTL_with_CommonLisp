@@ -21,12 +21,14 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.REMatch;
 import java.awt.AWTEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
 import javax.swing.undo.CompoundEdit;
+
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
 
 public final class LispShellMode extends LispMode implements Constants, Mode
 {

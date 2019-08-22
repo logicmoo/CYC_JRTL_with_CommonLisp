@@ -2,11 +2,12 @@
 
 package com.netbreeze.swing.editors;
 
-import java.beans.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.Component;
+import java.beans.PropertyEditorSupport;
+
+import javax.swing.JCheckBox;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
 * JavaBeans PropertyEditor implementation for boolean values.
