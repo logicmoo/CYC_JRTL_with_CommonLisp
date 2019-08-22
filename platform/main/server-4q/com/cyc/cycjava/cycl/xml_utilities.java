@@ -3724,8 +3724,7 @@ public final class xml_utilities extends SubLTranslatedFile implements V12 {
 		setup_xml_utilities_file();
 	}
 
-	static {
-	}
+	
 }
 
 /**

@@ -1,26 +1,26 @@
 package com.cyc.cycjava.cycl.owl;
 
 
-import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.access_macros.register_external_symbol;
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.html_utilities.decode_html_language_abbreviation;
 import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.indexed_term_p;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
@@ -33,17 +33,87 @@ import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.api_control_vars;
+import com.cyc.cycjava.cycl.assertions_high;
+import com.cyc.cycjava.cycl.at_utilities;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.constants_high;
+import com.cyc.cycjava.cycl.cyc_kernel;
+import com.cyc.cycjava.cycl.cycl_grammar;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.czer_main;
+import com.cyc.cycjava.cycl.czer_meta;
+import com.cyc.cycjava.cycl.date_utilities;
+import com.cyc.cycjava.cycl.deck;
+import com.cyc.cycjava.cycl.dictionary;
+import com.cyc.cycjava.cycl.dictionary_contents;
+import com.cyc.cycjava.cycl.dictionary_utilities;
+import com.cyc.cycjava.cycl.disjoint_with;
+import com.cyc.cycjava.cycl.file_utilities;
+import com.cyc.cycjava.cycl.format_nil;
+import com.cyc.cycjava.cycl.formula_pattern_match;
+import com.cyc.cycjava.cycl.fort_types_interface;
+import com.cyc.cycjava.cycl.forts;
+import com.cyc.cycjava.cycl.function_terms;
+import com.cyc.cycjava.cycl.genls;
+import com.cyc.cycjava.cycl.hlmt;
+import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.kb_accessors;
+import com.cyc.cycjava.cycl.kb_mapping_macros;
+import com.cyc.cycjava.cycl.kb_mapping_utilities;
+import com.cyc.cycjava.cycl.kb_utilities;
+import com.cyc.cycjava.cycl.ke;
+import com.cyc.cycjava.cycl.lexicon_accessors;
+import com.cyc.cycjava.cycl.lexification_utilities;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.misc_utilities;
+import com.cyc.cycjava.cycl.morphology;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.narts_high;
+import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.numeral_parser;
+import com.cyc.cycjava.cycl.obsolete;
+import com.cyc.cycjava.cycl.operation_communication;
+import com.cyc.cycjava.cycl.pattern_match;
+import com.cyc.cycjava.cycl.process_utilities;
+import com.cyc.cycjava.cycl.query_utilities;
+import com.cyc.cycjava.cycl.queues;
+import com.cyc.cycjava.cycl.rkf_assertion_utilities;
+import com.cyc.cycjava.cycl.rkf_term_utilities;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.set_contents;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.term;
+import com.cyc.cycjava.cycl.web_utilities;
+import com.cyc.cycjava.cycl.wff;
+import com.cyc.cycjava.cycl.xml_parsing_utilities;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
 import com.cyc.cycjava.cycl.rdf.rdf_utilities;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.process_utilities;
-import com.cyc.cycjava.cycl.owl.owl_to_cycl.$owl_import_parameters_native;
-import com.cyc.cycjava.cycl.owl.owl_to_cycl.$owl_importer_native;
-import com.cyc.cycjava.cycl.owl.owl_to_cycl.$owl_pred_info_native;
-import com.cyc.cycjava.cycl.owl.owl_to_cycl.$owl_term_info_native;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
+import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
+import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_links;
+import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
+import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -3406,7 +3476,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
     }
 
     public static SubLObject owl_pred_info_p(final SubLObject v_object) {
-        return v_object.getClass() == $owl_pred_info_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$owl_pred_info_native.class ? T : NIL;
     }
 
     public static SubLObject opi_cyc_name(final SubLObject v_object) {
@@ -3705,7 +3775,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
     }
 
     public static SubLObject owl_import_parameters_p(final SubLObject v_object) {
-        return v_object.getClass() == $owl_import_parameters_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$owl_import_parameters_native.class ? T : NIL;
     }
 
     public static SubLObject oip_ontology(final SubLObject v_object) {
@@ -7559,7 +7629,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
     }
 
     public static SubLObject owl_term_info_p(final SubLObject v_object) {
-        return v_object.getClass() == $owl_term_info_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$owl_term_info_native.class ? T : NIL;
     }
 
     public static SubLObject oti_cyc_name(final SubLObject v_object) {
@@ -9070,7 +9140,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
     }
 
     public static SubLObject owl_importer_p(final SubLObject v_object) {
-        return v_object.getClass() == $owl_importer_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$owl_importer_native.class ? T : NIL;
     }
 
     public static SubLObject owl_imp_id(final SubLObject v_object) {
@@ -9962,738 +10032,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
         setup_owl_to_cycl_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $owl_pred_info_native extends SubLStructNative {
         public SubLObject $cyc_name;

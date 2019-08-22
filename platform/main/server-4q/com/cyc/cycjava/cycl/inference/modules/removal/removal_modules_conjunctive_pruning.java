@@ -1,6 +1,21 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.utilities_macros.note_funcall_helper_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_internal_real_time;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.at_admitted;
 import com.cyc.cycjava.cycl.at_var_types;
 import com.cyc.cycjava.cycl.bindings;
@@ -11,18 +26,6 @@ import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.cycjava.cycl.disjoint_with;
 import com.cyc.cycjava.cycl.format_nil;
 import com.cyc.cycjava.cycl.genls;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_query;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_residual_transformation;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_restriction;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_split;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conjunctive_pruning;
 import com.cyc.cycjava.cycl.kb_accessors;
 import com.cyc.cycjava.cycl.kb_control_vars;
 import com.cyc.cycjava.cycl.kb_mapping_utilities;
@@ -39,6 +42,17 @@ import com.cyc.cycjava.cycl.subl_promotions;
 import com.cyc.cycjava.cycl.term;
 import com.cyc.cycjava.cycl.unification;
 import com.cyc.cycjava.cycl.variables;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_query;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_tactic;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_residual_transformation;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_restriction;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_split;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
@@ -51,35 +65,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conjunctive_pruning.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
 public final class removal_modules_conjunctive_pruning extends SubLTranslatedFile {
@@ -1355,60 +1340,7 @@ public final class removal_modules_conjunctive_pruning extends SubLTranslatedFil
         setup_removal_modules_conjunctive_pruning_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $prune_non_wff_conjunction_applicability$UnaryFunction extends UnaryFunction {
         public $prune_non_wff_conjunction_applicability$UnaryFunction() {

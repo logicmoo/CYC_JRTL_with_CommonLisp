@@ -1,17 +1,12 @@
 package com.cyc.cycjava.cycl;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.cycjava.cycl.cyc_cvs_id;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.defvar;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.cyc_cvs_id.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public final class cyc_cvs_id extends SubLTranslatedFile {
     public static final SubLFile me = new cyc_cvs_id();
@@ -52,9 +47,7 @@ public final class cyc_cvs_id extends SubLTranslatedFile {
 	setup_cyc_cvs_id_file();
     }
 
-    static {
-
-    }
+    
 }
 
 /**

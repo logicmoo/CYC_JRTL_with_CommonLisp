@@ -1,32 +1,44 @@
 package com.cyc.cycjava.cycl.inference;
 
 
-import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.cycjava.cycl.utilities_macros.note_funcall_helper_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.valid_process_p;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.function_spec_p;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.cycl_string;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.numeric_date_utilities;
+import com.cyc.cycjava.cycl.pph_macros;
+import com.cyc.cycjava.cycl.pph_methods;
+import com.cyc.cycjava.cycl.pph_proof;
+import com.cyc.cycjava.cycl.pph_vars;
+import com.cyc.cycjava.cycl.process_utilities;
+import com.cyc.cycjava.cycl.query_library_api;
+import com.cyc.cycjava.cycl.queues;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.task_processor;
+import com.cyc.cycjava.cycl.unicode_nauts;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.process_utilities;
-import com.cyc.cycjava.cycl.inference.inference_ipc_queue_processor.$inference_ipc_queue_processor_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Semaphores;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -252,7 +264,7 @@ public final class inference_ipc_queue_processor extends SubLTranslatedFile {
     }
 
     public static SubLObject inference_ipc_queue_processor_p(final SubLObject v_object) {
-        return v_object.getClass() == $inference_ipc_queue_processor_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$inference_ipc_queue_processor_native.class ? T : NIL;
     }
 
     public static SubLObject inf_ipcq_processor_inference(final SubLObject v_object) {
@@ -939,86 +951,7 @@ public final class inference_ipc_queue_processor extends SubLTranslatedFile {
         setup_inference_ipc_queue_processor_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $inference_ipc_queue_processor_native extends SubLStructNative {
         public SubLObject $inference;

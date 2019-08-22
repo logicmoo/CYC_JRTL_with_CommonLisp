@@ -1,160 +1,23 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.c_name_translation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.c_name_translation.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_0;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_1;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_3;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_4;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_5;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_6;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_7;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_8;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_9;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_A;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_B;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_C;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_D;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_E;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_F;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_G;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_H;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_I;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_J;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_K;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_L;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_M;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_N;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_O;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_P;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_Q;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_R;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_S;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_U;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_V;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_W;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_X;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_Y;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_Z;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_a;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_ampersand;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_asterisk;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_at;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_b;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backquote;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backslash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backspace;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_c;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_caret;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_comma;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_d;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_dollar;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_e;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_equal;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_escape;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_exclamation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_f;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_g;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_h;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hyphen;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_i;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_j;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_k;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_l;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_lbrace;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_lbracket;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_less;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_lparen;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_m;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_n;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_newline;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_o;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_p;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_page;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_percent;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_period;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_plus;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_q;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_question;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quote;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_r;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rbrace;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rbracket;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_return;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rparen;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rubout;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_s;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_semicolon;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_slash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_t;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tab;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tilde;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_u;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_underbar;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_v;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_vertical;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_w;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_x;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_y;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_z;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ELEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOURTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINETEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
 public final class c_name_translation extends SubLTranslatedFile {
@@ -551,40 +414,7 @@ public final class c_name_translation extends SubLTranslatedFile {
         setup_c_name_translation_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 }
 
 /**

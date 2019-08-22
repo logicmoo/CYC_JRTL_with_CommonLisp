@@ -1,19 +1,14 @@
 package com.cyc.cycjava.cycl.quirk;
 
 
-import com.cyc.cycjava.cycl.quirk.quirk_trampolines;
+import static com.cyc.cycjava.cycl.access_macros.register_external_symbol;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.quirk.quirk_trampolines.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
 public final class quirk_trampolines extends SubLTranslatedFile {
@@ -99,15 +94,7 @@ public final class quirk_trampolines extends SubLTranslatedFile {
         setup_quirk_trampolines_file();
     }
 
-    static {
-
-
-
-
-
-
-
-    }
+    
 }
 
 /**

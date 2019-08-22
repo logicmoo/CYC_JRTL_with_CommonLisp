@@ -1,7 +1,22 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.rkf_salient_descriptor_datastructures;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.make_lock;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -14,38 +29,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.rkf_salient_descriptor_datastructures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-
-import static com.cyc.cycjava.cycl.rkf_salient_descriptor_datastructures.*; 
+import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rkf_salient_descriptor_datastructures extends SubLTranslatedFile {
     public static final SubLFile me = new rkf_salient_descriptor_datastructures();
 
@@ -393,7 +377,7 @@ import static com.cyc.cycjava.cycl.rkf_salient_descriptor_datastructures.*;
     }
 
     public static SubLObject rkf_salient_descriptor_prompter_p(final SubLObject v_object) {
-        return v_object.getClass() == $rkf_salient_descriptor_prompter_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$rkf_salient_descriptor_prompter_native.class ? T : NIL;
     }
 
     public static SubLObject rkf_sd_prompter_seed_term(final SubLObject v_object) {
@@ -582,7 +566,7 @@ import static com.cyc.cycjava.cycl.rkf_salient_descriptor_datastructures.*;
     }
 
     public static SubLObject rkf_salient_descriptor_prompt_p(final SubLObject v_object) {
-        return v_object.getClass() == $rkf_salient_descriptor_prompt_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$rkf_salient_descriptor_prompt_native.class ? T : NIL;
     }
 
     public static SubLObject rkf_sd_prompt_id(final SubLObject v_object) {
@@ -864,7 +848,7 @@ import static com.cyc.cycjava.cycl.rkf_salient_descriptor_datastructures.*;
     }
 
     public static SubLObject rkf_sd_rule_info_score_p(final SubLObject v_object) {
-        return v_object.getClass() == $rkf_sd_rule_info_score_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$rkf_sd_rule_info_score_native.class ? T : NIL;
     }
 
     public static SubLObject rkf_sd_rule_info_score_seed_term_in_pos_litsP(final SubLObject v_object) {
@@ -1044,7 +1028,7 @@ import static com.cyc.cycjava.cycl.rkf_salient_descriptor_datastructures.*;
     }
 
     public static SubLObject rkf_sd_example_p(final SubLObject v_object) {
-        return v_object.getClass() == $rkf_sd_example_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$rkf_sd_example_native.class ? T : NIL;
     }
 
     public static SubLObject rkf_sd_example_type(final SubLObject v_object) {
@@ -1402,173 +1386,7 @@ import static com.cyc.cycjava.cycl.rkf_salient_descriptor_datastructures.*;
         setup_rkf_salient_descriptor_datastructures_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $rkf_salient_descriptor_prompter_native extends SubLStructNative {
         public SubLObject $seed_term;

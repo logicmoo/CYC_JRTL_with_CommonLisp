@@ -1,20 +1,20 @@
 package com.cyc.cycjava.cycl.sksi;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
+import static com.cyc.cycjava.cycl.utilities_macros.note_funcall_helper_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
@@ -22,7 +22,7 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
@@ -37,7 +37,6 @@ import com.cyc.cycjava.cycl.set;
 import com.cyc.cycjava.cycl.string_utilities;
 import com.cyc.cycjava.cycl.subl_promotions;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_access_path;
-import com.cyc.cycjava.cycl.sksi.semantic_etl_bus.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -2153,7 +2152,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject semantics_p(final SubLObject v_object) {
-        return v_object.getClass() == $semantics_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$semantics_native.class ? T : NIL;
     }
 
     public static SubLObject semant_access_path(final SubLObject v_object) {
@@ -2471,7 +2470,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject table_semantics_p(final SubLObject v_object) {
-        return v_object.getClass() == $table_semantics_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$table_semantics_native.class ? T : NIL;
     }
 
     public static SubLObject t_semant_table_id(final SubLObject v_object) {
@@ -3263,7 +3262,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject foreign_key_constraint_p(final SubLObject v_object) {
-        return v_object.getClass() == $foreign_key_constraint_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$foreign_key_constraint_native.class ? T : NIL;
     }
 
     public static SubLObject fk_constraint_constraint_name(final SubLObject v_object) {
@@ -3506,7 +3505,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject primary_key_constraint_p(final SubLObject v_object) {
-        return v_object.getClass() == $primary_key_constraint_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$primary_key_constraint_native.class ? T : NIL;
     }
 
     public static SubLObject pk_constraint_constraint_name(final SubLObject v_object) {
@@ -3678,7 +3677,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject column_semantics_p(final SubLObject v_object) {
-        return v_object.getClass() == $column_semantics_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$column_semantics_native.class ? T : NIL;
     }
 
     public static SubLObject c_semant_column_name(final SubLObject v_object) {
@@ -4029,7 +4028,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject value_semantics_p(final SubLObject v_object) {
-        return v_object.getClass() == $value_semantics_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$value_semantics_native.class ? T : NIL;
     }
 
     public static SubLObject v_semant_value(final SubLObject v_object) {
@@ -4135,7 +4134,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject database_output_spec_p(final SubLObject v_object) {
-        return v_object.getClass() == $database_output_spec_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$database_output_spec_native.class ? T : NIL;
     }
 
     public static SubLObject db_output_spec_id(final SubLObject v_object) {
@@ -4497,7 +4496,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject table_merger_p(final SubLObject v_object) {
-        return v_object.getClass() == $table_merger_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$table_merger_native.class ? T : NIL;
     }
 
     public static SubLObject table_merger_id(final SubLObject v_object) {
@@ -4821,7 +4820,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject column_merger_p(final SubLObject v_object) {
-        return v_object.getClass() == $column_merger_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$column_merger_native.class ? T : NIL;
     }
 
     public static SubLObject column_merger_output_spec(final SubLObject v_object) {
@@ -5159,7 +5158,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_conjunction_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_conjunction_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_conjunction_native.class ? T : NIL;
     }
 
     public static SubLObject sql_conjunction_conjuncts(final SubLObject v_object) {
@@ -5233,7 +5232,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_disjunction_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_disjunction_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_disjunction_native.class ? T : NIL;
     }
 
     public static SubLObject sql_disjunction_disjuncts(final SubLObject v_object) {
@@ -5307,7 +5306,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_copy_table_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_copy_table_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_copy_table_native.class ? T : NIL;
     }
 
     public static SubLObject sql_copy_table_table(final SubLObject v_object) {
@@ -5405,7 +5404,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_insert_into_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_insert_into_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_insert_into_native.class ? T : NIL;
     }
 
     public static SubLObject sql_insert_into_table(final SubLObject v_object) {
@@ -5511,7 +5510,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_select_from_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_select_from_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_select_from_native.class ? T : NIL;
     }
 
     public static SubLObject sql_select_from_columns(final SubLObject v_object) {
@@ -5663,7 +5662,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_except_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_except_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_except_native.class ? T : NIL;
     }
 
     public static SubLObject sql_except_table1(final SubLObject v_object) {
@@ -5744,7 +5743,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_alias_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_alias_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_alias_native.class ? T : NIL;
     }
 
     public static SubLObject sql_alias_table(final SubLObject v_object) {
@@ -5825,7 +5824,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_column_equal_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_column_equal_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_column_equal_native.class ? T : NIL;
     }
 
     public static SubLObject sql_column_equal_table1(final SubLObject v_object) {
@@ -5940,7 +5939,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_is_null_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_is_null_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_is_null_native.class ? T : NIL;
     }
 
     public static SubLObject sql_is_null_table(final SubLObject v_object) {
@@ -6021,7 +6020,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_not_in_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_not_in_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_not_in_native.class ? T : NIL;
     }
 
     public static SubLObject sql_not_in_column_table(final SubLObject v_object) {
@@ -6119,7 +6118,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_inner_join_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_inner_join_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_inner_join_native.class ? T : NIL;
     }
 
     public static SubLObject sql_inner_join_table1(final SubLObject v_object) {
@@ -6217,7 +6216,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_left_join_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_left_join_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_left_join_native.class ? T : NIL;
     }
 
     public static SubLObject sql_left_join_left_table(final SubLObject v_object) {
@@ -6315,7 +6314,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_union_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_union_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_union_native.class ? T : NIL;
     }
 
     public static SubLObject sql_union_select1(final SubLObject v_object) {
@@ -6396,7 +6395,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_alter_table_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_alter_table_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_alter_table_native.class ? T : NIL;
     }
 
     public static SubLObject sql_alter_table_table(final SubLObject v_object) {
@@ -6477,7 +6476,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_add_column_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_add_column_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_add_column_native.class ? T : NIL;
     }
 
     public static SubLObject sql_add_column_column(final SubLObject v_object) {
@@ -6627,7 +6626,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_drop_column_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_drop_column_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_drop_column_native.class ? T : NIL;
     }
 
     public static SubLObject sql_drop_column_column(final SubLObject v_object) {
@@ -6691,7 +6690,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_rename_column_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_rename_column_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_rename_column_native.class ? T : NIL;
     }
 
     public static SubLObject sql_rename_column_old_column(final SubLObject v_object) {
@@ -6772,7 +6771,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_add_constraint_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_add_constraint_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_add_constraint_native.class ? T : NIL;
     }
 
     public static SubLObject sql_add_constraint_constraint(final SubLObject v_object) {
@@ -6836,7 +6835,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_drop_constraint_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_drop_constraint_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_drop_constraint_native.class ? T : NIL;
     }
 
     public static SubLObject sql_drop_constraint_constraint(final SubLObject v_object) {
@@ -6900,7 +6899,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_fk_column_constraint_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_fk_column_constraint_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_fk_column_constraint_native.class ? T : NIL;
     }
 
     public static SubLObject sql_fk_column_constraint_name(final SubLObject v_object) {
@@ -6998,7 +6997,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_fk_table_constraint_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_fk_table_constraint_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_fk_table_constraint_native.class ? T : NIL;
     }
 
     public static SubLObject sql_fk_table_constraint_column(final SubLObject v_object) {
@@ -7079,7 +7078,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_update_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_update_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_update_native.class ? T : NIL;
     }
 
     public static SubLObject sql_update_table(final SubLObject v_object) {
@@ -7216,7 +7215,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
     }
 
     public static SubLObject sql_drop_table_p(final SubLObject v_object) {
-        return v_object.getClass() == $sql_drop_table_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sql_drop_table_native.class ? T : NIL;
     }
 
     public static SubLObject sql_drop_table_table(final SubLObject v_object) {
@@ -9075,911 +9074,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
         setup_semantic_etl_bus_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $semantics_native extends SubLStructNative {
         public SubLObject $access_path;

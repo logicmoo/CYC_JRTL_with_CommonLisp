@@ -1,15 +1,15 @@
 package com.cyc.cycjava.cycl.rdf;
 
 
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.cycjava.cycl.utilities_macros.note_funcall_helper_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.search;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
@@ -24,7 +24,6 @@ import com.cyc.cycjava.cycl.unicode_strings;
 import com.cyc.cycjava.cycl.web_utilities;
 import com.cyc.cycjava.cycl.xml_parsing_utilities;
 import com.cyc.cycjava.cycl.owl.owl_to_cycl;
-import com.cyc.cycjava.cycl.rdf.rdf_literal.$rdf_literal_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -183,7 +182,7 @@ public final class rdf_literal extends SubLTranslatedFile {
     }
 
     public static SubLObject rdf_literal_p(final SubLObject v_object) {
-        return v_object.getClass() == $rdf_literal_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$rdf_literal_native.class ? T : NIL;
     }
 
     public static SubLObject rdf_lit_utf8_lexical_form(final SubLObject v_object) {
@@ -453,65 +452,7 @@ public final class rdf_literal extends SubLTranslatedFile {
         setup_rdf_literal_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $rdf_literal_native extends SubLStructNative {
         public SubLObject $utf8_lexical_form;

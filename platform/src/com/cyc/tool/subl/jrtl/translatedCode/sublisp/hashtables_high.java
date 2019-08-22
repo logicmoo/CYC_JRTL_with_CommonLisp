@@ -63,10 +63,7 @@ public class hashtables_high implements SubLFile {
     // Internal Constants
     private static final SubLObject[] $constants = new SubLObject[2];
 
-    static {
-
-
-    }
+    
 
     @Override
     public void declareFunctions() {

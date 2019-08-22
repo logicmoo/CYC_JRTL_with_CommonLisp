@@ -1,27 +1,27 @@
 package com.cyc.cycjava.cycl.inference.harness;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.access_macros.register_macro_helper;
+import static com.cyc.cycjava.cycl.control_vars.$inference_debugP$;
+import static com.cyc.cycjava.cycl.el_utilities.hl_ground_tree_p;
 import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
+import static com.cyc.cycjava.cycl.utilities_macros.within_normal_forward_inferenceP;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import java.util.Iterator;
@@ -29,7 +29,26 @@ import java.util.Map;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.access_macros;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.clauses;
+import com.cyc.cycjava.cycl.constant_handles;
+import com.cyc.cycjava.cycl.control_vars;
+import com.cyc.cycjava.cycl.dictionary;
+import com.cyc.cycjava.cycl.dictionary_contents;
+import com.cyc.cycjava.cycl.dictionary_utilities;
+import com.cyc.cycjava.cycl.el_utilities;
+import com.cyc.cycjava.cycl.format_nil;
+import com.cyc.cycjava.cycl.kb_accessors;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.set_contents;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.cycjava.cycl.inference.inference_trampolines;
 import com.cyc.cycjava.cycl.inference.leviathan;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
@@ -5136,11 +5155,11 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_p(final SubLObject v_object) {
-	return v_object.getClass() == $problem_native.class ? T : NIL;
+	return v_object.getJavaClass() ==$problem_native.class ? T : NIL;
     }
 
     public static final SubLObject problem_p_alt(SubLObject v_object) {
-	return v_object.getClass() == inference_datastructures_problem.$problem_native.class ? ((SubLObject) (T)) : NIL;
+	return v_object.getJavaClass() ==inference_datastructures_problem.$problem_native.class ? ((SubLObject) (T)) : NIL;
     }
 
     public static final SubLObject problem_possible_removal_tactics(final SubLObject problem) {
@@ -7175,9 +7194,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
 	setup_inference_datastructures_problem_file();
     }
 
-    static {
-
-    }
+    
     // // Initializers
 
     // // Definitions

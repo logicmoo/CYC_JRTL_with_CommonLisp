@@ -5,78 +5,27 @@ package com.cyc.cycjava.cycl;
 
 import static com.cyc.cycjava.cycl.access_macros.register_macro_helper;
 import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_enter;
-import static com.cyc.cycjava.cycl.id_index.id_index_lookup;
-import static com.cyc.cycjava.cycl.id_index.id_index_reserve;
-import static com.cyc.cycjava.cycl.id_index.new_id_index;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.cycjava.cycl.utilities_macros.register_html_state_variable;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.eq;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.equal;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.make_lock;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.release_lock;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.seize_lock;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.subseq;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.def_csetf;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.makeStructDeclNative;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.register_method;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.fboundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.integerp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.keywordp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.listp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.property_list_member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.adjoin;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.getf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.putf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.remf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.prin1_to_string;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.parse_integer;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
 
@@ -1637,11 +1586,11 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject user_interaction_p_alt(SubLObject v_object) {
-		return v_object.getClass() == com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_native.class ? ((SubLObject) (T)) : NIL;
+		return v_object.getJavaClass() ==com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_native.class ? ((SubLObject) (T)) : NIL;
 	}
 
 	public static SubLObject user_interaction_p(final SubLObject v_object) {
-		return v_object.getClass() == com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_native.class ? T : NIL;
+		return v_object.getJavaClass() ==com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_native.class ? T : NIL;
 	}
 
 	public static final SubLObject ui_id_alt(SubLObject v_object) {
@@ -2356,11 +2305,11 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject user_interaction_agenda_p_alt(SubLObject v_object) {
-		return v_object.getClass() == com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_agenda_native.class ? ((SubLObject) (T)) : NIL;
+		return v_object.getJavaClass() ==com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_agenda_native.class ? ((SubLObject) (T)) : NIL;
 	}
 
 	public static SubLObject user_interaction_agenda_p(final SubLObject v_object) {
-		return v_object.getClass() == com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_agenda_native.class ? T : NIL;
+		return v_object.getJavaClass() ==com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_agenda_native.class ? T : NIL;
 	}
 
 	public static final SubLObject uia_id_alt(SubLObject v_object) {
@@ -4470,11 +4419,11 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject user_interaction_meta_agenda_p_alt(SubLObject v_object) {
-		return v_object.getClass() == com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_meta_agenda_native.class ? ((SubLObject) (T)) : NIL;
+		return v_object.getJavaClass() ==com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_meta_agenda_native.class ? ((SubLObject) (T)) : NIL;
 	}
 
 	public static SubLObject user_interaction_meta_agenda_p(final SubLObject v_object) {
-		return v_object.getClass() == com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_meta_agenda_native.class ? T : NIL;
+		return v_object.getJavaClass() ==com.cyc.cycjava.cycl.user_interaction_agenda.$user_interaction_meta_agenda_native.class ? T : NIL;
 	}
 
 	public static final SubLObject uima_id_alt(SubLObject v_object) {
@@ -8822,8 +8771,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 		setup_user_interaction_agenda_file();
 	}
 
-	static {
-	}
+	
 
 	public static final class $user_interaction_p$UnaryFunction extends UnaryFunction {
 		public $user_interaction_p$UnaryFunction() {

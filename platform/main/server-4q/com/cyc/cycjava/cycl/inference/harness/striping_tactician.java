@@ -1,59 +1,59 @@
 package com.cyc.cycjava.cycl.inference.harness;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
+import com.cyc.cycjava.cycl.assertion_utilities;
 import com.cyc.cycjava.cycl.backward;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.cycjava.cycl.dictionary_utilities;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.cycjava.cycl.inference.kbq_query_run;
-import com.cyc.cycjava.cycl.inference.browser.cb_inference_browser;
+import com.cyc.cycjava.cycl.bijection;
 import com.cyc.cycjava.cycl.cb_utilities;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
+import com.cyc.cycjava.cycl.control_vars;
+import com.cyc.cycjava.cycl.dictionary;
+import com.cyc.cycjava.cycl.dictionary_utilities;
+import com.cyc.cycjava.cycl.format_nil;
 import com.cyc.cycjava.cycl.html_macros;
 import com.cyc.cycjava.cycl.html_utilities;
-import com.cyc.cycjava.cycl.assertion_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
-import com.cyc.cycjava.cycl.set_contents;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
-import com.cyc.cycjava.cycl.bijection;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
+import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.set_contents;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.utilities_macros;
+import com.cyc.cycjava.cycl.inference.kbq_query_run;
+import com.cyc.cycjava.cycl.inference.browser.cb_inference_browser;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class striping_tactician
@@ -269,7 +269,7 @@ public final class striping_tactician
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/striping-tactician.lisp", position = 4363L)
   public static SubLObject striping_tactician_data_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $striping_tactician_data_native.class ) ? T : NIL;
+    return ( v_object.getJavaClass() ==$striping_tactician_data_native.class ) ? T : NIL;
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/striping-tactician.lisp", position = 4363L)
@@ -985,7 +985,7 @@ public final class striping_tactician
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/striping-tactician.lisp", position = 15323L)
   public static SubLObject new_root_metrics_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $new_root_metrics_native.class ) ? T : NIL;
+    return ( v_object.getJavaClass() ==$new_root_metrics_native.class ) ? T : NIL;
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/striping-tactician.lisp", position = 15323L)

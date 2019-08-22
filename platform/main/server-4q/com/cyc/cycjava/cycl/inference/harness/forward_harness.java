@@ -1,55 +1,55 @@
 package com.cyc.cycjava.cycl.inference.harness;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.assertion_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.queues;
-import com.cyc.cycjava.cycl.kb_control_vars;
-import com.cyc.cycjava.cycl.clause_utilities;
-import com.cyc.cycjava.cycl.hl_storage_modules;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
+import com.cyc.cycjava.cycl.arguments;
+import com.cyc.cycjava.cycl.assertion_handles;
+import com.cyc.cycjava.cycl.assertion_utilities;
+import com.cyc.cycjava.cycl.assertions_high;
+import com.cyc.cycjava.cycl.clause_utilities;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.hl_storage_modules;
+import com.cyc.cycjava.cycl.hlmt;
+import com.cyc.cycjava.cycl.kb_control_vars;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.queues;
 import com.cyc.cycjava.cycl.set;
 import com.cyc.cycjava.cycl.set_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
-import com.cyc.cycjava.cycl.hlmt;
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
+import com.cyc.cycjava.cycl.utilities_macros;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class forward_harness
@@ -231,7 +231,7 @@ public final class forward_harness
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/forward-harness.lisp", position = 2045L)
   public static SubLObject forward_propagation_state_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $forward_propagation_state_native.class ) ? T : NIL;
+    return ( v_object.getJavaClass() ==$forward_propagation_state_native.class ) ? T : NIL;
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/forward-harness.lisp", position = 2045L)
@@ -540,7 +540,7 @@ public final class forward_harness
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/forward-harness.lisp", position = 8116L)
   public static SubLObject forward_triggering_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $forward_triggering_native.class ) ? T : NIL;
+    return ( v_object.getJavaClass() ==$forward_triggering_native.class ) ? T : NIL;
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/forward-harness.lisp", position = 8116L)
@@ -934,7 +934,7 @@ public final class forward_harness
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/forward-harness.lisp", position = 12659L)
   public static SubLObject skeletal_proof_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $skeletal_proof_native.class ) ? T : NIL;
+    return ( v_object.getJavaClass() ==$skeletal_proof_native.class ) ? T : NIL;
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/forward-harness.lisp", position = 12659L)
@@ -1235,7 +1235,7 @@ public final class forward_harness
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/forward-harness.lisp", position = 15807L)
   public static SubLObject placeable_proof_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $placeable_proof_native.class ) ? T : NIL;
+    return ( v_object.getJavaClass() ==$placeable_proof_native.class ) ? T : NIL;
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/inference/harness/forward-harness.lisp", position = 15807L)

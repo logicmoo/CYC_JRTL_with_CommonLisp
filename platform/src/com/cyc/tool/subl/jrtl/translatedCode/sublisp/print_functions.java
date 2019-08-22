@@ -755,40 +755,7 @@ public class print_functions extends SubLTranslatedFile {
 
     private static final SubLSymbol PRINT_OBJECT_GUID_METHOD = makeSymbol("PRINT-OBJECT-GUID-METHOD");
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     @Override
     public void declareFunctions() {

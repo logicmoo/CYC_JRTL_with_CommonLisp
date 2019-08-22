@@ -5,9 +5,7 @@ package com.cyc.cycjava.cycl.cyblack;
 
 
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 
 import com.cyc.cycjava.cycl.V02;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;

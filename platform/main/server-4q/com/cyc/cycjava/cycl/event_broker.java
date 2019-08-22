@@ -1,33 +1,27 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.cfasl.cfasl_output;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.event_broker.$event_broker_native;
-import com.cyc.cycjava.cycl.event_broker.$event_listener_native;
-import com.cyc.cycjava.cycl.event_broker.$funcall_info_native;
-import com.cyc.cycjava.cycl.event_broker.$protocol_description_native;
-import com.cyc.cycjava.cycl.event_broker.$socket_info_native;
-import com.cyc.cycjava.cycl.process_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -434,7 +428,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject funcall_info_p(final SubLObject v_object) {
-        return v_object.getClass() == $funcall_info_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$funcall_info_native.class ? T : NIL;
     }
 
     public static SubLObject funcall_info_function(final SubLObject v_object) {
@@ -494,7 +488,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject socket_info_p(final SubLObject v_object) {
-        return v_object.getClass() == $socket_info_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$socket_info_native.class ? T : NIL;
     }
 
     public static SubLObject socket_info_host(final SubLObject v_object) {
@@ -597,7 +591,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject event_listener_p(final SubLObject v_object) {
-        return v_object.getClass() == $event_listener_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$event_listener_native.class ? T : NIL;
     }
 
     public static SubLObject event_listener_event(final SubLObject v_object) {
@@ -774,7 +768,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject event_broker_p(final SubLObject v_object) {
-        return v_object.getClass() == $event_broker_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$event_broker_native.class ? T : NIL;
     }
 
     public static SubLObject event_broker_hierarchy(final SubLObject v_object) {
@@ -966,7 +960,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject protocol_description_p(final SubLObject v_object) {
-        return v_object.getClass() == $protocol_description_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$protocol_description_native.class ? T : NIL;
     }
 
     public static SubLObject protocol_description_protocol(final SubLObject v_object) {
@@ -1792,192 +1786,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         setup_event_broker_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $funcall_info_native extends SubLStructNative {
         public SubLObject $function;

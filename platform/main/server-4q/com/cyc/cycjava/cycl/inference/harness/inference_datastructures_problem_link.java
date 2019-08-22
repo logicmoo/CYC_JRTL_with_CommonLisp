@@ -3,12 +3,12 @@ package com.cyc.cycjava.cycl.inference.harness;
 import static com.cyc.cycjava.cycl.access_macros.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
@@ -23,7 +23,6 @@ import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.memoization_state;
 import com.cyc.cycjava.cycl.number_utilities;
 import com.cyc.cycjava.cycl.set_contents;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -212,7 +211,7 @@ public final class inference_datastructures_problem_link extends SubLTranslatedF
     }
 
     public static SubLObject problem_link_p(final SubLObject v_object) {
-	return v_object.getClass() == $problem_link_native.class ? T : NIL;
+	return v_object.getJavaClass() ==$problem_link_native.class ? T : NIL;
     }
 
     public static SubLObject prob_link_suid(final SubLObject v_object) {
@@ -996,7 +995,7 @@ public final class inference_datastructures_problem_link extends SubLTranslatedF
     }
 
     public static SubLObject mapped_problem_p(final SubLObject v_object) {
-	return v_object.getClass() == $mapped_problem_native.class ? T : NIL;
+	return v_object.getJavaClass() ==$mapped_problem_native.class ? T : NIL;
     }
 
     public static SubLObject mapped_prob_problem(final SubLObject v_object) {
@@ -1460,9 +1459,7 @@ public final class inference_datastructures_problem_link extends SubLTranslatedF
 	setup_inference_datastructures_problem_link_file();
     }
 
-    static {
-
-    }
+    
 
     public static final class $problem_link_native extends SubLStructNative {
 	public SubLObject $suid;

@@ -257,7 +257,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject variable_p(final SubLObject v_object) {
-        return v_object.getClass() == $variable_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$variable_native.class ? T : NIL;
     }
 
     public static SubLObject var_id(final SubLObject v_object) {
@@ -756,99 +756,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         setup_variables_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $variable_native extends SubLStructNative {
         public SubLObject $id;

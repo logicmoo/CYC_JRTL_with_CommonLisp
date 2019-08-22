@@ -1,15 +1,9 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.transformation_heuristics;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.transformation_heuristics.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
 public final class transformation_heuristics extends SubLTranslatedFile {
@@ -46,9 +40,7 @@ public final class transformation_heuristics extends SubLTranslatedFile {
         setup_transformation_heuristics_file();
     }
 
-    static {
-
-    }
+    
 }
 
 /**

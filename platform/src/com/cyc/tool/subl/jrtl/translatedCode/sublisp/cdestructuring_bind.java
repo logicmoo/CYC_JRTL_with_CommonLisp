@@ -32,6 +32,7 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -80,6 +81,9 @@ public class cdestructuring_bind extends SubLTranslatedFile {
     }
 
     public static SubLObject cdestructuring_bind_error(SubLObject original, SubLObject pattern) {
+    	if(SubLMain.BOOTY_HACKZ) {
+    		return Errors.warn($str9$The_value__S_failed_to_match_the_, original, CDESTRUCTURING_BIND, pattern);
+    	}
         return Errors.error($str9$The_value__S_failed_to_match_the_, original, CDESTRUCTURING_BIND, pattern);
     }
 
@@ -541,57 +545,7 @@ public class cdestructuring_bind extends SubLTranslatedFile {
 
     public static final SubLList $list47 = list(T, SubLNil.NIL);
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     @Override
     public void declareFunctions() {

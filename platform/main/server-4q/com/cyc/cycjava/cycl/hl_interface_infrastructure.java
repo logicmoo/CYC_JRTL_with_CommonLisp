@@ -1,23 +1,23 @@
 package com.cyc.cycjava.cycl;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.access_macros.register_macro_helper;
 import static com.cyc.cycjava.cycl.cfasl.*;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.eval;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.apply;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -960,9 +960,7 @@ public final class hl_interface_infrastructure extends SubLTranslatedFile {
 		setup_hl_interface_infrastructure_file();
 	}
 
-	static {
-
-	}
+	
 
 	public static final class $hl_store_iterator_doneP$UnaryFunction extends UnaryFunction {
 		public $hl_store_iterator_doneP$UnaryFunction() {

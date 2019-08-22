@@ -149,26 +149,7 @@ public class condition_macros extends SubLTranslatedFile {
 
     public static final SubLList $list16 = list(makeSymbol("FUNCTION"), makeSymbol("IGNORE-ERRORS-HANDLER"));
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     @Override
     public void declareFunctions() {

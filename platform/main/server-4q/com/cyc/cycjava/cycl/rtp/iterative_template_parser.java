@@ -1,31 +1,31 @@
 package com.cyc.cycjava.cycl.rtp;
 
 
-import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_parameters.cyc_cgi_url_int;
 import static com.cyc.cycjava.cycl.cb_utilities.*;
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.control_vars.$rkf_mt$;
 import static com.cyc.cycjava.cycl.el_utilities.*;
 import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.indexed_term_p;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import java.util.Iterator;
@@ -33,11 +33,59 @@ import java.util.Map;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.assertion_handles;
+import com.cyc.cycjava.cycl.assertions_high;
+import com.cyc.cycjava.cycl.collection_defns;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.deck;
+import com.cyc.cycjava.cycl.dictionary;
+import com.cyc.cycjava.cycl.dictionary_contents;
+import com.cyc.cycjava.cycl.dictionary_utilities;
+import com.cyc.cycjava.cycl.fi;
+import com.cyc.cycjava.cycl.fort_types_interface;
+import com.cyc.cycjava.cycl.forts;
+import com.cyc.cycjava.cycl.function_terms;
+import com.cyc.cycjava.cycl.genls;
+import com.cyc.cycjava.cycl.hash_table_utilities;
+import com.cyc.cycjava.cycl.html_macros;
+import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.kb_mapping;
+import com.cyc.cycjava.cycl.kb_mapping_macros;
+import com.cyc.cycjava.cycl.kb_mapping_utilities;
+import com.cyc.cycjava.cycl.lexicon_accessors;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.narts_high;
+import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.numeral_parser;
+import com.cyc.cycjava.cycl.obsolete;
+import com.cyc.cycjava.cycl.parsing_utilities;
+import com.cyc.cycjava.cycl.parsing_vars;
+import com.cyc.cycjava.cycl.psp_chart;
+import com.cyc.cycjava.cycl.psp_lexicon;
+import com.cyc.cycjava.cycl.psp_main;
+import com.cyc.cycjava.cycl.psp_syntax;
+import com.cyc.cycjava.cycl.queues;
+import com.cyc.cycjava.cycl.rkf_concept_harvester;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.set_contents;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.transform_list_utilities;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.rtp.iterative_template_parser.$itp_node_native;
-import com.cyc.cycjava.cycl.rtp.iterative_template_parser.$itp_state_native;
+import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
+import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
+import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_links;
+import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
+import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -2149,7 +2197,7 @@ public final class iterative_template_parser extends SubLTranslatedFile {
     }
 
     public static SubLObject itp_node_p(final SubLObject v_object) {
-        return v_object.getClass() == $itp_node_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$itp_node_native.class ? T : NIL;
     }
 
     public static SubLObject itp_node_id(final SubLObject v_object) {
@@ -2674,7 +2722,7 @@ public final class iterative_template_parser extends SubLTranslatedFile {
     }
 
     public static SubLObject itp_state_p(final SubLObject v_object) {
-        return v_object.getClass() == $itp_state_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$itp_state_native.class ? T : NIL;
     }
 
     public static SubLObject itp_state_sequence(final SubLObject v_object) {
@@ -5442,360 +5490,7 @@ public final class iterative_template_parser extends SubLTranslatedFile {
         setup_iterative_template_parser_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $itp_node_native extends SubLStructNative {
         public SubLObject $id;

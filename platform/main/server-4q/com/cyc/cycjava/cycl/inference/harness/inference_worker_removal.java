@@ -2,23 +2,23 @@ package com.cyc.cycjava.cycl.inference.harness;
 
 
 import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.el_utilities.asent_and_sense_to_literal;
 import static com.cyc.cycjava.cycl.id_index.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import java.util.Iterator;
@@ -26,12 +26,43 @@ import java.util.Map;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.arguments;
+import com.cyc.cycjava.cycl.backward;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.clause_utilities;
+import com.cyc.cycjava.cycl.clauses;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.enumeration_types;
+import com.cyc.cycjava.cycl.eval_in_api;
+import com.cyc.cycjava.cycl.formula_pattern_match;
+import com.cyc.cycjava.cycl.forts;
+import com.cyc.cycjava.cycl.hl_macros;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.pattern_match;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.set_contents;
+import com.cyc.cycjava.cycl.subl_macros;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.unification_utilities;
+import com.cyc.cycjava.cycl.variables;
 import com.cyc.cycjava.cycl.inference.inference_trampolines;
 import com.cyc.cycjava.cycl.inference.modules.simplification_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.meta_removal_modules;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_abduction;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_formula;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conjunctive_pruning;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_evaluate;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_evaluation;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_function_corresponding_predicate;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_isa;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_natfunction;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_reflexive_on;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_termofunit;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_tva_lookup;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_macros;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal.$removal_link_data_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -328,7 +359,7 @@ public final class inference_worker_removal extends SubLTranslatedFile {
     }
 
     public static SubLObject removal_link_data_p(final SubLObject v_object) {
-        return v_object.getClass() == $removal_link_data_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$removal_link_data_native.class ? T : NIL;
     }
 
     public static SubLObject remov_link_data_hl_module(final SubLObject v_object) {
@@ -2872,130 +2903,7 @@ public final class inference_worker_removal extends SubLTranslatedFile {
         setup_inference_worker_removal_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $removal_link_data_native extends SubLStructNative {
         public SubLObject $hl_module;

@@ -1,15 +1,15 @@
 package com.cyc.cycjava.cycl.inference.harness;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
@@ -18,7 +18,6 @@ import com.cyc.cycjava.cycl.dictionary;
 import com.cyc.cycjava.cycl.dictionary_contents;
 import com.cyc.cycjava.cycl.set;
 import com.cyc.cycjava.cycl.stacks;
-import com.cyc.cycjava.cycl.inference.harness.removal_tactician_datastructures.$removal_strategy_data_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -134,7 +133,7 @@ public final class removal_tactician_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject removal_strategy_data_p(final SubLObject v_object) {
-        return v_object.getClass() == $removal_strategy_data_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$removal_strategy_data_native.class ? T : NIL;
     }
 
     public static SubLObject rem_strat_data_link_heads_motivated(final SubLObject v_object) {
@@ -586,50 +585,7 @@ public final class removal_tactician_datastructures extends SubLTranslatedFile {
         setup_removal_tactician_datastructures_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $removal_strategy_data_native extends SubLStructNative {
         public SubLObject $link_heads_motivated;

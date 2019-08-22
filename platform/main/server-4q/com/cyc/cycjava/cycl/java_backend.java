@@ -16,7 +16,7 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
@@ -1153,8 +1153,7 @@ public final class java_backend extends SubLTranslatedFile {
 
 	private static final SubLSymbol $sym534$_ = makeSymbol(">");
 
-	static {
-	}
+	
 
 	public static SubLObject is_java_backend_logging_activeP() {
 		final SubLThread thread = SubLProcess.currentSubLThread();

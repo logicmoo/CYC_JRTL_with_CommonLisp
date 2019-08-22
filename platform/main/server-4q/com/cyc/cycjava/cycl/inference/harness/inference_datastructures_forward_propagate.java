@@ -1,15 +1,15 @@
 package com.cyc.cycjava.cycl.inference.harness;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
@@ -20,7 +20,6 @@ import com.cyc.cycjava.cycl.kb_control_vars;
 import com.cyc.cycjava.cycl.kb_mapping;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.queues;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_forward_propagate.$forward_propagate_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -111,7 +110,7 @@ public final class inference_datastructures_forward_propagate extends SubLTransl
     }
 
     public static SubLObject forward_propagate_p(final SubLObject v_object) {
-        return v_object.getClass() == $forward_propagate_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$forward_propagate_native.class ? T : NIL;
     }
 
     public static SubLObject fpmt_old_queue(final SubLObject v_object) {
@@ -344,38 +343,7 @@ public final class inference_datastructures_forward_propagate extends SubLTransl
         setup_inference_datastructures_forward_propagate_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $forward_propagate_native extends SubLStructNative {
         public SubLObject $old_queue;

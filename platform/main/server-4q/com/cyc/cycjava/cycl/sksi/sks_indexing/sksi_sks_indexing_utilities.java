@@ -1,24 +1,17 @@
 package com.cyc.cycjava.cycl.sksi.sks_indexing;
 
 
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+
 import com.cyc.cycjava.cycl.bindings;
 import com.cyc.cycjava.cycl.cycl_grammar;
-import com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_indexing_utilities;
 import com.cyc.cycjava.cycl.unification;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_indexing_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
 public final class sksi_sks_indexing_utilities extends SubLTranslatedFile {
@@ -100,9 +93,7 @@ public final class sksi_sks_indexing_utilities extends SubLTranslatedFile {
         setup_sksi_sks_indexing_utilities_file();
     }
 
-    static {
-
-    }
+    
 }
 
 /**

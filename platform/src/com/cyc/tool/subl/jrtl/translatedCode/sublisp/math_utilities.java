@@ -431,7 +431,8 @@ public class math_utilities extends SubLTranslatedFile {
                 m_1 = multiply(((SubLObject) (m_1)), roundp);
             }
             roundp = evenp(significand);
-            return NIL != funcall(NIL != roundp ? symbol_function($sym15$__) : symbol_function($sym16$_), add(r1, ((SubLObject) (mX1))), ((SubLObject) (s1))) ? values(fdl_generate(r1, multiply(((SubLObject) (s1)), TEN_INTEGER), ((SubLObject) (mX1)), ((SubLObject) (m_1)), roundp), add(estimate, ONE_INTEGER)) : values(fdl_generate(r1, ((SubLObject) (s1)), ((SubLObject) (mX1)), ((SubLObject) (m_1)), roundp), estimate);
+            return NIL != funcall(NIL != roundp ? symbol_function($sym15$__) : 
+            	symbol_function($sym16$_), add(r1, ((SubLObject) (mX1))), ((SubLObject) (s1))) ? values(fdl_generate(r1, multiply(((SubLObject) (s1)), TEN_INTEGER), ((SubLObject) (mX1)), ((SubLObject) (m_1)), roundp), add(estimate, ONE_INTEGER)) : values(fdl_generate(r1, ((SubLObject) (s1)), ((SubLObject) (mX1)), ((SubLObject) (m_1)), roundp), estimate);
         }
     }
 

@@ -1,20 +1,20 @@
 package com.cyc.cycjava.cycl.sbhl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
@@ -23,10 +23,20 @@ import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cycl_grammar;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.date_utilities;
+import com.cyc.cycjava.cycl.forts;
+import com.cyc.cycjava.cycl.genl_predicates;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.kb_control_vars;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.map_utilities;
+import com.cyc.cycjava.cycl.narts_high;
+import com.cyc.cycjava.cycl.numeric_date_utilities;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.time_interval_utilities;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_infrastructure_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_time_utilities.$hl_end_native;
-import com.cyc.cycjava.cycl.sbhl.sbhl_time_utilities.$hl_start_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -260,7 +270,7 @@ public final class sbhl_time_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject hl_start_p(final SubLObject v_object) {
-        return v_object.getClass() == $hl_start_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$hl_start_native.class ? T : NIL;
     }
 
     public static SubLObject hl_start_interval(final SubLObject v_object) {
@@ -316,7 +326,7 @@ public final class sbhl_time_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject hl_end_p(final SubLObject v_object) {
-        return v_object.getClass() == $hl_end_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$hl_end_native.class ? T : NIL;
     }
 
     public static SubLObject hl_end_interval(final SubLObject v_object) {
@@ -1104,89 +1114,7 @@ public final class sbhl_time_utilities extends SubLTranslatedFile {
         setup_sbhl_time_utilities_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $hl_start_native extends SubLStructNative {
         public SubLObject $interval;

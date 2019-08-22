@@ -1,30 +1,30 @@
 package com.cyc.cycjava.cycl;
 
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_proof;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_residual_transformation;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_residual_transformation;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class proof_view_residual

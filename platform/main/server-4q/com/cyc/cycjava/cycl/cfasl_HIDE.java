@@ -111,7 +111,7 @@
 //    }
 //
 //    public static final SubLObject cfasl_encoding_stream_p(SubLObject v_object) {
-//	return v_object.getClass() == $cfasl_encoding_stream_native.class ? ((SubLObject) (T)) : NIL;
+//	return v_object.getJavaClass() ==$cfasl_encoding_stream_native.class ? ((SubLObject) (T)) : NIL;
 //    }
 //
 //    public static final class $cfasl_encoding_stream_p$UnaryFunction extends UnaryFunction {
@@ -409,7 +409,7 @@
 //    }
 //
 //    public static final SubLObject cfasl_decoding_stream_p(SubLObject v_object) {
-//        return v_object.getClass() == cfasl_HIDE.$cfasl_decoding_stream_native.class ? ((SubLObject) (T)) : NIL;
+//        return v_object.getJavaClass() ==cfasl_HIDE.$cfasl_decoding_stream_native.class ? ((SubLObject) (T)) : NIL;
 //    }
 //
 //    public static final class $cfasl_decoding_stream_p$UnaryFunction extends UnaryFunction {
@@ -617,7 +617,7 @@
 //    }
 //
 //    public static final SubLObject cfasl_count_stream_p(SubLObject v_object) {
-//        return v_object.getClass() == cfasl_HIDE.$cfasl_count_stream_native.class ? ((SubLObject) (T)) : NIL;
+//        return v_object.getJavaClass() ==cfasl_HIDE.$cfasl_count_stream_native.class ? ((SubLObject) (T)) : NIL;
 //    }
 //
 //    public static final class $cfasl_count_stream_p$UnaryFunction extends UnaryFunction {

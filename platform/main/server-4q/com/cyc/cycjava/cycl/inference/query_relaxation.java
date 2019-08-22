@@ -1,33 +1,33 @@
 package com.cyc.cycjava.cycl.inference;
 
-import com.cyc.cycjava.cycl.constant_handles;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.cycjava.cycl.cyc_testing.generic_testing;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.tool.subl.util.SubLFiles;
+
 import com.cyc.cycjava.cycl.collection_defns;
+import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.cycjava.cycl.el_utilities;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.kb_mapping_utilities;
 import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
+import com.cyc.cycjava.cycl.utilities_macros;
+import com.cyc.cycjava.cycl.cyc_testing.generic_testing;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class query_relaxation

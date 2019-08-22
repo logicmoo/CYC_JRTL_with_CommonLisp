@@ -2,57 +2,24 @@
  * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
  */
 package com.cyc.cycjava.cycl;
-import static com.cyc.cycjava.cycl.cfasl.cfasl_input;
-import static com.cyc.cycjava.cycl.cfasl.cfasl_output;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_d;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_e;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.clrhash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.remhash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numE;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.substitute;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.def_csetf;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.makeStructDeclNative;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.register_method;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.assoc;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.prin1;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.prin1_to_string;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.finish_output;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.open_stream_p;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.write_string;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
 
@@ -309,7 +276,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject jsession_p(SubLObject v_object) {
-        return v_object.getClass() == jubl.$jsession_native.class ? ((SubLObject) (T)) : NIL;
+        return v_object.getJavaClass() ==jubl.$jsession_native.class ? ((SubLObject) (T)) : NIL;
     }
 
     public static final class $jsession_p$UnaryFunction extends UnaryFunction {
@@ -731,7 +698,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject jpg_p(SubLObject v_object) {
-        return v_object.getClass() == jubl.$jpg_native.class ? ((SubLObject) (T)) : NIL;
+        return v_object.getJavaClass() ==jubl.$jpg_native.class ? ((SubLObject) (T)) : NIL;
     }
 
     public static final class $jpg_p$UnaryFunction extends UnaryFunction {
@@ -902,7 +869,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject jcl_p(SubLObject v_object) {
-        return v_object.getClass() == jubl.$jcl_native.class ? ((SubLObject) (T)) : NIL;
+        return v_object.getJavaClass() ==jubl.$jcl_native.class ? ((SubLObject) (T)) : NIL;
     }
 
     public static final class $jcl_p$UnaryFunction extends UnaryFunction {
@@ -1171,7 +1138,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject jin_p(SubLObject v_object) {
-        return v_object.getClass() == jubl.$jin_native.class ? ((SubLObject) (T)) : NIL;
+        return v_object.getJavaClass() ==jubl.$jin_native.class ? ((SubLObject) (T)) : NIL;
     }
 
     public static final class $jin_p$UnaryFunction extends UnaryFunction {

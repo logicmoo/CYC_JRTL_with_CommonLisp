@@ -119,7 +119,7 @@ public final class slots extends SubLTranslatedFile {
 	}
 
 	public static SubLObject slot_p(final SubLObject v_object) {
-		return v_object.getClass() == $slot_native.class ? T : NIL;
+		return v_object.getJavaClass() ==$slot_native.class ? T : NIL;
 	}
 
 	public static SubLObject slot_name(final SubLObject v_object) {
@@ -713,9 +713,7 @@ public final class slots extends SubLTranslatedFile {
 		setup_slots_file();
 	}
 
-	static {
-
-	}
+	
 
 	public static final class $slot_native extends SubLStructNative {
 		public SubLObject $name;

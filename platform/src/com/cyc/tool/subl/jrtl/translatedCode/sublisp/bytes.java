@@ -106,18 +106,7 @@ public class bytes extends SubLTranslatedFile {
 
     private static final SubLInteger $int$_12 = makeInteger(-12);
 
-    static {
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     @Override
     public void declareFunctions() {

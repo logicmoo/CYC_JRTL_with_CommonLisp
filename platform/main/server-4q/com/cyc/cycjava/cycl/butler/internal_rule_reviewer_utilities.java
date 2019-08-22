@@ -1,15 +1,9 @@
 package com.cyc.cycjava.cycl.butler;
 
 
-import com.cyc.cycjava.cycl.butler.internal_rule_reviewer_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.butler.internal_rule_reviewer_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
 public final class internal_rule_reviewer_utilities extends SubLTranslatedFile {
@@ -46,9 +40,7 @@ public final class internal_rule_reviewer_utilities extends SubLTranslatedFile {
         setup_internal_rule_reviewer_utilities_file();
     }
 
-    static {
-
-    }
+    
 }
 
 /**

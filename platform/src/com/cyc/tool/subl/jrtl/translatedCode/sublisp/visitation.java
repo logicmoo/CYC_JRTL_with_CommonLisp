@@ -156,21 +156,7 @@ public class visitation extends SubLTranslatedFile {
 
     public static final SubLString $str10$_A__A__A___A__ = makeString("~A ~A ~A: ~A~%");
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     @Override
     public void declareFunctions() {

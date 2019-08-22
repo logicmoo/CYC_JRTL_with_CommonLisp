@@ -3,15 +3,15 @@ package com.cyc.cycjava.cycl.sbhl;
 
 import static com.cyc.cycjava.cycl.sbhl.sbhl_iteration.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
@@ -19,10 +19,6 @@ import org.armedbear.lisp.Lisp;
 import com.cyc.cycjava.cycl.function_terms;
 import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.cycjava.cycl.obsolete;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_iterators.$sbhl_link_node_search_state_iterator_state_native;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_iterators.$sbhl_module_direction_link_search_state_iterator_state_native;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_iterators.$sbhl_module_naut_link_node_search_state_iterator_state_native;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_iterators.$sbhl_module_tv_link_node_search_state_iterator_state_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -361,7 +357,7 @@ public final class sbhl_link_iterators extends SubLTranslatedFile {
     }
 
     public static SubLObject sbhl_link_node_search_state_iterator_state_p(final SubLObject v_object) {
-        return v_object.getClass() == $sbhl_link_node_search_state_iterator_state_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sbhl_link_node_search_state_iterator_state_native.class ? T : NIL;
     }
 
     public static SubLObject sbhl_link_node_search_state_iterator_state_sbhl_link_node_search_state(final SubLObject v_object) {
@@ -548,7 +544,7 @@ public final class sbhl_link_iterators extends SubLTranslatedFile {
     }
 
     public static SubLObject sbhl_module_direction_link_search_state_iterator_state_p(final SubLObject v_object) {
-        return v_object.getClass() == $sbhl_module_direction_link_search_state_iterator_state_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sbhl_module_direction_link_search_state_iterator_state_native.class ? T : NIL;
     }
 
     public static SubLObject sbhl_module_direction_link_search_state_iterator_state_mt_link_iterator(final SubLObject v_object) {
@@ -776,7 +772,7 @@ public final class sbhl_link_iterators extends SubLTranslatedFile {
     }
 
     public static SubLObject sbhl_module_tv_link_node_search_state_iterator_state_p(final SubLObject v_object) {
-        return v_object.getClass() == $sbhl_module_tv_link_node_search_state_iterator_state_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sbhl_module_tv_link_node_search_state_iterator_state_native.class ? T : NIL;
     }
 
     public static SubLObject sbhl_module_tv_link_node_search_state_iterator_state_tv_link_iterator(final SubLObject v_object) {
@@ -1016,7 +1012,7 @@ public final class sbhl_link_iterators extends SubLTranslatedFile {
     }
 
     public static SubLObject sbhl_module_naut_link_node_search_state_iterator_state_p(final SubLObject v_object) {
-        return v_object.getClass() == $sbhl_module_naut_link_node_search_state_iterator_state_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sbhl_module_naut_link_node_search_state_iterator_state_native.class ? T : NIL;
     }
 
     public static SubLObject sbhl_module_naut_link_node_search_state_iterator_state_generating_functions(final SubLObject v_object) {
@@ -1552,157 +1548,7 @@ public final class sbhl_link_iterators extends SubLTranslatedFile {
         setup_sbhl_link_iterators_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $sbhl_link_node_search_state_iterator_state_native extends SubLStructNative {
         public SubLObject $sbhl_link_node_search_state;

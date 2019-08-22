@@ -7,25 +7,25 @@ import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
 import static com.cyc.cycjava.cycl.html_utilities.*;
 import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.cycjava.cycl.utilities_macros.register_html_state_variable;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
@@ -34,7 +34,49 @@ import java.util.Map;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.assertion_handles;
+import com.cyc.cycjava.cycl.assertions_high;
+import com.cyc.cycjava.cycl.at_var_types;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.bookkeeping_store;
+import com.cyc.cycjava.cycl.cb_assertion_editor;
+import com.cyc.cycjava.cycl.cb_editor;
+import com.cyc.cycjava.cycl.cb_form_widgets;
+import com.cyc.cycjava.cycl.cb_tools;
+import com.cyc.cycjava.cycl.constant_completion_high;
+import com.cyc.cycjava.cycl.constants_high;
+import com.cyc.cycjava.cycl.cyc_file_dependencies;
+import com.cyc.cycjava.cycl.cyc_navigator_internals;
+import com.cyc.cycjava.cycl.czer_meta;
+import com.cyc.cycjava.cycl.date_utilities;
+import com.cyc.cycjava.cycl.dhtml_macros;
+import com.cyc.cycjava.cycl.dictionary;
+import com.cyc.cycjava.cycl.format_nil;
+import com.cyc.cycjava.cycl.genls;
+import com.cyc.cycjava.cycl.hlmt;
+import com.cyc.cycjava.cycl.hlmt_relevance;
+import com.cyc.cycjava.cycl.html_complete;
+import com.cyc.cycjava.cycl.html_macros;
+import com.cyc.cycjava.cycl.html_script_utilities;
+import com.cyc.cycjava.cycl.integer_sequence_generator;
+import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.kb_accessors;
+import com.cyc.cycjava.cycl.kb_mapping_macros;
+import com.cyc.cycjava.cycl.kb_mapping_utilities;
+import com.cyc.cycjava.cycl.kb_utilities;
+import com.cyc.cycjava.cycl.ke;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.mt_vars;
+import com.cyc.cycjava.cycl.nart_handles;
+import com.cyc.cycjava.cycl.narts_high;
+import com.cyc.cycjava.cycl.operation_communication;
+import com.cyc.cycjava.cycl.process_utilities;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.system_parameters;
+import com.cyc.cycjava.cycl.time_interval_utilities;
 import com.cyc.cycjava.cycl.cyc_testing.ctest_utils;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.kb_query;
@@ -46,9 +88,6 @@ import com.cyc.cycjava.cycl.inference.browser.cb_query_browser;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
 import com.cyc.cycjava.cycl.inference.harness.inference_parameters;
-import com.cyc.cycjava.cycl.process_utilities;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.cb_kct_test.$kct_answer_native;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.cb_kct_test.$kct_test_state_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -2909,7 +2948,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject kct_test_state_p(final SubLObject v_object) {
-        return v_object.getClass() == $kct_test_state_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$kct_test_state_native.class ? T : NIL;
     }
 
     public static SubLObject kct_test_state_test_spec(final SubLObject v_object) {
@@ -3339,7 +3378,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject kct_answer_p(final SubLObject v_object) {
-        return v_object.getClass() == $kct_answer_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$kct_answer_native.class ? T : NIL;
     }
 
     public static SubLObject kct_answer_binding_set(final SubLObject v_object) {
@@ -7225,495 +7264,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         setup_cb_kct_test_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $kct_test_state_native extends SubLStructNative {
         public SubLObject $test_spec;

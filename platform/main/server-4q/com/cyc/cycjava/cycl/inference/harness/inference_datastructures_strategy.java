@@ -1708,11 +1708,11 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strategy_p_alt(SubLObject v_object) {
-		return v_object.getClass() == $strategy_native.class ? ((SubLObject) (T)) : NIL;
+		return v_object.getJavaClass() ==$strategy_native.class ? ((SubLObject) (T)) : NIL;
 	}
 
 	public static SubLObject strategy_p(final SubLObject v_object) {
-		return v_object.getClass() == inference_datastructures_strategy.$strategy_native.class ? T : NIL;
+		return v_object.getJavaClass() ==inference_datastructures_strategy.$strategy_native.class ? T : NIL;
 	}
 
 	public static SubLObject strat_suid_alt(SubLObject v_object) {
@@ -4291,13 +4291,13 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject problem_strategic_properties_p_alt(SubLObject v_object) {
-		return v_object.getClass() == inference_datastructures_strategy.$problem_strategic_properties_native.class
+		return v_object.getJavaClass() ==inference_datastructures_strategy.$problem_strategic_properties_native.class
 				? ((SubLObject) (T))
 				: NIL;
 	}
 
 	public static SubLObject problem_strategic_properties_p(final SubLObject v_object) {
-		return v_object.getClass() == inference_datastructures_strategy.$problem_strategic_properties_native.class ? T
+		return v_object.getJavaClass() ==inference_datastructures_strategy.$problem_strategic_properties_native.class ? T
 				: NIL;
 	}
 
@@ -5152,7 +5152,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject tactic_strategic_properties_p(final SubLObject v_object) {
-		return v_object.getClass() == $tactic_strategic_properties_native.class ? T : NIL;
+		return v_object.getJavaClass() ==$tactic_strategic_properties_native.class ? T : NIL;
 	}
 
 	public static SubLObject tact_strategic_properties_preference_level_alt(SubLObject v_object) {
@@ -8588,8 +8588,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 		inference_datastructures_strategy.setup_inference_datastructures_strategy_file();
 	}
 
-	static {
-	}
+	
 
 	public static final class $strategy_native extends SubLStructNative {
 		public SubLObject $suid;

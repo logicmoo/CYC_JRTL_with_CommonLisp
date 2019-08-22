@@ -1,7 +1,25 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.subloop_structures;
+import static com.cyc.cycjava.cycl.utilities_macros.generate_instance_variable_bindings_for_structure_slots;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.intern;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -19,43 +37,6 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.subloop_structures.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOURTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-import static com.cyc.cycjava.cycl.subloop_structures.*;
 
 public final class subloop_structures extends SubLTranslatedFile {
     public static final SubLFile me = new subloop_structures();
@@ -1023,7 +1004,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject class_p(final SubLObject v_object) {
-        return v_object.getClass() == $class_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$class_native.class ? T : NIL;
     }
 
     public static SubLObject class_name(final SubLObject v_object) {
@@ -1536,7 +1517,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject instance_p(final SubLObject v_object) {
-        return v_object.getClass() == $instance_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$instance_native.class ? T : NIL;
     }
 
     public static SubLObject instance_class(final SubLObject v_object) {
@@ -1656,7 +1637,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject interface_p(final SubLObject v_object) {
-        return v_object.getClass() == $interface_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$interface_native.class ? T : NIL;
     }
 
     public static SubLObject interface_name(final SubLObject v_object) {
@@ -1932,7 +1913,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject method_p(final SubLObject v_object) {
-        return v_object.getClass() == $method_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$method_native.class ? T : NIL;
     }
 
     public static SubLObject method_name(final SubLObject v_object) {
@@ -2199,7 +2180,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject method_trace_p(final SubLObject v_object) {
-        return v_object.getClass() == $method_trace_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$method_trace_native.class ? T : NIL;
     }
 
     public static SubLObject method_trace_name(final SubLObject v_object) {
@@ -2340,7 +2321,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject method_info_p(final SubLObject v_object) {
-        return v_object.getClass() == $method_info_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$method_info_native.class ? T : NIL;
     }
 
     public static SubLObject mi_method_name(final SubLObject v_object) {
@@ -2476,7 +2457,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject slot_listener_p(final SubLObject v_object) {
-        return v_object.getClass() == $slot_listener_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$slot_listener_native.class ? T : NIL;
     }
 
     public static SubLObject sl_slot_name(final SubLObject v_object) {
@@ -2632,7 +2613,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject slot_listener_registry_p(final SubLObject v_object) {
-        return v_object.getClass() == $slot_listener_registry_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$slot_listener_registry_native.class ? T : NIL;
     }
 
     public static SubLObject slr_instance(final SubLObject v_object) {
@@ -2743,7 +2724,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject method_listener_p(final SubLObject v_object) {
-        return v_object.getClass() == $method_listener_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$method_listener_native.class ? T : NIL;
     }
 
     public static SubLObject ml_owning_method_name(final SubLObject v_object) {
@@ -2864,7 +2845,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject function_detail_p(final SubLObject v_object) {
-        return v_object.getClass() == $function_detail_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$function_detail_native.class ? T : NIL;
     }
 
     public static SubLObject fd_function_name(final SubLObject v_object) {
@@ -2955,7 +2936,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject method_detail_p(final SubLObject v_object) {
-        return v_object.getClass() == $method_detail_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$method_detail_native.class ? T : NIL;
     }
 
     public static SubLObject md_method_name(final SubLObject v_object) {
@@ -3076,7 +3057,7 @@ public final class subloop_structures extends SubLTranslatedFile {
     }
 
     public static SubLObject method_listener_registry_p(final SubLObject v_object) {
-        return v_object.getClass() == $method_listener_registry_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$method_listener_registry_native.class ? T : NIL;
     }
 
     public static SubLObject mlr_instance(final SubLObject v_object) {
@@ -3643,478 +3624,7 @@ public final class subloop_structures extends SubLTranslatedFile {
         setup_subloop_structures_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $class_native extends SubLStructNative {
         public SubLObject $name;

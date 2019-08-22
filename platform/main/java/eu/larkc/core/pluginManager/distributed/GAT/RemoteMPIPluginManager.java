@@ -69,7 +69,6 @@ import org.gridlab.gat.resources.Job.JobState;
 import org.gridlab.gat.resources.HardwareResourceDescription;
 import eu.larkc.core.gatresource.GATResource;
 
-
 /**
  * RemotePluginManager is a particular implementation of LocalPluginManger that runs within a thread on a
  * remote machine.
@@ -79,7 +78,7 @@ import eu.larkc.core.gatresource.GATResource;
  * @param <E> The Input type of the queue that the PluginManager should accept
  * @param <F> The Output type of the queue that the PluginManager should produce
  */
-public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
+public abstract class RemoteMPIPluginManager<E, F> implements PluginManager {
 
 	/**
 	 * The queue for storing and accessing control methods sent by other PluginManagers
@@ -115,7 +114,7 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	 * @param resource The GATResource instance which describes the resource parameters
 	 * @param input_output_ID The input (for prestage plug-ins) and output (for execute and poststage plug-ins) ID (disk file name)
 	 */
-	public RemoteMPIPluginManager(Queue<E> theInputQueue, Queue<F> theOutputQueue, GATResource resource, String input_output_ID){
+	public RemoteMPIPluginManager(Queue<E> theInputQueue, Queue<F> theOutputQueue, GATResource resource, String input_output_ID) {
 		this.inputQueue = theInputQueue;
 		this.outputQueue = theOutputQueue;
 		this.resource = resource;
@@ -126,7 +125,7 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	 * @see eu.larkc.core.pluginManager.PluginManager#accept(eu.larkc.core.pluginManager.PluginManager.Message)
 	 */
 	@Override
-  public void accept(Message message) {
+	public void accept(Message message) {
 		mControlQueue.put(message);
 	}
 
@@ -135,7 +134,7 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	 *
 	 * @return the next control message
 	 */
-	public Message getNextControlMessage(){
+	public Message getNextControlMessage() {
 		return mControlQueue.take();
 	}
 
@@ -143,15 +142,15 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	 * @see eu.larkc.core.pluginManager.PluginManager#setPrevious(eu.larkc.core.pluginManager.PluginManager)
 	 */
 	@Override
-  public void setPrevious(PluginManager provider) {
+	public void setPrevious(PluginManager provider) {
 		this.mPreviousPlugin = provider;
 	}
 
 	/**
 	 * This method should be called in order to tell the previous plugin in the pipeline to stop sending input on the input queue
 	 */
-	protected void stopPrevious(){
-		if (mPreviousPlugin != null){
+	protected void stopPrevious() {
+		if (mPreviousPlugin != null) {
 			mPreviousPlugin.accept(PluginManager.Message.STOP);
 		}
 	}
@@ -159,8 +158,8 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	/**
 	 * This method should be called in order to tell the previous plugin in the pipeline to send the next piece of input on the input queue
 	 */
-	protected void alertPrevious(){
-		if (mPreviousPlugin != null){
+	protected void alertPrevious() {
+		if (mPreviousPlugin != null) {
 			mPreviousPlugin.accept(PluginManager.Message.NEXT);
 		}
 	}
@@ -169,7 +168,7 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	 * @see eu.larkc.core.pluginManager.PluginManager#start()
 	 */
 	@Override
-  public void start() {
+	public void start() {
 		if (thread != null) {
 			thread.start();
 		}
@@ -180,7 +179,7 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	 *
 	 * @param theThread The Thread in which the plugin management occurs
 	 */
-	protected void setThread(Thread theThread){
+	protected void setThread(Thread theThread) {
 		this.thread = theThread;
 	}
 
@@ -189,7 +188,7 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	 *
 	 * @return the next element on the input queue
 	 */
-	protected E getNextInput(){
+	protected E getNextInput() {
 		return inputQueue.take();
 	}
 
@@ -198,16 +197,14 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	 *
 	 * @param theF The element to put on the output queue
 	 */
-	protected void putNextOutput(F theF){
+	protected void putNextOutput(F theF) {
 		outputQueue.put(theF);
 	}
 
-	private static Logger log = Logger.getLogger(PluginManager.class
-			.getCanonicalName());
+	private static Logger log = Logger.getLogger(PluginManager.class.getCanonicalName());
 
 	protected GATResource resource;
 	protected String input_output_ID;
-
 
 	/**
 	* Prestages input data (method's parameters) to the remote machine with GAT as a disk file with the given ID (this.inputpu_output_ID).
@@ -218,21 +215,21 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 	*/
 	protected String doPrestage(Object... params) {
 
-
 		String DataInputID = input_output_ID; // here we will have a check whether the given input_ID exists.
-											  // otherwise DataIntputID will be generated
+												// otherwise DataIntputID will be generated
 
 		java.io.FileOutputStream fos;
 		java.io.ObjectOutputStream oos;
 
-		try{
+		try {
 			fos = new java.io.FileOutputStream("input");
-			oos= new java.io.ObjectOutputStream(fos);
-			for (int i=0; i<params.length; i++)
+			oos = new java.io.ObjectOutputStream(fos);
+			for (int i = 0; i < params.length; i++)
 				oos.writeObject(params[i]);
-			oos.close(); fos.close();
-		} catch(IOException ex) {
-				ex.printStackTrace();
+			oos.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 
 		//GATContext context = new GATContext();
@@ -266,14 +263,13 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 		ArrayList<Object> result = new ArrayList<Object>();
 
 		String DataOutputID = input_output_ID; // here we will have a check whether the given output_ID exists.
-											   // otherwise DataOuttputID will be generated
+												// otherwise DataOuttputID will be generated
 
-		try{
+		try {
 			//GATContext context = GAT.getDefaultGATContext();
 			//GATContext context = new GATContext();
 			Preferences gatprefs = new Preferences();
 			gatprefs.put("File.adaptor.name", resource.FileAdaptor);
-
 
 			//context.addPreferences(gatprefs);
 			try {
@@ -284,18 +280,16 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 
 			java.io.FileInputStream inputStream = new java.io.FileInputStream("output");
 			java.io.ObjectInputStream oin = new java.io.ObjectInputStream(inputStream);
-			while(true) {
-				try{
+			while (true) {
+				try {
 					Object readObj = (Object) oin.readObject();
 					result.add(readObj);
-				}
-				catch(java.io.EOFException e){
+				} catch (java.io.EOFException e) {
 					break;
 				}
 			}
 
-		}
-		catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -303,7 +297,6 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 
 		return result;
 	}
-
 
 	/**
 	* Runs a job on a remote machine. This method will copy all required files
@@ -320,98 +313,98 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 		Class managedClass = (Class) params[0];
 		String inputDataID = (String) params[1];
 
-		try{
+		try {
 
-				//Step 1. Submission preparation
+			//Step 1. Submission preparation
 
-				String managedPluginURI = managedClass.getCanonicalName().split("\\.")[managedClass.getCanonicalName().split("\\.").length - 1];
+			String managedPluginURI = managedClass.getCanonicalName().split("\\.")[managedClass.getCanonicalName().split("\\.").length - 1];
 
-				GATContext context = GAT.getDefaultGATContext();
+			GATContext context = GAT.getDefaultGATContext();
 
-				Preferences gatprefs = new Preferences();
-				gatprefs.put("ResourceBroker.adaptor.name", resource.Broker/*"wsgt4new"*/);
-				gatprefs.put("File.adaptor.name",resource.FileAdaptor /*"gt4gridftp"*/);
-				gatprefs.put("wsgt4new.factory.type", "PBS");
-				context.addPreferences(gatprefs);
+			Preferences gatprefs = new Preferences();
+			gatprefs.put("ResourceBroker.adaptor.name", resource.Broker/*"wsgt4new"*/);
+			gatprefs.put("File.adaptor.name", resource.FileAdaptor /*"gt4gridftp"*/);
+			gatprefs.put("wsgt4new.factory.type", "PBS");
+			context.addPreferences(gatprefs);
 
-				SoftwareDescription sd = new SoftwareDescription();
-				sd.setExecutable("/bin/sh");
+			SoftwareDescription sd = new SoftwareDescription();
+			sd.setExecutable("/bin/sh");
 
-				String[] arguments = new String[6];
-				arguments[0]="run_plugin";
-				arguments[1]=managedPluginURI;
-				arguments[2]=resource.WorkDir + "/" + inputDataID;
-				arguments[3]=resource.WorkDir + "/" + input_output_ID;
-				arguments[4]=resource.LarKCDir;
-				arguments[5]="-Xmx5000M -Xms5000M -XX:+AggressiveOpts -XX:+UseParallelGC -XX:ParallelGCThreads=16";
-				sd.setArguments(arguments);
+			String[] arguments = new String[6];
+			arguments[0] = "run_plugin";
+			arguments[1] = managedPluginURI;
+			arguments[2] = resource.WorkDir + "/" + inputDataID;
+			arguments[3] = resource.WorkDir + "/" + input_output_ID;
+			arguments[4] = resource.LarKCDir;
+			arguments[5] = "-Xmx5000M -Xms5000M -XX:+AggressiveOpts -XX:+UseParallelGC -XX:ParallelGCThreads=16";
+			sd.setArguments(arguments);
 
-				// finally, we redirect stdout/stderr for debugging, and setup pre- and
-				// post-staging
+			// finally, we redirect stdout/stderr for debugging, and setup pre- and
+			// post-staging
 
-				sd.setStdout(GAT.createFile(context, "stdout"));
-				sd.setStderr(GAT.createFile(context, "stderr"));
-				sd.addPreStagedFile(GAT.createFile(context, "run_plugin"));
+			sd.setStdout(GAT.createFile(context, "stdout"));
+			sd.setStderr(GAT.createFile(context, "stderr"));
+			sd.addPreStagedFile(GAT.createFile(context, "run_plugin"));
 
-				sd.addAttribute(/*SoftwareDescription.JOB_TYPE*/ "job.type", "single");
-				sd.addAttribute("sandbox.delete", "false");
+			sd.addAttribute(/*SoftwareDescription.JOB_TYPE*/ "job.type", "single");
+			sd.addAttribute("sandbox.delete", "false");
 
+			// Step 2 - Job submission
 
-				// Step 2 - Job submission
+			JobDescription jd = new JobDescription(sd);
 
-				JobDescription jd = new JobDescription(sd);
+			jd.setProcessCount(1);
+			jd.setResourceCount(resource.NumMPIProcesses + 1); //+1 is to allow for the host process
+			ResourceBroker broker = GAT.createResourceBroker(new URI("any://" + resource.URI));
 
-				jd.setProcessCount(1);
-				jd.setResourceCount(resource.NumMPIProcesses + 1); //+1 is to allow for the host process
-				ResourceBroker broker = GAT.createResourceBroker(new URI(
-						"any://" + resource.URI));
+			org.gridlab.gat.resources.Job job = broker.submitJob(jd);
 
-				org.gridlab.gat.resources.Job job = broker.submitJob(jd);
+			log.fine("job submitted");
 
-				log.fine("job submitted");
-
-				while (job.getState() != JobState.STOPPED
-						&& job.getState() != JobState.SUBMISSION_ERROR) {
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException e) {
-					}
+			while (job.getState() != JobState.STOPPED && job.getState() != JobState.SUBMISSION_ERROR) {
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
 				}
-				log.fine("job done");
+			}
+			log.fine("job done");
 
 			// Step 3 - analysis of the job execution
-				System.out.println("Stdout from the remote Plug-in: ");
-				System.out.println("--------------------------------");
-				java.io.File stdoutFile = new java.io.File("stdout");
-			    java.io.FileInputStream stdoutFis = null;
-			    java.io.BufferedInputStream stdoutBis = null;
-			    java.io.DataInputStream stdoutDis = null;
+			System.out.println("Stdout from the remote Plug-in: ");
+			System.out.println("--------------------------------");
+			java.io.File stdoutFile = new java.io.File("stdout");
+			java.io.FileInputStream stdoutFis = null;
+			java.io.BufferedInputStream stdoutBis = null;
+			java.io.DataInputStream stdoutDis = null;
 
-			    stdoutFis = new java.io.FileInputStream(stdoutFile);
-			    stdoutBis = new java.io.BufferedInputStream(stdoutFis);
-			    stdoutDis = new java.io.DataInputStream(stdoutBis);
+			stdoutFis = new java.io.FileInputStream(stdoutFile);
+			stdoutBis = new java.io.BufferedInputStream(stdoutFis);
+			stdoutDis = new java.io.DataInputStream(stdoutBis);
 
-			    while (stdoutDis.available() != 0)
-			        System.out.println(stdoutDis.readLine());
-			    System.out.println("--------------------------------");
-			    stdoutFis.close(); stdoutBis.close(); stdoutDis.close();
+			while (stdoutDis.available() != 0)
+				System.out.println(stdoutDis.readLine());
+			System.out.println("--------------------------------");
+			stdoutFis.close();
+			stdoutBis.close();
+			stdoutDis.close();
 
-				System.out.println("Stderr from the remote Plug-in: ");
-				System.out.println("--------------------------------");
-				stdoutFile = new java.io.File("stderr");
-			    stdoutFis = null;
-			    stdoutBis = null;
-			    stdoutDis = null;
+			System.out.println("Stderr from the remote Plug-in: ");
+			System.out.println("--------------------------------");
+			stdoutFile = new java.io.File("stderr");
+			stdoutFis = null;
+			stdoutBis = null;
+			stdoutDis = null;
 
-			    stdoutFis = new java.io.FileInputStream(stdoutFile);
-			    stdoutBis = new java.io.BufferedInputStream(stdoutFis);
-			    stdoutDis = new java.io.DataInputStream(stdoutBis);
+			stdoutFis = new java.io.FileInputStream(stdoutFile);
+			stdoutBis = new java.io.BufferedInputStream(stdoutFis);
+			stdoutDis = new java.io.DataInputStream(stdoutBis);
 
-			    while (stdoutDis.available() != 0)
-			        System.out.println(stdoutDis.readLine());
-			    System.out.println("--------------------------------");
-			    stdoutFis.close(); stdoutBis.close(); stdoutDis.close();
-
+			while (stdoutDis.available() != 0)
+				System.out.println(stdoutDis.readLine());
+			System.out.println("--------------------------------");
+			stdoutFis.close();
+			stdoutBis.close();
+			stdoutDis.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -419,87 +412,84 @@ public abstract class RemoteMPIPluginManager <E, F> implements PluginManager {
 		return input_output_ID;
 	}
 
-
 	/**
 	* Contains the code executed on the remote machine
 	*
 	* @param stub
 	*            stub for adapting to a concrete plug-in type
 	*/
-	protected static void runRemoteJob(RemoteContainerStub stub){
+	protected static void runRemoteJob(RemoteContainerStub stub) {
 
-			//getting the remote machine's hostname
-			try{
-				java.net.InetAddress localMachine =
-						java.net.InetAddress.getLocalHost();
-				System.out.println ("The plug-in is executed on: " +
-						localMachine.getHostName());
-			} catch(java.net.UnknownHostException e){
-				e.printStackTrace();
-			}
+		//getting the remote machine's hostname
+		try {
+			java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
+			System.out.println("The plug-in is executed on: " + localMachine.getHostName());
+		} catch (java.net.UnknownHostException e) {
+			e.printStackTrace();
+		}
 
-//			System.out.println ("The LarKC location is: " +
-//					System.getProperty("larkc.location"));
+		//			System.out.println ("The LarKC location is: " +
+		//					System.getProperty("larkc.location"));
 
-//			System.out.println ("The input is: " +
-//					System.getProperty("larkc.job.input"));
+		//			System.out.println ("The input is: " +
+		//					System.getProperty("larkc.job.input"));
 
-//			System.out.println ("The output is: " +
-//					System.getProperty("larkc.job.output"));
+		//			System.out.println ("The output is: " +
+		//					System.getProperty("larkc.job.output"));
 
-			ArrayList<Object> parameters = new ArrayList<Object>();
+		ArrayList<Object> parameters = new ArrayList<Object>();
 
-			try {
-				java.io.FileInputStream inputStream = new java.io.FileInputStream(System.getProperty("larkc.job.input"));
-				java.io.ObjectInputStream oin = new java.io.ObjectInputStream(inputStream);
+		try {
+			java.io.FileInputStream inputStream = new java.io.FileInputStream(System.getProperty("larkc.job.input"));
+			java.io.ObjectInputStream oin = new java.io.ObjectInputStream(inputStream);
 
-				// read our startup parameters from local input file
-				while(true) {
-					try{
-						Object readObj = (Object) oin.readObject();
-						parameters.add(readObj);
-					}
-					catch(java.io.EOFException e){
-						break;
-					}
+			// read our startup parameters from local input file
+			while (true) {
+				try {
+					Object readObj = (Object) oin.readObject();
+					parameters.add(readObj);
+				} catch (java.io.EOFException e) {
+					break;
 				}
-
-				inputStream.close(); oin.close();
-
-			} catch(Exception e){
-				e.printStackTrace();
 			}
 
-//			Integer size = parameters.size();
-//			System.out.println(size.toString() + " properties are available");
+			inputStream.close();
+			oin.close();
 
-			//Invoking the plug-in
-			ArrayList<Object> result = new ArrayList<Object>();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-			try {
-				result = stub.invoke(parameters);
-			} catch (Exception e) {
-				e.printStackTrace();
+		//			Integer size = parameters.size();
+		//			System.out.println(size.toString() + " properties are available");
+
+		//Invoking the plug-in
+		ArrayList<Object> result = new ArrayList<Object>();
+
+		try {
+			result = stub.invoke(parameters);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			java.io.FileOutputStream outputStream = new java.io.FileOutputStream(System.getProperty("larkc.job.output"));
+			java.io.ObjectOutputStream outStream = new java.io.ObjectOutputStream(outputStream);
+
+			for (int i = 0; i < result.size(); i++) {
+				Object result_tmp = result.get(i);
+				outStream.writeObject(result_tmp);
 			}
 
-			try {
-				java.io.FileOutputStream outputStream = new java.io.FileOutputStream(System.getProperty("larkc.job.output"));
-				java.io.ObjectOutputStream outStream = new java.io.ObjectOutputStream(outputStream);
-
-				for (int i=0; i<result.size(); i++)	{
-					Object result_tmp = result.get(i);
-					outStream.writeObject(result_tmp);
-				}
-
-				outStream.close(); outputStream.close();
-			} catch(Exception e){
-				e.printStackTrace();
-			}
+			outStream.close();
+			outputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-
 	protected interface RemoteContainerStub {
-			public ArrayList<Object> invoke(ArrayList<Object> params) throws Exception;
+		public ArrayList<Object> invoke(ArrayList<Object> params) throws Exception;
 	}
 
 }

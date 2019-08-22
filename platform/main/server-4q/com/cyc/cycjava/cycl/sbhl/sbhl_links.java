@@ -2,10 +2,10 @@ package com.cyc.cycjava.cycl.sbhl;
 
 
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
@@ -19,8 +19,6 @@ import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.set;
 import com.cyc.cycjava.cycl.set_contents;
 import com.cyc.cycjava.cycl.set_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_links.$sbhl_directed_link_native;
-import com.cyc.cycjava.cycl.sbhl.sbhl_links.$sbhl_undirected_link_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -164,7 +162,7 @@ public final class sbhl_links extends SubLTranslatedFile {
     }
 
     public static SubLObject sbhl_directed_link_p(final SubLObject v_object) {
-        return v_object.getClass() == $sbhl_directed_link_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sbhl_directed_link_native.class ? T : NIL;
     }
 
     public static SubLObject sbhl_directed_link_predicate_links(final SubLObject v_object) {
@@ -231,7 +229,7 @@ public final class sbhl_links extends SubLTranslatedFile {
     }
 
     public static SubLObject sbhl_undirected_link_p(final SubLObject v_object) {
-        return v_object.getClass() == $sbhl_undirected_link_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sbhl_undirected_link_native.class ? T : NIL;
     }
 
     public static SubLObject sbhl_undirected_link_links(final SubLObject v_object) {
@@ -1200,63 +1198,7 @@ public final class sbhl_links extends SubLTranslatedFile {
         setup_sbhl_links_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $sbhl_directed_link_native extends SubLStructNative {
         public SubLObject $predicate_links;

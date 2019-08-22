@@ -384,35 +384,7 @@ public final class kct_thinking extends SubLTranslatedFile {
         setup_kct_thinking_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 }
 
 /**

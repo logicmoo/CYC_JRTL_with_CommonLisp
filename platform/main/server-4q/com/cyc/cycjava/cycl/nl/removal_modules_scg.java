@@ -1,36 +1,36 @@
 package com.cyc.cycjava.cycl.nl;
 
-import com.cyc.cycjava.cycl.constant_handles;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.cycjava.cycl.subcollection_unwinder;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.cycjava.cycl.backward;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
 import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.cycl_grammar;
+import com.cyc.cycjava.cycl.backward;
 import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.cycjava.cycl.unification;
-import com.cyc.cycjava.cycl.el_grammar;
+import com.cyc.cycjava.cycl.constant_handles;
+import com.cyc.cycjava.cycl.cycl_grammar;
+import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.cycjava.cycl.cycl_variables;
+import com.cyc.cycjava.cycl.el_grammar;
 import com.cyc.cycjava.cycl.el_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.subcollection_unwinder;
+import com.cyc.cycjava.cycl.unification;
+import com.cyc.cycjava.cycl.unification_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.cycjava.cycl.inference.harness.inference_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class removal_modules_scg

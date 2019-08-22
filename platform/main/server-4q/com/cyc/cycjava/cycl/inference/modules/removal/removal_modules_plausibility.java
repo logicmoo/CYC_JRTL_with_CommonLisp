@@ -1,32 +1,32 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.cycjava.cycl.constant_handles;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.tool.subl.util.SubLFiles;
+
 import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.plausible_narts;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.cycjava.cycl.arithmetic;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.plausibility_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.narts_high;
-import com.cyc.cycjava.cycl.nart_handles;
-import com.cyc.cycjava.cycl.czer_utilities;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.cycl_grammar;
 import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.cycjava.cycl.czer_utilities;
+import com.cyc.cycjava.cycl.el_utilities;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.nart_handles;
+import com.cyc.cycjava.cycl.narts_high;
+import com.cyc.cycjava.cycl.plausibility_utilities;
+import com.cyc.cycjava.cycl.plausible_narts;
+import com.cyc.cycjava.cycl.unification_utilities;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class removal_modules_plausibility

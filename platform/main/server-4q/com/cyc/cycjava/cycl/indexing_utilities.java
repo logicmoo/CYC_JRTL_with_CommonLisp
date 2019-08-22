@@ -1,21 +1,20 @@
 package com.cyc.cycjava.cycl;
 
-import static com.cyc.cycjava.cycl.id_index.*;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.id_index.*;
 import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
@@ -682,7 +681,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
 	}
 
 	public static SubLObject complex_index_visitor_p(final SubLObject v_object) {
-		return v_object.getClass() == $complex_index_visitor_native.class ? T : NIL;
+		return v_object.getJavaClass() ==$complex_index_visitor_native.class ? T : NIL;
 	}
 
 	public static SubLObject compinx_visit_begin_subindex_fn(final SubLObject v_object) {
@@ -1608,9 +1607,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
 		setup_indexing_utilities_file();
 	}
 
-	static {
-
-	}
+	
 
 	public static final class $complex_index_visitor_native extends SubLStructNative {
 		public SubLObject $begin_subindex_fn;

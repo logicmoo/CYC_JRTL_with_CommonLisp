@@ -34,6 +34,7 @@ public interface SubLObject extends Cloneable {
 
     SubLObject add(SubLObject p0);
 
+    Class getJavaClass() ;
     void addKey(SubLObject p0);
 
     public boolean lispEquals(Object obj);

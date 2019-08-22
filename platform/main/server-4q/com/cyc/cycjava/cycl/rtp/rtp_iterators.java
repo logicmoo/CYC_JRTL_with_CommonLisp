@@ -1,30 +1,36 @@
 package com.cyc.cycjava.cycl.rtp;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_null;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.assertion_handles;
+import com.cyc.cycjava.cycl.assertions_high;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.parsing_utilities;
+import com.cyc.cycjava.cycl.parsing_vars;
+import com.cyc.cycjava.cycl.queues;
+import com.cyc.cycjava.cycl.rkf_formula_optimizer;
+import com.cyc.cycjava.cycl.rkf_text_processors;
 import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.rtp.rtp_iterators.$itp_child_iterator_native;
-import com.cyc.cycjava.cycl.rtp.rtp_iterators.$itp_result_iterator_native;
-import com.cyc.cycjava.cycl.rtp.rtp_iterators.$itp_section_iterator_native;
-import com.cyc.cycjava.cycl.rtp.rtp_iterators.$rtp_iterator_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -337,7 +343,7 @@ public final class rtp_iterators extends SubLTranslatedFile {
     }
 
     public static SubLObject itp_result_iterator_p(final SubLObject v_object) {
-        return v_object.getClass() == $itp_result_iterator_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$itp_result_iterator_native.class ? T : NIL;
     }
 
     public static SubLObject itp_result_iterator_style(final SubLObject v_object) {
@@ -434,7 +440,7 @@ public final class rtp_iterators extends SubLTranslatedFile {
     }
 
     public static SubLObject itp_section_iterator_p(final SubLObject v_object) {
-        return v_object.getClass() == $itp_section_iterator_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$itp_section_iterator_native.class ? T : NIL;
     }
 
     public static SubLObject itp_section_iterator_parent(final SubLObject v_object) {
@@ -536,7 +542,7 @@ public final class rtp_iterators extends SubLTranslatedFile {
     }
 
     public static SubLObject itp_child_iterator_p(final SubLObject v_object) {
-        return v_object.getClass() == $itp_child_iterator_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$itp_child_iterator_native.class ? T : NIL;
     }
 
     public static SubLObject itp_child_iterator_parent(final SubLObject v_object) {
@@ -1003,7 +1009,7 @@ public final class rtp_iterators extends SubLTranslatedFile {
     }
 
     public static SubLObject rtp_iterator_p(final SubLObject v_object) {
-        return v_object.getClass() == $rtp_iterator_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$rtp_iterator_native.class ? T : NIL;
     }
 
     public static SubLObject rtp_iterator_string(final SubLObject v_object) {
@@ -1593,147 +1599,7 @@ public final class rtp_iterators extends SubLTranslatedFile {
         setup_rtp_iterators_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $itp_result_iterator_native extends SubLStructNative {
         public SubLObject $style;

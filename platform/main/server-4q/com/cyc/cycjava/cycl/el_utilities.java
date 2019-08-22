@@ -22,7 +22,7 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.set_aref;
@@ -14347,8 +14347,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 		setup_el_utilities_file();
 	}
 
-	static {
-	}
+	
 
 	public static final class $el_negation_p$UnaryFunction extends UnaryFunction {
 		public $el_negation_p$UnaryFunction() {

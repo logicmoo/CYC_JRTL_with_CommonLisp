@@ -597,7 +597,7 @@ public class process_utilities extends SubLTranslatedFile {
 	}
 
 	public static SubLObject task_p(final SubLObject v_object) {
-		return v_object.getClass() == $task_native.class ? T : NIL;
+		return v_object.getJavaClass() ==$task_native.class ? T : NIL;
 	}
 
 	public static SubLObject task_process(final SubLObject v_object) {
@@ -703,7 +703,7 @@ public class process_utilities extends SubLTranslatedFile {
 	}
 
 	public static SubLObject thinking_task_p(final SubLObject v_object) {
-		return v_object.getClass() == $thinking_task_native.class ? T : NIL;
+		return v_object.getJavaClass() ==$thinking_task_native.class ? T : NIL;
 	}
 
 	public static SubLObject t_task_lock(final SubLObject v_object) {
@@ -1327,7 +1327,7 @@ public class process_utilities extends SubLTranslatedFile {
 	}
 
 	public static SubLObject ipc_queue_p(final SubLObject v_object) {
-		return v_object.getClass() == $ipc_queue_native.class ? T : NIL;
+		return v_object.getJavaClass() ==$ipc_queue_native.class ? T : NIL;
 	}
 
 	public static SubLObject ipc_queue_lock(final SubLObject v_object) {
@@ -1696,7 +1696,7 @@ public class process_utilities extends SubLTranslatedFile {
 	}
 
 	public static SubLObject ordered_ipc_queue_p(final SubLObject v_object) {
-		return v_object.getClass() == $ordered_ipc_queue_native.class ? T : NIL;
+		return v_object.getJavaClass() ==$ordered_ipc_queue_native.class ? T : NIL;
 	}
 
 	public static SubLObject ordrd_ipcq_lock(final SubLObject v_object) {
@@ -1978,7 +1978,7 @@ public class process_utilities extends SubLTranslatedFile {
 	}
 
 	public static SubLObject process_wrapper_p(final SubLObject v_object) {
-		return v_object.getClass() == $process_wrapper_native.class ? T : NIL;
+		return v_object.getJavaClass() ==$process_wrapper_native.class ? T : NIL;
 	}
 
 	public static SubLObject process_wrapper_id(final SubLObject v_object) {
@@ -2678,9 +2678,7 @@ public class process_utilities extends SubLTranslatedFile {
 		setup_process_utilities_file();
 	}
 
-	static {
-
-	}
+	
 
 	public static final class $task_native extends SubLStructNative {
 		public SubLObject $process;
@@ -3170,7 +3168,7 @@ public class process_utilities extends SubLTranslatedFile {
 
 		// @SubL(source = "cycl/process-utilities.lisp", position = 2865)
 		// public static final SubLObject task_p(SubLObject v_object) {
-		// return ((v_object.getClass() == $task_native.class) ? ((SubLObject) T) : NIL);
+		// return ((v_object.getJavaClass() ==$task_native.class) ? ((SubLObject) T) : NIL);
 		// }
 		// 
 		// public static final class $task_p$UnaryFunction extends UnaryFunction {

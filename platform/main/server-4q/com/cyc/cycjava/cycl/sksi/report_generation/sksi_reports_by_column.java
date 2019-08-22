@@ -1,96 +1,97 @@
 package com.cyc.cycjava.cycl.sksi.report_generation;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
-import com.cyc.cycjava.cycl.constant_handles;
-import com.cyc.cycjava.cycl.cyc_testing.generic_testing;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
 import com.cyc.cycjava.cycl.access_macros;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.cycjava.cycl.fi;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.sksi.query_sks.sksi_removal_module_generation;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
-import com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_sks_manager;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
-import com.cyc.cycjava.cycl.simplifier;
-import com.cyc.cycjava.cycl.czer_utilities;
-import com.cyc.cycjava.cycl.inference.ask_utilities;
+import com.cyc.cycjava.cycl.api_control_vars;
 import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_field_translation_utilities;
-import com.cyc.cycjava.cycl.inference.kb_query;
+import com.cyc.cycjava.cycl.cae_query_search;
+import com.cyc.cycjava.cycl.constant_handles;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.czer_utilities;
+import com.cyc.cycjava.cycl.dictionary;
 import com.cyc.cycjava.cycl.dictionary_contents;
 import com.cyc.cycjava.cycl.dictionary_utilities;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.hash_table_utilities;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_interaction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import java.util.Map;
-import java.util.Iterator;
-import com.cyc.cycjava.cycl.vector_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ReadWriteLocks;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
-import com.cyc.cycjava.cycl.file_utilities;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
-import com.cyc.cycjava.cycl.http_kernel;
-import com.cyc.cycjava.cycl.mail_utilities;
-import com.cyc.cycjava.cycl.misc_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
-import com.cyc.cycjava.cycl.system_parameters;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
-import com.cyc.cycjava.cycl.hlmt_czer;
 import com.cyc.cycjava.cycl.el_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.api_control_vars;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.cycjava.cycl.fi;
+import com.cyc.cycjava.cycl.file_utilities;
+import com.cyc.cycjava.cycl.hash_table_utilities;
+import com.cyc.cycjava.cycl.hlmt_czer;
+import com.cyc.cycjava.cycl.http_kernel;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.kb_mapping_macros;
+import com.cyc.cycjava.cycl.kb_mapping_utilities;
 import com.cyc.cycjava.cycl.ke;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.cycjava.cycl.inference.scheduled_queries;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
-import com.cyc.cycjava.cycl.cae_query_search;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.mail_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.misc_utilities;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.number_utilities;
 import com.cyc.cycjava.cycl.operation_communication;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
+import com.cyc.cycjava.cycl.simplifier;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.system_parameters;
+import com.cyc.cycjava.cycl.utilities_macros;
+import com.cyc.cycjava.cycl.vector_utilities;
+import com.cyc.cycjava.cycl.cyc_testing.generic_testing;
+import com.cyc.cycjava.cycl.inference.ask_utilities;
+import com.cyc.cycjava.cycl.inference.kb_query;
+import com.cyc.cycjava.cycl.inference.scheduled_queries;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;
+import com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_sks_manager;
+import com.cyc.cycjava.cycl.sksi.query_sks.sksi_removal_module_generation;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_field_translation_utilities;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_interaction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ReadWriteLocks;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class sksi_reports_by_column
@@ -1302,7 +1303,7 @@ public final class sksi_reports_by_column
   @SubLTranslatedFile.SubL(source = "cycl/sksi/report-generation/sksi-reports-by-column.lisp", position = 19108L)
   public static SubLObject report_generator_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $report_generator_native.class ) ? T : NIL;
+    return ( v_object.getJavaClass() ==$report_generator_native.class ) ? T : NIL;
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/sksi/report-generation/sksi-reports-by-column.lisp", position = 19108L)
@@ -1592,7 +1593,7 @@ public final class sksi_reports_by_column
   @SubLTranslatedFile.SubL(source = "cycl/sksi/report-generation/sksi-reports-by-column.lisp", position = 23076L)
   public static SubLObject report_generator_problem_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $report_generator_problem_native.class ) ? T : NIL;
+    return ( v_object.getJavaClass() ==$report_generator_problem_native.class ) ? T : NIL;
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/sksi/report-generation/sksi-reports-by-column.lisp", position = 23076L)
@@ -1751,7 +1752,7 @@ public final class sksi_reports_by_column
   @SubLTranslatedFile.SubL(source = "cycl/sksi/report-generation/sksi-reports-by-column.lisp", position = 24976L)
   public static SubLObject report_generation_state_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $report_generation_state_native.class ) ? T : NIL;
+    return ( v_object.getJavaClass() ==$report_generation_state_native.class ) ? T : NIL;
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/sksi/report-generation/sksi-reports-by-column.lisp", position = 24976L)

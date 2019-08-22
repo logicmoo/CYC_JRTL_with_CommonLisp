@@ -1,26 +1,25 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.cycjava.cycl.constant_handles;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
+import com.cyc.cycjava.cycl.collection_defns;
+import com.cyc.cycjava.cycl.constant_handles;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.czer_utilities;
+import com.cyc.cycjava.cycl.el_utilities;
+import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.cycjava.cycl.mt_vars;
 import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.cycjava.cycl.czer_utilities;
-import com.cyc.cycjava.cycl.collection_defns;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.el_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class removal_modules_fractions

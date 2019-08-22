@@ -1,13 +1,13 @@
 package com.cyc.cycjava.cycl.sksi.query_sks;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
@@ -29,8 +29,6 @@ import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.cycjava.cycl.string_utilities;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_accessors;
-import com.cyc.cycjava.cycl.sksi.query_sks.sksi_query_datastructures.$sks_profile_native;
-import com.cyc.cycjava.cycl.sksi.query_sks.sksi_query_datastructures.$table_aliasing_context_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -241,7 +239,7 @@ public final class sksi_query_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject sks_profile_p(final SubLObject v_object) {
-        return v_object.getClass() == $sks_profile_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$sks_profile_native.class ? T : NIL;
     }
 
     public static SubLObject sks_profile_sks(final SubLObject v_object) {
@@ -481,7 +479,7 @@ public final class sksi_query_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject table_aliasing_context_p(final SubLObject v_object) {
-        return v_object.getClass() == $table_aliasing_context_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$table_aliasing_context_native.class ? T : NIL;
     }
 
     public static SubLObject tac_lits(final SubLObject v_object) {
@@ -1076,95 +1074,7 @@ public final class sksi_query_datastructures extends SubLTranslatedFile {
         setup_sksi_query_datastructures_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $sks_profile_native extends SubLStructNative {
         public SubLObject $sks;

@@ -2,32 +2,48 @@ package com.cyc.cycjava.cycl.leader;
 
 
 import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
 import org.armedbear.lisp.Lisp;
 
-import com.cyc.cycjava.cycl.*;
-import com.cyc.cycjava.cycl.leader.parse_tree_gui.$gui_enabled_document_native;
-import com.cyc.cycjava.cycl.leader.parse_tree_gui.$gui_enabled_sentence_native;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.cyclifier;
+import com.cyc.cycjava.cycl.cycml_generator;
+import com.cyc.cycjava.cycl.document;
+import com.cyc.cycjava.cycl.forts;
+import com.cyc.cycjava.cycl.instances;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.methods;
+import com.cyc.cycjava.cycl.object;
+import com.cyc.cycjava.cycl.parse_tree;
+import com.cyc.cycjava.cycl.parser;
+import com.cyc.cycjava.cycl.parsing_utilities;
+import com.cyc.cycjava.cycl.semtrans_lexicon;
+import com.cyc.cycjava.cycl.stacks;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.web_utilities;
+import com.cyc.cycjava.cycl.word_tree;
+import com.cyc.cycjava.cycl.xml_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -402,7 +418,7 @@ public final class parse_tree_gui extends SubLTranslatedFile {
     }
 
     public static SubLObject gui_enabled_document_p(final SubLObject v_object) {
-        return v_object.getClass() == $gui_enabled_document_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$gui_enabled_document_native.class ? T : NIL;
     }
 
     public static SubLObject ged_sentences(final SubLObject v_object) {
@@ -512,7 +528,7 @@ public final class parse_tree_gui extends SubLTranslatedFile {
     }
 
     public static SubLObject gui_enabled_sentence_p(final SubLObject v_object) {
-        return v_object.getClass() == $gui_enabled_sentence_native.class ? T : NIL;
+        return v_object.getJavaClass() ==$gui_enabled_sentence_native.class ? T : NIL;
     }
 
     public static SubLObject ges_surface_string(final SubLObject v_object) {
@@ -1578,173 +1594,7 @@ public final class parse_tree_gui extends SubLTranslatedFile {
         setup_parse_tree_gui_file();
     }
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     public static final class $gui_enabled_document_native extends SubLStructNative {
         public SubLObject $sentences;

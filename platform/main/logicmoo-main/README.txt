@@ -15,29 +15,5 @@ JDK1.3 or greater.  It makes use of certain features of the reflection API
 that will not compile with JDK1.2 or lower.
 
 
-
-Startup Modes
-
-Common Lisp Interpreted Mode 
-   -  Building the Common Lisp Compiled Mode
-   -  Running ANSI Tests (Conformance)
-   -  Running Benchmarks
-   -  Ensuring an application works right before you begin to CycLify it
-
-Common Lisp Pure Mode 
-   -  Running ANSI Tests (Conformance)
-   -  Running Benchmarks
-   -  Ensuring an application os working before you begin to CycLify it
-
-SubL Lisp Mode    
-   -  Running Performance Tests
-   -  Running Conformance Tests
-   -  Ensuring an application os working before you bergin to CycLify it
-   
-Common Lisp Programming using the Cyc
-
-
-
-
 --
 

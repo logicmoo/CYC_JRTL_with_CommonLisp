@@ -171,21 +171,7 @@ public class environment extends SubLTranslatedFile {
 
     public static final SubLSymbol $NETWORK_NAME = makeKeyword("NETWORK-NAME");
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     @Override
     public void declareFunctions() {

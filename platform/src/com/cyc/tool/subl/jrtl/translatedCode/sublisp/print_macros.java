@@ -176,26 +176,7 @@ public class print_macros extends SubLTranslatedFile {
 
 
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+    
 
     @Override
     public void declareFunctions() {

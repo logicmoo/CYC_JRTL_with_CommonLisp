@@ -1,18 +1,13 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.optimized_funcall_declarations;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.optimized_funcall_declarations.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
 public final class optimized_funcall_declarations extends SubLTranslatedFile {
@@ -56,10 +51,7 @@ public final class optimized_funcall_declarations extends SubLTranslatedFile {
         setup_optimized_funcall_declarations_file();
     }
 
-    static {
-
-
-    }
+    
 }
 
 /**

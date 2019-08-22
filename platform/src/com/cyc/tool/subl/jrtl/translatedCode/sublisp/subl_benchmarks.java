@@ -281,15 +281,7 @@ public class subl_benchmarks implements SubLFile {
     // deflexical
     private static final SubLSymbol $benchmark_hash_table_exerciser_times$ = makeSymbol("*BENCHMARK-HASH-TABLE-EXERCISER-TIMES*");
 
-    static {
-
-
-
-
-
-
-
-    }
+    
 
     @Override
     public void declareFunctions() {

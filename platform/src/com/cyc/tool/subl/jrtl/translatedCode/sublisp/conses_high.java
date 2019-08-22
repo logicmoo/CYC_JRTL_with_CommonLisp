@@ -2326,9 +2326,7 @@ public class conses_high extends SubLTranslatedFile {
 
 	private static final SubLString $$$NBUTLAST_called_on_circular_list = makeString("NBUTLAST called on circular list");
 
-	static {
-
-	}
+	
 
 	@Override
 	public void declareFunctions() {
