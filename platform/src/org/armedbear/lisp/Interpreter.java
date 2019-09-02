@@ -60,9 +60,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintStream;
 
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
+import org.semanticweb.kaon2.oab;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
@@ -140,12 +142,14 @@ public final class Interpreter extends Startup implements Runnable {
 			out._writeString(banner());
 			out._finishOutput();
 		}
+
 		if (help) {
 			final Stream out = getStandardOutput();
 			out._writeString(help());
 			out._finishOutput();
 			exit(0); // FIXME
 		}
+
 		if (noinform)
 			_NOINFORM_.setSymbolValue(T);
 		else {
@@ -213,33 +217,39 @@ public final class Interpreter extends Startup implements Runnable {
 	}
 
 	public static Interpreter createJLispInstance(InputStream in, OutputStream out, String initialDirectory, String version) {
-		boolean postrgs = false;
-		try {
-			synchronized (Interpreter.class) {
-				postrgs = true;
-				globalInterpreter = new Interpreter(in, out, initialDirectory);
-				return initInstance(globalInterpreter, new String[0], true);
-			}
 
-		} finally {
-			if (postrgs)
-				postProcessCommandLine(Main.passedArgs);
-		}
+		return createNewLispInstanceJDo(in, out, initialDirectory, version, true, passedArgs, true);
+
 	}
 
-	public static Interpreter createNewLispInstance(InputStream in, OutputStream out, String initialDirectory, String version, //
-			boolean jlisp0, boolean redoTodo) {
-		String[] todo = null;
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param in
+	 * @param out
+	 * @param absolutePath
+	 * @param version
+	 * @param b
+	 * @return
+	 */
+	public static Interpreter createNewLispInstance(InputStream in, PrintStream out, String initialDirectory, String version, boolean procArgs) {
+		return createNewLispInstanceJDo(in, out, initialDirectory, version, false, passedArgs, procArgs);
+	}
+
+	public static Interpreter createNewLispInstanceJDo(InputStream in, OutputStream out, String initialDirectory, String version, //
+			boolean jlisp0, String[] todo, boolean redoTodo) {
+
 		try {
 			synchronized (Interpreter.class) {
-				todo = Main.passedArgs;
-				Main.passedArgs = null;
+				if (todo == null) {
+					todo = Main.passedArgs;
+					//Main.passedArgs = null;
+				}
 				Interpreter interp = new Interpreter(in, out, initialDirectory);
 				if (globalInterpreter == null) {
 					globalInterpreter = interp;
 					redoTodo = true;
 				}
-				return initInstance(interp, new String[0], jlisp0);
+				return initInstance(interp, todo, jlisp0);
 			}
 		} finally {
 			if (todo != null && redoTodo) {
