@@ -401,6 +401,7 @@ public class SubLMain extends Startup {
 		// @todo do something with worldFile if not null here -APB
 		setIsInitialized();
 		try {
+			SubLPackage.setCurrentPackage("CYC");
 			handleInitFileRunning();
 			handleInitFormRunning();
 			handleAllegroCompatiblityMode();

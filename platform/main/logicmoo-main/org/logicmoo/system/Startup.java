@@ -204,7 +204,7 @@ public class Startup {
 	public static boolean noExit = true;
 	public static String[] passedArgs;
 	public static String[] cycCmdArgs = new String[] { "-f", "(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))" };
-
+	static boolean cycPart2Early = false;
 	public static boolean isSublispDefault = true;
 	protected static boolean useMainThread = true;
 	public static boolean noProlog = true;
@@ -291,7 +291,8 @@ public class Startup {
 		if (cycArgsList.size() == 0) {
 			me.processCommandLineArgs(cycCmdArgs);
 		} else {
-			cycCmdArgs = cycArgsList.toArray(new String[cycArgsList.size()]);
+			final String[] array = cycArgsList.toArray(new String[cycArgsList.size()]);
+			cycCmdArgs = array;
 		}
 
 		if (argsList.contains("--fakeajaxswing")) {
@@ -378,6 +379,11 @@ public class Startup {
 					throw new RuntimeException(" UpdateZip.updateUnits throw " + e, e);
 			}
 		}
+		if (argsList.remove("--rcyc2")) {
+			argsList.add("--rcyc");
+			argsList.add("--cyc2");
+		}
+		
 		if (argsList.remove("--rcyc")) {
 			SubLMain.OPENCYC = false;
 			needSubLMAIN = true;
@@ -390,6 +396,9 @@ public class Startup {
 				if (!keepGoing)
 					throw new RuntimeException(" UpdateZip.updateUnits throw " + e, e);
 			}
+		}
+		if (argsList.remove("--cyc2")) {
+			cycPart2Early = true;
 		}
 		if (argsList.remove("--cyc")) {
 			Main.noBSHGUI = false;
@@ -444,8 +453,9 @@ public class Startup {
 			noBSHGUI = false;
 			useBeanDeskGUI = true;
 		}
+
 		if (!argsList.contains("-cp")) {
-			IsolatedClassLoader.addDefaultJarsToClassPath();
+			IsolatedClassLoader.addDefaultJarsToClassPath(System.getProperty("user.dir", "."));
 		}
 		String[] argsNew = jiggleEvalArgs(argsList.toArray(new String[argsList.size()]));
 
@@ -1291,9 +1301,9 @@ public class Startup {
 				SubLPackage prevPackage = Lisp.getCurrentPackage();
 				try {
 					init_subl();
-					SubLMain.handleInits();
 					SubLPackage.setCurrentPackage("CYC");
 					SubLMain.initializeTranslatedSystems();
+					SubLMain.handleInits();
 					SubLMain.handlePatches();
 					inited_cyc = true;
 					inited_cyc_complete = true;
@@ -1355,7 +1365,7 @@ public class Startup {
 	}
 
 	@LispMethod
-	public static void init_server_2() {
+	public static void init_cyc_classes_part2() {
 		synchronized (StartupInitLock) {
 			final boolean wasSubLisp = Main.isSubLisp();
 			SubLPackage prevPackage = Lisp.getCurrentPackage();
@@ -1406,7 +1416,7 @@ public class Startup {
 					te = e;
 				}
 				if (true)
-					init_server_2();
+					init_cyc_classes_part2();
 				try {
 					PrologSync.setPrologReady(true);
 					LispSync.setLispReady(true);
@@ -2782,6 +2792,8 @@ public class Startup {
 	public static void completeCycInit() {
 		startCycInit();
 		try {
+			if (cycPart2Early)
+				init_cyc_classes_part2();
 			init_cyc_server();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

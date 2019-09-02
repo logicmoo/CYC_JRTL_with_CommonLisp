@@ -311,5 +311,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/larkc/asm-all-3.1.jar"/>
-	<classpathentry kind="output" path="target/ceclipse-classes"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

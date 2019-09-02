@@ -59,7 +59,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			"./lib/jetty-libs/*v20190813.jar", "./lib/larkc/*.jar", //
 			"./lib/jetty-libs/*.jar", "./lib/*.jar" };
 
-	public static void addDefaultJarsToClassPath() {
+	public static void addDefaultJarsToClassPath(String LARKC_HOME) {
 		ArrayList<File> al = new ArrayList();
 		Consumer<File> foo = new Consumer<File>() {
 
@@ -71,10 +71,15 @@ public class IsolatedClassLoader extends URLClassLoader {
 			}
 		};
 		for (String s : larkcDefaultJarFiles) {
+			if (s.startsWith(".")) {
+				if (!new File(s).exists()) {
+					s = LARKC_HOME + s.substring(1);
+				}
+			}
 			try {
-				if (s.contains("*"))
+				if (s.contains("*")) {
 					new FileFinder(s, false, foo).doFiles();
-				else
+				} else
 					foo.accept(normalizedFile(new File(s)));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -597,10 +602,10 @@ public class IsolatedClassLoader extends URLClassLoader {
 				try {
 					final ClassLoader pcl = getIsolatedParent();
 					if (pcl != null) {
-					c = pcl.loadClass(className);
+						c = pcl.loadClass(className);
 						println("Parent Loading: " + className);
 						myResolveClass(c);
-					return c;
+						return c;
 
 					}
 				} catch (ClassNotFoundException e) {
@@ -731,7 +736,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 */
 	private void myResolveClass(Class c) {
 		saveClass(c);
-			resolveClass(c);
+		resolveClass(c);
 		// TODO Auto-generated method stub
 
 	}
