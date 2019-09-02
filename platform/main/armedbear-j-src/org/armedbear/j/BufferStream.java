@@ -20,7 +20,6 @@
  */
 
 package org.armedbear.j;
-
 import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.LispObject;

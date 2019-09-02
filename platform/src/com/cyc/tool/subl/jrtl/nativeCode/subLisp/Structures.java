@@ -1,7 +1,7 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import static org.logicmoo.system.Startup.addSubLFile;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -164,6 +164,6 @@ public class Structures implements SubLFile
 
 	public Structures()
 	{
-		addSubLFile(this);
+		BeanShellCntrl.addSubLFile(this);
 	}
 }

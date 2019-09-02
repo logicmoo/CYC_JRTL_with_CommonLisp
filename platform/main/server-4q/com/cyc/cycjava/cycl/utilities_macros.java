@@ -85,7 +85,6 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.getf;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.putf;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.unquoted_symbol_in_tree_p;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.princ_to_string;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.$features$;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
@@ -4031,7 +4030,7 @@ public final class utilities_macros extends SubLTranslatedFile {
 			SubLObject arg = NIL;
 			arg = cdolist_list_var.first();
 			while (NIL != cdolist_list_var) {
-				if (NIL != unquoted_symbol_in_tree_p(symbol, arg)) {
+				if (NIL != com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.unquoted_symbol_in_tree_p(symbol, arg)) {
 					return T;
 				}
 				cdolist_list_var = cdolist_list_var.rest();

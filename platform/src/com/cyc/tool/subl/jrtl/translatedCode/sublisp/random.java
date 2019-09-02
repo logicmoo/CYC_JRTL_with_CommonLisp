@@ -56,7 +56,11 @@ public class random extends SubLTrampolineFile {
     // Private Area
     private static final Random randomState = new Random();
 
-    
+    static {
+
+
+
+    }
 
     @Override
     public void declareFunctions() {

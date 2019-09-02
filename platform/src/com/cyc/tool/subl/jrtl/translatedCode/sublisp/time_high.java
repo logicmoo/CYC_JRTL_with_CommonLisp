@@ -291,7 +291,9 @@ public class time_high extends SubLTranslatedFile {
 
     private static final SubLInteger $int$99 = makeInteger(99);
 
-    
+    static {
+
+    }
 
     @Override
     public void declareFunctions() {

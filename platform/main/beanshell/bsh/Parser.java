@@ -100,6 +100,7 @@ public class Parser/*@bgen(jjtree)*/implements ParserTreeConstants, ParserConsta
         throws IOException, ParseException
     {
         boolean print = false;
+        args = org.logicmoo.system.Startup.extractOptions(Parser.class, args);
         int i=0;
         if ( args[0].equals("-p") ) {
             i++;

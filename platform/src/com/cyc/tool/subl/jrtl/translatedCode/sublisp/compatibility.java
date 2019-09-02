@@ -353,7 +353,48 @@ public class compatibility extends SubLTranslatedFile {
 
     public static final SubLList $list38 = list(makeKeyword("PRIVATE"), makeKeyword("BINARY"));
 
-    
+    static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 
     @Override
     public void declareFunctions() {

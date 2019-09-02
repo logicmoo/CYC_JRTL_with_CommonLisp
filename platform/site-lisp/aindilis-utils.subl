@@ -1,0 +1,406 @@
+;; VARIABLE DEFINITIONS
+
+(csetq *subl-debug* nil)
+(csetq *cmh-current-mt* nil)
+
+;; UTILITY FUNCTIONS
+
+(define non-nil (item)
+ (ret (cnot (null item))))
+
+(define see (item &optional new-line)
+ (princ item)
+ (pif new-line (nl)))
+
+;; (define if (test a b)
+;;  (pif test
+;;   (ret a)
+;;   (ret b)))
+
+(define cmh-funcall (function args)
+ (ret (eval (append (list 'funcall function) args))))
+
+(define nl ()
+ (see " 
+"))
+
+(define tab (&optional n)
+ (pif *subl-debug*
+  (see "    ")))
+
+(define limit (n list)
+ (cmh-not-yet-implemented))
+
+(define randomize-list ()
+ (cmh-not-yet-implemented))
+
+(define t-or-f (result &optional inhibit)
+ (pif result
+  (progn
+   (pif (cnot inhibit) (see "true" t))
+   (ret "true"))
+  (progn
+   (pif (cnot inhibit) (see "false" t))
+   (ret "false"))))
+
+(define return (result)
+ (debug-t-or-f-nl result)
+ (ret result))
+
+(define debug-t-or-f-nl (result)
+ (pif *subl-debug*
+  (progn
+   (t-or-f result t)
+   (nl))))
+
+
+;; MOST INITIAL
+
+(define cmh-not-yet-implemented (&optional error-msg)
+ (prin1 "Not Yet Implemented"))
+
+(define cmh-fixme (message)
+ (prin1 message))
+
+(define frdcsa-ensure-included (file)
+ (cmh-not-yet-implemented))
+
+
+;; TRUE ALIASES
+
+(define f (constant-string)
+ (ret (find-or-create-constant constant-string)))
+
+(define c (constant)
+ (complete-info constant))
+
+(define co (constant)
+ (p (comment constant)))
+
+(define p (result)
+ (print-results result))
+
+;; (define am (assertion mt)
+;;  (print (prin1-to-string (list assertion mt)))
+;;  (cyc-assert assertion mt))
+
+
+(define am (assertion mt)
+ (print (prin1-to-string (list assertion mt)))
+ (cyc-assert assertion mt))
+
+(define qm (query mt)
+ (p (cyc-query query mt)))
+
+(define um (assertion mt)
+ (cyc-unassert assertion mt))
+
+(define cap (string)
+ (constant-apropos-print string))
+
+(define ps (result)
+ (print-sorted result))
+
+
+;; PSEUDO ALIASES
+
+(define ca (string)
+ (pif (stringp string)
+  (print (prin1-to-string (constant-apropos string)))))
+
+(define this-or-that (this that)
+ (pif (null this)
+  (ret that)
+  (ret this)))
+
+(define get-mt (mt-arg &optional default-mt)
+ (ret (this-or-that mt-arg
+       (this-or-that *cmh-current-mt*
+	(this-or-that default-mt
+	 #$BaseKB)))))
+
+(define get-mt-old (mt-arg &optional default-mt)
+ (pif (null mt-arg)
+  (pif (cor
+	(cnot
+	 (boundp (read-from-string "*cmh-current-mt*")))
+	(null *cmh-current-mt*))
+   (pif (null default-mt)
+    (ret #$BaseKB)
+    (ret default-mt))
+   (ret *cmh-current-mt*))
+  (ret mt-arg)))
+
+;; (define as (assertion provenance &optional mt-arg)
+;;  (clet ((mt (get-mt mt-arg)))
+;;   (pif *subl-debug*
+;;    (see (list 'a assertion mt) t))
+;;   (ret
+;;    (return
+;;     (cyc-assert assertion mt)))))
+
+(define a (assertion &optional mt-arg)
+ (clet ((mt (get-mt mt-arg)))
+  (pif *subl-debug*
+   (see (list 'a assertion mt) t))
+  (ret
+   (return
+    (cyc-assert assertion mt)))))
+
+(define al (assertion-list &optional mt-arg)
+ (clet ((mt (get-mt mt-arg))
+	(results nil))
+  (cdolist (assertion assertion-list)
+   (clet ((result (a assertion mt)))
+    (debug-t-or-f-nl result)
+    (cpush result results)))
+  (ret results)))
+
+(define alt (test-and-assertion-list &optional mt-arg)
+ (clet ((mt (get-mt mt-arg))
+	(results nil))
+  (cdolist (test-and-assertion test-and-assertion-list)
+   (pif (car test-and-assertion)
+    (clet ((result (a (cadr test-and-assertion) mt)))
+     (debug-t-or-f-nl result)
+     (cpush result results))))
+  (ret results)))
+
+(define q (query &optional mt-arg)
+ (clet ((mt (get-mt mt-arg #$EverythingPSC)))
+  (pif *subl-debug*
+   (prin1 (list 'q query mt)))
+  (ret
+   (return
+    (cyc-query query  mt)))))
+
+(define ql (query-list &optional mt-arg)
+ (clet ((mt (get-mt mt-arg #$EverythingPSC))
+	(results nil))
+  (cdolist (query query-list)
+   (clet ((result (q query mt)))
+    (debug-t-or-f-nl result)
+    (cpush result results)))
+  (ret results)))
+
+(define u (assertion &optional mt-arg)
+ (clet ((mt (get-mt mt-arg)))
+  (ret (return (cyc-unassert assertion mt)))))
+
+(define ul (assertion-list &optional mt-arg)
+ (clet ((mt (get-mt mt-arg))
+	(results nil))
+  (cdolist (assertion assertion-list)
+   (clet ((result (u assertion mt)))
+    (debug-t-or-f-nl result)
+    (cpush result results)))
+  (ret results)))
+
+
+;; REGULAR FUNCTIONS
+
+(define constant-apropos-print (string)
+ (pif (stringp string)
+  (mapc #'print (constant-apropos string))))
+
+(define all-term-assertions-print (constant)
+ (pif (constantp constant)
+  (mapc #'print (all-term-assertions constant))))
+
+(define all-term-assertions-print-mt (constant mt)
+ (pif (constantp constant)
+  (mapc #'print (all-term-assertions constant mt))))
+
+(define all-instances-print (constant)
+ (pif (constantp constant)
+  (mapc #'print (all-instances constant))))
+
+(define all-instances-print-mt (constant mt)
+ (pif (constantp constant)
+  (mapc #'print (all-instances constant mt))))
+
+(define cyc-query-print (query)
+ (mapc #'print (cyc-query query)))
+
+(define cyc-query-print-mt (query mt)
+ (mapc #'print (cyc-query query mt)))
+
+(define all-isa-print (constant)
+ (pif (constantp constant)
+  (mapc #'print (all-isa constant))))
+
+(define all-isa-print-mt (constant mt)
+ (pif (constantp constant)
+  (mapc #'print (all-isa constant mt))))
+
+;; rewrite p to be a macro so we can do (p 'all-isa #$DBPedia-CMLS)
+;; instead of (p (all-isa #$DBPedia-CMLS))
+
+(define complete-info (constant)
+ (nl)
+ (princ "all-term-assertions:")
+ (nl)
+ (nl)
+ (p (all-term-assertions constant))
+ (nl)
+ (nl)
+ (princ "comment:")
+ (nl)
+ (nl)
+ (princ (comment constant))
+ (nl)
+ (nl))
+
+(define c-mt (constant mt)
+ (c constant))
+
+(define print-results (result)
+ (mapc #'princ-nl result))
+
+(define princ-nl (result)
+ (princ result)
+ (nl))
+
+(define print-results-with-title (item results)
+ (princ item)
+ (nl)
+ (p results)
+ (nl))
+
+;; use this to describe that thing we posted about reasons why we
+;; might attack symbols of Israeli power #$inReactionTo
+
+;; (all-term-assertions-print #$MuammarAl-Qaddafi)
+;; (intersection (all-isa #$primeMinister) (all-isa #$president))
+
+;; (q '(#$isa ?X #$TheMatrix))
+
+;; (q '(#$thereExists ?Y (#$authorOfLiteraryWork-CW ?X ?Y)))
+
+;; #$definingMt
+
+;; can just populate this from the log of queries we make.  make that
+;; searchable
+
+(define describe-all-instances (constant)
+ (mapc #'c (all-instances constant #$EverythingPSC)))
+
+;; #<AS:(#$implies (#$and (#$isa ?COUNTRY #$Country) (#$goalCategoryForAgent ?COUNTRY ?PROP #$VitalNationalInterest)) (#$providesMotiveFor (#$thereExists ?THREAT-AGT (#$agentThreatensInterest ?THREAT-AGT ?COUNTRY ?PROP)) ?COUNTRY #$MilitaryAttack #$performedBy)):#$HPKBVocabMt> 
+
+;; (cyclify-string "(AndrewDougherty)")
+
+;; (p (cyc-query '(#$and (#$isa ?X #$CountrySubsidiary) (#$geopoliticalSubdivision #$NorthernIreland ?X)) #$WorldGeographyMt))
+
+;; ;; come up with a version of c that can be used with (C-c c s a
+;; ;; cmh-act-on-referent-and-push-onto-ring)
+
+;; ;; do some planning to develop the cyc emacs interface so that we
+;; ;; can run (C-c c s a cmh-act-on-referent-and-push-onto-ring) on
+;; ;; things like cc without it sending an mt.
+
+(define cc-mt (constant mt)
+ (all-term-assertions constant))
+
+;; (cons
+;;  (comment constant)
+;;   (all-term-assertions constant))
+
+(define frdcsa-grep (search pattern)
+ (list-grep pattern (split-string (prin1-to-string (constant-apropos search)) "#$")))
+
+(define frdcsa-ata-grep (constant pattern)
+ (list-grep pattern (mapc #'prin1-to-string (all-term-assertions constant))))
+
+(define describe-all-matching-constants (pattern)
+ (mapc #'c (constant-apropos pattern)))
+
+;; (get-arglist 'f)
+
+;; Error: Unimplemented method : SubLInterpretedFunction.getArglist().
+;; java.lang.Exception
+;; [8Cat com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors.possiblyCallErrorHandler(Errors.java:430)
+
+
+(define all-term-assertions-sorted (constant)
+ (pif (constantp constant)
+  (print-sorted (all-term-assertions constant))))
+
+(define print-sorted (result)
+ (p (sort (mapcar #'prin1-to-string result) #'string-lessp)))
+
+;; (apropos "definition")
+
+;; FIXME: implement (apropos-sorted "string")
+
+;; (mapc #'print (constant-apropos "api"))
+
+;; (qm '(#$arg1Isa #$URLFn ?X) #$EverythingPSC)
+
+(define all-members (collection &optional mt-arg)
+ (clet ((mt (get-mt mt-arg #$EverythingPSC)))
+  (ret (q (list #$isa '?X collection) mt))))
+
+(define arg (constant n &optional mt-arg)
+ (clet ((mt (get-mt mt-arg #$EverythingPSC)))
+  (ret (cdr (car (car (q (list #$argIsa constant n '?X) mt)))))))
+
+(define arg1 (constant &optional mt-arg)
+ (clet ((mt (get-mt mt-arg #$EverythingPSC)))
+  (ret (arg constant 1 mt))))
+
+(define arg2 (constant &optional mt-arg)
+ (clet ((mt (get-mt mt-arg #$EverythingPSC)))
+  (ret (arg constant 2 mt))))
+
+(define arg3 (constant &optional mt-arg)
+ (clet ((mt (get-mt mt-arg #$EverythingPSC)))
+  (ret (arg constant 3 mt))))
+
+(define goals (agent)
+ (q (list #$goals agent '?X) #$EverythingPSC))
+
+(define print-spec (term)
+ (see (q (list #$arity term '?ARITY)))
+ (clet ((arity 2))
+  (print "Arg1: ")
+  (print (arg1 term))
+  (print "Arg2: ")
+  (print (arg2 term))
+  )
+ )
+
+;; convert "c" into printing to a string followed by one (princ
+;; *string*)
+
+;; (define blah (constant)
+;;  (p '(#$arity constant ?Arity))
+;;  (p '(#$argIsa constant ?X ?Y))
+;;  (complete-info constant))
+
+(define p2 (result)
+ (print-results-2 result))
+
+(define print-results-2 (result)
+ (mapc #'princ-nl-2 result))
+
+(define princ-nl-2 (result)
+ (princ result)
+ (nl)
+ (nl))
+
+;; (define co (search)
+;;  (comment search))
+
+(define listify (a)
+ (ret (fif (atom a) (list a) a)))
+
+(define pc (list)
+ (ret
+  (cyc-string-concat
+   (mapcar #'pad-with-a-space
+    (listify (mapcar #'prin1-to-string list))))))
+
+(define pad-with-a-space (item)
+ (ret (cyc-string-concat (list item " "))))
+
+

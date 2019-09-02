@@ -1,11 +1,11 @@
 /* For LarKC */
 package com.cyc.tool.subl.parser;
 
-import static org.logicmoo.system.Startup.exit;
-
 import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.StringReader;
+
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -79,7 +79,7 @@ public class SubLParserUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Finished abnormally");
-			exit(-1);
+			BeanShellCntrl.exit(-1);
 		}
 	}
 

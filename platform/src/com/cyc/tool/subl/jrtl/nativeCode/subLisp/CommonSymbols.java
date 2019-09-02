@@ -18,6 +18,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
+import com.cyc.tool.subl.util.SubLFiles.VariableAccessMode;
 
 public interface CommonSymbols extends CommonSymbols_KW {
 
@@ -91,6 +92,12 @@ public interface CommonSymbols extends CommonSymbols_KW {
 	SubLSymbol ANSWER_TAG = makeSublispSymbol("%ANSWER");
 	SubLSymbol SUSPEND_TYPE_CHECKING = makeSublispSymbol("*SUSPEND-TYPE-CHECKING?*");
 	SubLSymbol OTHERWISE = makeSublispSymbol("OTHERWISE");
+	Object $_static_hack = new Object() {
+		{
+			OTHERWISE.setAccessMode(VariableAccessMode.DYNAMIC);
+			OTHERWISE.setDynamicValue(NIL);
+		}
+	};
 	SubLSymbol CDESTRUCTURING_BIND = makeSublispSymbol("CDESTRUCTURING-BIND");
 	SubLSymbol MACRO_FORM = makeSublispSymbol("%MACRO-FORM");
 	SubLSymbol MACRO_ENV = makeSublispSymbol("%ENV");

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="antlib:org.apache.tools.ant" name="abcl-master" default="abcl.wrapper" basedir=".">
-	<description>Compiling, testing, and packaging Armed Bear Common Lisp</description>
+<project xmlns="antlib:org.apache.tools.ant"
+         name="abcl-master" default="abcl.wrapper" basedir=".">
+    <description>Compiling, testing, and packaging Armed Bear Common Lisp</description>
 
-	<target name="abcl" depends="abcl.wrapper,abcl-contrib.jar" />
+    <target name="abcl" depends="abcl.wrapper,abcl-contrib.jar"/>
 
-	<target name="help">
-		<echo>
+    <target name="help">
+      <echo>
 Main Ant targets:
 
  abcl.wrapper
@@ -20,573 +21,691 @@ Main Ant targets:
    -- remove ABCL intermediate files
       </echo>
 
-		<echo>
+      <echo>
 For help on the automatic tests available, use the Ant target 'help.test'.
       </echo>
-	</target>
+    </target>
 
-	<!-- Behavior of the build system can be customized via setting
+    <!-- Behavior of the build system can be customized via setting
          properties in the 'abcl.properties' file. -->
-	<property file="abcl.properties" />
+    <property file="abcl.properties"/>
 
-	<property name="build.dir" value="${basedir}/target" />
-	<property name="build.classes.dir" value="${build.dir}/classes" />
-	<property name="src.dir" value="${basedir}/src" />
-	<property name="dist.dir" value="${basedir}/dist" />
-	<property name="forked" value="true" />
-	<property name="abcl.jar.path" value="${dist.dir}/abcl.jar" />
-	<property name="abcl-aio.jar.path" value="${dist.dir}/abcl-aio.jar" />
-	<property name="abcl.ext.dir" value="${basedir}/ext" />
+    <property name="build.dir"
+              value="${basedir}/target"/>
+    <property name="build.classes.dir"
+              value="${build.dir}/classes"/>
+    <property name="src.dir"
+              value="${basedir}/src"/>
+    <property name="dist.dir"
+              value="${basedir}/dist"/>
+    <property name="forked"
+                  value="true"/>
+    <property name="abcl.jar.path"
+              value="${dist.dir}/abcl.jar"/>
+    <property name="abcl-aio.jar.path"
+              value="${dist.dir}/abcl-aio.jar"/>
+    <property name="abcl.ext.dir"
+              value="${basedir}/ext"/>
 
-	<property name="abcl.runtime.jar.path" value="${abcl.jar.path}" />
+    <property name="abcl.runtime.jar.path"
+              value="${abcl.jar.path}"/>
 
-	<!-- TODO verify me -->
-	<fail message="Please build using Ant 1.7.1 or higher.">
-		<condition>
-			<not>
-				<antversion atleast="1.7.1" />
-			</not>
-		</condition>
-	</fail>
+    <!-- TODO verify me -->
+    <fail message="Please build using Ant 1.7.1 or higher.">
+        <condition>
+            <not>
+                <antversion atleast="1.7.1"/>
+            </not>
+        </condition>
+    </fail>
 
-	<!-- Deprecated.  Checks if JSR-223 support is available.  Should always be true.  Unused.  D -->
-	<available property="abcl.jsr-223.p" classname="javax.script.ScriptEngine" />
+    <!-- Deprecated.  Checks if JSR-223 support is available.  Should always be true.  Unused.  D -->
+    <available property="abcl.jsr-223.p"
+               classname="javax.script.ScriptEngine"/>
 
-	<patternset id="abcl.source.java">
-		<include name="org/armedbear/lisp/*.java" />
-		<include name="org/armedbear/lisp/util/*.java" />
-		<include name="org/armedbear/lisp/protocol/*.java" />
-		<include name="org/armedbear/lisp/java/**/*.java" />
-		<!-- if="abcl.jsr-223.p" for 1.4/1.5 -->
-		<include name="org/armedbear/lisp/scripting/*.java" />
-		<!-- if="abcl.jsr-223.p" -->
-		<include name="org/armedbear/lisp/scripting/util/*.java" />
-		<include name="org/armedbear/Main.java" />
-		<include name="org/abcl/**/*.java" />
-		<include name="org/armedbear/*/*.java" />
-		<include name="org/logicmoo*/**/*.java" />
-		<include name="org/armedbear/**/*.java" />
-		<include name="gnu/regexp/*.*" />
-		<include name="**/*.*" />
-		<include name="**/*.java" />
-		<include name="bsh/**/*.*" />
-		<include name="org/objectweb/asm/**/*.java" />
-		<include name="com/cyc/tool/subl/**/*.java" />
+    <patternset id="abcl.source.java">
+      <include name="org/armedbear/lisp/*.java"/>
+      <include name="org/armedbear/lisp/util/*.java"/>
+      <include name="org/armedbear/lisp/protocol/*.java"/>
+      <include name="org/armedbear/lisp/java/**/*.java"/>
+<!-- if="abcl.jsr-223.p" for 1.4/1.5 -->
+      <include name="org/armedbear/lisp/scripting/*.java" />
+<!-- if="abcl.jsr-223.p" -->
+      <include name="org/armedbear/lisp/scripting/util/*.java" />
+      <include name="org/armedbear/Main.java"/>
+      <include name="org/abcl/**/*.java"/>
+      <include name="org/armedbear/*/*.java"/>
+      <include name="org/logicmoo*/**/*.java" />
+      <include name="org/armedbear/**/*.java"/>
+      <include name="gnu/regexp/*.*"/>
+      <include name="**/*.*"/>
+      <include name="**/*.java"/>
+      <include name="bsh/**/*.*"/>
+      <include name="org/objectweb/asm/**/*.java"/>
+      <include name="com/cyc/tool/subl/**/*.java"/>
 
-		<exclude name="**/Test*.java" />
-		<exclude name="**/UnitTest.java" />
-		<exclude name="**/*JUnit.java" />
-		<exclude name="**/test/**/*.java" />
-		<!--
+      <exclude name="**/Test*.java"/>
+      <exclude name="**/UnitTest.java"/>
+	  <exclude name="**/*JUnit.java"/>
+      <exclude name="**/test/**/*.java"/>
+      <!--
     -  <include name="../../AppdatorGUI/src/**/*.java"/>
       -->
-	</patternset>
+    </patternset>
 
-	<patternset id="abcl.source.lisp">
-		<include name="org/armedbear/lisp/*.lisp" />
-		<include name="org/armedbear/lisp/java/**/*.lisp" />
-		<include name="org/armedbear/lisp/tests/*.lisp" />
-		<include name="org/armedbear/lisp/j.lisp" />
-		<include name="org/armedbear/*/*.lisp" />
-		<!-- if="abcl.jsr-223.p" -->
-		<include name="org/armedbear/lisp/scripting/lisp/*.lisp" />
-	</patternset>
+    <patternset id="abcl.source.lisp">
+      <include name="org/armedbear/lisp/*.lisp"/>
+      <include name="org/armedbear/lisp/java/**/*.lisp"/>
+      <include name="org/armedbear/lisp/tests/*.lisp"/>
+      <include name="org/armedbear/lisp/j.lisp"/>
+      <include name="org/armedbear/*/*.lisp"/>
+<!-- if="abcl.jsr-223.p" -->
+      <include name="org/armedbear/lisp/scripting/lisp/*.lisp"/>
+    </patternset>
 
-	<!-- Lisp files required at runtime -->
-	<patternset id="abcl.source.lisp.dist">
-		<include name="org/armedbear/lisp/boot.lisp" />
-		<include name="org/armedbear/*/*.lisp" />
-		<!-- if="abcl.jsr-223.p" -->
-		<include name="org/armedbear/lisp/scripting/lisp/*.lisp" />
-		<include if="abcl.compile.lisp.skip" name="**/*.lisp" />
-		<include name="bsh/commands/**" />
-	</patternset>
+    <!-- Lisp files required at runtime -->
+    <patternset id="abcl.source.lisp.dist">
+      <include name="org/armedbear/lisp/boot.lisp"/>
+      <include name="org/armedbear/*/*.lisp"/>
+<!-- if="abcl.jsr-223.p" -->
+      <include name="org/armedbear/lisp/scripting/lisp/*.lisp"/>
+      <include if="abcl.compile.lisp.skip"
+               name="**/*.lisp" />
+      <include name="bsh/commands/**"/>      
+    </patternset>
 
-	<patternset id="abcl.objects">
-		<!-- "system.lisp" is dynamically created by COMPILE-SYSTEM -->
-		<include name="org/armedbear/lisp/system.lisp" />
-		<include name="org/armedbear/lisp/**/*.class" />
-		<include name="org/armedbear/lisp/**/*.cls" />
-		<include name="org/armedbear/lisp/**/*.abcl" />
-		<include name="org/abcl/util/*.class" />
-		<include name="org/armedbear/lisp/version" />
-		<!-- if="abcl.jsr-223.p" -->
-		<include name="org/armedbear/lisp/scripting/*.class" />
-		<!-- if="abcl.jsr-223.p" -->
-		<include name="org/armedbear/lisp/scripting/util/*.class" />
-		<patternset refid="abcl.source.lisp.dist" />
-		<include name="abcl.rdf" />
-		<include name="abcl.asd" />
-		<include name="README" />
-		<include name="build.xml" />
-		<include name="abcl.properties.in" />
-		<include name="abcl.in" />
-		<include name="abcl.bat.in" />
-		<include name="org/objectweb/**/*.class" />
-		<include name="com/**/*.class" />
-		<include name="**/*.*" />
-		<include name="**/*" />
-		<include name="bsh/commands/**" />
-		<include name="bsh/**/*.*" />
-		<include name="**/*.*" />
-		<include name="org/armedbear/**/*.*" />
-		<include name="gnu/regexp/*.*" />
-	</patternset>
+    <patternset id="abcl.objects">
+      <!-- "system.lisp" is dynamically created by COMPILE-SYSTEM -->
+      <include name="org/armedbear/lisp/system.lisp"/>
+      <include name="org/armedbear/lisp/**/*.class"/>
+      <include name="org/armedbear/lisp/**/*.cls"/>
+      <include name="org/armedbear/lisp/**/*.abcl"/>
+      <include name="org/abcl/util/*.class"/>
+      <include name="org/armedbear/lisp/version"/>
+<!-- if="abcl.jsr-223.p" -->
+      <include name="org/armedbear/lisp/scripting/*.class" />
+<!-- if="abcl.jsr-223.p" -->
+      <include name="org/armedbear/lisp/scripting/util/*.class"/>
+      <patternset refid="abcl.source.lisp.dist"/>
+      <include name="abcl.rdf"/>
+      <include name="abcl.asd"/>
+      <include name="README"/>
+      <include name="build.xml"/>
+      <include name="abcl.properties.in"/>
+      <include name="abcl.in"/>
+      <include name="abcl.bat.in"/>
+      <include name="org/objectweb/**/*.class"/>
+      <include name="com/**/*.class"/>
+      <include name="**/*.*"/>
+	  <include name="**/*"/>
+	  <include name="bsh/commands/**"/>
+	  <include name="bsh/**/*.*"/>
+      <include name="**/*.*"/>
+      <include name="org/armedbear/**/*.*"/>
+      <include name="gnu/regexp/*.*"/>
+    </patternset>
 
-	<path id="abcl.classpath.dist">
-		<pathelement location="${abcl.jar.path}" />
-		<pathelement location="${env.CLASSPATH}" />
-	</path>
+    <path id="abcl.classpath.dist">
+      <pathelement location="${abcl.jar.path}"/>
+      <pathelement location="${env.CLASSPATH}"/>
+    </path>
 
-	<path id="abcl.classpath.build">
-		<pathelement location="${build.classes.dir}" />
-		<pathelement location="${env.CLASSPATH}" />
-		<pathelement location="bin-eclipse/" />
-		<pathelement location="${java.home}/lib/tools.jar" />
-		<pathelement location="${java.home}/../lib/tools.jar" />
-		<fileset dir="lib">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
+    <path id="abcl.classpath.build">
+      <pathelement location="${build.classes.dir}"/>
+    	<pathelement location="${env.CLASSPATH}"/>
+    	<pathelement location="bin-eclipse/"/>
+    	<pathelement location="${java.home}/../lib/tools.jar"/>
+    	  <fileset dir="lib">
+    	    <include name="**/*.jar" />
+    	  </fileset>    	
+    </path>
 
-	<target name="abcl.compile" depends="abcl.clean.maybe,abcl.compile.lisp">
-		<echo>Compiled ABCL with Java version: ${java.version}</echo>
-	</target>
+    <target name="abcl.compile" depends="abcl.clean.maybe,abcl.compile.lisp">
+      <echo>Compiled ABCL with Java version: ${java.version}</echo>
+    </target>
 
-	<target name="abcl.clean.maybe" unless="abcl.build.incremental">
-		<echo>Cleaning all intermediate compilation artifacts.</echo>
-		<echo>Setting 'abcl.build.incremental' enables incremental compilation.</echo>
-		<antcall target="abcl.clean" />
-	</target>
+    <target name="abcl.clean.maybe" unless="abcl.build.incremental">
+      <echo>Cleaning all intermediate compilation artifacts.</echo>
+      <echo>Setting 'abcl.build.incremental' enables incremental compilation.</echo>
+      <antcall target="abcl.clean"/>
+    </target>
 
 
-	<target name="abcl.init">
-		<tstamp>
-			<format property="build" pattern="EEE MMM dd yyyy HH:mm:ss zzz" />
-		</tstamp>
+    <target name="abcl.init">
+      <tstamp>
+        <format property="build" pattern="EEE MMM dd yyyy HH:mm:ss zzz"/>
+      </tstamp>
 
-		<tstamp>
-			<format property="build.stamp" pattern="yyyymmdd-HHmm" />
-		</tstamp>
+      <tstamp>
+        <format property="build.stamp" pattern="yyyymmdd-HHmm"/>
+      </tstamp>
 
-		<property name="abcl.test.log.file" value="abcl-test-${build.stamp}.log" />
+      <property name="abcl.test.log.file"
+                value="abcl-test-${build.stamp}.log"/>
 
-		<property name="java.path" value="${java.home}/bin/java" />
+      <property name="java.path"
+                value="${java.home}/bin/java"/>
 
-		<!-- Deprecated. Two main types of build environents: 'unix' or 'windows'. -->
-		<condition property="unix">
-			<or>
-				<os family="unix" />
-				<os family="mac" />
-			</or>
-		</condition>
-		<condition property="windows">
-			<os family="windows" />
-		</condition>
+      <!-- Deprecated. Two main types of build environents: 'unix' or 'windows'. -->
+      <condition property="unix">
+        <or>
+          <os family="unix"/>
+          <os family="mac"/>
+        </or>
+      </condition>
+      <condition property="windows">
+        <os family="windows"/>
+      </condition>
 
-		<!-- Deprecated. -->
-		<available file="${src.dir}org/armedbear/lisp/Interpreter.java" property="abcl.lisp.p" />
+      <!-- Deprecated. -->
+      <available file="${src.dir}org/armedbear/lisp/Interpreter.java"
+                 property="abcl.lisp.p"/>
 
-		<echo>java.version: ${java.version}</echo>
-		<condition property="abcl.java.version.p">
-			<or>
-				<!-- maybe Unsupported as of abcl-1.5.0 due to lack of open jdk -->
-				<matches string="${java.version}" pattern="1\.5" />
-				<!-- Don't use 1.6.0_09 or earlier. -->
-				<matches string="${java.version}" pattern="1\.6\.0_[1-9][0-9]" />
-				<!-- 1.7.0_04 works much better. -->
-				<matches string="${java.version}" pattern="1\.7\.0_(0[4-9])|([1-9][0-9])" />
-				<matches string="${java.version}" pattern="1\.8\.0" />
-			</or>
-		</condition>
+      <echo>java.version: ${java.version}</echo>
+      <condition property="abcl.java.version.p">
+        <or>
+        <!-- maybe Unsupported as of abcl-1.5.0 due to lack of open jdk -->
+          <matches string="${java.version}"
+                   pattern="1\.5"/>
+          <!-- Don't use 1.6.0_09 or earlier. -->
+          <matches string="${java.version}"
+                   pattern="1\.6\.0_[1-9][0-9]"/>
+          <!-- 1.7.0_04 works much better. -->
+          <matches string="${java.version}"
+                   pattern="1\.7\.0_(0[4-9])|([1-9][0-9])"/>
+          <matches string="${java.version}"
+                   pattern="1\.8\.0"/>
+        </or>
+      </condition>
 
-	</target>
+    </target>
 
-	<target name="abcl.java.warning" depends="abcl.init" unless="abcl.java.version.p">
-		<echo>WARNING: Use of Java version ${java.version} not recommended.</echo>
-	</target>
+    <target name="abcl.java.warning"
+            depends="abcl.init"
+            unless="abcl.java.version.p">
+      <echo>WARNING: Use of Java version ${java.version} not recommended.</echo>
+    </target>
 
-	<!-- Deprecated.  JSR-223 is always present -->
-	<target name="abcl.jsr-223.notice" depends="abcl.init" unless="abcl.jsr-223.p">
-		<echo>
+    <!-- Deprecated.  JSR-223 is always present -->
+    <target name="abcl.jsr-223.notice"
+            depends="abcl.init"
+            unless="abcl.jsr-223.p">
+      <echo>
         Notice: JSR-223 support won't be built since it is not
                 supported, neither natively by your JVM nor by
                 libraries in the CLASSPATH.
       </echo>
-	</target>
-
+    </target>
+	
 	<path id="lib.class.path">
-		<fileset dir="lib">
-			<include name="*.jar" />
-			<include name="**/*.jar" />
-		</fileset>
+	  <fileset dir="lib">
+	    <include name="**/*.jar" />
+	  </fileset>
 	</path>
 
-	<target name="abcl.compile.java" depends="abcl.init,abcl.java.warning,abcl.jsr-223.notice">
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${build.classes.dir}" />
-		<echo>${java.home}</echo>
-		<echo>${env.JAVA_HOME}</echo>
-		<echo>${lib.class.path}</echo>
+    <target name="abcl.compile.java"
+            depends="abcl.init,abcl.java.warning,abcl.jsr-223.notice">
+      <mkdir dir="${build.dir}"/>
+      <mkdir dir="${build.classes.dir}"/>
+    	<echo>${java.home}</echo>
+    	<echo>${env.JAVA_HOME}</echo>
+    	<echo>${lib.class.path}</echo>
+    	
+      <!-- Stock build for Java 1.5 (aka Java 2) container -->
+      <javac destdir="${build.classes.dir}"
+             debug="true"
+             target="${cv}"
+             source="${cv}"          
+      	 classpathref="abcl.classpath.build"
+             includeantruntime="false"
+             failonerror="true">
+      	<src path="${src.dir}"/>
+      	 
+      	
+      	<src path="main/armedbear-j-src"/>
+		<src path="main/cycjava-persistence-hacks"/>
+		<src path="main/jpl7-hacked"/>
+		<src path="main/logicmoo-main"/>
+		<src path="main/beanshell"/>
+		<src path="main/objectweb-asm-src"/>
+		<src path="main/server-4q"/>
+		<src path="main/java/"/>
+        <compilerarg value="-XDignore.symbol.file"/>
+        <patternset refid="abcl.source.java"/>
+      </javac>
+      <echo message="${build}"
+            file="${build.classes.dir}/org/armedbear/lisp/build"/>
+    </target>
 
-		<!-- Stock build for Java 1.5 (aka Java 2) container -->
-		<javac destdir="${build.classes.dir}" fork="true" debug="true" target="${cv}" source="${cv}" classpathref="abcl.classpath.build" includeantruntime="false" failonerror="true">
+    <!-- Additional artifacts to stage relative to Ant ${basedir} -->
+    <patternset id="abcl.stage">
+      <include name="README"/>
+      <include name="COPYING"/>
+      <include name="abcl.rdf"/>
+      <include name="abcl.asd"/> 
+      <include name="build.xml"/>
+      <include name="abcl.properties.in"/> <!--TODO: massage into abcl.properties at build-time -->
+      <include name="abcl.in"/>
+      <include name="abcl.bat.in"/>
+      <include name="etc/ant/*.xml"/>
+    </patternset>
 
-			<src path="${src.dir}" />
-			<src path="main/armedbear-j-src" />
-			<src path="main/beanshell" />
-			<src path="main/cycjava-persistence-hacks" />
-			<src path="main/jpl7-hacked" />
-			<src path="main/logicmoo-main" />
-			<src path="main/objectweb-asm-src" />
-			<src path="main/server-4q" />
-			<src path="main/java/" />
-			<compilerarg value="-XDignore.symbol.file" />
-			<patternset refid="abcl.source.java" />
-		</javac>
-		<echo message="${build}" file="${build.classes.dir}/org/armedbear/lisp/build" />
-	</target>
+    <target name="abcl.stage"
+	    depends="abcl.copy.lisp">
+      <copy todir="${build.classes.dir}" preservelastmodified="yes"
+            verbose="true">
+	<fileset dir="${basedir}/">
+	  <patternset refid="abcl.stage"/>
+	</fileset>
+      </copy>
+    </target>
 
-	<!-- Additional artifacts to stage relative to Ant ${basedir} -->
-	<patternset id="abcl.stage">
-		<include name="README" />
-		<include name="COPYING" />
-		<include name="abcl.rdf" />
-		<include name="abcl.asd" />
-		<include name="build.xml" />
-		<include name="abcl.properties.in" />
-		<!--TODO: massage into abcl.properties at build-time -->
-		<include name="abcl.in" />
-		<include name="abcl.bat.in" />
-		<include name="etc/ant/*.xml" />
-	</patternset>
+    <target name="abcl.copy.lisp">
+      <copy todir="${build.classes.dir}" preservelastmodified="yes">
+        <fileset dir="${src.dir}">
+          <patternset refid="abcl.source.lisp.dist"/>
+        </fileset>
+      </copy>
+    </target>
 
-	<target name="abcl.stage" depends="abcl.copy.lisp">
-		<copy todir="${build.classes.dir}" preservelastmodified="yes" verbose="true">
-			<fileset dir="${basedir}/">
-				<patternset refid="abcl.stage" />
-			</fileset>
-		</copy>
-	</target>
-
-	<target name="abcl.copy.lisp">
-		<copy todir="${build.classes.dir}" preservelastmodified="yes">
-			<fileset dir="${src.dir}">
-				<patternset refid="abcl.source.lisp.dist" />
-			</fileset>
-		</copy>
-	</target>
-
-	<!-- Adjust the patternset for ABCL source to use the much faster
+    <!-- Adjust the patternset for ABCL source to use the much faster
          Ant 'uptodate' task to check if we need to compile the system
          fasls.  Highly inter-dependent with the behavior specified in
          'compile-system.lisp', i.e. files not listed in
          there should NOT occur here. -->
-	<patternset id="abcl.source.lisp.fasls">
-		<patternset refid="abcl.source.lisp" />
-		<exclude name="org/armedbear/lisp/scripting/**/*.lisp" />
-		<exclude name="org/armedbear/lisp/boot.lisp" />
-		<exclude name="org/armedbear/lisp/emacs.lisp" />
-		<exclude name="org/armedbear/lisp/run-benchmarks.lisp" />
-	</patternset>
+    <patternset id="abcl.source.lisp.fasls">
+      <patternset refid="abcl.source.lisp"/>
+      <exclude name="org/armedbear/lisp/scripting/**/*.lisp"/>
+      <exclude name="org/armedbear/lisp/boot.lisp"/>
+      <exclude name="org/armedbear/lisp/emacs.lisp"/>
+      <exclude name="org/armedbear/lisp/run-benchmarks.lisp"/>
+    </patternset>
 
-	<target name="abcl.fasls.uptodate">
-		<uptodate property="abcl.fasls.uptodate.p" value="true">
-			<srcfiles dir="${src.dir}">
-				<patternset refid="abcl.source.lisp.fasls" />
-			</srcfiles>
-			<mapper type="glob" from="*.lisp" to="${build.classes.dir}/*.abcl" />
-		</uptodate>
-	</target>
+    <target name="abcl.fasls.uptodate">
+      <uptodate property="abcl.fasls.uptodate.p" value="true">
+        <srcfiles dir="${src.dir}">
+          <patternset refid="abcl.source.lisp.fasls"/>
+        </srcfiles>
+        <mapper type="glob" from="*.lisp" to="${build.classes.dir}/*.abcl"/>
+      </uptodate>
+    </target>
 
-	<path id="abcl.home.dir.path">
-		<path location="${src.dir}/org/armedbear/lisp/" />
-	</path>
-	<pathconvert property="abcl.home.dir" refid="abcl.home.dir.path" />
+    <path id="abcl.home.dir.path">
+        <path location="${src.dir}/org/armedbear/lisp/"/>
+    </path>
+    <pathconvert property="abcl.home.dir" refid="abcl.home.dir.path"/>
 
-	<path id="abcl.lisp.output.path" location="${build.classes.dir}/org/armedbear/lisp/" />
-	<pathconvert dirsep="/" property="abcl.lisp.output" refid="abcl.lisp.output.path" />
+    <path id="abcl.lisp.output.path"
+          location="${build.classes.dir}/org/armedbear/lisp/"/>
+    <pathconvert dirsep="/" property="abcl.lisp.output" refid="abcl.lisp.output.path"/>
 
-	<property name="system.lisp.file" value="${build.classes.dir}/org/armedbear/lisp/system.lisp" />
+    <property name="system.lisp.file"
+              value="${build.classes.dir}/org/armedbear/lisp/system.lisp"/>
 
-	<target name="abcl.compile.lisp" depends="abcl.stage,abcl.compile.java,abcl.system.update.maybe,abcl.fasls.uptodate" unless="abcl.fasls.uptodate.p">
-		<abcl.compile.lisp />
-	</target>
+    <target name="abcl.compile.lisp"
+            depends="abcl.stage,abcl.compile.java,abcl.system.update.maybe,abcl.fasls.uptodate"
+            unless="abcl.fasls.uptodate.p">
+      <abcl.compile.lisp/>
+    </target>
 
-	<macrodef name="abcl.compile.lisp">
-		<element name="additional.jvmarg" optional="true" />
-		<sequential>
-			<echo>
+    <macrodef name="abcl.compile.lisp">
+      <element name="additional.jvmarg" optional="true"/>
+      <sequential>
+      	 <echo>
 Compiling Lisp system
 from ${abcl.home.dir}
  to  ${abcl.lisp.output}</echo>
-			<!-- Not good if ${abcl.home.dir} == ${abcl.lisp.output} -->
-			<delete>
-				<fileset dir="${abcl.home.dir}" includes="**/*.abcl **/*.cls **/*._" />
-			</delete>
-			<java classpath="${build.classes.dir}:bin-eclipse/:${env.CLASSPATH}" fork="${forked}" failonerror="true" 
-			    inputstring="(handler-case (compile-system :zip nil :quit t :output-path &quot;${abcl.lisp.output}/&quot;) (t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))" classname="org.armedbear.lisp.Main">
-				<jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}" />
-				<jvmarg value="-Dabcl.autoload.verbose=Y" />
-				<additional.jvmarg />
-				<arg value="--noinit" />
-				<arg value="--nosystem" />
-				<arg value="--lisp" />
-				<arg value="--eval" />
-				<arg value="(setf *load-verbose* t)" />
-			</java>
-			<echo> concat "${system.lisp.file} ${abcl.startup.file} </echo>
-			<concat destfile="${system.lisp.file}" append="true">
-				<fileset file="${abcl.startup.file}" />
-			</concat>
-			<echo> Done with abcl.compile.lisp</echo>
-		</sequential>
-	</macrodef>
 
-	<property name="abcl.compile.lisp.debug.jvmarg" value="-agentlib:jdwp=transport=dt_socket,server=y,address=6789,suspend=y" />
-	<target name="abcl.compile.lisp.debug" depends="abcl.stage,abcl.compile.java,abcl.system.update.maybe,abcl.fasls.uptodate" unless="abcl.fasls.uptodate.p">
-		<echo>Debugging with jvmarg ${abcl.compile.lisp.debug.jvmarg}</echo>
-		<abcl.compile.lisp>
-			<additional.jvmarg>
-				<jvmarg value="${abcl.compile.lisp.debug.jvmarg}" />
-			</additional.jvmarg>
-		</abcl.compile.lisp>
-	</target>
+     <!-- Not good if ${abcl.home.dir} == ${abcl.lisp.output} -->
+     <delete>
+       <fileset dir="${abcl.home.dir}" includes="**/*.abcl **/*.cls **/*._"/>
+     </delete>
+     <java classpath="${build.classes.dir}:bin-eclipse/:${env.CLASSPATH}"
+            fork="${forked}"
+            failonerror="true"
+            inputstring="(handler-case (compile-system :zip nil :quit t :output-path &quot;${abcl.lisp.output}/&quot;) (t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))"
+            classname="org.armedbear.lisp.Main">
+        <jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}"/>
+        <jvmarg value="-Dabcl.autoload.verbose=Y"/>
+        <additional.jvmarg/>
+        <arg value="--noinit"/>
+        <arg value="--nosystem"/>
+        <arg value="--eval"/>
+        <arg value="(setf *load-verbose* t)"/>
+      </java>
+      	<echo> concat "${system.lisp.file} 
+      		${abcl.startup.file} </echo> 
+      <concat destfile="${system.lisp.file}" append="true">
+        <fileset file="${abcl.startup.file}"/>
+      </concat>
+      	<echo> Done with abcl.compile.lisp</echo>
+        </sequential>
+    </macrodef>
 
-	<property name="abcl.build.path" value="${build.classes.dir}/org/armedbear/lisp/build" />
-	<target name="abcl.stamp" depends="abcl.compile,abcl.stamp.version,abcl.stamp.hostname">
-		<mkdir dir="${abcl.build.path}/.." />
-		<loadfile property="abcl.version" srcFile="${abcl.version.path}" />
-		<echo message="${build}" file="${abcl.build.path}" />
-	</target>
+    <property name="abcl.compile.lisp.debug.jvmarg"
+              value="-agentlib:jdwp=transport=dt_socket,server=y,address=6789,suspend=y"/>
+    <target name="abcl.compile.lisp.debug"
+            depends="abcl.stage,abcl.compile.java,abcl.system.update.maybe,abcl.fasls.uptodate"
+            unless="abcl.fasls.uptodate.p">
+      <echo>Debugging with jvmarg ${abcl.compile.lisp.debug.jvmarg}</echo>
+      <abcl.compile.lisp>
+          <additional.jvmarg>
+            <jvmarg value="${abcl.compile.lisp.debug.jvmarg}"/>
+          </additional.jvmarg>
+      </abcl.compile.lisp>
+    </target>
+
+    <property name="abcl.build.path"
+              value="${build.classes.dir}/org/armedbear/lisp/build"/>
+    <target name="abcl.stamp"
+            depends="abcl.compile,abcl.stamp.version,abcl.stamp.hostname">
+      <mkdir dir="${abcl.build.path}/.."/>
+      <loadfile property="abcl.version"
+                srcFile="${abcl.version.path}"/>
+      <echo message="${build}" file="${abcl.build.path}"/>
+    </target>
 
 
-	<!-- Environment variables may be accessed as ${env.NAME} -->
-	<property environment="env" />
+    <!-- Environment variables may be accessed as ${env.NAME} -->
+    <property environment="env"/>
 
-	<!-- Can we derive an SVN version from the current build tree? -->
-	<condition property="abcl.version.svn.p">
-		<and>
-			<available file="${basedir}/.svn" type="dir" />
-			<or>
-				<available file="svnversion.exe" filepath="${env.Path}" />
-				<available file="svnversion.exe" filepath="${env.PATH}" />
-				<available file="svnversion" filepath="${env.Path}" />
-				<available file="svnversion" filepath="${env.PATH}" />
-			</or>
-		</and>
-	</condition>
+    <!-- Can we derive an SVN version from the current build tree? -->
+    <condition property="abcl.version.svn.p">
+      <and>
+        <available
+            file="${basedir}/.svn"
+            type="dir"/>
+        <or>
+            <available
+                file="svnversion.exe"
+                filepath="${env.Path}"/>
+            <available
+                file="svnversion.exe"
+                filepath="${env.PATH}"/>
+             <available
+                file="svnversion"
+                filepath="${env.Path}"/>
+            <available
+                file="svnversion"
+                filepath="${env.PATH}"/>
+        </or>
+      </and>
+    </condition>
 
-	<target name="abcl.version.src" depends="abcl.version.src.3" />
+    <target name="abcl.version.src" depends="abcl.version.src.3"/>
 
-	<target name="abcl.version.src.0" if="windows">
-		<exec executable="svnversion.exe" outputproperty="abcl.version.svn.raw" failifexecutionfails="false" searchpath="true" />
-	</target>
+    <target name="abcl.version.src.0" if="windows">
+      <exec
+          executable="svnversion.exe"
+          outputproperty="abcl.version.svn.raw"
+          failifexecutionfails="false"
+          searchpath="true" />
+    </target>
 
-	<target name="abcl.version.src.1" depends="abcl.version.src.0">
-		<exec executable="svnversion" outputproperty="abcl.version.svn.raw" failifexecutionfails="false" searchpath="true" />
-	</target>
+    <target name="abcl.version.src.1" depends="abcl.version.src.0">
+      <exec
+          executable="svnversion"
+          outputproperty="abcl.version.svn.raw"
+          failifexecutionfails="false"
+          searchpath="true" />
+    </target>
 
-	<target name="abcl.version.src.2" depends="abcl.version.src.1" if="abcl.version.svn.p">
+    <target name="abcl.version.src.2"
+            depends="abcl.version.src.1"
+            if="abcl.version.svn.p">
 
-		<!-- Transform all occurances of ":" ==> "-" in the version string -->
-		<tempfile property="version-tmp.path" />
-		<echo message="${abcl.version.svn.raw}" file="${version-tmp.path}" />
-		<replace file="${version-tmp.path}" token=":" value="-" />
-		<loadfile property="abcl.version.svn" srcFile="${version-tmp.path}" />
-		<delete file="${version-tmp.path}" />
+      <!-- Transform all occurances of ":" ==> "-" in the version string -->
+      <tempfile property="version-tmp.path"/>
+      <echo message="${abcl.version.svn.raw}"
+            file="${version-tmp.path}"/>
+      <replace file="${version-tmp.path}"
+               token=":" value="-"/>
+      <loadfile property="abcl.version.svn" srcFile="${version-tmp.path}"/>
+      <delete file="${version-tmp.path}"/>
 
-		<echo>abcl.version.svn: ${abcl.version.svn}</echo>
-		<property name="abcl.version.src" value="svn-${abcl.version.svn}" />
-	</target>
+      <echo>abcl.version.svn: ${abcl.version.svn}</echo>
+      <property name="abcl.version.src"
+                value="svn-${abcl.version.svn}"/>
+    </target>
 
-	<target name="abcl.version.src.3" depends="abcl.version.src.2" unless="abcl.version.svn.p">
-		<property name="abcl.version.src" value="" />
-	</target>
+    <target name="abcl.version.src.3"
+            depends="abcl.version.src.2"
+            unless="abcl.version.svn.p">
+      <property name="abcl.version.src"
+                value=""/>
+    </target>
 
-	<property name="abcl.home.dir" value="${src.dir}/org/armedbear/lisp/" />
-	<property name="abcl.version.path" value="${build.classes.dir}/org/armedbear/lisp/version" />
+    <property name="abcl.home.dir"
+              value="${src.dir}/org/armedbear/lisp/"/>
+    <property name="abcl.version.path"
+              value="${build.classes.dir}/org/armedbear/lisp/version"/>
 
-	<target name="abcl.clean.version">
-		<delete file="${abcl.version.path}" />
-	</target>
+    <target name="abcl.clean.version">
+      <delete file="${abcl.version.path}"/>
+    </target>
 
-	<target name="abcl.stamp.version.uptodate">
-		<uptodate property="abcl.stamp.version.uptodate.p" targetfile="${abcl.version.path}" srcfile="${build.classes.dir}/org/armedbear/lisp/Version.class" />
-	</target>
+    <target name="abcl.stamp.version.uptodate">
+      <uptodate property="abcl.stamp.version.uptodate.p"
+                targetfile="${abcl.version.path}"
+                srcfile="${build.classes.dir}/org/armedbear/lisp/Version.class"/>
+    </target>
 
-	<target name="abcl.stamp.version" depends="abcl.version.src,abcl.stamp.version.1,abcl.stamp.version.2" unless="abcl.stamp.version.uptodate.p">
-		<mkdir dir="${abcl.version.path}/.." />
-		<echo>ABCL implementation version: ${abcl.implementation.version}</echo>
-		<echo file="${abcl.version.path}">${abcl.implementation.version}</echo>
-	</target>
+    <target name="abcl.stamp.version"
+            depends="abcl.version.src,abcl.stamp.version.1,abcl.stamp.version.2"
+            unless="abcl.stamp.version.uptodate.p">
+      <mkdir dir="${abcl.version.path}/.."/>
+      <echo>ABCL implementation version: ${abcl.implementation.version}</echo>
+      <echo file="${abcl.version.path}">${abcl.implementation.version}</echo>
+    </target>
 
-	<target name="abcl.stamp.version.generate" depends="abcl.compile.java" unless="abcl.stamp.version.uptodate.p">
-		<java fork="true" classpath="${build.classes.dir}" outputproperty="abcl.version" classname="org.armedbear.lisp.Version" logerror="yes" />
-		<!-- Don't catch stderr output -->
-	</target>
+    <target name="abcl.stamp.version.generate"
+            depends="abcl.compile.java"
+            unless="abcl.stamp.version.uptodate.p">
+      <java fork="true"
+            classpath="${build.classes.dir}"
+            outputproperty="abcl.version"
+            classname="org.armedbear.lisp.Version"
+            logerror="yes"/> <!-- Don't catch stderr output -->
+    </target>
 
-	<target name="abcl.stamp.version.0" depends="abcl.stamp.version.uptodate,abcl.stamp.version.generate">
-	</target>
+    <target name="abcl.stamp.version.0"
+            depends="abcl.stamp.version.uptodate,abcl.stamp.version.generate">
+    </target>
 
-	<target name="abcl.stamp.version.1" depends="abcl.stamp.version.0" unless="abcl.version.svn.p">
-		<property name="abcl.implementation.version" value="${abcl.version}" />
-	</target>
+    <target name="abcl.stamp.version.1"
+            depends="abcl.stamp.version.0"
+            unless="abcl.version.svn.p">
+      <property name="abcl.implementation.version"
+                value="${abcl.version}"/>
+    </target>
 
-	<target name="abcl.stamp.version.2" depends="abcl.stamp.version.0" if="abcl.version.svn.p">
-		<property name="abcl.implementation.version" value="${abcl.version}-${abcl.version.src}" />
-	</target>
+    <target name="abcl.stamp.version.2"
+            depends="abcl.stamp.version.0"
+            if="abcl.version.svn.p">
+      <property name="abcl.implementation.version"
+                value="${abcl.version}-${abcl.version.src}"/>
+    </target>
 
-	<target name="abcl.stamp.hostname" if="unix">
-		<exec executable="hostname" outputproperty="abcl.hostname" />
-		<echo>abcl.hostname: ${abcl.hostname}</echo>
-	</target>
+    <target name="abcl.stamp.hostname" if="unix">
+      <exec executable="hostname" outputproperty="abcl.hostname"/>
+      <echo>abcl.hostname: ${abcl.hostname}</echo>
+    </target>
 
-	<target name="abcl.system.uptodate">
-		<condition property="abcl.system.needs-update.p">
-			<and>
-				<available file="${system.lisp.file}" />
-				<available file="${abcl.startup.file}" />
-				<uptodate srcfile="${system.lisp.file}" targetfile="${abcl.startup.file}" />
-			</and>
-		</condition>
-	</target>
+    <target name="abcl.system.uptodate">
+      <condition property="abcl.system.needs-update.p">
+        <and>
+          <available file="${system.lisp.file}"/>
+          <available file="${abcl.startup.file}"/>
+          <uptodate
+                srcfile="${system.lisp.file}"
+                targetfile="${abcl.startup.file}"/>
+        </and>
+      </condition>
+    </target>
 
-	<target name="abcl.system.update.maybe" depends="abcl.system.uptodate" if="abcl.system.needs-update.p">
-		<touch file="${src.dir}/org/armedbear/lisp/compile-system.lisp" />
-	</target>
+    <target name="abcl.system.update.maybe" depends="abcl.system.uptodate"
+            if="abcl.system.needs-update.p">
+      <touch file="${src.dir}/org/armedbear/lisp/compile-system.lisp"/>
+    </target>
 
-	<target name="abcl.jar.uptodate" depends="abcl.compile,abcl.stamp">
-		<uptodate property="abcl.jar.uptodate.p" targetfile="${abcl.jar.path}">
-			<srcfiles dir="${build.classes.dir}">
-				<patternset refid="abcl.objects" />
-			</srcfiles>
-		</uptodate>
-	</target>
+    <target name="abcl.jar.uptodate" depends="abcl.compile,abcl.stamp">
+      <uptodate property="abcl.jar.uptodate.p" targetfile="${abcl.jar.path}">
+        <srcfiles dir="${build.classes.dir}">
+          <patternset refid="abcl.objects"/>
+        </srcfiles>
+      </uptodate>
+    </target>
 
-	<target name="abcl.jar" depends="abcl.jar.uptodate,abcl-contrib.jar" unless="abcl.jar.uptodate.p">
-		<mkdir dir="${dist.dir}" />
-		<jar destfile="${abcl.jar.path}" compress="true" update="true" basedir="${build.classes.dir}">
-			<patternset refid="abcl.objects" />
-			<manifest>
-				<attribute name="Main-Class" value="org.armedbear.lisp.Main" />
-				<section name="org/armedbear/lisp">
-					<attribute name="Implementation-Title" value="ABCL" />
-					<attribute name="Implementation-Version" value="${abcl.implementation.version}" />
-					<attribute name="Implementation-Build" value="${build}" />
-				</section>
-			</manifest>
-			<metainf dir="${src.dir}/META-INF">
-				<exclude name="services/javax.script.ScriptEngineFactory" unless="abcl.jsr-223.p" />
-			</metainf>
-		</jar>
-	</target>
+    <target name="abcl.jar" depends="abcl.jar.uptodate,abcl-contrib.jar"
+            unless="abcl.jar.uptodate.p">
+      <mkdir dir="${dist.dir}"/>
+      <jar destfile="${abcl.jar.path}"
+           compress="true"
+           update="true"
+           basedir="${build.classes.dir}">
+        <patternset refid="abcl.objects"/>
+        <manifest>
+          <attribute name="Main-Class" value="org.armedbear.lisp.Main"/>
+          <section name="org/armedbear/lisp">
+            <attribute name="Implementation-Title"
+                       value="ABCL"/>
+            <attribute name="Implementation-Version"
+                       value="${abcl.implementation.version}"/>
+            <attribute name="Implementation-Build"
+                       value="${build}"/>
+          </section>
+        </manifest>
+        <metainf dir="${src.dir}/META-INF">
+          <exclude name="services/javax.script.ScriptEngineFactory"
+                   unless="abcl.jsr-223.p"/>
+        </metainf>
+      </jar>
+    </target>
 
-	<target name="abcl-aio.jar" depends="abcl.compile,abcl.version">
-		<mkdir dir="${dist.dir}" />
-		<jar destfile="${abcl-aio.jar.path}" compress="true" update="true" basedir="${build.classes.dir}">
-			<fileset dir="${src.dir}">
-				<patternset refid="abcl.objects" />
-				<patternset refid="abcl.source.java" />
-				<patternset refid="abcl.source.lisp" />
-			</fileset>
-			<fileset dir="${basedir}">
-				<patternset refid="abcl.contrib.source" />
-			</fileset>
-			<!-- According to <http://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html>
+    <target name="abcl-aio.jar" depends="abcl.compile,abcl.version">
+      <mkdir dir="${dist.dir}"/>
+      <jar destfile="${abcl-aio.jar.path}"
+           compress="true"
+           update="true"
+           basedir="${build.classes.dir}">
+	<fileset dir="${src.dir}">
+          <patternset refid="abcl.objects"/>
+	  <patternset refid="abcl.source.java"/>
+	  <patternset refid="abcl.source.lisp"/>
+	</fileset>
+	<fileset dir="${basedir}">
+	  <patternset refid="abcl.contrib.source"/>
+	</fileset>
+        <!-- According to <http://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html>
              any attributes not specified are ignored, so we are free to make up new attributes if necessary.  For now we just overload Implementation-Title and Implementation-Version.
             -->
-			<manifest>
-				<attribute name="Main-Class" value="org.armedbear.lisp.Main" />
-				<section name="org/armedbear/lisp">
-					<attribute name="Implementation-Title" value="ABCL" />
-					<attribute name="Implementation-Version" value="${abcl.implementation.version}" />
-					<attribute name="Implementation-Build" value="${build}" />
-				</section>
-				<section name="contrib">
-					<attribute name="Implementation-Title" value="org.abcl-contrib" />
-					<!-- FIXME: declare separate abcl-contrib version? -->
-					<attribute name="Implementation-Version" value="${abcl.implementation.version}" />
-				</section>
-				<section name="tools">
-					<attribute name="Implementation-Title" value="org.abcl-tools" />
-				</section>
-				<section name="src">
-					<attribute name="Implementation-Title" value="org.abcl-source" />
-					<attribute name="Implementation-Version" value="${abcl.implementation.version}" />
-				</section>
-			</manifest>
-			<metainf dir="${src.dir}/META-INF">
-				<exclude name="services/javax.script.ScriptEngineFactory" unless="abcl.jsr-223.p" />
-			</metainf>
-		</jar>
-	</target>
+        <manifest>
+          <attribute name="Main-Class" value="org.armedbear.lisp.Main"/>
+          <section name="org/armedbear/lisp">
+            <attribute name="Implementation-Title" 
+                       value="ABCL"/>
+            <attribute name="Implementation-Version"  
+                       value="${abcl.implementation.version}"/>
+            <attribute name="Implementation-Build" 
+                       value="${build}"/>
+          </section>
+          <section name="contrib">
+            <attribute name="Implementation-Title" 
+                       value="org.abcl-contrib"/>
+            <!-- FIXME: declare separate abcl-contrib version? -->
+            <attribute name="Implementation-Version"  
+                       value="${abcl.implementation.version}"/>
+          </section>
+          <section name="tools">
+            <attribute name="Implementation-Title" 
+                       value="org.abcl-tools"/>
+          </section>
+          <section name="src">
+            <attribute name="Implementation-Title" 
+                       value="org.abcl-source"/>
+            <attribute name="Implementation-Version"  
+                       value="${abcl.implementation.version}"/>
+          </section>
+        </manifest>
+        <metainf dir="${src.dir}/META-INF"> 
+          <exclude name="services/javax.script.ScriptEngineFactory"
+                   unless="abcl.jsr-223.p"/>
+        </metainf>
+      </jar>
+    </target>
 
-
-	<target name="abcl.wrapper" depends="abcl.jar,abcl.contrib,abcl.wrapper.unix,abcl.wrapper.windows">
-		<description>
+    
+    <target name="abcl.wrapper"
+            depends="abcl.jar,abcl.contrib,abcl.wrapper.unix,abcl.wrapper.windows">
+      <description>
         Creates in-place executable shell wrapper in
         '${abcl.wrapper.file}'
       </description>
-		<!-- Set from commandline or in 'build.properties' -->
-		<property name="additional.jars" value="" />
-		<path id="abcl.runtime.classpath">
-			<pathelement location="${abcl.runtime.jar.path}" />
-			<pathelement path="${additional.jars}" />
-			<pathelement path="${java.home}/../lib/tools.jar" />
+      <!-- Set from commandline or in 'build.properties' -->
+      <property name="additional.jars" value=""/>
+      <path id="abcl.runtime.classpath">
+        <pathelement location="${abcl.runtime.jar.path}"/>
+        <pathelement path="${additional.jars}"/>
+      	<pathelement path="${java.home}/../lib/tools.jar"/>
+      	
+      </path>
+      <!-- set via '-Djava.options=JAVA_OPTIONS' or in 'build.properties -->
+      <property name="java.options" value=""/>
 
-		</path>
-		<!-- set via '-Djava.options=JAVA_OPTIONS' or in 'build.properties -->
-		<property name="java.options" value="" />
+      <copy file="${abcl.wrapper.in.file}" toFile="${abcl.wrapper.file}" overwrite="yes">
+        <filterset>
+          <filter token="JAVA"
+                  value="${java.path}"/>
+          <filter token="ABCL_JAVA_OPTIONS"
+                  value="${java.options}"/>
+          <filter token="ABCL_CLASSPATH"
+                  value="${toString:abcl.runtime.classpath}"/>
+        </filterset>
+      </copy>
+      <chmod file="${abcl.wrapper.file}" perm="a+x"/>
 
-		<copy file="${abcl.wrapper.in.file}" toFile="${abcl.wrapper.file}" overwrite="yes">
-			<filterset>
-				<filter token="JAVA" value="${java.path}" />
-				<filter token="ABCL_JAVA_OPTIONS" value="${java.options}" />
-				<filter token="ABCL_CLASSPATH" value="${toString:abcl.runtime.classpath}" />
-			</filterset>
-		</copy>
-		<chmod file="${abcl.wrapper.file}" perm="a+x" />
+      <echo>Created executable ABCL wrapper in '${abcl.wrapper.file}'</echo>
+      <echo>N.B. This wrapper requires '${abcl.jar.path}' not be moved.</echo>
+    </target>
 
-		<echo>Created executable ABCL wrapper in '${abcl.wrapper.file}'</echo>
-		<echo>N.B. This wrapper requires '${abcl.jar.path}' not be moved.</echo>
-	</target>
+    <target name="abcl.wrapper.unix" if="unix">
+      <property name="abcl.wrapper.file" value="abcl"/>
+      <property name="abcl.wrapper.in.file" value="abcl.in"/>
+    </target>
 
-	<target name="abcl.wrapper.unix" if="unix">
-		<property name="abcl.wrapper.file" value="abcl" />
-		<property name="abcl.wrapper.in.file" value="abcl.in" />
-	</target>
+    <target name="abcl.wrapper.windows" if="windows">
+      <property name="abcl.wrapper.file" value="abcl.bat"/>
+      <property name="abcl.wrapper.in.file" value="abcl.bat.in"/>
+    </target>
 
-	<target name="abcl.wrapper.windows" if="windows">
-		<property name="abcl.wrapper.file" value="abcl.bat" />
-		<property name="abcl.wrapper.in.file" value="abcl.bat.in" />
-	</target>
+    <patternset id="abcl.contrib.source">
+          <include name="**/*.asd"/>
+          <include name="**/*.lisp"/>
+          <include name="**/README.markdown"/>
+    </patternset>
 
-	<patternset id="abcl.contrib.source">
-		<include name="**/*.asd" />
-		<include name="**/*.lisp" />
-		<include name="**/README.markdown" />
-	</patternset>
+    <patternset id="abcl.contrib.docs">
+          <include name="**/README.markdown"/>
+    </patternset>
 
-	<patternset id="abcl.contrib.docs">
-		<include name="**/README.markdown" />
-	</patternset>
+    <property name="abcl-contrib.jar"
+              value="${dist.dir}/abcl-contrib.jar"/>
+    <condition property="abcl.contrib.uptodate.p">
+      <uptodate targetfile="${abcl-contrib.jar}">
+        <srcfiles dir="contrib">
+          <patternset refid="abcl.contrib.source"/>
+        </srcfiles>
+      </uptodate>
+    </condition>
 
-	<property name="abcl-contrib.jar" value="${dist.dir}/abcl-contrib.jar" />
-	<condition property="abcl.contrib.uptodate.p">
-		<uptodate targetfile="${abcl-contrib.jar}">
-			<srcfiles dir="contrib">
-				<patternset refid="abcl.contrib.source" />
-			</srcfiles>
-		</uptodate>
-	</condition>
-
-	<target name="abcl-contrib.jar" depends="abcl.contrib" />
-	<target name="abcl.contrib" unless="abcl.contrib.uptodate.p">
-		<jar destfile="${abcl-contrib.jar}" compress="true" basedir="contrib">
-			<patternset refid="abcl.contrib.source" />
-		</jar>
-		<echo>
+    <target name="abcl-contrib.jar" depends="abcl.contrib"/>
+    <target name="abcl.contrib" unless="abcl.contrib.uptodate.p">
+      <jar destfile="${abcl-contrib.jar}"
+           compress="true"
+           basedir="contrib">
+        <patternset refid="abcl.contrib.source"/>
+      </jar>
+      <echo>
 Packaged contribs in ${abcl-contrib.jar}. To use contribs, ensure that
 this file is in the same directory as 'abcl.jar', and then
 
@@ -600,263 +719,302 @@ To load a contrib, something like
 
 will compile (if necessary) and load JSS.
 </echo>
-	</target>
+    </target>
 
-	<target name="abcl.contrib.javadoc.jar">
-		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/abcl-contrib-javadoc.jar" basedir="contrib">
-			<patternset refid="abcl.contrib.docs" />
-		</jar>
-	</target>
+    <target name="abcl.contrib.javadoc.jar">
+      <mkdir dir="${dist.dir}"/>
+      <jar destfile="${dist.dir}/abcl-contrib-javadoc.jar" basedir="contrib">
+        <patternset refid="abcl.contrib.docs" />
+      </jar>
+    </target>
 
-	<target name="abcl.contrib.source.jar">
-		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/abcl-contrib-sources.jar" basedir="contrib">
-			<patternset refid="abcl.contrib.source" />
-		</jar>
-	</target>
+    <target name="abcl.contrib.source.jar">
+      <mkdir dir="${dist.dir}"/>
+      <jar destfile="${dist.dir}/abcl-contrib-sources.jar" basedir="contrib">
+        <patternset refid="abcl.contrib.source" />
+      </jar>
+    </target>
 
-	<target name="abcl.debug.jpda" depends="abcl.jar">
-		<description>Invoke ABCL with JPDA listener on port 6789</description>
-		<java fork="true" classpathref="abcl.classpath.dist" classname="org.armedbear.lisp.Main">
-			<jvmarg value="-agentlib:jdwp=transport=dt_socket,address=6789,server=y" />
-		</java>
-		<echo>JPDA listening on localhost:6789</echo>
-	</target>
+    <target name="abcl.debug.jpda" depends="abcl.jar">
+      <description>Invoke ABCL with JPDA listener on port 6789</description>
+      <java fork="true"
+            classpathref="abcl.classpath.dist"
+            classname="org.armedbear.lisp.Main">
+        <jvmarg
+            value="-agentlib:jdwp=transport=dt_socket,address=6789,server=y"/>
+      </java>
+      <echo>JPDA listening on localhost:6789</echo>
+    </target>
 
-	<target name="abcl.build.debug.jpda" depends="abcl.compile.java">
-		<description>Invoke ABCL with JPDA listener on port 6789</description>
-		<java fork="true" classpathref="abcl.classpath.build" classname="org.armedbear.lisp.Main">
-			<jvmarg value="-agentlib:jdwp=transport=dt_socket,address=6789,server=y" />
-			<jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}" />
-		</java>
-		<echo>JPDA listening on localhost:6789</echo>
-	</target>
-	<target name="abcl.run" depends="abcl.jar">
-		<java fork="true" classpathref="abcl.classpath.dist" classname="org.armedbear.lisp.Main">
-		</java>
-	</target>
+    <target name="abcl.build.debug.jpda" depends="abcl.compile.java">
+      <description>Invoke ABCL with JPDA listener on port 6789</description>
+      <java fork="true"
+            classpathref="abcl.classpath.build"
+            classname="org.armedbear.lisp.Main">
+        <jvmarg
+            value="-agentlib:jdwp=transport=dt_socket,address=6789,server=y"/>
+        <jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}"/>
+      </java>
+      <echo>JPDA listening on localhost:6789</echo>
+    </target>
+    <target name="abcl.run" depends="abcl.jar">
+      <java fork="true"
+            classpathref="abcl.classpath.dist"
+            classname="org.armedbear.lisp.Main">
+      </java>
+    </target>
 
-	<target name="abcl.clean">
-		<delete dir="${build.dir}" />
-		<delete file="${abcl.jar.path}" />
-		<delete file="abcl" />
-		<delete file="abcl.bat" />
-	</target>
+    <target name="abcl.clean">
+      <delete dir="${build.dir}"/>
+      <delete file="${abcl.jar.path}"/>
+      <delete file="abcl"/>
+      <delete file="abcl.bat"/>
+    </target>
 
-	<property name="slime.fasls" value="${user.home}/.slime/" />
-	<property name="quicklisp.common-lisp.fasls" value="${user.home}/.cache/common-lisp/" />
-	<target name="abcl.clean.application.fasls">
-		<echo>Deleting ABCL SLIME fasls under ${slime.fasls}</echo>
-		<delete>
-			<fileset dir="${slime.fasls}" includes="**/*.abcl" />
-		</delete>
-		<echo>Deleting ABCL Quicklisp fasls under ${quicklisp.common-lisp.fasls}</echo>
-		<delete>
-			<fileset dir="${quicklisp.common-lisp.fasls}" includes="**/*.abcl" />
-		</delete>
-	</target>
+    <property name="slime.fasls"
+              value="${user.home}/.slime/"/>
+    <property name="quicklisp.common-lisp.fasls"
+              value="${user.home}/.cache/common-lisp/"/>
+    <target name="abcl.clean.application.fasls">
+      <echo>Deleting ABCL SLIME fasls under ${slime.fasls}</echo>
+      <delete>
+        <fileset dir="${slime.fasls}" includes="**/*.abcl"/>
+      </delete>
+      <echo>Deleting ABCL Quicklisp fasls under ${quicklisp.common-lisp.fasls}</echo>
+      <delete>
+        <fileset dir="${quicklisp.common-lisp.fasls}" includes="**/*.abcl"/>
+      </delete>
+    </target>
 
-	<target name="abcl.dist" depends="abcl.jar">
-		<copy file="${abcl.jar.path}" toFile="${dist.dir}/abcl-${abcl.version}.jar" />
-	</target>
+    <target name="abcl.dist" depends="abcl.jar">
+      <copy file="${abcl.jar.path}"
+            toFile="${dist.dir}/abcl-${abcl.version}.jar"/>
+    </target>
 
-	<target name="abcl.distclean" depends="abcl.clean">
-		<delete dir="${dist.dir}" />
-		<delete file="abcl" />
-		<delete file="abcl.bat" />
-	</target>
+    <target name="abcl.distclean" depends="abcl.clean">
+      <delete dir="${dist.dir}"/>
+      <delete file="abcl"/>
+      <delete file="abcl.bat"/>
+    </target>
 
-	<condition property="etags.executable" value="etags" else="c:/cygwin64/bin/ctags.exe">
-		<not>
-			<os family="windows" />
-		</not>
-	</condition>
+    <condition property="etags.executable"
+               value="etags"
+               else="c:/cygwin64/bin/ctags.exe">
+      <not>
+        <os family="windows"/>
+      </not>
+    </condition>
+      
+    <target name="TAGS">
+      <delete file="TAGS"/>
+      <apply executable="${etags.executable}" parallel="true" verbose="true" maxparallel="300">
+        <arg value="--append"/>
+        <arg value="--regex=|[ \t]+//[ \t]+###[ \t]+\([^ \t]+\)|\1|"/>
+        <arg value='--regex=|[ \t]*@DocString([ \n\r\t]*name=\"\([^\"]*\)|\1|m'/>
+        <fileset dir="${src.dir}">
+          <patternset refid="abcl.source.java"/>
+          <patternset refid="abcl.source.lisp"/>
+        </fileset>
+      </apply>
+    </target>
 
-	<target name="TAGS">
-		<delete file="TAGS" />
-		<apply executable="${etags.executable}" parallel="true" verbose="true" maxparallel="300">
-			<arg value="--append" />
-			<arg value="--regex=|[ \t]+//[ \t]+###[ \t]+\([^ \t]+\)|\1|" />
-			<arg value='--regex=|[ \t]*@DocString([ \n\r\t]*name=\"\([^\"]*\)|\1|m' />
-			<fileset dir="${src.dir}">
-				<patternset refid="abcl.source.java" />
-				<patternset refid="abcl.source.lisp" />
-			</fileset>
-		</apply>
-	</target>
+    <patternset id="abcl.dist.misc"
+                description="Additional includes in the source distributions relative to basedir">
+      <include name="abcl.rdf"/>
+      <include name="build.xml"/>
+      <include name="abcl.properties.in"/>
+      <include name="COPYING"/>
+      <include name="README"/>
+      <include name="CHANGES"/>
+      <include name="abcl.in"/>
+      <include name="abcl.bat.in"/>
 
-	<patternset id="abcl.dist.misc" description="Additional includes in the source distributions relative to basedir">
-		<include name="abcl.rdf" />
-		<include name="build.xml" />
-		<include name="abcl.properties.in" />
-		<include name="COPYING" />
-		<include name="README" />
-		<include name="CHANGES" />
-		<include name="abcl.in" />
-		<include name="abcl.bat.in" />
+      <include name="abcl.asd"/>
 
-		<include name="abcl.asd" />
-		
-		<include name="examples/**" />
+      <include name="examples/**"/>
 
-		<include name="contrib/**" />
+      <include name="contrib/**"/>
 
-		<include name="test/**" />
+      <include name="test/**"/>
 
-		<include name="build-from-lisp.bash" />
+      <include name="build-from-lisp.bash"/>
 
-		<!-- The remainder of these files are used by the Lisp hosted
+      <!-- The remainder of these files are used by the Lisp hosted
            build in 'build-abcl.lisp' but not used by Ant, so include
            them in the source distribution. -->
-		<include name="make-jar.in" />
-		<include name="make-jar.bat.in" />
+      <include name="make-jar.in"/>
+      <include name="make-jar.bat.in"/>
 
-		<include name="build-abcl.lisp" />
-		<include name="customizations.lisp.in" />
+      <include name="build-abcl.lisp"/>
+      <include name="customizations.lisp.in"/>
 
-	</patternset>
+    </patternset>
 
-	<patternset id="abcl.source.misc" description="Additional includes in the source distribution relative to source root">
-		<include name="org/armedbear/lisp/LICENSE" />
-		<include name="manifest-abcl" />
-		<include name="META-INF/services/javax.script.ScriptEngineFactory" />
-	</patternset>
+    <patternset
+        id="abcl.source.misc"
+        description="Additional includes in the source distribution relative to source root">
+      <include name="org/armedbear/lisp/LICENSE"/>
+      <include name="manifest-abcl"/>
+      <include name="META-INF/services/javax.script.ScriptEngineFactory"/>
+    </patternset>
 
-	<target name="abcl.source.prepare" depends="abcl.stamp.version">
-		<property name="abcl.build.src.dir" value="${build.dir}/abcl-src-${abcl.version}" />
-		<mkdir dir="${abcl.build.src.dir}/src" />
-		<copy todir="${abcl.build.src.dir}/src" preservelastmodified="true">
-			<fileset dir="${src.dir}" id="abcl.source.src">
-				<patternset refid="abcl.source.java" />
-				<patternset refid="abcl.source.lisp" />
-				<patternset refid="abcl.source.misc" />
-			</fileset>
-		</copy>
-		<copy todir="${abcl.build.src.dir}" preservelastmodified="true">
-			<fileset dir="${basedir}">
-				<patternset refid="abcl.dist.misc" />
-			</fileset>
-		</copy>
-	</target>
+    <target name="abcl.source.prepare" depends="abcl.stamp.version">
+      <property name="abcl.build.src.dir"
+                value="${build.dir}/abcl-src-${abcl.version}"/>
+      <mkdir dir="${abcl.build.src.dir}/src"/>
+      <copy todir="${abcl.build.src.dir}/src"
+            preservelastmodified="true">
+        <fileset dir="${src.dir}"
+                 id="abcl.source.src">
+            <patternset refid="abcl.source.java"/>
+            <patternset refid="abcl.source.lisp"/>
+            <patternset refid="abcl.source.misc"/>
+        </fileset>
+      </copy>
+      <copy todir="${abcl.build.src.dir}"
+            preservelastmodified="true">
+        <fileset dir="${basedir}">
+            <patternset refid="abcl.dist.misc"/>
+        </fileset>
+      </copy>
+    </target>
 
-	<!--  Files in source distribution that always get LF EOL (aka
+    <!--  Files in source distribution that always get LF EOL (aka
          'unix') -->
-	<patternset id="abcl.dist.lf">
-		<include name="abcl.in" />
-	</patternset>
+    <patternset id="abcl.dist.lf">
+      <include name="abcl.in"/>
+    </patternset>
 
-	<!--  Files in source distribution that always get CRLF EOL (aka
+    <!--  Files in source distribution that always get CRLF EOL (aka
          'dos') -->
-	<patternset id="abcl.dist.crlf">
-		<include name="abcl.bat.in" />
-	</patternset>
+    <patternset id="abcl.dist.crlf">
+      <include name="abcl.bat.in"/>
+    </patternset>
 
-	<target name="abcl.source.unix" depends="abcl.source.prepare">
-		<fixcrlf srcdir="${abcl.build.src.dir}" preservelastmodified="true" eol="lf">
-		</fixcrlf>
+    <target name="abcl.source.unix" depends="abcl.source.prepare">
+      <fixcrlf srcdir="${abcl.build.src.dir}"
+               preservelastmodified="true"
+               eol="lf">
+      </fixcrlf>
 
-		<fixcrlf srcdir="${abcl.build.src.dir}" preservelastmodified="true" eol="crlf">
-			<patternset refid="abcl.dist.crlf" />
-		</fixcrlf>
+      <fixcrlf srcdir="${abcl.build.src.dir}"
+               preservelastmodified="true"
+               eol="crlf">
+          <patternset refid="abcl.dist.crlf"/>
+      </fixcrlf>
 
-		<fixcrlf srcdir="${abcl.build.src.dir}" preservelastmodified="true" eol="lf">
-			<patternset refid="abcl.dist.lf" />
-		</fixcrlf>
-	</target>
+      <fixcrlf srcdir="${abcl.build.src.dir}"
+               preservelastmodified="true"
+               eol="lf">
+          <patternset refid="abcl.dist.lf"/>
+      </fixcrlf>
+    </target>
 
-	<target name="abcl.source.tar" depends="abcl.source.unix">
-		<mkdir dir="${dist.dir}" />
-		<tar destfile="${dist.dir}/abcl-src-${abcl.version}.tar.gz" compression="gzip">
-			<tarfileset dir="${build.dir}">
-				<include name="abcl-src-${abcl.version}/**" />
-			</tarfileset>
-		</tar>
-	</target>
+    <target name="abcl.source.tar" depends="abcl.source.unix">
+      <mkdir dir="${dist.dir}"/>
+      <tar destfile="${dist.dir}/abcl-src-${abcl.version}.tar.gz"
+           compression="gzip">
+        <tarfileset dir="${build.dir}">
+          <include name="abcl-src-${abcl.version}/**"/>
+        </tarfileset>
+      </tar>
+    </target>
 
-	<target name="abcl.source.windows" depends="abcl.source.prepare">
-		<fixcrlf srcdir="${abcl.build.src.dir}" preservelastmodified="true" eol="crlf">
-		</fixcrlf>
+    <target name="abcl.source.windows" depends="abcl.source.prepare">
+      <fixcrlf srcdir="${abcl.build.src.dir}"
+               preservelastmodified="true"
+               eol="crlf">
+      </fixcrlf>
 
-		<fixcrlf srcdir="${abcl.build.src.dir}" preservelastmodified="true" eol="crlf">
-			<patternset refid="abcl.dist.crlf" />
-		</fixcrlf>
+      <fixcrlf srcdir="${abcl.build.src.dir}"
+               preservelastmodified="true"
+               eol="crlf">
+          <patternset refid="abcl.dist.crlf"/>
+      </fixcrlf>
 
-		<fixcrlf srcdir="${abcl.build.src.dir}" preservelastmodified="true" eol="lf">
-			<patternset refid="abcl.dist.lf" />
-		</fixcrlf>
-	</target>
+      <fixcrlf srcdir="${abcl.build.src.dir}"
+               preservelastmodified="true"
+               eol="lf">
+          <patternset refid="abcl.dist.lf"/>
+      </fixcrlf>
+    </target>
 
-	<target name="abcl.source.zip" depends="abcl.stamp,abcl.source.windows">
-		<mkdir dir="${dist.dir}" />
-		<zip destfile="${dist.dir}/abcl-src-${abcl.version}.zip" compress="true">
-			<zipfileset dir="${abcl.build.src.dir}" prefix="abcl-src-${abcl.version}" />
-		</zip>
-	</target>
+    <target name="abcl.source.zip" depends="abcl.stamp,abcl.source.windows">
+      <mkdir dir="${dist.dir}"/>
+      <zip destfile="${dist.dir}/abcl-src-${abcl.version}.zip"
+           compress="true">
+        <zipfileset dir="${abcl.build.src.dir}" prefix="abcl-src-${abcl.version}"/>
+      </zip>
+    </target>
 
-	<target name="abcl.source.jar" depends="abcl.stamp,abcl.source.unix">
-		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/abcl-${abcl.version}-sources.jar">
-			<metainf dir="${abcl.build.src.dir}">
-				<include name="COPYING" />
-			</metainf>
-			<fileset dir="${abcl.build.src.dir}/src">
-				<include name="**/*.java" />
-				<include name="**/*.lisp" />
-			</fileset>
-		</jar>
-	</target>
+    <target name="abcl.source.jar" depends="abcl.stamp,abcl.source.unix">
+      <mkdir dir="${dist.dir}"/>
+      <jar destfile="${dist.dir}/abcl-${abcl.version}-sources.jar">
+        <metainf dir="${abcl.build.src.dir}">
+          <include name="COPYING"/>
+        </metainf>
+        <fileset dir="${abcl.build.src.dir}/src">
+          <include name="**/*.java"/>
+          <include name="**/*.lisp"/>
+        </fileset>
+      </jar>
+    </target>
 
-	<property name="abcl.javadoc.dir" value="${build.dir}/javadoc" />
+    <property name="abcl.javadoc.dir" value="${build.dir}/javadoc"/>
 
-	<target name="abcl.javadoc" depends="abcl.stamp">
-		<mkdir dir="${abcl.javadoc.dir}" />
-		<javadoc destdir="${abcl.javadoc.dir}" sourcepath="${src.dir}" />
-	</target>
+    <target name="abcl.javadoc" depends="abcl.stamp">
+      <mkdir dir="${abcl.javadoc.dir}"/>
+      <javadoc destdir="${abcl.javadoc.dir}"
+               sourcepath="${src.dir}"/>
+    </target>
 
-	<target name="abcl.javadoc.jar" depends="abcl.stamp.version,abcl.javadoc">
-		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/abcl-${abcl.version}-javadoc.jar">
-			<fileset dir="${abcl.javadoc.dir}" />
-		</jar>
-	</target>
+    <target name="abcl.javadoc.jar" depends="abcl.stamp.version,abcl.javadoc">
+      <mkdir dir="${dist.dir}"/>
+      <jar destfile="${dist.dir}/abcl-${abcl.version}-javadoc.jar">
+        <fileset dir="${abcl.javadoc.dir}"/>
+      </jar>
+    </target>
 
-	<target name="abcl.binary.prepare" depends="abcl.jar,abcl.contrib,abcl.documentation,abcl.stamp.version">
-		<property name="abcl.build.binary.dir" value="${build.dir}/abcl-bin-${abcl.version}" />
-		<mkdir dir="${abcl.build.binary.dir}" />
-		<copy todir="${abcl.build.binary.dir}" preservelastmodified="true">
-			<fileset dir="${basedir}/dist">
-				<patternset>
-					<include name="abcl.jar" />
-					<include name="abcl-contrib.jar" />
-					<include name="*.pdf" />
-				</patternset>
-			</fileset>
-			<fileset dir="${basedir}">
-				<patternset>
-					<include name="README" />
-					<include name="CHANGES" />
-				</patternset>
-			</fileset>
-		</copy>
-	</target>
+    <target name="abcl.binary.prepare" depends="abcl.jar,abcl.contrib,abcl.documentation,abcl.stamp.version">
+      <property name="abcl.build.binary.dir"
+                value="${build.dir}/abcl-bin-${abcl.version}"/>
+      <mkdir dir="${abcl.build.binary.dir}"/>
+      <copy todir="${abcl.build.binary.dir}"
+            preservelastmodified="true">
+        <fileset dir="${basedir}/dist">
+          <patternset>
+            <include name="abcl.jar"/>
+            <include name="abcl-contrib.jar"/>
+            <include name="*.pdf"/>
+          </patternset>
+        </fileset>
+        <fileset dir="${basedir}">
+          <patternset>
+            <include name="README"/>
+            <include name="CHANGES"/>
+          </patternset>
+        </fileset>
+      </copy>
+    </target>
 
-	<target name="abcl.binary.tar" depends="abcl.binary.prepare">
-		<tar destfile="${dist.dir}/abcl-bin-${abcl.version}.tar.gz" compression="gzip">
-			<tarfileset dir="${build.dir}">
-				<include name="abcl-bin-${abcl.version}/**" />
-			</tarfileset>
-		</tar>
-	</target>
+    <target name="abcl.binary.tar" depends="abcl.binary.prepare">
+      <tar destfile="${dist.dir}/abcl-bin-${abcl.version}.tar.gz"
+           compression="gzip">
+        <tarfileset dir="${build.dir}">
+          <include name="abcl-bin-${abcl.version}/**"/>
+          </tarfileset>
+      </tar>
+    </target>
 
-	<target name="abcl.binary.zip" depends="abcl.binary.prepare">
-		<zip destfile="${dist.dir}/abcl-bin-${abcl.version}.zip" compress="true">
-			<zipfileset dir="${abcl.build.binary.dir}" prefix="abcl-bin-${abcl.version}" />
-		</zip>
-	</target>
+    <target name="abcl.binary.zip" depends="abcl.binary.prepare">
+      <zip destfile="${dist.dir}/abcl-bin-${abcl.version}.zip"
+           compress="true">
+        <zipfileset dir="${abcl.build.binary.dir}" prefix="abcl-bin-${abcl.version}"/>
+      </zip>
+    </target>
 
-	<target name="help.test">
-		<echo>
+    <target name="help.test">
+      <echo>
 The following Ant targets run various test suites:
 
   abcl.test
@@ -882,198 +1040,216 @@ ${basedir}/../cl-bench
 
 [2]: http://www.chez.com/emarsden/downloads/cl-bench.tar.gz
       </echo>
-	</target>
+    </target>
 
-	<property name="abcl.test.classes.dir" value="${build.dir}/classes-test" />
+    <property name="abcl.test.classes.dir"
+              value="${build.dir}/classes-test"/>
 
-	<property name="abcl.test.src.dir" value="${basedir}/test/src" />
+    <property name="abcl.test.src.dir"
+              value="${basedir}/test/src"/>
 
-	<patternset id="abcl.test.source.java">
-		<include name="org/armedbear/lisp/**/*.java" />
-	</patternset>
+    <patternset id="abcl.test.source.java">
+      <include name="org/armedbear/lisp/**/*.java"/>
+    </patternset>
 
-	<property name="junit.path" value="${abcl.ext.dir}/junit-4.8.1.jar" />
-	<property name="maven.dist.name" value="apache-maven-3.3.9-bin.zip" />
-	<property name="maven.dist.uri" value="http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/${maven.dist.name}" />
-	<property name="maven.local.path" value="${abcl.ext.dir}/${maven.dist.name}" />
+    <property name="junit.path"
+              value="${abcl.ext.dir}/junit-4.8.1.jar"/>
+    <property name="maven.dist.name"
+              value="apache-maven-3.3.9-bin.zip"/>
+    <property name="maven.dist.uri"
+              value="http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/${maven.dist.name}"/>
+    <property name="maven.local.path"
+              value="${abcl.ext.dir}/${maven.dist.name}"/>
 
-	<path id="abcl.test.compile.classpath">
-		<pathelement location="${junit.path}" />
-		<pathelement location="${build.classes.dir}" />
-	</path>
+    <path id="abcl.test.compile.classpath">
+      <pathelement location="${junit.path}"/>
+      <pathelement location="${build.classes.dir}"/>
+    </path>
 
-	<target name="abcl.test.pre-compile" depends="abcl.ext" />
+    <target name="abcl.test.pre-compile" depends="abcl.ext"/>
 
-	<target name="abcl.ext.p">
-		<!--XXX generalize over enumeration of all contributions to
+    <target name="abcl.ext.p">
+      <!--XXX generalize over enumeration of all contributions to
            abcl.ext if we get more of them.  -->
-		<condition property="abcl.ext.p">
-			<and>
-				<available file="${junit.path}" />
-				<available file="${maven.local.path}" />
-			</and>
-		</condition>
-	</target>
-	<target name="abcl.ext" depends="abcl.ext.p" unless="abcl.ext.p">
+      <condition property="abcl.ext.p">
+        <and>
+          <available file="${junit.path}"/>
+          <available file="${maven.local.path}"/>
+        </and>
+      </condition>
+    </target>
+    <target name="abcl.ext" depends="abcl.ext.p" unless="abcl.ext.p">
 
-		<mkdir dir="${abcl.ext.dir}" />
-		<get src="http://central.maven.org/maven2/junit/junit/4.8.1/junit-4.8.1.jar" usetimestamp="true" dest="${junit.path}" />
-		<get src="${maven.dist.uri}" usetimestamp="true" dest="${maven.local.path}" />
-	</target>
+      <mkdir dir="${abcl.ext.dir}"/>
+      <get
+          src="http://central.maven.org/maven2/junit/junit/4.8.1/junit-4.8.1.jar"
+          usetimestamp="true"
+          dest="${junit.path}"/>
+      <get 
+          src="${maven.dist.uri}"
+          usetimestamp="true"
+          dest="${maven.local.path}"/>
+    </target>
 
-	<target name="abcl.ext.maven" depends="abcl.ext">
-		<echo>Installing Maven for ABCL from ${maven.dist.uri}.</echo>
-		<unzip src="${maven.local.path}" dest="${abcl.ext.dir}">
-		</unzip>
-	</target>
+    <target name="abcl.ext.maven" depends="abcl.ext">
+      <echo>Installing Maven for ABCL from ${maven.dist.uri}.</echo>
+      <unzip src="${maven.local.path}"
+             dest="${abcl.ext.dir}">
+      </unzip>
+    </target>
 
-	<target name="abcl.test.compile" depends="abcl.test.pre-compile">
-		<mkdir dir="${abcl.test.classes.dir}" />
-		<javac destdir="${abcl.test.classes.dir}" classpathref="abcl.test.compile.classpath" fork="true" debug="true" target="${cv}">
-			<src path="${abcl.test.src.dir}" />
-			<patternset refid="abcl.test.source.java" />
-		</javac>
-	</target>
+    <target name="abcl.test.compile"
+            depends="abcl.test.pre-compile">
+      <mkdir dir="${abcl.test.classes.dir}"/>
+      <javac destdir="${abcl.test.classes.dir}"
+             classpathref="abcl.test.compile.classpath"
+             debug="true"
+             target="${cv}">
+        <src path="${abcl.test.src.dir}"/>
+        <patternset refid="abcl.test.source.java"/>
+      </javac>
+    </target>
 
-	<path id="abcl.test.run.classpath">
-		<path refid="abcl.test.compile.classpath" />
-		<pathelement location="${abcl.test.classes.dir}" />
-	</path>
+    <path id="abcl.test.run.classpath">
+      <path refid="abcl.test.compile.classpath"/>
+      <pathelement location="${abcl.test.classes.dir}"/>
+    </path>
 
-	<target name="abcl.test" depends="abcl.test.java,abcl.test.lisp" />
+    <target name="abcl.test"
+            depends="abcl.test.java,abcl.test.lisp"/>
 
-	<target name="abcl.test.java" depends="abcl.test.compile">
-		<java fork="true" classpathref="abcl.test.run.classpath" classname="org.junit.runner.JUnitCore">
-			<arg value="org.armedbear.lisp.PathnameTest" />
-			<arg value="org.armedbear.lisp.StreamTest" />
-			<arg value="org.armedbear.lisp.SeekableStringWriterTest" />
-			<arg value="org.armedbear.lisp.UtilitiesTest" />
-			<!-- currently hangs(!) the running process
+    <target name="abcl.test.java" depends="abcl.test.compile">
+      <java fork="true"
+            classpathref="abcl.test.run.classpath"
+            classname="org.junit.runner.JUnitCore">
+        <arg value="org.armedbear.lisp.PathnameTest"/>
+        <arg value="org.armedbear.lisp.StreamTest"/>
+        <arg value="org.armedbear.lisp.SeekableStringWriterTest"/>
+        <arg value="org.armedbear.lisp.UtilitiesTest"/>
+		<!-- currently hangs(!) the running process
         <arg value="org.armedbear.lisp.util.HttpHeadTest"/>
 		-->
-		</java>
-	</target>
+      </java>
+    </target>
 
-	<target name="abcl.test.lisp" depends="test.abcl,test.cl-bench" />
+    <target name="abcl.test.lisp"
+            depends="test.abcl,test.cl-bench"/> 
 
-	<target name="test.ansi.interpreted" depends="abcl.jar">
-		<echo>Recording test output in ${abcl.test.log.file}.</echo>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes" />
-		<java fork="true" dir="${basedir}" classpathref="abcl.classpath.dist" classname="org.armedbear.lisp.Main">
-			<arg value="--noinit" />
-			<arg value="--eval" />
-			<arg value="(require (quote asdf))" />
-			<arg value="--eval" />
-			<arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration))" />
-			<arg value="--eval" />
-			<arg value="(asdf:test-system :abcl/test/ansi/interpreted)" />
-			<arg value="--eval" />
-			<arg value="(ext:exit)" />
-		</java>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="stop" />
-		<echo>Finished recording test output in ${abcl.test.log.file}.</echo>
-	</target>
-
-
-	<target name="test.ansi.interpreted.old-asdf" depends="abcl.jar">
-		<echo>Recording test output in ${abcl.test.log.file}.</echo>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes" />
-		<java fork="true" dir="${basedir}" classpathref="abcl.classpath.dist" classname="org.armedbear.lisp.Main">
-			<arg value="--noinit" />
-			<arg value="--eval" />
-			<arg value="(require (quote asdf))" />
-			<arg value="--eval" />
-			<arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration))" />
-			<arg value="--eval" />
-			<arg value="(asdf:load-system :abcl)" />
-			<arg value="--eval" />
-			<arg value="(asdf:test-system :ansi-interpreted)" />
-		</java>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="stop" />
-		<echo>Finished recording test output in ${abcl.test.log.file}.</echo>
-	</target>
-
-	<target name="test.ansi.compiled" depends="abcl.jar">
-		<echo>Recording test output in ${abcl.test.log.file}.</echo>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes" />
-		<java fork="${forked}" dir="${basedir}" classpathref="abcl.classpath.dist" classname="org.armedbear.lisp.Main">
-			<!-- Run in 64bit mode-->
-			<jvmarg value="-d64" />
-
-			<!-- Enable JVM assertions -->
-			<jvmarg value="-ea" />
-
-			<!-- (Possibly) unload classes when reference count reaches zero -->
-			<jvmarg value="-XX:+CMSClassUnloadingEnabled" />
-
-			<!-- Increase the size of the space used to store JVM class metadata. -->
-			<jvmarg value="-XX:MaxPermSize=768m" />
-
-			<arg value="--noinit" />
-			<arg value="--eval" />
-			<arg value="(require (quote asdf))" />
-			<arg value="--eval" />
-			<arg value="(asdf:initialize-source-registry `(:source-registry (:directory 	&#34;abcl/test/ansi/compiled&#34;) :inherit-configuration)))" />
-			<arg value="--eval" />
-			<arg value="(asdf:test-system :abcl/test/ansi/compiled)" />
-			<arg value="--eval" />
-			<arg value="(ext:exit)" />
-		</java>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="stop" />
-		<echo>Finished recording test output in ${abcl.test.log.file}.</echo>
-	</target>
-
-	<path id="abcl.classpath.test">
-		<pathelement location="lib/junit-4.10.jar" />
-		<pathelement location="lib/hamcrest-core-1.1.jar" />
-		<pathelement location="${abcl.jar.path}" />
-		<pathelement location="${env.CLASSPATH}" />
-		<pathelement location="${java.home}/../lib/tools.jar" />
-		<fileset dir="lib">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-
-	<target name="test.abcl" depends="abcl.jar">
-		<echo>Recording test output in ${abcl.test.log.file}.</echo>
-		<echo>Classpath is ${abcl.classpath.test}</echo>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes" />
-		<java fork="${forked}" dir="${basedir}" classpathref="abcl.classpath.test" classname="org.armedbear.lisp.Main">
-			<arg value="--noinit" />
-			<arg value="--eval" />
-			<arg value="(require (quote asdf))" />
-			<arg value="--eval" />
-			<arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration)))" />
-			<arg value="--eval" />
-			<arg value="(asdf:test-system :abcl)" />
-			<arg value="--eval" />
-			<arg value="(ext:exit)" />
-		</java>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="stop" />
-		<echo>Finished recording test output in ${abcl.test.log.file}.</echo>
-	</target>
-
-	<target name="test.cl-bench" depends="abcl.jar">
-		<echo>Recording test output in ${abcl.test.log.file}.</echo>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes" />
-		<java fork="true" dir="${basedir}" classpathref="abcl.classpath.dist" classname="org.armedbear.lisp.Main">
-			<arg value="--noinit" />
-			<arg value="--eval" />
-			<arg value="(require (quote asdf))" />
-			<arg value="--eval" />
-			<arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration))" />
-			<arg value="--eval" />
-			<arg value="(asdf:test-system :abcl/test/cl-bench)" />
-			<arg value="--eval" />
-			<arg value="(ext:exit)" />
-		</java>
-		<record name="${abcl.test.log.file}" emacsmode="true" action="stop" />
-		<echo>Finished recording test output in ${abcl.test.log.file}.</echo>
-	</target>
+    <target name="test.ansi.interpreted" depends="abcl.jar">
+      <echo>Recording test output in ${abcl.test.log.file}.</echo>
+      <record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes"/>
+      <java fork="true" dir="${basedir}"
+            classpathref="abcl.classpath.dist"
+            classname="org.armedbear.lisp.Main">
+        <arg value="--noinit"/>
+        <arg value="--eval"/><arg value="(require (quote asdf))"/>
+        <arg value="--eval"/>
+          <arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration))"/>
+        <arg value="--eval"/><arg value="(asdf:test-system :abcl/test/ansi/interpreted)"/>
+        <arg value="--eval"/><arg value="(ext:exit)"/>
+      </java>
+      <record name="${abcl.test.log.file}" emacsmode="true" action="stop"/>
+      <echo>Finished recording test output in ${abcl.test.log.file}.</echo>
+    </target>
 
 
-	<target name="abcl.diagnostic" description="Emit diagnostics describing available hosting JVM properties." depends="abcl.build.diagnostic" />
-	<!--
+    <target name="test.ansi.interpreted.old-asdf" depends="abcl.jar">
+      <echo>Recording test output in ${abcl.test.log.file}.</echo>
+      <record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes"/>
+      <java fork="true" dir="${basedir}"
+            classpathref="abcl.classpath.dist"
+            classname="org.armedbear.lisp.Main">
+        <arg value="--noinit"/> 
+        <arg value="--eval"/><arg value="(require (quote asdf))"/>
+        <arg value="--eval"/>
+          <arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration))"/>
+        <arg value="--eval"/><arg value="(asdf:load-system :abcl)"/>
+        <arg value="--eval"/><arg value="(asdf:test-system :ansi-interpreted)"/>
+      </java>
+      <record name="${abcl.test.log.file}" emacsmode="true" action="stop"/>
+      <echo>Finished recording test output in ${abcl.test.log.file}.</echo>
+    </target>
+
+    <target name="test.ansi.compiled" depends="abcl.jar">
+      <echo>Recording test output in ${abcl.test.log.file}.</echo>
+      <record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes"/>
+      <java fork="${forked}" dir="${basedir}"
+            classpathref="abcl.classpath.dist"
+            classname="org.armedbear.lisp.Main">
+        <!-- Run in 64bit mode-->
+        <jvmarg value="-d64"/>
+
+        <!-- Enable JVM assertions -->
+        <jvmarg value="-ea"/>
+
+        <!-- (Possibly) unload classes when reference count reaches zero -->
+        <jvmarg value="-XX:+CMSClassUnloadingEnabled"/>
+
+        <!-- Increase the size of the space used to store JVM class metadata. -->
+        <jvmarg value="-XX:MaxPermSize=768m"/>
+
+        <arg value="--noinit"/>
+        <arg value="--eval"/><arg value="(require (quote asdf))"/>
+        <arg value="--eval"/>
+          <arg value="(asdf:initialize-source-registry `(:source-registry (:directory 	&#34;abcl/test/ansi/compiled&#34;) :inherit-configuration)))"/>
+        <arg value="--eval"/><arg value="(asdf:test-system :abcl/test/ansi/compiled)"/>
+        <arg value="--eval"/><arg value="(ext:exit)"/>
+      </java>
+      <record name="${abcl.test.log.file}" emacsmode="true" action="stop"/>
+    	<echo>Finished recording test output in ${abcl.test.log.file}.</echo>
+    </target>
+
+    <path id="abcl.classpath.test">
+        <pathelement location="lib/junit-4.10.jar"/>
+        <pathelement location="lib/hamcrest-core-1.1.jar"/>
+        <pathelement location="${abcl.jar.path}"/>
+        <pathelement location="${env.CLASSPATH}"/>
+    	<pathelement location="${java.home}/../lib/tools.jar"/>
+    	 <fileset dir="lib">
+    	    <include name="**/*.jar" />
+    	  </fileset>
+    </path>
+	
+    <target name="test.abcl" depends="abcl.jar">
+      <echo>Recording test output in ${abcl.test.log.file}.</echo>
+      	<echo>Classpath is ${abcl.classpath.test}</echo>    	
+      <record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes"/>
+      <java fork="${forked}" dir="${basedir}"
+            classpathref="abcl.classpath.test"
+            classname="org.armedbear.lisp.Main">
+        <arg value="--noinit"/>
+        <arg value="--eval"/><arg value="(require (quote asdf))"/>
+        <arg value="--eval"/>
+          <arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration)))"/>
+        <arg value="--eval"/><arg value="(asdf:test-system :abcl)"/>
+        <arg value="--eval"/><arg value="(ext:exit)"/>
+      </java>
+      <record name="${abcl.test.log.file}" emacsmode="true" action="stop"/>
+      <echo>Finished recording test output in ${abcl.test.log.file}.</echo>
+    </target>
+
+    <target name="test.cl-bench" depends="abcl.jar">
+      <echo>Recording test output in ${abcl.test.log.file}.</echo>
+      <record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes"/>
+      <java fork="true" dir="${basedir}"
+            classpathref="abcl.classpath.dist"
+            classname="org.armedbear.lisp.Main">
+        <arg value="--noinit"/>
+        <arg value="--eval"/><arg value="(require (quote asdf))"/>
+        <arg value="--eval"/>
+          <arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration))"/>
+        <arg value="--eval"/><arg value="(asdf:test-system :abcl/test/cl-bench)"/>
+        <arg value="--eval"/><arg value="(ext:exit)"/>
+      </java>
+      <record name="${abcl.test.log.file}" emacsmode="true" action="stop"/>
+      <echo>Finished recording test output in ${abcl.test.log.file}.</echo>
+    </target>
+
+
+<target name="abcl.diagnostic"
+        description="Emit diagnostics describing available hosting JVM properties."
+        depends="abcl.build.diagnostic"/>
+<!--
 
 urn:org.abcl.build.ant.targets.diagnostic
 
@@ -1115,45 +1291,56 @@ user.dir
 
 -->
 
-	<target name="abcl.build.diagnostic" description="Emit diagnostics describing available hosting JVM properties.">
-		<echo>:java.version    ${java.version}</echo>
-		<echo>:java.vendor     ${java.vendor}</echo>
-		<echo>:java.vm.vendor  ${java.vm.vendor}</echo>
-		<echo>:java.vm.name    ${java.vm.name}</echo>
+<target name="abcl.build.diagnostic" description="Emit diagnostics describing available hosting JVM properties.">
+  <echo>:java.version    ${java.version}</echo>
+  <echo>:java.vendor     ${java.vendor}</echo>
+  <echo>:java.vm.vendor  ${java.vm.vendor}</echo>
+  <echo>:java.vm.name    ${java.vm.name}</echo>
 
-		<echo>:os.name    ${os.name}</echo>
-		<echo>:os.arch    ${os.arch}</echo>
-		<echo>:os.version ${os.version}</echo>
+  <echo>:os.name    ${os.name}</echo>
+  <echo>:os.arch    ${os.arch}</echo>
+  <echo>:os.version ${os.version}</echo>
 
-		<echo>:java.specification.version       ${java.specification.version}</echo>
-		<echo>:java.vm.specification.version    ${java.vm.specification.version}</echo>
-	</target>
+  <echo>:java.specification.version       ${java.specification.version}</echo>
+  <echo>:java.vm.specification.version    ${java.vm.specification.version}</echo>
+</target>
 
-	<target name="abcl.release" depends="abcl.clean,abcl.binary.tar,abcl.source.tar,abcl.binary.zip,abcl.source.zip">
-		<copy file="${abcl.jar.path}" tofile="${dist.dir}/abcl-${abcl.version}.jar" />
-		<copy file="${abcl-contrib.jar}" tofile="${dist.dir}/abcl-contrib-${abcl.version}.jar" />
-	</target>
+    <target name="abcl.release"
+            depends="abcl.clean,abcl.binary.tar,abcl.source.tar,abcl.binary.zip,abcl.source.zip">
+      <copy file="${abcl.jar.path}"
+            tofile="${dist.dir}/abcl-${abcl.version}.jar"/>
+      <copy file="${abcl-contrib.jar}"
+            tofile="${dist.dir}/abcl-contrib-${abcl.version}.jar"/>
+    </target>
 
-	<target name="abcl.documentation" depends="abcl.documentation.manual,abcl.documentation.asdf" />
-	<target name="abcl.documentation.manual" depends="abcl.stamp.version">
-		<echo>This target requires 'make' and a LaTeX installation to be on the PATH.</echo>
-		<exec executable="make" dir="${basedir}/doc/manual" />
-		<copy file="doc/manual/abcl.pdf" tofile="${dist.dir}/abcl-${abcl.version}.pdf" />
-	</target>
-	<target name="abcl.documentation.asdf">
-		<echo>This target requires 'texi2pdf' to be on the PATH.</echo>
-		<exec executable="texi2pdf" dir="${basedir}/doc/asdf">
-			<arg value="asdf.texinfo" />
-		</exec>
-		<copy file="doc/asdf/asdf.pdf" tofile="${dist.dir}/asdf.pdf" />
-	</target>
+    <target name="abcl.documentation"
+            depends="abcl.documentation.manual,abcl.documentation.asdf"/>
+    <target name="abcl.documentation.manual"
+            depends="abcl.stamp.version">
+      <echo>This target requires 'make' and a LaTeX installation to be on the PATH.</echo>
+      <exec
+          executable="make"
+          dir="${basedir}/doc/manual"/>
+      <copy file="doc/manual/abcl.pdf"
+            tofile="${dist.dir}/abcl-${abcl.version}.pdf"/>
+    </target>
+    <target name="abcl.documentation.asdf">
+      <echo>This target requires 'texi2pdf' to be on the PATH.</echo>
+      <exec
+          executable="texi2pdf"
+          dir="${basedir}/doc/asdf">
+        <arg value="asdf.texinfo"/>
+      </exec>
+      <copy file="doc/asdf/asdf.pdf"
+            tofile="${dist.dir}/asdf.pdf"/>
+    </target>
 
-	<import file="build-snapshot.xml" optional="true" />
+        <import file="build-snapshot.xml" optional="true"/>
 
-	<import file="netbeans-build.xml" optional="true" />
-	<import file="not.org-build.xml" optional="true" />
-	<import file="build-maven.xml" optional="true" />
-	<import file="j-build.xml" optional="true" />
+    <import file="netbeans-build.xml" optional="true"/>
+    <import file="not.org-build.xml" optional="true"/>
+    <import file="build-maven.xml" optional="true"/> 
+    <import file="j-build.xml" optional="true"/> 
 	<!--
     <import file="etc/ant/netbeans-build.xml" optional="true"/> 
     <import file="etc/ant/build-snapshot.xml" optional="true"/>

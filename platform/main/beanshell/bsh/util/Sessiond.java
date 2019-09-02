@@ -41,58 +41,48 @@ import bsh.NameSpace;
     Note: the sessiond effectively maps all connections to the same interpreter
     (shared namespace).
 */
-public class Sessiond extends Thread
-{
-    private ServerSocket ss;
-    NameSpace globalNameSpace;
+public class Sessiond extends Thread {
+	private ServerSocket ss;
+	NameSpace globalNameSpace;
 
-    /*
-    public static void main(String argv[]) throws IOException
-    {
-        new Sessiond( Integer.parseInt(argv[0])).start();
-    }
-    */
+	public static void main(String argv[]) throws IOException {
+		argv = org.logicmoo.system.Startup.extractOptions(Sessiond.class, argv);
+		//new Sessiond(  Integer.parseInt(argv[0])).start();
+	}
 
-    public Sessiond(NameSpace globalNameSpace, int port) throws IOException
-    {
-        ss = new ServerSocket(port);
-        this.globalNameSpace = globalNameSpace;
-    }
+	public Sessiond(NameSpace globalNameSpace, int port) throws IOException {
+		ss = new ServerSocket(port);
+		this.globalNameSpace = globalNameSpace;
+	}
 
-    public void run()
-    {
-        try
-        {
-            while(true)
-                new SessiondConnection(globalNameSpace, ss.accept()).start();
-        }
-        catch(IOException e) { System.out.println(e); }
-    }
+	public void run() {
+		try {
+			while (true)
+				new SessiondConnection(globalNameSpace, ss.accept()).start();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+	}
 }
 
-class SessiondConnection extends Thread
-{
-    NameSpace globalNameSpace;
-    Socket client;
-    Interpreter i;
+class SessiondConnection extends Thread {
+	NameSpace globalNameSpace;
+	Socket client;
+	Interpreter i;
 
-    SessiondConnection(NameSpace globalNameSpace, Socket client)
-    {
-        this.client = client;
-        this.globalNameSpace = globalNameSpace;
-    }
+	SessiondConnection(NameSpace globalNameSpace, Socket client) {
+		this.client = client;
+		this.globalNameSpace = globalNameSpace;
+	}
 
-    public void run()
-    {
-        try (Reader in = new FileReader(client.getInputStream())) {
-            PrintStream out = new PrintStream(
-                    client.getOutputStream(), true, "UTF-8");
-            i = new Interpreter(
-                in, out, out, true, globalNameSpace);
-            i.setExitOnEOF( false ); // don't exit interpreter
-            i.run();
-        }
-        catch(IOException e) { System.out.println(e); }
-    }
+	public void run() {
+		try (Reader in = new FileReader(client.getInputStream())) {
+			PrintStream out = new PrintStream(client.getOutputStream(), true, "UTF-8");
+			i = new Interpreter(in, out, out, true, globalNameSpace);
+			i.setExitOnEOF(false); // don't exit interpreter
+			i.run();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+	}
 }
-

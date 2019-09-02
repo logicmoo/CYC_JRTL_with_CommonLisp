@@ -10,6 +10,8 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JPanel;
 
+import org.logicmoo.system.Startup;
+
 import bsh.Interpreter;
 
 /**
@@ -37,6 +39,7 @@ public class BshPane extends JConsole {
 				f.dispose();
 			}
 		} );
+		Startup.extractOptions(BshPane.class, args);
 		Container d;
 		//d.disposeOnClose(f);
 		//f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);

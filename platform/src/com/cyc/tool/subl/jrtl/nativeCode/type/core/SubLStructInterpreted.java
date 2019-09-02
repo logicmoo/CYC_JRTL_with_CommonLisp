@@ -1,6 +1,5 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
-import static org.logicmoo.system.Startup.wasSetField;
 
 import java.util.Arrays;
 
@@ -10,6 +9,7 @@ import org.armedbear.lisp.Layout;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.StructureObject;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -64,7 +64,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 	Object was = slots[pingAt];
 	final SubLNil theNil = SubLNil.NIL;
 	Arrays.fill(slots, theNil);
-	wasSetField(this, pingAt, pingAt, was, theNil);
+	BeanShellCntrl.wasSetField(this, pingAt, pingAt, was, theNil);
     }
 
     public void reallySetSlot(int index, LispObject newValue) throws ArrayIndexOutOfBoundsException {
@@ -72,7 +72,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 	if (index == 0 || index == pingAt) {
 	    Object was = getSlotValue(index);
 	    slots[index] = newValue;
-	    wasSetField(this, index, pingAt, was, newValue);
+	    BeanShellCntrl.wasSetField(this, index, pingAt, was, newValue);
 	    return;
 	}
 	slots[index] = newValue;

@@ -25,13 +25,15 @@
  *****************************************************************************/
 package bsh;
 
+import org.logicmoo.system.Startup;
+
 /**
     Console startup class.
 */
 public class Console
 {
     public static void main( String args[] ) {
-
+    	Startup.extractOptions(Console.class, args);
         if ( !Capabilities.classExists( "bsh.util.Util" ) )
             System.out.println("Can't find the BeanShell utilities...");
 

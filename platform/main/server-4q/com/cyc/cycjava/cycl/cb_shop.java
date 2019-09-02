@@ -1882,7 +1882,8 @@ public final class cb_shop extends SubLTranslatedFile {
 
     public static SubLObject cb_shop_extract_problem(final SubLObject args) {
         if (NIL != args) {
-            final SubLObject domain_mt_string = string_utilities.trim_whitespace(html_extract_input($str162$domain_mt, args));
+            final SubLObject html_extract_input = html_extract_input($str162$domain_mt, args);
+			final SubLObject domain_mt_string = string_utilities.trim_whitespace(html_extract_input);
             final SubLObject domain_mt = constants_high.find_constant(domain_mt_string);
             final SubLObject task_string = string_utilities.trim_whitespace(html_extract_input($$$task, args));
             final SubLObject task = cb_form_widgets.cb_extract_query_formula_from_string(task_string, domain_mt);

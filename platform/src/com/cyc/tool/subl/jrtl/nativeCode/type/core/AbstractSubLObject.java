@@ -39,9 +39,8 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
 	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject#getJavaClass()
 	 */
 	@Override
-	public Class getJavaClass() {
-		// TODO Auto-generated method stub
-		return this.getClass();
+	public Class<?> getJavaClass() {
+		return getClass();
 	}
 
 	public Object termRef;

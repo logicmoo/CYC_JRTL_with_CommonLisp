@@ -32,6 +32,7 @@
  */
 
 package org.armedbear.lisp;
+
 import static org.armedbear.lisp.Lisp.EOF;
 import static org.armedbear.lisp.Lisp.LISP_NOT_JAVA;
 import static org.armedbear.lisp.Lisp.NIL;
@@ -51,9 +52,7 @@ import static org.armedbear.lisp.Lisp.getStandardInput;
 import static org.armedbear.lisp.Lisp.getStandardOutput;
 import static org.armedbear.lisp.Lisp.initialized;
 import static org.armedbear.lisp.Lisp.intern;
-import static org.armedbear.lisp.Main.addUncaught;
 import static org.armedbear.lisp.Main.startTimeMillis;
-import static org.logicmoo.system.Startup.scanForExports;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -68,21 +67,14 @@ import org.logicmoo.system.Startup;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
-public final class Interpreter implements Runnable {
-	// There should only be one globalInterpreter.
-	public static Interpreter globalInterpreter;
+public final class Interpreter extends Startup implements Runnable {
 
-	public static boolean jlisp;
+	public static boolean doubledash = false;
+
+	public static String RC_FILE = ".abclrc";
+
 	private final InputStream inputStream;
 	private final OutputStream outputStream;
-
-	public static boolean noinit = false;
-	public static boolean nosystem = false;
-	public static String RC_FILE = ".abclrc";
-	public static boolean noinform = false;
-	public static boolean postProcess = true;
-	public static boolean help = false;
-	public static boolean doubledash = false;
 
 	public static Interpreter getInstance() {
 		synchronized (Interpreter.class) {
@@ -92,18 +84,7 @@ public final class Interpreter implements Runnable {
 
 	// Interface.
 	public static Interpreter createInstance() {
-		try {
-			synchronized (Interpreter.class) {
-				if (globalInterpreter != null)
-					return null;
-				globalInterpreter = new Interpreter();
-				_NOINFORM_.setSymbolValue(T);
-				initializeLisp();
-				return globalInterpreter;
-			}
-		} finally {
-			postProcessCommandLine(Main.passedArgs);
-		}
+		return createDefaultInstance(passedArgs);
 	}
 
 	// Interface.
@@ -123,16 +104,29 @@ public final class Interpreter implements Runnable {
 	}
 
 	public static Interpreter createDefaultInstance(String[] args) {
+		boolean postrgs = false;
 		try {
 			synchronized (Interpreter.class) {
 				if (globalInterpreter != null) {
 					return null;
 				}
 				globalInterpreter = new Interpreter();
+				postrgs = true;
 				return initInstance(globalInterpreter, args, false);
 			}
 		} finally {
-			postProcessCommandLine(args);
+			if (postrgs)
+				postProcessCommandLine(args);
+		}
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	public static void ensureInitialized() {
+		synchronized (Interpreter.class) {
+			if (!initialized)
+				initializeLisp(jlisp);
 		}
 	}
 
@@ -140,13 +134,14 @@ public final class Interpreter implements Runnable {
 		//Interpreter.globalInterpreter = interp;
 		if (args != null)
 			preprocessCommandLineArguments(args);
+
 		if (!noinform) {
-			Stream out = getStandardOutput();
+			final Stream out = getStandardOutput();
 			out._writeString(banner());
 			out._finishOutput();
 		}
 		if (help) {
-			Stream out = getStandardOutput();
+			final Stream out = getStandardOutput();
 			out._writeString(help());
 			out._finishOutput();
 			exit(0); // FIXME
@@ -155,13 +150,11 @@ public final class Interpreter implements Runnable {
 			_NOINFORM_.setSymbolValue(T);
 		else {
 			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
-			getStandardOutput()._writeString("Low-level initialization completed in " + uptime + " seconds.\n");
+			final Stream out = getStandardOutput();
+			out._writeString("Low-level initialization completed in " + uptime + " seconds.\n");
 		}
-		if (jLisp || jlisp) {
-			initializeJLisp();
-		} else {
-			initializeLisp();
-		}
+
+		initializeLisp(jLisp || jlisp);
 
 		initializeTopLevel();
 
@@ -189,6 +182,7 @@ public final class Interpreter implements Runnable {
 
 		if (Main.subLisp != null)
 			SubLPackage.setCurrentPackage("CL-USER");
+
 		//globalInterpreter.eval("(cl:funcall #'top-level::top-level-loop)");
 		///StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
 		return interp;
@@ -219,20 +213,22 @@ public final class Interpreter implements Runnable {
 	}
 
 	public static Interpreter createJLispInstance(InputStream in, OutputStream out, String initialDirectory, String version) {
+		boolean postrgs = false;
 		try {
 			synchronized (Interpreter.class) {
-				if (Interpreter.globalInterpreter != null) {
-					return null;
-				}
+				postrgs = true;
 				globalInterpreter = new Interpreter(in, out, initialDirectory);
 				return initInstance(globalInterpreter, new String[0], true);
 			}
+
 		} finally {
-			postProcessCommandLine(Main.passedArgs);
+			if (postrgs)
+				postProcessCommandLine(Main.passedArgs);
 		}
 	}
 
-	public static Interpreter createNewLispInstance(InputStream in, OutputStream out, String initialDirectory, String version, boolean redoTodo) {
+	public static Interpreter createNewLispInstance(InputStream in, OutputStream out, String initialDirectory, String version, //
+			boolean jlisp0, boolean redoTodo) {
 		String[] todo = null;
 		try {
 			synchronized (Interpreter.class) {
@@ -243,7 +239,7 @@ public final class Interpreter implements Runnable {
 					globalInterpreter = interp;
 					redoTodo = true;
 				}
-				return initInstance(interp, new String[0], false);
+				return initInstance(interp, new String[0], jlisp0);
 			}
 		} finally {
 			if (todo != null && redoTodo) {
@@ -270,7 +266,7 @@ public final class Interpreter implements Runnable {
 	private Interpreter(InputStream inputStream, OutputStream outputStream, String initialDirectory) {
 		Main.lispInstances++;
 		//if(!Main.noBSH)BeanShellCntrl.setSingleton(this);
-		jlisp = true;
+		//jlisp = true;
 		this.inputStream = inputStream;
 		this.outputStream = outputStream;
 		Lisp.setIO(inputStream, outputStream);
@@ -284,40 +280,47 @@ public final class Interpreter implements Runnable {
 		return Lisp.eval(new StringInputStream(s).read(true, NIL, false, LispThread.currentThread(), Stream.currentReadtable));
 	}
 
-	public static void initializeLisp() {
-		synchronized (Interpreter.class) {
-			if (!initialized) {
-				//		if (globalInterpreter == null) {
-				//		    globalInterpreter = new Interpreter();
-				//		    _NOINFORM_.setSymbolValue(T);
-				//		}
-				Load.loadSystemFile("boot.lisp", false, false, false);
-				initialized = true;
-			}
-		}
+	public static void initializeJLisp() {
+		initializeLisp(true);
 	}
 
-	public static void initializeJLisp() {
+	public static void initializeLisp() {
+		initializeLisp(false);
+	}
+
+	public static void initializeLisp(boolean jlisp) {
 		synchronized (Interpreter.class) {
 			if (!initialized) {
-				addFeature("J");
+				initialized = true;
+				if (jlisp)
+					addFeature("J");
+
 				Load.loadSystemFile("boot.lisp", false, false, false);
 				try {
-
 					try {
-						Class.forName("org.armedbear.j.LispAPI");
+						if (jlisp)
+							Class.forName("org.armedbear.j.LispAPI");
 					} catch (ClassNotFoundException e) {
 					} // FIXME: what to do?
 					try {
-						Load.loadSystemFile("j.lisp", false); // not being autoloaded
+						if (jlisp)
+							Load.loadSystemFile("j.lisp", false); // not being autoloaded
 					} catch (Throwable e) {
 						e.printStackTrace();
 					} // FIXME: what to do?
-						// Load.loadSystemFile("emacs.lisp", true); // not being autoloaded
+					try {
+						if (jlisp && false)
+							Load.loadSystemFile("emacs.lisp", true); // not being autoloaded
+
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+					initialized = true;
+
 				} catch (Throwable e) {
+					initialized = false;
 					e.printStackTrace();
 				} // FIXME: what to do?
-				initialized = true;
 			}
 		}
 	}
@@ -342,6 +345,7 @@ public final class Interpreter implements Runnable {
 
 	public static void processInitializationFile() {
 		synchronized (Interpreter.class) {
+			boolean wasNoInit = noinit;
 			try {
 				Interpreter.noinit = true;
 				// checks local directory firsts
@@ -362,7 +366,7 @@ public final class Interpreter implements Runnable {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-				Interpreter.noinit = false;
+				Interpreter.noinit = wasNoInit;
 			}
 		}
 	}
@@ -473,6 +477,7 @@ public final class Interpreter implements Runnable {
 						try {
 							evaluate("(setf *load-verbose* t)");
 							evaluate("(setf trace-lisp 10)");
+							//String eval = "(handler-case (compile-system :zip nil :quit t :output-path \"${abcl.lisp.output}/\") (t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))";
 							evaluate("(handler-case (compile-system :zip nil :quit t :output-path \"build/classes/\") " + "(t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))");
 						} catch (UnhandledCondition c) {
 							addUncaught(c);
@@ -752,8 +757,7 @@ public final class Interpreter implements Runnable {
 	 *      should be passed to the Lisp debugger
 	 */
 	public static LispObject evaluate(String s) {
-		if (!initialized)
-			initializeJLisp();
+		ensureInitialized();
 		StringInputStream stream = new StringInputStream(s);
 		final LispThread thread = LispThread.currentThread();
 		LispObject obj = null;

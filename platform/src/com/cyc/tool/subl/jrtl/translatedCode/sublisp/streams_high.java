@@ -789,7 +789,9 @@ public class streams_high extends SubLTrampolineFile {
 
 	public static final int EOF_CHAR = -1;
 
-	
+	static {
+
+	}
 
 	@Override
 	public void declareFunctions() {

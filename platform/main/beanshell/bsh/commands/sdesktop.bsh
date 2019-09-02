@@ -9,6 +9,8 @@
  */
 
 import javax.swing.*;
+import java.awt.*;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.border.*;
 import bsh.util.JConsole;
 import bsh.util.Util;
@@ -44,7 +46,7 @@ sdesktop()
 
 	// Disallowed by applet security
 	try {
-		bsh.system.fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().
+		bsh.system.fonts = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
 			getAvailableFontFamilyNames();
 	} catch ( SecurityException se ) { }
 
@@ -91,7 +93,7 @@ sdesktop()
 
 	addInternalFrame( frame )
 	{
-		iframeListener=new InternalFrameListener() {
+		iframeListener=new javax.swing.event.InternalFrameListener() {
 
 			internalFrameClosing(ife) {
 				for(e:new Hashtable(frameMap).entrySet()) {
@@ -156,19 +158,23 @@ sdesktop()
 
 	actionPerformed( e )
 	{
-		this.com = e.getActionCommand();
-		if ( com.equals("New Bsh Workspace") )
-			makeWorkspace( ""+ super.windowCount++);
-		else if ( com.equals("New Lisp Thread") )
-			makeConsole( "Lisp Console: "+ super.windowCount++);
-		if ( com.equals("New Class Browser") )
-			classBrowser();
-		else if	( com.equals("Save Workspace") )
-			JOptionPane.showInternalMessageDialog( pane, "Unimplemented" );
-		else if	( com.equals("Exit") )
-			shutdown();
+		this.com = e.getActionCommand().toLowerCase();
+		actNow(this.com);
 	}
 
+	actNow(String c) {
+		if(c.startsWith("new")) {
+			if(c.contains("workspace")) makeWorkspace( ""+ super.windowCount++);
+			else if(c.contains("subl")) embedComponent(new com.cyc.tool.subl.ui.SubLReaderPanel(com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment.currentEnvironment()) , "SubLisp Console: "+ super.windowCount++);
+			else if(c.contains("lisp")) makeConsole( "Lisp Console: "+ super.windowCount++);
+			else if(c.contains("class browser")) classBrowser();			
+		}
+		else if	( c.equals("save workspace") )
+			JOptionPane.showInternalMessageDialog( pane, "Unimplemented" );
+		else if	( c.equals("exit") )
+			shutdown();
+	}
+	
 	this.pane = org.logicmoo.system.BeanShellCntrl.findDesktopPane(this);
 
 	if(this.pane==null || this.pane==void) {
@@ -183,12 +189,23 @@ sdesktop()
 	mi=new JMenuItem("New Class Browser");
 	mi.addActionListener(this);
 	popup.add( mi );
+
 	mi=new JMenuItem("Save Workspace");
 	mi.addActionListener(this);
 	popup.add( mi );
+	
+	mi=new JMenuItem("New SubLisp Thread");
+	mi.addActionListener(this);
+	popup.add( mi );
+	
+	mi=new JMenuItem("New Prolog Thread");
+	mi.addActionListener(this);
+	popup.add( mi );
+	
 	mi=new JMenuItem("New Lisp Thread");
 	mi.addActionListener(this);
 	popup.add( mi );
+	
 	mi=new JMenuItem("Exit");
 	mi.addActionListener(this);
 	popup.add( mi );
@@ -232,6 +249,7 @@ sdesktop()
 	}
 
 	*/
+	
 
 	// start one terminal
 	workSpace=makeWorkspace( ""+windowCount++	);
@@ -239,13 +257,10 @@ sdesktop()
 	// confirm the breakpoint
 	org.logicmoo.system.BeanShellCntrl.bp();
 
-	// start next terminal
-	makeConsole( "Lisp Console: "+windowCount++	);
-
-
-	makeConsole( "Prolog Console: "+windowCount++	);
-
-
+	//if(org.logicmoo.system.BeanShellCntrl.needIOConsole) {
+	//org.logicmoo.system.BeanShellCntrl.needIOConsole = false;
+	makeConsole( "System IO: "+windowCount++	);
+//}
 	frame.setSize(800,600);
 	frame.show();
 
@@ -253,4 +268,13 @@ sdesktop()
 
 	frame.toFront();
 	workSpace.frame.selected=true;
+	
+	// start next terminal
+	makeConsole( "Lisp Console: "+windowCount++	);
+	
+	//if(!org.logicmoo.system.BeanShellCntrl.noInitCyc) actNow("new subl");
+
+	//if(!org.logicmoo.system.BeanShellCntrl.noProlog)  actNow("new prolog");
+
+	
 }

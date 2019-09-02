@@ -49,7 +49,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-
 public class SpecialMethod extends SpecialOperator {
 	boolean evalArgs = true;
 	// LispMethod lispMethod;

@@ -426,6 +426,7 @@ public class ClassBrowser extends JSplitPane
     public static void main( String [] args )
         throws Exception
     {
+    	args = org.logicmoo.system.Startup.extractOptions(ClassBrowser.class, args);
         ClassBrowser cb = new ClassBrowser();
         cb.init();
 

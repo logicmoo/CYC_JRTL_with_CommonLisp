@@ -1,6 +1,6 @@
 package org.armedbear.lisp;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileWriter;

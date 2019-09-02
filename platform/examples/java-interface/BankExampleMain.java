@@ -1,8 +1,8 @@
 import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.Symbol;
+import org.armedbear.lisp.Packages;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.LispObject;
-import org.armedbear.lisp.Packages;
-import org.armedbear.lisp.Symbol;
 
 public class BankExampleMain 
 {

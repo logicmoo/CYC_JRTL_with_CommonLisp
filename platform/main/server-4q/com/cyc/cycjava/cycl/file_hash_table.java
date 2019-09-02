@@ -4855,11 +4855,11 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject write_fht_uint4(final SubLObject stream, final SubLObject value) {
-        return write_positive_integer_as_byte_sequence(value, FOUR_INTEGER, stream, T);
+        return com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.write_positive_integer_as_byte_sequence(value, FOUR_INTEGER, stream, T);
     }
 
     public static SubLObject read_fht_uint8(final SubLObject stream) {
-        return read_byte_sequence_to_positive_integer(EIGHT_INTEGER, stream, T, NIL, T);
+        return com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.read_byte_sequence_to_positive_integer(EIGHT_INTEGER, stream, T, NIL, T);
     }
 
     public static SubLObject write_fht_uint8(final SubLObject stream, final SubLObject value) {

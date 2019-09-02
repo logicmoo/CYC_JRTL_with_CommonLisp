@@ -173,6 +173,7 @@ public class LoadMap {
 	}
 
 	public static void main(String[] args) {
+		args = org.logicmoo.system.Startup.extractOptions(LoadMap.class, args);
 		String mapFile = "/tmp/kbless-state.cfasl.map";
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream("/tmp/kbless-state.cfasl.map"));

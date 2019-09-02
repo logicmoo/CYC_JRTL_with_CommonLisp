@@ -1,6 +1,5 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
-import static org.logicmoo.system.Startup.ensureMainReader;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import org.armedbear.lisp.JavaException;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.Main;
+import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -293,7 +293,7 @@ public class Errors extends SubLTrampolineFile {
 		}
 		SubLReader reader = getReaderForCurrentThread();
 		if (reader == null) {
-			reader = ensureMainReader();
+			reader = BeanShellCntrl.ensureMainReader();
 		}
 		RestartMethod restartMethod = null;
 		if (!reader.isInReaderThread()) {

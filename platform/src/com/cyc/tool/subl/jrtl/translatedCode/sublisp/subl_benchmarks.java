@@ -8,6 +8,8 @@
  *
  */
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
+
+
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
@@ -52,10 +54,11 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.princ_to_
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static org.logicmoo.system.Startup.addSubLFile;
 
 import java.util.Iterator;
 import java.util.Map;
+
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -278,7 +281,15 @@ public class subl_benchmarks implements SubLFile {
     // deflexical
     private static final SubLSymbol $benchmark_hash_table_exerciser_times$ = makeSymbol("*BENCHMARK-HASH-TABLE-EXERCISER-TIMES*");
 
-    
+    static {
+
+
+
+
+
+
+
+    }
 
     @Override
     public void declareFunctions() {
@@ -296,7 +307,7 @@ public class subl_benchmarks implements SubLFile {
     }
 
     public subl_benchmarks() {
-        addSubLFile(this);
+        BeanShellCntrl.addSubLFile(this);
     }
 }
 

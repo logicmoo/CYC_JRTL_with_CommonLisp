@@ -1999,6 +1999,8 @@ public interface CommonSymbols_SYM {
     SubLSymbol NEXT_STATES = makeCycSymbol("NEXT-STATES");
     SubLSymbol NEXT_TOKEN = makeCycSymbol("NEXT-TOKEN");
     SubLSymbol NIL_OR = makeCycSymbol("NIL-OR");
+    SubLSymbol NIL_OR_STRING = makeCycSymbol("NIL-OR-STRING");
+    SubLSymbol T_OR_NIL = makeCycSymbol("T-OR-NIL");
     SubLSymbol NL_GENERATION_CACHE_METHOD = makeCycSymbol("NL-GENERATION-CACHE-METHOD");
     SubLSymbol NL_MT = makeCycSymbol("NL-MT");
     SubLSymbol NL_PREDS = makeCycSymbol("NL-PREDS");

@@ -659,7 +659,62 @@ public class foreign extends SubLTranslatedFile {
 
     public static final SubLList $list45 = list(list(makeSymbol("RET"), makeSymbol("%VAL")));
 
-    
+    static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 
     @Override
     public void declareFunctions() {

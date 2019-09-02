@@ -3,7 +3,7 @@
 */
 import bsh.util.ClassBrowser;
 
-classBrowser()
+classBrowser( )
 {
     this.inDesktop = ( bsh.system.desktop != void );
 

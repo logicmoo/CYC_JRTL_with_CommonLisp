@@ -3,7 +3,6 @@
 // For LarKC
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
-import static org.logicmoo.system.Startup.addThis;
 
 import java.lang.reflect.Field;
 
@@ -11,6 +10,7 @@ import org.armedbear.lisp.Layout;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Symbol;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -108,7 +108,7 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
     protected SubLStructNative() {
 	layout = getStructDecl();
 	if (isTracked()) {
-	    addThis(this);
+	    BeanShellCntrl.addThis(this);
 	}
     }
 

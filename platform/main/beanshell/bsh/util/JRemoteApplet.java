@@ -70,6 +70,7 @@ public class JRemoteApplet extends JFrame
         setVisible(true);
     }
     public static void main(String[] args) {
+    	args = org.logicmoo.system.Startup.extractOptions(JRemoteApplet.class, args);
         new JWindow(new JRemoteApplet(Integer.parseInt(args[0])));
     }
 

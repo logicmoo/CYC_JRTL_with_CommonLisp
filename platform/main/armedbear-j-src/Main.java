@@ -1,3 +1,4 @@
+
 /*
  * Main.java
  *
@@ -19,38 +20,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import java.lang.reflect.Method;
-
 // @TODO Remove
 public final class Main {
-    public static void main(String[] args) {
-	MainJ.main(args);
-    }
-}
-final class MainJ
-{
-    public static void main(String[] args)
-    {
-        final String version = System.getProperty("java.version");
-        if (version.startsWith("1.0") || version.startsWith("1.1") ||
-            version.startsWith("1.2") || version.startsWith("1.3")) {
-            System.err.println("");
-            System.err.print("J requires Java 1.4 or later.");
-            System.err.println(" (Java 1.4.2 is recommended.)");
-            System.err.println("");
-            // System.exit(1);
-        }
-        try {
-            Class c = Class.forName("org.armedbear.j.Editor");
-            Class[] parameterTypes = new Class[1];
-            parameterTypes[0] = String[].class;
-            Method method = c.getMethod("main", parameterTypes);
-            Object[] parameters = new Object[1];
-            parameters[0] = args;
-            method.invoke(null, parameters);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public static void main(String[] args) {
+		org.armedbear.j.MainJ.main(args);
+	}
 }

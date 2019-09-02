@@ -20,37 +20,56 @@
 
 package org.armedbear.lisp.scripting;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
+import org.armedbear.lisp.Version;
+
 public class AbclScriptEngineFactory implements ScriptEngineFactory {
 
+	// Begin impl ScriptEnginInfo
+
+	/**
+	 * 
+	 */
+	private static final String ANSI_X3_226_1994 = "ANSI X3.226:1994";
+
+	final List<String> mimeTypes = Collections.unmodifiableList(Arrays.asList("application/x-lisp", "application/x-abcl"));
+
+	final List<String> names = Collections.unmodifiableList(Arrays.asList("ABCL", "cl", "Lisp", "Common Lisp", "lsp"));
+
+	final List<String> extensions = Collections.unmodifiableList(Arrays.asList("cl", "lisp", "lsp"));
+
+	// End impl ScriptEngineFactory
     private static AbclScriptEngine THE_ONLY_ONE_ENGINE = null;
 	
+	@Override
     public String getEngineName() {
 	return "ABCL Script";
     }
 
+	@Override
     public String getEngineVersion() {
-	return "0.1";
+		return Version.getVersion();
     }
 
+	@Override
     public List<String> getExtensions() {
-	List<String> extensions = new ArrayList<String>(1);
-	extensions.add("lisp");
-	return Collections.unmodifiableList(extensions);
+		return extensions;
     }
 
+	@Override
     public String getLanguageName() {
 	return "ANSI Common Lisp";
     }
 
+	@Override
     public String getLanguageVersion() {
-	return "ANSI X3.226:1994";
+		return ANSI_X3_226_1994;
     }
 
     public static String escape(String raw) {
@@ -68,7 +87,8 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	return sb.toString();
     }
 	
-    public String getMethodCallSyntax(String obj, String method, String... args) {
+	@Override
+	public String getMethodCallSyntax(String obj, String method, String[] args) {
 	StringBuilder sb = new StringBuilder();
 	sb.append("(jcall \"");
 	sb.append(method);
@@ -82,29 +102,47 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	return sb.toString();
     }
     
+	@Override
     public List<String> getMimeTypes() {
-	return Collections.unmodifiableList(new ArrayList<String>());
+		return mimeTypes;
     }
 
+	@Override
     public List<String> getNames() {
-	List<String> names = new ArrayList<String>(1);
-	names.add("ABCL");
-	names.add("cl");
-	names.add("Lisp");
-	names.add("Common Lisp");
-	return Collections.unmodifiableList(names);
+		return names;
     }
 
+	@Override
     public String getOutputStatement(String str) {
-	return "(cl:print \"" + str + "\")";
+		return "(cl:print \"" + escape(str) + "\")";
+	}
+
+	@Override
+	public Object getParameter(String param) {
+		if (param.equals(ScriptEngine.ENGINE)) {
+			return getEngineName();
+		}
+		if (param.equals(ScriptEngine.ENGINE_VERSION)) {
+			return getEngineVersion();
+		}
+		if (param.equals(ScriptEngine.NAME)) {
+			return getEngineName();
+		}
+		if (param.equals(ScriptEngine.LANGUAGE)) {
+			return getLanguageName();
+		}
+		if (param.equals(ScriptEngine.LANGUAGE_VERSION)) {
+			return getLanguageVersion();
+		}
+		if (param.equals("THREADING")) {
+			return "MULTITHREADED";
     }
 
-    public Object getParameter(String key) {
-	// TODO Auto-generated method stub
 	return null;
     }
 
-    public String getProgram(String... statements) {
+	@Override
+	public String getProgram(String[] statements) {
 	StringBuilder sb = new StringBuilder();
 	sb.append("(cl:progn");
 	for(String stmt : statements) {
@@ -115,6 +153,7 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	return sb.toString();
     }
     
+	@Override
     public synchronized ScriptEngine getScriptEngine() {
         if (THE_ONLY_ONE_ENGINE == null) {
             THE_ONLY_ONE_ENGINE = new AbclScriptEngine();

@@ -32,7 +32,6 @@
  */
 
 package org.armedbear.lisp;
-import static org.logicmoo.system.Startup.doThrow;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,6 +55,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jpl7.JPL;
+import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 
@@ -386,7 +386,7 @@ abstract public class Lisp extends ABCLStatic {
 
 	public static final LispObject error(LispObject condition) {
 		if (Main.isNoDebug()) {
-			throw doThrow(conditionToSubLException(condition));
+			throw BeanShellCntrl.doThrow(conditionToSubLException(condition));
 		}
 		if (Main.isSubLisp()) {
 			if (SubLMain.commonSymbolsOK)
@@ -493,79 +493,70 @@ abstract public class Lisp extends ABCLStatic {
 		return eval(obj, env, LispThread.currentThread());
 	}
 
-	public static final LispObject eval(LispObject obj, final Environment env, final LispThread thread)
+	public static final LispObject eval(final LispObject obj, final Environment env, final LispThread thread)
 
 	{
-		while (true) {
 
-			thread._values = null;
-			if (interrupted)
-				handleInterrupt();
-			if (thread.isDestroyed())
-				throw new ThreadDestroyed();
-			if (obj instanceof Symbol) {
-				Symbol symbol = (Symbol) obj;
-				LispObject result;
-				if (symbol.isSpecialVariable()) {
-					if (symbol.constantp())
-						return symbol.getSymbolValue();
-					else
-						result = thread.lookupSpecial(symbol);
-				} else if (env.isDeclaredSpecial(symbol))
-					result = thread.lookupSpecial(symbol);
+		thread._values = null;
+		if (interrupted)
+			handleInterrupt();
+		if (thread.isDestroyed())
+			throw new ThreadDestroyed();
+		if (obj instanceof Symbol) {
+			Symbol symbol = (Symbol) obj;
+			LispObject result;
+			if (symbol.isSpecialVariable()) {
+				if (symbol.constantp())
+					return symbol.getSymbolValue();
 				else
-					result = env.lookup(symbol);
+					result = thread.lookupSpecial(symbol);
+			} else if (env.isDeclaredSpecial(symbol))
+				result = thread.lookupSpecial(symbol);
+			else
+				result = env.lookup(symbol);
+			if (result == null) {
+				result = symbol.getSymbolMacro();
 				if (result == null) {
-					result = symbol.getSymbolMacro();
-					if (result == null) {
-						result = symbol.getSymbolValue();
-					}
-					if (result == null) {
-						return error(new UnboundVariable(symbol));
-					}
+					result = symbol.getSymbolValue();
 				}
-				if (result instanceof SymbolMacro) {
-					final LispObject expansion = ((SymbolMacro) result).getExpansion();
-					obj = expansion;
-					continue;
+				if (result == null) {
+					return error(new UnboundVariable(symbol));
 				}
-				return result;
-			} else if (obj instanceof Cons) {
-				LispObject first = ((Cons) obj).car;
-				final LispObject cdr = ((Cons) obj).cdr;
-				if (first instanceof Symbol) {
-					LispObject fun = env.lookupFunction(first);
+			}
+			if (result instanceof SymbolMacro)
+				return eval(((SymbolMacro) result).getExpansion(), env, thread);
+			return result;
+		} else if (obj instanceof Cons) {
+			LispObject first = ((Cons) obj).car;
+			final LispObject cdr = ((Cons) obj).cdr;
+			if (first instanceof Symbol) {
+				LispObject fun = env.lookupFunction(first);
 
-					if (isSpecialOperatorF(fun)) {
-						if (profiling)
-							if (!sampling)
-								fun.incrementCallCount();
-						// Don't eval args!
-						return ((Symbol) first).execute(cdr, env);
-						//fun.execute(((Cons)obj).cdr, env);
-					}
-					if (fun instanceof MacroObject) {
-						final LispObject macroexpand = macroexpand(obj, env, thread);
-						obj = macroexpand;
-						continue;
-
-					}
-					if (fun instanceof Autoload) {
-						Autoload autoload = (Autoload) fun;
-						autoload.load();
-						continue;
-					}
-					return evalCall(fun != null ? fun : first, cdr, env, thread);
-				} else {
-					if (first instanceof Cons && first.car() == Symbol.LAMBDA) {
-						Closure closure = new LambdaClosure(first, env);
-						return evalCall(closure, cdr, env, thread);
-					} else
-						return program_error("Illegal function object: " + first.princToString() + ".");
+				if (isSpecialOperatorF(fun)) {
+					if (profiling)
+						if (!sampling)
+							fun.incrementCallCount();
+					// Don't eval args!
+					return ((Symbol) first).execute(cdr, env);
+					//fun.execute(((Cons)obj).cdr, env);
 				}
-			} else
-				return obj;
-		}
+				if (fun instanceof MacroObject)
+					return eval(macroexpand(obj, env, thread), env, thread);
+				if (fun instanceof Autoload) {
+					Autoload autoload = (Autoload) fun;
+					autoload.load();
+					return eval(obj, env, thread);
+				}
+				return evalCall(fun != null ? fun : first, cdr, env, thread);
+			} else {
+				if (first instanceof Cons && first.car() == Symbol.LAMBDA) {
+					Closure closure = new LambdaClosure(first, env);
+					return evalCall(closure, cdr, env, thread);
+				} else
+					return program_error("Illegal function object: " + first.princToString() + ".");
+			}
+		} else
+			return obj;
 	}
 
 	public static final int CALL_REGISTERS_MAX = 8;

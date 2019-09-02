@@ -5,11 +5,6 @@
  */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import static org.logicmoo.system.Startup.cyc_repl;
-import static org.logicmoo.system.Startup.exit;
-import static org.logicmoo.system.Startup.lisp_repl;
-import static org.logicmoo.system.Startup.registerSelf;
-
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
@@ -38,6 +33,7 @@ import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Main;
 import org.jpl7.JPL;
 import org.jpl7.Query;
+import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 
 // Internal imports
@@ -54,6 +50,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
+import com.cyc.tool.subl.ui.SubLReaderPanel;
 import com.cyc.tool.subl.util.PatchFileLoader;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
@@ -65,12 +62,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
  *
  * @author goolsbey, tbrussea, dmiles
  */
-public class SubLMain {
-	public static boolean OPENCYC = false;
-	public static boolean TINY_KB = false;
-	public static boolean Never_REDEFINE = false;
-	public static boolean Always_REDEFINE = false;
-	public static boolean BOOTY_HACKZ = true;
+public class SubLMain extends Startup {
 
 	static {
 		SystemCurrent.setupIO();
@@ -231,22 +223,18 @@ public class SubLMain {
 	public static InputStream ORIGINAL_IN_STREAM;
 	public static PrintStream ORIGINAL_OUT_STREAM;
 	public static PrintStream ORIGINAL_ERR_STREAM;
-	public static SubLMain me;
-	private static List<Cleanup> cleanups;
-	private static Set<String> noArgCommandLineArgs;
-	private static Set<String> argRequiredCommandLineArgs;
+	final public static SubLMain me = new SubLMain();
+	final private static List<Cleanup> cleanups;
+	final private static Set<String> noArgCommandLineArgs;
+	final private static Set<String> argRequiredCommandLineArgs;
 	private static volatile boolean isInitialized;
 	private static volatile boolean isFullyInitialized;
-	private static ArrayList<SubLFunction> lowMemoryCallbacks;
+	final private static ArrayList<SubLFunction> lowMemoryCallbacks;
 	private static Semaphore lowMemorySemaphore;
 	private static volatile boolean isSubLInitialized;
 	public static volatile boolean isSubLInitialized_part0;
-	public static Runnable NOTHING_TO_DO;
-	protected static boolean noInitLisp = false;
-	public static boolean noInitCyc = true;
-	protected static boolean delayEvalParams = true;
-	protected static boolean noInit;
-	public static boolean commonSymbolsOK = false;
+	final public static Runnable NOTHING_TO_DO;
+
 	public static long fistStartTime;
 	protected static long startTime;
 	public static boolean shouldRunInBackground;
@@ -254,7 +242,6 @@ public class SubLMain {
 	private static List<String> loadedTranslatedSystems = new ArrayList<String>();
 	static {
 		captureStreams();
-		me = new SubLMain();
 		cleanups = Collections.synchronizedList(new ArrayList<Cleanup>(16));
 		noArgCommandLineArgs = new HashSet<String>();
 		argRequiredCommandLineArgs = new HashSet<String>();
@@ -706,19 +693,12 @@ public class SubLMain {
 	}
 
 	public static void main(String[] argsIn) {
-		SubLMain me = SubLMain.me;
-		Main.setSubLisp(true);
-		Main.isSubLispBindingMode = true;
-		noInitCyc = false;
-		delayEvalParams = false;
-		commonSymbolsOK = true;
 		if (argsIn == null || argsIn.length == 0) {
 			argsIn = new String[] { "--opencyc" };
 		}
-		final String[] args = Main.extractOptions(argsIn);
-		Interpreter.nosystem = true;
+		sublispStartupDefaults();
+		final String[] args = extractOptions(SubLMain.class, argsIn);
 		preInitLisp();
-		Interpreter.nosystem = true;
 		SubLPackage.initPackages();
 		trueMainReader = new SubLReader();
 		setMainReader(trueMainReader);
@@ -745,6 +725,20 @@ public class SubLMain {
 		SubLMain.commonSymbolsOK = true;
 		final RunnableMain runnable = new RunnableMain();
 		embeddedMain(args, runnable);
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	private static void sublispStartupDefaults() {
+		Main.noPrologJNI = true;
+		Interpreter.noinit = true;
+		Interpreter.nosystem = true;
+		Main.setSubLisp(true);
+		Main.isSubLispBindingMode = true;
+		noInitCyc = false;
+		delayEvalParams = false;
+		commonSymbolsOK = true;
 	}
 
 	public static void preInitLisp() {
@@ -797,7 +791,7 @@ public class SubLMain {
 
 	public static boolean shouldRunReadloopInGUI() {
 		Boolean value = (Boolean) me.argNameToArgValueMap.get("-gui");
-		return value == Boolean.TRUE;
+		return value == Boolean.TRUE || Startup.guiClass == SubLReaderPanel.class;
 	}
 
 	private static void writeSystemInfo() {

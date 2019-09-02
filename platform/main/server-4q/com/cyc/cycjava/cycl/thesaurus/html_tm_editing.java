@@ -6567,9 +6567,9 @@ public final class html_tm_editing extends SubLTranslatedFile implements V02 {
 							    SubLObject value = value_spec.first();
 							    SubLObject preferred = (NIL != forts.fort_p(value)) ? ((SubLObject) (tm_datastructures.concept_term(value, thesaurus))) : NIL;
 							    if (preferred.isString()) {
-								preferred = preferred;
+								//preferred = preferred;
 							    } else if (value.isString()) {
-								value = value;
+								//value = value;
 							    }
 
 							    if (NIL != forts.fort_p(value)) {

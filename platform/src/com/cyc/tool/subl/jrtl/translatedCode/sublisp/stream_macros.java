@@ -336,7 +336,54 @@ public class stream_macros extends SubLTranslatedFile {
 
     public static final SubLList $list43 = list(makeKeyword("SYNONYM"));
 
-    
+    static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 
     @Override
     public void declareFunctions() {

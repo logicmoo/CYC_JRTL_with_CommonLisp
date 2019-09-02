@@ -27,6 +27,8 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package bsh.org.objectweb.asm;
 
+import org.objectweb.asm.ConstantDynamic;
+
 /**
  * A visitor to visit a Java method. The methods of this class must be called in the following
  * order: ( <tt>visitParameter</tt> )* [ <tt>visitAnnotationDefault</tt> ] (

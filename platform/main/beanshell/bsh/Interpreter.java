@@ -36,7 +36,8 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ResourceBundle;
+
+import org.logicmoo.system.Startup;
 
 /**
  * The BeanShell script interpreter.
@@ -107,8 +108,8 @@ public class Interpreter implements Runnable, Serializable
   public static final String VERSION;
   static
   {
-    ResourceBundle b = ResourceBundle.getBundle( "version" );
-    VERSION = b.getString( "release" ) + "." + b.getString( "build" );
+   // ResourceBundle b = ResourceBundle.getBundle( "version" );
+    VERSION = "3.0"; // b.getString( "release" ) + "." + b.getString( "build" );
     staticInit();
   }
   /** Shared system object visible under bsh.system */
@@ -348,6 +349,7 @@ public class Interpreter implements Runnable, Serializable
    */
   public static void main(String[] args)
   {
+	  args = Startup.extractOptions(Interpreter.class, args);
     if( args.length > 0 )
     {
       String filename = args[ 0 ];

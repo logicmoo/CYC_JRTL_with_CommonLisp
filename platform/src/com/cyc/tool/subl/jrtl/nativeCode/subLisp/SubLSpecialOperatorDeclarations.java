@@ -1,8 +1,6 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import static org.logicmoo.system.Startup.currentLisp;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +14,7 @@ import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Main;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Symbol;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -569,7 +568,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 		try {
 			iter = resourcer.acquireSubLListListIterator(specialForm, 1);
 			if (!iter.hasNext())
-				Errors.error("CSETQ expects at least 2 arguments\nit was given " + iter.itemsRemaining() + "arguments.");
+				Errors.error(
+						"CSETQ expects at least 2 arguments\nit was given " + iter.itemsRemaining() + "arguments.");
 			while (iter.hasNext()) {
 				SubLSymbol var = (SubLSymbol) iter.nextSubLObject();
 				if (!iter.hasNext())
@@ -642,7 +642,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 				value = protectedForm.eval(env);
 			} finally {
 				SubLObject[] allThreadBindings = SubLProcess.currentSubLThread().bindingsList;
-				SubLObject oldIsCleaningUpValue = Threads.$is_thread_performing_cleanupP$.currentBinding(allThreadBindings);
+				SubLObject oldIsCleaningUpValue = Threads.$is_thread_performing_cleanupP$
+						.currentBinding(allThreadBindings);
 				SubLObject vals = Values.getValuesAsVector();
 				try {
 					Threads.$is_thread_performing_cleanupP$.bind(CommonSymbols.T, allThreadBindings);
@@ -693,7 +694,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 			SubLSymbol name = iter.nextSubLObject().toSymbol();
 			SubLList arglist = iter.nextSubLObject().toList();
 			SubLCons lambdaExpression = SubLObjectFactory.makeListS(CommonSymbols.LAMBDA_SYMBOL, arglist, iter);
-			SubLInterpretedFunction interpretedFunction = SubLObjectFactory.makeInterpretedFunction(name, lambdaExpression, env);
+			SubLInterpretedFunction interpretedFunction = SubLObjectFactory.makeInterpretedFunction(name,
+					lambdaExpression, env);
 			name.setFunction(interpretedFunction);
 			return name;
 		} finally {
@@ -716,8 +718,13 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 			iter = resourcer.acquireSubLListListIterator(specialForm, 1);
 			SubLSymbol name = iter.nextSubLObject().toSymbol();
 			SubLList arglist = iter.nextSubLObject().toList();
-			SubLCons lambdaExpression = ConsesLow.list(CommonSymbols.LAMBDA_SYMBOL, ConsesLow.list(CommonSymbols.MACRO_FORM, CommonSymbols.MACRO_ENV), SubLObjectFactory.makeListS(CommonSymbols.CDESTRUCTURING_BIND, arglist, ConsesLow.list(CommonSymbols.CDR, CommonSymbols.MACRO_FORM), iter)).toCons();
-			SubLInterpretedFunction macroExpander = SubLObjectFactory.makeInterpretedFunction(name, lambdaExpression, env);
+			SubLCons lambdaExpression = ConsesLow.list(CommonSymbols.LAMBDA_SYMBOL,
+					ConsesLow.list(CommonSymbols.MACRO_FORM, CommonSymbols.MACRO_ENV),
+					SubLObjectFactory.makeListS(CommonSymbols.CDESTRUCTURING_BIND, arglist,
+							ConsesLow.list(CommonSymbols.CDR, CommonSymbols.MACRO_FORM), iter))
+					.toCons();
+			SubLInterpretedFunction macroExpander = SubLObjectFactory.makeInterpretedFunction(name, lambdaExpression,
+					env);
 			SubLMacro macro = SubLObjectFactory.makeMacro(macroExpander);
 			name.setFunction(macro);
 			return name;
@@ -755,7 +762,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 			else if (nargs == 2)
 				Errors.error(formatString, specialForm.fourth().eval(env), specialForm.fifth().eval(env));
 			else if (nargs == 3)
-				Errors.error(formatString, specialForm.fourth().eval(env), specialForm.fifth().eval(env), specialForm.sixth().eval(env));
+				Errors.error(formatString, specialForm.fourth().eval(env), specialForm.fifth().eval(env),
+						specialForm.sixth().eval(env));
 			else {
 				if (nargs < 0)
 					Errors.error("Got invalid enforce must construct: " + specialForm);
@@ -914,7 +922,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 		return fif(specialForm, env);
 	}
 
-	public static ArrayList possiblyNoteOldDynamicValue(SubLSymbol variable, SubLObject value, ArrayList oldDynamicValues) {
+	public static ArrayList possiblyNoteOldDynamicValue(SubLSymbol variable, SubLObject value,
+			ArrayList oldDynamicValues) {
 		if (variable.isDynamic()) {
 			if (oldDynamicValues == null)
 				oldDynamicValues = new ArrayList<SubLSymbol>();
@@ -940,9 +949,11 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 		if (declarationSpecifier.isCons()) {
 			SubLCons declSpec = declarationSpecifier.toCons();
 			SubLObject functor = declSpec.first();
-			if (SubLNil.NIL != conses_high.member(functor, SubLSpecialOperatorDeclarations.accessTypes, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)) {
+			if (SubLNil.NIL != conses_high.member(functor, SubLSpecialOperatorDeclarations.accessTypes,
+					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)) {
 				SubLObject visibility = declSpec.second();
-				if (SubLNil.NIL != conses_high.member(visibility, SubLSpecialOperatorDeclarations.visibilityTypes, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)) {
+				if (SubLNil.NIL != conses_high.member(visibility, SubLSpecialOperatorDeclarations.visibilityTypes,
+						CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)) {
 					SubLObject symbols = declSpec.cddr();
 					SubLObject symbol = SubLNil.NIL;
 					symbol = symbols.first();
@@ -952,8 +963,10 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 						symbol = symbols.first();
 					}
 				} else
-					Errors.warn(SubLObjectFactory.makeString("~S is not a known ~S visibility type."), visibility, functor);
-			} else if (SubLNil.NIL != conses_high.member(functor, SubLSpecialOperatorDeclarations.inlineTypes, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)) {
+					Errors.warn(SubLObjectFactory.makeString("~S is not a known ~S visibility type."), visibility,
+							functor);
+			} else if (SubLNil.NIL != conses_high.member(functor, SubLSpecialOperatorDeclarations.inlineTypes,
+					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)) {
 				SubLObject symbols2 = declSpec.rest();
 				SubLObject symbol2 = SubLNil.NIL;
 				symbol2 = symbols2.first();
@@ -1024,7 +1037,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 		if (o != null)
 			o.exitReadloop();
 		if (!was) {
-			Interpreter interpreter = currentLisp();
+			Interpreter interpreter = BeanShellCntrl.currentLisp();
 			if (interpreter != null)
 				interpreter.kill(0);
 		}
@@ -1113,9 +1126,12 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 		SubLSpecialOperatorDeclarations.star = null;
 		SubLSpecialOperatorDeclarations.doubleStar = null;
 		SubLSpecialOperatorDeclarations.tripleStar = null;
-		SubLSpecialOperatorDeclarations.accessTypes = ConsesLow.list(SubLObjectFactory.makeSymbol("FACCESS"), SubLObjectFactory.makeSymbol("VACCESS"));
-		SubLSpecialOperatorDeclarations.visibilityTypes = ConsesLow.list(SubLObjectFactory.makeSymbol("PRIVATE"), SubLObjectFactory.makeSymbol("PROTECTED"), SubLObjectFactory.makeSymbol("PUBLIC"));
-		SubLSpecialOperatorDeclarations.inlineTypes = ConsesLow.list(SubLObjectFactory.makeSymbol("INLINE"), SubLObjectFactory.makeSymbol("NOTINLINE"));
+		SubLSpecialOperatorDeclarations.accessTypes = ConsesLow.list(SubLObjectFactory.makeSymbol("FACCESS"),
+				SubLObjectFactory.makeSymbol("VACCESS"));
+		SubLSpecialOperatorDeclarations.visibilityTypes = ConsesLow.list(SubLObjectFactory.makeSymbol("PRIVATE"),
+				SubLObjectFactory.makeSymbol("PROTECTED"), SubLObjectFactory.makeSymbol("PUBLIC"));
+		SubLSpecialOperatorDeclarations.inlineTypes = ConsesLow.list(SubLObjectFactory.makeSymbol("INLINE"),
+				SubLObjectFactory.makeSymbol("NOTINLINE"));
 		SubLSpecialOperatorDeclarations.inlineMode = SubLObjectFactory.makeSymbol("INLINE-MODE");
 		SubLSpecialOperatorDeclarations.optimizeFuncall = SubLObjectFactory.makeSymbol("OPTIMIZE-FUNCALL");
 	}
@@ -1125,7 +1141,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 			Class[] parameterArray = { SubLCons.class, SubLEnvironment.class };
 			Method method = this.getClass().getMethod(methodName, parameterArray);
 			SubLSymbol operatorSymbol = SubLObjectFactory.makeSublispSymbol(symbolName);
-			SubLCompiledFunction evaluationFunction = SubLObjectFactory.makeCompiledFunction(method, operatorSymbol, 2, 0, false);
+			SubLCompiledFunction evaluationFunction = SubLObjectFactory.makeCompiledFunction(method, operatorSymbol, 2,
+					0, false);
 			new SubLSpecialOperatorImpl(evaluationFunction, operatorSymbol);
 		} catch (Exception e) {
 			Errors.handleError("Failed to declare special operator: " + methodName, e);

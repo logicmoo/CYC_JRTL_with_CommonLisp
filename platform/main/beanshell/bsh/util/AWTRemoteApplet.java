@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+
 /**
     A lightweight console applet for remote display of a Beanshell session.
 */
@@ -76,6 +77,7 @@ public class AWTRemoteApplet extends Frame
         setVisible(true);
     }
     public static void main(String[] args) {
+    	args = org.logicmoo.system.Startup.extractOptions(AWTRemoteApplet.class, args);
         new Window(new AWTRemoteApplet(Integer.parseInt(args[0])));
     }
 

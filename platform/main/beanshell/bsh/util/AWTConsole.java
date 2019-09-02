@@ -330,11 +330,12 @@ public class AWTConsole extends TextArea
     }
 
     public static void main( String args[] ) {
+    	args = org.logicmoo.system.Startup.extractOptions(AWTConsole.class, args);
         AWTConsole console = new AWTConsole();
         final Frame f = new Frame("Bsh Console");
         f.add(console, "Center");
         f.pack();
-        f.setVisible(true);
+        f.setVisible(true);        
         f.addWindowListener( new WindowAdapter() {
             public void windowClosing( WindowEvent e ) {
                 f.dispose();

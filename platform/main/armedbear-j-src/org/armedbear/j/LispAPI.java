@@ -46,7 +46,6 @@ import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TypeError;
 import org.armedbear.lisp.UndefinedFunction;
 import org.armedbear.lisp.WrongNumberOfArgumentsException;
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
 
 import gnu.regexp.REException;

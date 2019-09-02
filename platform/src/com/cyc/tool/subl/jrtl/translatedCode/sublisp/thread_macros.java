@@ -139,7 +139,26 @@ public class thread_macros extends SubLTranslatedFile {
 
     private static final SubLSymbol RELEASE_LOCK = makeSymbol("RELEASE-LOCK");
 
-    
+    static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 
     @Override
     public void declareFunctions() {

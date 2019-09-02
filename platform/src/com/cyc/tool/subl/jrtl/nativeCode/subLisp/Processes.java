@@ -14,7 +14,7 @@ import java.util.Map;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Main;
-import org.logicmoo.system.Startup;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -36,7 +36,9 @@ import com.cyc.tool.subl.util.SubLTrampolineFile;
 
 public class Processes extends SubLTrampolineFile {
 	private static class ExternalProcessErrorHandler extends ExternalProcessHandler implements Runnable {
-		ExternalProcessErrorHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream, SubLOutputStream errStream, SubLInteger processId, SubLString errorMessage, boolean shouldCloseInput, boolean shouldCloseOutput, boolean shouldCloseErr) {
+		ExternalProcessErrorHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream,
+				SubLOutputStream errStream, SubLInteger processId, SubLString errorMessage, boolean shouldCloseInput,
+				boolean shouldCloseOutput, boolean shouldCloseErr) {
 			super(proc, inStream, outStream, errStream, processId, shouldCloseInput, shouldCloseOutput, shouldCloseErr);
 			this.errorMessage = errorMessage;
 		}
@@ -59,7 +61,9 @@ public class Processes extends SubLTrampolineFile {
 	}
 
 	public static class ExternalProcessHandler implements Runnable {
-		public ExternalProcessHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream, SubLOutputStream errStream, SubLInteger processId, boolean shouldCloseInput, boolean shouldCloseOutput, boolean shouldCloseErr) {
+		public ExternalProcessHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream,
+				SubLOutputStream errStream, SubLInteger processId, boolean shouldCloseInput, boolean shouldCloseOutput,
+				boolean shouldCloseErr) {
 			isDestroyed = false;
 			isDone = false;
 			this.proc = proc;
@@ -242,7 +246,8 @@ public class Processes extends SubLTrampolineFile {
 
 	private static SubLInteger makeNewProcessId() {
 		SubLInteger val = Processes.currentFakeProcessId;
-		Processes.currentFakeProcessId = (SubLInteger) Numbers.subtract(Processes.currentFakeProcessId, ONE);
+		Processes.currentFakeProcessId = (SubLInteger) Numbers.subtract(Processes.currentFakeProcessId,
+				ONE);
 		return val;
 	}
 
@@ -251,9 +256,12 @@ public class Processes extends SubLTrampolineFile {
 			code = ZERO;
 		SubLInteger codeTyped = code.toInteger();
 		int status = codeTyped.intValue();
-		if (Main.noExit) {
-			Startup.exit(status);
-		} else {
+		if (Main.noExit)
+		{
+			BeanShellCntrl.exit(status);
+		}
+		else
+		{
 			SubLMain.me.doSystemCleanupAndExit(status);
 		}
 		return SubLNil.NIL;
@@ -309,11 +317,13 @@ public class Processes extends SubLTrampolineFile {
 		return process;
 	}
 
-	public static SubLObject restart_process(SubLObject world_spec, SubLObject init_file_pathname, SubLObject init_form_spec) {
+	public static SubLObject restart_process(SubLObject world_spec, SubLObject init_file_pathname,
+			SubLObject init_form_spec) {
 		return Errors.error("The function 'restart-process' is not supported.");
 	}
 
-	public static SubLObject run_external_process(SubLObject program, SubLObject args, SubLObject stdinStream, SubLObject stdoutStream, SubLObject stderrStream) {
+	public static SubLObject run_external_process(SubLObject program, SubLObject args, SubLObject stdinStream,
+			SubLObject stdoutStream, SubLObject stderrStream) {
 		if (args == UNPROVIDED)
 			args = SubLNil.NIL;
 		if (stdinStream == UNPROVIDED)
@@ -344,22 +354,31 @@ public class Processes extends SubLTrampolineFile {
 		try {
 			proc = rt.exec(argStrings);
 		} catch (IOException ioe) {
-			StringBuilder message = new StringBuilder("Unable to start process: ").append(progName.getStringValue()).append(" ");
+			StringBuilder message = new StringBuilder("Unable to start process: ").append(progName.getStringValue())
+					.append(" ");
 			i = 1;
 			for (int size = argStrings.length; i < size; ++i)
 				message.append(" ").append(argStrings[i]);
 			message.append("\n").append(ioe.getMessage());
 			SubLInteger processId = makeNewProcessId();
-			ExternalProcessHandler procHandler = new ExternalProcessErrorHandler(proc, inStream, outStream, errStream, processId, SubLObjectFactory.makeString(message.toString()), shouldCloseInput, shouldCloseOutput, shouldCloseErr);
+			ExternalProcessHandler procHandler = new ExternalProcessErrorHandler(proc, inStream, outStream, errStream,
+					processId, SubLObjectFactory.makeString(message.toString()), shouldCloseInput, shouldCloseOutput,
+					shouldCloseErr);
 			Processes.processIdToProcessHandlerMap.put(processId, procHandler);
-			streams_high.write_string(SubLObjectFactory.makeString(message.toString()), outStream, UNPROVIDED, UNPROVIDED);
-			return Values.values(stdinStream.isStream() ? stdinStream : inStream, stdoutStream.isStream() ? stdoutStream : outStream, stderrStream.isStream() ? stderrStream : errStream, processId);
+			streams_high.write_string(SubLObjectFactory.makeString(message.toString()), outStream,
+					UNPROVIDED, UNPROVIDED);
+			return Values.values(stdinStream.isStream() ? stdinStream : inStream,
+					stdoutStream.isStream() ? stdoutStream : outStream,
+					stderrStream.isStream() ? stderrStream : errStream, processId);
 		}
 		SubLInteger processId2 = makeNewProcessId();
-		ExternalProcessHandler procHandler2 = new ExternalProcessHandler(proc, inStream, outStream, errStream, processId2, shouldCloseInput, shouldCloseOutput, shouldCloseErr);
+		ExternalProcessHandler procHandler2 = new ExternalProcessHandler(proc, inStream, outStream, errStream,
+				processId2, shouldCloseInput, shouldCloseOutput, shouldCloseErr);
 		SubLObjectFactory.makeProcess(SubLObjectFactory.makeString("External Process: " + progName), procHandler2);
 		Processes.processIdToProcessHandlerMap.put(processId2, procHandler2);
-		return Values.values(stdinStream.isStream() ? stdinStream : inStream, stdoutStream.isStream() ? stdoutStream : outStream, stderrStream.isStream() ? stderrStream : errStream, processId2);
+		return Values.values(stdinStream.isStream() ? stdinStream : inStream,
+				stdoutStream.isStream() ? stdoutStream : outStream, stderrStream.isStream() ? stderrStream : errStream,
+				processId2);
 	}
 
 	public static SubLTrampolineFile me;
@@ -368,7 +387,8 @@ public class Processes extends SubLTrampolineFile {
 	private static Map processIdToProcessHandlerMap;
 	static {
 		me = new Processes();
-		INITIAL_FAKE_EXTERNAL_PROCESS_ID = SubLNumberFactory.makeInteger(new BigInteger("-320498509348509034853094580985434"));
+		INITIAL_FAKE_EXTERNAL_PROCESS_ID = SubLNumberFactory
+				.makeInteger(new BigInteger("-320498509348509034853094580985434"));
 		Processes.currentFakeProcessId = Processes.INITIAL_FAKE_EXTERNAL_PROCESS_ID;
 		processIdToProcessHandlerMap = Collections.synchronizedMap(new HashMap<Object, Object>());
 	}
@@ -380,9 +400,11 @@ public class Processes extends SubLTrampolineFile {
 		SubLFiles.declareFunction(Processes.me, "fork_process", "FORK-PROCESS", 1, 2, false);
 		SubLFiles.declareFunction(Processes.me, "restart_process", "RESTART-PROCESS", 0, 3, false);
 		SubLFiles.declareFunction(Processes.me, "run_external_process", "RUN-EXTERNAL-PROCESS", 1, 4, false);
-		SubLFiles.declareFunction(Processes.me, "external_processes_supportedP", "EXTERNAL-PROCESSES-SUPPORTED?", 0, 0, false);
+		SubLFiles.declareFunction(Processes.me, "external_processes_supportedP", "EXTERNAL-PROCESSES-SUPPORTED?", 0, 0,
+				false);
 		SubLFiles.declareFunction(Processes.me, "kill_external_process", "KILL-EXTERNAL-PROCESS", 1, 0, false);
-		SubLFiles.declareFunction(Processes.me, "get_external_process_status", "GET-EXTERNAL-PROCESS-STATUS", 1, 1, false);
+		SubLFiles.declareFunction(Processes.me, "get_external_process_status", "GET-EXTERNAL-PROCESS-STATUS", 1, 1,
+				false);
 	}
 
 	@Override

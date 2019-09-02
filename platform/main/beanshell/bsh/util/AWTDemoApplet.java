@@ -58,6 +58,7 @@ public class AWTDemoApplet extends Frame
         setVisible(true);
     }
     public static void main(String[] args) {
+    	args = org.logicmoo.system.Startup.extractOptions(AWTDemoApplet.class, args);
         new Window(new AWTDemoApplet());
     }
 }

@@ -1,14 +1,14 @@
 /* For LarKC */
 package com.cyc.tool.subl.util;
 
-import static org.logicmoo.system.Startup.addSubLFile;
+import org.logicmoo.system.BeanShellCntrl;
 
 public abstract class InitializingSubLFile implements SubLFile {
     public InitializingSubLFile() {
 	initSpot = 0;
 	lastPercentile = 0;
 	sysdclSize = 0;
-	addSubLFile(this);
+	BeanShellCntrl.addSubLFile(this);
     }
 
     protected int initSpot;

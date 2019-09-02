@@ -18,7 +18,8 @@
 */
 
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
-import static org.logicmoo.system.Startup.addSubLFile;
+
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -69,7 +70,7 @@ public class Equality implements SubLFile {
 
 	/** There should only ever be one instance of this */
 	private Equality() {
-       addSubLFile(this);
+       BeanShellCntrl.addSubLFile(this);
 	}
 
 

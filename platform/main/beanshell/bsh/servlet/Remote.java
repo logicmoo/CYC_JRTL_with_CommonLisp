@@ -52,6 +52,7 @@ public class Remote
     public static void main( String args[] )
         throws Exception
     {
+      	args = org.logicmoo.system.Startup.extractOptions(Remote.class, args);
         if ( args.length < 2 ) {
             System.out.println(
                 "usage: Remote URL(http|bsh) file [ file ] ... ");

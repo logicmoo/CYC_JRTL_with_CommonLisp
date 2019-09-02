@@ -41,6 +41,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.function.Supplier;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -55,12 +56,14 @@ import javax.swing.text.JTextComponent;
 
 import org.armedbear.lisp.Function;
 import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.SpecialBindingsMark;
 import org.armedbear.lisp.Stream;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TwoWayStream;
+import org.logicmoo.system.Startup;
 
 public class REPLConsole extends DefaultStyledDocument {
 
@@ -69,7 +72,8 @@ public class REPLConsole extends DefaultStyledDocument {
   private Reader reader = new Reader() {
 
       @Override
-      public void close() throws RuntimeException {}
+		public void close() throws RuntimeException {
+		}
 
       @Override
       public synchronized int read(char[] cbuf, int off, int len) throws RuntimeException {
@@ -91,10 +95,12 @@ public class REPLConsole extends DefaultStyledDocument {
   private Writer writer = new Writer() {
 	    
       @Override
-      public void close() throws RuntimeException {}
+		public void close() throws RuntimeException {
+		}
 
       @Override
-      public void flush() throws RuntimeException {}
+		public void flush() throws RuntimeException {
+		}
 
       @Override
       public void write(final char[] cbuf, final int off, final int len) throws RuntimeException {
@@ -113,9 +119,7 @@ public class REPLConsole extends DefaultStyledDocument {
 			public void run() {
                 synchronized(reader) {
                   try {
-                    superInsertString(insertOffs,
-                                      new String(cbuf, off, len),
-                                      null);
+								superInsertString(insertOffs, new String(cbuf, off, len), null);
                   } catch(Exception e) {
                     assert(false); //BadLocationException should not happen here
                   }
@@ -132,10 +136,8 @@ public class REPLConsole extends DefaultStyledDocument {
   private boolean disposed = false;
   private final Thread replThread;
 	
-  public REPLConsole(LispObject replFunction) {
-    final LispObject replWrapper = makeReplWrapper(new Stream(Symbol.SYSTEM_STREAM, new BufferedReader(reader)),
-                                                   new Stream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer)),
-                                                   replFunction);
+	public REPLConsole(Supplier<LispObject> replFunction) {
+		final LispObject replWrapper = makeReplWrapper(new Stream(Symbol.SYSTEM_STREAM, new BufferedReader(reader)), new Stream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer)), replFunction);
     replThread = new Thread("REPL-thread-" + System.identityHashCode(this)) {
         @Override
 		public void run() {
@@ -145,12 +147,10 @@ public class REPLConsole extends DefaultStyledDocument {
           }
         }
       };
-    replThread.start();
   }
 
   @Override
-  public void insertString(int offs, String str, AttributeSet a)
-    throws BadLocationException {
+	public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
     synchronized(reader) {
       int bufferStart = getLength() - inputBuffer.length();
       if(offs < bufferStart) {
@@ -164,8 +164,7 @@ public class REPLConsole extends DefaultStyledDocument {
     }
   }
 	
-  protected void superInsertString(int offs, String str, AttributeSet a)
-    throws BadLocationException {
+	protected void superInsertString(int offs, String str, AttributeSet a) throws BadLocationException {
     super.insertString(offs, str, a);
   }
 	
@@ -266,13 +265,14 @@ public class REPLConsole extends DefaultStyledDocument {
 	    
     };
 	
-  public LispObject makeReplWrapper(final Stream in, final Stream out, final LispObject fn) {
+	public LispObject makeReplWrapper(final Stream in, final Stream out, final Supplier<LispObject> fn) {
     return new Function() {	
       @Override
       public LispObject execute() {
         final LispThread currentThread = LispThread.currentThread();
 		SpecialBindingsMark lastSpecialBinding = currentThread.markSpecialBindings();
         try {
+					LispObject lispObject = fn.get();
           TwoWayStream ioStream = TwoWayStream.createTwoWayStream(in, out, true);
           currentThread.bindSpecial(Symbol.DEBUGGER_HOOK, debuggerHook);
           currentThread.bindSpecial(Symbol.STANDARD_INPUT, in);
@@ -281,7 +281,7 @@ public class REPLConsole extends DefaultStyledDocument {
           currentThread.bindSpecial(Symbol.TERMINAL_IO, ioStream);
           currentThread.bindSpecial(Symbol.DEBUG_IO, ioStream);
           currentThread.bindSpecial(Symbol.QUERY_IO, ioStream);
-          return fn.execute();
+					return lispObject.execute();
         } finally {
           currentThread.resetSpecialBindings(lastSpecialBinding);
         }
@@ -301,13 +301,18 @@ public class REPLConsole extends DefaultStyledDocument {
   }
 	
   public static void main(String[] args) {
-    LispObject repl = null;
+		args = Startup.extractOptions(REPLConsole.class, args);
+		Supplier<LispObject> repl = () -> {
     try {		
-      repl = Interpreter.createInstance().eval("#'top-level::top-level-loop");
+				Interpreter createInstance = Interpreter.createInstance();
+				return createInstance.eval("#'top-level::top-level-loop");
     } catch (Throwable e) {
       e.printStackTrace();
       System.exit(1);  // Ok. We haven't done anything useful yet.
     }
+			return Lisp.EOF;
+		};
+
     final REPLConsole d = new REPLConsole(repl);
     final JTextComponent txt = new JTextArea(d);
     d.setupTextComponent(txt);
@@ -317,6 +322,14 @@ public class REPLConsole extends DefaultStyledDocument {
     f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
     f.pack();
     f.setVisible(true);
+		d.start();
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	public void start() {
+		replThread.start();
   }
 	
 }

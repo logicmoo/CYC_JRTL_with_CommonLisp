@@ -357,24 +357,23 @@ public class Eval implements SubLFile {
 		return Errors.unimplementedMethod("variable-information");
 	}
 
-	public static SubLFile me;
+	final public static SubLFile me;
 	public static SubLSymbol $star$;
 	public static SubLSymbol $star_star$;
 	public static SubLSymbol $star_star_star$;
 	public static SubLSymbol $evaluator_method$;
-	private static SubLSymbol EOF_KEYWORD;
-	private static SubLString LOAD_ERROR_STRING_1;
-	private static SubLString LOAD_ERROR_STRING_2;
-	private static SubLString EVAL_ERROR_STRING;
-	public static String FILE_DIGEST_ALGORITHM = "SHA-1";
-	private static IsolatedClassLoader isolatedClassLoader;
+	final private static SubLSymbol EOF_KEYWORD;
+	final private static SubLString LOAD_ERROR_STRING_1;
+	final private static SubLString LOAD_ERROR_STRING_2;
+	final private static SubLString EVAL_ERROR_STRING;
+	final public static String FILE_DIGEST_ALGORITHM = "SHA-1";
+	final public static IsolatedClassLoader isolatedClassLoader = IsolatedClassLoader.theIsolatedClassLoader;
 	static {
 		me = new Eval();
 		EOF_KEYWORD = SubLObjectFactory.makeKeyword("EOF");
 		LOAD_ERROR_STRING_1 = SubLObjectFactory.makeString("Read error occured at position ~S of file ~S");
 		LOAD_ERROR_STRING_2 = SubLObjectFactory.makeString("Could not load file ~S.");
 		EVAL_ERROR_STRING = SubLObjectFactory.makeString("Could not evaluate form~%  ~S~%after ~A:~A");
-		isolatedClassLoader = new IsolatedClassLoader();
 	}
 
 	@Override

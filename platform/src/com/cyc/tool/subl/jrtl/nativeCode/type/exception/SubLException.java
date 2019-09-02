@@ -1284,13 +1284,13 @@ public class SubLException extends RuntimeException implements SubLObject {
 	public boolean getBooleanValue() {
 		return true;
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject#getJavaClass()
 	 */
 	@Override
-	public Class getJavaClass() {
-		// TODO Auto-generated method stub
-		return this.getClass();
+	public Class<?> getJavaClass() {
+		return getClass();
 	}
+
 }

@@ -4030,6 +4030,10 @@ public final class html_utilities extends SubLTranslatedFile {
 	}
 
 	public static SubLObject html_extract_input(final SubLObject field_name, final SubLObject args) {
+		return html_extract_input(field_name, args, NIL);
+	}
+
+	public static SubLObject html_extract_input(final SubLObject field_name, final SubLObject args, SubLObject ifMissing) {
 		final SubLThread thread = SubLProcess.currentSubLThread();
 		assert NIL != stringp(field_name) : "Types.stringp(field_name) " + "CommonSymbols.NIL != Types.stringp(field_name) " + field_name;
 		assert NIL != listp(args) : "Types.listp(args) " + "CommonSymbols.NIL != Types.listp(args) " + args;
@@ -4037,7 +4041,13 @@ public final class html_utilities extends SubLTranslatedFile {
 		final SubLObject _prev_bind_0 = $html_extract_field_name$.currentBinding(thread);
 		try {
 			$html_extract_field_name$.bind(field_name, thread);
-			ans = find_if(symbol_function(MATCHING_HTML_FIELD), args, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+			final SubLObject _prev_bind_1 = OTHERWISE.currentBinding(thread);
+			try {
+				OTHERWISE.bind(ifMissing, thread);
+				ans = find_if(symbol_function(MATCHING_HTML_FIELD), args, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+			} finally {
+				OTHERWISE.rebind(_prev_bind_1, thread);
+			}
 		} finally {
 			$html_extract_field_name$.rebind(_prev_bind_0, thread);
 		}
@@ -6092,7 +6102,6 @@ public final class html_utilities extends SubLTranslatedFile {
 		setup_html_utilities_file();
 	}
 
-	
 }
 
 /**

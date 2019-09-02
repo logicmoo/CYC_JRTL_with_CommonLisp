@@ -44,7 +44,9 @@ import com.cyc.tool.subl.util.SafeRunnable;
 
 public abstract class SubLProcess extends SafeRunnable implements Runnable, SubLObject {
 
-	
+	static {
+
+	}
     @Override
     public SubLProcess toLispObject() {
         return this;

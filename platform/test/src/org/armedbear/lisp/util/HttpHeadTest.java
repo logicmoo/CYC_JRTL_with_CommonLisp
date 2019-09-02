@@ -1,6 +1,6 @@
 package org.armedbear.lisp.util;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

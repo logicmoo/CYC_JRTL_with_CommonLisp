@@ -70,6 +70,7 @@ public class JDemoApplet extends JFrame
         }
     }
     public static void main(String[] args) {
+    	args = org.logicmoo.system.Startup.extractOptions(JDemoApplet.class, args);
         new JWindow(new JDemoApplet(args[0]));
     }
 }

@@ -52,6 +52,7 @@ public class Httpd extends Thread
 
     public static void main(String argv[]) throws IOException
     {
+    	argv = org.logicmoo.system.Startup.extractOptions(Httpd.class, argv);
         new Httpd(Integer.parseInt(argv[0])).start();
     }
 

@@ -34,13 +34,6 @@
  */
 
 package org.logicmoo.system;
-import static org.logicmoo.system.Startup.cyc_progn;
-import static org.logicmoo.system.Startup.cyc_repl;
-import static org.logicmoo.system.Startup.init_cyc_classes;
-import static org.logicmoo.system.Startup.init_cyc_kb;
-import static org.logicmoo.system.Startup.init_subl;
-import static org.logicmoo.system.Startup.lisp_progn;
-import static org.logicmoo.system.Startup.lisp_repl;
 
 import org.armedbear.lisp.Environment;
 import org.armedbear.lisp.JavaException;
@@ -72,7 +65,7 @@ public final class CycEval
 		@Override
 		public LispObject execute(LispObject args, Environment env)
 		{
-			return lisp_progn(args, env);
+			return BeanShellCntrl.lisp_progn(args, env);
 		}
 	}
 
@@ -100,7 +93,7 @@ public final class CycEval
 		@Override
 		public SubLObject apply(SubLCons specialForm, SubLEnvironment env)
 		{
-			return cyc_progn(specialForm, env);
+			return BeanShellCntrl.cyc_progn(specialForm, env);
 		}
 
 		//
@@ -139,7 +132,7 @@ public final class CycEval
 		{
 			try
 			{
-				return cyc_repl();
+				return BeanShellCntrl.cyc_repl();
 			} catch (Throwable e)
 			{
 				e.printStackTrace();
@@ -163,7 +156,7 @@ public final class CycEval
 		@Override
 		public LispObject execute()
 		{
-			return lisp_repl();
+			return BeanShellCntrl.lisp_repl();
 		}
 
 	}
@@ -182,7 +175,7 @@ public final class CycEval
 		@Override
 		public LispObject execute()
 		{
-			init_cyc_kb();
+			BeanShellCntrl.init_cyc_kb();
 			return T;
 		}
 	}
@@ -201,7 +194,7 @@ public final class CycEval
 		@Override
 		public LispObject execute()
 		{
-			init_cyc_classes();
+			BeanShellCntrl.init_cyc_classes();
 			return T;
 		}
 	}
@@ -220,7 +213,7 @@ public final class CycEval
 		@Override
 		public LispObject execute()
 		{
-			init_subl();
+			BeanShellCntrl.init_subl();
 			return T;
 		}
 	}

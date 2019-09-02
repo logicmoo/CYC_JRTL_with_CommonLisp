@@ -39,7 +39,6 @@ public final class tm_control_vars extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new tm_control_vars();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.tm_control_vars";
 
     // // Definitions
     /**
@@ -216,7 +215,7 @@ public final class tm_control_vars extends SubLTranslatedFile implements V02 {
 
     public static final SubLSymbol $tm_bootstrap_administrator_login$ = makeSymbol("*TM-BOOTSTRAP-ADMINISTRATOR-LOGIN*");
 
-    private static final SubLSymbol NIL_OR_STRING = makeSymbol("NIL-OR-STRING");
+   // private static final SubLSymbol NIL_OR_STRING = makeSymbol("NIL-OR-STRING");
 
     static private final SubLString $str_alt14$Possible_values__NIL__or_a_string = makeString("Possible values: NIL, or a string.  If *USE-HTTP-AUTHENTICATION* is T,\nthis must be set to a string which is the user ID for the initial \nadministrator.  It must be the same user ID the external authentication\nsystem uses.");
 

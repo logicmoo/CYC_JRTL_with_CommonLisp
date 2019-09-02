@@ -14,6 +14,5 @@ For exaple, the file XThis.java is a module loaded only when bsh is run under
 JDK1.3 or greater.  It makes use of certain features of the reflection API 
 that will not compile with JDK1.2 or lower.
 
-
 --
 

@@ -22,6 +22,10 @@
 
 package org.armedbear.j;
 
+//import org.armedbear.prolog.PrologThread;
+import static org.logicmoo.system.Startup.init_swipl_server;
+import static org.logicmoo.system.Startup.started_from_prolog;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -33,9 +37,6 @@ import javax.swing.SwingUtilities;
 import org.logicmoo.system.BeanShellCntrl;
 
 import gnu.regexp.REMatch;
-//import org.armedbear.prolog.PrologThread;
-import static org.logicmoo.system.Startup.*;
-import static org.logicmoo.system.BeanShellCntrl.*;
 
 public class PrologShell extends Shell
 {
@@ -69,6 +70,7 @@ public class PrologShell extends Shell
 		//super(TYPE_TELNET, "cycserver:4023");
 		//setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
 //		setResetCommand(":reset");
+		BeanShellCntrl.init_swipl_server();
 		slime = false;
 	}
 
