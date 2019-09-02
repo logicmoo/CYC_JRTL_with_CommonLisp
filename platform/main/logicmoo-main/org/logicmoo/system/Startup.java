@@ -399,6 +399,7 @@ public class Startup {
 		}
 		if (argsList.remove("--cyc2")) {
 			cycPart2Early = true;
+			argsList.add("--cyc");
 		}
 		if (argsList.remove("--cyc")) {
 			Main.noBSHGUI = false;
@@ -2783,7 +2784,7 @@ public class Startup {
 		scanForExports(BeanShellCntrl.class);
 		if (Main.needSubLMAIN) {
 			init_cyc_classes();
-			SubLMain.doInitialEmbeddedMain(cycCmdArgs);
+			//SubLMain.doInitialEmbeddedMain(cycCmdArgs);
 			cl_imports_cyc();
 			cyc_imports_cl();
 		}
