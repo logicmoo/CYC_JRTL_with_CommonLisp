@@ -65,7 +65,7 @@ public final class Reflect {
     static final String GET_PREFIX = "get";
     static final String SET_PREFIX = "set";
     static final String IS_PREFIX = "is";
-    private static final Map<String,String> ACCESSOR_NAMES = new WeakHashMap<>();
+    private static final Map<String,String> ACCESSOR_NAMES = new WeakHashMap<String, String>();
     private static final Pattern DEFAULT_PACKAGE
         = Pattern.compile("[^\\.]+|bsh\\..*");
     private static final Pattern PACKAGE_ACCESS
@@ -432,8 +432,8 @@ public final class Reflect {
             Class<?>[] idealMatch, List<Invocable> methods )
         {
             // copy signatures into array for findMostSpecificMethod()
-            List<Class<?>[]> candidateSigs = new ArrayList<>();
-            List<Invocable> methodList = new ArrayList<>();
+            List<Class<?>[]> candidateSigs = new ArrayList<Class<?>[]>();
+            List<Invocable> methodList = new ArrayList<Invocable>();
             for( Invocable method : methods ) {
                 Class<?>[] parameterTypes = method.getParameterTypes();
                 methodList.add( method );
@@ -965,7 +965,7 @@ public final class Reflect {
         }
     }
 
-    private static final Map<Class<?>,Object> instanceCache = new WeakHashMap<>();
+    private static final Map<Class<?>,Object> instanceCache = new WeakHashMap<Class<?>, Object>();
 
     /*
      * Class new instance or null, wrap exception handling and

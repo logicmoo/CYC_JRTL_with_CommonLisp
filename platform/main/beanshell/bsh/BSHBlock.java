@@ -39,7 +39,7 @@ class BSHBlock extends SimpleNode
     public boolean isSynchronized = false;
     public boolean isStatic = false;
     private boolean hasClassDeclaration = false, isFirst = true;
-    private static final List<SimpleNode> enumBlocks = new ArrayList<>();
+    private static final List<SimpleNode> enumBlocks = new ArrayList<SimpleNode>();
     private static final ReferenceCache<NameSpace,NameSpace> blockspaces
         = new ReferenceCache<NameSpace, NameSpace>(Type.Weak, Type.Weak, 4000) {
             protected NameSpace create(NameSpace key) {

@@ -130,7 +130,7 @@ public class This implements java.io.Serializable, Runnable
    * outside of bsh.
    */
   transient Interpreter declaringInterpreter;
-  public static final Map<String, NameSpace> contextStore = new ConcurrentHashMap<>();
+  public static final Map<String, NameSpace> contextStore = new ConcurrentHashMap<String, NameSpace>();
   /**
    * A cache of proxy interface handlers. Currently just one per interface.
    */
@@ -633,7 +633,7 @@ public class This implements java.io.Serializable, Runnable
       NameSpace instanceNameSpace = instanceThis.getNameSpace();
       // if this is a super constructor we need to initialize the parent's
       // instance This
-      List<String> parentNames = new ArrayList<>();
+      List<String> parentNames = new ArrayList<String>();
       Class< ? > clas = instance.getClass();
       while ( null != clas && !clas.getSimpleName().equals( className ))
       {
@@ -666,9 +666,9 @@ public class This implements java.io.Serializable, Runnable
       throw new InterpreterError( "Error in class instance initialization: " + e, e );
     }
   }
-  private static final ThreadLocal<NameSpace> CONTEXT_NAMESPACE = new ThreadLocal<>();
-  private static final ThreadLocal<Interpreter> CONTEXT_INTERPRETER = new ThreadLocal<>();
-  static final ThreadLocal<Map<String, Object[]>> CONTEXT_ARGS = ThreadLocal.withInitial( () -> new HashMap<>() );
+  private static final ThreadLocal<NameSpace> CONTEXT_NAMESPACE = new ThreadLocal<NameSpace>();
+  private static final ThreadLocal<Interpreter> CONTEXT_INTERPRETER = new ThreadLocal<Interpreter>();
+  static final ThreadLocal<Map<String, Object[]>> CONTEXT_ARGS = ThreadLocal.withInitial( () -> new HashMap<String, Object[]>() );
 
   /**
    * Register actual context, used by generated class constructor, which calls

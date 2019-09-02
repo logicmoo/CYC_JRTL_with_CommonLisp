@@ -122,16 +122,6 @@ public final class Interpreter extends Startup implements Runnable {
 		}
 	}
 
-	/**
-	 * TODO Describe the purpose of this method.
-	 */
-	public static void ensureInitialized() {
-		synchronized (Interpreter.class) {
-			if (!initialized)
-				initializeLisp(jlisp);
-		}
-	}
-
 	public static synchronized Interpreter initInstance(Interpreter interp, String[] args, boolean jLisp) {
 		//Interpreter.globalInterpreter = interp;
 		if (args != null)
@@ -155,7 +145,7 @@ public final class Interpreter extends Startup implements Runnable {
 		else {
 			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
 			final Stream out = getStandardOutput();
-			out._writeString("Low-level initialization completed in " + uptime + " seconds.\n");
+			out._writeString("Low-level initialization used " + uptime + " seconds.\n");
 		}
 
 		initializeLisp(jLisp || jlisp);
@@ -178,14 +168,30 @@ public final class Interpreter extends Startup implements Runnable {
 		//			Main.needABCL = false;
 		//			SubLMain.embeddedMain(new String[0], SubLMain.NOTHING_TO_DO);
 		//		}
+		if (!noinform) {
+			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
+			final Stream out = getStandardOutput();
+			out._writeString("Low-level initialization completed in " + uptime + " seconds.\n");
+		}
+		Startup.startCycInit();
+
+		if (!noinform) {
+			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
+			final Stream out = getStandardOutput();
+			out._writeString("CYC initialization complete at " + uptime + " total seconds.\n");
+		}
 
 		if (!noinit) {
 			processInitializationFile();
 			noinit = true;
 		}
 
-		if (Main.subLisp != null)
+		completeCycInit();
+
+		if (!Main.isSublispDefault)
 			SubLPackage.setCurrentPackage("CL-USER");
+
+		//Startup.i
 
 		//globalInterpreter.eval("(cl:funcall #'top-level::top-level-loop)");
 		///StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
@@ -201,7 +207,7 @@ public final class Interpreter extends Startup implements Runnable {
 			if (Main.passedArgs == passedArgs)
 				Main.passedArgs = null;
 		}
-		scanForExports(BeanShellCntrl.class);
+
 		if (passedArgs != null) {
 			if (postProcess) {
 				postProcess = false;
@@ -217,25 +223,14 @@ public final class Interpreter extends Startup implements Runnable {
 	}
 
 	public static Interpreter createJLispInstance(InputStream in, OutputStream out, String initialDirectory, String version) {
-
-		return createNewLispInstanceJDo(in, out, initialDirectory, version, true, passedArgs, true);
-
+		return createNewLispInstance(in, out, initialDirectory, version, true, passedArgs, Main.lispInstances == 0);
 	}
 
-	/**
-	 * TODO Describe the purpose of this method.
-	 * @param in
-	 * @param out
-	 * @param absolutePath
-	 * @param version
-	 * @param b
-	 * @return
-	 */
-	public static Interpreter createNewLispInstance(InputStream in, PrintStream out, String initialDirectory, String version, boolean procArgs) {
-		return createNewLispInstanceJDo(in, out, initialDirectory, version, false, passedArgs, procArgs);
+	public static Interpreter createNewLispInstance(InputStream in, OutputStream out, String initialDirectory, String version, boolean procArgs) {
+		return createNewLispInstance(in, out, initialDirectory, version, false, passedArgs, procArgs);
 	}
 
-	public static Interpreter createNewLispInstanceJDo(InputStream in, OutputStream out, String initialDirectory, String version, //
+	public static Interpreter createNewLispInstance(InputStream in, OutputStream out, String initialDirectory, String version, //
 			boolean jlisp0, String[] todo, boolean redoTodo) {
 
 		try {
@@ -288,6 +283,16 @@ public final class Interpreter extends Startup implements Runnable {
 	// Interface.
 	public LispObject eval(String s) {
 		return Lisp.eval(new StringInputStream(s).read(true, NIL, false, LispThread.currentThread(), Stream.currentReadtable));
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	public static void ensureInitialized() {
+		synchronized (Interpreter.class) {
+			if (!initialized)
+				initializeLisp(jlisp);
+		}
 	}
 
 	public static void initializeJLisp() {
@@ -416,6 +421,13 @@ public final class Interpreter extends Startup implements Runnable {
 					} else if (arg.equals("--batch")) {
 						_BATCH_MODE_.setSymbolValue(T);
 					} else if (arg.equals("--compile-system")) {
+						isSublispDefault = false;
+						abclProcessArgs = true;
+						noProlog = true;
+						noPrologJNI = true;
+						noInitCyc = true;
+						noBSH = true;
+						Main.setSubLisp(false);
 						nosystem = true;
 						noinform = true;
 					} else if (arg.equals("--eval")) {

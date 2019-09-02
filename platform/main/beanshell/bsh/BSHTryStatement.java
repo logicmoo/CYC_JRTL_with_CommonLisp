@@ -52,8 +52,8 @@ class BSHTryStatement extends SimpleNode
 
         BSHBlock tryBlock = (BSHBlock) jjtGetChild(i++);
 
-        List<BSHMultiCatch> catchParams = new ArrayList<>();
-        List<BSHBlock> catchBlocks = new ArrayList<>();
+        List<BSHMultiCatch> catchParams = new ArrayList<BSHMultiCatch>();
+        List<BSHBlock> catchBlocks = new ArrayList<BSHBlock>();
 
         int nchild = jjtGetNumChildren();
         Node node = null;

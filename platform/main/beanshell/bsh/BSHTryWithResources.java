@@ -31,7 +31,7 @@ public class BSHTryWithResources extends SimpleNode {
     }
 
     public List<Throwable> autoClose() {
-        List<Throwable> thrown = new ArrayList<>();
+        List<Throwable> thrown = new ArrayList<Throwable>();
         for (int i=0; i < jjtGetNumChildren(); i++) try {
             ((BSHAutoCloseable) jjtGetChild(i)).close();
         } catch (Throwable e) {

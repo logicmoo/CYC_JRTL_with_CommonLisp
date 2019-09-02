@@ -124,7 +124,7 @@ public class JConsole extends JScrollPane implements GUIConsoleInterface, Runnab
 	}
 
 	private int cmdStart = 0;
-	private List<String> history = new ArrayList<>();
+	private List<String> history = new ArrayList<String>();
 	private String startedLine;
 	private int histLine = 0;
 	private JPopupMenu menu;

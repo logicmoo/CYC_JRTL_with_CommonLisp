@@ -163,14 +163,12 @@ public final class Main extends Startup {
 
 						// File initialDir = new File("./");
 						Interpreter.createDefaultInstance(args);
-						if (!noProlog)
-							Startup.start_prolog_from_lisp();
+
 						/*
 						 * Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in,
 						 * SystemCurrent.out, initialDir.getCanonicalPath(),
 						 * Version.getLongVersionString());
 						 */
-						//BeanShellCntrl.registerSelf();
 						if (after != null)
 							after.run();
 					} catch (ProcessingTerminated e) {

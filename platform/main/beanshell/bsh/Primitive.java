@@ -52,7 +52,7 @@ public final class Primitive implements Serializable {
     /** default serial version id */
     private static final long serialVersionUID = 1L;
 
-    static final Map<Class<?>, Class<?>> wrapperMap = new HashMap<>();
+    static final Map<Class<?>, Class<?>> wrapperMap = new HashMap<Class<?>, Class<?>>();
     static {
         wrapperMap.put( Boolean.TYPE, Boolean.class );
         wrapperMap.put( Byte.TYPE, Byte.class );

@@ -478,9 +478,7 @@ abstract public class Lisp extends ABCLStatic {
 			return NIL;
 	}
 
-	public static final LispObject eval(LispObject obj)
-
-	{
+	public static final LispObject eval(LispObject obj) {
 		if (Main.isSubLisp()) {
 			return (LispObject) obj.eval(SubLEnvironment.currentEnvironment());
 		}
@@ -493,70 +491,76 @@ abstract public class Lisp extends ABCLStatic {
 		return eval(obj, env, LispThread.currentThread());
 	}
 
-	public static final LispObject eval(final LispObject obj, final Environment env, final LispThread thread)
+	public static final LispObject eval(LispObject obj, final Environment env, final LispThread thread)
 
 	{
-
-		thread._values = null;
-		if (interrupted)
-			handleInterrupt();
-		if (thread.isDestroyed())
-			throw new ThreadDestroyed();
-		if (obj instanceof Symbol) {
-			Symbol symbol = (Symbol) obj;
-			LispObject result;
-			if (symbol.isSpecialVariable()) {
-				if (symbol.constantp())
-					return symbol.getSymbolValue();
-				else
+		while (true) {
+			thread._values = null;
+			if (interrupted)
+				handleInterrupt();
+			if (thread.isDestroyed())
+				throw new ThreadDestroyed();
+			if (obj instanceof Symbol) {
+				Symbol symbol = (Symbol) obj;
+				LispObject result;
+				if (symbol.isSpecialVariable()) {
+					if (symbol.constantp())
+						return symbol.getSymbolValue();
+					else
+						result = thread.lookupSpecial(symbol);
+				} else if (env.isDeclaredSpecial(symbol))
 					result = thread.lookupSpecial(symbol);
-			} else if (env.isDeclaredSpecial(symbol))
-				result = thread.lookupSpecial(symbol);
-			else
-				result = env.lookup(symbol);
-			if (result == null) {
-				result = symbol.getSymbolMacro();
+				else
+					result = env.lookup(symbol);
 				if (result == null) {
-					result = symbol.getSymbolValue();
+					result = symbol.getSymbolMacro();
+					if (result == null) {
+						result = symbol.getSymbolValue();
+					}
+					if (result == null) {
+						return error(new UnboundVariable(symbol));
+					}
 				}
-				if (result == null) {
-					return error(new UnboundVariable(symbol));
+				if (result instanceof SymbolMacro) {
+					obj = ((SymbolMacro) result).getExpansion();
+					continue;
 				}
-			}
-			if (result instanceof SymbolMacro)
-				return eval(((SymbolMacro) result).getExpansion(), env, thread);
-			return result;
-		} else if (obj instanceof Cons) {
-			LispObject first = ((Cons) obj).car;
-			final LispObject cdr = ((Cons) obj).cdr;
-			if (first instanceof Symbol) {
-				LispObject fun = env.lookupFunction(first);
+				return result;
+			} else if (obj instanceof Cons) {
+				LispObject first = ((Cons) obj).car;
+				final LispObject cdr = ((Cons) obj).cdr;
+				if (first instanceof Symbol) {
+					LispObject fun = env.lookupFunction(first);
 
-				if (isSpecialOperatorF(fun)) {
-					if (profiling)
-						if (!sampling)
-							fun.incrementCallCount();
-					// Don't eval args!
-					return ((Symbol) first).execute(cdr, env);
-					//fun.execute(((Cons)obj).cdr, env);
+					if (isSpecialOperatorF(fun)) {
+						if (profiling)
+							if (!sampling)
+								fun.incrementCallCount();
+						// Don't eval args!
+						return ((Symbol) first).execute(cdr, env);
+						//fun.execute(((Cons)obj).cdr, env);
+					}
+					if (fun instanceof MacroObject) {
+						obj = macroexpand(obj, env, thread);
+						continue;
+					}
+					if (fun instanceof Autoload) {
+						Autoload autoload = (Autoload) fun;
+						autoload.load();
+						continue;
+						//return eval(obj, env, thread);
+					}
+					return evalCall(fun != null ? fun : first, cdr, env, thread);
+				} else {
+					if (first instanceof Cons && first.car() == Symbol.LAMBDA) {
+						Closure closure = new LambdaClosure(first, env);
+						return evalCall(closure, cdr, env, thread);
+					} else
+						return program_error("Illegal function object: " + first.princToString() + ".");
 				}
-				if (fun instanceof MacroObject)
-					return eval(macroexpand(obj, env, thread), env, thread);
-				if (fun instanceof Autoload) {
-					Autoload autoload = (Autoload) fun;
-					autoload.load();
-					return eval(obj, env, thread);
-				}
-				return evalCall(fun != null ? fun : first, cdr, env, thread);
-			} else {
-				if (first instanceof Cons && first.car() == Symbol.LAMBDA) {
-					Closure closure = new LambdaClosure(first, env);
-					return evalCall(closure, cdr, env, thread);
-				} else
-					return program_error("Illegal function object: " + first.princToString() + ".");
-			}
-		} else
-			return obj;
+			} else
+				return obj;
+		}
 	}
 
 	public static final int CALL_REGISTERS_MAX = 8;

@@ -994,7 +994,7 @@ class Name implements java.io.Serializable
     // I guess we could move these to StringUtil someday
 
     private static class Parts {
-        private static final Map<String, Parts> PARTSCACHE = new WeakHashMap<>();
+        private static final Map<String, Parts> PARTSCACHE = new WeakHashMap<String, Parts>();
         private final String[] prefix;
         private final String[] suffix;
         private final List<String> list;

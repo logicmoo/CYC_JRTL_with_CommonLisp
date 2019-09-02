@@ -66,21 +66,21 @@ public class NameSpace
     /** The parent. */
     private NameSpace parent;
     /** The variables. */
-    private Map<String, Variable> variables = new HashMap<>();
+    private Map<String, Variable> variables = new HashMap<String, Variable>();
     /** The methods. */
-    private Map<String, List<BshMethod>> methods = new HashMap<>();
+    private Map<String, List<BshMethod>> methods = new HashMap<String, List<BshMethod>>();
     /** The imported classes. */
-    protected Map<String, String> importedClasses = new HashMap<>();
+    protected Map<String, String> importedClasses = new HashMap<String, String>();
     /** The imported packages. */
-    private List<String> importedPackages = new ArrayList<>();
+    private List<String> importedPackages = new ArrayList<String>();
     /** The imported commands. */
-    private List<String> importedCommands = new ArrayList<>();
+    private List<String> importedCommands = new ArrayList<String>();
     /** The imported objects. */
-    private List<Object> importedObjects = new ArrayList<>();
+    private List<Object> importedObjects = new ArrayList<Object>();
     /** The imported static. */
-    private List<Class<?>> importedStatic = new ArrayList<>();
+    private List<Class<?>> importedStatic = new ArrayList<Class<?>>();
     /** The name source listeners. */
-    private List<NameSource.Listener> nameSourceListeners = new ArrayList<>();
+    private List<NameSource.Listener> nameSourceListeners = new ArrayList<Listener>();
     /** The package name. */
     private String packageName;
     /** The class manager. */
@@ -89,7 +89,7 @@ public class NameSpace
     // See notes in getThis()
     private This thisReference;
     /** Name resolver objects. */
-    private Map<String, Name> names = new HashMap<>();
+    private Map<String, Name> names = new HashMap<String, Name>();
     /** The node associated with the creation of this namespace. This is used
      * support getInvocationLine() and getInvocationText(). */
     SimpleNode callerInfoNode;
@@ -111,7 +111,7 @@ public class NameSpace
      * getClass() (taking into account imports). Only unqualified class names
      * are cached here (those which might be imported). Qualified names are
      * always absolute and are cached by BshClassManager. */
-    private transient Map<String, Class<?>> classCache = new HashMap<>();
+    private transient Map<String, Class<?>> classCache = new HashMap<String, Class<?>>();
 
     /** Sets the class static.
      * @param clas the new class static */
@@ -1169,7 +1169,7 @@ public class NameSpace
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
 
-        this.classCache = new HashMap<>();
+        this.classCache = new HashMap<String, Class<?>>();
     }
     /** Invoke a method in this namespace with the specified args and
      * interpreter reference. No caller information or call stack is required.

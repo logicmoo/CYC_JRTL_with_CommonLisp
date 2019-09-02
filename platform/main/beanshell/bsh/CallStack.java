@@ -54,7 +54,7 @@ import java.util.Stack;
 public final class CallStack implements Serializable {
     /** default serial version id */
     private static final long serialVersionUID = 1L;
-    private final Stack<NameSpace> stack = new Stack<>();
+    private final Stack<NameSpace> stack = new Stack<NameSpace>();
 
     public CallStack() { }
 

@@ -17,6 +17,7 @@
    limitations under the License.
  */
 package org.logicmoo.system;
+
 import static org.armedbear.lisp.Lisp.PACKAGE_CL;
 import static org.armedbear.lisp.Lisp.PACKAGE_CL_USER;
 import static org.armedbear.lisp.Lisp.PACKAGE_CYC;
@@ -194,16 +195,15 @@ public class Startup {
 	public static boolean Never_REDEFINE = false;
 	public static boolean Always_REDEFINE = false;
 	public static boolean BOOTY_HACKZ = true;
-	protected static boolean noInitLisp = false;
-	public static boolean noInitCyc = true;
 	protected static boolean delayEvalParams = true;
-	protected static boolean noInit = false;
 
 	public static boolean commonSymbolsOK = false;
+	protected static boolean noInitLisp = false;
+	public static boolean noInitCyc = false;
 
-	public static String subLisp = null;
 	public static boolean noExit = true;
 	public static String[] passedArgs;
+	public static String[] cycCmdArgs = new String[] { "-f", "(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))" };
 
 	public static boolean isSublispDefault = true;
 	protected static boolean useMainThread = true;
@@ -255,6 +255,7 @@ public class Startup {
 			to = System.out;
 		if (to == null)
 			to = SystemCurrent.originalSystemErr;
+
 		for (int i = 0; i < args.length; i++) {
 			String thisArg = args[i];
 			thisArg = thisArg.toLowerCase();
@@ -267,8 +268,31 @@ public class Startup {
 				}
 			}
 		}
-
-		ArrayList<String> argsList = new ArrayList<String>(Arrays.asList(args));
+		SubLMain me = SubLMain.me;
+		ArrayList<String> argsList = new ArrayList<String>();
+		ArrayList<String> cycArgsList = new ArrayList<String>();
+		for (int i = 0, size = args.length; i < size; ++i) {
+			String arg = args[i];
+			if (SubLMain.noArgCommandLineArgs.contains(arg)) {
+				cycArgsList.add(arg);
+				me.argNameToArgValueMap.put(arg, Boolean.TRUE);
+			} else if (SubLMain.argRequiredCommandLineArgs.contains(args[i])) {
+				if (i == size)
+					Errors.error("Not enough command line arguments given for: " + arg);
+				cycArgsList.add(args[i]);
+				final String value = args[++i];
+				cycArgsList.add(value);
+				me.argNameToArgValueMap.put(arg, value);
+			} else {
+				argsList.add(args[i]);
+				//Errors.error("Got invalid command line argument: " + args[i]);
+			}
+		}
+		if (cycArgsList.size() == 0) {
+			me.processCommandLineArgs(cycCmdArgs);
+		} else {
+			cycCmdArgs = cycArgsList.toArray(new String[cycArgsList.size()]);
+		}
 
 		if (argsList.contains("--fakeajaxswing")) {
 			argsList.add(0, "--ajaxswing");
@@ -356,7 +380,9 @@ public class Startup {
 		}
 		if (argsList.remove("--rcyc")) {
 			SubLMain.OPENCYC = false;
+			needSubLMAIN = true;
 			isSublispDefault = true;
+			argsList.add("--cyc");
 			try {
 				UpdateZip.updateUnits("7166");
 			} catch (Throwable e) {
@@ -366,7 +392,6 @@ public class Startup {
 			}
 		}
 		if (argsList.remove("--cyc")) {
-			Main.subLisp = "cyc-init";
 			Main.noBSHGUI = false;
 			needSubLMAIN = true;
 			Main.needABCL = false;
@@ -375,6 +400,9 @@ public class Startup {
 		}
 		if (argsList.remove("--nocyc")) {
 			needSubLMAIN = false;
+			noInitCyc = true;
+			isSublispDefault = false;
+
 		}
 		if (argsList.remove("--fromprolog")) {
 			//disablePrologSync = false;
@@ -386,6 +414,11 @@ public class Startup {
 			disablePrologSync = false;
 			trackStructs = true;
 			noPrologJNI = false;
+			//			JPL.init();
+			//			Query.oneSolution("ensure_loaded(library(jpl))");
+			//			Query.oneSolution("interactor");
+			/// Query.oneSolution("jcall('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',mainFromProlog,[])");
+
 		}
 		if (argsList.remove("--noprologsync")) {
 			disablePrologSync = true;
@@ -479,9 +512,9 @@ public class Startup {
 		if (gotSomeDs) {
 			argsNew = argsList.toArray(new String[argsList.size()]);
 		}
-		
+
 		passedArgs = argsNew;
-		
+
 		if (useBeanDeskGUI) {
 			bsh_desktop();
 			needIOConsole = false;
@@ -734,10 +767,6 @@ public class Startup {
 	final static private AtomicInteger nthCall = new AtomicInteger(0);
 	final static private CountDownLatch cdl = new CountDownLatch(1);
 
-	/**
-	 * TODO Describe the purpose of this method.
-	 * @param class1
-	 */
 	public static void needRunningSystem(Class class1) {
 		if (MainThreaded)
 			return;
@@ -898,6 +927,7 @@ public class Startup {
 
 	@LispMethod
 	public static SubLObject cyc_eval(final String str) throws Exception {
+
 		return while_not_changing_package(new Callable<SubLObject>() {
 			@Override
 			public SubLObject call() {
@@ -1254,17 +1284,17 @@ public class Startup {
 			inited_cyc = true;
 		}
 		synchronized (StartupInitLock) {
-			init_subl();
 			boolean wasSubLisp = Main.isSubLisp();
-			Main.setSubLisp(true);
 			try {
+				Main.setSubLisp(true);
+				init_subl();
 				SubLPackage prevPackage = Lisp.getCurrentPackage();
 				try {
 					init_subl();
 					SubLMain.handleInits();
 					SubLPackage.setCurrentPackage("CYC");
 					SubLMain.initializeTranslatedSystems();
-
+					SubLMain.handlePatches();
 					inited_cyc = true;
 					inited_cyc_complete = true;
 				} catch (Throwable e) {
@@ -1412,8 +1442,8 @@ public class Startup {
 			boolean wasshouldRunInBackground = SubLMain.shouldRunInBackground;
 
 			SubLPackage prevPackage = Lisp.getCurrentPackage();
-			SubLPackage.initPackages();
 			Main.setSubLisp(true);
+			SubLPackage.initPackages();
 			try {
 				SubLMain.shouldRunInBackground = true;
 				SubLMain.initializeSubL(new String[0]);
@@ -2068,6 +2098,7 @@ public class Startup {
 				return;
 			if (inited_swipl_server)
 				return;
+
 			synchronized (StartupInitLock) {
 				try {
 					String LARKC_HOME = getSetProp("LARKC_HOME", "larkc.home");
@@ -2623,14 +2654,14 @@ public class Startup {
 		} else {
 			runnable = Main.mainRunnable(argsNew, null);
 		}
+
 		scanForExports(Startup.class);
 		if (runnable != null) {
 			runnable.run();
+
 			scanForExports(BeanShellCntrl.class);
 		}
-		if (Main.needSubLMAIN) {
-			SubLMain.main(argsNew);
-		}
+
 	}
 
 	static class CreationInfo {
@@ -2735,11 +2766,27 @@ public class Startup {
 	/**
 	 *
 	 */
-	public static void registerSelf() {
+
+	public static void startCycInit() {
+		if (!noProlog)
+			Startup.start_prolog_from_lisp();
 		scanForExports(BeanShellCntrl.class);
-		cl_imports_cyc();
-		cyc_imports_cl();
-		start_prolog_from_lisp();
+		if (Main.needSubLMAIN) {
+			init_cyc_classes();
+			SubLMain.doInitialEmbeddedMain(cycCmdArgs);
+			cl_imports_cyc();
+			cyc_imports_cl();
+		}
+	}
+
+	public static void completeCycInit() {
+		startCycInit();
+		try {
+			init_cyc_server();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

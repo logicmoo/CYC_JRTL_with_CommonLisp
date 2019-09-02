@@ -151,8 +151,8 @@ public class ClassGeneratorUtil implements Opcodes {
         This.contextStore.put(this.uuid = UUID.randomUUID().toString(), classStaticNameSpace);
 
         // Split the methods into constructors and regular method lists
-        List<DelayedEvalBshMethod> consl = new ArrayList<>();
-        List<DelayedEvalBshMethod> methodsl = new ArrayList<>();
+        List<DelayedEvalBshMethod> consl = new ArrayList<DelayedEvalBshMethod>();
+        List<DelayedEvalBshMethod> methodsl = new ArrayList<DelayedEvalBshMethod>();
         String classBaseName = Types.getBaseName(className); // for inner classes
         for (DelayedEvalBshMethod bshmethod : bshmethods)
             if (bshmethod.getName().equals(classBaseName))
@@ -722,7 +722,7 @@ public class ClassGeneratorUtil implements Opcodes {
      * @param type The class to check.
      * @throws RuntimException if validation fails. */
     static void checkAbstractMethodImplementation(Class<?> type) {
-        final List<Method> meths = new ArrayList<>();
+        final List<Method> meths = new ArrayList<Method>();
         class Reflector {
             void gatherMethods(Class<?> type) {
                 if (null != type.getSuperclass())

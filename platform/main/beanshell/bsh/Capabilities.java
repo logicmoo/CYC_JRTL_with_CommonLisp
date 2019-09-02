@@ -89,7 +89,7 @@ public class Capabilities implements Supplier<Boolean>, Consumer<Boolean>
         BshClassManager.memberCache.clear();
     }
 
-    private static final Map<String, Class<?>> classes = new WeakHashMap<>();
+    private static final Map<String, Class<?>> classes = new WeakHashMap<String, Class<?>>();
     /**
         Use direct Class.forName() to test for the existence of a class.
         We should not use BshClassManager here because:

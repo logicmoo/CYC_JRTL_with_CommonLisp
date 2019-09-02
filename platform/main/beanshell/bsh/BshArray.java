@@ -91,7 +91,7 @@ public class BshArray {
             return list.subList(0, 0);
         if ( step == 0 || step == 1 )
             return list.subList(from, to);
-        List<Integer> slices = new ArrayList<>();
+        List<Integer> slices = new ArrayList<Integer>();
         for ( int i = 0; i < length; i++ )
             if ( i % step == 0 )
                 slices.add(step < 0 ? length-1-i : i+from);
@@ -133,12 +133,12 @@ public class BshArray {
     public static Object repeat(List<Object> list, int times) {
         if ( times < 1 )
             if (list instanceof Queue)
-                return new LinkedList<>();
+                return new LinkedList<Object>();
             else
-                return new ArrayList<>(0);
+                return new ArrayList<Object>(0);
         List<Object> lst = list instanceof Queue
-                            ? new LinkedList<>(list)
-                            : new ArrayList<>(list);
+                            ? new LinkedList<Object>(list)
+                            : new ArrayList<Object>(list);
         if ( times == 1 )
             return lst;
         while ( times-- > 1 )
@@ -172,8 +172,8 @@ public class BshArray {
      * @return a new list instance of concatenated contents. */
     public static Object concat(List<?> lhs, List<?> rhs) {
         List<Object> list = lhs instanceof Queue
-                        ? new LinkedList<>(lhs)
-                        : new ArrayList<>(lhs);
+                        ? new LinkedList<Object>(lhs)
+                        : new ArrayList<Object>(lhs);
         list.addAll(rhs);
         return list;
     }
@@ -288,7 +288,7 @@ public class BshArray {
      * @param entries array of Map.Entry elements
      * @return a mutable, type relaxed LinkedHashMap */
     private static Map<?, ?> mapOfEntries( Entry<?, ?>... entries ) {
-        Map<Object, Object> looseTypedMap = new LinkedHashMap<>( entries.length );
+        Map<Object, Object> looseTypedMap = new LinkedHashMap<Object, Object>( entries.length );
         for (Entry<?, ?> entry : entries)
             looseTypedMap.put(entry.getKey(), entry.getValue());
         return looseTypedMap;
@@ -309,19 +309,19 @@ public class BshArray {
             if ( Types.isJavaAssignable(List.class, toType) || Queue.class == toType ) {
                 if ( Types.isJavaAssignable(toType, ArrayList.class) )
                     // List type is implemented as a mutable ArrayList
-                    return new ArrayList<>(Arrays.asList((Object[])
+                    return new ArrayList<Object>(Arrays.asList((Object[])
                         Types.castObject(fromValue, Object.class, Types.CAST)));
                 else if ( Types.isJavaAssignable(toType, LinkedList.class) )
                     // Queue type is implemented as a mutable LinkedList
-                    return new LinkedList<>(Arrays.asList((Object[])
+                    return new LinkedList<Object>(Arrays.asList((Object[])
                         Types.castObject(fromValue, Object.class, Types.CAST)));
             } else if ( Types.isJavaAssignable(toType, ArrayDeque.class) )
                 // Deque type is implemented as a mutable ArrayDeque
-                return new ArrayDeque<>(Arrays.asList((Object[])
+                return new ArrayDeque<Object>(Arrays.asList((Object[])
                     Types.castObject(fromValue, Object.class, Types.CAST)));
             else if ( Types.isJavaAssignable(toType, LinkedHashSet.class) )
                 // Set type is implemented as a mutable LinkedHashSet
-                return new LinkedHashSet<>(Arrays.asList((Object[])
+                return new LinkedHashSet<Object>(Arrays.asList((Object[])
                     Types.castObject(fromValue, Object.class, Types.CAST)));
 
         Class<?> baseType = Types.arrayElementType(fromType);
@@ -332,7 +332,7 @@ public class BshArray {
                 return mapOfEntries((Entry[]) fromValue);
             if ( Types.isJavaAssignable(toType, LinkedHashMap.class) ) {
                 int length = Array.getLength(fromValue);
-                Map<Object, Object> map = new LinkedHashMap<>(
+                Map<Object, Object> map = new LinkedHashMap<Object, Object>(
                         (int) Math.ceil((0.0 + length) / 2));
                 for ( int i = 0; i < length; i++ )
                     map.put(Array.get(fromValue, i),
@@ -497,7 +497,7 @@ public class BshArray {
         @Override
         public ListIterator<Object> listIterator(final int index) {
             /** A copy of the list iterator to avoid concurrent modification issues. */
-            ListIterator<Integer> sliceIter = new ArrayList<>(this.steps).listIterator(index);
+            ListIterator<Integer> sliceIter = new ArrayList<Integer>(this.steps).listIterator(index);
             return new ListIterator<Object>() {
                 int lastIndex = 0;
                 /** Overridden method delegates to the copy.

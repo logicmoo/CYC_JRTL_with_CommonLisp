@@ -310,9 +310,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/larkc/asm-7.1.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1567386215684/source/asm-7.1-sources.jar"/>
-	<classpathentry kind="lib" path="lib/larkc/asm-analysis-7.1.jar"/>
-	<classpathentry kind="lib" path="lib/larkc/asm-commons-7.1.jar"/>
-	<classpathentry kind="lib" path="lib/larkc/asm-tree-7.1.jar"/>
-	<classpathentry kind="output" path="target/classes"/>
+	<classpathentry kind="lib" path="lib/larkc/asm-all-3.1.jar"/>
+	<classpathentry kind="output" path="target/ceclipse-classes"/>
 </classpath>

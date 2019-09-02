@@ -73,7 +73,7 @@ class BSHClassDeclaration extends SimpleNode
 
         // resolve superclass if any
         Class superClass = null;
-        final List<BshMethod> meths = new ArrayList<>(0);
+        final List<BshMethod> meths = new ArrayList<BshMethod>(0);
         if ( extend ) {
             BSHAmbiguousName superNode = (BSHAmbiguousName)jjtGetChild(child++);
             superClass = superNode.toClass( callstack, interpreter );

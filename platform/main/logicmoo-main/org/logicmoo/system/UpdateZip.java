@@ -35,6 +35,7 @@ import java.util.zip.ZipFile;
 public class UpdateZip {
 	public static void main(String[] args) throws IOException {
 		updateUnits(args[0]);
+		args = org.logicmoo.system.Startup.extractOptions(UpdateZip.class, args);
 	}
 
 	static boolean startedUpdateUnits = false;
@@ -47,21 +48,28 @@ public class UpdateZip {
 		if (startedUpdateUnits)
 			return;
 		startedUpdateUnits = true;
-		zipMap("units/" + name + "/unrepresented-terms.cfasl", "units" + name + ".zip", "units/");
-		zipMap("data/caches/" + name + "/generic-singular-nl-generation-fort-cache.fht", "data" + name + ".zip", "data/");
-		zipMap("data/scg-repo-v2/service.properties", "scg-repo-v2.zip", "data/");
-		zipMap("webapps/apps/webapp-manifest.xml", "webapps" + name + ".zip", "./");
-		zipMap("httpd/htdocs/javascript/simularity.js", "httpd.zip", "httpd/");
+		try {
+			zipMap("units/" + name + "/unrepresented-terms.cfasl", "units" + name + ".zip", "units/");
+			zipMap("data/caches/" + name + "/generic-singular-nl-generation-fort-cache.fht", "data" + name + ".zip", "data/");
+			zipMap("data/scg-repo-v2/service.properties", "scg-repo-v2.zip", "data/");
+			//zipMap("webapps/webapp-manifest.xml", "webapps" + name + ".zip", "./");
+			zipMap("httpd/htdocs/javascript/similarity.js", "httpd.zip", "httpd/");
+		} catch (Throwable t) {
+			Startup.addUncaught(t);
+		}
 
 	}
 
 	public static void zipMap(String fileName, String zipname, String outDir) {
 		try {
 
-			File fileDir = new File("../platform/");
-			if (!fileDir.exists()) {
-				throw new RuntimeException("Not exists dir " + fileDir);
+			File fileDir2 = new File(new File(".."), "platform");
+			if (!fileDir2.isDirectory()) {
+				if (!Startup.isUnderAjax() && !Startup.keepGoing)
+					throw new RuntimeException("Not exists dir " + fileDir2);
 			}
+			Startup.getSetProp("LARKC_HOME", "larkc.home");
+			File fileDir = new File(System.getProperty("larkc.home", fileDir2.getAbsolutePath()));
 			File testfile = new File(fileDir, fileName);
 			if (!testfile.exists()) {
 				System.err.println("Not exists " + testfile);
@@ -76,8 +84,10 @@ public class UpdateZip {
 				System.err.println("Exists " + testfile);
 			}
 		} catch (Throwable e) {
+			Startup.addUncaught(e);
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			if (!Startup.keepGoing)
+				throw new RuntimeException(e);
 		}
 	}
 

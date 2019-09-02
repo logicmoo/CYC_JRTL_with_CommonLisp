@@ -60,7 +60,7 @@ public abstract class Invocable implements Member {
     private final String name;
     private final int flags;
     private final Class<?> declaringClass;
-    protected final List<Object> parameters = new ArrayList<>();
+    protected final List<Object> parameters = new ArrayList<Object>();
     protected int lastParameterIndex;
 
     /** Package private abstract invocable constructor.

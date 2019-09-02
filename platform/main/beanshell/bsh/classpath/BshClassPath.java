@@ -99,7 +99,7 @@ public class BshClassPath
     */
     private boolean nameCompletionIncludesUnqNames = true;
 
-    Vector<WeakReference<ClassPathListener>> listeners = new Vector<>();
+    Vector<WeakReference<ClassPathListener>> listeners = new Vector<WeakReference<ClassPathListener>>();
 
     // constructors
 
@@ -528,7 +528,7 @@ public class BshClassPath
     static String [] searchJarFSForClasses( URL url ) throws IOException {
         try {
             try {
-                FileSystems.newFileSystem(url.toURI(), new HashMap<>());
+                FileSystems.newFileSystem(url.toURI(), new HashMap<String, Object>());
             } catch (FileSystemAlreadyExistsException e) { /* ignore */ }
 
             Path path = FileSystems.getFileSystem(url.toURI()).getPath("/");
@@ -546,7 +546,7 @@ public class BshClassPath
      * @return array of class names found
      * @throws IOException */
     static String [] searchArchiveForClasses( URL url ) throws IOException {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<String>();
         ZipInputStream zip = new ZipInputStream(url.openStream());
 
         ZipEntry ze;

@@ -108,7 +108,7 @@ public class AWTConsole extends TextArea
     private StringBuffer line = new StringBuffer();
     private String startedLine;
     private int textLength = 0;
-    private List<String> history = new ArrayList<>();
+    private List<String> history = new ArrayList<String>();
     private int histLine = 0;
 
     public AWTConsole( int rows, int cols, InputStream cin, OutputStream cout ) {

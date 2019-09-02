@@ -57,8 +57,8 @@ public abstract class ReferenceCache<K,V> {
         keyFactory = toFactory(keyType);
         valueFactory = toFactory(valueType);
         lookupFactory = new HardReferenceFactory();
-        cache = new ConcurrentHashMap<>(initialSize);
-        queue = new ReferenceQueueMonitor<>();
+        cache = new ConcurrentHashMap<CacheReference<K>, Future<CacheReference<V>>>(initialSize);
+        queue = new ReferenceQueueMonitor<Object>();
         Thread t = new Thread(queue);
         t.setDaemon(true);
         t.start();
@@ -99,7 +99,7 @@ public abstract class ReferenceCache<K,V> {
         CacheReference<K> refKey = keyFactory.createKey(key, queue);
         if (cache.containsKey(refKey))
             return;
-        FutureTask<CacheReference<V>> task = new FutureTask<>(()-> {
+        FutureTask<CacheReference<V>> task = new FutureTask<CacheReference<V>>(()-> {
             V created = requireNonNull(create(key));
             return valueFactory.createValue(created, queue);
         });
@@ -279,7 +279,7 @@ public abstract class ReferenceCache<K,V> {
         @Override
         public CacheReference<V> createValue(
                 V value, ReferenceQueue<? super V> queue) {
-            return new WeakReferenceValue<>(value, queue);
+            return new WeakReferenceValue<V>(value, queue);
         }
     }
 
@@ -317,7 +317,7 @@ public abstract class ReferenceCache<K,V> {
         @Override
         public CacheReference<V> createValue(
                 V value, ReferenceQueue<? super V> queue) {
-            return new SoftReferenceValue<>(value, queue);
+            return new SoftReferenceValue<V>(value, queue);
         }
     }
 

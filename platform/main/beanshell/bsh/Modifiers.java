@@ -40,7 +40,7 @@ public class Modifiers implements java.io.Serializable
     private static final long serialVersionUID = 1L;
     public static final int CLASS=0, METHOD=1, FIELD=2;
     private final int context;
-    private final List<String> modifiers = new ArrayList<>();
+    private final List<String> modifiers = new ArrayList<String>();
 
     public Modifiers(int context) {
         this.context = context;
