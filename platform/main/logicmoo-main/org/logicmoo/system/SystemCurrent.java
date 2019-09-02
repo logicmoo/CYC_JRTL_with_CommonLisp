@@ -214,8 +214,8 @@ public class SystemCurrent {
 		} while (true);
 	}
 
-	public static InputStream in = System.in;
-	public static final In sin = new SystemCurrent.In("#<System.in>");
+	//public static InputStream in = System.in;
+	public static final In in = new SystemCurrent.In("#<System.in>");
 
 	/**
 	 * Reassigns the "standard" output stream.
@@ -274,8 +274,8 @@ public class SystemCurrent {
 			return is;
 		}
 	};
-	public static PrintStream out = System.out;
-	public static final Out sout = new Out("#<System.out>", tlout);
+	//public static PrintStream out = System.out;
+	public static final Out out = new Out("#<System.out>", tlout);
 
 	/**
 	 * Reassigns the "standard" error output stream.
@@ -335,12 +335,12 @@ public class SystemCurrent {
 			return is;
 		}
 	};
-	public static PrintStream err = System.err;
+	//public static PrintStream err = System.err;
 	public static boolean cantSetOut;
-	public static final Out serr = new Out("#<System.err>", tlerr);
+	public static final Out err = new Out("#<System.err>", tlerr);
 
 	static {
-		setupIO();
+		// setupIO();
 	}
 
 	static public class In extends BufferedInputStream {
@@ -396,14 +396,14 @@ public class SystemCurrent {
 		}
 
 		public boolean canAccessConsole(boolean expectedTo) {
-			if (currentOwner == null)
-				return true;
 			final Thread currentThread = Thread.currentThread();
 			if (currentThread == currentOwner)
 				return true;
 			if (!expectedTo) {
 				return false;
 			}
+			if (currentOwner == null)
+				return true;
 			return false;
 		}
 
@@ -416,10 +416,6 @@ public class SystemCurrent {
 					if (interrupted) {
 						Thread.sleep(100);
 						interrupted = false;
-						continue;
-					}
-					if (!canAccessConsole(false)) {
-						Thread.sleep(100);
 						continue;
 					}
 					int available = available();

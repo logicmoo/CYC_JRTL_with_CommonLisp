@@ -14,6 +14,9 @@ import static org.armedbear.lisp.Lisp.list;
 import static org.armedbear.lisp.Lisp.quote;
 import static org.armedbear.lisp.Lisp.readObjectFromString;
 import static org.armedbear.lisp.Lisp.valueOfString;
+import static org.logicmoo.system.Startup.addObject;
+import static org.logicmoo.system.Startup.create_constant;
+import static org.logicmoo.system.Startup.find_constant_by_name;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -60,7 +63,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
-
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
 public class LispSync extends SubLTrampolineFile {
 
 	static {
@@ -758,9 +761,9 @@ public class LispSync extends SubLTrampolineFile {
 		SimpleString cs = str(constname);
 		if (true)
 			return cs;
-		SubLObject lo = BeanShellCntrl.find_constant_by_name(cs);
+		SubLObject lo = find_constant_by_name(cs);
 		if (lo == null || lo == NIL) {
-			lo = BeanShellCntrl.create_constant(cs, (SubLBoolean) NIL);
+			lo = create_constant(cs, (SubLBoolean) NIL);
 		}
 		return (LispObject) lo;
 	}
@@ -910,7 +913,7 @@ public class LispSync extends SubLTrampolineFile {
 		if (!Main.noBSH) {
 			addSingleton(this);
 		}
-		BeanShellCntrl.addObject("mapClass2Refs", mapClass2Refs);
+		addObject("mapClass2Refs", mapClass2Refs);
 		addStaticFields(null, LispSync.class);
 	}
 
@@ -1371,7 +1374,7 @@ public class LispSync extends SubLTrampolineFile {
 
 	static {
 		addStaticFields(null, LispSync.class);
-		BeanShellCntrl.addObject("mapClass2Refs", mapClass2Refs);
+		addObject("mapClass2Refs", mapClass2Refs);
 	}
 
 	public static LispObject cycL(String name, AbstractSubLStruct s, java.util.List l) {

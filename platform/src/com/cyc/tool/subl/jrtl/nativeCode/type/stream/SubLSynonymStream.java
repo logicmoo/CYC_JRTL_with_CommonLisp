@@ -12,8 +12,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 	public SubLSynonymStream(SubLSymbol streamSymbol) {
-		super(Keyword.TEXT_KEYWORD_CHARACTER, getDirection(streamSymbol),
-				Keyword.ERROR_KEYWORD, Keyword.ERROR_KEYWORD);
+		super(Keyword.TEXT_KEYWORD_CHARACTER, getDirection(streamSymbol), Keyword.ERROR_KEYWORD, Keyword.ERROR_KEYWORD);
 		this.streamSymbol = (Symbol) streamSymbol;
 	}
 
@@ -22,9 +21,11 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 	 * @return
 	 */
 	public static SubLSymbol getDirection(SubLSymbol streamSymbol) {
-		if(streamSymbol==null) return null;
+		if (streamSymbol == null)
+			return null;
 		SubLObject o = streamSymbol.getValue();
-		if(o==null) return null;
+		if (o == null)
+			return null;
 		SubLStream s = o.getStream(true);
 		if(s==null) {
 			return Keyword.UNDERFLOW;
@@ -71,9 +72,7 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 			return this;
 		try {
 			SubLStream result;
-			for (result = streamSymbol.getValue()
-					.getStream(true); result instanceof SubLSynonymStream; result = ((SubLSynonymStream) result)
-							.getStreamSymbol().getValue().getStream(true)) {
+			for (result = streamSymbol.getValue().getStream(true); result instanceof SubLSynonymStream; result = ((SubLSynonymStream) result).getStreamSymbol().getValue().getStream(true)) {
 			}
 			return result;
 		} catch (Exception e) {
@@ -173,5 +172,15 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 	@Override
 	public SubLOutputTextStream toOutputTextStream() {
 		return getStream(true).toOutputTextStream();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.stream.AbstractRandomAccessSubLStream#print(char)
+	 */
+	@Override
+	public void print(char c) {
+		toOutputTextStream().write(c);
+		// TODO Auto-generated method stub
+
 	}
 }

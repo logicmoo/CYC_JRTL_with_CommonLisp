@@ -44,6 +44,7 @@ import java.util.ArrayList;
 
 import org.armedbear.lisp.util.Finalizer;
 import org.logicmoo.system.SpecialMethod;
+import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.util.SubLFiles.VariableAccessMode;
@@ -5452,7 +5453,7 @@ public final class Primitives {
 
         @Override
         public LispObject execute() {
-            return number(System.currentTimeMillis() - Main.startTimeMillis);
+            return number(System.currentTimeMillis() - Startup.startTimeMillis);
         }
     };
 

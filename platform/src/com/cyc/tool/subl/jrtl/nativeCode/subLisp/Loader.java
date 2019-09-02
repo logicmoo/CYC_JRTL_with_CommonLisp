@@ -17,6 +17,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ResumeException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.IsolatedClassLoader;
 import com.cyc.tool.subl.util.PatchFileLoader;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
@@ -254,7 +255,7 @@ public class Loader {
 
 	for (String sc : skippedClasses) {
 	    if (className.matches(sc)) {
-		Errors.warn("Skipping: " + className);
+				// Errors.warn("Skipping: " + className);
 		skippedClasses.add(className);
 		return;
 	    }
@@ -270,7 +271,7 @@ public class Loader {
 		// Errors.warn("Not again: " + className);
 		return;
 	    } else if (notAgain.contains(shortClassName)) {
-		Errors.warn("Again: " + className);
+				//Errors.warn("Again: " + className);
 		notAgain.add(className);
 
 		if (!SubLTranslatedFile.installingUnderlay) {
@@ -408,7 +409,7 @@ public class Loader {
 	String superMethod = string.replace("|", shortName);
 	Method m;
 	try {
-	    m = fileClass.getDeclaredMethod(superMethod);
+			m = IsolatedClassLoader.getDeclaredMethod(fileClass, superMethod);
 	} catch (NoSuchMethodException e) {
 	    return false;
 	}
@@ -426,7 +427,7 @@ public class Loader {
 	String superMethod = string.replace("|", shortName);
 	Method m;
 	try {
-	    m = fileClass.getDeclaredMethod(superMethod);
+			m = IsolatedClassLoader.getDeclaredMethod(fileClass, superMethod);
 	} catch (NoSuchMethodException e) {
 	    return false;
 	}
@@ -476,7 +477,7 @@ public class Loader {
 			return previous;
 		}
 		if (!alwaysRedefine) {
-		    Errors.warn("Attempt to redefine: " + functionSymbol);
+					//Errors.warn("Attempt to redefine: " + functionSymbol);
 		    return previous;
 		}
 	    }
@@ -511,7 +512,7 @@ public class Loader {
 	    if (alwaysRedefine) {
 		//Errors.warn("ALWAYS Redefining " + functionSymbol);
 	    } else if (neverRedefine) {
-		Errors.warn("NEVER Redefining " + functionSymbol);
+				//Errors.warn("NEVER Redefining " + functionSymbol);
 		return previous;
 	    }
 

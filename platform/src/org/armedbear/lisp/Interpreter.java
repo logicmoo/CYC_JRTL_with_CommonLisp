@@ -64,7 +64,7 @@ import java.io.PrintStream;
 
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
-import org.semanticweb.kaon2.oab;
+
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
@@ -143,7 +143,7 @@ public final class Interpreter extends Startup implements Runnable {
 		if (noinform)
 			_NOINFORM_.setSymbolValue(T);
 		else {
-			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
+			double uptime = (System.currentTimeMillis() - Startup.startTimeMillis) / 1000.0;
 			final Stream out = getStandardOutput();
 			out._writeString("Low-level initialization used " + uptime + " seconds.\n");
 		}
@@ -169,16 +169,9 @@ public final class Interpreter extends Startup implements Runnable {
 		//			SubLMain.embeddedMain(new String[0], SubLMain.NOTHING_TO_DO);
 		//		}
 		if (!noinform) {
-			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
+			double uptime = (System.currentTimeMillis() - Startup.startTimeMillis) / 1000.0;
 			final Stream out = getStandardOutput();
 			out._writeString("Low-level initialization completed in " + uptime + " seconds.\n");
-		}
-		Startup.startCycInit();
-
-		if (!noinform) {
-			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
-			final Stream out = getStandardOutput();
-			out._writeString("CYC initialization complete at " + uptime + " total seconds.\n");
 		}
 
 		if (!noinit) {

@@ -833,8 +833,8 @@ public class SubLMain extends Startup {
 		exit(code);
 	}
 
-	public void processCommandLineArgs(String[] argsIn) {
-		String[] args = Main.extractOptions(argsIn);
+	public void processCommandLineArgs(String[] args) {
+		// String[] args = Main.extractOptions(argsIn);
 		for (int i = 0, size = args.length; i < size; ++i) {
 			String arg = args[i];
 			if (noArgCommandLineArgs.contains(arg))

@@ -29,6 +29,7 @@ import java.util.jar.Manifest;
 
 import org.armedbear.lisp.JavaClassLoader;
 import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
@@ -105,6 +106,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 			final URL url = normalizedURL(f.toURI().toURL());
 			if (containsURL(cl, url))
 				return true;
+
+			final String urlString = url.toString();
+			if (urlString.contains("/javagat/")) {
+				Errors.warn("adding? " + urlString);
+			}
 
 			// If Java 8 or below fallback to old method
 			Method m = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
@@ -532,7 +538,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	*/
 	static void printf(String s, Object... a) {
 		// TODO Auto-generated method stub
-		System.err.printf(s, a);
+		SystemCurrent.originalSystemOut.printf(s, a);
 	}
 
 	private byte[] toByteArray(InputStream inputStream) throws IOException {
@@ -877,7 +883,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		if (found == 0) {
 			printf(" MISSING!: %s%n", name);
 		} else if (found != 1) {
-			printf(" DUPERS!: %s%n", name);
+			printf(" DUPERS(%d): %s%n", found, name);
 
 			urls = cl.getResources(classAsResource);
 			while (urls.hasMoreElements()) {
@@ -885,5 +891,62 @@ public class IsolatedClassLoader extends URLClassLoader {
 				printf(" DUPE!: %s%n", url.toExternalForm());
 			}
 		}
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param class1
+	 * @throws IOException
+	 */
+	public static void classDupes(final Class<?> class1) throws IOException {
+		addPreloadedClass(class1);
+		IsolatedClassLoader.classDupes(class1.getName());
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param class1
+	 */
+	public static void addPreloadedClass(Class<?> class1) {
+		theIsolatedClassLoader.loadedAlready.put(class1.getName(), class1);
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @throws IOException
+	 */
+	public static void configChecks() throws IOException {
+		printf("CLASSPATH=%s%n", System.getProperty("java.class.path"));
+		classDupes(javax.servlet.ServletContext.class);
+		classDupes(org.apache.jasper.servlet.JspServlet.class);
+		classDupes(org.apache.xerces.jaxp.SAXParserFactoryImpl.class);
+		classDupes(org.eclipse.jetty.webapp.WebAppClassLoader.Context.class);
+		classDupes(org.slf4j.spi.LocationAwareLogger.class);
+		IsolatedClassLoader.classDupes("org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer");
+		//classDupes(org.apache.tomcat.util.security.MD5Encoder.class);
+
+		//		classDupes(org.apache.jasper.servlet.JasperInitializer.class);
+		//		classDupes(org.eclipse.jetty.util.component.AttributeContainerMap.class);
+		//		classDupes(com.sun.jersey.spi.container.servlet.ServletContainer.class);
+		//		classDupes(org.eclipse.jetty.http.HttpField.class);
+		//		classDupes(HttpServletRequest.class);
+
+		IsolatedClassLoader.classDupes("org.eclipse.jetty.io.ByteBufferPool");
+		classDupes(org.eclipse.jetty.security.SecurityHandler.class);
+		//		classDupes(RealmBase.class);
+		//		classDupes(Embedded.class);
+		//		classDupes(Loader.class);
+		//		//JasperInitializer.class.toString();
+		//		classDupes(org.apache.naming.resources.BaseDirContext.class);
+		//		classDupes(ParallelWebappClassLoader.class);
+		//		try {
+		//			//org.apache.tomcat.util.security.MD5Encoder.class.getConstructor().setAccessible(true);
+		//		} catch (SecurityException | NoSuchMethodException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
+		//classDupes(com.sun.jersey.spi.scanning.AnnotationScannerListener.class);
 	}
 }

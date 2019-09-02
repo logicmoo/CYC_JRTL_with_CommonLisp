@@ -2,6 +2,8 @@
  * For LarKC
  */
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+
 
 
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;

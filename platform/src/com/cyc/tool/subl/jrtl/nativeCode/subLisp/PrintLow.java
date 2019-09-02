@@ -16,7 +16,7 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-public class PrintLow extends SubLTrampolineFile {
+public class PrintLow extends SubLTrampolineFile implements CommonSymbols {
     public static boolean controlPrintLength() {
 	return $print_length$.getValue().isNumber();
     }

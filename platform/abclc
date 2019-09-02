@@ -31,11 +31,14 @@ export _JAVA_SR_SIGNUM=20
 
 # cls
 
+export CATALINA_HOME=$BASEDIR
+export CLASSPATH=$BASEDIR/target/classes
+
 echo BASEDIR=$BASEDIR
 echo LCD=$LCD
 echo JARPREFIX=$JARPREFIX
-ln -s $BASEDIR/lib $JARPREFIX
-source $BASEDIR/set_classpath.sh
+#ln -s $BASEDIR/lib $JARPREFIX
+# source $BASEDIR/set_classpath.sh
 #echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 #echo JAVA_HOME=$JAVA_HOME
 #echo LD_PRELOAD=$LD_PRELOAD

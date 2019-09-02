@@ -30,6 +30,8 @@ For help on the automatic tests available, use the Ant target 'help.test'.
          properties in the 'abcl.properties' file. -->
     <property file="abcl.properties"/>
 
+    <property name="lib.file.mask"
+              value="larkc/*.jar"/>
     <property name="build.dir"
               value="${basedir}/target"/>
     <property name="build.classes.dir"
@@ -156,7 +158,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
     	<pathelement location="bin-eclipse/"/>
     	<pathelement location="${java.home}/../lib/tools.jar"/>
     	  <fileset dir="lib">
-    	    <include name="**/*.jar" />
+    	    <include name="${lib.filemask}" />
     	  </fileset>    	
     </path>
 
@@ -239,7 +241,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 	
 	<path id="lib.class.path">
 	  <fileset dir="lib">
-	    <include name="**/*.jar" />
+	    <include name="${lib.filemask}" />
 	  </fileset>
 	</path>
 
@@ -1206,7 +1208,7 @@ ${basedir}/../cl-bench
         <pathelement location="${env.CLASSPATH}"/>
     	<pathelement location="${java.home}/../lib/tools.jar"/>
     	 <fileset dir="lib">
-    	    <include name="**/*.jar" />
+    	    <include name="${lib.filemask}" />
     	  </fileset>
     </path>
 	

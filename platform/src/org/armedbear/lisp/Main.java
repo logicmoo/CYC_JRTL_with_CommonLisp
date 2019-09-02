@@ -32,54 +32,30 @@
  */
 package org.armedbear.lisp;
 
-//import static org.armedbear.lisp.Options.*;
-import java.io.PrintStream;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.Iterator;
 
 import org.armedbear.j.Editor;
 import org.logicmoo.system.JVMImpl;
 import org.logicmoo.system.Startup;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess.TerminationRequest;
 
 public final class Main extends Startup {
 
-	/**
-	 * @author Administrator
-	 *
-	 */
-
-	public static final long startTimeMillis = System.currentTimeMillis();
-
-	private static void reportUncaughts() {
-		PrintStream err = getNoticeStream();
-		if (unexpectedThrowable != null) {
-
-			for (Iterator<Throwable> iterator = unexpectedThrowable.iterator(); iterator.hasNext();) {
-				Throwable throwable = iterator.next();
-				try {
-					err.print("unexpectedThrowable: " + throwable);
-					throwable.printStackTrace(err);
-					err.flush();
-				} catch (Throwable e) {
-					// TODO: handle exception
-				}
-			}
-
-		}
-	}
-
-	private static PrintStream getNoticeStream() {
-		PrintStream err = System.err;
-		if (err == null)
-			err = System.out;
-		return err;
-	}
-
 	public static void main(String[] args) throws InterruptedException {
 		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if (true)
+					Errors.unimplementedMethod("Auto-generated method stub:  Type1567437873876.run");
+
+			}
+		}));
 		if (args == null || args.length == 0) {
 			args = new String[] { "--abcl" };
 		}
@@ -88,14 +64,17 @@ public final class Main extends Startup {
 			Editor.main(prependArgs("--no-session", prependArgs("--force-new-instance", argsNew)));
 			return;
 		}
-		if (needIOConsole) {
-			needIOConsole = false;
-			noExit = false;
-			Runnable t = mainUnjoined(argsNew);
-			runThread(Main.class.getName(), t);
+		try {
+			if (needIOConsole) {
+				needIOConsole = false;
+				noExit = false;
+				Runnable t = mainUnjoined(argsNew);
+				runThread(Main.class.getName(), t);
+			} else {
+				Thread.yield();
+			}
+		} finally {
 			exit(exitCode);
-		} else {
-			Thread.yield();
 		}
 	}
 
@@ -146,8 +125,9 @@ public final class Main extends Startup {
 		} catch (Throwable e) {
 			exitCode = 1;
 			addUncaught(e);
+		} finally {
+			Startup.reportUncaughts();
 		}
-		reportUncaughts();
 	}
 
 	public static Runnable mainRunnable(final String[] args, Runnable after) {

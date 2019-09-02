@@ -35,8 +35,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		UNINIT, READ, WRITE;
 	}
 
-	protected AbstractRandomAccessSubLStream(String fileName, SubLSymbol elementType, SubLSymbol direction,
-			SubLSymbol ifExists, SubLSymbol ifNotExists) {
+	protected AbstractRandomAccessSubLStream(String fileName, SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists, SubLSymbol ifNotExists) {
 		super(elementType, direction, ifExists, ifNotExists);
 		isMapped = false;
 		readByteBuffer = null;
@@ -51,8 +50,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		initFile(fileName);
 	}
 
-	protected AbstractRandomAccessSubLStream(SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists,
-			SubLSymbol ifNotExists) {
+	protected AbstractRandomAccessSubLStream(SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists, SubLSymbol ifNotExists) {
 		super(elementType, direction, ifExists, ifNotExists);
 		isMapped = false;
 		readByteBuffer = null;
@@ -236,11 +234,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			fileChannel = raf.getChannel();
 			if (direction == Keyword.INPUT_KEYWORD || direction == Keyword.IO_KEYWORD)
 				if (theFile.length() > 100000L && theFile.length() < 2147483647L && shouldMemoryMap) {
-					mappedBuffer = direction == Keyword.INPUT_KEYWORD
-							? fileChannel.map(FileChannel.MapMode.READ_ONLY, 0L, theFile.length())
-							: fileChannel.map(
-									canWrite() ? FileChannel.MapMode.READ_WRITE : FileChannel.MapMode.READ_ONLY, 0L,
-									theFile.length());
+					mappedBuffer = direction == Keyword.INPUT_KEYWORD ? fileChannel.map(FileChannel.MapMode.READ_ONLY, 0L, theFile.length()) : fileChannel.map(canWrite() ? FileChannel.MapMode.READ_WRITE : FileChannel.MapMode.READ_ONLY, 0L, theFile.length());
 					readByteBuffer = mappedBuffer;
 					isMapped = true;
 					if (theFile.length() <= 700000000L)
@@ -559,12 +553,10 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			readByteBuffer.get(tmpBuffer, 0, bytesInInteger);
 			incrementFilePosition(bytesInInteger);
 			if (useNetworkByteOrder)
-				for (int i = bytesInInteger
-						- 1, offset = 0; i >= 0; result |= (tmpBuffer[i--] & 0xFF) << offset, offset += 8) {
+				for (int i = bytesInInteger - 1, offset = 0; i >= 0; result |= (tmpBuffer[i--] & 0xFF) << offset, offset += 8) {
 				}
 			else
-				for (int i = 0, offset = 0; i < bytesInInteger; result |= (tmpBuffer[i++]
-						& 0xFF) << offset, offset += 8) {
+				for (int i = 0, offset = 0; i < bytesInInteger; result |= (tmpBuffer[i++] & 0xFF) << offset, offset += 8) {
 				}
 			return result;
 		} catch (BufferUnderflowException bue) {
@@ -874,6 +866,10 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		try {
 			if (c > '\u00ff' || c < '\0')
 				Errors.error("Non-ascii characters not currently supported: " + c + ".");
+			if (writeByteBuffer == null) {
+				print(c);
+				return;
+			}
 			writeByteBuffer.put((byte) c);
 		} catch (BufferOverflowException boe) {
 			this.flush();
@@ -881,14 +877,22 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		}
 	}
 
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param c
+	 */
+	abstract public void print(char c);
+
 	public void writeChar(char[] cbuf) {
 		lastDirection = Direction.WRITE;
-		Errors.unimplementedMethod("AbstractSubLTetStream.write(char[])");
+		for (char c : cbuf)
+			this.writeChar(c);
 	}
 
 	public void writeChar(char[] cbuf, int off, int len) {
 		lastDirection = Direction.WRITE;
-		Errors.unimplementedMethod("AbstractSubLTetStream.write(char[],int,int)");
+		for (int i = off, size = len + off; i < size; ++i)
+			this.writeChar(cbuf[i]);
 	}
 
 	public void writePositiveIntegerAsByteSequence(long integer, int bytesInInteger, boolean useNetworkByteOrder) {
@@ -986,8 +990,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		this.writeWritableDataToChannel(getUnderlyingFilePos(), writeByteBuffer.position(), checkOpen);
 	}
 
-	protected synchronized void writeWritableDataToChannel(long filePos, int bufferPos, boolean checkOpen)
-			throws IOException {
+	protected synchronized void writeWritableDataToChannel(long filePos, int bufferPos, boolean checkOpen) throws IOException {
 		if (fileChannel == null || writeByteBuffer == null)
 			return;
 		if (checkOpen)

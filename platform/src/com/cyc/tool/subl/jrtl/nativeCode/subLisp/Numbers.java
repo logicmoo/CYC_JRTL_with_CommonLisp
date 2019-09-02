@@ -1,6 +1,8 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.RET_T;
+
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -62,20 +64,16 @@ public class Numbers extends SubLTrampolineFile {
 	private static class BigIntMathFuncProcessingFunc implements MathFuncProcessingByType {
 		@Override
 		public SubLNumber processMathFunc(SubLObject arg1, SubLObject arg2, MultiArgMathFuncDesc mathFunc) {
-			BigInteger firstArg = arg1.isBigIntegerBignum() ? ((SubLBigIntBignum) arg1).getBigInt()
-					: new BigInteger(arg1.princToString());
-			BigInteger secondArg = arg2.isBigIntegerBignum() ? ((SubLBigIntBignum) arg2).getBigInt()
-					: new BigInteger(arg2.princToString());
+			BigInteger firstArg = arg1.isBigIntegerBignum() ? ((SubLBigIntBignum) arg1).getBigInt() : new BigInteger(arg1.princToString());
+			BigInteger secondArg = arg2.isBigIntegerBignum() ? ((SubLBigIntBignum) arg2).getBigInt() : new BigInteger(arg2.princToString());
 			return SubLNumberFactory.makeInteger(mathFunc.getBinaryValue(firstArg, secondArg));
 		}
 
 		@Override
 		public SubLNumber processMathFunc(SubLObject[] args, MultiArgMathFuncDesc mathFunc) {
-			BigInteger result = args[0].isBigIntegerBignum() ? ((SubLBigIntBignum) args[0]).getBigInt()
-					: new BigInteger(args[0].princToString());
+			BigInteger result = args[0].isBigIntegerBignum() ? ((SubLBigIntBignum) args[0]).getBigInt() : new BigInteger(args[0].princToString());
 			for (int i = 1, size = args.length; i < size; ++i)
-				result = mathFunc.getBinaryValue(result, args[i].isBigIntegerBignum()
-						? ((SubLBigIntBignum) args[i]).getBigInt() : new BigInteger(args[i].princToString()));
+				result = mathFunc.getBinaryValue(result, args[i].isBigIntegerBignum() ? ((SubLBigIntBignum) args[i]).getBigInt() : new BigInteger(args[i].princToString()));
 			return SubLNumberFactory.makeInteger(result);
 		}
 	}
@@ -313,10 +311,8 @@ public class Numbers extends SubLTrampolineFile {
 	private static SubLObject disassemble_integer_to_fixnums_recursive(SubLObject integer) {
 		if (SubLNil.NIL != numE(integer, CommonSymbols.ZERO_INTEGER))
 			return SubLNil.NIL;
-		SubLObject least_significant_fixnum = bytes
-				.ldb(bytes.sublisp_byte(CommonSymbols.EIGHT_INTEGER, CommonSymbols.ZERO_INTEGER), integer);
-		SubLObject recursive_answer = disassemble_integer_to_fixnums_recursive(
-				ash(integer, MINUS_EIGHT_INTEGER));
+		SubLObject least_significant_fixnum = bytes.ldb(bytes.sublisp_byte(CommonSymbols.EIGHT_INTEGER, CommonSymbols.ZERO_INTEGER), integer);
+		SubLObject recursive_answer = disassemble_integer_to_fixnums_recursive(ash(integer, MINUS_EIGHT_INTEGER));
 		return ConsesLow.cons(least_significant_fixnum, recursive_answer);
 	}
 
@@ -339,8 +335,7 @@ public class Numbers extends SubLTrampolineFile {
 		return subtract(CommonSymbols.ZERO_INTEGER, val);
 	}
 
-	private static SubLObject processBinaryArgMathFunction(SubLObject arg1, SubLObject arg2,
-			MultiArgMathFuncDesc mathFunc) {
+	private static SubLObject processBinaryArgMathFunction(SubLObject arg1, SubLObject arg2, MultiArgMathFuncDesc mathFunc) {
 		MathFuncProcessingByType processingClassByType = verifyAndProcessBinaryMathFunctionArgs(arg1, arg2, mathFunc);
 		if (mathFunc == multiplicationDesc && processingClassByType != DOUBLE_PROCESSING_FUNC)
 			processingClassByType = BIGINT_PROCESSING_FUNC;
@@ -357,8 +352,7 @@ public class Numbers extends SubLTrampolineFile {
 		return processingClassByType.processMathFunc(args, mathFunc);
 	}
 
-	private static MathFuncProcessingByType verifyAndProcessBinaryMathFunctionArgs(SubLObject arg1, SubLObject arg2,
-			MultiArgMathFuncDesc mathFunc) {
+	private static MathFuncProcessingByType verifyAndProcessBinaryMathFunctionArgs(SubLObject arg1, SubLObject arg2, MultiArgMathFuncDesc mathFunc) {
 		int size = Math.max(arg1.getNumSize(), arg2.getNumSize());
 		switch (size) {
 		case 0:
@@ -375,8 +369,7 @@ public class Numbers extends SubLTrampolineFile {
 		}
 	}
 
-	private static MathFuncProcessingByType verifyAndProcessMathFunctionArgs(SubLObject[] args,
-			MultiArgMathFuncDesc mathFunc) {
+	private static MathFuncProcessingByType verifyAndProcessMathFunctionArgs(SubLObject[] args, MultiArgMathFuncDesc mathFunc) {
 		int minType = mathFunc == divisionDesc ? 3 : 0;
 		int i = 0;
 		int size = args.length;
@@ -545,8 +538,7 @@ public class Numbers extends SubLTrampolineFile {
 
 	public static SubLObject divide(SubLObject numerator, SubLObject denominator) {
 		if (!numerator.isFixnum() || !denominator.isFixnum()) {
-			if (denominator.eql(CommonSymbols.ZERO_INTEGER) || denominator.eql(ZERO_FLOAT)
-					|| denominator.eql(CommonSymbols.ZERO_DOUBLE))
+			if (denominator.eql(CommonSymbols.ZERO_INTEGER) || denominator.eql(ZERO_FLOAT) || denominator.eql(CommonSymbols.ZERO_DOUBLE))
 				Errors.error("Attempt to divide " + numerator + " by 0.");
 			SubLObject[] args = SubLProcess.currentSubLThread().sublArraySize2;
 			args[0] = numerator;
@@ -602,10 +594,7 @@ public class Numbers extends SubLTrampolineFile {
 			long baseTyped = base.longValue();
 			long powerTyped = power.longValue();
 			if (powerTyped > 2147483647L)
-				return Errors.error(
-						SubLObjectFactory.makeString(
-								"Cannot raise ~A to ~A; power is larger than implementation limit ~A for integers."),
-						base, power, SubLNumberFactory.makeInteger(Integer.MAX_VALUE));
+				return Errors.error(SubLObjectFactory.makeString("Cannot raise ~A to ~A; power is larger than implementation limit ~A for integers."), base, power, SubLNumberFactory.makeInteger(Integer.MAX_VALUE));
 			BigInteger bigBase = new BigInteger(String.valueOf(baseTyped));
 			BigInteger result = bigBase.pow((int) powerTyped);
 			return SubLNumberFactory.makeInteger(result);
@@ -620,8 +609,7 @@ public class Numbers extends SubLTrampolineFile {
 	}
 
 	public static SubLObject fixnumMultiply(SubLObject fixnum1, SubLObject fixnum2) {
-		return SubLNumberFactory
-				.makeInteger(truncateToFixnum(fixnum1.toFixnum().longValue() * fixnum2.toFixnum().longValue()));
+		return SubLNumberFactory.makeInteger(truncateToFixnum(fixnum1.toFixnum().longValue() * fixnum2.toFixnum().longValue()));
 	}
 
 	public static SubLObject float_digits(SubLObject theFloat) {
@@ -1107,12 +1095,10 @@ public class Numbers extends SubLTrampolineFile {
 			double remainder2 = numTyped2 % divTyped2;
 			double quotient2 = (numTyped2 - remainder2) / divTyped2;
 			Values.resetMultipleValues();
-			return Values.values(SubLNumberFactory.makeInteger((long) quotient2),
-					SubLNumberFactory.makeDouble(remainder2));
+			return Values.values(SubLNumberFactory.makeInteger((long) quotient2), SubLNumberFactory.makeDouble(remainder2));
 		}
 		if (num.isDouble() || divisor.isDouble()) {
-			Errors.unimplementedMethod(
-					"truncate(" + num + ", " + divisor + ") on big integer bignums and floats.");
+			Errors.unimplementedMethod("truncate(" + num + ", " + divisor + ") on big integer bignums and floats.");
 			return CommonSymbols.ZERO_INTEGER;
 		}
 		BigInteger numTyped3 = num.bigIntegerValue();
@@ -1198,18 +1184,10 @@ public class Numbers extends SubLTrampolineFile {
 		FLOAT_DIGITS = SubLNumberFactory.makeInteger(53);
 		ZERO_FLOAT = SubLNumberFactory.makeDouble(0.0);
 		MINUS_EIGHT_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(-8);
-		INTEGER_LENGTH_TABLE = new long[] { 0L, 1L, 2L, 4L, 8L, 16L, 32L, 64L, 128L, 256L, 512L, 1024L, 2048L, 4096L,
-				8192L, 16384L, 32768L, 65536L, 131072L, 262144L, 524288L, 1048576L, 2097152L, 4194304L, 8388608L,
-				16777216L, 33554432L, 67108864L, 134217728L, 268435456L, 536870912L, 1073741824L, 2147483648L,
-				4294967296L, 8589934592L, 17179869184L, 34359738368L, 68719476736L, 137438953472L, 274877906944L,
-				549755813888L, 1099511627776L, 2199023255552L, 4398046511104L, 8796093022208L, 17592186044416L,
-				35184372088832L, 70368744177664L, 140737488355328L, 281474976710656L, 562949953421312L,
-				1125899906842624L, 2251799813685248L, 4503599627370496L, 9007199254740992L, 18014398509481984L,
-				36028797018963968L, 72057594037927936L, 144115188075855872L, 288230376151711744L, 576460752303423488L,
-				1152921504606846976L, 2305843009213693952L, 4611686018427387904L };
-		funcProcessing = new MathFuncProcessingByType[] { new IntegerMathFuncProcessingFunc(),
-				new LongMathFuncProcessingFunc(), new BigIntMathFuncProcessingFunc(),
-				new DoubleMathFuncProcessingFunc() };
+		INTEGER_LENGTH_TABLE = new long[] { 0L, 1L, 2L, 4L, 8L, 16L, 32L, 64L, 128L, 256L, 512L, 1024L, 2048L, 4096L, 8192L, 16384L, 32768L, 65536L, 131072L, 262144L, 524288L, 1048576L, 2097152L, 4194304L, 8388608L, 16777216L, 33554432L, 67108864L, 134217728L, 268435456L, 536870912L, 1073741824L, 2147483648L, 4294967296L, 8589934592L, 17179869184L, 34359738368L, 68719476736L, 137438953472L, 274877906944L,
+				549755813888L, 1099511627776L, 2199023255552L, 4398046511104L, 8796093022208L, 17592186044416L, 35184372088832L, 70368744177664L, 140737488355328L, 281474976710656L, 562949953421312L, 1125899906842624L, 2251799813685248L, 4503599627370496L, 9007199254740992L, 18014398509481984L, 36028797018963968L, 72057594037927936L, 144115188075855872L, 288230376151711744L, 576460752303423488L, 1152921504606846976L,
+				2305843009213693952L, 4611686018427387904L };
+		funcProcessing = new MathFuncProcessingByType[] { new IntegerMathFuncProcessingFunc(), new LongMathFuncProcessingFunc(), new BigIntMathFuncProcessingFunc(), new DoubleMathFuncProcessingFunc() };
 		INTEGER_PROCESSING_FUNC = funcProcessing[0];
 		LONG_PROCESSING_FUNC = funcProcessing[1];
 		BIGINT_PROCESSING_FUNC = funcProcessing[2];
@@ -1268,8 +1246,7 @@ public class Numbers extends SubLTrampolineFile {
 		SubLFiles.declareFunction(me, "boole", "BOOLE", 3, 0, false);
 		SubLFiles.declareFunction(me, "cos", "COS", 1, 0, false);
 		SubLFiles.declareFunction(me, "decode_float", "DECODE-FLOAT", 1, 0, false);
-		SubLFiles.declareFunction(me, "disassemble_integer_to_fixnums", "DISASSEMBLE-INTEGER-TO-FIXNUMS", 1, 0,
-				false);
+		SubLFiles.declareFunction(me, "disassemble_integer_to_fixnums", "DISASSEMBLE-INTEGER-TO-FIXNUMS", 1, 0, false);
 		SubLFiles.declareFunction(me, "exp", "EXP", 1, 0, false);
 		SubLFiles.declareFunction(me, "integer_length", "INTEGER-LENGTH", 1, 0, false);
 		SubLFiles.declareFunction(me, "isqrt", "ISQRT", 1, 0, false);
@@ -1293,14 +1270,11 @@ public class Numbers extends SubLTrampolineFile {
 
 	@Override
 	public void initializeVariables() {
-		$double_float_minimum_exponent$ = SubLFiles.defconstant(me, "*DOUBLE-FLOAT-MINIMUM-EXPONENT*",
-				SubLObjectFactory.makeInteger(-1074));
+		$double_float_minimum_exponent$ = SubLFiles.defconstant(me, "*DOUBLE-FLOAT-MINIMUM-EXPONENT*", SubLObjectFactory.makeInteger(-1074));
 		$e$ = SubLFiles.defconstant(me, "*E*", E_FLOAT);
 		$pi$ = SubLFiles.defconstant(me, "*PI*", PI_FLOAT);
-		$most_negative_fixnum$ = SubLFiles.defconstant(me, "*MOST-NEGATIVE-FIXNUM*",
-				SubLObjectFactory.makeInteger(SubLNumberFactory.MIN_FIXNUM));
-		$most_positive_fixnum$ = SubLFiles.defconstant(me, "*MOST-POSITIVE-FIXNUM*",
-				SubLObjectFactory.makeInteger(SubLNumberFactory.MAX_FIXNUM));
+		$most_negative_fixnum$ = SubLFiles.defconstant(me, "*MOST-NEGATIVE-FIXNUM*", SubLObjectFactory.makeInteger(SubLNumberFactory.MIN_FIXNUM));
+		$most_positive_fixnum$ = SubLFiles.defconstant(me, "*MOST-POSITIVE-FIXNUM*", SubLObjectFactory.makeInteger(SubLNumberFactory.MAX_FIXNUM));
 		$exp1$ = SubLFiles.defconstant(me, "*EXP1*", SubLObjectFactory.makeDouble(2.718281828459045));
 		$boole_clr$ = SubLFiles.defconstant(me, "BOOLE-CLR", CommonSymbols.ZERO_INTEGER);
 		$boole_set$ = SubLFiles.defconstant(me, "BOOLE-SET", CommonSymbols.ONE_INTEGER);

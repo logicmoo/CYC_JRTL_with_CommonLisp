@@ -1,6 +1,10 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.OUTPUT_KEYWORD;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols_SYM.ONE;
 import static org.armedbear.lisp.Fixnum.ZERO;
 
 import java.io.IOException;
@@ -33,7 +37,6 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
-
 public class Processes extends SubLTrampolineFile {
 	private static class ExternalProcessErrorHandler extends ExternalProcessHandler implements Runnable {
 		ExternalProcessErrorHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream,

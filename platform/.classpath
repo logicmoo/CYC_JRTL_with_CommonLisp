@@ -25,7 +25,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-continuation-8.0.4.v20111024.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1559995346763/source/jetty-continuation-8.0.4.v20111024-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/servlet-api-3.0.20100224.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jena-dig.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/arq-extra.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/cycSparqlEndpoint.jar"/>
@@ -311,5 +310,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/larkc/asm-all-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/larkc/servlet-api-3.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -53,6 +53,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -159,6 +160,40 @@ import sun.misc.Unsafe;
  */
 public class Startup {
 
+	/**
+	 * @author Administrator
+	 *
+	 */
+
+	public static final long startTimeMillis = System.currentTimeMillis();
+
+	public static PrintStream getNoticeStream() {
+		PrintStream err = SystemCurrent.originalSystemErr;
+		if (err == null)
+			err = System.err;
+		if (err == null)
+			err = System.out;
+		return err;
+	}
+
+	public static void reportUncaughts() {
+		PrintStream err = getNoticeStream();
+		if (unexpectedThrowable != null) {
+
+			for (Iterator<Throwable> iterator = unexpectedThrowable.iterator(); iterator.hasNext();) {
+				Throwable throwable = iterator.next();
+				try {
+					err.print("unexpectedThrowable: " + throwable);
+					throwable.printStackTrace(err);
+					err.flush();
+				} catch (Throwable e) {
+					// TODO: handle exception
+				}
+			}
+
+		}
+	}
+
 	public static final class ABCLMainUncaughtExceptionHandler implements UncaughtExceptionHandler {
 		@Override
 		public void uncaughtException(Thread arg0, Throwable e) {
@@ -205,6 +240,7 @@ public class Startup {
 	public static String[] passedArgs;
 	public static String[] cycCmdArgs = new String[] { "-f", "(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))" };
 	static boolean cycPart2Early = false;
+	static boolean noCycPart2 = false;
 	public static boolean isSublispDefault = true;
 	protected static boolean useMainThread = true;
 	public static boolean noProlog = true;
@@ -250,11 +286,7 @@ public class Startup {
 	}
 
 	public static String[] extractOptions(String[] args) {
-		PrintStream to = System.err;
-		if (to == null)
-			to = System.out;
-		if (to == null)
-			to = SystemCurrent.originalSystemErr;
+		final PrintStream to = getNoticeStream();
 
 		for (int i = 0; i < args.length; i++) {
 			String thisArg = args[i];
@@ -342,6 +374,7 @@ public class Startup {
 			noBSH = true;
 			Main.setSubLisp(false);
 			argsList.add(0, "--nocyc");
+			argsList.add(0, "--nocyc2");
 			argsList.add(0, "--noprolog");
 		}
 
@@ -368,13 +401,16 @@ public class Startup {
 		if (argsList.remove("--noprolog") || argsList.remove("--noswi")) {
 			noPrologJNI = true;
 		}
+		if (argsList.remove("--nocyc2")) {
+			noCycPart2 = true;
+		}
 		if (argsList.remove("--opencyc")) {
 			SubLMain.OPENCYC = true;
 			isSublispDefault = true;
 			try {
 				UpdateZip.updateUnits("5022");
 			} catch (Throwable e) {
-				e.printStackTrace();
+				e.printStackTrace(to);
 				if (!Startup.keepGoing)
 					throw new RuntimeException(" UpdateZip.updateUnits throw " + e, e);
 			}
@@ -383,7 +419,7 @@ public class Startup {
 			argsList.add("--rcyc");
 			argsList.add("--cyc2");
 		}
-		
+
 		if (argsList.remove("--rcyc")) {
 			SubLMain.OPENCYC = false;
 			needSubLMAIN = true;
@@ -457,6 +493,14 @@ public class Startup {
 
 		if (!argsList.contains("-cp")) {
 			IsolatedClassLoader.addDefaultJarsToClassPath(System.getProperty("user.dir", "."));
+		}
+		if (!noInitCyc || needSubLMAIN) {
+			try {
+				IsolatedClassLoader.configChecks();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		String[] argsNew = jiggleEvalArgs(argsList.toArray(new String[argsList.size()]));
 
@@ -1352,8 +1396,11 @@ public class Startup {
 				SubLPackage prevPackage = Lisp.getCurrentPackage();
 				try {
 					init_cyc_classes();
-					SubLPackage.setCurrentPackage("CYC");
-					Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
+					boolean noKBLoaded = false;
+					if (noKBLoaded) {
+						SubLPackage.setCurrentPackage("CYC");
+						Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
+					}
 				} catch (Throwable e) {
 					throw doThrow(e);
 				} finally {
@@ -1368,6 +1415,8 @@ public class Startup {
 	@LispMethod
 	public static void init_cyc_classes_part2() {
 		synchronized (StartupInitLock) {
+			if (noCycPart2)
+				return;
 			final boolean wasSubLisp = Main.isSubLisp();
 			SubLPackage prevPackage = Lisp.getCurrentPackage();
 			try {
@@ -1416,7 +1465,7 @@ public class Startup {
 					e.printStackTrace();
 					te = e;
 				}
-				if (true)
+				if (!cycPart2Early)
 					init_cyc_classes_part2();
 				try {
 					PrologSync.setPrologReady(true);
@@ -2791,6 +2840,8 @@ public class Startup {
 	}
 
 	public static void completeCycInit() {
+		if (!Main.needSubLMAIN)
+			return;
 		startCycInit();
 		try {
 			if (cycPart2Early)
@@ -2800,6 +2851,14 @@ public class Startup {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Startup.startCycInit();
+
+		if (!noinform) {
+			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
+			final PrintStream out = getNoticeStream();
+			out.println("CYC initialization complete at " + uptime + " total seconds.\n");
+		}
+
 	}
 
 	/**
