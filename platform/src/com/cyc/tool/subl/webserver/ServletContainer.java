@@ -34,7 +34,7 @@ public class ServletContainer extends SubLTrampolineFile {
 
 	public static SubLObject startServletContainerInt(int portNum, List<WarSpec> warSpecs, SubLObject tmpDirString) {
 		String tmpDir = tmpDirString == UNPROVIDED ? null : tmpDirString.getStringValue();
-		Jetty.startJettyServer(portNum, warSpecs, tmpDir);
+		NewJetty.startJettyServer(portNum, warSpecs, tmpDir);
 		return NIL;
 	}
 
@@ -46,13 +46,13 @@ public class ServletContainer extends SubLTrampolineFile {
 			SubLList alistEntry = fileSpec.asConsList();
 			warSpecs.add(new WarSpec(alistEntry.first().getStringValue(), alistEntry.rest().getStringValue()));
 		}
-		Jetty.startJettyServer(portNum, warSpecs, tmpDir);
+		NewJetty.startJettyServer(portNum, warSpecs, tmpDir);
 		return NIL;
 	}
 
 	public static SubLObject stopServletContainerInt(SubLObject tmpDirString) {
 		String tmpDir = tmpDirString == UNPROVIDED ? null : tmpDirString.getStringValue();
-		Jetty.stopJettyServer(tmpDir);
+		NewJetty.stopJettyServer(tmpDir);
 		return NIL;
 	}
 

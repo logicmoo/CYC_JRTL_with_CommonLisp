@@ -1,7 +1,7 @@
-/* For LarKC */
+//
+// For LarKC
+//
 package com.cyc.tool.subl.webserver;
-
-import static org.armedbear.lisp.Lisp.T;
 
 import java.io.File;
 import java.util.List;
@@ -11,17 +11,14 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
+import static org.armedbear.lisp.Lisp.*;
 
 public class Jetty {
 	public static class JettyStartFailureException extends RuntimeException {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 3359948703323893755L;
-
 		public JettyStartFailureException(String str) {
 			super(str);
 		}
@@ -66,13 +63,13 @@ public class Jetty {
 	protected static synchronized void startJettyServer(int port, List<ServletContainer.WarSpec> warFiles, String tmpDirString) {
 		Label_0411: {
 			deleteDir(tmpDirString);
-			if (jettyServer != null)
-				if (!(jettyServer instanceof Server) || jettyServer.isRunning())
+			if (Jetty.jettyServer != null)
+				if (!(Jetty.jettyServer instanceof Server) || Jetty.jettyServer.isRunning())
 					break Label_0411;
 			try {
 				File tmpDir = tmpDirString != null ? new File(tmpDirString) : null;
 				possiblyDeleteTmpDir(tmpDir);
-				jettyServer = new Server(port);
+				Jetty.jettyServer = new Server(port);
 				ContextHandlerCollection handlers = new ContextHandlerCollection();
 				for (ServletContainer.WarSpec war : warFiles) {
 					String warFilename = "webapps/apps/" + war.getFilename();
@@ -93,9 +90,9 @@ public class Jetty {
 						streams_high.force_output(T);
 					}
 				}
-				jettyServer.setHandler(handlers);
-				jettyServer.start();
-				if (jettyServer.isRunning()) {
+				Jetty.jettyServer.setHandler(handlers);
+				Jetty.jettyServer.start();
+				if (Jetty.jettyServer.isRunning()) {
 					PrintLow.format(T, SubLObjectFactory.makeString("Jetty server started on port " + port));
 					return;
 				}
@@ -106,13 +103,13 @@ public class Jetty {
 				throw new RuntimeException("Jetty server failed to start on port " + Lisp.valueOfString(port), ex2);
 			}
 		}
-		PrintLow.format(T, SubLObjectFactory.makeString("Jetty is already running on port " + jettyServer.getConnectors()[0].getLocalPort()));
+		PrintLow.format(T, SubLObjectFactory.makeString("Jetty is already running on port " + Jetty.jettyServer.getConnectors()[0]));
 	}
 
 	protected static synchronized void stopJettyServer(String tmpDirString) {
 		try {
-			if (jettyServer instanceof Server && jettyServer.isRunning()) {
-				jettyServer.stop();
+			if (Jetty.jettyServer instanceof Server && Jetty.jettyServer.isRunning()) {
+				Jetty.jettyServer.stop();
 
 			}
 		} catch (Exception e) {

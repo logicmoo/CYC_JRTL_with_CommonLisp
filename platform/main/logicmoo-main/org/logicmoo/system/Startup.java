@@ -168,7 +168,9 @@ public class Startup {
 	public static final long startTimeMillis = System.currentTimeMillis();
 
 	public static PrintStream getNoticeStream() {
-		PrintStream err = SystemCurrent.originalSystemErr;
+		PrintStream err = SystemCurrent.originalSystemOut;
+		if (err == null)
+			err = SystemCurrent.originalSystemErr;
 		if (err == null)
 			err = System.err;
 		if (err == null)
@@ -178,9 +180,9 @@ public class Startup {
 
 	public static void reportUncaughts() {
 		PrintStream err = getNoticeStream();
-		if (unexpectedThrowable != null) {
+		if (unexpectedThrowables != null) {
 
-			for (Iterator<Throwable> iterator = unexpectedThrowable.iterator(); iterator.hasNext();) {
+			for (Iterator<Throwable> iterator = unexpectedThrowables.iterator(); iterator.hasNext();) {
 				Throwable throwable = iterator.next();
 				try {
 					err.print("unexpectedThrowable: " + throwable);
@@ -203,13 +205,25 @@ public class Startup {
 
 	public static final UncaughtExceptionHandler uncaughtExceptionHandler = new ABCLMainUncaughtExceptionHandler();
 
-	public static List<Throwable> unexpectedThrowable = new ArrayList<Throwable>(0);
+	public static List<Throwable> unexpectedThrowables = new ArrayList<Throwable>(0);
 
 	public static void addUncaught(Throwable e) {
-		unexpectedThrowable.add(e);
+		unexpectedThrowables.add(e);
 	}
 
 	public static int exitCode = 0;
+	static {
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				reportUncaughts();
+				getNoticeStream().println("Shutdown Hook");
+
+			}
+		}));
+		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
+	}
 
 	// There should only be one globalInterpreter.
 	public static Interpreter globalInterpreter;
@@ -230,15 +244,16 @@ public class Startup {
 	public static boolean Never_REDEFINE = false;
 	public static boolean Always_REDEFINE = false;
 	public static boolean BOOTY_HACKZ = true;
-	protected static boolean delayEvalParams = true;
+	protected static boolean hasCycCmdlineInits = false;
 
 	public static boolean commonSymbolsOK = false;
 	protected static boolean noInitLisp = false;
 	public static boolean noInitCyc = false;
 
-	public static boolean noExit = true;
+	public static boolean noExit = false;
 	public static String[] passedArgs;
-	public static String[] cycCmdArgs = new String[] { "-f", "(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))" };
+	public static String[] cycCmdArgs = new String[0];
+	public static String[] defaultCycCmdArgs = new String[] { "-f", "(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))" };
 	static boolean cycPart2Early = false;
 	static boolean noCycPart2 = false;
 	public static boolean isSublispDefault = true;
@@ -313,6 +328,7 @@ public class Startup {
 					Errors.error("Not enough command line arguments given for: " + arg);
 				cycArgsList.add(args[i]);
 				final String value = args[++i];
+				hasCycCmdlineInits = true;
 				cycArgsList.add(value);
 				me.argNameToArgValueMap.put(arg, value);
 			} else {
@@ -411,7 +427,7 @@ public class Startup {
 				UpdateZip.updateUnits("5022");
 			} catch (Throwable e) {
 				e.printStackTrace(to);
-				if (!Startup.keepGoing)
+				if (!keepGoing)
 					throw new RuntimeException(" UpdateZip.updateUnits throw " + e, e);
 			}
 		}
@@ -1348,7 +1364,8 @@ public class Startup {
 					init_subl();
 					SubLPackage.setCurrentPackage("CYC");
 					SubLMain.initializeTranslatedSystems();
-					SubLMain.handleInits();
+					if (hasCycCmdlineInits)
+						SubLMain.handleInits();
 					SubLMain.handlePatches();
 					inited_cyc = true;
 					inited_cyc_complete = true;
@@ -1396,8 +1413,7 @@ public class Startup {
 				SubLPackage prevPackage = Lisp.getCurrentPackage();
 				try {
 					init_cyc_classes();
-					boolean noKBLoaded = false;
-					if (noKBLoaded) {
+					if (!hasCycCmdlineInits) {
 						SubLPackage.setCurrentPackage("CYC");
 						Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
 					}
@@ -1449,15 +1465,17 @@ public class Startup {
 				try {
 					init_cyc_classes();
 					SubLPackage.setCurrentPackage("CYC");
-					Eval.eval("(sl:load \"init/services-init.lisp\")");
 					SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");
 					SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
+					if (!hasCycCmdlineInits) {
+						Eval.eval("(sl:load \"init/services-init.lisp\")");
+					}
 					//SubLMain.BOOTY_HACKZ = true;
 					//SubLFiles.initialize("com.cyc.cycjava_3.cycl.cycl");
 					//(cyc-eval (INITIALIZE-SUBL-INTERFACE-FILE "com.cyc.cycjava_2.cycl.cycl") :CYC)
 					// if( !SubLMain.OPENCYC )
-					if (false) {
-						eu.larkc.core.orchestrator.LarkcInit.initializeLarkc();
+					if (!hasCycCmdlineInits) {
+						//eu.larkc.core.orchestrator.LarkcInit.initializeLarkc();
 					}
 					LarKCHttpServer.start_sparql_server();
 					inited_cyc_server = true;
@@ -1482,6 +1500,7 @@ public class Startup {
 			}
 
 		}
+
 	}
 
 	@LispMethod
@@ -2829,20 +2848,18 @@ public class Startup {
 
 	public static void startCycInit() {
 		if (!noProlog)
-			Startup.start_prolog_from_lisp();
+			start_prolog_from_lisp();
 		scanForExports(BeanShellCntrl.class);
 		if (Main.needSubLMAIN) {
 			init_cyc_classes();
 			//SubLMain.doInitialEmbeddedMain(cycCmdArgs);
 			cl_imports_cyc();
-			cyc_imports_cl();
 		}
 	}
 
 	public static void completeCycInit() {
 		if (!Main.needSubLMAIN)
 			return;
-		startCycInit();
 		try {
 			if (cycPart2Early)
 				init_cyc_classes_part2();
@@ -2851,7 +2868,8 @@ public class Startup {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Startup.startCycInit();
+		startCycInit();
+		cyc_imports_cl();
 
 		if (!noinform) {
 			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;

@@ -159,6 +159,7 @@ public final class Interpreter extends Startup implements Runnable {
 			nosystem = true;
 		}
 
+		startCycInit();
 		//
 		//		if (!Main.noSubLisp) {
 		//			/*

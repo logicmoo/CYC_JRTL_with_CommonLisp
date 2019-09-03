@@ -167,7 +167,7 @@ public class SubLMain extends Startup {
 			if (!shouldRunInBackground())
 				SystemCurrent.out.println("Internal initialization time = " + theTime + " secs.");
 			startTime = System.currentTimeMillis();
-			if (!delayEvalParams)
+			if (hasCycCmdlineInits)
 				handleInits();
 			if (!shouldRunInBackground()) {
 				endTime = System.currentTimeMillis();
@@ -730,7 +730,7 @@ public class SubLMain extends Startup {
 		Main.setSubLisp(true);
 		Main.isSubLispBindingMode = true;
 		noInitCyc = false;
-		delayEvalParams = false;
+		hasCycCmdlineInits = true;
 		commonSymbolsOK = true;
 	}
 
@@ -834,7 +834,6 @@ public class SubLMain extends Startup {
 	}
 
 	public void processCommandLineArgs(String[] args) {
-		// String[] args = Main.extractOptions(argsIn);
 		for (int i = 0, size = args.length; i < size; ++i) {
 			String arg = args[i];
 			if (noArgCommandLineArgs.contains(arg))
@@ -843,6 +842,7 @@ public class SubLMain extends Startup {
 				if (i == size)
 					Errors.error("Not enough command line arguments given for: " + arg);
 				this.argNameToArgValueMap.put(arg, args[++i]);
+				hasCycCmdlineInits = true;
 			} else {
 				Errors.error("Got invalid command line argument: " + args[i]);
 			}

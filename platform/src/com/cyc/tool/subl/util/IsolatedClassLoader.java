@@ -29,6 +29,7 @@ import java.util.jar.Manifest;
 
 import org.armedbear.lisp.JavaClassLoader;
 import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -57,8 +58,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 	}
 
 	static String[] larkcDefaultJarFiles = new String[] { //
-			"./lib/jetty-libs/*v20190813.jar", "./lib/larkc/*.jar", //
-			"./lib/jetty-libs/*.jar", "./lib/*.jar" };
+			"./lib/jetty-libs/jetty-*v20190813.jar",
+			//"./lib/jetty-libs/*v20190813.jar",
+			"./lib/larkc/*.jar", //
+			// "./lib/jetty-libs/*.jar",
+			"./lib/*.jar" };
 
 	public static void addDefaultJarsToClassPath(String LARKC_HOME) {
 		ArrayList<File> al = new ArrayList();
@@ -72,13 +76,14 @@ public class IsolatedClassLoader extends URLClassLoader {
 			}
 		};
 		for (String s : larkcDefaultJarFiles) {
-			if (s.startsWith(".")) {
+			if (false && s.startsWith(".")) {
 				if (!new File(s).exists()) {
 					s = LARKC_HOME + s.substring(1);
 				}
 			}
 			try {
 				if (s.contains("*")) {
+
 					new FileFinder(s, false, foo).doFiles();
 				} else
 					foo.accept(normalizedFile(new File(s)));
@@ -94,7 +99,9 @@ public class IsolatedClassLoader extends URLClassLoader {
 
 	public static boolean addClassPath(File f) {
 		ClassLoader cl = ClassLoader.getSystemClassLoader();
+		f = normalizedFile(f);
 		try {
+
 			// If Java 9 or higher use Instrumentation
 			if (!(cl instanceof URLClassLoader)) {
 				if (inst == null) {
@@ -111,11 +118,10 @@ public class IsolatedClassLoader extends URLClassLoader {
 			if (urlString.contains("/javagat/")) {
 				Errors.warn("adding? " + urlString);
 			}
+			if (f.isDirectory()) {
 
-			// If Java 8 or below fallback to old method
-			Method m = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-			m.setAccessible(true);
-			m.invoke(cl, (Object) url);
+			}
+			addURL(cl, url);
 			return true;
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -143,43 +149,43 @@ public class IsolatedClassLoader extends URLClassLoader {
 		if (o instanceof URLClassLoader)
 			return o;
 
-		System.err.println("Classloader is not a URLClassLoader: " + o);
+		println("Classloader is not a URLClassLoader: " + o);
 		ClassLoader classLoader = null;
 		if (o != null) {
 			classLoader = o.getParent();
 			if (traceSearch)
-				System.err.println("Checking Parent Classloader: " + classLoader);
+				println("Checking Parent Classloader: " + classLoader);
 			if (classLoader instanceof URLClassLoader) {
 				return classLoader;
 			}
 		}
 		classLoader = Thread.currentThread().getContextClassLoader();
 		if (traceSearch)
-			System.err.println("Checking Context Classloader: " + classLoader);
+			println("Checking Context Classloader: " + classLoader);
 		if (classLoader instanceof URLClassLoader) {
 			return classLoader;
 		}
 		classLoader = JavaClassLoader.getCurrentClassLoader();
 		if (traceSearch)
-			System.err.println("Checking Current Classloader: " + classLoader);
+			println("Checking Current Classloader: " + classLoader);
 		if (classLoader instanceof URLClassLoader) {
 			return classLoader;
 		}
 		classLoader = Lisp.class.getClassLoader();
 		if (traceSearch)
-			System.err.println("Checking Ext Classloader: " + classLoader);
+			println("Checking Ext Classloader: " + classLoader);
 		if (classLoader instanceof URLClassLoader) {
 			return classLoader;
 		}
 		classLoader = ClassLoader.getSystemClassLoader();
 		if (traceSearch)
-			System.err.println("Checking System Classloader: " + classLoader);
+			println("Checking System Classloader: " + classLoader);
 		if (classLoader instanceof URLClassLoader) {
 			return classLoader;
 		}
 		classLoader = Class.class.getClassLoader();
 		if (traceSearch)
-			System.err.println("Checking Boot Classloader: " + classLoader);
+			println("Checking Boot Classloader: " + classLoader);
 		if (classLoader instanceof URLClassLoader) {
 			return classLoader;
 		}
@@ -191,7 +197,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 				return asURLClassLoader(platformClassLoader, traceSearch);
 			}
 			if (traceSearch)
-				System.err.println("Platform Classloader is not a URLClassLoader: " + platformClassLoader);
+				println("Platform Classloader is not a URLClassLoader: " + platformClassLoader);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			// TODO Auto-generated catch block
 		}
@@ -207,13 +213,13 @@ public class IsolatedClassLoader extends URLClassLoader {
 	public static ClassLoader addURL(ClassLoader o, URL url) throws IOException {
 		url = normalizedURL(url);
 		if (!(o instanceof URLClassLoader)) {
-			System.err.println("Classloader is not a URLClassLoader: " + o);
+			println("Classloader is not a URLClassLoader: " + o);
 			{
 				ClassLoader extClassLoader = asURLClassLoader(o, true);
 				if (extClassLoader instanceof URLClassLoader) {
 					return addURL(extClassLoader, url);
 				}
-				System.err.println("asURLClassLoader is not a URLClassLoader: " + extClassLoader);
+				println("asURLClassLoader is not a URLClassLoader: " + extClassLoader);
 			}
 		}
 		URL[] urls = Lisp.getURLs(o);
@@ -224,6 +230,8 @@ public class IsolatedClassLoader extends URLClassLoader {
 		try {
 			Method method = getDeclaredMethod(o.getClass(), "addURL", URL.class);
 			method.setAccessible(true);
+			if (debug > 1)
+				println("Add " + url + " to " + o);
 			method.invoke(o, url);
 			return o;
 		} catch (NoSuchMethodException e) {
@@ -274,6 +282,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	ArrayList<String> outerNames;
 	ArrayList<String> blockedNames;
 	Map<String, Class> loadedAlready;
+	static int debug = 1;
 	public static boolean ALLOW_DYNAMIC_LOADING_OF_CODE = true;
 	public static boolean ALLOW_LOADING_OF_DIRS_FROM_INTERPRETER = false;
 	private static ArrayList<ClassLoader> peerLoaders = new ArrayList();
@@ -373,6 +382,27 @@ public class IsolatedClassLoader extends URLClassLoader {
 	public void addCode(String stringTyped) {
 
 		stringTyped = org.logicmoo.system.Startup.unquote(stringTyped);
+		URL url;
+		if (stringTyped.startsWith("file:")) {
+
+			try {
+				url = new URL(stringTyped);
+				stringTyped = url.getFile();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		} else if (stringTyped.startsWith("jar:")) {
+			try {
+				url = new URL(stringTyped);
+				stringTyped = url.getFile();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
 		File jfile = normalizedFile(new File(stringTyped));
 
 		stringTyped = jfile.getAbsolutePath();
@@ -421,8 +451,9 @@ public class IsolatedClassLoader extends URLClassLoader {
 		} catch (IOException e) {
 			final String absolutePath = jfile.getAbsolutePath();
 			String newA = absolutePath.replace("/./", "/");
-			if (newA.length() != absolutePath.length())
+			if (newA.length() != absolutePath.length()) {
 				return normalizedFile(new File(newA));
+			}
 			return jfile;
 		}
 	}
@@ -445,7 +476,8 @@ public class IsolatedClassLoader extends URLClassLoader {
 	public void addDirectory(File jfile) throws IOException {
 		jfile = normalizedFile(jfile);
 		final String extracted = slashify(jfile.getAbsolutePath(), false);
-		URL url = normalizedURL(new URL("file", "", extracted));
+		final URL withHost = new URL("file", "", extracted);
+		URL url = normalizedURL(withHost);
 		addURL(url);
 		File[] jfiles = jfile.listFiles();
 		for (int i = 0; i < jfiles.length; ++i)
@@ -527,9 +559,8 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * TODO Describe the purpose of this method.
 	 * @param string
 	 */
-	static void println(String string) {
-		// TODO Auto-generated method stub
-
+	static void println(String s) {
+		Startup.getNoticeStream().println(s);
 	}
 
 	/**
@@ -537,8 +568,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	* @param string
 	*/
 	static void printf(String s, Object... a) {
-		// TODO Auto-generated method stub
-		SystemCurrent.originalSystemOut.printf(s, a);
+		Startup.getNoticeStream().printf(s, a);
 	}
 
 	private byte[] toByteArray(InputStream inputStream) throws IOException {
@@ -557,7 +587,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		url = normalizedURL(url);
 		if (containsURL(this, url) || containsURL(getParent(), url))
 			return;
-
+		println("Add " + url + " to " + this);
 		super.addURL(url);
 	}
 
@@ -602,22 +632,26 @@ public class IsolatedClassLoader extends URLClassLoader {
 	@Override
 	public synchronized Class loadClass(String className) throws ClassNotFoundException {
 		Class c = maybeFindLoadedClass(className);
+		boolean parentFirst = false;
 		ClassNotFoundException ex = null;
 		if (c == null) {
 			if (!isDefinedHere(className) && c == null)
 				try {
 					final ClassLoader pcl = getIsolatedParent();
-					if (pcl != null) {
-						c = pcl.loadClass(className);
-						println("Parent Loading: " + className);
-						myResolveClass(c);
-						return c;
+					if (parentFirst)
+						if (pcl != null) {
+							c = pcl.loadClass(className);
+							if (debug > 1)
+								println("Parent Loading: " + className);
+							myResolveClass(c);
+							return c;
 
-					}
+						}
 				} catch (ClassNotFoundException e) {
 					ex = e;
 				}
-			println("local Loading: " + className);
+			if (debug > 1)
+				println("local Loading: " + className);
 			if (c == null)
 				try {
 					c = findClass(className);
@@ -639,6 +673,8 @@ public class IsolatedClassLoader extends URLClassLoader {
 			myResolveClass(c);
 			return c;
 		}
+		if (debug > 1)
+			println("Not Found: " + className + " (this will be found later)");
 		throw ex;
 	}
 
@@ -919,12 +955,12 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 */
 	public static void configChecks() throws IOException {
 		printf("CLASSPATH=%s%n", System.getProperty("java.class.path"));
-		classDupes(javax.servlet.ServletContext.class);
-		classDupes(org.apache.jasper.servlet.JspServlet.class);
-		classDupes(org.apache.xerces.jaxp.SAXParserFactoryImpl.class);
-		classDupes(org.eclipse.jetty.webapp.WebAppClassLoader.Context.class);
-		classDupes(org.slf4j.spi.LocationAwareLogger.class);
-		IsolatedClassLoader.classDupes("org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer");
+
+		classDupes("org.apache.xerces.jaxp.SAXParserFactoryImpl");
+
+		classDupes("org.slf4j.spi.LocationAwareLogger");
+		classDupes("org.slf4j.LoggerFactory");
+		//classDupes("org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer");
 		//classDupes(org.apache.tomcat.util.security.MD5Encoder.class);
 
 		//		classDupes(org.apache.jasper.servlet.JasperInitializer.class);
@@ -933,8 +969,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		//		classDupes(org.eclipse.jetty.http.HttpField.class);
 		//		classDupes(HttpServletRequest.class);
 
-		IsolatedClassLoader.classDupes("org.eclipse.jetty.io.ByteBufferPool");
-		classDupes(org.eclipse.jetty.security.SecurityHandler.class);
+		//classDupes("org.eclipse.jetty.io.ByteBufferPool");
 		//		classDupes(RealmBase.class);
 		//		classDupes(Embedded.class);
 		//		classDupes(Loader.class);

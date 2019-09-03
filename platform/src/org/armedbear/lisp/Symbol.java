@@ -493,7 +493,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 					// function = (LispObject) func;
 					return;
 				}
-				traceRedefine("NOT redefining", function, func);
+				// traceRedefine("NOT redefining", function, func);
 				return;
 			}
 			if (func instanceof SubLMacro) {

@@ -22,7 +22,6 @@
 	<classpathentry kind="src" path="examples/misc"/>
 	<classpathentry kind="src" path="examples/pure-lisp-to-java"/>
 	<classpathentry kind="src" path="main/server-4q"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-continuation-8.0.4.v20111024.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1559995346763/source/jetty-continuation-8.0.4.v20111024-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jena-dig.jar"/>
@@ -169,14 +168,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jcommon-1.0.16.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jdom.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1557998638135/source/jdom-1.1.1-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jep-2.4.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-http-8.0.4.v20111024.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-io-8.0.4.v20111024.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-security-8.0.4.v20111024.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-server-8.0.4.v20111024.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-servlet-8.0.4.v20111024.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-util-8.0.4.v20111024.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1561097504017/source/jetty-util-8.0.4.v20111024-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-webapp-8.0.4.v20111024.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-xml-8.0.4.v20111024.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/JFlex.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jfreechart-1.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/jfreechart-1.0.13.jar"/>
@@ -239,7 +230,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/larkc/rhino-1.7.7.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/runnersFramework-2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/scala-compiler-2.10.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/scala-library-2.10.2.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1559483046738/source/scala-library-2.10.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/scala-library-2.10.2.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1567418253655/source/scala-library-2.10.2-sources-1567450945391.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/scala-reflect-2.10.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/services_AdvertServiceEntry_stubs.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/larkc/services_IndexServiceProxyService_stubs.jar"/>
@@ -309,7 +300,32 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/larkc/asm-all-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/larkc/servlet-api-3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/asm-all-3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/castor-1.1.1-xml.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/commons-codec-1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/commons-logging-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/GAT-API.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/GAT-engine.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/GAT-tests.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jaxr-api-osgi-1.0-b01.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jaxrpc-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-continuation-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-http-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-io-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-security-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-server-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-servlet-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-util-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-webapp-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jetty-xml-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jna-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/jna-platform-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/junit-4.5.jar.HIDE"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/log4j-1.2.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/servlet-api-3.0.20100224.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/servlet.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/slf4j-api-1.5.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/slf4j-log4j12-1.5.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/larkc/xmlParserAPIs.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -24,7 +24,8 @@ public abstract class SubLTrampolineFile extends SubLFiles
 		//
 		//
 		implements SubLFile, Singleton {
-	static public boolean USE_V2_METHODS = true;
+
+	public boolean USE_V2_METHODS = true;
 
 	/**
 	 * @return

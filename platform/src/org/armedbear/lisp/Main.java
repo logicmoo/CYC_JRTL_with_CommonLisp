@@ -45,17 +45,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess.TerminationReques
 public final class Main extends Startup {
 
 	public static void main(String[] args) throws InterruptedException {
-		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				if (true)
-					Errors.unimplementedMethod("Auto-generated method stub:  Type1567437873876.run");
-
-			}
-		}));
 		if (args == null || args.length == 0) {
 			args = new String[] { "--abcl" };
 		}
