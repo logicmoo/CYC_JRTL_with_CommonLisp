@@ -1,8 +1,7 @@
 /* For LarKC */
 package com.cyc.tool.subl.webserver;
 
-import static com.cyc.tool.subl.util.IsolatedClassLoader.classDupes;
-import static com.cyc.tool.subl.util.IsolatedClassLoader.configChecks;
+import static com.cyc.tool.subl.util.IsolatedClassLoader.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +48,7 @@ public class Jetty {
 
 	}
 
-	public static boolean loadToParent;
+	public static boolean passToSharing;
 
 	public static class CycWebAppContext extends WebAppContext {
 
@@ -97,27 +96,55 @@ public class Jetty {
 		}
 
 		@Override
+		protected Class<?> findClass(String name) throws ClassNotFoundException {
+
+			Class found = null;
+			try {
+				if (!neverFindOurselves(name)) {
+					found = with_classloader(this, () -> sharingLoader.findClass(name));
+					if (found != null) {
+						info(" sharingLoader found " + name);
+						return found;
+					}
+				}
+			} catch (Throwable ee1) {
+				if (!(ee1 instanceof ClassNotFoundException)) {
+					ee1.printStackTrace();
+				}
+			}
+
+			found = with_classloader(this, () -> super.findClass(name));
+			if (found != null) {
+				info(" super found " + name);
+				return found;
+			}
+			return found;
+		}
+
+		@Override
 		public Class<?> loadClass(String name) throws ClassNotFoundException {
 			return with_classloader(this, () -> super.loadClass(name));
 		}
 
 		@Override
 		protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-			if (neverFindOurselves(name)) {
-				return with_classloader(this, () -> super.loadClass(name, resolve));
-			}
 
-			Class found;
+			Class found = null;
 			try {
-				found = with_classloader(this, () -> sharingLoader.loadClass(name, resolve));
-				if (found != null) {
-					info(" sharingLoader found " + name);
-					if (false && resolve) {
-						claimResolveClass(found);
+				if (!neverFindOurselves(name)) {
+					found = with_classloader(this, () -> sharingLoader.loadClass(name, resolve));
+					if (found != null) {
+						info(" sharingLoader found " + name);
+						if (false && resolve) {
+							claimResolveClass(found);
+						}
+						return found;
 					}
-					return found;
 				}
 			} catch (Throwable ee1) {
+				if (!(ee1 instanceof ClassNotFoundException)) {
+					ee1.printStackTrace();
+				}
 			}
 
 			found = with_classloader(this, () -> super.loadClass(name, resolve));
@@ -142,28 +169,6 @@ public class Jetty {
 			super.addClassPath(resource);
 		}
 
-		@Override
-		public Class<?> findClass(String name) throws ClassNotFoundException {
-			if (neverFindOurselves(name)) {
-				return with_classloader(this, () -> super.findClass(name));
-			}
-			Class found;
-			try {
-				found = with_classloader(this, () -> sharingLoader.findClass(name));
-				if (found != null) {
-					info(" sharingLoader found " + name);
-					return found;
-				}
-			} catch (Throwable ee1) {
-			}
-			found = with_classloader(this, () -> super.findClass(name));
-			if (found != null) {
-				info("super found " + name);
-				return found;
-			}
-			return found;
-		}
-
 		private Class maybeGlobal(String name) {
 
 			Class found = classMap.get(name);
@@ -184,8 +189,8 @@ public class Jetty {
 		@Override
 		protected void addURL(URL url) {
 			try {
-				if (loadToParent)
-					IsolatedClassLoader.addClassPath(url);
+				if (passToSharing)
+					sharingLoader.addClassPath(url);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -198,8 +203,8 @@ public class Jetty {
 		 */
 		@Override
 		public void addClassPath(String classPath) throws IOException {
-			if (loadToParent)
-				IsolatedClassLoader.addToClassPath(classPath);
+			if (passToSharing)
+				sharingLoader.addToClassPath(classPath);
 			super.addClassPath(classPath);
 		}
 
@@ -430,7 +435,7 @@ public class Jetty {
 	 */
 	private static void addJettyClassesToClasspath() {
 		if (true) {
-			ClassLoader cl = IsolatedClassLoader.getCommonClassLoader();
+			ClassLoader cl = sharingLoader.getCommonClassLoader();
 			final File file = new File("lib/jetty-libs/");
 			if (file.exists()) {
 				for (File f : file.listFiles()) {
@@ -438,7 +443,7 @@ public class Jetty {
 					if (!name.startsWith("~") && name.endsWith("v20190813.jar") && name.startsWith("jetty-")) {
 						try {
 							final URL url = f.getCanonicalFile().toURL();
-							IsolatedClassLoader.addURL(cl, url);
+							sharingLoader.addURL(cl, url);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -508,9 +513,9 @@ public class Jetty {
 		//tmpAppDir.deleteOnExit();
 
 		CycWebAppClassLoader classLoader = new CycWebAppClassLoader(webapp);
-		//		final WebAppClassLoader parent = new CycWebAppClassLoader(IsolatedClassLoader.getCommonClassLoader(), webapp);
+		//		final WebAppClassLoader parent = new CycWebAppClassLoader(sharingLoader.getCommonClassLoader(), webapp);
 		//		final WebAppClassLoader classLoader = new WebAppClassLoaderVis(parent, webapp);
-		//final WebAppClassLoader classLoader = new WebAppClassLoaderVis(IsolatedClassLoader.getCommonClassLoader(), webapp);
+		//final WebAppClassLoader classLoader = new WebAppClassLoaderVis(sharingLoader.getCommonClassLoader(), webapp);
 		webapp.setClassLoader(classLoader);
 		webapp.setParentLoaderPriority(true);
 		///webapp.setAttribute("org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern", "");
