@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
+import org.armedbear.lisp.ABCLStatic;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
@@ -39,7 +40,7 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLPatcher;
 
-public class Eval implements SubLFile {
+public class Eval extends ABCLStatic implements SubLFile {
 
 	public static SubLObject constantp(SubLObject object, SubLObject env) {
 		if (object.isSymbol()) {
@@ -169,16 +170,7 @@ public class Eval implements SubLFile {
 	}
 
 	public static SubLObject load(final SubLObject filename) {
-		try {
-			return Startup.with_sublisp(true, new Callable<SubLObject>() {
-				@Override
-				public SubLObject call() {
-					return load_sublisp(filename);
-				}
-			}).call();
-		} catch (Exception e) {
-			return Errors.error(e);
-		}
+		return subl_preserve_pkg(true, true, () -> load_sublisp(filename));
 	}
 
 	public static SubLObject load_sublisp(SubLObject filename) {

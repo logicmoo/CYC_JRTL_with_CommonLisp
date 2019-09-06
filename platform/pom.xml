@@ -8,66 +8,11 @@
 	<artifactId>platform</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>LarKC Platform</name>
-	<description>LarKC Platform used in LogicMOO
-</description>
+	<description>LarKC Platform used in LogicMOO</description>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>main/objectweb-asm-src</sourceDirectory>
 		<testSourceDirectory>test/src</testSourceDirectory>
 		<resources>
-			<resource>
-				<directory>main/cycjava-persistence-hacks</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>main/logicmoo-main</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>main/objectweb-asm-src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>main/armedbear-j-src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>main/server-4q</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>main/jpl7-hacked</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>main/java</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>main/beanshell</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
 		</resources>
 		<testResources>
 			<testResource>
@@ -100,21 +45,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>process-sources.platform</id>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<ant antfile="${basedir}/build.xml">
-									<target name="abcl.jar" />
-								</ant>
-							</target>
-							<failOnError>true</failOnError>
-						</configuration>
-					</execution>
-					<execution>
 						<id>compile.platform</id>
 						<phase>compile</phase>
 						<goals>
@@ -130,74 +60,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-					<includes>
-						<include>src/**/*.java</include>
-						<include>main/cycjava-persistence-hacks/**/*.java</include>
-						<include>main/logicmoo-main**/*.java</include>
-						<include>main/opencyc-server-jsrc-in-progress/**/*.java</include>
-						<include>main/objectweb-asm-src/**/*.java</include>
-						<include>main/armedbear-j-src/**/*.java</include>
-						<include>main/server-4q/**/*.java</include>
-						<include>main/server-4u/**/*.java</include>
-						<include>main/server-4v/**/*.java</include>
-						<include>main/jpl7-hacked/**/*.java</include>
-						<include>main/java/**/*.java</include>
-						<include>main/platform-1.1/**/*.java</include>
-						<include>main/beanshell/**/*.java</include>
-					</includes>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.12</version>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<skip>true</skip>
-							<sources>
-								<source>main/cycjava-persistence-hacks</source>
-								<source>main/logicmoo-main</source>
-								<source>main/opencyc-server-jsrc-in-progress</source>
-								<source>main/objectweb-asm-src</source>
-								<source>main/armedbear-j-src</source>
-								<source>main/server-4q</source>
-								<source>main/server-4u</source>
-								<source>main/server-4v</source>
-								<source>main/jpl7-hacked</source>
-								<source>main/java</source>
-								<source>main/platform-1.1</source>
-								<source>main/beanshell</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-antrun-plugin</artifactId> 
-				<executions> <execution> <id>Compile Lisp Code</id> <phase>compile</phase> 
-				<goals> <goal>run</goal> </goals> <configuration> <target> <taskdef resource="build.xml" 
-				classpath="" /> </target> </configuration> </execution> </executions> </plugin> 
-				<plugin> <artifactId>maven-antrun-plugin</artifactId> <version>1.7</version> 
-				<executions> <execution> <phase>generate-sources</phase> <configuration> 
-				<tasks> <taskdef resource="build.xml" classpath="" /> <target>default</target> 
-				Place any ant task here. You can add anything you can add between <target> 
-				and </target> in a build.xml. </tasks> </configuration> <goals> <goal>run</goal> 
-				</goals> </execution> </executions> </plugin> -->
-
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -224,152 +86,10 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>
-											build-helper-maven-plugin
-										</artifactId>
-										<versionRange>[1.12,)</versionRange>
-										<goals>
-											<goal>add-source</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
+		<pluginManagement>			
 		</pluginManagement>
 	</build>
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.ant</groupId>
-			<artifactId>ant</artifactId>
-			<version>1.10.5</version>
-			<scope>compile</scope>
-		</dependency>
-		<!-- Thanks for using https://jar-download.com -->
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-ant-tasks</artifactId>
-			<version>2.1.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-script-ant</artifactId>
-			<version>2.1.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-rio-rdfxml</artifactId>
-			<version>2.8.5</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.openrdf/openrdf-util -->
-		<dependency>
-			<groupId>org.openrdf</groupId>
-			<artifactId>openrdf-util</artifactId>
-			<version>1.2.5</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.openrdf/openrdf-model -->
-		<dependency>
-			<groupId>org.openrdf</groupId>
-			<artifactId>openrdf-model</artifactId>
-			<version>1.2.5</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.bcel</groupId>
-			<artifactId>bcel</artifactId>
-			<version>6.3.1</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/junit/junit-dep -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit-dep</artifactId>
-			<version>4.8.2</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>3.0-alpha-1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>jdk.tools</groupId>
-			<artifactId>jdk.tools</artifactId>
-			<version>1.8</version>
-			<scope>system</scope>
-			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>2.0.0-alpha0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>2.0.0-alpha0</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jdk14</artifactId>
-			<version>2.0.0-alpha0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.kencochrane.raven</groupId>
-			<artifactId>raven</artifactId>
-			<version>3.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-jdk14</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
@@ -394,7 +114,7 @@
 	<profiles>
 		<profile>
 			<id>run.cyc</id>
-			<!-- Launch with#   mvn test -Prun.cyc   -->
+			<!-- Launch with#   mvn run -Prun.cyc   -->
 			<build>
 				<plugins>
 					<plugin>
@@ -403,18 +123,14 @@
 						<version>1.1.1</version>
 						<executions>
 							<execution>
-								<phase>test</phase>
+								<phase>run</phase>
 								<goals>
 									<goal>java</goal>
 								</goals>
 								<configuration>
 									<mainClass>org.armedbear.lisp.Main</mainClass>
 									<arguments>
-										<argument>--noinit</argument>
-										<argument>--noprolog</argument>
 										<argument>--rcyc</argument>
-										<argument>--exec</argument>
-										<argument>"(init-cyc-server)"</argument>
 									</arguments>
 								</configuration>
 							</execution>

@@ -24,7 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import org.appdapter.core.convert.Converter.ConverterMethod;
+
 import org.armedbear.j.Log;
 import org.armedbear.j.ReaderThread;
 import org.armedbear.lisp.Debug;
@@ -445,7 +445,7 @@ public class BeanShellCntrl extends Startup {
 		}
 	}
 
-	@ConverterMethod
+	//@org.appdapter.core.convert.Converter.ConverterMethod
 	public static Term object_to_term(Object o) {
 		Term term = PrologSync.toProlog(o);
 		// o.termRef = term;

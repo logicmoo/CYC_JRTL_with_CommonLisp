@@ -1,6 +1,6 @@
 package com.netbreeze.bbowl.gui;
 
-import static org.appdapter.core.log.Debuggable.printStackTrace;
+//import static org.appdapter.core.log.Debuggable.printStackTrace;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -29,6 +29,7 @@ import javax.swing.JToolBar;
 //import org.appdapter.gui.demo.DemoBrowser;
 import org.logicmoo.bb.BeanBowl;
 import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.Startup;
 import org.logicmoo.system.ToplevelMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -372,7 +373,8 @@ protected void processEvent(AWTEvent e) {
 				theLogger = LoggerFactory.getLogger(BeanBowl.class);
 			}
 		} catch (Throwable t) {
-			printStackTrace(t);
+			t.printStackTrace();
+			//Startup.printStackTrace(t);
 		}
 		return theLogger;
 	}

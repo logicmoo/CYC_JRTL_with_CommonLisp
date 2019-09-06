@@ -53,6 +53,7 @@ import static org.armedbear.lisp.Lisp.getStandardOutput;
 import static org.armedbear.lisp.Lisp.initialized;
 import static org.armedbear.lisp.Lisp.intern;
 import static org.armedbear.lisp.Main.startTimeMillis;
+import static org.logicmoo.system.Startup.isSubLisp;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -64,7 +65,6 @@ import java.io.PrintStream;
 
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
-
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
@@ -98,7 +98,7 @@ public final class Interpreter extends Startup implements Runnable {
 				globalInterpreter = new Interpreter();
 				_NOINFORM_.setSymbolValue(T);
 				initializeLisp();
-				return globalInterpreter;
+				return globalInterpreter; 
 			}
 		} finally {
 			// postProcessCommandLine(Main.passedArgs);
@@ -123,7 +123,12 @@ public final class Interpreter extends Startup implements Runnable {
 	}
 
 	public static synchronized Interpreter initInstance(Interpreter interp, String[] args, boolean jLisp) {
+		return subl_preserve_pkg(false, false, () -> initInstance0(interp, args, jLisp));
+	}
+
+	public static Interpreter initInstance0(Interpreter interp, String[] args, boolean jLisp) {
 		//Interpreter.globalInterpreter = interp;
+
 		if (args != null)
 			preprocessCommandLineArguments(args);
 
@@ -160,6 +165,7 @@ public final class Interpreter extends Startup implements Runnable {
 		}
 
 		startCycInit();
+
 		//
 		//		if (!Main.noSubLisp) {
 		//			/*

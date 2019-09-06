@@ -36,18 +36,78 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
 public class IsolatedClassLoader extends URLClassLoader {
 	static ClassLoader parentClassLoader;
+	static URL modpatch1;
 	static {
 		parentClassLoader = IsolatedClassLoader.class.getClassLoader();
+		try {
+			modpatch1 = normalizedFile(new File("lib/java.desktop.modpatch-1.jar")).toURL();
+			String scl = System.getProperty("java.system.class.loader", null);
+			System.out.println("java.system.class.loader=" + scl);
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//classDupes(sun.awt.shell.PublicShellFolderManager.class.getName());
 	}
 
 	public static IsolatedClassLoader theIsolatedClassLoader = new IsolatedClassLoader();
 
-	private IsolatedClassLoader() {
-		super(new URL[0], getIsolatedParent());
+	public IsolatedClassLoader() {
+		super(new URL[0], parentClassLoader);
+		safeToGetSystemClassLaoder = true;
 		outerNames = new ArrayList<String>();
 		theIsolatedClassLoader = this;
 		blockedNames = new ArrayList<String>();
 		loadedAlready = new HashMap<String, Class>();
+		if (false) {
+			ClassLoader scl = getSystemClassLoader();
+			try {
+				Method method = getDeclaredMethod(scl.getClass(), "loadClass", String.class, boolean.class);
+				method.setAccessible(true);
+				Class psfm1 = parentClassLoader.loadClass("sun.awt.shell.PublicShellFolderManager");
+				Class psfm0 = (Class) method.invoke(scl, "sun.awt.shell.ShellFolderManager", true);
+				Class psfm2 = loadClass("sun.awt.shell.PublicShellFolderManager", true);
+				if (psfm1 != psfm2) {
+					Thread.dumpStack();
+				}
+				if (psfm0 != psfm2) {
+					Thread.dumpStack();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	static boolean safeToGetSystemClassLaoder = false;
+
+	public IsolatedClassLoader(ClassLoader pcl) {
+		super(new URL[0], pcl);
+		try {
+			Method method = getDeclaredMethod(pcl.getClass(), "addURL", URL.class);
+			method.setAccessible(true);
+			method.invoke(pcl, modpatch1);
+			System.out.println("parent of java.system.class.loader=" + pcl);
+			System.out.println("parentClassLoader=" + parentClassLoader);
+			final Thread currentThread = Thread.currentThread();
+			System.out.println("getContextClassLoader=" + currentThread.getContextClassLoader());
+			currentThread.setContextClassLoader(this);
+			outerNames = new ArrayList<String>();
+			theIsolatedClassLoader = this;
+			blockedNames = new ArrayList<String>();
+			loadedAlready = new HashMap<String, Class>();
+			addURL(modpatch1);
+			Class psfm0 = loadClass("sun.awt.shell.ShellFolderManager", true);
+			Class psfm2 = loadClass("sun.awt.shell.PublicShellFolderManager", true);
+			Class psfm1 = parentClassLoader.loadClass("sun.awt.shell.PublicShellFolderManager");
+			if (psfm1 != psfm2) {
+				Thread.dumpStack();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private static Instrumentation inst = null;
@@ -58,7 +118,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	}
 
 	static String[] larkcDefaultJarFiles = new String[] { //
-			"./lib/jetty-libs/jetty-*v20190813.jar",
+			"./lib/jetty-libs/",
 			//"./lib/jetty-libs/*v20190813.jar",
 			"./lib/larkc/*.jar", //
 			// "./lib/jetty-libs/*.jar",
@@ -98,7 +158,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	}
 
 	public static boolean addClassPath(File f) {
-		ClassLoader cl = ClassLoader.getSystemClassLoader();
+		ClassLoader cl = getSystemClassLoader();
 		f = normalizedFile(f);
 		try {
 
@@ -177,7 +237,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		if (classLoader instanceof URLClassLoader) {
 			return classLoader;
 		}
-		classLoader = ClassLoader.getSystemClassLoader();
+		classLoader = IsolatedClassLoader.mightSystemClassLoader();
 		if (traceSearch)
 			println("Checking System Classloader: " + classLoader);
 		if (classLoader instanceof URLClassLoader) {
@@ -201,6 +261,12 @@ public class IsolatedClassLoader extends URLClassLoader {
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			// TODO Auto-generated catch block
 		}
+		return null;
+	}
+
+	private static ClassLoader mightSystemClassLoader() {
+		if (safeToGetSystemClassLaoder)
+			return getSystemClassLoader();
 		return null;
 	}
 
@@ -414,7 +480,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 					String className = stringTyped.substring(jarChars + 4);
 					addJarClass(jfile, className);
 					return;
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					Errors.error("Error loading jar!class: " + stringTyped, e);
 				}
 		}
@@ -422,19 +488,24 @@ public class IsolatedClassLoader extends URLClassLoader {
 			if (stringTyped.endsWith(".jar"))
 				try {
 					addJar(jfile);
-				} catch (IOException e2) {
+				} catch (Throwable e2) {
 					Errors.error("Error accessing jar: " + stringTyped, e2);
 				}
 			else if (stringTyped.endsWith(".class"))
 				try {
 					addClassFile(jfile);
-				} catch (Exception e3) {
+				} catch (Throwable e3) {
 					Errors.error("Error accessing classfile: " + stringTyped, e3);
 				}
-			else if (jfile.isDirectory())
-				Errors.error("Unable to load directory into classpath: " + jfile);
-			else
+			else if (jfile.isDirectory()) {
+				try {
+					addURL(jfile.toURI().toURL());
+				} catch (Throwable e2) {
+					Errors.error("Unable to load directory into classpath: " + jfile);
+				}
+			} else {
 				Errors.error("Error loading file:: " + stringTyped + " not a class or jar file");
+			}
 		} else
 			Errors.error("Error finding file:: " + stringTyped);
 	}
@@ -585,8 +656,12 @@ public class IsolatedClassLoader extends URLClassLoader {
 	@Override
 	public void addURL(URL url) {
 		url = normalizedURL(url);
-		if (containsURL(this, url) || containsURL(getParent(), url))
+		if (containsURL(this, url))
 			return;
+		if (safeToGetSystemClassLaoder) {
+			if (containsURL(getParent(), url))
+				return;
+		}
 		println("Add " + url + " to " + this);
 		super.addURL(url);
 	}
@@ -698,6 +773,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 */
 	public URL[] getURLs() {
 		return super.getURLs();
+	}
+
+	@Override
+	public Class<?> findClass(String name) throws ClassNotFoundException {
+		return super.findClass(name);
 	}
 
 	//	/**
@@ -840,7 +920,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * @throws  ClassNotFoundException
 	 *          If the class could not be found
 	 */
-	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+	public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 		synchronized (getClassLoadingLock(name)) {
 			// First, check if the class has already been loaded
 			Class<?> c = maybeFindLoadedClass(name);
@@ -896,7 +976,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 */
 	public static ClassLoader getCommonClassLoader() {
 		ClassLoader cl = IsolatedClassLoader.theIsolatedClassLoader;
-		assert cl == Thread.currentThread().getContextClassLoader();
+		//assert cl == Thread.currentThread().getContextClassLoader();
 		return cl;
 	}
 

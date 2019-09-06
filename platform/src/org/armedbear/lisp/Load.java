@@ -613,6 +613,20 @@ public final class Load {
 	}
 
 	static final LispObject faslLoadStream(LispThread thread) {
+		boolean wasSubLisp = Main.isSubLisp();
+		if (!wasSubLisp) {
+			return faslLoadStream0(thread);
+		}
+		Main.setSubLisp(false);
+		try {
+			return faslLoadStream0(thread);
+		} finally {
+			Main.setSubLisp(true);
+		}
+	}
+
+
+	static final LispObject faslLoadStream0(LispThread thread) {
 		Stream in = (Stream) _LOAD_STREAM_.symbolValue(thread);
 		final Environment env = Environment.newEnvironment();
 		final SpecialBindingsMark mark = thread.markSpecialBindings();
@@ -622,11 +636,11 @@ public final class Load {
 			thread.bindSpecial(Symbol.READ_BASE, LispInteger.getInstance(10));
 			thread.bindSpecial(Symbol.READ_EVAL, Symbol.T);
 			thread.bindSpecial(Symbol.READ_SUPPRESS, Nil.NIL);
-
+	
 			in.setExternalFormat(_FASL_EXTERNAL_FORMAT_.symbolValue(thread));
 			while (true) {
 				LispObject obj = in.read(false, EOF, false, // should be 'true' once we
-															// have a FASL wide object table
+						// have a FASL wide object table
 						thread, Stream.faslReadtable);
 				if (obj == EOF)
 					break;
@@ -641,7 +655,6 @@ public final class Load {
 		// only called from load, which already has its own policy for choosing
 		// whether to return T or the last value.
 	}
-
 
 	// ### %load filespec verbose print if-does-not-exist external-format=>
 	// generalized-boolean

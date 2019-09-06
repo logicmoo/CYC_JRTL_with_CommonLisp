@@ -605,7 +605,7 @@ public class SubLMain extends Startup {
 					SubLFiles.USE_V1 = true;
 					SubLFiles.USE_V2 = false;
 					SubLMain.BOOTY_HACKZ = false;
-					initialize1TranslatedSystem(com.cyc.cycjava.cycl.rcycl.class.getName());
+					initialize1TranslatedSystem("com.cyc.cycjava.cycl.rcycl");
 
 				} finally {
 					SubLMain.Always_REDEFINE = was;

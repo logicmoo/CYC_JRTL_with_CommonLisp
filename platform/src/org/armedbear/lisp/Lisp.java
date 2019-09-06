@@ -385,12 +385,14 @@ abstract public class Lisp extends ABCLStatic {
 	}
 
 	public static final LispObject error(LispObject condition) {
-		if (Main.isNoDebug()) {
-			throw BeanShellCntrl.doThrow(conditionToSubLException(condition));
-		}
 		if (Main.isSubLisp()) {
-			if (SubLMain.commonSymbolsOK)
-				return (LispObject) Errors.error("Lisp.error", conditionToSubLException(condition));
+			final SubLException conditionToSubLException = conditionToSubLException(condition);
+			if (Main.isNoDebug()) {
+				throw BeanShellCntrl.doThrow(conditionToSubLException);
+			}
+			if (SubLMain.commonSymbolsOK) {
+				return (LispObject) Errors.error("Lisp.error", conditionToSubLException);
+			}
 		}
 		pushJavaStackFrames();
 		return Symbol.ERROR.execute(condition);
@@ -566,9 +568,11 @@ abstract public class Lisp extends ABCLStatic {
 	public static final int CALL_REGISTERS_MAX = 8;
 
 	// Also used in JProxy.java.
-	public static final LispObject evalCall(LispObject function, LispObject args, Environment env, LispThread thread)
+	public static final LispObject evalCall(LispObject function, LispObject args, Environment env, LispThread thread) {
+		return subl_preserve_pkg(false, false, () -> evalCall0(function, args, env, thread));
+	}
 
-	{
+	public static final LispObject evalCall0(LispObject function, LispObject args, Environment env, LispThread thread) {
 		if (args == NIL)
 			return thread.execute(function);
 		LispObject first = eval(args.car(), env, thread);
@@ -689,9 +693,14 @@ abstract public class Lisp extends ABCLStatic {
 		return specials;
 	}
 
+	public static void expectSubLisp(boolean tf) {
+
+	}
+
 	public static final LispObject progn(LispObject body, Environment env, LispThread thread)
 
 	{
+		expectSubLisp(false);
 		LispObject result = NIL;
 		while ((body instanceof Cons)) {
 			result = eval(body.car(), env, thread);

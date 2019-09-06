@@ -50,6 +50,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URL;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -62,9 +64,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JOptionPane;
 
-import org.appdapter.core.convert.Converter.ConverterMethod;
 import org.armedbear.j.Editor;
 import org.armedbear.j.JLisp;
+import org.armedbear.lisp.ABCLStatic;
 import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Cons;
 import org.armedbear.lisp.ControlTransfer;
@@ -107,12 +109,14 @@ import org.jpl7.Variable;
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
 import org.logicmoo.bb.BeanBowl;
+//import org.webswing.server.common.util.CommonUtil;
 
 import com.cyc.cycjava.cycl.constant_completion_high;
 import com.cyc.cycjava.cycl.constant_completion_low;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.constants_high;
 import com.cyc.cycjava.cycl.ke;
+import com.cyc.cycjava.cycl.web_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
@@ -158,7 +162,8 @@ import sun.misc.Unsafe;
  * @author Administrator
  *
  */
-public class Startup {
+//import org.opencyc.cycobject.CycConstant;
+public class Startup extends ABCLStatic {
 
 	/**
 	 * @author Administrator
@@ -167,8 +172,12 @@ public class Startup {
 
 	public static final long startTimeMillis = System.currentTimeMillis();
 
+	public static PrintStream noticeStream;
+
 	public static PrintStream getNoticeStream() {
-		PrintStream err = SystemCurrent.originalSystemOut;
+		PrintStream err = noticeStream;
+		if (err == null)
+			err = SystemCurrent.originalSystemOut;
 		if (err == null)
 			err = SystemCurrent.originalSystemErr;
 		if (err == null)
@@ -205,13 +214,16 @@ public class Startup {
 
 	public static final UncaughtExceptionHandler uncaughtExceptionHandler = new ABCLMainUncaughtExceptionHandler();
 
-	public static List<Throwable> unexpectedThrowables = new ArrayList<Throwable>(0);
+	public static final List<Throwable> unexpectedThrowables = new ArrayList<Throwable>(0);
 
 	public static void addUncaught(Throwable e) {
-		unexpectedThrowables.add(e);
+		if (unexpectedThrowables != null && e != null)
+			unexpectedThrowables.add(e);
 	}
 
 	public static int exitCode = 0;
+
+	private static UncaughtExceptionHandler initialUncaughtExceptionHandler;
 	static {
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
@@ -222,15 +234,18 @@ public class Startup {
 
 			}
 		}));
-		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
+		initialUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+		if (initialUncaughtExceptionHandler == null) {
+			Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
+		}
 	}
 
 	// There should only be one globalInterpreter.
 	public static Interpreter globalInterpreter;
 
 	public static boolean jlisp;
-	public static boolean noinit = true;
-	public static boolean nosystem = true;
+	public static boolean noinit = false;
+	public static boolean nosystem = false;
 	public static boolean noinform = false;
 	public static boolean postProcess = true;
 	public static boolean help = false;
@@ -610,7 +625,7 @@ public class Startup {
 			}
 		}
 		if (mainClass != null)
-			exit(Main.exitCode);
+			exit(exitCode);
 		return argsNew;
 	}
 
@@ -708,6 +723,8 @@ public class Startup {
 	}
 
 	public static void enableAllCWD() {
+
+		configWebSwing();
 
 		String pwd = System.getProperty("ajaxswing.home", System.getProperty("catalina.home", "."));
 		try {
@@ -909,7 +926,7 @@ public class Startup {
 	@LispMethod
 	public static void cyc_imports_cl() {
 		Symbol._PACKAGE_.setProcessScope(true);
-		if (!Main.isSubLisp()) {
+		if (!isSubLisp()) {
 			return;
 		} else {
 
@@ -1038,8 +1055,11 @@ public class Startup {
 	public static <T> Callable<T> with_sublisp(final boolean tf, final Callable<T> str) {
 		return new Callable<T>() {
 			@Override
-			public T call() {
+			public T call() throws Exception {
 				boolean wasSubLisp = Main.isSubLisp();
+				if (wasSubLisp == tf) {
+					return str.call();
+				}
 				Main.setSubLisp(tf);
 				try {
 					return str.call();
@@ -1333,6 +1353,7 @@ public class Startup {
 		return sym;
 	}
 
+	@LispMethod
 	public static BeanBowl getBowl() {
 		return bowl;
 	}
@@ -1358,12 +1379,21 @@ public class Startup {
 			boolean wasSubLisp = Main.isSubLisp();
 			try {
 				Main.setSubLisp(true);
-				init_subl();
 				SubLPackage prevPackage = Lisp.getCurrentPackage();
 				try {
 					init_subl();
 					SubLPackage.setCurrentPackage("CYC");
 					SubLMain.initializeTranslatedSystems();
+					try {
+						SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
+					} catch (Throwable ex) {
+						ex.printStackTrace();
+					}
+					try {
+						start_servlet();
+					} catch (Throwable ex) {
+						ex.printStackTrace();
+					}
 					if (hasCycCmdlineInits)
 						SubLMain.handleInits();
 					SubLMain.handlePatches();
@@ -1382,6 +1412,19 @@ public class Startup {
 	}
 
 	@LispMethod
+	public static void start_servlet() {
+		try {
+			synchronized (StartupInitLock) {
+				init_cyc_classes();
+				SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
+				web_utilities.start_servlet_container(SubLObjectFactory.makeInteger(3603));
+			}
+		} catch (Throwable ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	@LispMethod
 	public static void init_cyc_server() throws IOException {
 		synchronized (StartupInitLock) {
 			init_cyc_kb();
@@ -1389,11 +1432,13 @@ public class Startup {
 		}
 	}
 
+	@LispMethod
 	public static void init_kb() {
 		UpdateZip.updateUnits("7166");
 		init_cyc();
 	}
 
+	@LispMethod
 	public static void init_cyc_kb() {
 		UpdateZip.updateUnits("7166");
 		init_cyc();
@@ -1404,27 +1449,17 @@ public class Startup {
 		synchronized (StartupLock) {
 			if (inited_kb)
 				return;
-			inited_kb = true;
 		}
 		synchronized (StartupInitLock) {
-			boolean wasSubLisp = Main.isSubLisp();
-			Main.setSubLisp(true);
-			try {
-				SubLPackage prevPackage = Lisp.getCurrentPackage();
-				try {
-					init_cyc_classes();
-					if (!hasCycCmdlineInits) {
-						SubLPackage.setCurrentPackage("CYC");
-						Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
-					}
-				} catch (Throwable e) {
-					throw doThrow(e);
-				} finally {
-					SubLPackage.setCurrentPackage(prevPackage);
+			subl_preserve_pkg(true, true, () -> {
+				init_cyc_classes();
+				if (!hasCycCmdlineInits) {
+					SubLPackage.setCurrentPackage("CYC");
+					Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
+					inited_kb = true;
 				}
-			} finally {
-				Main.setSubLisp(wasSubLisp);
-			}
+				return null;
+			});
 		}
 	}
 
@@ -1433,20 +1468,10 @@ public class Startup {
 		synchronized (StartupInitLock) {
 			if (noCycPart2)
 				return;
-			final boolean wasSubLisp = Main.isSubLisp();
-			SubLPackage prevPackage = Lisp.getCurrentPackage();
-			try {
-				try {
-					SubLMain.initialize1TranslatedSystem("com.cyc.cycjava.cycl.cycl");
-				} catch (Throwable e) {
-					e.printStackTrace();
-					doThrow(e);
-				}
-			} finally {
-				SubLPackage.setCurrentPackage(prevPackage);
-				Main.setSubLisp(wasSubLisp);
-			}
-
+			subl_preserve_pkg(true, true, () -> {
+				SubLMain.initialize1TranslatedSystem("com.cyc.cycjava.cycl.cycl");
+				return null;
+			});
 		}
 	}
 
@@ -1456,12 +1481,9 @@ public class Startup {
 			if (inited_cyc_server)
 				return;
 		}
-		Throwable te = null;
 		synchronized (StartupInitLock) {
-			final boolean wasSubLisp = Main.isSubLisp();
-			SubLPackage prevPackage = Lisp.getCurrentPackage();
-			try {
-				Main.setSubLisp(true);
+			subl_preserve_pkg(true, true, () -> {
+				Throwable te = null;
 				try {
 					init_cyc_classes();
 					SubLPackage.setCurrentPackage("CYC");
@@ -1494,10 +1516,8 @@ public class Startup {
 				if (te != null) {
 					doThrow(te);
 				}
-			} finally {
-				SubLPackage.setCurrentPackage(prevPackage);
-				Main.setSubLisp(wasSubLisp);
-			}
+				return null;
+			});
 
 		}
 
@@ -1519,7 +1539,6 @@ public class Startup {
 			}
 			boolean wasSubLisp = Main.isSubLisp();
 			boolean wasshouldRunInBackground = SubLMain.shouldRunInBackground;
-
 			SubLPackage prevPackage = Lisp.getCurrentPackage();
 			Main.setSubLisp(true);
 			SubLPackage.initPackages();
@@ -1810,7 +1829,7 @@ public class Startup {
 		}
 	}
 
-	@ConverterMethod
+	//@org.appdapter.core.convert.Converter.ConverterMethod
 	public static Term lobject_to_term(LispObject o) {
 		Term term = PrologSync.toProlog(o, new ArrayList());
 		// o.termRef = term;
@@ -2240,7 +2259,7 @@ public class Startup {
 		return prologName;
 	}
 
-	@ConverterMethod
+	//@org.appdapter.core.convert.Converter.ConverterMethod
 	@LispMethod
 	public static LispObject term_to_lobject(Term term) throws Exception {
 		if (term instanceof Atom) {
@@ -2253,7 +2272,7 @@ public class Startup {
 		return JavaObject.getInstance(o, true);
 	}
 
-	@ConverterMethod
+	//@org.appdapter.core.convert.Converter.ConverterMethod
 	@LispMethod
 	public static Object term_to_object(Term term) throws Exception {
 		if (term == null)
@@ -2328,7 +2347,7 @@ public class Startup {
 				return found.toLispObject();
 			found = null;
 		}
-		boolean readAsSubLisp = s.startsWith("?") || s.contains("#$") || (Main.isSubLisp() && s.contains(":"));
+		boolean readAsSubLisp = s.startsWith("?") || s.contains("#$") || (isSubLisp() && s.contains(":"));
 		if (readAsSubLisp) {
 			if (!inited_cyc_complete) {
 				Debug.assertTrue(inited_cyc_complete);
@@ -2368,7 +2387,7 @@ public class Startup {
 		}).call();
 	}
 
-	@ConverterMethod
+	//@org.appdapter.core.convert.Converter.ConverterMethod
 	public static Object atom_to_object(Atom thiz) {
 		String value = thiz.name();
 		String type = thiz.atomType();
@@ -2384,7 +2403,7 @@ public class Startup {
 		return atom_to_lobject(thiz);
 	}
 
-	@ConverterMethod
+	//@org.appdapter.core.convert.Converter.ConverterMethod
 	private static LispObject atom_to_lobject(Atom term) {
 		if (term.isListNil())
 			return Lisp.NIL;
@@ -2728,7 +2747,7 @@ public class Startup {
 		String[] argsNew = Main.extractOptions(args0);
 		start_lisp_from_prolog();
 		Runnable runnable;
-		if (Main.needSubLMAIN) {
+		if (needSubLMAIN) {
 			runnable = null;
 		} else {
 			runnable = Main.mainRunnable(argsNew, null);
@@ -2830,7 +2849,7 @@ public class Startup {
 
 	public static void exit(int status) {
 		// Debug.assertTrue(false);
-		if (Main.noExit) {
+		if (noExit) {
 			// Lisp.exit(status);
 			return;
 		}
@@ -2850,7 +2869,7 @@ public class Startup {
 		if (!noProlog)
 			start_prolog_from_lisp();
 		scanForExports(BeanShellCntrl.class);
-		if (Main.needSubLMAIN) {
+		if (needSubLMAIN) {
 			init_cyc_classes();
 			//SubLMain.doInitialEmbeddedMain(cycCmdArgs);
 			cl_imports_cyc();
@@ -2858,11 +2877,16 @@ public class Startup {
 	}
 
 	public static void completeCycInit() {
-		if (!Main.needSubLMAIN)
+		if (!needSubLMAIN)
 			return;
 		try {
 			if (cycPart2Early)
 				init_cyc_classes_part2();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
 			init_cyc_server();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -2941,6 +2965,52 @@ public class Startup {
 	public static void removeThis(AbstractSubLStruct struct) {
 		LispSync.removeThis(struct);
 		PrologSync.removeThis(struct);
+	}
+
+	/**
+	 * 
+	 */
+	public static void configWebSwing() {
+		//		org.webswing.Constants Constants;
+		//		String warFile = System.getProperty(Constants.WAR_FILE_LOCATION);
+		//		if (warFile == null) {
+		//			ProtectionDomain domain = main.Main.class.getProtectionDomain();
+		//			URL location = domain.getCodeSource().getLocation();
+		//			String locationString = location.toExternalForm();
+		//			if (locationString.endsWith("/WEB-INF/classes/")) {
+		//				locationString = locationString.substring(0, locationString.length() - "/WEB-INF/classes/".length());
+		//			}
+		//			System.setProperty(Constants.WAR_FILE_LOCATION, locationString);
+		//			warFile = CommonUtil.getWarFileLocation();
+		//		}
+		//		String configFile = System.getProperty(Constants.CONFIG_FILE_PATH);
+		//		if (configFile == null) {
+		//			String war = CommonUtil.getWarFileLocation();
+		//			if (war != null) {
+		//				final File fileWar = new File(war);
+		//				if (fileWar.isDirectory()) {
+		//					File f = new File(war, Constants.DEFAULT_CONFIG_FILE_NAME);
+		//					if (f.exists()) {
+		//						configFile = f.getAbsolutePath();
+		//					}
+		//				} else if (fileWar.isFile()) {
+		//					configFile = war.substring(0, war.lastIndexOf("/") + 1) + Constants.DEFAULT_CONFIG_FILE_NAME;
+		//				}
+		//			}
+		//			if (configFile == null) {
+		//				configFile = Constants.DEFAULT_CONFIG_FILE_NAME;
+		//			}
+		//			if (configFile != null) {
+		//				File f = new File(configFile);
+		//				if (f.exists()) {
+		//					configFile = f.getAbsolutePath();
+		//				}
+		//				getNoticeStream().println(Constants.CONFIG_FILE_PATH + "=" + configFile);
+		//				System.setProperty(Constants.CONFIG_FILE_PATH, configFile);
+		//			}
+		//		}
+		//		getNoticeStream().println(Constants.WAR_FILE_LOCATION + "=" + warFile);
+
 	}
 
 }

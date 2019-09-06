@@ -1,18 +1,14 @@
 //
 //
 package com.cyc.cycjava.cycl;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+
 import static com.cyc.tool.subl.util.SubLFiles.INEXACT;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Loader;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.InitializingSubLFile;
-import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-
-import eu.cyc.sparql.server.JavaHttpServer;
 
 public class rcycl extends InitializingSubLFile {
 	public static final rcycl me = new rcycl();
@@ -24,35 +20,6 @@ public class rcycl extends InitializingSubLFile {
 
 	@Override
 	public void initializeVariables() {
-	}
-
-	static public class Sparql extends SubLTrampolineFile {
-		public static final SubLFile me = new Sparql();
-
-		public static final SubLObject startSparqlServer(SubLObject port) {
-			int portNum = port.toInteger().intValue();
-			JavaHttpServer.start_sparql_server(portNum);
-			return NIL;
-		}
-
-		public static final SubLObject stopSparqlServer() {
-			JavaHttpServer.stop_sparql_server();
-			return NIL;
-		}
-
-		@Override
-		public void declareFunctions() {
-			SubLFiles.declareFunction(me, "startSparqlServer", "START-SPARQL-SERVER", 1, 0, false);
-			SubLFiles.declareFunction(me, "stopSparqlServer", "STOP-SPARQL-SERVER", 0, 0, false);
-		}
-
-		@Override
-		public void initializeVariables() {
-		}
-
-		@Override
-		public void runTopLevelForms() {
-		}
 	}
 
 	@Override
@@ -67,14 +34,14 @@ public class rcycl extends InitializingSubLFile {
 	static public SubLObject setup_rcycl_file() {
 		try {
 			// if(!SubLMain.TINY_KB) //
-			SubLFiles.initialize(Sparql.me);
+			SubLFiles.initialize(Sparql.class.getName());
 			// ;
-		} catch (final Exception ex) {
+		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
 		try {
 			SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
-		} catch (final Exception ex) {
+		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
 		SubLFiles.currentClassName = null;

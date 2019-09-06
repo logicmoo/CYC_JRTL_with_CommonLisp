@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import org.armedbear.j.Debug;
+import org.armedbear.lisp.ABCLStatic;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
@@ -451,7 +452,7 @@ public class SubLFiles {
 	}
 
 	public static void initialize(String className) {
-		Loader.initialize_subl_file_exact(className, !INEXACT);
+		ABCLStatic.subl_preserve_pkg(true, true, () -> Loader.initialize_subl_file_exact(className, !INEXACT));
 		checkSymbolConflicts();
 	}
 

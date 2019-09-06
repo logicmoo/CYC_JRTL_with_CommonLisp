@@ -16,8 +16,8 @@
 (pushnew :use-cyc *features*)
 ;; (pushnew :use-dd *features*)
 
-     (user:init-cyc) ;; Loads CYC code (without a KB)
-     '(user::setup-kb-tables 0)
+;; (user::init-cyc) ;; Loads CYC code (without a KB)
+;; (user::setup-kb-tables 0)
 
 ;; Starts AppdapterGUI
 ;; (UI-INSPECTOR)
@@ -37,8 +37,9 @@
 
 ;; Do ansi tests
 (defun cyc-ansi ()
-  (let ((*default-pathname-defaults*
-    (merge-pathnames "../old-ansi-tests/" #.(directory-namestring *load-truename*)))) (load "doit.lsp")))
+  (let ((cl:*default-pathname-defaults*
+    (cl:merge-pathnames "../old-ansi-tests/" #.(cl:directory-namestring cl:*load-truename*)))) 
+    (cl:load "doit.lsp")))
 
 
 (PRINT *features*)
