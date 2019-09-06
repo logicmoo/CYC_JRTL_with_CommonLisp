@@ -41,6 +41,8 @@ import com.cyc.tool.subl.util.IsolatedClassLoader;
 
 public class Jetty {
 
+	public static final IsolatedClassLoader sharingLoader = IsolatedClassLoader.theIsolatedClassLoader;
+
 	public interface RunnableExc {
 
 		void call();
@@ -81,80 +83,17 @@ public class Jetty {
 
 	}
 
-	static public class WebAppClassLoaderVis extends WebAppClassLoader {
-
-		public WebAppClassLoaderVis(ClassLoader parent, Context context) throws IOException {
-			super(parent, context);
-		}
-
-		public WebAppClassLoaderVis(WebAppContext webapp) throws IOException {
-			super(webapp);
-		}
-
-		@Override
-		public Class<?> loadClass(String name) throws ClassNotFoundException {
-			return super.loadClass(name);
-		}
-
-		@Override
-		protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-			return super.loadClass(name, resolve);
-		}
-
-		@Override
-		public Class<?> findClass(String name) throws ClassNotFoundException {
-			return super.findClass(name);
-		}
-
-		@Override
-		public void addClassPath(Resource resource) throws IOException {
-			super.addClassPath(resource);
-		}
-
-		@Override
-		public void addURL(URL url) {
-			try {
-				if (loadToParent)
-					IsolatedClassLoader.addClassPath(url);
-			} catch (Throwable e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			super.addURL(url);
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.jetty.webapp.WebAppClassLoader#addClassPath(java.lang.String)
-		 */
-		@Override
-		public void addClassPath(String classPath) throws IOException {
-			try {
-				if (loadToParent) {
-					IsolatedClassLoader.addToClassPath(classPath);
-				}
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
-
-			super.addClassPath(classPath);
-		}
-	}
-
 	public static final class CycWebAppClassLoader extends WebAppClassLoader {
 		/**
 		 * TODO Describe this constructor.
 		 * @param parent
 		 * @param context
 		 */
-		WebAppClassLoaderVis webAppClassLoader;
 		private Context context;
 
-		private CycWebAppClassLoader(ClassLoader parent, org.eclipse.jetty.webapp.WebAppClassLoader.Context context) throws IOException {
-			super(parent, context);
+		private CycWebAppClassLoader(org.eclipse.jetty.webapp.WebAppClassLoader.Context context) throws IOException {
+			super(context);
 			this.context = context;
-			if (parent instanceof WebAppClassLoaderVis) {
-				webAppClassLoader = (WebAppClassLoaderVis) parent;
-			}
 		}
 
 		@Override
@@ -168,46 +107,26 @@ public class Jetty {
 				return with_classloader(this, () -> super.loadClass(name, resolve));
 			}
 
-			if (!context.isParentLoaderPriority()) {
-				info("Not parentPriority?! " + context);
-			}
 			Class found;
 			try {
-				found = maybeGlobal(name);
+				found = with_classloader(this, () -> sharingLoader.loadClass(name, resolve));
 				if (found != null) {
-					info(" maybeGlobal found " + name);
-					if (resolve && found != null) {
+					info(" sharingLoader found " + name);
+					if (false && resolve) {
 						claimResolveClass(found);
 					}
 					return found;
 				}
 			} catch (Throwable ee1) {
+			}
 
-			}
-			try {
-				found = with_classloader(this, () -> IsolatedClassLoader.theIsolatedClassLoader.loadClass(name, resolve));
-				if (found != null) {
-					info(" theIsolatedClassLoader found " + name);
-					if (resolve && found != null) {
-						claimResolveClass(found);
-					}
-					return found;
+			found = with_classloader(this, () -> super.loadClass(name, resolve));
+			if (found != null) {
+				info(" super found " + name);
+				if (false && resolve) {
+					claimResolveClass(found);
 				}
-			} catch (Throwable ee1) {
-			}
-			try {
-				if (webAppClassLoader != null) {
-					found = with_classloader(this, () -> webAppClassLoader.loadClass(name, resolve));
-					if (found != null) {
-						info("" + webAppClassLoader + " found " + name);
-						return found;
-					}
-				}
-			} catch (Throwable ee1) {
-			}
-			found = super.loadClass(name, resolve);
-			if (resolve && found != null) {
-				claimResolveClass(found);
+				return found;
 			}
 			return found;
 		}
@@ -230,32 +149,18 @@ public class Jetty {
 			}
 			Class found;
 			try {
-				found = with_classloader(this, () -> maybeGlobal(name));
+				found = with_classloader(this, () -> sharingLoader.findClass(name));
 				if (found != null) {
-					info(" maybeGlobal found " + name);
+					info(" sharingLoader found " + name);
 					return found;
-				}
-			} catch (Throwable ee1) {
-			}
-			try {
-				found = with_classloader(this, () -> IsolatedClassLoader.theIsolatedClassLoader.findClass(name));
-				if (found != null) {
-					info(" theIsolatedClassLoader found " + name);
-					return found;
-				}
-			} catch (Throwable ee1) {
-			}
-			try {
-				if (webAppClassLoader != null) {
-					found = with_classloader(this, () -> webAppClassLoader.findClass(name));
-					if (found != null) {
-						info("" + webAppClassLoader + " found " + name);
-						return found;
-					}
 				}
 			} catch (Throwable ee1) {
 			}
 			found = with_classloader(this, () -> super.findClass(name));
+			if (found != null) {
+				info("super found " + name);
+				return found;
+			}
 			return found;
 		}
 
@@ -602,8 +507,7 @@ public class Jetty {
 		File warFile = new File(warFilename);
 		//tmpAppDir.deleteOnExit();
 
-		final WebAppClassLoaderVis parent = new WebAppClassLoaderVis(webapp);
-		CycWebAppClassLoader classLoader = new CycWebAppClassLoader(parent, webapp);
+		CycWebAppClassLoader classLoader = new CycWebAppClassLoader(webapp);
 		//		final WebAppClassLoader parent = new CycWebAppClassLoader(IsolatedClassLoader.getCommonClassLoader(), webapp);
 		//		final WebAppClassLoader classLoader = new WebAppClassLoaderVis(parent, webapp);
 		//final WebAppClassLoader classLoader = new WebAppClassLoaderVis(IsolatedClassLoader.getCommonClassLoader(), webapp);
