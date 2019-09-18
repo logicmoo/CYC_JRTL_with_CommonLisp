@@ -138,7 +138,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1470,7 +1470,7 @@ public final class owl_importer2 extends SubLTranslatedFile {
 
     public static SubLObject owl_importer2_set_options(final SubLObject importer, final SubLObject options) {
         assert NIL != owl_importer2_p(importer) : "owl_importer2.owl_importer2_p(importer) " + "CommonSymbols.NIL != owl_importer2.owl_importer2_p(importer) " + importer;
-        if (((NIL != options) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == list_utilities.property_list_p(options))) {
+        if (((NIL != options) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == list_utilities.property_list_p(options))) {
             throw new AssertionError(options);
         }
         _csetf_owl_imp2_options(importer, options);
@@ -1803,7 +1803,7 @@ public final class owl_importer2 extends SubLTranslatedFile {
             uri = NIL;
         }
         assert NIL != owl_importer2_p(importer) : "owl_importer2.owl_importer2_p(importer) " + "CommonSymbols.NIL != owl_importer2.owl_importer2_p(importer) " + importer;
-        if (((NIL != uri) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == rdf_uri.rdf_uri_p(uri))) {
+        if (((NIL != uri) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == rdf_uri.rdf_uri_p(uri))) {
             throw new AssertionError(uri);
         }
         final SubLObject ontology_term = owl_importer2_get_option(importer, $ONTOLOGY_TERM, UNPROVIDED);

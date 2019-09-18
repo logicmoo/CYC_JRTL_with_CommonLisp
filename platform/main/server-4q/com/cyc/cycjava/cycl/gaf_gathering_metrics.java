@@ -69,7 +69,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -117,7 +117,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
     public static final SubLObject record_gg_metrics(SubLObject metrics) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType($gg_metrics_cfasl_stream$.getDynamicValue(thread), STREAMP);
+            SubLSystemTrampolineFile.checkType($gg_metrics_cfasl_stream$.getDynamicValue(thread), STREAMP);
             cfasl_output_externalized(metrics, $gg_metrics_cfasl_stream$.getDynamicValue(thread));
             force_output($gg_metrics_cfasl_stream$.getDynamicValue(thread));
             return metrics;
@@ -137,8 +137,8 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
     public static final SubLObject record_gg_verification_metrics(SubLObject metrics) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(metrics, GG_GAF_VERIFICATION_METRICS_P);
-            SubLTrampolineFile.checkType($gg_verification_metrics_cfasl_stream$.getDynamicValue(thread), STREAMP);
+            SubLSystemTrampolineFile.checkType(metrics, GG_GAF_VERIFICATION_METRICS_P);
+            SubLSystemTrampolineFile.checkType($gg_verification_metrics_cfasl_stream$.getDynamicValue(thread), STREAMP);
             cfasl_output_externalized(metrics, $gg_verification_metrics_cfasl_stream$.getDynamicValue(thread));
             force_output($gg_verification_metrics_cfasl_stream$.getDynamicValue(thread));
             return metrics;
@@ -358,7 +358,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
     }
 
     public static final SubLObject gg_metrics_total_milliseconds(SubLObject metrics) {
-        SubLTrampolineFile.checkType(metrics, GG_METRICS_P);
+        SubLSystemTrampolineFile.checkType(metrics, GG_METRICS_P);
         return metrics.first();
     }
 
@@ -878,7 +878,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject metrics = NIL;
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;
@@ -995,7 +995,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject metrics = NIL;
-                SubLTrampolineFile.checkType(gaf_gathering_metrics_directory_path_for_kb(kb), DIRECTORY_P);
+                SubLSystemTrampolineFile.checkType(gaf_gathering_metrics_directory_path_for_kb(kb), DIRECTORY_P);
                 {
                     SubLObject directory_contents_var = Filesys.directory(gaf_gathering_metrics_directory_path_for_kb(kb), T);
                     SubLObject progress_message_var = NIL;
@@ -1194,7 +1194,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject partial_gaf_count = ZERO_INTEGER;
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;
@@ -1378,7 +1378,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject results_dictionary = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;
@@ -1535,7 +1535,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                         }
                     }
                 }
-                SubLTrampolineFile.checkType(gaf_gathering_metrics_directory_path_for_kb(kb), DIRECTORY_P);
+                SubLSystemTrampolineFile.checkType(gaf_gathering_metrics_directory_path_for_kb(kb), DIRECTORY_P);
                 {
                     SubLObject directory_contents_var = Filesys.directory(gaf_gathering_metrics_directory_path_for_kb(kb), T);
                     SubLObject progress_message_var = NIL;
@@ -2322,7 +2322,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject results_dictionary = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;
@@ -2499,7 +2499,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject counts = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;
@@ -2644,7 +2644,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject results = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;
@@ -4724,7 +4724,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject times = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;
@@ -5026,7 +5026,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
         if (times == UNPROVIDED) {
             times = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
         }
-        SubLTrampolineFile.checkType(gg_metrics, GG_METRICS_P);
+        SubLSystemTrampolineFile.checkType(gg_metrics, GG_METRICS_P);
         {
             SubLObject categorized = ZERO_INTEGER;
             SubLObject datum = list_utilities.first_n(THREE_INTEGER, gg_metrics);
@@ -5068,7 +5068,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
         if (times == UNPROVIDED) {
             times = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
         }
-        SubLTrampolineFile.checkType(search_string_metrics, GG_ONE_SEARCH_STRING_METRICS_P);
+        SubLSystemTrampolineFile.checkType(search_string_metrics, GG_ONE_SEARCH_STRING_METRICS_P);
         {
             SubLObject categorized = ZERO_INTEGER;
             SubLObject datum = search_string_metrics;
@@ -5137,7 +5137,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
     }
 
     public static final SubLObject gg_time_breakdown_for_search_result_metrics(SubLObject search_result_metrics, SubLObject times) {
-        SubLTrampolineFile.checkType(search_result_metrics, GG_SEARCH_RESULT_METRICS_P);
+        SubLSystemTrampolineFile.checkType(search_result_metrics, GG_SEARCH_RESULT_METRICS_P);
         {
             SubLObject total_ms = search_result_metrics.first();
             SubLObject all_filler_string_metrics = second(search_result_metrics);
@@ -5181,7 +5181,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
     }
 
     public static final SubLObject gg_time_breakdown_for_complete_gaf_metrics(SubLObject complete_gaf_metrics, SubLObject times) {
-        SubLTrampolineFile.checkType(complete_gaf_metrics, GG_ONE_COMPLETE_GAF_METRICS_P);
+        SubLSystemTrampolineFile.checkType(complete_gaf_metrics, GG_ONE_COMPLETE_GAF_METRICS_P);
         {
             SubLObject total_ms = complete_gaf_metrics.first();
             SubLObject categorized = ZERO_INTEGER;
@@ -5237,7 +5237,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
         if (results_dictionary == UNPROVIDED) {
             results_dictionary = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
         }
-        SubLTrampolineFile.checkType(gg_metrics, GG_METRICS_P);
+        SubLSystemTrampolineFile.checkType(gg_metrics, GG_METRICS_P);
         {
             SubLObject cdolist_list_var = second(gg_metrics);
             SubLObject search_string_metrics = NIL;
@@ -5298,7 +5298,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject counts = NIL;
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;
@@ -5446,7 +5446,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
     }
 
     public static final SubLObject partial_gaf_results_verification_counts(SubLObject gg_metrics) {
-        SubLTrampolineFile.checkType(gg_metrics, GG_METRICS_P);
+        SubLSystemTrampolineFile.checkType(gg_metrics, GG_METRICS_P);
         {
             SubLObject counts = NIL;
             SubLObject cdolist_list_var = second(gg_metrics);
@@ -5498,7 +5498,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject strings = NIL;
-                SubLTrampolineFile.checkType(gaf_gathering_metrics_directory_path_for_kb(kb), DIRECTORY_P);
+                SubLSystemTrampolineFile.checkType(gaf_gathering_metrics_directory_path_for_kb(kb), DIRECTORY_P);
                 {
                     SubLObject directory_contents_var = Filesys.directory(gaf_gathering_metrics_directory_path_for_kb(kb), T);
                     SubLObject progress_message_var = NIL;
@@ -5636,7 +5636,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject results = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;
@@ -5840,7 +5840,7 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
                 SubLObject gafs = NIL;
                 SubLObject parent = gaf_gathering_metrics_directory_path_for_kb(kb);
                 if (NIL != Filesys.directory_p(parent)) {
-                    SubLTrampolineFile.checkType(parent, DIRECTORY_P);
+                    SubLSystemTrampolineFile.checkType(parent, DIRECTORY_P);
                     {
                         SubLObject directory_contents_var = Filesys.directory(parent, T);
                         SubLObject progress_message_var = NIL;

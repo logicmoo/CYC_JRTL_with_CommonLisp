@@ -60,7 +60,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1692,8 +1692,8 @@ public final class interfaces extends SubLTranslatedFile {
     public static SubLObject init_interfaces_file() {
         defconstant("*INTERFACES-INITIAL-HASHTABLE-SIZE*", $int$400);
         defparameter("*INTERFACES-INTERFACE-TABLE-UPDATE-LOCK*", make_lock($$$Interface_Table_Update_Lock));
-        deflexical("*INTERFACES-INTERFACE-TABLE*", SubLTrampolineFile.maybeDefault($interfaces_interface_table$, $interfaces_interface_table$, () -> make_hash_table($interfaces_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
-        deflexical("*INTERFACES-ALIST-OF-ALL-INTERFACES*", SubLTrampolineFile.maybeDefault($interfaces_alist_of_all_interfaces$, $interfaces_alist_of_all_interfaces$, NIL));
+        deflexical("*INTERFACES-INTERFACE-TABLE*", SubLSystemTrampolineFile.maybeDefault($interfaces_interface_table$, $interfaces_interface_table$, () -> make_hash_table($interfaces_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
+        deflexical("*INTERFACES-ALIST-OF-ALL-INTERFACES*", SubLSystemTrampolineFile.maybeDefault($interfaces_alist_of_all_interfaces$, $interfaces_alist_of_all_interfaces$, NIL));
         defparameter("*INTERFACES-MARKED-INTERFACES*", NIL);
         defconstant("*INTERFACE-METHOD-IMPOSSIBLE-PROPERTIES*", $list4);
         defconstant("*INTERFACE-METHOD-REQUIRED-PROPERTIES*", $list5);

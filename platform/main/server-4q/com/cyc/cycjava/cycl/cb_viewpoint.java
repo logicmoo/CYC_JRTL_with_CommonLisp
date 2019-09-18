@@ -119,7 +119,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class cb_viewpoint extends SubLTranslatedFile {
     public static final SubLFile me = new cb_viewpoint();
@@ -2220,8 +2220,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_cb_viewpoint_file() {
         defparameter("*VIEWPOINT-TYPE*", NIL);
         defconstant("*DTP-VIEWPOINT*", VIEWPOINT);
-        deflexical("*CB-VIEWPOINT-TABLE*", SubLTrampolineFile.maybeDefault($cb_viewpoint_table$, $cb_viewpoint_table$, NIL));
-        deflexical("*CB-VIEWPOINT-SUMMARY-ALIST*", SubLTrampolineFile.maybeDefault($cb_viewpoint_summary_alist$, $cb_viewpoint_summary_alist$, NIL));
+        deflexical("*CB-VIEWPOINT-TABLE*", SubLSystemTrampolineFile.maybeDefault($cb_viewpoint_table$, $cb_viewpoint_table$, NIL));
+        deflexical("*CB-VIEWPOINT-SUMMARY-ALIST*", SubLSystemTrampolineFile.maybeDefault($cb_viewpoint_summary_alist$, $cb_viewpoint_summary_alist$, NIL));
         defparameter("*INDEX-HOOK*", NIL);
         deflexical("*VIEWPOINT-CACHE*", NIL);
         deflexical("*DASH-NIL*", $str93$________);

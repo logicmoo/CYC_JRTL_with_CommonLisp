@@ -22,7 +22,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -137,11 +137,11 @@ public final class removal_modules_min_quant_value extends SubLTranslatedFile {
     }
 
     public static SubLObject init_removal_modules_min_quant_value_file() {
-        deflexical("*MIN-QUANT-VALUE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($min_quant_value_defining_mt$, $min_quant_value_defining_mt$, $$UniversalVocabularyMt));
-        deflexical("*MAX-QUANT-VALUE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($max_quant_value_defining_mt$, $max_quant_value_defining_mt$, $$UniversalVocabularyMt));
-        deflexical("*QUANTITY-UNIT-DEFINING-MT*", SubLTrampolineFile.maybeDefault($quantity_unit_defining_mt$, $quantity_unit_defining_mt$, $$UniversalVocabularyMt));
-        deflexical("*QUANTITY-MEASURE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($quantity_measure_defining_mt$, $quantity_measure_defining_mt$, $$UniversalVocabularyMt));
-        deflexical("*MULTIPLICATION-UNITS-DEFINING-MT*", SubLTrampolineFile.maybeDefault($multiplication_units_defining_mt$, $multiplication_units_defining_mt$, $$UniversalVocabularyMt));
+        deflexical("*MIN-QUANT-VALUE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($min_quant_value_defining_mt$, $min_quant_value_defining_mt$, $$UniversalVocabularyMt));
+        deflexical("*MAX-QUANT-VALUE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($max_quant_value_defining_mt$, $max_quant_value_defining_mt$, $$UniversalVocabularyMt));
+        deflexical("*QUANTITY-UNIT-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($quantity_unit_defining_mt$, $quantity_unit_defining_mt$, $$UniversalVocabularyMt));
+        deflexical("*QUANTITY-MEASURE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($quantity_measure_defining_mt$, $quantity_measure_defining_mt$, $$UniversalVocabularyMt));
+        deflexical("*MULTIPLICATION-UNITS-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($multiplication_units_defining_mt$, $multiplication_units_defining_mt$, $$UniversalVocabularyMt));
         return NIL;
     }
 

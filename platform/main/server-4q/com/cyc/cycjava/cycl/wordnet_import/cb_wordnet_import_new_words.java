@@ -72,7 +72,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -343,7 +343,7 @@ public final class cb_wordnet_import_new_words extends SubLTranslatedFile {
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
-        if (((NIL != matched_term_name) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(matched_term_name))) {
+        if (((NIL != matched_term_name) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(matched_term_name))) {
             throw new AssertionError(matched_term_name);
         }
         assert NIL != list_utilities.alist_p(workflow_alist) : "list_utilities.alist_p(workflow_alist) " + "CommonSymbols.NIL != list_utilities.alist_p(workflow_alist) " + workflow_alist;
@@ -845,7 +845,7 @@ public final class cb_wordnet_import_new_words extends SubLTranslatedFile {
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
-        if (((NIL != matched_term_name) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(matched_term_name))) {
+        if (((NIL != matched_term_name) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(matched_term_name))) {
             throw new AssertionError(matched_term_name);
         }
         assert NIL != consp(workflow_alist) : "Types.consp(workflow_alist) " + "CommonSymbols.NIL != Types.consp(workflow_alist) " + workflow_alist;

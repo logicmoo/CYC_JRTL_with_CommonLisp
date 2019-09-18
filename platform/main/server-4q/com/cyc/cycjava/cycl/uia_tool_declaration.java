@@ -32,7 +32,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -61,7 +61,7 @@ public final class uia_tool_declaration extends SubLTranslatedFile implements V0
     public static final SubLObject declare_uia_tool(SubLObject operator, SubLObject plist) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(operator, UI_OPERATOR_P);
+            SubLSystemTrampolineFile.checkType(operator, UI_OPERATOR_P);
             {
                 SubLObject info = NIL;
                 SubLObject cdolist_list_var = $uia_tool_slots$.getGlobalValue();
@@ -128,7 +128,7 @@ public final class uia_tool_declaration extends SubLTranslatedFile implements V0
     }
 
     public static final SubLObject undeclare_uia_tool(SubLObject operator) {
-        SubLTrampolineFile.checkType(operator, UI_OPERATOR_P);
+        SubLSystemTrampolineFile.checkType(operator, UI_OPERATOR_P);
         dictionary.dictionary_remove($uia_tool_info_dictionary$.getGlobalValue(), operator);
         return operator;
     }

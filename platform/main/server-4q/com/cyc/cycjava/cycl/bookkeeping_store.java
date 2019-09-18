@@ -78,7 +78,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -283,8 +283,8 @@ public final class bookkeeping_store extends SubLTranslatedFile {
 
     public static SubLObject hl_assert_bookkeeping_binary_gaf(final SubLObject pred, final SubLObject arg1, final SubLObject arg2, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(HL_ASSERT_BOOKKEEPING_BINARY_GAF, pred, arg1, arg2, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -313,8 +313,8 @@ public final class bookkeeping_store extends SubLTranslatedFile {
 
     public static SubLObject hl_unassert_bookkeeping_binary_gaf(final SubLObject pred, final SubLObject arg1, final SubLObject arg2, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(HL_UNASSERT_BOOKKEEPING_BINARY_GAF, pred, arg1, arg2, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -803,8 +803,8 @@ public final class bookkeeping_store extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = $$BookkeepingMt;
         }
-        SubLTrampolineFile.enforceType(fort, FORT_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
         return bookkeeping_fpred_value($$myCreator, fort, mt);
     }
 
@@ -812,8 +812,8 @@ public final class bookkeeping_store extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = $$BookkeepingMt;
         }
-        SubLTrampolineFile.enforceType(fort, FORT_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
         return bookkeeping_fpred_value($$myCreationTime, fort, mt);
     }
 
@@ -1532,8 +1532,8 @@ public final class bookkeeping_store extends SubLTranslatedFile {
     public static SubLObject init_bookkeeping_store_file() {
         deflexical("*BOOKKEEPING-PREDICATES-FOR-HL-STORE*", $list37);
         deflexical("*ARG2-INDEXED-BOOKKEEPING-PREDICATES-FOR-HL-STORE*", $list38);
-        deflexical("*BOOKKEEPING-BINARY-GAF-STORE*", SubLTrampolineFile.maybeDefault($bookkeeping_binary_gaf_store$, $bookkeeping_binary_gaf_store$, () -> new_bookkeeping_top_level_index($bookkeeping_predicates_for_hl_store$.getGlobalValue())));
-        deflexical("*BOOKKEEPING-BINARY-GAF-ARG2-INDEX*", SubLTrampolineFile.maybeDefault($sym45$_BOOKKEEPING_BINARY_GAF_ARG2_INDEX_, $bookkeeping_binary_gaf_arg2_index$, () -> new_bookkeeping_top_level_index($arg2_indexed_bookkeeping_predicates_for_hl_store$.getGlobalValue())));
+        deflexical("*BOOKKEEPING-BINARY-GAF-STORE*", SubLSystemTrampolineFile.maybeDefault($bookkeeping_binary_gaf_store$, $bookkeeping_binary_gaf_store$, () -> new_bookkeeping_top_level_index($bookkeeping_predicates_for_hl_store$.getGlobalValue())));
+        deflexical("*BOOKKEEPING-BINARY-GAF-ARG2-INDEX*", SubLSystemTrampolineFile.maybeDefault($sym45$_BOOKKEEPING_BINARY_GAF_ARG2_INDEX_, $bookkeeping_binary_gaf_arg2_index$, () -> new_bookkeeping_top_level_index($arg2_indexed_bookkeeping_predicates_for_hl_store$.getGlobalValue())));
         return NIL;
     }
 

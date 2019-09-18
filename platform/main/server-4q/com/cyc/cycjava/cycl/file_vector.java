@@ -110,7 +110,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class file_vector extends SubLTranslatedFile {
@@ -614,7 +614,7 @@ public final class file_vector extends SubLTranslatedFile {
     }
 
     public static SubLObject persist_file_vector_wide_mark(final SubLObject fvector, final SubLObject wide_mark_filename) {
-	SubLTrampolineFile.enforceType(fvector, FILE_VECTOR_P);
+	SubLSystemTrampolineFile.enforceType(fvector, FILE_VECTOR_P);
 	return save_file_vector_wide_mark(get_file_vector_wide_mark(fvector), wide_mark_filename);
     }
 

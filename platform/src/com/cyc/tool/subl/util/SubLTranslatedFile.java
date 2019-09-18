@@ -12,7 +12,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 
-public abstract class SubLTranslatedFile extends SubLTrampolineFile implements CommonSymbols, CommonSymbols_CYC
+public abstract class SubLTranslatedFile extends SubLSystemTrampolineFile implements CommonSymbols, CommonSymbols_CYC
 //
 {
 	// static protected SubLFiles SubLFiles;

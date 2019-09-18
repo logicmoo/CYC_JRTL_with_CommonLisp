@@ -49,7 +49,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -190,7 +190,7 @@ public final class sg_tracer extends SubLTranslatedFile implements V02 {
         if (NIL != misc_utilities.uninitialized_p($typed_spec_preds_rule$.getGlobalValue())) {
             {
                 SubLObject rule = czer_meta.find_assertion_cycl($typed_spec_preds_rule_sentence$.getGlobalValue(), UNPROVIDED);
-                SubLTrampolineFile.checkType(rule, ASSERTION_P);
+                SubLSystemTrampolineFile.checkType(rule, ASSERTION_P);
                 $typed_spec_preds_rule$.setGlobalValue(rule);
             }
         }
@@ -284,7 +284,7 @@ public final class sg_tracer extends SubLTranslatedFile implements V02 {
                                 SubLObject idx = assertion_handles.do_assertions_table();
                                 SubLObject total = id_index.id_index_count(idx);
                                 SubLObject sofar = ZERO_INTEGER;
-                                SubLTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
+                                SubLSystemTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
                                 {
                                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -427,7 +427,7 @@ public final class sg_tracer extends SubLTranslatedFile implements V02 {
                                 SubLObject idx = assertion_handles.do_assertions_table();
                                 SubLObject total = id_index.id_index_count(idx);
                                 SubLObject sofar = ZERO_INTEGER;
-                                SubLTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
+                                SubLSystemTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
                                 {
                                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -533,7 +533,7 @@ public final class sg_tracer extends SubLTranslatedFile implements V02 {
             SubLObject cdolist_list_var = rules;
             SubLObject rule = NIL;
             for (rule = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , rule = cdolist_list_var.first()) {
-                SubLTrampolineFile.checkType(rule, $sym37$VALID_ASSERTION_);
+                SubLSystemTrampolineFile.checkType(rule, $sym37$VALID_ASSERTION_);
                 {
                     SubLObject new_rules = sg_tracer_convert_abductive_expansion_rule_to_implies(rule);
                     dictionary_utilities.dictionary_append($sg_tracer_abductive_rule_table$.getGlobalValue(), module, new_rules);
@@ -723,7 +723,7 @@ public final class sg_tracer extends SubLTranslatedFile implements V02 {
                                 SubLObject idx = assertion_handles.do_assertions_table();
                                 SubLObject total = id_index.id_index_count(idx);
                                 SubLObject sofar = ZERO_INTEGER;
-                                SubLTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
+                                SubLSystemTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
                                 {
                                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -853,7 +853,7 @@ public final class sg_tracer extends SubLTranslatedFile implements V02 {
                                 SubLObject idx = assertion_handles.do_assertions_table();
                                 SubLObject total = id_index.id_index_count(idx);
                                 SubLObject sofar = ZERO_INTEGER;
-                                SubLTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
+                                SubLSystemTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
                                 {
                                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -950,7 +950,7 @@ public final class sg_tracer extends SubLTranslatedFile implements V02 {
                                 SubLObject idx = assertion_handles.do_assertions_table();
                                 SubLObject total = id_index.id_index_count(idx);
                                 SubLObject sofar = ZERO_INTEGER;
-                                SubLTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
+                                SubLSystemTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
                                 {
                                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -1194,7 +1194,7 @@ public final class sg_tracer extends SubLTranslatedFile implements V02 {
                                 SubLObject idx = assertion_handles.do_assertions_table();
                                 SubLObject total_8 = id_index.id_index_count(idx);
                                 SubLObject sofar = ZERO_INTEGER;
-                                SubLTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
+                                SubLSystemTrampolineFile.checkType($str_alt32$do_broad_mt_index, STRINGP);
                                 {
                                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);

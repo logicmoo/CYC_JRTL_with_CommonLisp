@@ -79,7 +79,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class cb_form_widgets extends SubLTranslatedFile {
@@ -1790,7 +1790,7 @@ public final class cb_form_widgets extends SubLTranslatedFile {
 		assert NIL != stringp(input_name) : "Types.stringp(input_name) " + "CommonSymbols.NIL != Types.stringp(input_name) " + input_name;
 		assert NIL != subl_promotions.positive_integer_p(width) : "subl_promotions.positive_integer_p(width) " + "CommonSymbols.NIL != subl_promotions.positive_integer_p(width) " + width;
 		assert NIL != subl_promotions.positive_integer_p(height) : "subl_promotions.positive_integer_p(height) " + "CommonSymbols.NIL != subl_promotions.positive_integer_p(height) " + height;
-		if (((NIL != complete_label) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(complete_label))) {
+		if (((NIL != complete_label) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(complete_label))) {
 			throw new AssertionError(complete_label);
 		}
 		final SubLObject list_var = choices;
@@ -1803,16 +1803,16 @@ public final class cb_form_widgets extends SubLTranslatedFile {
 			cdolist_list_var = cdolist_list_var.rest();
 			elem = cdolist_list_var.first();
 		}
-		if (((NIL != pretty_name) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(pretty_name))) {
+		if (((NIL != pretty_name) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(pretty_name))) {
 			throw new AssertionError(pretty_name);
 		}
-		if (((NIL != cyclify_label) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyclify_label))) {
+		if (((NIL != cyclify_label) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyclify_label))) {
 			throw new AssertionError(cyclify_label);
 		}
-		if (((NIL != clear_label) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(clear_label))) {
+		if (((NIL != clear_label) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(clear_label))) {
 			throw new AssertionError(clear_label);
 		}
-		if (((NIL != mode) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == keywordp(mode))) {
+		if (((NIL != mode) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == keywordp(mode))) {
 			throw new AssertionError(mode);
 		}
 		if ((((NIL != complete_label) || (NIL != pretty_name)) || (NIL != cyclify_label)) || (NIL != clear_label)) {
@@ -2186,14 +2186,14 @@ public final class cb_form_widgets extends SubLTranslatedFile {
 			error_options = NIL;
 		}
 		assert NIL != el_formula_error_p(el_formula_error) : "cb_form_widgets.el_formula_error_p(el_formula_error) " + "CommonSymbols.NIL != cb_form_widgets.el_formula_error_p(el_formula_error) " + el_formula_error;
-		if (((NIL != formula_string) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(formula_string))) {
+		if (((NIL != formula_string) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(formula_string))) {
 			throw new AssertionError(formula_string);
 		}
 		final SubLObject current;
 		final SubLObject datum = current = error_options;
 		final SubLObject location_tail = property_list_member($LOCATION, current);
 		final SubLObject location = (NIL != location_tail) ? cadr(location_tail) : NIL;
-		if (((NIL != location) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(location))) {
+		if (((NIL != location) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(location))) {
 			throw new AssertionError(location);
 		}
 		SubLObject el_formula_error_keyword = NIL;
@@ -2359,16 +2359,16 @@ public final class cb_form_widgets extends SubLTranslatedFile {
 		final SubLObject cyclify_label_tail = property_list_member($CYCLIFY_LABEL, current);
 		final SubLObject cyclify_label = (NIL != cyclify_label_tail) ? cadr(cyclify_label_tail) : NIL;
 		assert NIL != stringp(input_name) : "Types.stringp(input_name) " + "CommonSymbols.NIL != Types.stringp(input_name) " + input_name;
-		if (((NIL != complete_label) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(complete_label))) {
+		if (((NIL != complete_label) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(complete_label))) {
 			throw new AssertionError(complete_label);
 		}
-		if (((NIL != pretty_name) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(pretty_name))) {
+		if (((NIL != pretty_name) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(pretty_name))) {
 			throw new AssertionError(pretty_name);
 		}
-		if (((NIL != cyclify_label) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyclify_label))) {
+		if (((NIL != cyclify_label) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyclify_label))) {
 			throw new AssertionError(cyclify_label);
 		}
-		if (((NIL != clear_label) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(clear_label))) {
+		if (((NIL != clear_label) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(clear_label))) {
 			throw new AssertionError(clear_label);
 		}
 		if ((((NIL == complete_label) && (NIL == pretty_name)) && (NIL == cyclify_label)) && (NIL == clear_label)) {
@@ -2702,14 +2702,14 @@ public final class cb_form_widgets extends SubLTranslatedFile {
 			error_options = NIL;
 		}
 		assert NIL != el_term_error_p(el_term_error) : "cb_form_widgets.el_term_error_p(el_term_error) " + "CommonSymbols.NIL != cb_form_widgets.el_term_error_p(el_term_error) " + el_term_error;
-		if (((NIL != term_string) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(term_string))) {
+		if (((NIL != term_string) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(term_string))) {
 			throw new AssertionError(term_string);
 		}
 		final SubLObject current;
 		final SubLObject datum = current = error_options;
 		final SubLObject location_tail = property_list_member($LOCATION, current);
 		final SubLObject location = (NIL != location_tail) ? cadr(location_tail) : NIL;
-		if (((NIL != location) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(location))) {
+		if (((NIL != location) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(location))) {
 			throw new AssertionError(location);
 		}
 		SubLObject el_term_error_keyword = NIL;

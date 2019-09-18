@@ -42,7 +42,7 @@ package bsh;
 */
 public interface NameSource
 {
-    String [] getAllNames();
+    String [] getAllNames(long miliseconds);
     void addNameSourceListener( NameSource.Listener listener );
 
     public static interface Listener {

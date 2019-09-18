@@ -125,7 +125,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1735,14 +1735,14 @@ public final class misc_utilities extends SubLTranslatedFile {
 
     public static SubLObject init_misc_utilities_file() {
         defconstant("*KB-CONTENT-COPYRIGHT-NOTICE*", $str1$___Copyright__c__1998___2014_Cyco);
-        deflexical("*SYSTEM-CODE-INITIALIZATIONS-MARKER*", SubLTrampolineFile.maybeDefault($system_code_initializations_marker$, $system_code_initializations_marker$, () -> Environment.get_process_id(UNPROVIDED)));
-        deflexical("*SYSTEM-CODE-INITIALIZATIONS-LOCK*", SubLTrampolineFile.maybeDefault($system_code_initializations_lock$, $system_code_initializations_lock$, () -> make_lock($$$System_Code_Initializations_Lock)));
+        deflexical("*SYSTEM-CODE-INITIALIZATIONS-MARKER*", SubLSystemTrampolineFile.maybeDefault($system_code_initializations_marker$, $system_code_initializations_marker$, () -> Environment.get_process_id(UNPROVIDED)));
+        deflexical("*SYSTEM-CODE-INITIALIZATIONS-LOCK*", SubLSystemTrampolineFile.maybeDefault($system_code_initializations_lock$, $system_code_initializations_lock$, () -> make_lock($$$System_Code_Initializations_Lock)));
         deflexical("*SYSTEM-CODE-VERSION-STRING*", NIL);
         deflexical("*SYSTEM-CODE-RELEASE-STRING*", NIL);
         deflexical("*ID-SPACE-FIXNUM-RANGE-PROBLEM*", cconcatenate($str33$__Your_KB_object_ID_space_has_out, new SubLObject[]{ $str34$__Performance__and_most_likely_co, $str35$__Relaunch_your_image_with_more_F }));
-        deflexical("*HL-STORE-CACHES-DIRECTORY*", SubLTrampolineFile.maybeDefault($hl_store_caches_directory$, $hl_store_caches_directory$, NIL));
-        deflexical("*HL-STORE-CACHES-SHARED-SYMBOLS*", SubLTrampolineFile.maybeDefault($hl_store_caches_shared_symbols$, $hl_store_caches_shared_symbols$, NIL));
-        deflexical("*HL-STORE-CACHES-SHARED-SYMBOLS-SIMPLE*", SubLTrampolineFile.maybeDefault($hl_store_caches_shared_symbols_simple$, $hl_store_caches_shared_symbols_simple$, NIL));
+        deflexical("*HL-STORE-CACHES-DIRECTORY*", SubLSystemTrampolineFile.maybeDefault($hl_store_caches_directory$, $hl_store_caches_directory$, NIL));
+        deflexical("*HL-STORE-CACHES-SHARED-SYMBOLS*", SubLSystemTrampolineFile.maybeDefault($hl_store_caches_shared_symbols$, $hl_store_caches_shared_symbols$, NIL));
+        deflexical("*HL-STORE-CACHES-SHARED-SYMBOLS-SIMPLE*", SubLSystemTrampolineFile.maybeDefault($hl_store_caches_shared_symbols_simple$, $hl_store_caches_shared_symbols_simple$, NIL));
         deflexical("*STANDARD-HL-STORE-CACHE-FILE-EXTENSION*", $$$cfasl);
         deflexical("*HOSTNAME-CACHING-STATE*", NIL);
         deflexical("*MACHINE-BOGOMIPS*", $UNINITIALIZED);

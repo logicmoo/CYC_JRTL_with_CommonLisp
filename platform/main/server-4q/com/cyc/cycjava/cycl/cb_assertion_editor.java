@@ -158,7 +158,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class cb_assertion_editor extends SubLTranslatedFile {
     public static final SubLFile me = new cb_assertion_editor();
@@ -6754,10 +6754,10 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (NIL == linktext) {
             linktext = $str118$_Trigger_Test_;
         }
-        if (((NIL != support) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == arguments.support_p(support))) {
+        if (((NIL != support) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == arguments.support_p(support))) {
             throw new AssertionError(support);
         }
-        if (((NIL != rule) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == assertions_high.rule_assertionP(rule))) {
+        if (((NIL != rule) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == assertions_high.rule_assertionP(rule))) {
             throw new AssertionError(rule);
         }
         thread.resetMultipleValues();

@@ -116,7 +116,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1716,7 +1716,7 @@ public final class tptp_problem_generator extends SubLTranslatedFile implements 
                             SubLObject idx = assertion_handles.do_assertions_table();
                             SubLObject total = id_index.id_index_count(idx);
                             SubLObject sofar = ZERO_INTEGER;
-                            SubLTrampolineFile.checkType($$$Gathering_all_gafs, STRINGP);
+                            SubLSystemTrampolineFile.checkType($$$Gathering_all_gafs, STRINGP);
                             {
                                 SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                 SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);

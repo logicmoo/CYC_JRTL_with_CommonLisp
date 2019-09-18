@@ -33,6 +33,7 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.ABCLStatic.with_thread_prefix;
 import static org.armedbear.lisp.Lisp.EOF;
 import static org.armedbear.lisp.Lisp.NIL;
 import static org.armedbear.lisp.Lisp.NULL;
@@ -58,6 +59,7 @@ import static org.armedbear.lisp.Lisp.coerceToPathname;
 import static org.armedbear.lisp.Lisp.error;
 import static org.armedbear.lisp.Lisp.eval;
 import static org.armedbear.lisp.Lisp.exportConstant;
+import static org.armedbear.lisp.Lisp.forcedCLRead;
 import static org.armedbear.lisp.Lisp.getStandardOutput;
 import static org.armedbear.lisp.Lisp.internConstant;
 import static org.armedbear.lisp.Lisp.internSpecial;
@@ -82,8 +84,7 @@ import java.text.MessageFormat;
 public final class Load {
 	public static final LispObject load(String filename) {
 		final LispThread thread = LispThread.currentThread();
-		return load(new Pathname(filename), Symbol.LOAD_VERBOSE.symbolValue(thread) != NIL,
-				Symbol.LOAD_PRINT.symbolValue(thread) != NIL, true);
+		return with_thread_prefix("load " + filename, forcedCLRead, () -> load(new Pathname(filename), Symbol.LOAD_VERBOSE.symbolValue(thread) != NIL, Symbol.LOAD_PRINT.symbolValue(thread) != NIL, true));
 	}
 
 	/**
@@ -280,8 +281,11 @@ public final class Load {
 		return result;
 	}
 
-
 	public static final LispObject loadSystemFile(final String filename, boolean verbose, boolean print, boolean auto) {
+		return with_thread_prefix("loadSystemFile " + filename, forcedCLRead, () -> loadSystemFile0(filename, verbose, print, auto));
+	}
+
+	public static final LispObject loadSystemFile0(final String filename, boolean verbose, boolean print, boolean auto) {
 		InputStream in = null;
 		Pathname pathname = null;
 		Pathname truename = null;
@@ -461,8 +465,13 @@ public final class Load {
 			_SPEED_, _SPACE_, _SAFETY_, _DEBUG_, _EXPLAIN_ };
 
 	// A nil TRUENAME signals a load from stream which has no possible path
-	private static final LispObject loadFileFromStream(LispObject pathname, LispObject truename, Stream in,
-			boolean verbose, boolean print, boolean auto, boolean returnLastResult)
+	private static final LispObject loadFileFromStream(LispObject pathname, LispObject truename, Stream in, boolean verbose, boolean print, boolean auto, boolean returnLastResult) {
+		LispObject filename = (truename != NIL ? truename : pathname != NIL ? pathname : Symbol.LOAD_TRUENAME.symbolValueNoThrow());
+		String filenameStr = (filename == null || filename == NIL) ? "<unknown>" : filename.toString();
+		return with_thread_prefix("loadFileFromStream " + filenameStr, forcedCLRead, () -> loadFileFromStream0(pathname, truename, in, verbose, print, auto, returnLastResult));
+	}
+
+	private static final LispObject loadFileFromStream0(LispObject pathname, LispObject truename, Stream in, boolean verbose, boolean print, boolean auto, boolean returnLastResult)
 
 	{
 		long start = System.currentTimeMillis();
@@ -595,6 +604,7 @@ public final class Load {
 				LispObject obj = in.read(false, EOF, false, thread, Stream.currentReadtable);
 				if (obj == EOF)
 					break;
+				// Thread.currentThread().setName("" + obj);
 				result = eval(obj, env, thread);
 				if (print) {
 					Stream out = checkCharacterOutputStream(Symbol.STANDARD_OUTPUT.symbolValue(thread));
@@ -636,7 +646,7 @@ public final class Load {
 			thread.bindSpecial(Symbol.READ_BASE, LispInteger.getInstance(10));
 			thread.bindSpecial(Symbol.READ_EVAL, Symbol.T);
 			thread.bindSpecial(Symbol.READ_SUPPRESS, Nil.NIL);
-	
+
 			in.setExternalFormat(_FASL_EXTERNAL_FORMAT_.symbolValue(thread));
 			while (true) {
 				LispObject obj = in.read(false, EOF, false, // should be 'true' once we

@@ -90,7 +90,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -405,9 +405,10 @@ public final class http_kernel extends SubLTranslatedFile {
             $read_default_float_format$.bind(DOUBLE_FLOAT, thread);
             $print_readably$.bind(NIL, thread);
             $read_eval$.bind(NIL, thread);
-            final SubLObject old_priority = process_priority(current_process());
+            final SubLObject current_process2 = current_process();
+			final SubLObject old_priority = process_priority(current_process2);
             try {
-                set_process_priority(current_process(), $process_normal_priority$.getGlobalValue());
+                set_process_priority(current_process2, $process_normal_priority$.getGlobalValue());
                 thread.resetMultipleValues();
                 SubLObject protocol = http_parse_request(in_stream);
                 SubLObject content = thread.secondMultipleValue();
@@ -469,7 +470,7 @@ public final class http_kernel extends SubLTranslatedFile {
                 try {
                     $is_thread_performing_cleanupP$.bind(T, thread);
                     final SubLObject _values2 = getValuesAsVector();
-                    set_process_priority(current_process(), old_priority);
+                    set_process_priority(current_process2, old_priority);
                     restoreValuesFromVector(_values2);
                 } finally {
                     $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$3, thread);
@@ -1156,8 +1157,8 @@ public final class http_kernel extends SubLTranslatedFile {
         deflexical("*HTTP-CG-URL*", $str1$_cg_);
         deflexical("*HTTP-CGI-BIN-WS-DIRECTORY*", $str2$_cgi_bin_ws_);
         deflexical("*HTTP-CYC-WS-DIRECTORY*", $str3$_cyc_ws);
-        deflexical("*HTTP-CYC-WS-MACHINE*", SubLTrampolineFile.maybeDefault($http_cyc_ws_machine$, $http_cyc_ws_machine$, NIL));
-        deflexical("*HTTP-CYC-WS-PORT*", SubLTrampolineFile.maybeDefault($http_cyc_ws_port$, $http_cyc_ws_port$, NIL));
+        deflexical("*HTTP-CYC-WS-MACHINE*", SubLSystemTrampolineFile.maybeDefault($http_cyc_ws_machine$, $http_cyc_ws_machine$, NIL));
+        deflexical("*HTTP-CYC-WS-PORT*", SubLSystemTrampolineFile.maybeDefault($http_cyc_ws_port$, $http_cyc_ws_port$, NIL));
         deflexical("*HTTP-REQUEST-LOGGING-STREAM*", NIL);
         defparameter("*GET-HTTP-LOGGING-SEQUENCE-GENERATOR*", $UNINITIALIZED);
         defconstant("*HTTP-RETURN-MIME-TYPE-PREFIX*", $str33$return_mime_type_);

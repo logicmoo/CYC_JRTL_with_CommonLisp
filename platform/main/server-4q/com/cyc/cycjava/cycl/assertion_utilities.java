@@ -136,7 +136,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2310,7 +2310,7 @@ public final class assertion_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_has_meta_assertionsP(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return list_utilities.sublisp_boolean(assertions_low.assertion_index(assertion));
     }
 

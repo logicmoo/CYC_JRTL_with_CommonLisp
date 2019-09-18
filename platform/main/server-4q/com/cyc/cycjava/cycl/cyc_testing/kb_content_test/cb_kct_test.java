@@ -204,7 +204,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class cb_kct_test extends SubLTranslatedFile {
     public static final SubLFile me = new cb_kct_test();
@@ -3282,7 +3282,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject kct_test_state_set_cardinality(final SubLObject test_state, final SubLObject type, final SubLObject num) {
         assert NIL != kct_test_state_p(test_state) : "cb_kct_test.kct_test_state_p(test_state) " + "CommonSymbols.NIL != cb_kct_test.kct_test_state_p(test_state) " + test_state;
-        if (((NIL != num) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(num))) {
+        if (((NIL != num) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(num))) {
             throw new AssertionError(num);
         }
         if (NIL == subl_promotions.memberP(type, $list203, UNPROVIDED, UNPROVIDED)) {
@@ -6022,22 +6022,22 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject kct_assert_test_spec_definition(final SubLObject test_spec, final SubLObject query_spec, final SubLObject answer_cardinality, final SubLObject answer_min_cardinality, final SubLObject answer_max_cardinality, final SubLObject exact_bindings, final SubLObject wanted_bindings, final SubLObject unwanted_bindings, final SubLObject unimportant_bindings, final SubLObject no_answers, final SubLObject metric_constants, final SubLObject responsible_cyclists, final SubLObject test_categories, final SubLObject defining_mt, final SubLObject multiple_choice_option_specs) {
         assert NIL != constant_p(test_spec) : "constant_handles.constant_p(test_spec) " + "CommonSymbols.NIL != constant_handles.constant_p(test_spec) " + test_spec;
-        if (((NIL != answer_cardinality) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_cardinality))) {
+        if (((NIL != answer_cardinality) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_cardinality))) {
             throw new AssertionError(answer_cardinality);
         }
-        if (((NIL != answer_min_cardinality) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_min_cardinality))) {
+        if (((NIL != answer_min_cardinality) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_min_cardinality))) {
             throw new AssertionError(answer_min_cardinality);
         }
-        if (((NIL != answer_max_cardinality) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_max_cardinality))) {
+        if (((NIL != answer_max_cardinality) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_max_cardinality))) {
             throw new AssertionError(answer_max_cardinality);
         }
-        if (((NIL != exact_bindings) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(exact_bindings))) {
+        if (((NIL != exact_bindings) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(exact_bindings))) {
             throw new AssertionError(exact_bindings);
         }
-        if (((NIL != wanted_bindings) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(wanted_bindings))) {
+        if (((NIL != wanted_bindings) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(wanted_bindings))) {
             throw new AssertionError(wanted_bindings);
         }
-        if (((NIL != unwanted_bindings) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(unwanted_bindings))) {
+        if (((NIL != unwanted_bindings) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(unwanted_bindings))) {
             throw new AssertionError(unwanted_bindings);
         }
         assert NIL != listp(metric_constants) : "Types.listp(metric_constants) " + "CommonSymbols.NIL != Types.listp(metric_constants) " + metric_constants;
@@ -6157,13 +6157,13 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject kct_ensure_test_spec_definition(final SubLObject test_spec, final SubLObject query_spec, final SubLObject answer_cardinality, final SubLObject answer_min_cardinality, final SubLObject answer_max_cardinality, final SubLObject exact_bindings, final SubLObject wanted_bindings, final SubLObject unwanted_bindings, final SubLObject unimportant_bindings, final SubLObject no_answers, final SubLObject metric_constants, final SubLObject responsible_cyclists, final SubLObject test_categories, final SubLObject defining_mt, final SubLObject multiple_choice_option_specs) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != constant_p(test_spec) : "constant_handles.constant_p(test_spec) " + "CommonSymbols.NIL != constant_handles.constant_p(test_spec) " + test_spec;
-        if (((NIL != answer_cardinality) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_cardinality))) {
+        if (((NIL != answer_cardinality) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_cardinality))) {
             throw new AssertionError(answer_cardinality);
         }
-        if (((NIL != answer_min_cardinality) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_min_cardinality))) {
+        if (((NIL != answer_min_cardinality) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_min_cardinality))) {
             throw new AssertionError(answer_min_cardinality);
         }
-        if (((NIL != answer_max_cardinality) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_max_cardinality))) {
+        if (((NIL != answer_max_cardinality) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(answer_max_cardinality))) {
             throw new AssertionError(answer_max_cardinality);
         }
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == list_utilities.every_in_list(KB_BINDING_SET_P, wanted_bindings, UNPROVIDED))) {

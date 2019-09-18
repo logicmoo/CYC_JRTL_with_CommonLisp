@@ -57,7 +57,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -911,7 +911,7 @@ public final class hypothesis_corroboration extends SubLTranslatedFile implement
                                 SubLObject idx = assertion_handles.do_assertions_table();
                                 SubLObject total = id_index.id_index_count(idx);
                                 SubLObject sofar = ZERO_INTEGER;
-                                SubLTrampolineFile.checkType($str_alt96$do_broad_mt_index, STRINGP);
+                                SubLSystemTrampolineFile.checkType($str_alt96$do_broad_mt_index, STRINGP);
                                 {
                                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -1221,7 +1221,7 @@ public final class hypothesis_corroboration extends SubLTranslatedFile implement
      * return list; a variable->skolem alist mapping using the information of #$variableSubstitutionsForScenario in MT
      */
     public static final SubLObject get_var_skolem_substitutions(SubLObject mt) {
-        SubLTrampolineFile.checkType(mt, MICROTHEORY_P);
+        SubLSystemTrampolineFile.checkType(mt, MICROTHEORY_P);
         {
             SubLObject variable_substitutions_for_scenario_raw = kb_mapping_utilities.pred_value_tuples_in_any_mt(mt, $$variableSubstitutionsForScenario, ONE_INTEGER, $list_alt18, UNPROVIDED).first();
             SubLObject subst_skolem_variables = el_utilities.el_list_items(variable_substitutions_for_scenario_raw.first());

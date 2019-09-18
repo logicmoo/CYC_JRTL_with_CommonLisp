@@ -39,7 +39,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -469,9 +469,9 @@ public final class subl_identifier extends SubLTranslatedFile {
     }
 
     public static SubLObject init_subl_identifier_file() {
-        deflexical("*SUBLID-DOMAIN-TO-FORTS-TABLE*", SubLTrampolineFile.maybeDefault($sublid_domain_to_forts_table$, $sublid_domain_to_forts_table$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*SUBLID-ID-TO-FORTS-TABLE*", SubLTrampolineFile.maybeDefault($sublid_id_to_forts_table$, $sublid_id_to_forts_table$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*SUBLID-FORT-TO-ID-TABLE*", SubLTrampolineFile.maybeDefault($sublid_fort_to_id_table$, $sublid_fort_to_id_table$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SUBLID-DOMAIN-TO-FORTS-TABLE*", SubLSystemTrampolineFile.maybeDefault($sublid_domain_to_forts_table$, $sublid_domain_to_forts_table$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SUBLID-ID-TO-FORTS-TABLE*", SubLSystemTrampolineFile.maybeDefault($sublid_id_to_forts_table$, $sublid_id_to_forts_table$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SUBLID-FORT-TO-ID-TABLE*", SubLSystemTrampolineFile.maybeDefault($sublid_fort_to_id_table$, $sublid_fort_to_id_table$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         defconstant("*SUBLID-PRED*", $$subLIdentifier);
         defconstant("*SUBLID-UIIT-PRED*", $$uniquelyIdentifiedInType);
         return NIL;

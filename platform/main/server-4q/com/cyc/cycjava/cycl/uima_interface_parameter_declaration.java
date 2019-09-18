@@ -47,7 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -139,7 +139,7 @@ public final class uima_interface_parameter_declaration extends SubLTranslatedFi
     public static final SubLObject declare_uima_interface_parameter(SubLObject parameter, SubLObject plist) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(parameter, POSSIBLE_UIMA_INTERFACE_PARAMETER_P);
+            SubLSystemTrampolineFile.checkType(parameter, POSSIBLE_UIMA_INTERFACE_PARAMETER_P);
             {
                 SubLObject info = NIL;
                 SubLObject cdolist_list_var = $uima_interface_parameter_slots$.getGlobalValue();
@@ -214,7 +214,7 @@ public final class uima_interface_parameter_declaration extends SubLTranslatedFi
     }
 
     public static final SubLObject undeclare_uima_interface_parameter(SubLObject parameter) {
-        SubLTrampolineFile.checkType(parameter, POSSIBLE_UIMA_INTERFACE_PARAMETER_P);
+        SubLSystemTrampolineFile.checkType(parameter, POSSIBLE_UIMA_INTERFACE_PARAMETER_P);
         dictionary.dictionary_remove($uima_interface_parameter_info_dictionary$.getGlobalValue(), parameter);
         return parameter;
     }

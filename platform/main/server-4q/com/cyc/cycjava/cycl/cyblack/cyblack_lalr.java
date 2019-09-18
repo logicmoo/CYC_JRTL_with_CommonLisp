@@ -93,7 +93,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -399,62 +399,62 @@ public final class cyblack_lalr extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject lalr_rule_no(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.getField2();
     }
 
     public static final SubLObject lalr_rule_mother(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.getField3();
     }
 
     public static final SubLObject lalr_rule_daughters(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.getField4();
     }
 
     public static final SubLObject lalr_rule_action(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.getField5();
     }
 
     public static final SubLObject lalr_rule_method_name(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.getField6();
     }
 
     public static final SubLObject lalr_rule_method_defn(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.getField7();
     }
 
     public static final SubLObject _csetf_lalr_rule_no(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_lalr_rule_mother(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_lalr_rule_daughters(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_lalr_rule_action(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_lalr_rule_method_name(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_lalr_rule_method_defn(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, LALR_RULE_P);
+        SubLSystemTrampolineFile.checkType(v_object, LALR_RULE_P);
         return v_object.setField7(value);
     }
 
@@ -903,32 +903,32 @@ public final class cyblack_lalr extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject item_rule(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, ITEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, ITEM_P);
         return v_object.getField2();
     }
 
     public static final SubLObject item_pos(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, ITEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, ITEM_P);
         return v_object.getField3();
     }
 
     public static final SubLObject item_la(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, ITEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, ITEM_P);
         return v_object.getField4();
     }
 
     public static final SubLObject _csetf_item_rule(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, ITEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, ITEM_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_item_pos(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, ITEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, ITEM_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_item_la(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, ITEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, ITEM_P);
         return v_object.setField4(value);
     }
 
@@ -1393,42 +1393,42 @@ public final class cyblack_lalr extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject state_name(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, STATE_P);
         return v_object.getField2();
     }
 
     public static final SubLObject state_citems(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, STATE_P);
         return v_object.getField3();
     }
 
     public static final SubLObject state_shifts(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, STATE_P);
         return v_object.getField4();
     }
 
     public static final SubLObject state_conflict(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, STATE_P);
         return v_object.getField5();
     }
 
     public static final SubLObject _csetf_state_name(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, STATE_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_state_citems(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, STATE_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_state_shifts(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, STATE_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_state_conflict(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, STATE_P);
         return v_object.setField5(value);
     }
 
@@ -1534,22 +1534,22 @@ public final class cyblack_lalr extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject shift_cat(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, SHIFT_P);
+        SubLSystemTrampolineFile.checkType(v_object, SHIFT_P);
         return v_object.getField2();
     }
 
     public static final SubLObject shift_where(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, SHIFT_P);
+        SubLSystemTrampolineFile.checkType(v_object, SHIFT_P);
         return v_object.getField3();
     }
 
     public static final SubLObject _csetf_shift_cat(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, SHIFT_P);
+        SubLSystemTrampolineFile.checkType(v_object, SHIFT_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_shift_where(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, SHIFT_P);
+        SubLSystemTrampolineFile.checkType(v_object, SHIFT_P);
         return v_object.setField3(value);
     }
 

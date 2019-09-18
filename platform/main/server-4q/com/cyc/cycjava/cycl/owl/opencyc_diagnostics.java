@@ -80,7 +80,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -420,7 +420,7 @@ public final class opencyc_diagnostics extends SubLTranslatedFile implements V02
     private static final SubLSymbol $opencyc_source_file$ = makeSymbol("*OPENCYC-SOURCE-FILE*");
 
     public static final SubLObject load_opencyc_graph(SubLObject owl_file) {
-        SubLTrampolineFile.enforceType(owl_file, $sym37$FILE_EXISTS_);
+        SubLSystemTrampolineFile.enforceType(owl_file, $sym37$FILE_EXISTS_);
         $opencyc_graph$.setGlobalValue(rdf_parser.parse_rdfXxml_file(owl_file, UNPROVIDED));
         $opencyc_source_file$.setGlobalValue(owl_file);
         return $opencyc_graph$.getGlobalValue();

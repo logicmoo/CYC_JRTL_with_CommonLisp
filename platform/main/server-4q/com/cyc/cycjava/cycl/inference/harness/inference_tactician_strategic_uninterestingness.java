@@ -57,7 +57,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -395,16 +395,16 @@ public final class inference_tactician_strategic_uninterestingness extends SubLT
             subexplanation = NIL;
         }
         assert NIL != strategy_uninterestingness_explanation_type_p(explanation_type) : "inference_tactician_strategic_uninterestingness.strategy_uninterestingness_explanation_type_p(explanation_type) " + "CommonSymbols.NIL != inference_tactician_strategic_uninterestingness.strategy_uninterestingness_explanation_type_p(explanation_type) " + explanation_type;
-        if (((NIL != problem) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem.problem_p(problem))) {
+        if (((NIL != problem) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem.problem_p(problem))) {
             throw new AssertionError(problem);
         }
-        if (((NIL != tactic) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_tactic.tactic_p(tactic))) {
+        if (((NIL != tactic) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_tactic.tactic_p(tactic))) {
             throw new AssertionError(tactic);
         }
-        if (((NIL != link) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.problem_link_p(link))) {
+        if (((NIL != link) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.problem_link_p(link))) {
             throw new AssertionError(link);
         }
-        if (((NIL != subexplanation) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == strategy_uninterestingness_explanation_p(subexplanation))) {
+        if (((NIL != subexplanation) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == strategy_uninterestingness_explanation_p(subexplanation))) {
             throw new AssertionError(subexplanation);
         }
         return list(explanation_type, problem, tactic, link, subexplanation);

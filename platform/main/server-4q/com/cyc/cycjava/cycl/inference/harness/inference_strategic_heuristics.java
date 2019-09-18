@@ -82,7 +82,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class inference_strategic_heuristics extends SubLTranslatedFile {
@@ -1871,7 +1871,7 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile {
 	}
 
 	public static SubLObject init_inference_strategic_heuristics_file() {
-		deflexical("*STRATEGIC-HEURISTIC-INDEX*", SubLTrampolineFile.maybeDefault($strategic_heuristic_index$, $strategic_heuristic_index$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+		deflexical("*STRATEGIC-HEURISTIC-INDEX*", SubLSystemTrampolineFile.maybeDefault($strategic_heuristic_index$, $strategic_heuristic_index$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
 		deflexical("*HEURISTIC-DOMAINS*", $list17);
 		defvar("*OVERRIDING-STRATEGIC-HEURISTIC-SCALING-FACTORS*", NIL);
 		deflexical("*STRATEGIC-USELESSNESS-BASED-ON-PROOF-DEPTH-MATH-MEMOIZED-CACHING-STATE*", NIL);

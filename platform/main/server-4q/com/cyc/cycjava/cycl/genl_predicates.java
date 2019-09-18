@@ -74,7 +74,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -527,7 +527,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv, UNPROVIDED);
     }
 
@@ -538,7 +538,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_min_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -549,7 +549,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv, UNPROVIDED);
     }
 
@@ -560,7 +560,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_min_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -571,7 +571,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv, UNPROVIDED);
     }
 
@@ -582,7 +582,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_max_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -593,7 +593,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv, UNPROVIDED);
     }
 
@@ -604,7 +604,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_max_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -615,7 +615,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_backward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv, UNPROVIDED);
     }
 
@@ -626,7 +626,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_max_backward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -637,7 +637,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_backward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv, UNPROVIDED);
     }
 
@@ -648,7 +648,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_max_backward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -659,7 +659,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_backward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv, UNPROVIDED);
     }
 
@@ -670,7 +670,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_min_backward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -681,7 +681,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_backward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv, UNPROVIDED);
     }
 
@@ -692,7 +692,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_min_backward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -703,7 +703,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_siblings_forward(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -714,7 +714,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_siblings_forward(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -725,7 +725,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_siblings_backward(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -736,7 +736,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_link_methods.sbhl_siblings_backward(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -747,7 +747,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return max_predicates(all_genl_predicates(pred, mt, tv), mt, tv);
     }
 
@@ -758,7 +758,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return max_predicates(all_genl_inverses(pred, mt, tv), mt, tv);
     }
 
@@ -769,7 +769,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -1049,7 +1049,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -1060,7 +1060,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -1081,7 +1081,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_methods.sbhl_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -1452,8 +1452,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, EL_FORT_P);
-        SubLTrampolineFile.enforceType(candidates, LISTP);
+        SubLSystemTrampolineFile.enforceType(pred, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(candidates, LISTP);
         return sbhl_search_methods.sbhl_all_forward_true_nodes_among(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, candidates, mt, tv);
     }
 
@@ -1494,7 +1494,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_implied_relations.sbhl_all_implied_forward_false_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -1515,7 +1515,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_implied_relations.sbhl_all_implied_forward_false_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -1526,7 +1526,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_implied_relations.sbhl_all_implied_backward_false_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, mt, tv);
     }
 
@@ -1547,7 +1547,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
         return sbhl_search_implied_relations.sbhl_all_implied_backward_false_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, mt, tv);
     }
 
@@ -1558,7 +1558,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(preds, LISTP);
+        SubLSystemTrampolineFile.enforceType(preds, LISTP);
         return sbhl_search_methods.sbhl_union_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), preds, mt, tv);
     }
 
@@ -1569,7 +1569,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(preds, LISTP);
+        SubLSystemTrampolineFile.enforceType(preds, LISTP);
         return sbhl_search_methods.sbhl_union_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), preds, mt, tv);
     }
 
@@ -1580,7 +1580,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(preds, LISTP);
+        SubLSystemTrampolineFile.enforceType(preds, LISTP);
         return sbhl_search_methods.sbhl_union_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), preds, mt, tv);
     }
 
@@ -1591,7 +1591,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(preds, LISTP);
+        SubLSystemTrampolineFile.enforceType(preds, LISTP);
         return sbhl_search_methods.sbhl_union_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), preds, mt, tv);
     }
 
@@ -1633,8 +1633,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
         sbhl_search_methods.sbhl_map_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, fn, mt, tv);
         return NIL;
     }
@@ -1646,8 +1646,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
         return sbhl_search_methods.sbhl_gather_first_among_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, fn, mt, tv, UNPROVIDED);
     }
 
@@ -1658,8 +1658,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
         return sbhl_search_methods.sbhl_gather_first_among_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, fn, mt, tv, UNPROVIDED);
     }
 
@@ -1680,8 +1680,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
         sbhl_search_methods.sbhl_map_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, fn, mt, tv);
         return NIL;
     }
@@ -1711,8 +1711,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
         return sbhl_search_methods.sbhl_gather_first_among_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, fn, mt, tv, UNPROVIDED);
     }
 
@@ -1794,9 +1794,9 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(col, FORT_P);
-        SubLTrampolineFile.enforceType(arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(col, FORT_P);
+        SubLSystemTrampolineFile.enforceType(arg, INTEGERP);
         if (((NIL != fort_types_interface.predicateP(pred)) && (NIL != fort_types_interface.collectionP(col))) && (NIL != subl_promotions.memberP(arg, czer_vars.$arg_positions$.getGlobalValue(), UNPROVIDED, UNPROVIDED))) {
             SubLObject result = NIL;
             final SubLObject _prev_bind_0 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
@@ -1913,9 +1913,9 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(fort, FORT_P);
-        SubLTrampolineFile.enforceType(arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(arg, INTEGERP);
         if (((NIL != fort_types_interface.predicateP(pred)) && (NIL != forts.fort_p(fort))) && (NIL != subl_promotions.memberP(arg, czer_vars.$arg_positions$.getGlobalValue(), UNPROVIDED, UNPROVIDED))) {
             SubLObject result = NIL;
             final SubLObject _prev_bind_0 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
@@ -2637,7 +2637,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(preds, LISTP);
+        SubLSystemTrampolineFile.enforceType(preds, LISTP);
         return sbhl_search_methods.sbhl_min_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), preds, mt, tv);
     }
 
@@ -2648,7 +2648,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(preds, LISTP);
+        SubLSystemTrampolineFile.enforceType(preds, LISTP);
         return sbhl_search_methods.sbhl_max_nodes(sbhl_module_vars.get_sbhl_module($$genlPreds), preds, mt, tv, UNPROVIDED);
     }
 
@@ -2662,7 +2662,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(preds, LISTP);
+        SubLSystemTrampolineFile.enforceType(preds, LISTP);
         return sbhl_search_methods.sbhl_min_ceilings(sbhl_module_vars.get_sbhl_module($$genlPreds), preds, candidates, mt, tv);
     }
 
@@ -2676,7 +2676,7 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(preds, LISTP);
+        SubLSystemTrampolineFile.enforceType(preds, LISTP);
         if (NIL != list_utilities.doubletonP(preds)) {
             SubLObject pred1 = NIL;
             SubLObject pred2 = NIL;
@@ -2726,8 +2726,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl, FORT_P);
         if ((!spec.eql(genl)) && (NIL == some_spec_predicate_or_inverse_somewhereP(genl))) {
             return NIL;
         }
@@ -2797,8 +2797,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(genl, FORT_P);
-        SubLTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
         return genl_predicateP(spec, genl, mt, tv);
     }
 
@@ -2809,8 +2809,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl, FORT_P);
         if ((!spec.eql(genl)) && (NIL == some_spec_predicate_or_inverse_somewhereP(genl))) {
             return NIL;
         }
@@ -2824,8 +2824,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl, FORT_P);
         return genl_inverseP(spec, genl, mt, tv);
     }
 
@@ -2856,8 +2856,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(v_genls, LISTP);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_genls, LISTP);
         return NIL == v_genls ? NIL : NIL != list_utilities.singletonP(v_genls) ? genl_predicateP(spec, v_genls.first(), mt, tv) : sbhl_search_methods.sbhl_predicate_relation_with_any_p(sbhl_module_vars.get_sbhl_module($$genlPreds), spec, v_genls, mt, tv);
     }
 
@@ -2904,8 +2904,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(not_genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(not_genl, FORT_P);
         return sbhl_search_implied_relations.sbhl_implied_false_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$genlPreds), spec, not_genl, mt, tv);
     }
 
@@ -2946,8 +2946,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(not_genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(not_genl, FORT_P);
         return sbhl_search_methods.sbhl_false_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$genlInverse), spec, not_genl, mt, tv);
     }
 
@@ -2975,8 +2975,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(not_genls, LISTP);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(not_genls, LISTP);
         return sbhl_search_implied_relations.sbhl_implied_false_predicate_relation_with_any_p(sbhl_module_vars.get_sbhl_module($$genlPreds), pred, not_genls, mt, tv);
     }
 
@@ -2988,10 +2988,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_genl_predicates(pred, mt, tv));
@@ -3005,10 +3005,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_spec_predicates(pred, mt, tv));
@@ -3022,10 +3022,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_proper_genl_predicates(pred, mt, tv));
@@ -3039,10 +3039,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_proper_spec_predicates(pred, mt, tv));
@@ -3056,10 +3056,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_genl_inverses(pred, mt, tv));
@@ -3073,10 +3073,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_spec_inverses(pred, mt, tv));
@@ -3090,10 +3090,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_proper_genl_inverses(pred, mt, tv));
@@ -3107,10 +3107,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_proper_spec_inverses(pred, mt, tv));
@@ -3124,10 +3124,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_genl_predicates_and_inverses(pred, mt, tv));
@@ -3141,10 +3141,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_spec_predicates_and_inverses(pred, mt, tv));
@@ -3158,10 +3158,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_proper_genl_predicates_and_inverses(pred, mt, tv));
@@ -3175,10 +3175,10 @@ public final class genl_predicates extends SubLTranslatedFile {
             tv = NIL;
         }
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != tv) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
+        if (((NIL != tv) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.tv_p(tv))) {
             throw new AssertionError(tv);
         }
         return list_utilities.random_element(all_proper_spec_predicates_and_inverses(pred, mt, tv));
@@ -3248,8 +3248,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(pred1, FORT_P);
-        SubLTrampolineFile.enforceType(pred2, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred1, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred2, FORT_P);
         return predicates_intersectP(pred1, pred2, mt);
     }
 
@@ -3280,8 +3280,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (behavior == UNPROVIDED) {
             behavior = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl, FORT_P);
         return sbhl_search_methods.why_sbhl_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$genlPreds), spec, genl, mt, tv, behavior);
     }
 
@@ -3295,8 +3295,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (behavior == UNPROVIDED) {
             behavior = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl, FORT_P);
         return sbhl_search_implied_relations.why_sbhl_implied_false_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$genlPreds), spec, genl, mt, tv, behavior);
     }
 
@@ -3310,8 +3310,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (behavior == UNPROVIDED) {
             behavior = NIL;
         }
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(genl_inverse, FORT_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl_inverse, FORT_P);
         return sbhl_search_methods.why_sbhl_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$genlInverse), pred, genl_inverse, mt, tv, behavior);
     }
 
@@ -3338,8 +3338,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (behavior == UNPROVIDED) {
             behavior = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl, FORT_P);
         return sbhl_search_implied_relations.why_sbhl_implied_false_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$genlMt), spec, genl, mt, tv, behavior);
     }
 
@@ -3373,8 +3373,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(genl, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl, FORT_P);
         return sbhl_search_what_mts.sbhl_max_floor_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$genlPreds), spec, genl, tv);
     }
 
@@ -3414,8 +3414,8 @@ public final class genl_predicates extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, FORT_P);
-        SubLTrampolineFile.enforceType(genl_inverse, FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, FORT_P);
+        SubLSystemTrampolineFile.enforceType(genl_inverse, FORT_P);
         return sbhl_search_what_mts.sbhl_max_floor_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$genlInverse), spec, genl_inverse, tv);
     }
 

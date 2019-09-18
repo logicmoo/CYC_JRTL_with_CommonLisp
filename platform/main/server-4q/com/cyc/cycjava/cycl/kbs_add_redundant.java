@@ -94,7 +94,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1867,7 +1867,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile {
         defparameter("*ARG2-DEFINING-PREDICATES-INFO*", $list19);
         deflexical("*CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO-CACHING-STATE*", NIL);
         defparameter("*KBS-CYCLE-SIZE-THRESHOLD*", TWENTY_INTEGER);
-        deflexical("*KBS-BROADER-TERM-GAFS*", SubLTrampolineFile.maybeDefault($kbs_broader_term_gafs$, $kbs_broader_term_gafs$, NIL));
+        deflexical("*KBS-BROADER-TERM-GAFS*", SubLSystemTrampolineFile.maybeDefault($kbs_broader_term_gafs$, $kbs_broader_term_gafs$, NIL));
         defparameter("*GET-BROADER-MT-SUPPORT-STACK*", NIL);
         deflexical("*BROADER-TERM-PREDS-CACHING-STATE*", NIL);
         defparameter("*KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS*", NIL);

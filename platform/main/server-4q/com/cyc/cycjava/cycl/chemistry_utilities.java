@@ -47,7 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -736,7 +736,7 @@ public final class chemistry_utilities extends SubLTranslatedFile implements V02
      * @return booeanp
      */
     public static final SubLObject chem_parseP(SubLObject string) {
-        SubLTrampolineFile.checkType(string, STRINGP);
+        SubLSystemTrampolineFile.checkType(string, STRINGP);
         if (NIL != string_utilities.empty_string_p(string)) {
             return NIL;
         }

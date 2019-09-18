@@ -11,9 +11,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Values extends SubLTrampolineFile {
+public class Values extends SubLSystemTrampolineFile {
 	public static SubLObject arg2(SubLObject arg1, SubLObject arg2) {
 		return arg2;
 	}

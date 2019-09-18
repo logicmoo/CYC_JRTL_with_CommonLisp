@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rkf_term_agglomerator extends SubLTranslatedFile {
     public static final SubLFile me = new rkf_term_agglomerator();
@@ -876,7 +876,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_rkf_term_agglomerator_file() {
         defparameter("*KR-SUGAR-ON*", NIL);
-        deflexical("*KR-SUGAR*", SubLTrampolineFile.maybeDefault($kr_sugar$, $kr_sugar$, NIL));
+        deflexical("*KR-SUGAR*", SubLSystemTrampolineFile.maybeDefault($kr_sugar$, $kr_sugar$, NIL));
         defparameter("*K-PERMUTATIONS-MAX*", $int$100000);
         defconstant("*DTP-AGGLOMERATION-STATE*", AGGLOMERATION_STATE);
         return NIL;

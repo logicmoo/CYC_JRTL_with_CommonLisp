@@ -71,7 +71,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -323,62 +323,62 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject jsession_host(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.getField2();
     }
 
     public static final SubLObject jsession_port(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.getField3();
     }
 
     public static final SubLObject jsession_channel(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.getField4();
     }
 
     public static final SubLObject jsession_packages(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.getField5();
     }
 
     public static final SubLObject jsession_classes(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.getField6();
     }
 
     public static final SubLObject jsession_objects(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.getField7();
     }
 
     public static final SubLObject _csetf_jsession_host(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_jsession_port(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_jsession_channel(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_jsession_packages(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_jsession_classes(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_jsession_objects(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(v_object, JSESSION_P);
         return v_object.setField7(value);
     }
 
@@ -444,9 +444,9 @@ public final class jubl extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(host, STRINGP);
-            SubLTrampolineFile.checkType(port, NON_NEGATIVE_INTEGER_P);
-            SubLTrampolineFile.checkType(cfasl_classes, LISTP);
+            SubLSystemTrampolineFile.checkType(host, STRINGP);
+            SubLSystemTrampolineFile.checkType(port, NON_NEGATIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(cfasl_classes, LISTP);
             {
                 SubLObject channel = NIL;
                 SubLObject error_message = NIL;
@@ -561,7 +561,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * 		Closes JS
      */
     public static final SubLObject jsession_close(SubLObject js) {
-        SubLTrampolineFile.checkType(js, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(js, JSESSION_P);
         jsession_destroy_objects(js);
         jsession_destroy_classes(js);
         jsession_destroy_packages(js);
@@ -577,7 +577,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * @return boolean; t if JS is open, nil otherwise
      */
     public static final SubLObject jsession_open_p(SubLObject js) {
-        SubLTrampolineFile.checkType(js, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(js, JSESSION_P);
         return open_stream_p(jsession_channel(js));
     }
 
@@ -602,8 +602,8 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     on CLASS-OR-PACKAGE
      */
     public static final SubLObject jsession_import(SubLObject js, SubLObject class_or_package) {
-        SubLTrampolineFile.checkType(js, JSESSION_P);
-        SubLTrampolineFile.checkType(class_or_package, STRINGP);
+        SubLSystemTrampolineFile.checkType(js, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(class_or_package, STRINGP);
         {
             SubLObject jcp = jsession_get_jcl(js, class_or_package);
             if (NIL == jcp) {
@@ -745,22 +745,22 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject jpg_name(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JPG_P);
+        SubLSystemTrampolineFile.checkType(v_object, JPG_P);
         return v_object.getField2();
     }
 
     public static final SubLObject jpg_session(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JPG_P);
+        SubLSystemTrampolineFile.checkType(v_object, JPG_P);
         return v_object.getField3();
     }
 
     public static final SubLObject _csetf_jpg_name(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JPG_P);
+        SubLSystemTrampolineFile.checkType(v_object, JPG_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_jpg_session(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JPG_P);
+        SubLSystemTrampolineFile.checkType(v_object, JPG_P);
         return v_object.setField3(value);
     }
 
@@ -831,8 +831,8 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     Imports CLASS unless already imported and returns a jcl class object
      */
     public static final SubLObject jpg_import(SubLObject jpg, SubLObject v_class) {
-        SubLTrampolineFile.checkType(jpg, JPG_P);
-        SubLTrampolineFile.checkType(v_class, STRINGP);
+        SubLSystemTrampolineFile.checkType(jpg, JPG_P);
+        SubLSystemTrampolineFile.checkType(v_class, STRINGP);
         return jsession_import(jpg_session(jpg), cconcatenate(jpg_name(jpg), new SubLObject[]{ $str_alt97$_, v_class }));
     }
 
@@ -916,22 +916,22 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject jcl_name(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JCL_P);
+        SubLSystemTrampolineFile.checkType(v_object, JCL_P);
         return v_object.getField2();
     }
 
     public static final SubLObject jcl_session(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JCL_P);
+        SubLSystemTrampolineFile.checkType(v_object, JCL_P);
         return v_object.getField3();
     }
 
     public static final SubLObject _csetf_jcl_name(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JCL_P);
+        SubLSystemTrampolineFile.checkType(v_object, JCL_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_jcl_session(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JCL_P);
+        SubLSystemTrampolineFile.checkType(v_object, JCL_P);
         return v_object.setField3(value);
     }
 
@@ -1003,8 +1003,8 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * @return object; the value of the class attribute FIELD in class JCL
      */
     public static final SubLObject jcl_get(SubLObject jcl, SubLObject field) {
-        SubLTrampolineFile.checkType(jcl, JCL_P);
-        SubLTrampolineFile.checkType(field, STRINGP);
+        SubLSystemTrampolineFile.checkType(jcl, JCL_P);
+        SubLSystemTrampolineFile.checkType(field, STRINGP);
         return jsession_exec(jcl_session(jcl), format(NIL, $str_alt111$self_modules___a____a, jcl_name(jcl), field));
     }
 
@@ -1018,8 +1018,8 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * 		Sets class attribute FILED of class JCL to VALUE
      */
     public static final SubLObject jcl_set(SubLObject jcl, SubLObject field, SubLObject value) {
-        SubLTrampolineFile.checkType(jcl, JCL_P);
-        SubLTrampolineFile.checkType(field, STRINGP);
+        SubLSystemTrampolineFile.checkType(jcl, JCL_P);
+        SubLSystemTrampolineFile.checkType(field, STRINGP);
         return jsession_exec(jcl_session(jcl), format(NIL, $str_alt112$self_modules___a____a____a, new SubLObject[]{ jcl_name(jcl), field, value }));
     }
 
@@ -1185,32 +1185,32 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject jin_session(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JIN_P);
+        SubLSystemTrampolineFile.checkType(v_object, JIN_P);
         return v_object.getField2();
     }
 
     public static final SubLObject jin_class(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JIN_P);
+        SubLSystemTrampolineFile.checkType(v_object, JIN_P);
         return v_object.getField3();
     }
 
     public static final SubLObject jin_id(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, JIN_P);
+        SubLSystemTrampolineFile.checkType(v_object, JIN_P);
         return v_object.getField4();
     }
 
     public static final SubLObject _csetf_jin_session(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JIN_P);
+        SubLSystemTrampolineFile.checkType(v_object, JIN_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_jin_class(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JIN_P);
+        SubLSystemTrampolineFile.checkType(v_object, JIN_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_jin_id(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, JIN_P);
+        SubLSystemTrampolineFile.checkType(v_object, JIN_P);
         return v_object.setField4(value);
     }
 
@@ -1268,8 +1268,8 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * @return object; the value of the instance attribute FIELD in instance JIN
      */
     public static final SubLObject jin_get(SubLObject jin, SubLObject field) {
-        SubLTrampolineFile.checkType(jin, JIN_P);
-        SubLTrampolineFile.checkType(field, STRINGP);
+        SubLSystemTrampolineFile.checkType(jin, JIN_P);
+        SubLSystemTrampolineFile.checkType(field, STRINGP);
         return jsession_exec(jin_session(jin), format(NIL, $str_alt136$self_objects__a___a, jin_id(jin), field));
     }
 
@@ -1283,8 +1283,8 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * 		Sets instance attribute FIELD of instance JIN to VALUE
      */
     public static final SubLObject jin_set(SubLObject jin, SubLObject field, SubLObject value) {
-        SubLTrampolineFile.checkType(jin, JIN_P);
-        SubLTrampolineFile.checkType(field, STRINGP);
+        SubLSystemTrampolineFile.checkType(jin, JIN_P);
+        SubLSystemTrampolineFile.checkType(field, STRINGP);
         return jsession_exec(jin_session(jin), format(NIL, $str_alt137$self_objects__a___a____a, new SubLObject[]{ jin_id(jin), field, value }));
     }
 
@@ -1296,7 +1296,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * 		Destroys JIN
      */
     public static final SubLObject jin_destroy(SubLObject jin) {
-        SubLTrampolineFile.checkType(jin, JIN_P);
+        SubLSystemTrampolineFile.checkType(jin, JIN_P);
         if (NIL != open_jsession_p(jin_session(jin))) {
             jsession_exec(jin_session(jin), format(NIL, $str_alt138$del_self_objects__a_, jin_id(jin)));
             jsession_remove_jin(jin_session(jin), jin);
@@ -1390,7 +1390,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * @return listp; a list of all fields of class JCL
      */
     public static final SubLObject jcl_fields(SubLObject jcl) {
-        SubLTrampolineFile.checkType(jcl, JCL_P);
+        SubLSystemTrampolineFile.checkType(jcl, JCL_P);
         jsession_import(jcl_session(jcl), $str_alt148$java_lang_Class);
         {
             SubLObject jin_seq = jsession_exec(jcl_session(jsession_import(jcl_session(jcl), jcl_name(jcl))), format(NIL, $str_alt116$self_modules___a____a_a, new SubLObject[]{ jcl_name(jsession_import(jcl_session(jcl), jcl_name(jcl))), $$$getFields, jython_arglist(list(EMPTY_SUBL_OBJECT_ARRAY)) }));
@@ -1408,7 +1408,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * @return listp; a list of all constructors of class JCL
      */
     public static final SubLObject jcl_constructors(SubLObject jcl) {
-        SubLTrampolineFile.checkType(jcl, JCL_P);
+        SubLSystemTrampolineFile.checkType(jcl, JCL_P);
         jsession_import(jcl_session(jcl), $str_alt148$java_lang_Class);
         {
             SubLObject jin_seq = jsession_exec(jcl_session(jsession_import(jcl_session(jcl), jcl_name(jcl))), format(NIL, $str_alt116$self_modules___a____a_a, new SubLObject[]{ jcl_name(jsession_import(jcl_session(jcl), jcl_name(jcl))), $$$getConstructors, jython_arglist(list(EMPTY_SUBL_OBJECT_ARRAY)) }));
@@ -1426,7 +1426,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * @return listp; a list of all methods of class JCL
      */
     public static final SubLObject jcl_methods(SubLObject jcl) {
-        SubLTrampolineFile.checkType(jcl, JCL_P);
+        SubLSystemTrampolineFile.checkType(jcl, JCL_P);
         jsession_import(jcl_session(jcl), $str_alt148$java_lang_Class);
         {
             SubLObject jin_seq = jsession_exec(jcl_session(jsession_import(jcl_session(jcl), jcl_name(jcl))), format(NIL, $str_alt116$self_modules___a____a_a, new SubLObject[]{ jcl_name(jsession_import(jcl_session(jcl), jcl_name(jcl))), $$$getMethods, jython_arglist(list(EMPTY_SUBL_OBJECT_ARRAY)) }));
@@ -1444,7 +1444,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * @return boolean; t if JIN is a class member, false otherwise
      */
     public static final SubLObject jin_class_member_p(SubLObject member) {
-        SubLTrampolineFile.checkType(member, JIN_P);
+        SubLSystemTrampolineFile.checkType(member, JIN_P);
         return numE(jsession_exec(jcl_session(jsession_import(jin_session(member), $str_alt152$java_lang_reflect_Modifier)), format(NIL, $str_alt116$self_modules___a____a_a, new SubLObject[]{ jcl_name(jsession_import(jin_session(member), $str_alt152$java_lang_reflect_Modifier)), $$$isStatic, jython_arglist(list(jsession_exec(jin_session(member), format(NIL, $str_alt6$self_objects__a___a_a, new SubLObject[]{ jin_id(member), $$$getModifiers, jython_arglist(list(EMPTY_SUBL_OBJECT_ARRAY)) })))) })), ONE_INTEGER);
     }
 
@@ -1467,7 +1467,7 @@ public final class jubl extends SubLTranslatedFile implements V02 {
      * @return boolean; t if JIN is final, false otherwise
      */
     public static final SubLObject jin_final_member_p(SubLObject member) {
-        SubLTrampolineFile.checkType(member, JIN_P);
+        SubLSystemTrampolineFile.checkType(member, JIN_P);
         return numE(jsession_exec(jcl_session(jsession_import(jin_session(member), $str_alt152$java_lang_reflect_Modifier)), format(NIL, $str_alt116$self_modules___a____a_a, new SubLObject[]{ jcl_name(jsession_import(jin_session(member), $str_alt152$java_lang_reflect_Modifier)), $$$isFinal, jython_arglist(list(jsession_exec(jin_session(member), format(NIL, $str_alt6$self_objects__a___a_a, new SubLObject[]{ jin_id(member), $$$getModifiers, jython_arglist(list(EMPTY_SUBL_OBJECT_ARRAY)) })))) })), ONE_INTEGER);
     }
 
@@ -1493,8 +1493,8 @@ public final class jubl extends SubLTranslatedFile implements V02 {
     JS is connected to
      */
     public static final SubLObject jsession_exec(SubLObject js, SubLObject request) {
-        SubLTrampolineFile.checkType(js, JSESSION_P);
-        SubLTrampolineFile.checkType(request, STRINGP);
+        SubLSystemTrampolineFile.checkType(js, JSESSION_P);
+        SubLSystemTrampolineFile.checkType(request, STRINGP);
         cfasl_output(request, jsession_channel(js));
         finish_output(jsession_channel(js));
         return jsession_decode(js, cfasl_input(jsession_channel(js), UNPROVIDED, UNPROVIDED));

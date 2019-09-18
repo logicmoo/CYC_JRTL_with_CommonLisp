@@ -124,7 +124,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1806,9 +1806,9 @@ public final class prove extends SubLTranslatedFile {
         defparameter("*SOMETHING-ASSERTED-WITHIN-HYPOTHESIZE-TERMS?*", NIL);
         defparameter("*FI-PROVE-NEW-CYC-QUERY-TRAMPOLINE-ENABLED?*", NIL);
         defparameter("*PROOF-HYPOTHESIS-FORWARD-PROPAGATION-ENABLED*", NIL);
-        deflexical("*HYPOTHESIS-MT-TABLE*", SubLTrampolineFile.maybeDefault($hypothesis_mt_table$, $hypothesis_mt_table$, () -> dictionary.new_dictionary(symbol_function(EQUAL), ZERO_INTEGER)));
+        deflexical("*HYPOTHESIS-MT-TABLE*", SubLSystemTrampolineFile.maybeDefault($hypothesis_mt_table$, $hypothesis_mt_table$, () -> dictionary.new_dictionary(symbol_function(EQUAL), ZERO_INTEGER)));
         defvar("*PROOF-ASSUME-CONSEQUENT-TYPE-CONSTRAINTS?*", T);
-        deflexical("*PROOF-MT-TABLE*", SubLTrampolineFile.maybeDefault($proof_mt_table$, $proof_mt_table$, () -> dictionary.new_dictionary(symbol_function(EQUAL), ZERO_INTEGER)));
+        deflexical("*PROOF-MT-TABLE*", SubLSystemTrampolineFile.maybeDefault($proof_mt_table$, $proof_mt_table$, () -> dictionary.new_dictionary(symbol_function(EQUAL), ZERO_INTEGER)));
         defvar("*PROOF-HYPOTHESIS-FORWARD-ABSOLUTE-TIME-CUTOFF*", $int$120);
         defvar("*PROOF-HYPOTHESIS-FORWARD-TIME-CUTOFF*", FIVE_INTEGER);
         defvar("*PROOF-HYPOTHESIS-FORWARD-REMOVAL-COST-CUTOFF*", TWENTY_INTEGER);

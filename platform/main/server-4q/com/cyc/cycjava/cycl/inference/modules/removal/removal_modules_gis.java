@@ -69,7 +69,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -963,7 +963,7 @@ public final class removal_modules_gis extends SubLTranslatedFile implements V02
     }
 
     public static final SubLObject canonicalize_gis_item(SubLObject item) {
-        SubLTrampolineFile.checkType(item, GIS_ITEM_P);
+        SubLSystemTrampolineFile.checkType(item, GIS_ITEM_P);
         if (NIL != forts.fort_p(item)) {
             return item;
         } else {

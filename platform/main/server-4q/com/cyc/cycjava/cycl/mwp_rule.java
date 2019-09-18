@@ -56,7 +56,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -876,11 +876,11 @@ public final class mwp_rule extends SubLTranslatedFile {
     }
 
     public static SubLObject init_mwp_rule_file() {
-        deflexical("*MWP-RULE-CONSTRAINT-TABLE-DERIV*", SubLTrampolineFile.maybeDefault($mwp_rule_constraint_table_deriv$, $mwp_rule_constraint_table_deriv$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$256)));
-        deflexical("*MWP-RULE-CONSTRAINT-TABLE-INFL*", SubLTrampolineFile.maybeDefault($mwp_rule_constraint_table_infl$, $mwp_rule_constraint_table_infl$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$256)));
+        deflexical("*MWP-RULE-CONSTRAINT-TABLE-DERIV*", SubLSystemTrampolineFile.maybeDefault($mwp_rule_constraint_table_deriv$, $mwp_rule_constraint_table_deriv$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$256)));
+        deflexical("*MWP-RULE-CONSTRAINT-TABLE-INFL*", SubLSystemTrampolineFile.maybeDefault($mwp_rule_constraint_table_infl$, $mwp_rule_constraint_table_infl$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$256)));
         deflexical("*MWP-BASE-POSES-FOR-REIFIED-AFFIX-CACHING-STATE*", NIL);
-        deflexical("*MWP-RULE-SPEC-TABLE-DERIV*", SubLTrampolineFile.maybeDefault($mwp_rule_spec_table_deriv$, $mwp_rule_spec_table_deriv$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$256)));
-        deflexical("*MWP-RULE-SPEC-TABLE-INFL*", SubLTrampolineFile.maybeDefault($mwp_rule_spec_table_infl$, $mwp_rule_spec_table_infl$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$256)));
+        deflexical("*MWP-RULE-SPEC-TABLE-DERIV*", SubLSystemTrampolineFile.maybeDefault($mwp_rule_spec_table_deriv$, $mwp_rule_spec_table_deriv$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$256)));
+        deflexical("*MWP-RULE-SPEC-TABLE-INFL*", SubLSystemTrampolineFile.maybeDefault($mwp_rule_spec_table_infl$, $mwp_rule_spec_table_infl$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$256)));
         deflexical("*MWP-SEM-TEMPLATES-FOR-REIFIED-AFFIX-CACHING-STATE*", NIL);
         deflexical("*MWP-RESULT-POSES-FOR-REIFIED-AFFIX-CACHING-STATE*", NIL);
         return NIL;

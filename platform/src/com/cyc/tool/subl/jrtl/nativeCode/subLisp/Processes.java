@@ -36,8 +36,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-public class Processes extends SubLTrampolineFile {
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
+public class Processes extends SubLSystemTrampolineFile {
 	private static class ExternalProcessErrorHandler extends ExternalProcessHandler implements Runnable {
 		ExternalProcessErrorHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream,
 				SubLOutputStream errStream, SubLInteger processId, SubLString errorMessage, boolean shouldCloseInput,
@@ -384,7 +384,7 @@ public class Processes extends SubLTrampolineFile {
 				processId2);
 	}
 
-	public static SubLTrampolineFile me;
+	public static SubLSystemTrampolineFile me;
 	private static SubLInteger INITIAL_FAKE_EXTERNAL_PROCESS_ID;
 	private static SubLInteger currentFakeProcessId;
 	private static Map processIdToProcessHandlerMap;

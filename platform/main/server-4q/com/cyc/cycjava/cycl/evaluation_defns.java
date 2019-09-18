@@ -138,7 +138,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -5930,13 +5930,13 @@ public final class evaluation_defns extends SubLTranslatedFile {
         deflexical("*WORD-STRINGS-FN*", NIL);
         deflexical("*WORD-SEQUENCE-FN*", NIL);
         deflexical("*CACHED-FIND-VIA-PRED-VALUE-WRT-TEMPLATE-CACHING-STATE*", NIL);
-        deflexical("*USE-NEW-NL-GENERATION-API-FOR-GENERATE-PHRASE-FN?*", SubLTrampolineFile.maybeDefault($sym204$_USE_NEW_NL_GENERATION_API_FOR_GENERATE_PHRASE_FN__, $use_new_nl_generation_api_for_generate_phrase_fnP$, NIL));
+        deflexical("*USE-NEW-NL-GENERATION-API-FOR-GENERATE-PHRASE-FN?*", SubLSystemTrampolineFile.maybeDefault($sym204$_USE_NEW_NL_GENERATION_API_FOR_GENERATE_PHRASE_FN__, $use_new_nl_generation_api_for_generate_phrase_fnP$, NIL));
         deflexical("*ASSERTIONS-RELEVANT-TO-STRING-DEFN-MAX-TO-CHECK*", $int$500000);
         defparameter("*CYC-ORDERING-RELATION*", NIL);
         deflexical("*TERM-TO-ISG-TABLE-LOCK*", make_lock($str302$term____isg_table_lock));
-        deflexical("*TERM-TO-ISG-TABLE*", SubLTrampolineFile.maybeDefault($term_to_isg_table$, $term_to_isg_table$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*TERM-TO-ISG-TABLE*", SubLSystemTrampolineFile.maybeDefault($term_to_isg_table$, $term_to_isg_table$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
         deflexical("*TERM-TO-ISG-W/START-TABLE-LOCK*", make_lock($str305$term____isg_w__start_table_lock));
-        deflexical("*TERM-TO-ISG-W/START-TABLE*", SubLTrampolineFile.maybeDefault($sym306$_TERM_TO_ISG_W_START_TABLE_, $term_to_isg_wXstart_table$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*TERM-TO-ISG-W/START-TABLE*", SubLSystemTrampolineFile.maybeDefault($sym306$_TERM_TO_ISG_W_START_TABLE_, $term_to_isg_wXstart_table$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
         return NIL;
     }
 

@@ -51,7 +51,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class reformulator_module_harness extends SubLTranslatedFile {
     public static final SubLFile me = new reformulator_module_harness();
@@ -655,7 +655,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_reformulator_module_harness_file() {
         defconstant("*DTP-RL-MODULE*", RL_MODULE);
-        deflexical("*RL-MODULE-STORE*", SubLTrampolineFile.maybeDefault($rl_module_store$, $rl_module_store$, NIL));
+        deflexical("*RL-MODULE-STORE*", SubLSystemTrampolineFile.maybeDefault($rl_module_store$, $rl_module_store$, NIL));
         return NIL;
     }
 

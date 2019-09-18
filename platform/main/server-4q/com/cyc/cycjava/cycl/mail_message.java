@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class mail_message extends SubLTranslatedFile {
     public static final SubLFile me = new mail_message();
@@ -485,16 +485,16 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (port == UNPROVIDED) {
             port = mail_utilities.$smtp_port$.getGlobalValue();
         }
-        if (((NIL != from) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(from))) {
+        if (((NIL != from) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(from))) {
             throw new AssertionError(from);
         }
-        if (((NIL != to) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(to))) {
+        if (((NIL != to) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(to))) {
             throw new AssertionError(to);
         }
-        if (((NIL != subject) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(subject))) {
+        if (((NIL != subject) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(subject))) {
             throw new AssertionError(subject);
         }
-        if (((NIL != message_string) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(message_string))) {
+        if (((NIL != message_string) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(message_string))) {
             throw new AssertionError(message_string);
         }
         assert NIL != stringp(host) : "Types.stringp(host) " + "CommonSymbols.NIL != Types.stringp(host) " + host;

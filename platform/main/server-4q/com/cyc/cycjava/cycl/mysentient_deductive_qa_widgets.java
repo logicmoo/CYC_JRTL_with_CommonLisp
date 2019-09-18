@@ -60,7 +60,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -127,12 +127,12 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
      * Wrapper for getting some answer to the user somehow.
      */
     public static final SubLObject perform_deductive_qa_and_explain(SubLObject sentence, SubLObject session_mt, SubLObject nl_mt, SubLObject string, SubLObject utterance_peg) {
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
         if (NIL != sentence) {
-            SubLTrampolineFile.checkType(sentence, CYCL_SENTENCE_P);
+            SubLSystemTrampolineFile.checkType(sentence, CYCL_SENTENCE_P);
         }
-        SubLTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(string, STRINGP);
+        SubLSystemTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(string, STRINGP);
         {
             SubLObject start_time = get_universal_time();
             return perform_deductive_qa_and_explain_int(sentence, session_mt, nl_mt, string, utterance_peg, start_time);
@@ -334,9 +334,9 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
         if (inference_properties == UNPROVIDED) {
             inference_properties = NIL;
         }
-        SubLTrampolineFile.checkType(sentence, CYCL_SENTENCE_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(sentence, CYCL_SENTENCE_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
         {
             SubLObject start_time = get_universal_time();
             return perform_and_explain_deductive_qa_int(sentence, session_mt, nl_mt, inference_properties, start_time);
@@ -384,8 +384,8 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
      * Wrapper for doing ASK of query and explanation together.
      */
     public static final SubLObject perform_and_explain_deductive_qa_query(SubLObject query_spec, SubLObject nl_mt) {
-        SubLTrampolineFile.checkType(query_spec, FORT_P);
-        SubLTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(query_spec, FORT_P);
+        SubLSystemTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
         {
             SubLObject start_time = get_universal_time();
             return perform_and_explain_deductive_qa_query_int(query_spec, nl_mt, start_time);
@@ -405,9 +405,9 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
      * Wrapper for doing the deductive QA ask on an utterance and then explaining the result.
      */
     public static final SubLObject perform_deductive_qa_appropriate_response_query_and_explain(SubLObject utterance_peg, SubLObject session_mt, SubLObject nl_mt) {
-        SubLTrampolineFile.checkType(utterance_peg, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(utterance_peg, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
         {
             SubLObject start_time = get_universal_time();
             return perform_deductive_qa_appropriate_response_query_and_explain_int(utterance_peg, session_mt, nl_mt, start_time);
@@ -426,9 +426,9 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
      * Wrapper for doing the deductive QA ask on an utterance and then explaining the result.
      */
     public static final SubLObject perform_deductive_qa_interesting_sentence_query_and_explain(SubLObject utterance_peg, SubLObject session_mt, SubLObject nl_mt) {
-        SubLTrampolineFile.checkType(utterance_peg, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(utterance_peg, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
         {
             SubLObject start_time = get_universal_time();
             return perform_deductive_qa_interesting_sentence_query_and_explain_int(utterance_peg, session_mt, nl_mt, start_time);
@@ -448,9 +448,9 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
      * and then explaining the result.
      */
     public static final SubLObject perform_deductive_qa_on_utterance_sentence_and_explain(SubLObject utterance_peg, SubLObject session_mt, SubLObject nl_mt) {
-        SubLTrampolineFile.checkType(utterance_peg, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(utterance_peg, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
         {
             SubLObject start_time = get_universal_time();
             return perform_deductive_qa_on_utterance_sentence_and_explain_int(utterance_peg, session_mt, nl_mt, start_time);
@@ -553,9 +553,9 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
         if (inference_properties == UNPROVIDED) {
             inference_properties = NIL;
         }
-        SubLTrampolineFile.checkType(sentence, CYCL_SENTENCE_P);
-        SubLTrampolineFile.checkType(elmt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(inference_properties, LISTP);
+        SubLSystemTrampolineFile.checkType(sentence, CYCL_SENTENCE_P);
+        SubLSystemTrampolineFile.checkType(elmt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(inference_properties, LISTP);
         {
             SubLObject start_time = get_universal_time();
             return perform_deductive_qa_on_sentence_int(sentence, elmt, inference_properties, start_time);
@@ -845,8 +845,8 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
     public static final SubLObject explain_inference_answer_with_proof(SubLObject inference_answer, SubLObject proof, SubLObject session_mt, SubLObject nl_mt) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(inference_answer, INFERENCE_ANSWER_P);
-            SubLTrampolineFile.checkType(proof, PROOF_P);
+            SubLSystemTrampolineFile.checkType(inference_answer, INFERENCE_ANSWER_P);
+            SubLSystemTrampolineFile.checkType(proof, PROOF_P);
             {
                 SubLObject explanation = NIL;
                 {
@@ -870,10 +870,10 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
         if (relevant_fn == UNPROVIDED) {
             relevant_fn = symbol_function(IDENTITY);
         }
-        SubLTrampolineFile.checkType(inference, INFERENCE_P);
-        SubLTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(relevant_fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.checkType(inference, INFERENCE_P);
+        SubLSystemTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(relevant_fn, FUNCTION_SPEC_P);
         {
             SubLObject start_time = get_universal_time();
             return explain_all_relevant_inference_answers_int(inference, nl_mt, session_mt, relevant_fn, start_time);
@@ -995,10 +995,10 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
         if (relevant_fn == UNPROVIDED) {
             relevant_fn = symbol_function(IDENTITY);
         }
-        SubLTrampolineFile.checkType(inference, INFERENCE_P);
-        SubLTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(relevant_fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.checkType(inference, INFERENCE_P);
+        SubLSystemTrampolineFile.checkType(nl_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(relevant_fn, FUNCTION_SPEC_P);
         {
             SubLObject start_time = get_universal_time();
             return report_all_relevant_inference_answers_int(inference, nl_mt, session_mt, relevant_fn, start_time);
@@ -1139,7 +1139,7 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
         if (root_folder == UNPROVIDED) {
             root_folder = $mysentient_deductive_qa_default_query_folder$.getGlobalValue();
         }
-        SubLTrampolineFile.checkType(root_folder, FORT_P);
+        SubLSystemTrampolineFile.checkType(root_folder, FORT_P);
         {
             SubLObject lock = $mysentient_deductive_qa_query_folder_lock$.getGlobalValue();
             SubLObject release = NIL;
@@ -1185,7 +1185,7 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
      * Compute and rank the queries matching the words in the string.
      */
     public static final SubLObject identify_mysentient_parameterized_queries_matching_words(SubLObject string) {
-        SubLTrampolineFile.checkType(string, STRINGP);
+        SubLSystemTrampolineFile.checkType(string, STRINGP);
         ensure_mysentient_deductive_qa_query_folder_initialized();
         mysentient_utilities.myselog_info(cconcatenate($str_alt131$Trolling_for_queries_that_match_, new SubLObject[]{ format_nil.format_nil_s_no_copy(string), $str_alt23$_ }));
         {

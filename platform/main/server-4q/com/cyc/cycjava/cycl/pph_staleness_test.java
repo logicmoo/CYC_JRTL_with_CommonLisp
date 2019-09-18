@@ -21,7 +21,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -207,9 +207,9 @@ public final class pph_staleness_test extends SubLTranslatedFile {
     }
 
     public static SubLObject init_pph_staleness_test_file() {
-        deflexical("*GEN-TEMPLATE-STORE-REVISIONS*", SubLTrampolineFile.maybeDefault($gen_template_store_revisions$, $gen_template_store_revisions$, NIL));
-        deflexical("*GEN-TEMPLATE-STORE-STALENESS-ACCEPTABLE?*", SubLTrampolineFile.maybeDefault($sym1$_GEN_TEMPLATE_STORE_STALENESS_ACCEPTABLE__, $gen_template_store_staleness_acceptableP$, NIL));
-        deflexical("*GEN-TEMPLATE-STORE-KNOWN-STALE?*", SubLTrampolineFile.maybeDefault($sym2$_GEN_TEMPLATE_STORE_KNOWN_STALE__, $gen_template_store_known_staleP$, NIL));
+        deflexical("*GEN-TEMPLATE-STORE-REVISIONS*", SubLSystemTrampolineFile.maybeDefault($gen_template_store_revisions$, $gen_template_store_revisions$, NIL));
+        deflexical("*GEN-TEMPLATE-STORE-STALENESS-ACCEPTABLE?*", SubLSystemTrampolineFile.maybeDefault($sym1$_GEN_TEMPLATE_STORE_STALENESS_ACCEPTABLE__, $gen_template_store_staleness_acceptableP$, NIL));
+        deflexical("*GEN-TEMPLATE-STORE-KNOWN-STALE?*", SubLSystemTrampolineFile.maybeDefault($sym2$_GEN_TEMPLATE_STORE_KNOWN_STALE__, $gen_template_store_known_staleP$, NIL));
         deflexical("*GEN-TEMPLATE-STORE-REVISION-GLOBALS*", $list3);
         return NIL;
     }

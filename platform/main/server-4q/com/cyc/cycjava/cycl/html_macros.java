@@ -99,7 +99,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class html_macros extends SubLTranslatedFile {
@@ -8558,13 +8558,13 @@ public final class html_macros extends SubLTranslatedFile {
 		defparameter("*SUPPRESS-HTML-SOURCE-READABILITY-TERPRI?*", NIL);
 		defparameter("*HTML-ID-SPACE-ID-GENERATOR*", NIL);
 		defparameter("*HTML-FORM-FIELD-UNIQUIFIER-CODE*", NIL);
-		deflexical("*HTML-FORM-FIELD-UNIQUIFIER-ISG*", SubLTrampolineFile.maybeDefault($html_form_field_uniquifier_isg$, $html_form_field_uniquifier_isg$, NIL));
+		deflexical("*HTML-FORM-FIELD-UNIQUIFIER-ISG*", SubLSystemTrampolineFile.maybeDefault($html_form_field_uniquifier_isg$, $html_form_field_uniquifier_isg$, NIL));
 		defparameter("*WITHIN-HTML-FORM*", NIL);
 		defparameter("*HTML-INDENT-TABLE-MAX*", NIL);
-		deflexical("*HTML-HANDLER-PROPERTY*", SubLTrampolineFile.maybeDefault($html_handler_property$, $html_handler_property$, $HTML_HANDLER));
-		deflexical("*XML-HANDLER-PROPERTY*", SubLTrampolineFile.maybeDefault($xml_handler_property$, $xml_handler_property$, $XML_HANDLER));
-		deflexical("*JSON-HANDLER-PROPERTY*", SubLTrampolineFile.maybeDefault($json_handler_property$, $json_handler_property$, $JSON_HANDLER));
-		deflexical("*HANDLER-MIME-TYPES*", SubLTrampolineFile.maybeDefault($handler_mime_types$, $handler_mime_types$, () -> make_hash_table($int$200, EQ, UNPROVIDED)));
+		deflexical("*HTML-HANDLER-PROPERTY*", SubLSystemTrampolineFile.maybeDefault($html_handler_property$, $html_handler_property$, $HTML_HANDLER));
+		deflexical("*XML-HANDLER-PROPERTY*", SubLSystemTrampolineFile.maybeDefault($xml_handler_property$, $xml_handler_property$, $XML_HANDLER));
+		deflexical("*JSON-HANDLER-PROPERTY*", SubLSystemTrampolineFile.maybeDefault($json_handler_property$, $json_handler_property$, $JSON_HANDLER));
+		deflexical("*HANDLER-MIME-TYPES*", SubLSystemTrampolineFile.maybeDefault($handler_mime_types$, $handler_mime_types$, () -> make_hash_table($int$200, EQ, UNPROVIDED)));
 		return NIL;
 	}
 

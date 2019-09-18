@@ -99,7 +99,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -952,14 +952,14 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
         assert NIL != booleanp(stop_at_first_failureP) : "Types.booleanp(stop_at_first_failureP) " + "CommonSymbols.NIL != Types.booleanp(stop_at_first_failureP) " + stop_at_first_failureP;
         assert NIL != booleanp(run_tiny_kb_tests_in_full_kbP) : "Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + "CommonSymbols.NIL != Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + run_tiny_kb_tests_in_full_kbP;
         assert NIL != cyc_testing.cyc_test_type_spec_p(type) : "cyc_testing.cyc_test_type_spec_p(type) " + "CommonSymbols.NIL != cyc_testing.cyc_test_type_spec_p(type) " + type;
-        if (((NIL != progress_file) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == file_utilities.file_valid_for_writing_p(progress_file))) {
+        if (((NIL != progress_file) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == file_utilities.file_valid_for_writing_p(progress_file))) {
             throw new AssertionError(progress_file);
         }
         if (NIL == rerun_crashing_tests) {
             rerun_crashing_tests = $default_rerun_crashing_tests$.getDynamicValue(thread);
         }
         assert NIL != subl_promotions.non_negative_integer_p(rerun_crashing_tests) : "subl_promotions.non_negative_integer_p(rerun_crashing_tests) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(rerun_crashing_tests) " + rerun_crashing_tests;
-        if (((NIL != cyc_test_write_image_directory()) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == file_utilities.directory_writeable_p(cyc_test_write_image_directory(), UNPROVIDED))) {
+        if (((NIL != cyc_test_write_image_directory()) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == file_utilities.directory_writeable_p(cyc_test_write_image_directory(), UNPROVIDED))) {
             throw new AssertionError(cyc_test_write_image_directory());
         }
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (!phase.numL(phases))) {

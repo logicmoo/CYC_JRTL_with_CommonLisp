@@ -91,7 +91,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2999,14 +2999,14 @@ public final class core extends SubLTranslatedFile {
     public static SubLObject init_core_file() {
         deflexical("*CORE-SEED-COLLECTION*", $$CoreUnionConstant);
         deflexical("*CORE-SEED-MT*", $list1);
-        deflexical("*ALL-CORE-RAW-CONSTANTS*", SubLTrampolineFile.maybeDefault($all_core_raw_constants$, $all_core_raw_constants$, $UNINITIALIZED));
-        deflexical("*ALL-CORE-SKOLEMS*", SubLTrampolineFile.maybeDefault($all_core_skolems$, $all_core_skolems$, NIL));
-        deflexical("*ALL-CORE-CONSTANTS*", SubLTrampolineFile.maybeDefault($all_core_constants$, $all_core_constants$, $UNINITIALIZED));
-        deflexical("*CORE-CONSTANT-TABLE*", SubLTrampolineFile.maybeDefault($core_constant_table$, $core_constant_table$, NIL));
-        deflexical("*ALL-CORE-NARTS*", SubLTrampolineFile.maybeDefault($all_core_narts$, $all_core_narts$, $UNINITIALIZED));
-        deflexical("*ALL-CORE-FORTS*", SubLTrampolineFile.maybeDefault($all_core_forts$, $all_core_forts$, $UNINITIALIZED));
-        deflexical("*CORE-FORT-TABLE*", SubLTrampolineFile.maybeDefault($core_fort_table$, $core_fort_table$, NIL));
-        deflexical("*ALL-CORE-RULES*", SubLTrampolineFile.maybeDefault($all_core_rules$, $all_core_rules$, $UNINITIALIZED));
+        deflexical("*ALL-CORE-RAW-CONSTANTS*", SubLSystemTrampolineFile.maybeDefault($all_core_raw_constants$, $all_core_raw_constants$, $UNINITIALIZED));
+        deflexical("*ALL-CORE-SKOLEMS*", SubLSystemTrampolineFile.maybeDefault($all_core_skolems$, $all_core_skolems$, NIL));
+        deflexical("*ALL-CORE-CONSTANTS*", SubLSystemTrampolineFile.maybeDefault($all_core_constants$, $all_core_constants$, $UNINITIALIZED));
+        deflexical("*CORE-CONSTANT-TABLE*", SubLSystemTrampolineFile.maybeDefault($core_constant_table$, $core_constant_table$, NIL));
+        deflexical("*ALL-CORE-NARTS*", SubLSystemTrampolineFile.maybeDefault($all_core_narts$, $all_core_narts$, $UNINITIALIZED));
+        deflexical("*ALL-CORE-FORTS*", SubLSystemTrampolineFile.maybeDefault($all_core_forts$, $all_core_forts$, $UNINITIALIZED));
+        deflexical("*CORE-FORT-TABLE*", SubLSystemTrampolineFile.maybeDefault($core_fort_table$, $core_fort_table$, NIL));
+        deflexical("*ALL-CORE-RULES*", SubLSystemTrampolineFile.maybeDefault($all_core_rules$, $all_core_rules$, $UNINITIALIZED));
         defparameter("*CORE-DEFINING-ARG1-PREDICATES-INFO*", $list22);
         defparameter("*CORE-DEFINING-ARG2-PREDICATES-INFO*", NIL);
         deflexical("*CORE-DEFINITIONAL-INFO-CACHING-STATE*", NIL);

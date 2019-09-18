@@ -129,7 +129,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class noun_compound_parser extends SubLTranslatedFile {
     public static final SubLFile me = new noun_compound_parser();
@@ -1878,7 +1878,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             violations_limit = parsing_vars.$rbp_filter_violations_limit$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != violations_limit) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(violations_limit))) {
+        if (((NIL != violations_limit) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(violations_limit))) {
             throw new AssertionError(violations_limit);
         }
         final SubLObject failures = dictionary.new_dictionary(EQUALP, UNPROVIDED);
@@ -5939,7 +5939,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_noun_compound_parser_file() {
         defconstant("*DTP-NOUN-COMPOUND-PARSE*", NOUN_COMPOUND_PARSE);
-        deflexical("*NC-PARSE-ID-COUNTER*", SubLTrampolineFile.maybeDefault($nc_parse_id_counter$, $nc_parse_id_counter$, ZERO_INTEGER));
+        deflexical("*NC-PARSE-ID-COUNTER*", SubLSystemTrampolineFile.maybeDefault($nc_parse_id_counter$, $nc_parse_id_counter$, ZERO_INTEGER));
         defparameter("*RBP-REPORT-PARSE-TIME?*", NIL);
         defparameter("*RBP-SHADOW-RULES?*", NIL);
         defparameter("*RBP-RULES-TO-PARSES-SHADOW*", NIL);
@@ -5948,7 +5948,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defparameter("*RBP-TRACED-RULES*", NIL);
         defconstant("*DTP-NOUN-COMPOUND-BLOCK*", NOUN_COMPOUND_BLOCK);
         defparameter("*RBP-DEFAULT-CONFIDENCE-MULTIPLIER-FOR-FAILING-A-FILTER*", $float$0_5);
-        deflexical("*NC-BLOCK-UNIQUE-ID-COUNTER*", SubLTrampolineFile.maybeDefault($nc_block_unique_id_counter$, $nc_block_unique_id_counter$, ZERO_INTEGER));
+        deflexical("*NC-BLOCK-UNIQUE-ID-COUNTER*", SubLSystemTrampolineFile.maybeDefault($nc_block_unique_id_counter$, $nc_block_unique_id_counter$, ZERO_INTEGER));
         defparameter("*RBP-UNIVERSAL-BOOLEAN-FILTERS*", $list92);
         defparameter("*RBP-DEVERBAL-BOOLEAN-FILTERS*", $list93);
         defparameter("*RBP-DEVERBAL-MACROSCOPIC-FILTERS*", $list94);

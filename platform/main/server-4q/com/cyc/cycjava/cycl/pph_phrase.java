@@ -126,7 +126,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -6424,7 +6424,7 @@ public final class pph_phrase extends SubLTranslatedFile {
         if (stop_at == UNPROVIDED) {
             stop_at = NIL;
         }
-        if (((NIL != stop_at) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(stop_at))) {
+        if (((NIL != stop_at) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(stop_at))) {
             throw new AssertionError(stop_at);
         }
         return pph_phrase_count_if_internal(phrase, test, stop_at);
@@ -7354,14 +7354,14 @@ public final class pph_phrase extends SubLTranslatedFile {
         defparameter("*PPH-VARIABLE-BINDINGS*", NIL);
         defparameter("*PPH-SANITY-CHECK-PHRASE-DONENESS?*", NIL);
         deflexical("*PPH-PHRASE-DESTROYER-GRACE-PERIOD*", $int$600);
-        deflexical("*PPH-PHRASE-DESTROYER*", SubLTrampolineFile.maybeDefault($pph_phrase_destroyer$, $pph_phrase_destroyer$, () -> delayed_processor.new_delayed_processor($pph_phrase_destroyer_grace_period$.getGlobalValue(), VALID_PPH_PHRASE_P, DESTROY_PPH_PHRASE_LOW)));
+        deflexical("*PPH-PHRASE-DESTROYER*", SubLSystemTrampolineFile.maybeDefault($pph_phrase_destroyer$, $pph_phrase_destroyer$, () -> delayed_processor.new_delayed_processor($pph_phrase_destroyer_grace_period$.getGlobalValue(), VALID_PPH_PHRASE_P, DESTROY_PPH_PHRASE_LOW)));
         deflexical("*WARN-ABOUT-PPH-PHRASE-DESTRUCTION-CACHING-STATE*", NIL);
         defparameter("*WARN-ON-INVALID-PPH-INFERENCES?*", NIL);
         defparameter("*PPH-DO-ALTERNATIVES-MAX*", $int$500);
         defparameter("*PPH-ROOT-MOTHER-LIST*", NIL);
         defparameter("*PPH-VARIANT-LIST-MAX-COUNT*", TEN_INTEGER);
         defparameter("*PPH-PHRASE-CATEGORY-DEPTH*", ZERO_INTEGER);
-        deflexical("*PPH-PHRASE-CATEGORY-MAX-DEPTH*", SubLTrampolineFile.maybeDefault($pph_phrase_category_max_depth$, $pph_phrase_category_max_depth$, $int$99));
+        deflexical("*PPH-PHRASE-CATEGORY-MAX-DEPTH*", SubLSystemTrampolineFile.maybeDefault($pph_phrase_category_max_depth$, $pph_phrase_category_max_depth$, $int$99));
         defconstant("*PPH-UNKNOWN-CYCL*", $PPH_UNKNOWN_CYCL);
         defconstant("*PPH-EMPTY-CYCL*", $PPH_EMPTY_CYCL);
         deflexical("*PPH-AGR-PREDS-FROM-CATEGORY-CACHED-CACHING-STATE*", NIL);

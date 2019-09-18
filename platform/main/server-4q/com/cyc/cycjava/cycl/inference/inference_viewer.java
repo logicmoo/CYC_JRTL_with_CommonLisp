@@ -57,7 +57,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -126,7 +126,7 @@ public final class inference_viewer extends SubLTranslatedFile {
         if (penetrate_hl_structuresP == UNPROVIDED) {
             penetrate_hl_structuresP = T;
         }
-        if (((NIL != max_terms) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(max_terms))) {
+        if (((NIL != max_terms) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(max_terms))) {
             throw new AssertionError(max_terms);
         }
         final SubLObject dict = dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED);
@@ -336,8 +336,8 @@ public final class inference_viewer extends SubLTranslatedFile {
     }
 
     public static SubLObject init_inference_viewer_file() {
-        deflexical("*CYC-TERM-WORKING-SET-QUERY-LOCK*", SubLTrampolineFile.maybeDefault($cyc_term_working_set_query_lock$, $cyc_term_working_set_query_lock$, () -> make_lock($str5$cyc_term_working_set_query_lock)));
-        deflexical("*CYC-TERM-WORKING-SET-QUERY-INFERENCE*", SubLTrampolineFile.maybeDefault($cyc_term_working_set_query_inference$, $cyc_term_working_set_query_inference$, NIL));
+        deflexical("*CYC-TERM-WORKING-SET-QUERY-LOCK*", SubLSystemTrampolineFile.maybeDefault($cyc_term_working_set_query_lock$, $cyc_term_working_set_query_lock$, () -> make_lock($str5$cyc_term_working_set_query_lock)));
+        deflexical("*CYC-TERM-WORKING-SET-QUERY-INFERENCE*", SubLSystemTrampolineFile.maybeDefault($cyc_term_working_set_query_inference$, $cyc_term_working_set_query_inference$, NIL));
         deflexical("*EXTERNAL-INFERENCE-MONITOR-TIME-INCREMENT-SECS*", $float$0_5);
         deflexical("*EXTERNAL-INFERENCE-MONITOR-MAX-TERMS*", $int$25);
         return NIL;

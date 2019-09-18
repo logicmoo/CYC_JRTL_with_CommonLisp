@@ -48,7 +48,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -388,7 +388,7 @@ public final class arguments extends SubLTranslatedFile {
     }
 
     public static SubLObject argument_truth(final SubLObject argument) {
-        SubLTrampolineFile.enforceType(argument, ARGUMENT_P);
+        SubLSystemTrampolineFile.enforceType(argument, ARGUMENT_P);
         if (NIL != belief_p(argument)) {
             return belief_truth(argument);
         }
@@ -406,7 +406,7 @@ public final class arguments extends SubLTranslatedFile {
     }
 
     public static SubLObject argument_strength(final SubLObject argument) {
-        SubLTrampolineFile.enforceType(argument, ARGUMENT_P);
+        SubLSystemTrampolineFile.enforceType(argument, ARGUMENT_P);
         if (NIL != belief_p(argument)) {
             return belief_strength(argument);
         }
@@ -724,7 +724,7 @@ public final class arguments extends SubLTranslatedFile {
     }
 
     public static SubLObject support_module(final SubLObject support) {
-        SubLTrampolineFile.enforceType(support, SUPPORT_P);
+        SubLSystemTrampolineFile.enforceType(support, SUPPORT_P);
         if (NIL != assertion_handles.assertion_p(support)) {
             return $assertion_support_module$.getGlobalValue();
         }
@@ -735,7 +735,7 @@ public final class arguments extends SubLTranslatedFile {
     }
 
     public static SubLObject support_sentence(final SubLObject support) {
-        SubLTrampolineFile.enforceType(support, SUPPORT_P);
+        SubLSystemTrampolineFile.enforceType(support, SUPPORT_P);
         if (NIL != assertion_handles.assertion_p(support)) {
             return assertions_high.assertion_formula(support);
         }
@@ -794,7 +794,7 @@ public final class arguments extends SubLTranslatedFile {
     }
 
     public static SubLObject support_mt(final SubLObject support) {
-        SubLTrampolineFile.enforceType(support, SUPPORT_P);
+        SubLSystemTrampolineFile.enforceType(support, SUPPORT_P);
         if (NIL != assertion_handles.assertion_p(support)) {
             return assertions_high.assertion_mt(support);
         }
@@ -825,12 +825,12 @@ public final class arguments extends SubLTranslatedFile {
     }
 
     public static SubLObject support_truth(final SubLObject support) {
-        SubLTrampolineFile.enforceType(support, SUPPORT_P);
+        SubLSystemTrampolineFile.enforceType(support, SUPPORT_P);
         return enumeration_types.tv_truth(support_tv(support));
     }
 
     public static SubLObject support_strength(final SubLObject support) {
-        SubLTrampolineFile.enforceType(support, SUPPORT_P);
+        SubLSystemTrampolineFile.enforceType(support, SUPPORT_P);
         return enumeration_types.tv_strength(support_tv(support));
     }
 
@@ -913,10 +913,10 @@ public final class arguments extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = $TRUE_DEF;
         }
-        SubLTrampolineFile.enforceType(hl_module, HL_SUPPORT_MODULE_P);
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_CYCL_SENTENCE_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
-        SubLTrampolineFile.enforceType(tv, TV_P);
+        SubLSystemTrampolineFile.enforceType(hl_module, HL_SUPPORT_MODULE_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_CYCL_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(tv, TV_P);
         return list(hl_module, sentence, mt, tv);
     }
 
@@ -1307,9 +1307,9 @@ public final class arguments extends SubLTranslatedFile {
 	 */
 	@LispMethod(comment = "Return the asserted argument with ASSERTION, TRUTH, and STRENGTH, if it exists.\r\nReturn NIL otherwise.\nReturn the asserted argument with ASSERTION, TRUTH, and STRENGTH, if it exists.\nReturn NIL otherwise.")
 	public static final SubLObject kb_lookup_asserted_argument(SubLObject assertion, SubLObject truth, SubLObject strength) {
-	    SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-	    SubLTrampolineFile.checkType(truth, TRUTH_P);
-	    SubLTrampolineFile.checkType(strength, EL_STRENGTH_P);
+	    SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
+	    SubLSystemTrampolineFile.checkType(truth, TRUTH_P);
+	    SubLSystemTrampolineFile.checkType(strength, EL_STRENGTH_P);
 	    if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
 	        return hl_interface_infrastructure.hl_store_remote_eval(list(KB_LOOKUP_ASSERTED_ARGUMENT, list(QUOTE, assertion), list(QUOTE, truth), list(QUOTE, strength)));
 	    } else {

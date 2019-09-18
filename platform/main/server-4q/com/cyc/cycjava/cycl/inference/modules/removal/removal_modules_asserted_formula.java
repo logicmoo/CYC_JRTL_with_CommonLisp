@@ -83,7 +83,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -5088,7 +5088,7 @@ public final class removal_modules_asserted_formula extends SubLTranslatedFile {
     }
 
     public static SubLObject init_removal_modules_asserted_formula_file() {
-        deflexical("*TERM-FORMULAS-DEFINING-MT*", SubLTrampolineFile.maybeDefault($term_formulas_defining_mt$, $term_formulas_defining_mt$, $$BaseKB));
+        deflexical("*TERM-FORMULAS-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($term_formulas_defining_mt$, $term_formulas_defining_mt$, $$BaseKB));
         return NIL;
     }
 

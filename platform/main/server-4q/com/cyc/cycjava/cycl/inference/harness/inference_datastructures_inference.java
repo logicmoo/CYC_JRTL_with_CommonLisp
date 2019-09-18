@@ -164,7 +164,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class inference_datastructures_inference extends SubLTranslatedFile {
     public static final SubLFile me = new inference_datastructures_inference();
@@ -3437,7 +3437,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_forward_propagate(final SubLObject inference, final SubLObject forward_propagate) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != forward_propagate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_forward_propagate.forward_propagate_p(forward_propagate))) {
+        if (((NIL != forward_propagate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_forward_propagate.forward_propagate_p(forward_propagate))) {
             throw new AssertionError(forward_propagate);
         }
         _csetf_infrnc_forward_propagate(inference, forward_propagate);
@@ -3446,7 +3446,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_input_mt(final SubLObject inference, final SubLObject mt) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
             throw new AssertionError(mt);
         }
         _csetf_infrnc_input_mt(inference, mt);
@@ -3455,7 +3455,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_input_el_query(final SubLObject inference, final SubLObject el_query) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != el_query) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == possibly_inference_sentence_p(el_query))) {
+        if (((NIL != el_query) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == possibly_inference_sentence_p(el_query))) {
             throw new AssertionError(el_query);
         }
         _csetf_infrnc_input_el_query(inference, el_query);
@@ -3464,7 +3464,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_input_non_explanatory_el_query(final SubLObject inference, final SubLObject el_query) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != el_query) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == possibly_inference_sentence_p(el_query))) {
+        if (((NIL != el_query) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == possibly_inference_sentence_p(el_query))) {
             throw new AssertionError(el_query);
         }
         _csetf_infrnc_input_non_explanatory_el_query(inference, el_query);
@@ -3473,7 +3473,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_input_query_properties(final SubLObject inference, final SubLObject query_properties) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != query_properties) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_enumerated_types.query_properties_p(query_properties))) {
+        if (((NIL != query_properties) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_enumerated_types.query_properties_p(query_properties))) {
             throw new AssertionError(query_properties);
         }
         _csetf_infrnc_input_query_properties(inference, query_properties);
@@ -3482,7 +3482,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_mt(final SubLObject inference, final SubLObject mt) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
         _csetf_infrnc_mt(inference, mt);
@@ -3491,7 +3491,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_el_query(final SubLObject inference, final SubLObject el_query) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != el_query) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == possibly_inference_sentence_p(el_query))) {
+        if (((NIL != el_query) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == possibly_inference_sentence_p(el_query))) {
             throw new AssertionError(el_query);
         }
         _csetf_infrnc_el_query(inference, el_query);
@@ -3535,7 +3535,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_hypothetical_bindings(final SubLObject inference, final SubLObject hypothetical_bindings) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != hypothetical_bindings) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == bindings.binding_list_p(hypothetical_bindings))) {
+        if (((NIL != hypothetical_bindings) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == bindings.binding_list_p(hypothetical_bindings))) {
             throw new AssertionError(hypothetical_bindings);
         }
         _csetf_infrnc_hypothetical_bindings(inference, hypothetical_bindings);
@@ -3569,7 +3569,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_control_process(final SubLObject inference, final SubLObject process) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != process) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == processp(process))) {
+        if (((NIL != process) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == processp(process))) {
             throw new AssertionError(process);
         }
         _csetf_infrnc_control_process(inference, process);
@@ -3710,7 +3710,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject set_inference_max_number(final SubLObject inference, final SubLObject max_number) {
-        if (((NIL != max_number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(max_number))) {
+        if (((NIL != max_number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(max_number))) {
             throw new AssertionError(max_number);
         }
         _csetf_infrnc_max_number(inference, max_number);
@@ -3718,7 +3718,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject set_inference_max_time(final SubLObject inference, final SubLObject max_time) {
-        if (((NIL != max_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == number_utilities.non_negative_number_p(max_time))) {
+        if (((NIL != max_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == number_utilities.non_negative_number_p(max_time))) {
             throw new AssertionError(max_time);
         }
         _csetf_infrnc_max_time(inference, max_time);
@@ -3726,7 +3726,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject set_inference_max_step(final SubLObject inference, final SubLObject max_step) {
-        if (((NIL != max_step) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(max_step))) {
+        if (((NIL != max_step) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(max_step))) {
             throw new AssertionError(max_step);
         }
         _csetf_infrnc_max_step(inference, max_step);
@@ -3740,7 +3740,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject set_inference_forward_max_time(final SubLObject inference, final SubLObject forward_max_time) {
-        if (((NIL != forward_max_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == number_utilities.non_negative_number_p(forward_max_time))) {
+        if (((NIL != forward_max_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == number_utilities.non_negative_number_p(forward_max_time))) {
             throw new AssertionError(forward_max_time);
         }
         final SubLObject max_time = inference_max_time(inference);
@@ -3752,7 +3752,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject set_inference_max_proof_depth(final SubLObject inference, final SubLObject max_proof_depth) {
-        if (((NIL != max_proof_depth) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(max_proof_depth))) {
+        if (((NIL != max_proof_depth) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(max_proof_depth))) {
             throw new AssertionError(max_proof_depth);
         }
         _csetf_infrnc_max_proof_depth(inference, max_proof_depth);
@@ -3760,7 +3760,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject set_inference_max_transformation_depth(final SubLObject inference, final SubLObject max_transformation_depth) {
-        if (((NIL != max_transformation_depth) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(max_transformation_depth))) {
+        if (((NIL != max_transformation_depth) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(max_transformation_depth))) {
             throw new AssertionError(max_transformation_depth);
         }
         _csetf_infrnc_max_transformation_depth(inference, max_transformation_depth);
@@ -3809,7 +3809,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_end_internal_real_time(final SubLObject inference, final SubLObject end_internal_real_time) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != end_internal_real_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(end_internal_real_time))) {
+        if (((NIL != end_internal_real_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(end_internal_real_time))) {
             throw new AssertionError(end_internal_real_time);
         }
         _csetf_infrnc_end_internal_real_time(inference, end_internal_real_time);
@@ -3818,7 +3818,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject set_inference_pad_internal_real_time(final SubLObject inference, final SubLObject pad_internal_real_time) {
         assert NIL != inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != pad_internal_real_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == number_utilities.potentially_infinite_integer_p(pad_internal_real_time))) {
+        if (((NIL != pad_internal_real_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == number_utilities.potentially_infinite_integer_p(pad_internal_real_time))) {
             throw new AssertionError(pad_internal_real_time);
         }
         _csetf_infrnc_pad_internal_real_time(inference, pad_internal_real_time);
@@ -7744,7 +7744,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_inference_datastructures_inference_file() {
         deflexical("*INFERENCE-TYPES*", $list0);
         defconstant("*DTP-INFERENCE*", INFERENCE);
-        deflexical("*PAD-TIMES-TO-FIRST-ANSWER*", SubLTrampolineFile.maybeDefault($pad_times_to_first_answer$, $pad_times_to_first_answer$, $UNINITIALIZED));
+        deflexical("*PAD-TIMES-TO-FIRST-ANSWER*", SubLSystemTrampolineFile.maybeDefault($pad_times_to_first_answer$, $pad_times_to_first_answer$, $UNINITIALIZED));
         defconstant("*DTP-INFERENCE-ANSWER*", INFERENCE_ANSWER);
         defconstant("*DTP-INFERENCE-ANSWER-JUSTIFICATION*", INFERENCE_ANSWER_JUSTIFICATION);
         return NIL;

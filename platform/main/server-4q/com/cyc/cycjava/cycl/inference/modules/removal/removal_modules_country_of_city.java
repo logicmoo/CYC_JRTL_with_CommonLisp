@@ -20,7 +20,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -72,7 +72,7 @@ public final class removal_modules_country_of_city extends SubLTranslatedFile {
     }
 
     public static SubLObject init_removal_modules_country_of_city_file() {
-        deflexical("*COUNTRY-OF-CITY-MT*", SubLTrampolineFile.maybeDefault($country_of_city_mt$, $country_of_city_mt$, $$WorldGeographyMt));
+        deflexical("*COUNTRY-OF-CITY-MT*", SubLSystemTrampolineFile.maybeDefault($country_of_city_mt$, $country_of_city_mt$, $$WorldGeographyMt));
         return NIL;
     }
 

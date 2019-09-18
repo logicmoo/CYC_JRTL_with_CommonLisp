@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -973,10 +973,10 @@ public final class at_cache extends SubLTranslatedFile {
     }
 
     public static SubLObject init_at_cache_file() {
-        deflexical("*ARG-TYPE-CACHE*", SubLTrampolineFile.maybeDefault($arg_type_cache$, $arg_type_cache$, () -> make_hash_table($int$1024, UNPROVIDED, UNPROVIDED)));
+        deflexical("*ARG-TYPE-CACHE*", SubLSystemTrampolineFile.maybeDefault($arg_type_cache$, $arg_type_cache$, () -> make_hash_table($int$1024, UNPROVIDED, UNPROVIDED)));
         deflexical("*ARG-TYPE-CACHE-PREDS*", $list2);
         deflexical("*ARG-TYPE-CACHE-PREDS-REVERSED*", reverse($arg_type_cache_preds$.getGlobalValue()));
-        deflexical("*ARG-TYPE-CACHE-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym3$_ARG_TYPE_CACHE_INITIALIZED__, $arg_type_cache_initializedP$, NIL));
+        deflexical("*ARG-TYPE-CACHE-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($sym3$_ARG_TYPE_CACHE_INITIALIZED__, $arg_type_cache_initializedP$, NIL));
         return NIL;
     }
 

@@ -25,7 +25,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1007,7 +1007,7 @@ public final class kb_modification_event extends SubLTranslatedFile {
 
     public static SubLObject init_kb_modification_event_file() {
         deflexical("*KB-MODIFICATIONS-EVENT-DISPATCHER-LOCK*", make_lock($str84$KB_MODIFICATIONS_EVENT_DISPATCHER));
-        deflexical("*KB-MODIFICATIONS-EVENT-DISPATCHER-LISTENERS*", SubLTrampolineFile.maybeDefault($kb_modifications_event_dispatcher_listeners$, $kb_modifications_event_dispatcher_listeners$, NIL));
+        deflexical("*KB-MODIFICATIONS-EVENT-DISPATCHER-LISTENERS*", SubLSystemTrampolineFile.maybeDefault($kb_modifications_event_dispatcher_listeners$, $kb_modifications_event_dispatcher_listeners$, NIL));
         return NIL;
     }
 

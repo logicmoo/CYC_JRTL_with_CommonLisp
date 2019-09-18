@@ -85,7 +85,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -735,8 +735,8 @@ public final class genl_mts extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(spec, EL_FORT_P);
-        SubLTrampolineFile.enforceType(v_genls, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(spec, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_genls, EL_FORT_P);
         if (NIL == list_utilities.any_in_list(CORE_MICROTHEORY_P, v_genls, UNPROVIDED)) {
             return sbhl_search_methods.sbhl_predicate_relation_with_any_p(sbhl_module_vars.get_sbhl_module($$genlMt), spec, v_genls, mt_mt, tv);
         }

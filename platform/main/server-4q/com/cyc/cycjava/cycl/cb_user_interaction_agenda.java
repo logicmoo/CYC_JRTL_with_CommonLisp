@@ -55,7 +55,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -623,7 +623,7 @@ public final class cb_user_interaction_agenda extends SubLTranslatedFile impleme
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+            SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
             {
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
                 html_utilities.html_markup(html_macros.$html_anchor_head$.getGlobalValue());
@@ -3617,7 +3617,7 @@ public final class cb_user_interaction_agenda extends SubLTranslatedFile impleme
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+            SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
             if (NIL == linktext) {
                 linktext = $str_alt173$_Continue_;
             }
@@ -3679,7 +3679,7 @@ public final class cb_user_interaction_agenda extends SubLTranslatedFile impleme
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+            SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
             if (NIL == linktext) {
                 linktext = $str_alt119$_Reject_;
             }

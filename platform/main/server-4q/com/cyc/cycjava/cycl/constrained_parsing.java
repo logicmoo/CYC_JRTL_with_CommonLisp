@@ -73,7 +73,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class constrained_parsing extends SubLTranslatedFile {
     public static final SubLFile me = new constrained_parsing();
@@ -2889,12 +2889,12 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_constrained_parsing_file() {
-        deflexical("*CONSTRAINED-PARSING-RANKINGS*", SubLTrampolineFile.maybeDefault($constrained_parsing_rankings$, $constrained_parsing_rankings$, NIL));
+        deflexical("*CONSTRAINED-PARSING-RANKINGS*", SubLSystemTrampolineFile.maybeDefault($constrained_parsing_rankings$, $constrained_parsing_rankings$, NIL));
         defparameter("*CONSTRAINED-PARSING-WITHOUT-ASSERTING?*", NIL);
         defparameter("*CONSTRAINED-PARSING-TRACKING-STRINGS?*", NIL);
         defparameter("*CONSTRAINED-PARSING-TRACKING-SUBSTRINGS?*", NIL);
         defparameter("*CONSTRAINED-PARSING-TRACE-LEVEL*", ZERO_INTEGER);
-        deflexical("*CONSTRAINED-PARSING-ACTION-LOG*", SubLTrampolineFile.maybeDefault($constrained_parsing_action_log$, $constrained_parsing_action_log$, NIL));
+        deflexical("*CONSTRAINED-PARSING-ACTION-LOG*", SubLSystemTrampolineFile.maybeDefault($constrained_parsing_action_log$, $constrained_parsing_action_log$, NIL));
         defparameter("*CONSTRAINED-PARSING-CASE-SENSITIVE?*", NIL);
         defparameter("*CONSTRAINED-PARSING-ASSERT-INTO-MT*", NIL);
         defparameter("*CONSTRAINED-PARSING-CONSIDER-ADJECTIVES?*", NIL);

@@ -12,9 +12,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Regex extends SubLTrampolineFile {
+public class Regex extends SubLSystemTrampolineFile {
     public static SubLObject compile_regular_expression_impl(SubLObject regularExpressionString, SubLObject options) {
         int optionsTyped = options.intValue();
         String patternTyped = regularExpressionString.getStringValue();
@@ -42,8 +42,8 @@ public class Regex extends SubLTrampolineFile {
         if (options == CommonSymbols.UNPROVIDED)
             options = CommonSymbols.ZERO_INTEGER;
         int optionsTyped = options.intValue();
-        int startTyped = SubLTrampolineFile.extractStart(start);
-        int endTyped = SubLTrampolineFile.extractEnd(end);
+        int startTyped = SubLSystemTrampolineFile.extractStart(start);
+        int endTyped = SubLSystemTrampolineFile.extractEnd(end);
         if (startTyped < 0)
             startTyped = 0;
         if (endTyped > stringTyped.length())
@@ -71,7 +71,7 @@ public class Regex extends SubLTrampolineFile {
         return Regex.REGEX_VERSION;
     }
 
-    public static SubLTrampolineFile me;
+    public static SubLSystemTrampolineFile me;
     private static SubLString REGEX_VERSION;
     static {
         me = new Regex();

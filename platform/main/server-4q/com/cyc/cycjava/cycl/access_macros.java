@@ -56,7 +56,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1196,7 +1196,7 @@ public final class access_macros extends SubLTranslatedFile {
     }
 
     public static SubLObject init_access_macros_file() {
-        deflexical("*EXTERNAL-SYMBOLS*", SubLTrampolineFile.maybeDefault($external_symbols$, $external_symbols$, () -> make_hash_table($int$400, symbol_function(EQ), UNPROVIDED)));
+        deflexical("*EXTERNAL-SYMBOLS*", SubLSystemTrampolineFile.maybeDefault($external_symbols$, $external_symbols$, () -> make_hash_table($int$400, symbol_function(EQ), UNPROVIDED)));
         deflexical("*EXTERNAL-ACCESS-METHODS*", $list57);
         return NIL;
     }

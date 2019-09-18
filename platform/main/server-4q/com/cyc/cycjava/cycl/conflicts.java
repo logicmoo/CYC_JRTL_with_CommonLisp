@@ -41,7 +41,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -271,8 +271,8 @@ public final class conflicts extends SubLTranslatedFile {
 
     public static SubLObject init_conflicts_file() {
         defparameter("*INCONSISTENT-SUPPORT-SETS*", NIL);
-        deflexical("*CURRENT-CONFLICTS*", SubLTrampolineFile.maybeDefault($current_conflicts$, $current_conflicts$, NIL));
-        deflexical("*MT-CONFLICTS*", SubLTrampolineFile.maybeDefault($mt_conflicts$, $mt_conflicts$, NIL));
+        deflexical("*CURRENT-CONFLICTS*", SubLSystemTrampolineFile.maybeDefault($current_conflicts$, $current_conflicts$, NIL));
+        deflexical("*MT-CONFLICTS*", SubLSystemTrampolineFile.maybeDefault($mt_conflicts$, $mt_conflicts$, NIL));
         return NIL;
     }
 

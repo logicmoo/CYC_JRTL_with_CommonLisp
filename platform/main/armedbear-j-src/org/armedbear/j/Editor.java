@@ -219,7 +219,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 	}
 
 	public static void startJ(String[] args, boolean blockUnusedNow, boolean mayExit) {
-		Startup.enableAjaxSwing();
+		Startup.enablewebswing();
 		final File currentDir = File.getInstance(System.getProperty("user.dir"));
 		boolean forceNewInstance = false;
 		boolean restoreSession = true;

@@ -37,6 +37,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.logicmoo.system.SystemCurrent;
+
 import bsh.EvalError;
 import bsh.FileReader;
 import bsh.Interpreter;
@@ -271,16 +273,16 @@ public class BshServlet extends HttpServlet
             PrintStream sout = System.out;
             PrintStream serr = System.err;
             if ( captureOutErr ) {
-                System.setOut( pout );
-                System.setErr( pout );
+            	SystemCurrent.setOut( pout );
+            	SystemCurrent.setErr( pout );
             }
             try {
                 // Eval the user text
                 result = bsh.eval( script );
             } finally {
                 if ( captureOutErr ) {
-                    System.setOut( sout );
-                    System.setErr( serr );
+                	SystemCurrent.setOut( sout );
+                	SystemCurrent.setErr( serr );
                 }
             }
             scriptOutput.append( baos.toString("UTF-8") );

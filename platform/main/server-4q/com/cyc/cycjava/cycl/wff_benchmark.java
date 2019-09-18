@@ -60,7 +60,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -594,32 +594,32 @@ public final class wff_benchmark extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject wbh_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
         return v_object.getField2();
     }
 
     public static final SubLObject wbh_kb(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
         return v_object.getField3();
     }
 
     public static final SubLObject wbh_level(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
         return v_object.getField4();
     }
 
     public static final SubLObject _csetf_wbh_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_wbh_kb(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_wbh_level(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_HEADER_P);
         return v_object.setField4(value);
     }
 
@@ -768,52 +768,52 @@ public final class wff_benchmark extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject wbd_cnf(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.getField2();
     }
 
     public static final SubLObject wbd_mt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.getField3();
     }
 
     public static final SubLObject wbd_wffP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.getField4();
     }
 
     public static final SubLObject wbd_time(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.getField5();
     }
 
     public static final SubLObject wbd_foundP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.getField6();
     }
 
     public static final SubLObject _csetf_wbd_cnf(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_wbd_mt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_wbd_wffP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_wbd_time(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_wbd_foundP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, WFF_BENCHMARK_DATA_P);
         return v_object.setField6(value);
     }
 
@@ -944,8 +944,8 @@ public final class wff_benchmark extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(scaling_probability, PROBABILITY_P);
-            SubLTrampolineFile.checkType(ill_formed_percentage, PERCENTAGE_P);
+            SubLSystemTrampolineFile.checkType(scaling_probability, PROBABILITY_P);
+            SubLSystemTrampolineFile.checkType(ill_formed_percentage, PERCENTAGE_P);
             {
                 SubLObject asserted_extent_dict = dictionary_of_asserted_predicate_extent();
                 SubLObject sample_gafs = NIL;
@@ -1017,7 +1017,7 @@ public final class wff_benchmark extends SubLTranslatedFile implements V02 {
     public static final SubLObject wff_kb_test_number_of_gafs_to_sample(SubLObject pred, SubLObject asserted_extent_dict) {
         {
             SubLObject asserted_extent = dictionary.dictionary_lookup(asserted_extent_dict, pred, ZERO_INTEGER);
-            SubLTrampolineFile.checkType(asserted_extent, NON_NEGATIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(asserted_extent, NON_NEGATIVE_INTEGER_P);
             if (asserted_extent.isZero()) {
                 return ZERO_INTEGER;
             } else
@@ -1075,7 +1075,7 @@ public final class wff_benchmark extends SubLTranslatedFile implements V02 {
                                                                 if (NIL != assertions_high.asserted_assertionP(ass)) {
                                                                     {
                                                                         SubLObject prob = probability;
-                                                                        SubLTrampolineFile.checkType(prob, PROBABILITY_P);
+                                                                        SubLSystemTrampolineFile.checkType(prob, PROBABILITY_P);
                                                                         if (NIL != number_utilities.true_with_probability(prob)) {
                                                                             result = cons(ass, result);
                                                                         }

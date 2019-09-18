@@ -65,7 +65,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1324,9 +1324,9 @@ public final class sbhl_module_vars extends SubLTranslatedFile {
     public static SubLObject init_sbhl_module_vars_file() {
         defconstant("*DTP-SBHL-MODULE*", SBHL_MODULE);
         deflexical("*SBHL-MODULE-KEY-TEST*", symbol_function(EQL));
-        deflexical("*SBHL-MODULES*", SubLTrampolineFile.maybeDefault($sbhl_modules$, $sbhl_modules$, NIL));
+        deflexical("*SBHL-MODULES*", SubLSystemTrampolineFile.maybeDefault($sbhl_modules$, $sbhl_modules$, NIL));
         deflexical("*SBHL-MODULE-TYPES*", $list75);
-        deflexical("*SBHL-MODULE-PROPERTIES*", SubLTrampolineFile.maybeDefault($sbhl_module_properties$, $sbhl_module_properties$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SBHL-MODULE-PROPERTIES*", SubLSystemTrampolineFile.maybeDefault($sbhl_module_properties$, $sbhl_module_properties$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         deflexical("*SBHL-MODULE-REQUIRED-PROPERTIES*", $list119);
         defparameter("*SBHL-MODULE*", NIL);
         defvar("*SBHL-MODULE-VARS*", NIL);

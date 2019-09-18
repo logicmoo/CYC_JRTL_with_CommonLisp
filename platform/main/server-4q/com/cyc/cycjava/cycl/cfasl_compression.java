@@ -47,7 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -506,8 +506,8 @@ public final class cfasl_compression extends SubLTranslatedFile {
         defconstant("*CFASL-OPCODE-COMPRESSION-PAIR*", $int$55);
         defconstant("*CFASL-OPCODE-COMPRESSION-KEY*", $int$56);
         defconstant("*CFASL-OPCODE-CLOSE-COMPRESSED-BLOCK*", $int$57);
-        deflexical("*CFASL-DECOMPRESSION-INDEX*", SubLTrampolineFile.maybeDefault($cfasl_decompression_index$, $cfasl_decompression_index$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
-        deflexical("*CFASL-COMPRESSION-NOT-FOUND*", SubLTrampolineFile.maybeDefault($cfasl_compression_not_found$, $cfasl_compression_not_found$, () -> make_symbol($str10$NOT_FOUND)));
+        deflexical("*CFASL-DECOMPRESSION-INDEX*", SubLSystemTrampolineFile.maybeDefault($cfasl_decompression_index$, $cfasl_decompression_index$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*CFASL-COMPRESSION-NOT-FOUND*", SubLSystemTrampolineFile.maybeDefault($cfasl_compression_not_found$, $cfasl_compression_not_found$, () -> make_symbol($str10$NOT_FOUND)));
         defparameter("*CFASL-OUTPUT-COMPRESSION-OPTIONS*", NIL);
         defparameter("*CFASL-OUTPUT-COMPRESSION-TABLE*", NIL);
         defparameter("*CFASL-OUTPUT-COMPRESSION-CODE-ISG*", NIL);

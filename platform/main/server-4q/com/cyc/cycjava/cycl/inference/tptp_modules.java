@@ -110,7 +110,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -145,14 +145,14 @@ public final class tptp_modules extends SubLTranslatedFile implements V02 {
     public static final SubLObject tptp_linchpin_module(SubLObject name, SubLObject plist) {
         {
             SubLObject plist_var = plist;
-            SubLTrampolineFile.checkType(plist_var, PROPERTY_LIST_P);
+            SubLSystemTrampolineFile.checkType(plist_var, PROPERTY_LIST_P);
             {
                 SubLObject remainder = NIL;
                 for (remainder = plist_var; NIL != remainder; remainder = cddr(remainder)) {
                     {
                         SubLObject property = remainder.first();
                         SubLObject value = cadr(remainder);
-                        SubLTrampolineFile.checkType(property, TPTP_LINCHPIN_MODULE_PROPERTY_P);
+                        SubLSystemTrampolineFile.checkType(property, TPTP_LINCHPIN_MODULE_PROPERTY_P);
                     }
                 }
             }
@@ -166,7 +166,7 @@ public final class tptp_modules extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tptp_linchpin_module_property_lookup(SubLObject name, SubLObject property) {
-        SubLTrampolineFile.checkType(name, TPTP_LINCHPIN_MODULE_NAME_P);
+        SubLSystemTrampolineFile.checkType(name, TPTP_LINCHPIN_MODULE_NAME_P);
         {
             SubLObject plist = dictionary.dictionary_lookup_without_values($tptp_linchpin_modules$.getGlobalValue(), name, UNPROVIDED);
             return getf(plist, property, UNPROVIDED);
@@ -509,14 +509,14 @@ public final class tptp_modules extends SubLTranslatedFile implements V02 {
     public static final SubLObject tptp_query_generation_module(SubLObject name, SubLObject plist) {
         {
             SubLObject plist_var = plist;
-            SubLTrampolineFile.checkType(plist_var, PROPERTY_LIST_P);
+            SubLSystemTrampolineFile.checkType(plist_var, PROPERTY_LIST_P);
             {
                 SubLObject remainder = NIL;
                 for (remainder = plist_var; NIL != remainder; remainder = cddr(remainder)) {
                     {
                         SubLObject property = remainder.first();
                         SubLObject value = cadr(remainder);
-                        SubLTrampolineFile.checkType(property, TPTP_QUERY_GENERATION_MODULE_PROPERTY_P);
+                        SubLSystemTrampolineFile.checkType(property, TPTP_QUERY_GENERATION_MODULE_PROPERTY_P);
                     }
                 }
             }
@@ -596,7 +596,7 @@ public final class tptp_modules extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject test_query_generation_module(SubLObject module_name, SubLObject n, SubLObject kb_content) {
-        SubLTrampolineFile.checkType(module_name, TPTP_QUERY_GENERATION_MODULE_NAME_P);
+        SubLSystemTrampolineFile.checkType(module_name, TPTP_QUERY_GENERATION_MODULE_NAME_P);
         {
             SubLObject cdolist_list_var = $list_alt72;
             SubLObject openness = NIL;
@@ -1303,8 +1303,8 @@ public final class tptp_modules extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject random_possibly_synthetic_predicate(SubLObject syntheticP, SubLObject part_types_pred, SubLObject parts_pred, SubLObject binaryP) {
-        SubLTrampolineFile.checkType(syntheticP, BOOLEANP);
-        SubLTrampolineFile.checkType(binaryP, BOOLEANP);
+        SubLSystemTrampolineFile.checkType(syntheticP, BOOLEANP);
+        SubLSystemTrampolineFile.checkType(binaryP, BOOLEANP);
         if (NIL != syntheticP) {
             if (NIL != number_utilities.coin_flip()) {
                 return genl_predicates.random_proper_spec_predicate_or_inverse_of(part_types_pred, UNPROVIDED, UNPROVIDED);
@@ -1321,7 +1321,7 @@ public final class tptp_modules extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject random_possibly_synthetic_proper_genl_pred_or_inverse(SubLObject arg0, SubLObject pred, SubLObject mt, SubLObject syntheticP) {
-        SubLTrampolineFile.checkType(syntheticP, BOOLEANP);
+        SubLSystemTrampolineFile.checkType(syntheticP, BOOLEANP);
         {
             SubLObject genl_preds = (arg0 == $$genlPreds) ? ((SubLObject) (genl_predicates.all_proper_genl_predicates(pred, mt, UNPROVIDED))) : genl_predicates.all_proper_genl_inverses(pred, mt, UNPROVIDED);
             if (NIL != syntheticP) {
@@ -2003,7 +2003,7 @@ public final class tptp_modules extends SubLTranslatedFile implements V02 {
                         mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
                     }
                 }
-                SubLTrampolineFile.checkType(result, FORT_P);
+                SubLSystemTrampolineFile.checkType(result, FORT_P);
                 return result;
             }
         }
@@ -2386,12 +2386,12 @@ public final class tptp_modules extends SubLTranslatedFile implements V02 {
             {
                 SubLObject rules = Mapping.mapcar(FIND_ASSERTION_CYCL, $tptp_core_rule_sentences$.getGlobalValue());
                 SubLObject list_var = rules;
-                SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+                SubLSystemTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
                 {
                     SubLObject cdolist_list_var = list_var;
                     SubLObject elem = NIL;
                     for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
-                        SubLTrampolineFile.checkType(elem, ASSERTION_P);
+                        SubLSystemTrampolineFile.checkType(elem, ASSERTION_P);
                     }
                 }
                 $tptp_core_rules$.setGlobalValue(rules);

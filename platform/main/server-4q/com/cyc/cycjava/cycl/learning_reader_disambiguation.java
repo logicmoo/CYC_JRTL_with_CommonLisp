@@ -126,7 +126,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -362,8 +362,8 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
     If N=0, return MIN. If N=GRANULARITY, return MAX.
      */
     public static final SubLObject tweakable_parameter_nth_value_internal(SubLObject min, SubLObject max, SubLObject granularity, SubLObject n) {
-        SubLTrampolineFile.checkType(n, NON_NEGATIVE_INTEGER_P);
-        SubLTrampolineFile.checkType(granularity, POSITIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(n, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(granularity, POSITIVE_INTEGER_P);
         if (n.eql(ZERO_INTEGER)) {
             return min;
         } else
@@ -447,8 +447,8 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
     public static final SubLObject tweakable_parameter_value_num_internal_internal(SubLObject min, SubLObject max, SubLObject granularity, SubLObject value) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(value, NUMBERP);
-            SubLTrampolineFile.checkType(granularity, POSITIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(value, NUMBERP);
+            SubLSystemTrampolineFile.checkType(granularity, POSITIVE_INTEGER_P);
             if (value.eql(min)) {
                 return ZERO_INTEGER;
             } else
@@ -655,7 +655,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
         if (map == UNPROVIDED) {
             map = $topic_struct_parameter_value_map$.getDynamicValue();
         }
-        SubLTrampolineFile.checkType(parameter, SYMBOLP);
+        SubLSystemTrampolineFile.checkType(parameter, SYMBOLP);
         if ((NIL != map) && (NIL != list_utilities.alist_p(map))) {
             {
                 SubLObject mapped_value = list_utilities.alist_lookup_without_values(map, parameter, UNPROVIDED, UNPROVIDED);
@@ -1078,7 +1078,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(training_pairs, PROPER_LIST_P);
+            SubLSystemTrampolineFile.checkType(training_pairs, PROPER_LIST_P);
             {
                 SubLObject num_correct = ZERO_INTEGER;
                 SubLObject total = ZERO_INTEGER;
@@ -1779,7 +1779,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
         {
             SubLObject sentence = topic_struct_sentence_from_position(topic_struct, sentence_path);
             SubLObject sentence_string = NIL;
-            SubLTrampolineFile.checkType(sentence, TOPIC_STRUCT_SENTENCE_P);
+            SubLSystemTrampolineFile.checkType(sentence, TOPIC_STRUCT_SENTENCE_P);
             {
                 SubLObject stream = NIL;
                 try {
@@ -1812,7 +1812,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
     public static final SubLObject topic_struct_string_compositional_contributor_score(SubLObject string, SubLObject denot, SubLObject index) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(string, STRINGP);
+            SubLSystemTrampolineFile.checkType(string, STRINGP);
             {
                 SubLObject data = NIL;
                 SubLObject tokenization_fudge_factor = FIVE_INTEGER;
@@ -2031,7 +2031,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
     private static final SubLSymbol $disambiguation_scoring_methods_for_strategies$ = makeSymbol("*DISAMBIGUATION-SCORING-METHODS-FOR-STRATEGIES*");
 
     public static final SubLObject disambiguation_scoring_method_for_strategy(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, FORT_P);
+        SubLSystemTrampolineFile.checkType(strategy, FORT_P);
         {
             SubLObject el_strategy = cycl_utilities.hl_to_el(strategy);
             SubLObject method = NIL;
@@ -2508,7 +2508,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
     public static final SubLObject peg_position(SubLObject peg) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(peg, FORT_P);
+            SubLSystemTrampolineFile.checkType(peg, FORT_P);
             {
                 SubLObject position = peg_position_from_covered_node(peg);
                 if (NIL == position) {
@@ -5154,7 +5154,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
                 if (NIL == Filesys.directory_p(subdirectory)) {
                     Filesys.make_directory(subdirectory, UNPROVIDED, UNPROVIDED);
                 }
-                SubLTrampolineFile.checkType(directory, DIRECTORY_P);
+                SubLSystemTrampolineFile.checkType(directory, DIRECTORY_P);
                 {
                     SubLObject directory_contents_var = Filesys.directory(directory, T);
                     SubLObject progress_message_var = NIL;
@@ -5919,7 +5919,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
     }
 
     public static final SubLObject annotate_topic_struct_word(SubLObject word) {
-        SubLTrampolineFile.checkType(word, NON_EMPTY_LIST_P);
+        SubLSystemTrampolineFile.checkType(word, NON_EMPTY_LIST_P);
         return list_utilities.nadd_to_end($list_alt269, word);
     }
 
@@ -5975,7 +5975,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(text_directory, DIRECTORY_P);
+            SubLSystemTrampolineFile.checkType(text_directory, DIRECTORY_P);
             {
                 SubLObject directory_contents_var = Filesys.directory(text_directory, T);
                 SubLObject progress_message_var = cconcatenate($str_alt299$Testing_document_texts_in_, new SubLObject[]{ format_nil.format_nil_s_no_copy(text_directory), $str_alt300$_, format_nil.$format_nil_percent$.getGlobalValue(), $str_alt301$_Output_files_will_be_placed_in_, format_nil.format_nil_s_no_copy(results_directory), $str_alt300$_ });
@@ -6702,17 +6702,17 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
     }
 
     public static final SubLObject cookie_strategy(SubLObject cookie) {
-        SubLTrampolineFile.checkType(cookie, TOPIC_STRUCT_COOKIE_P);
+        SubLSystemTrampolineFile.checkType(cookie, TOPIC_STRUCT_COOKIE_P);
         return cookie.first();
     }
 
     public static final SubLObject cookie_score(SubLObject cookie) {
-        SubLTrampolineFile.checkType(cookie, TOPIC_STRUCT_COOKIE_P);
+        SubLSystemTrampolineFile.checkType(cookie, TOPIC_STRUCT_COOKIE_P);
         return second(cookie);
     }
 
     public static final SubLObject cookie_data(SubLObject cookie) {
-        SubLTrampolineFile.checkType(cookie, TOPIC_STRUCT_COOKIE_P);
+        SubLSystemTrampolineFile.checkType(cookie, TOPIC_STRUCT_COOKIE_P);
         return third(cookie);
     }
 

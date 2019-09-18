@@ -26,7 +26,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -122,8 +122,8 @@ public final class kb_action_to_uia_trampolines extends SubLTranslatedFile imple
 	 * @return boolean
 	 */
 	public static final SubLObject kb_action_to_uia_salient_descriptor(SubLObject v_term, SubLObject interaction_mt) {
-		SubLTrampolineFile.checkType(v_term, FORT_P);
-		SubLTrampolineFile.checkType(interaction_mt, HLMT_P);
+		SubLSystemTrampolineFile.checkType(v_term, FORT_P);
+		SubLSystemTrampolineFile.checkType(interaction_mt, HLMT_P);
 		{
 			SubLObject v_agenda = kb_action_derive_uia_from_interaction_mt(interaction_mt);
 			if (NIL != user_interaction_agenda.user_interaction_agenda_p(v_agenda)) {
@@ -141,8 +141,8 @@ public final class kb_action_to_uia_trampolines extends SubLTranslatedFile imple
 	 * @return boolean
 	 */
 	public static final SubLObject kb_action_to_uia_assertion_creator(SubLObject sentence, SubLObject interaction_mt) {
-		SubLTrampolineFile.checkType(sentence, EL_FORMULA_P);
-		SubLTrampolineFile.checkType(interaction_mt, HLMT_P);
+		SubLSystemTrampolineFile.checkType(sentence, EL_FORMULA_P);
+		SubLSystemTrampolineFile.checkType(interaction_mt, HLMT_P);
 		{
 			SubLObject v_agenda = kb_action_derive_uia_from_interaction_mt(interaction_mt);
 			if (NIL != user_interaction_agenda.user_interaction_agenda_p(v_agenda)) {

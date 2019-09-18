@@ -46,7 +46,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -988,19 +988,19 @@ public final class operation_queues extends SubLTranslatedFile {
     }
 
     public static SubLObject init_operation_queues_file() {
-        deflexical("*LOCAL-QUEUE*", SubLTrampolineFile.maybeDefault($local_queue$, $local_queue$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*LOCAL-QUEUE*", SubLSystemTrampolineFile.maybeDefault($local_queue$, $local_queue$, () -> queues.create_queue(UNPROVIDED)));
         defparameter("*LOCAL-QUEUE-LOCK*", make_lock($$$Local_Queue_Lock));
-        deflexical("*REMOTE-QUEUE*", SubLTrampolineFile.maybeDefault($remote_queue$, $remote_queue$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*REMOTE-QUEUE*", SubLSystemTrampolineFile.maybeDefault($remote_queue$, $remote_queue$, () -> queues.create_queue(UNPROVIDED)));
         defparameter("*REMOTE-QUEUE-LOCK*", make_lock($$$Remote_Queue_Lock));
-        deflexical("*TRANSCRIPT-QUEUE*", SubLTrampolineFile.maybeDefault($transcript_queue$, $transcript_queue$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*TRANSCRIPT-QUEUE*", SubLSystemTrampolineFile.maybeDefault($transcript_queue$, $transcript_queue$, () -> queues.create_queue(UNPROVIDED)));
         defparameter("*TRANSCRIPT-QUEUE-LOCK*", make_lock($$$Transcript_Queue_Lock));
-        deflexical("*HL-TRANSCRIPT-QUEUE*", SubLTrampolineFile.maybeDefault($hl_transcript_queue$, $hl_transcript_queue$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*HL-TRANSCRIPT-QUEUE*", SubLSystemTrampolineFile.maybeDefault($hl_transcript_queue$, $hl_transcript_queue$, () -> queues.create_queue(UNPROVIDED)));
         defparameter("*HL-TRANSCRIPT-QUEUE-LOCK*", make_lock($$$HL_Transcript_Queue_Lock));
-        deflexical("*AUXILIARY-QUEUE*", SubLTrampolineFile.maybeDefault($auxiliary_queue$, $auxiliary_queue$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*AUXILIARY-QUEUE*", SubLSystemTrampolineFile.maybeDefault($auxiliary_queue$, $auxiliary_queue$, () -> queues.create_queue(UNPROVIDED)));
         defparameter("*AUXILIARY-QUEUE-LOCK*", make_lock($$$Auxiliary_Queue_Lock));
-        deflexical("*TRANSMIT-QUEUE*", SubLTrampolineFile.maybeDefault($transmit_queue$, $transmit_queue$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*TRANSMIT-QUEUE*", SubLSystemTrampolineFile.maybeDefault($transmit_queue$, $transmit_queue$, () -> queues.create_queue(UNPROVIDED)));
         defparameter("*TRANSMIT-QUEUE-LOCK*", make_lock($$$Transmit_Queue_Lock));
-        deflexical("*LOCAL-OPERATION-STORAGE-QUEUE*", SubLTrampolineFile.maybeDefault($local_operation_storage_queue$, $local_operation_storage_queue$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*LOCAL-OPERATION-STORAGE-QUEUE*", SubLSystemTrampolineFile.maybeDefault($local_operation_storage_queue$, $local_operation_storage_queue$, () -> queues.create_queue(UNPROVIDED)));
         defparameter("*LOCAL-OPERATION-STORAGE-QUEUE-LOCK*", make_lock($$$Local_Operation_Queue_Lock));
         defparameter("*WITHIN-A-REMOTE-OP?*", NIL);
         defparameter("*HL-TRANSCRIPTS-ENABLED?*", NIL);

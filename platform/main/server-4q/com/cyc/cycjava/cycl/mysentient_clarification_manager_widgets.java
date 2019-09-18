@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -75,7 +75,7 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
 
 
     public static final SubLObject set_max_clarification_questions(SubLObject max) {
-        SubLTrampolineFile.checkType(max, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(max, NON_NEGATIVE_INTEGER_P);
         $max_clarification_questions$.setGlobalValue(max);
         return NIL;
     }
@@ -93,11 +93,11 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
      * @return listp of up to MAX-NUMBER mysentient-clarification-question-spec-p's
      */
     public static final SubLObject mysentient_cm_execute_strategies(SubLObject utterance_peg, SubLObject user, SubLObject session_mt, SubLObject generation_mt, SubLObject max_number) {
-        SubLTrampolineFile.checkType(utterance_peg, FORT_P);
-        SubLTrampolineFile.checkType(user, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, MICROTHEORY_P);
-        SubLTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
-        SubLTrampolineFile.checkType(max_number, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(utterance_peg, FORT_P);
+        SubLSystemTrampolineFile.checkType(user, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, MICROTHEORY_P);
+        SubLSystemTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
+        SubLSystemTrampolineFile.checkType(max_number, NON_NEGATIVE_INTEGER_P);
         {
             SubLObject question_specs = NIL;
             SubLObject strategies_that_return_yes_no_questions = list($const9$SuggestApplicableSubtopics_Clarif, $const10$AskProfilingQuestionBasedOnSubExp);
@@ -251,11 +251,11 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
         if (max_number == UNPROVIDED) {
             max_number = THREE_INTEGER;
         }
-        SubLTrampolineFile.checkType(utterance_peg, CYCL_TERM_P);
-        SubLTrampolineFile.checkType(utterance_is_questionP, BOOLEANP);
-        SubLTrampolineFile.checkType(session_mt, MICROTHEORY_P);
-        SubLTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
-        SubLTrampolineFile.checkType(max_number, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(utterance_peg, CYCL_TERM_P);
+        SubLSystemTrampolineFile.checkType(utterance_is_questionP, BOOLEANP);
+        SubLSystemTrampolineFile.checkType(session_mt, MICROTHEORY_P);
+        SubLSystemTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
+        SubLSystemTrampolineFile.checkType(max_number, NON_NEGATIVE_INTEGER_P);
         {
             SubLObject question_specs = NIL;
             {
@@ -384,9 +384,9 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(utterance_peg, CYCL_TERM_P);
-            SubLTrampolineFile.checkType(session_mt, MICROTHEORY_P);
-            SubLTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
+            SubLSystemTrampolineFile.checkType(utterance_peg, CYCL_TERM_P);
+            SubLSystemTrampolineFile.checkType(session_mt, MICROTHEORY_P);
+            SubLSystemTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
             {
                 SubLObject redirects = get_applicable_user_redirects_as_quadruples(utterance_peg, session_mt, max_number);
                 SubLObject result_dict = dictionary.new_dictionary(symbol_function(EQUAL), ONE_INTEGER);
@@ -568,10 +568,10 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
         if (max_questions == UNPROVIDED) {
             max_questions = ONE_INTEGER;
         }
-        SubLTrampolineFile.checkType(user, FORT_P);
-        SubLTrampolineFile.checkType(session, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, MICROTHEORY_P);
-        SubLTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
+        SubLSystemTrampolineFile.checkType(user, FORT_P);
+        SubLSystemTrampolineFile.checkType(session, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, MICROTHEORY_P);
+        SubLSystemTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
         {
             SubLObject utterance_peg = mysentient_user_profile_manager_widgets.get_most_recent_utterance_peg(session, session_mt);
             SubLObject question_specs = NIL;
@@ -596,7 +596,7 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
             {
                 SubLObject question_specs = NIL;
                 SubLObject sd_candidates = mysentient_cm_sd_candidates(utterance_peg, session_mt);
-                SubLTrampolineFile.checkType($mysentient_deprecated_in_code_salient_descriptor_tactics$.getGlobalValue(), NON_DOTTED_LIST_P);
+                SubLSystemTrampolineFile.checkType($mysentient_deprecated_in_code_salient_descriptor_tactics$.getGlobalValue(), NON_DOTTED_LIST_P);
                 {
                     SubLObject tactics_for_seed_term_type = list_utilities.ordered_set_difference(rkf_salient_descriptor_prompter.rkf_sd_prompter_tactics_for_seed_term_type($FORT), $mysentient_deprecated_in_code_salient_descriptor_tactics$.getGlobalValue(), symbol_function(EQ), UNPROVIDED);
                     SubLObject tactics_table_copy = copy_tree(rkf_salient_descriptor_prompter.$rkf_sd_seed_term_tactics_table$.getDynamicValue(thread));
@@ -819,7 +819,7 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
      * This should be called with PPH memoization and with PPH addressee already bound to the user
      */
     public static final SubLObject sd_question_cycl_to_clarification_question_spec(SubLObject question_cycl, SubLObject session_mt, SubLObject generation_mt, SubLObject confidence) {
-        SubLTrampolineFile.checkType(question_cycl, $sym91$EL_SENTENCE_ASKABLE_);
+        SubLSystemTrampolineFile.checkType(question_cycl, $sym91$EL_SENTENCE_ASKABLE_);
         {
             SubLObject vars = el_utilities.sentence_free_variables(question_cycl, UNPROVIDED, UNPROVIDED, UNPROVIDED);
             if (NIL == list_utilities.singletonP(vars)) {
@@ -1048,9 +1048,9 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
     public static final SubLObject clarification_options_for_utterance(SubLObject utterance_peg, SubLObject session_mt, SubLObject generation_mt) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(utterance_peg, FORT_P);
-            SubLTrampolineFile.checkType(session_mt, MICROTHEORY_P);
-            SubLTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
+            SubLSystemTrampolineFile.checkType(utterance_peg, FORT_P);
+            SubLSystemTrampolineFile.checkType(session_mt, MICROTHEORY_P);
+            SubLSystemTrampolineFile.checkType(generation_mt, MICROTHEORY_P);
             thread.resetMultipleValues();
             {
                 SubLObject answer_choices = utterance_has_clarification_options(utterance_peg, session_mt);
@@ -1267,7 +1267,7 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(max_questions, POSITIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(max_questions, POSITIVE_INTEGER_P);
             mysentient_utilities.myselog_info(cconcatenate($str_alt126$Trying_to_get_Salient_Descriptor_, new SubLObject[]{ format_nil.format_nil_s_no_copy(v_term), $str_alt87$_in_, format_nil.format_nil_s_no_copy(session_mt) }));
             {
                 SubLObject question_specs = NIL;
@@ -1285,7 +1285,7 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
                                 {
                                     SubLObject knowledge_gap_formula = rkf_salient_descriptor_datastructures.rkf_salient_descriptor_prompt_formula(prompt);
                                     SubLObject prompt_formula = rkf_salient_descriptor.rkf_sd_remove_nonassertible_conjuncts(knowledge_gap_formula);
-                                    SubLTrampolineFile.checkType(prompt_formula, $sym91$EL_SENTENCE_ASKABLE_);
+                                    SubLSystemTrampolineFile.checkType(prompt_formula, $sym91$EL_SENTENCE_ASKABLE_);
                                     {
                                         SubLObject vars = el_utilities.sentence_free_variables(prompt_formula, UNPROVIDED, UNPROVIDED, UNPROVIDED);
                                         if (NIL == list_utilities.singletonP(vars)) {

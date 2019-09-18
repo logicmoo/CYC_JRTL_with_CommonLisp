@@ -79,7 +79,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class variables extends SubLTranslatedFile {
     public static final SubLFile me = new variables();
@@ -436,12 +436,12 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject variable_id(final SubLObject variable) {
-        SubLTrampolineFile.enforceType(variable, VARIABLE_P);
+        SubLSystemTrampolineFile.enforceType(variable, VARIABLE_P);
         return var_id(variable);
     }
 
     public static SubLObject find_variable_by_id(final SubLObject id) {
-        SubLTrampolineFile.enforceType(id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(id, INTEGERP);
         return get_variable(id);
     }
 
@@ -457,7 +457,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject default_el_var_for_hl_var(final SubLObject variable) {
-        SubLTrampolineFile.enforceType(variable, VARIABLE_P);
+        SubLSystemTrampolineFile.enforceType(variable, VARIABLE_P);
         return default_el_var_for_hl_var_cached(variable);
     }
 
@@ -735,12 +735,12 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defconstant("*DEFAULT-EL-VARIABLE-PREFIX*", $str0$_VAR);
         defconstant("*DTP-VARIABLE*", VARIABLE);
         deflexical("*VARIABLE-MAX*", $int$200);
-        deflexical("*VARIABLE-ARRAY*", SubLTrampolineFile.maybeDefault($variable_array$, $variable_array$, NIL));
-        deflexical("*VAR0*", SubLTrampolineFile.maybeDefault($sym27$_VAR0_, $var0$, NIL));
-        deflexical("*VAR1*", SubLTrampolineFile.maybeDefault($sym28$_VAR1_, $var1$, NIL));
-        deflexical("*VAR2*", SubLTrampolineFile.maybeDefault($sym29$_VAR2_, $var2$, NIL));
-        deflexical("*VAR3*", SubLTrampolineFile.maybeDefault($sym30$_VAR3_, $var3$, NIL));
-        deflexical("*VAR4*", SubLTrampolineFile.maybeDefault($sym31$_VAR4_, $var4$, NIL));
+        deflexical("*VARIABLE-ARRAY*", SubLSystemTrampolineFile.maybeDefault($variable_array$, $variable_array$, NIL));
+        deflexical("*VAR0*", SubLSystemTrampolineFile.maybeDefault($sym27$_VAR0_, $var0$, NIL));
+        deflexical("*VAR1*", SubLSystemTrampolineFile.maybeDefault($sym28$_VAR1_, $var1$, NIL));
+        deflexical("*VAR2*", SubLSystemTrampolineFile.maybeDefault($sym29$_VAR2_, $var2$, NIL));
+        deflexical("*VAR3*", SubLSystemTrampolineFile.maybeDefault($sym30$_VAR3_, $var3$, NIL));
+        deflexical("*VAR4*", SubLSystemTrampolineFile.maybeDefault($sym31$_VAR4_, $var4$, NIL));
         deflexical("*DEFAULT-EL-VAR-FOR-HL-VAR-CACHED-CACHING-STATE*", NIL);
         deflexical("*HL-VAR-FOR-DEFAULT-EL-VAR-CACHING-STATE*", NIL);
         return NIL;

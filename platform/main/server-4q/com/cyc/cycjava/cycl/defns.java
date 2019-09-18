@@ -92,7 +92,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -4439,7 +4439,7 @@ public final class defns extends SubLTranslatedFile {
     }
 
     public static SubLObject init_defns_file() {
-        deflexical("*INDEX-TO-DEFNS-CACHE-VECTOR*", SubLTrampolineFile.maybeDefault($index_to_defns_cache_vector$, $index_to_defns_cache_vector$, NIL));
+        deflexical("*INDEX-TO-DEFNS-CACHE-VECTOR*", SubLSystemTrampolineFile.maybeDefault($index_to_defns_cache_vector$, $index_to_defns_cache_vector$, NIL));
         defconstant("*HAS-SUF-DEFN-CACHE-INDEX*", ZERO_INTEGER);
         defconstant("*HAS-QUOTED-SUF-DEFN-CACHE-INDEX*", ONE_INTEGER);
         defconstant("*IFF-DEFNS-INDEX*", TWO_INTEGER);

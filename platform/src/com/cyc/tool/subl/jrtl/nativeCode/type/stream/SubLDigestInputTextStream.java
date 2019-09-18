@@ -3,6 +3,7 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -53,6 +54,42 @@ public class SubLDigestInputTextStream extends LispObject implements SubLStream,
 		bytes = new byte[131072];
 		buffer = ByteBuffer.wrap(bytes);
 		buffer_size = 131072;
+	}
+
+	/**
+	 * Attempts to read characters into the specified character buffer.
+	 * The buffer is used as a repository of characters as-is: the only
+	 * changes made are the results of a put operation. No flipping or
+	 * rewinding of the buffer is performed.
+	 *
+	 * @param cb the buffer to read characters into
+	 * @return The number of {@code char} values added to the buffer,
+	 *                 or -1 if this source of characters is at its end
+	 * @throws IOException if an I/O error occurs
+	 * @throws NullPointerException if cb is null
+	 * @throws java.nio.ReadOnlyBufferException if cb is a read only buffer
+	 * @since 1.5
+	 */
+	public int read(java.nio.CharBuffer target) throws IOException {
+		int len = target.remaining();
+		char[] cbuf = new char[len];
+		int n = read(cbuf, 0, len);
+		if (n > 0)
+			target.put(cbuf, 0, n);
+		return n;
+	}
+
+	public int read(char[] b, int off, int len) {
+		int curChar = -1;
+		int i = 0;
+		for (int size = off + len; i < size;) {
+			curChar = this.read();
+			if (curChar == -1)
+				break;
+			b[i] = (char) curChar;
+			i++;
+		}
+		return i;
 	}
 
 	@Override

@@ -76,7 +76,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class open_cyc_inference_api extends SubLTranslatedFile {
@@ -315,9 +315,9 @@ public final class open_cyc_inference_api extends SubLTranslatedFile {
 		if (optimize_query_sentence_variablesP == UNPROVIDED) {
 			optimize_query_sentence_variablesP = T;
 		}
-		SubLTrampolineFile.enforceType(sentence, EL_FORMULA_P);
-		SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
-		SubLTrampolineFile.enforceType(v_properties, QUERY_PROPERTIES_P);
+		SubLSystemTrampolineFile.enforceType(sentence, EL_FORMULA_P);
+		SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+		SubLSystemTrampolineFile.enforceType(v_properties, QUERY_PROPERTIES_P);
 		return open_cyc_start_continuable_query_internal(sentence, mt, v_properties, nl_generation_properties, inference_answer_process_function, incremental_resultsP, optimize_query_sentence_variablesP);
 	}
 
@@ -348,7 +348,7 @@ public final class open_cyc_inference_api extends SubLTranslatedFile {
 		if (client == UNPROVIDED) {
 			client = task_processor.get_current_task_processor_client();
 		}
-		SubLTrampolineFile.enforceType(client, STRINGP);
+		SubLSystemTrampolineFile.enforceType(client, STRINGP);
 		SubLObject cdolist_list_var;
 		final SubLObject problem_store_ids = cdolist_list_var = get_problem_store_ids_for_client(client);
 		SubLObject problem_store_id = NIL;
@@ -383,10 +383,10 @@ public final class open_cyc_inference_api extends SubLTranslatedFile {
 		if (incremental_resultsP == UNPROVIDED) {
 			incremental_resultsP = $use_api_task_processor_incremental_resultsP$.getDynamicValue();
 		}
-		SubLTrampolineFile.enforceType(problem_store_id, INTEGERP);
-		SubLTrampolineFile.enforceType(inference_id, INTEGERP);
-		SubLTrampolineFile.enforceType(v_properties, QUERY_PROPERTIES_P);
-		SubLTrampolineFile.enforceType(nl_generation_properties, GENERATE_PHRASE_FOR_JAVA_PROPERTY_LIST_P);
+		SubLSystemTrampolineFile.enforceType(problem_store_id, INTEGERP);
+		SubLSystemTrampolineFile.enforceType(inference_id, INTEGERP);
+		SubLSystemTrampolineFile.enforceType(v_properties, QUERY_PROPERTIES_P);
+		SubLSystemTrampolineFile.enforceType(nl_generation_properties, GENERATE_PHRASE_FOR_JAVA_PROPERTY_LIST_P);
 		return open_cyc_continue_query_guts(problem_store_id, inference_id, v_properties, nl_generation_properties, inference_answer_process_function, incremental_resultsP);
 	}
 
@@ -921,10 +921,10 @@ public final class open_cyc_inference_api extends SubLTranslatedFile {
 		defparameter("*USE-API-TASK-PROCESSOR-INCREMENTAL-RESULTS?*", T);
 		defparameter("*OPEN-CYC-MINIMUM-TIME-BEFORE-SENDING-NEW-ANSWERS*", numeric_date_utilities.elapsed_seconds_to_elapsed_internal_real_time(ONE_INTEGER));
 		defvar("*DEFAULT-OPEN-CYC-NL-GENERATION-PROPERTIES*", NIL);
-		deflexical("*INFERENCE-TO-IPC-QUEUE-MAP*", SubLTrampolineFile.maybeDefault($inference_to_ipc_queue_map$, $inference_to_ipc_queue_map$, () -> dictionary_utilities.new_synchronized_dictionary(UNPROVIDED, UNPROVIDED)));
-		deflexical("*OPENCYC-INFERENCE-OUTPUT*", SubLTrampolineFile.maybeDefault($opencyc_inference_output$, $opencyc_inference_output$, () -> StreamsLow.$standard_output$.getDynamicValue()));
-		deflexical("*SYNCH-FORMAT-LOCK*", SubLTrampolineFile.maybeDefault($synch_format_lock$, $synch_format_lock$, () -> make_lock($str10$_synch_format_lock_)));
-		deflexical("*CLIENT-TO-PROBLEM-STORES-MAP*", SubLTrampolineFile.maybeDefault($client_to_problem_stores_map$, $client_to_problem_stores_map$, () -> dictionary_utilities.new_synchronized_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+		deflexical("*INFERENCE-TO-IPC-QUEUE-MAP*", SubLSystemTrampolineFile.maybeDefault($inference_to_ipc_queue_map$, $inference_to_ipc_queue_map$, () -> dictionary_utilities.new_synchronized_dictionary(UNPROVIDED, UNPROVIDED)));
+		deflexical("*OPENCYC-INFERENCE-OUTPUT*", SubLSystemTrampolineFile.maybeDefault($opencyc_inference_output$, $opencyc_inference_output$, () -> StreamsLow.$standard_output$.getDynamicValue()));
+		deflexical("*SYNCH-FORMAT-LOCK*", SubLSystemTrampolineFile.maybeDefault($synch_format_lock$, $synch_format_lock$, () -> make_lock($str10$_synch_format_lock_)));
+		deflexical("*CLIENT-TO-PROBLEM-STORES-MAP*", SubLSystemTrampolineFile.maybeDefault($client_to_problem_stores_map$, $client_to_problem_stores_map$, () -> dictionary_utilities.new_synchronized_dictionary(symbol_function(EQUAL), UNPROVIDED)));
 		return NIL;
 	}
 

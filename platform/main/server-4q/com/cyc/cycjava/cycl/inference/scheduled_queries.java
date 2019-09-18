@@ -175,7 +175,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3318,17 +3318,17 @@ public final class scheduled_queries extends SubLTranslatedFile {
         deflexical("*SCHEDULED-QUERY-QUEUE*", $UNINITIALIZED);
         deflexical("*SCHEDULED-QUERY-QUEUE-LOCK*", make_lock($$$Scheduled_Query_Queue_Lock));
         deflexical("*UT-OFFSET-TO-UNIX-TIME*", $int$2208988800);
-        deflexical("*SCHEDULED-QUERY-INDEX*", SubLTrampolineFile.maybeDefault($scheduled_query_index$, $scheduled_query_index$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*SCHEDULED-QUERY-INDEX*", SubLSystemTrampolineFile.maybeDefault($scheduled_query_index$, $scheduled_query_index$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
         deflexical("*IN-PROGRESS-QUERIES*", NIL);
         deflexical("*COMPLETED-QUERIES*", NIL);
-        deflexical("*MAX-NUMBER-OF-SIMULTANEOUS-SCHEDULED-QUERIES*", SubLTrampolineFile.maybeDefault($max_number_of_simultaneous_scheduled_queries$, $max_number_of_simultaneous_scheduled_queries$, ONE_INTEGER));
-        deflexical("*ACTIVE-SCHEDULED-QUERIES*", SubLTrampolineFile.maybeDefault($active_scheduled_queries$, $active_scheduled_queries$, NIL));
-        deflexical("*ABORTED-SCHEDULED-QUERIES*", SubLTrampolineFile.maybeDefault($aborted_scheduled_queries$, $aborted_scheduled_queries$, NIL));
+        deflexical("*MAX-NUMBER-OF-SIMULTANEOUS-SCHEDULED-QUERIES*", SubLSystemTrampolineFile.maybeDefault($max_number_of_simultaneous_scheduled_queries$, $max_number_of_simultaneous_scheduled_queries$, ONE_INTEGER));
+        deflexical("*ACTIVE-SCHEDULED-QUERIES*", SubLSystemTrampolineFile.maybeDefault($active_scheduled_queries$, $active_scheduled_queries$, NIL));
+        deflexical("*ABORTED-SCHEDULED-QUERIES*", SubLSystemTrampolineFile.maybeDefault($aborted_scheduled_queries$, $aborted_scheduled_queries$, NIL));
         deflexical("*SCHEDULED-QUERY-CLEANUP-LOCK*", make_lock($$$Scheduled_Query_Cleanup_Lock));
         deflexical("*SCHEDULED-QUERY-RESULTS-MESSAGE-TEMPLATE*", $str136$The_following_query_has_been_run_);
-        deflexical("*SCHEDULED-QUERY-DAEMON*", SubLTrampolineFile.maybeDefault($scheduled_query_daemon$, $scheduled_query_daemon$, () -> misc_utilities.uninitialized()));
+        deflexical("*SCHEDULED-QUERY-DAEMON*", SubLSystemTrampolineFile.maybeDefault($scheduled_query_daemon$, $scheduled_query_daemon$, () -> misc_utilities.uninitialized()));
         deflexical("*SCHEDULED-QUERY-COMPUTER-INFO-MT*", $$QuerySchedulerDaemonComputersMt);
-        deflexical("*RUN-SCHEDULED-QUERIES-ON-THIS-IMAGE?*", SubLTrampolineFile.maybeDefault($sym189$_RUN_SCHEDULED_QUERIES_ON_THIS_IMAGE__, $run_scheduled_queries_on_this_imageP$, NIL));
+        deflexical("*RUN-SCHEDULED-QUERIES-ON-THIS-IMAGE?*", SubLSystemTrampolineFile.maybeDefault($sym189$_RUN_SCHEDULED_QUERIES_ON_THIS_IMAGE__, $run_scheduled_queries_on_this_imageP$, NIL));
         deflexical("*SCHEDULED-QUERY-RUNNER-ISG*", integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED));
         defparameter("*SQD-NEW-FORTS-TO-CLEANUP*", misc_utilities.uninitialized());
         return NIL;

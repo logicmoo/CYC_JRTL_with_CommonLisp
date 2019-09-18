@@ -205,7 +205,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2367,7 +2367,7 @@ public final class owlification extends SubLTranslatedFile {
         SubLObject owl_pred = list_utilities.alist_lookup(owl_cycl_predicate_table(UNPROVIDED), pred, UNPROVIDED, UNPROVIDED);
         if ((NIL == owl_pred) || (NIL != subl_promotions.memberP(pred, $owl_cycl_predicates_to_use_as_is$.getGlobalValue(), symbol_function(EQUAL), UNPROVIDED))) {
             if (NIL == misc_utilities.initialized_p($owl_asents_to_export$.getDynamicValue(thread))) {
-                SubLTrampolineFile.enforceType(pred, $sym146$FORT_IN_OWL_EXPORT_);
+                SubLSystemTrampolineFile.enforceType(pred, $sym146$FORT_IN_OWL_EXPORT_);
             }
             final SubLObject _prev_bind_0 = $owl_use_entity_referencesP$.currentBinding(thread);
             try {
@@ -2382,7 +2382,7 @@ public final class owlification extends SubLTranslatedFile {
 
     public static SubLObject owl_cyclify_arg1(final SubLObject arg1) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(arg1, $sym147$OWLIFIABLE_ARG1_);
+        SubLSystemTrampolineFile.enforceType(arg1, $sym147$OWLIFIABLE_ARG1_);
         SubLObject uri = NIL;
         SubLObject term_type = NIL;
         final SubLObject _prev_bind_0 = $owl_use_entity_referencesP$.currentBinding(thread);
@@ -2555,7 +2555,7 @@ public final class owlification extends SubLTranslatedFile {
     }
 
     public static SubLObject stringify_uri_fort(final SubLObject uri_fort) {
-        SubLTrampolineFile.enforceType(uri_fort, URI_FORT_P);
+        SubLSystemTrampolineFile.enforceType(uri_fort, URI_FORT_P);
         return stringify_uri_fort_internal(uri_fort);
     }
 
@@ -2856,7 +2856,7 @@ public final class owlification extends SubLTranslatedFile {
     }
 
     public static SubLObject find_inverse_binary_predicate(final SubLObject predicate) {
-        SubLTrampolineFile.enforceType(predicate, $sym219$BINARY_PREDICATE_);
+        SubLSystemTrampolineFile.enforceType(predicate, $sym219$BINARY_PREDICATE_);
         return ask_utilities.query_variable($inverse_binary_predicate_var$.getGlobalValue(), inverse_binary_predicate_sentence(predicate), $$UniversalVocabularyMt, $list220).first();
     }
 
@@ -2910,7 +2910,7 @@ public final class owlification extends SubLTranslatedFile {
     }
 
     public static SubLObject owl_term_type(final SubLObject v_term) {
-        SubLTrampolineFile.enforceType(v_term, $sym147$OWLIFIABLE_ARG1_);
+        SubLSystemTrampolineFile.enforceType(v_term, $sym147$OWLIFIABLE_ARG1_);
         if (NIL != atomic_sentenceP(v_term)) {
             return rdf_utilities.rdf_name($$$Statement);
         }

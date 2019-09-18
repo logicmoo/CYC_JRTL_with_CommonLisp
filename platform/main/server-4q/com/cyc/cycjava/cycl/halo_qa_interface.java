@@ -94,7 +94,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -548,342 +548,342 @@ public final class halo_qa_interface extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject halo_query_spec_cycl_id(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField2();
     }
 
     public static final SubLObject halo_query_spec_number(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField3();
     }
 
     public static final SubLObject halo_query_spec_formula(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField4();
     }
 
     public static final SubLObject halo_query_spec_query_a(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField5();
     }
 
     public static final SubLObject halo_query_spec_neg_query_a(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField6();
     }
 
     public static final SubLObject halo_query_spec_query_b(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField7();
     }
 
     public static final SubLObject halo_query_spec_neg_query_b(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField8();
     }
 
     public static final SubLObject halo_query_spec_query_c(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField9();
     }
 
     public static final SubLObject halo_query_spec_neg_query_c(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField10();
     }
 
     public static final SubLObject halo_query_spec_query_d(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField11();
     }
 
     public static final SubLObject halo_query_spec_neg_query_d(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField12();
     }
 
     public static final SubLObject halo_query_spec_query_e(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField13();
     }
 
     public static final SubLObject halo_query_spec_neg_query_e(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField14();
     }
 
     public static final SubLObject halo_query_spec_bindings(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField15();
     }
 
     public static final SubLObject halo_query_spec_answer(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField16();
     }
 
     public static final SubLObject halo_query_spec_answer_just(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField17();
     }
 
     public static final SubLObject halo_query_spec_correct_answer(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField18();
     }
 
     public static final SubLObject halo_query_spec_time(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField19();
     }
 
     public static final SubLObject halo_query_spec_mt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.getField20();
     }
 
     public static final SubLObject halo_query_spec_comment(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$comment;
     }
 
     public static final SubLObject halo_query_spec_static_properties(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$static_properties;
     }
 
     public static final SubLObject halo_query_spec_dynamic_properties(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$dynamic_properties;
     }
 
     public static final SubLObject halo_query_spec_multiple_choiceP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$multiple_choiceP;
     }
 
     public static final SubLObject halo_query_spec_generate_consequentP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$generate_consequentP;
     }
 
     public static final SubLObject halo_query_spec_max_number_of_results(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$max_number_of_results;
     }
 
     public static final SubLObject halo_query_spec_back_chaining(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$back_chaining;
     }
 
     public static final SubLObject halo_query_spec_time_cutoff_secs(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$time_cutoff_secs;
     }
 
     public static final SubLObject halo_query_spec_max_depth(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$max_depth;
     }
 
     public static final SubLObject halo_query_spec_removal_cost_cutoff(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$removal_cost_cutoff;
     }
 
     public static final SubLObject halo_query_spec_enable_negation_by_failure(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$enable_negation_by_failure;
     }
 
     public static final SubLObject halo_query_spec_enable_hl_predicate_backchaining(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$enable_hl_predicate_backchaining;
     }
 
     public static final SubLObject halo_query_spec_enable_cache_backwards_query_results(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$enable_cache_backwards_query_results;
     }
 
     public static final SubLObject halo_query_spec_enable_unbound_predicate_backchaining(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$enable_unbound_predicate_backchaining;
     }
 
     public static final SubLObject halo_query_spec_intermediate_step_validation_level(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$intermediate_step_validation_level;
     }
 
     public static final SubLObject _csetf_halo_query_spec_cycl_id(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_number(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_formula(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_query_a(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_neg_query_a(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_query_b(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_neg_query_b(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_query_c(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_neg_query_c(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField10(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_query_d(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField11(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_neg_query_d(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField12(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_query_e(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField13(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_neg_query_e(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField14(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_bindings(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField15(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_answer(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField16(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_answer_just(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField17(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_correct_answer(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField18(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_time(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField19(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_mt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return v_object.setField20(value);
     }
 
     public static final SubLObject _csetf_halo_query_spec_comment(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$comment = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_static_properties(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$static_properties = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_dynamic_properties(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$dynamic_properties = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_multiple_choiceP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$multiple_choiceP = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_generate_consequentP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$generate_consequentP = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_max_number_of_results(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$max_number_of_results = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_back_chaining(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$back_chaining = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_time_cutoff_secs(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$time_cutoff_secs = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_max_depth(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$max_depth = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_removal_cost_cutoff(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$removal_cost_cutoff = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_enable_negation_by_failure(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$enable_negation_by_failure = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_enable_hl_predicate_backchaining(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$enable_hl_predicate_backchaining = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_enable_cache_backwards_query_results(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$enable_cache_backwards_query_results = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_enable_unbound_predicate_backchaining(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$enable_unbound_predicate_backchaining = value;
     }
 
     public static final SubLObject _csetf_halo_query_spec_intermediate_step_validation_level(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_QUERY_SPECIFICATION_P);
         return ((halo_qa_interface.$halo_query_specification_native) (v_object)).$intermediate_step_validation_level = value;
     }
 
@@ -1140,9 +1140,9 @@ public final class halo_qa_interface extends SubLTranslatedFile implements V02 {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.checkType(constant_id, CYCL_DENOTATIONAL_TERM_P);
+        SubLSystemTrampolineFile.checkType(constant_id, CYCL_DENOTATIONAL_TERM_P);
         if (NIL != mt) {
-            SubLTrampolineFile.checkType(mt, MICROTHEORY_P);
+            SubLSystemTrampolineFile.checkType(mt, MICROTHEORY_P);
         }
         {
             SubLObject test_atom = halo_extract_test_atom(constant_id);
@@ -1426,42 +1426,42 @@ public final class halo_qa_interface extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject halo_just_answer(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
         return v_object.getField2();
     }
 
     public static final SubLObject halo_just_supportingP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
         return v_object.getField3();
     }
 
     public static final SubLObject halo_just_multiple_choiceP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
         return v_object.getField4();
     }
 
     public static final SubLObject halo_just_text(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
         return v_object.getField5();
     }
 
     public static final SubLObject _csetf_halo_just_answer(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_halo_just_supportingP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_halo_just_multiple_choiceP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_halo_just_text(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_JUSTIFICATION_P);
         return v_object.setField5(value);
     }
 
@@ -2230,92 +2230,92 @@ public final class halo_qa_interface extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject halo_stat_name(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.getField2();
     }
 
     public static final SubLObject halo_stat_correct(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.getField3();
     }
 
     public static final SubLObject halo_stat_wrong(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.getField4();
     }
 
     public static final SubLObject halo_stat_partial(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.getField5();
     }
 
     public static final SubLObject halo_stat_unknown(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.getField6();
     }
 
     public static final SubLObject halo_stat_encoded(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.getField7();
     }
 
     public static final SubLObject halo_stat_unencoded(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.getField8();
     }
 
     public static final SubLObject halo_stat_time(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.getField9();
     }
 
     public static final SubLObject halo_stat_total(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.getField10();
     }
 
     public static final SubLObject _csetf_halo_stat_name(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_halo_stat_correct(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_halo_stat_wrong(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_halo_stat_partial(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_halo_stat_unknown(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_halo_stat_encoded(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_halo_stat_unencoded(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_halo_stat_time(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_halo_stat_total(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
+        SubLSystemTrampolineFile.checkType(v_object, HALO_STATISTICS_P);
         return v_object.setField10(value);
     }
 
@@ -2483,7 +2483,7 @@ public final class halo_qa_interface extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject halo_calculate_query_correctness(SubLObject query_spec) {
-        SubLTrampolineFile.checkType(query_spec, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(query_spec, HALO_QUERY_SPECIFICATION_P);
         if (NIL == halo_query_spec_formula(query_spec)) {
             return $str_alt311$_nbsp;
         }
@@ -2739,7 +2739,7 @@ public final class halo_qa_interface extends SubLTranslatedFile implements V02 {
      * Should QUERY-SPEC be treated as a conditional, hypothesizing any neg-lits?
      */
     public static final SubLObject halo_query_specification_conditional_sentenceP(SubLObject query_spec) {
-        SubLTrampolineFile.checkType(query_spec, HALO_QUERY_SPECIFICATION_P);
+        SubLSystemTrampolineFile.checkType(query_spec, HALO_QUERY_SPECIFICATION_P);
         {
             SubLObject formula = halo_query_spec_formula(query_spec);
             return inference_strategist.inference_conditional_sentence_p(formula);

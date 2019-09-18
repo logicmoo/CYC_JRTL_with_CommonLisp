@@ -219,7 +219,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3208,7 +3208,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
         } finally {
             api_control_vars.$the_cyclist$.rebind(_prev_bind_0, thread);
         }
-        if (((NIL != uri) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == web_utilities.uri_p(uri, UNPROVIDED))) {
+        if (((NIL != uri) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == web_utilities.uri_p(uri, UNPROVIDED))) {
             throw new AssertionError(uri);
         }
         final SubLObject source_type = (NIL != file_utilities.file_existsP(source)) ? $FILE : $URL;
@@ -3762,7 +3762,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
 
     public static SubLObject set_owl_pred_info_comment(final SubLObject pred_info, final SubLObject comment) {
         assert NIL != owl_pred_info_p(pred_info) : "owl_to_cycl.owl_pred_info_p(pred_info) " + "CommonSymbols.NIL != owl_to_cycl.owl_pred_info_p(pred_info) " + pred_info;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         _csetf_opi_comment(pred_info, comment);
@@ -3778,7 +3778,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
 
     public static SubLObject set_owl_pred_info_range(final SubLObject pred_info, final SubLObject range) {
         assert NIL != owl_pred_info_p(pred_info) : "owl_to_cycl.owl_pred_info_p(pred_info) " + "CommonSymbols.NIL != owl_to_cycl.owl_pred_info_p(pred_info) " + pred_info;
-        if (((NIL != range) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == owl_external_value_specification_p(range))) {
+        if (((NIL != range) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == owl_external_value_specification_p(range))) {
             throw new AssertionError(range);
         }
         _csetf_opi_range(pred_info, range);
@@ -4420,7 +4420,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
     public static SubLObject find_or_create_owl_ontology_for_uri_internal(final SubLObject uri, final SubLObject import_parameters, final SubLObject problem_store) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != web_utilities.uri_p(uri, UNPROVIDED) : "web_utilities.uri_p(uri, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != web_utilities.uri_p(uri, CommonSymbols.UNPROVIDED) " + uri;
-        if (((NIL != import_parameters) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == owl_import_parameters_p(import_parameters))) {
+        if (((NIL != import_parameters) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == owl_import_parameters_p(import_parameters))) {
             throw new AssertionError(import_parameters);
         }
         SubLObject ontology = ((NIL != import_parameters) && uri.equal(owl_import_parameters_base_uri(import_parameters))) ? owl_import_parameters_ontology(import_parameters) : NIL;
@@ -7910,7 +7910,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
 
     public static SubLObject set_owl_term_info_comment(final SubLObject term_info, final SubLObject comment) {
         assert NIL != owl_term_info_p(term_info) : "owl_to_cycl.owl_term_info_p(term_info) " + "CommonSymbols.NIL != owl_to_cycl.owl_term_info_p(term_info) " + term_info;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         _csetf_oti_comment(term_info, comment);
@@ -9986,7 +9986,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
     }
 
     public static SubLObject init_owl_to_cycl_file() {
-        deflexical("*OWL-IMPORTER-V1-VERSION-NUMBER*", SubLTrampolineFile.maybeDefault($sym0$_OWL_IMPORTER_V1_VERSION_NUMBER_, $owl_importer_v1_version_number$, NIL));
+        deflexical("*OWL-IMPORTER-V1-VERSION-NUMBER*", SubLSystemTrampolineFile.maybeDefault($sym0$_OWL_IMPORTER_V1_VERSION_NUMBER_, $owl_importer_v1_version_number$, NIL));
         defparameter("*OWL-IMPORTER*", NIL);
         deflexical("*OWL-MERGE-MT*", $$OWLMappingMt);
         deflexical("*OWL-TERM-NAMES-PRECEDED-BY-ID*", $list49);
@@ -10012,11 +10012,11 @@ public final class owl_to_cycl extends SubLTranslatedFile {
         defparameter("*OWL-ALLOW-FIND-VIA-CREATION?*", NIL);
         deflexical("*CYC-PROPERTIES-TO-NOT-IMPORT*", $list392);
         deflexical("*OWL-FOUND-TERMS*", dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED));
-        deflexical("*OWL-OE-QUEUES*", SubLTrampolineFile.maybeDefault($owl_oe_queues$, $owl_oe_queues$, NIL));
-        deflexical("*OWL-OE-DAEMON*", SubLTrampolineFile.maybeDefault($owl_oe_daemon$, $owl_oe_daemon$, NIL));
+        deflexical("*OWL-OE-QUEUES*", SubLSystemTrampolineFile.maybeDefault($owl_oe_queues$, $owl_oe_queues$, NIL));
+        deflexical("*OWL-OE-DAEMON*", SubLSystemTrampolineFile.maybeDefault($owl_oe_daemon$, $owl_oe_daemon$, NIL));
         deflexical("*OWL-OE-QUEUE-MARKER*", CHAR_vertical);
         deflexical("*OWL-OE-QUEUE-END-MARKER*", CHAR_exclamation);
-        deflexical("*OWL-NODE-ID-INDEX*", SubLTrampolineFile.maybeDefault($owl_node_id_index$, $owl_node_id_index$, NIL));
+        deflexical("*OWL-NODE-ID-INDEX*", SubLSystemTrampolineFile.maybeDefault($owl_node_id_index$, $owl_node_id_index$, NIL));
         deflexical("*NOTE-FOUND-TERM-RESOLUTION-CACHING-STATE*", NIL);
         defparameter("*CREATE-ANONYMOUS-OWL-TERMS?*", NIL);
         deflexical("*OWL-RESTRICTION-COLLECTION-TEMPLATES*", list(bq_cons(owl_utilities.owl_name($$$allValuesFrom), $list509), bq_cons(owl_utilities.owl_name($$$someValuesFrom), $list510), bq_cons(owl_utilities.owl_name($$$hasValue), $list511), bq_cons(owl_utilities.owl_name($$$cardinality), $list512), bq_cons(owl_utilities.owl_name($$$maxCardinality), $list513), bq_cons(owl_utilities.owl_name($$$minCardinality), $list514)));
@@ -10025,7 +10025,7 @@ public final class owl_to_cycl extends SubLTranslatedFile {
         deflexical("*OWL-INTERVAL-DATATYPES*", $list623);
         deflexical("*XML-NAME-CACHING-STATE*", NIL);
         defconstant("*DTP-OWL-IMPORTER*", OWL_IMPORTER);
-        deflexical("*OWL-IMPORTER-ID-INDEX*", SubLTrampolineFile.maybeDefault($owl_importer_id_index$, $owl_importer_id_index$, NIL));
+        deflexical("*OWL-IMPORTER-ID-INDEX*", SubLSystemTrampolineFile.maybeDefault($owl_importer_id_index$, $owl_importer_id_index$, NIL));
         deflexical("*SWEET-ROOT*", $str675$http___sweet_jpl_nasa_gov_ontolog);
         deflexical("*SWEET-ONTOLOGIES*", $list676);
         return NIL;

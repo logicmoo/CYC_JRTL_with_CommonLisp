@@ -25,7 +25,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -191,7 +191,7 @@ public final class ctest_macros extends SubLTranslatedFile {
     }
 
     public static SubLObject init_ctest_macros_file() {
-        deflexical("*KCT-METRIC-EVALUATOR-METHODS*", SubLTrampolineFile.maybeDefault($kct_metric_evaluator_methods$, $kct_metric_evaluator_methods$, NIL));
+        deflexical("*KCT-METRIC-EVALUATOR-METHODS*", SubLSystemTrampolineFile.maybeDefault($kct_metric_evaluator_methods$, $kct_metric_evaluator_methods$, NIL));
         return NIL;
     }
 

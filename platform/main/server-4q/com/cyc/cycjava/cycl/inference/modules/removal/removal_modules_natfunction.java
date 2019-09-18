@@ -63,7 +63,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -912,7 +912,7 @@ public final class removal_modules_natfunction extends SubLTranslatedFile {
         deflexical("*DEFAULT-NAT-ARGUMENT-CHECK-COST*", $hl_module_check_cost$.getDynamicValue());
         defparameter("*NAT-ARGUMENT-CODE-RULE*", $list20);
         defparameter("*NAT-ARGUMENTS-EQUAL-CODE-RULE*", $list32);
-        deflexical("*NART-ID-DEFINING-MT*", SubLTrampolineFile.maybeDefault($nart_id_defining_mt$, $nart_id_defining_mt$, $$BaseKB));
+        deflexical("*NART-ID-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($nart_id_defining_mt$, $nart_id_defining_mt$, $$BaseKB));
         deflexical("*NART-ID-CHECK-DEFAULT-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*NART-ID-UNIFY-DEFAULT-COST*", ONE_INTEGER);
         return NIL;

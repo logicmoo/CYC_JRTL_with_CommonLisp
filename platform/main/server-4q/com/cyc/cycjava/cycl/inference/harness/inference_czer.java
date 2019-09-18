@@ -106,7 +106,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2055,7 +2055,7 @@ public final class inference_czer extends SubLTranslatedFile {
         defparameter("*INFERENCE-CZER-FIXED-VARS-TABLE*", misc_utilities.uninitialized());
         defparameter("*INFERENCE-CZER-NEXT-FIXED-VAR-ID*", misc_utilities.uninitialized());
         defparameter("*INFERENCE-CZER-AT-LEAST-PARTIALLY-COMMUTATIVE-RELATIONS-ALIST*", misc_utilities.uninitialized());
-        deflexical("*VARIABLE-TOKEN*", SubLTrampolineFile.maybeDefault($variable_token$, $variable_token$, () -> make_symbol($$$var)));
+        deflexical("*VARIABLE-TOKEN*", SubLSystemTrampolineFile.maybeDefault($variable_token$, $variable_token$, () -> make_symbol($$$var)));
         defparameter("*LARGEST-HL-VAR-NUM-SO-FAR*", $LAMBDA);
         defparameter("*HL-VAR-CONTIGUITY-ALIST*", $LAMBDA);
         return NIL;

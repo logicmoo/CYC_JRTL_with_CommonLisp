@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -528,9 +528,9 @@ public final class tersifier extends SubLTranslatedFile {
 
     public static SubLObject init_tersifier_file() {
         deflexical("*CONSTANTS-TO-IGNORE-FOR-CONTRACTION-HT*", $list2);
-        deflexical("*CONTRACTION-CONSTANT-HT*", SubLTrampolineFile.maybeDefault($contraction_constant_ht$, $contraction_constant_ht$, NIL));
-        deflexical("*CONTRACTION-CHECKSUM-HT*", SubLTrampolineFile.maybeDefault($contraction_checksum_ht$, $contraction_checksum_ht$, NIL));
-        deflexical("*CANON-EXPANSION-HT*", SubLTrampolineFile.maybeDefault($canon_expansion_ht$, $canon_expansion_ht$, NIL));
+        deflexical("*CONTRACTION-CONSTANT-HT*", SubLSystemTrampolineFile.maybeDefault($contraction_constant_ht$, $contraction_constant_ht$, NIL));
+        deflexical("*CONTRACTION-CHECKSUM-HT*", SubLSystemTrampolineFile.maybeDefault($contraction_checksum_ht$, $contraction_checksum_ht$, NIL));
+        deflexical("*CANON-EXPANSION-HT*", SubLSystemTrampolineFile.maybeDefault($canon_expansion_ht$, $canon_expansion_ht$, NIL));
         defparameter("*CURRENT-GENERIC-ARG-NUM*", ZERO_INTEGER);
         return NIL;
     }

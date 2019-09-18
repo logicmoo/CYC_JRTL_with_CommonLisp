@@ -83,7 +83,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class enumerations extends SubLTranslatedFile {
     public static final SubLFile me = new enumerations();
@@ -1164,10 +1164,10 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_enumerations_file() {
         defconstant("*ENUMERATIONS-INITIAL-HASHTABLE-SIZE*", $int$100);
         defparameter("*ENUMERATIONS-TABLE-UPDATE-LOCK*", make_lock($$$Enumerations_Table_Lock));
-        deflexical("*ENUMERATIONS-TABLE*", SubLTrampolineFile.maybeDefault($enumerations_table$, $enumerations_table$, () -> make_hash_table($enumerations_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
+        deflexical("*ENUMERATIONS-TABLE*", SubLSystemTrampolineFile.maybeDefault($enumerations_table$, $enumerations_table$, () -> make_hash_table($enumerations_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
         defconstant("*ENUM-VALUES-INITIAL-HASHTABLE-SIZE*", $int$200);
         defparameter("*ENUM-VALUES-TABLE-UPDATE-LOCK*", make_lock($str4$Enum_Values_Table_Lock));
-        deflexical("*ENUM-VALUES-TABLE*", SubLTrampolineFile.maybeDefault($enum_values_table$, $enum_values_table$, () -> make_hash_table($enum_values_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
+        deflexical("*ENUM-VALUES-TABLE*", SubLSystemTrampolineFile.maybeDefault($enum_values_table$, $enum_values_table$, () -> make_hash_table($enum_values_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-ENUMERATION*", ENUMERATION);
         return NIL;
     }

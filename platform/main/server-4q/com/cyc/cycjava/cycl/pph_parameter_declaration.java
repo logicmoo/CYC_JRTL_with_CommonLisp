@@ -41,7 +41,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -408,7 +408,7 @@ public final class pph_parameter_declaration extends SubLTranslatedFile {
     }
 
     public static SubLObject init_pph_parameter_declaration_file() {
-        deflexical("*PPH-PARAMETER-DECLARATIONS*", SubLTrampolineFile.maybeDefault($pph_parameter_declarations$, $pph_parameter_declarations$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*PPH-PARAMETER-DECLARATIONS*", SubLSystemTrampolineFile.maybeDefault($pph_parameter_declarations$, $pph_parameter_declarations$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         deflexical("*PPH-PARAMETER-DECLARATION-KEYWORDS*", $list45);
         deflexical("*PPH-PARAMETER-TYPES*", $list46);
         return NIL;

@@ -58,7 +58,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1299,8 +1299,8 @@ public final class concept_filter extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = $concept_filter_default_mt$.getDynamicValue();
         }
-        SubLTrampolineFile.enforceType(v_set, CYCL_TERM_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(v_set, CYCL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
         if (NIL != valid_constantP($const92$ConceptFilterSpecificationWithMtF, UNPROVIDED)) {
             return listS($const92$ConceptFilterSpecificationWithMtF, v_set, $list93);
         }
@@ -1311,8 +1311,8 @@ public final class concept_filter extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = $concept_filter_default_mt$.getDynamicValue();
         }
-        SubLTrampolineFile.enforceType(collection, $sym95$ISA_COLLECTION_);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(collection, $sym95$ISA_COLLECTION_);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
         if (NIL != valid_constantP($const92$ConceptFilterSpecificationWithMtF, UNPROVIDED)) {
             return list($const92$ConceptFilterSpecificationWithMtF, list($$TheSetOf, $sym96$_TERM, list($$isa, $sym96$_TERM, collection)), $$ConceptOnlyFilterParameter, $$TriggerFromConcept, mt);
         }
@@ -1323,8 +1323,8 @@ public final class concept_filter extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = $concept_filter_default_mt$.getDynamicValue();
         }
-        SubLTrampolineFile.enforceType(collection, $sym95$ISA_COLLECTION_);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(collection, $sym95$ISA_COLLECTION_);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
         if (NIL != valid_constantP($const92$ConceptFilterSpecificationWithMtF, UNPROVIDED)) {
             return list($const92$ConceptFilterSpecificationWithMtF, list($$TheSetOf, $sym96$_TERM, list($$genls, $sym96$_TERM, collection)), $$ConceptOnlyFilterParameter, $$TriggerFromConcept, mt);
         }

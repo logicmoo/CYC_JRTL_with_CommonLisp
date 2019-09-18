@@ -77,7 +77,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2664,13 +2664,13 @@ public final class classes extends SubLTranslatedFile {
         defconstant("*CLASSES-CLASS-SLOT-ACCESS-VIOLATION*", $str0$Cannot_access__A_slot__S_from_cla);
         defconstant("*CLASSES-INITIAL-HASHTABLE-SIZE*", $int$800);
         defparameter("*CLASSES-CLASS-TABLE-UPDATE-LOCK*", make_lock($$$Class_Table_Update_Lock));
-        deflexical("*CLASSES-CLASS-TABLE*", SubLTrampolineFile.maybeDefault($classes_class_table$, $classes_class_table$, () -> make_hash_table($classes_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
+        deflexical("*CLASSES-CLASS-TABLE*", SubLSystemTrampolineFile.maybeDefault($classes_class_table$, $classes_class_table$, () -> make_hash_table($classes_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
         defparameter("*CLASSES-VALID-CLASS-PROPERTIES*", $list4);
         defparameter("*CLASSES-VALID-SLOT-PROPERTIES*", $list5);
         defparameter("*CLASSES-VALID-METHOD-INTERFACE-TYPES*", $list6);
         defparameter("*CLASSES-VALID-METHOD-PROPERTIES*", $list7);
-        deflexical("*CLASSES-ALWAYS-GENERATE-BEFORE-LISTENERS*", SubLTrampolineFile.maybeDefault($classes_always_generate_before_listeners$, $classes_always_generate_before_listeners$, NIL));
-        deflexical("*CLASSES-ALWAYS-GENERATE-AFTER-LISTENERS*", SubLTrampolineFile.maybeDefault($classes_always_generate_after_listeners$, $classes_always_generate_after_listeners$, NIL));
+        deflexical("*CLASSES-ALWAYS-GENERATE-BEFORE-LISTENERS*", SubLSystemTrampolineFile.maybeDefault($classes_always_generate_before_listeners$, $classes_always_generate_before_listeners$, NIL));
+        deflexical("*CLASSES-ALWAYS-GENERATE-AFTER-LISTENERS*", SubLSystemTrampolineFile.maybeDefault($classes_always_generate_after_listeners$, $classes_always_generate_after_listeners$, NIL));
         defparameter("*CLASSES-NEW-CLASS-CURRENT*", NIL);
         defparameter("*CURCLASS*", NIL);
         return NIL;

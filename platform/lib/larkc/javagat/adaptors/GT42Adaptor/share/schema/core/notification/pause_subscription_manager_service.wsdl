@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="PausableSubscriptionManagerService" targetNamespace="http://wsrf.globus.org/core/notification/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://wsrf.globus.org/core/notification/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://wsrf.globus.org/core/notification/bindings" location="pause_subscription_manager_bindings.wsdl"/>
-  <wsdl:service name="PausableSubscriptionManagerService">
-    <wsdl:port name="PausableSubscriptionManagerPort" binding="binding:PausableSubscriptionManagerSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>

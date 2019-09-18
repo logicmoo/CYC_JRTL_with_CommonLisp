@@ -67,7 +67,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -156,37 +156,37 @@ public final class mysentient_utilities extends SubLTranslatedFile implements V0
     }
 
     public static final SubLObject myselog_info(SubLObject message) {
-        SubLTrampolineFile.checkType(message, STRINGP);
+        SubLSystemTrampolineFile.checkType(message, STRINGP);
         return myselog_append($INFO, message, get_universal_time());
     }
 
     public static final SubLObject myselog_debug(SubLObject message) {
-        SubLTrampolineFile.checkType(message, STRINGP);
+        SubLSystemTrampolineFile.checkType(message, STRINGP);
         return myselog_append($DEBUG, message, get_universal_time());
     }
 
     public static final SubLObject myselog_error(SubLObject message) {
-        SubLTrampolineFile.checkType(message, STRINGP);
+        SubLSystemTrampolineFile.checkType(message, STRINGP);
         return myselog_append($ERROR, message, get_universal_time());
     }
 
     public static final SubLObject myselog_fine(SubLObject message) {
-        SubLTrampolineFile.checkType(message, STRINGP);
+        SubLSystemTrampolineFile.checkType(message, STRINGP);
         return myselog_append($FINE, message, get_universal_time());
     }
 
     public static final SubLObject myselog_finer(SubLObject message) {
-        SubLTrampolineFile.checkType(message, STRINGP);
+        SubLSystemTrampolineFile.checkType(message, STRINGP);
         return myselog_append($FINER, message, get_universal_time());
     }
 
     public static final SubLObject myselog_finest(SubLObject message) {
-        SubLTrampolineFile.checkType(message, STRINGP);
+        SubLSystemTrampolineFile.checkType(message, STRINGP);
         return myselog_append($FINEST, message, get_universal_time());
     }
 
     public static final SubLObject myselog_warn(SubLObject message) {
-        SubLTrampolineFile.checkType(message, STRINGP);
+        SubLSystemTrampolineFile.checkType(message, STRINGP);
         return myselog_append($WARN, message, get_universal_time());
     }
 
@@ -309,9 +309,9 @@ public final class mysentient_utilities extends SubLTranslatedFile implements V0
     public static final SubLObject myselog_append(SubLObject category, SubLObject message, SubLObject timestamp) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(category, SYMBOLP);
-            SubLTrampolineFile.checkType(message, STRINGP);
-            SubLTrampolineFile.checkType(timestamp, NUMBERP);
+            SubLSystemTrampolineFile.checkType(category, SYMBOLP);
+            SubLSystemTrampolineFile.checkType(message, STRINGP);
+            SubLSystemTrampolineFile.checkType(timestamp, NUMBERP);
             if (NIL != $mysentient_logging_is_enabledP$.getDynamicValue(thread)) {
                 {
                     SubLObject record = myselog_construct_event_record(category, message, timestamp);
@@ -665,8 +665,8 @@ public final class mysentient_utilities extends SubLTranslatedFile implements V0
         if (key == UNPROVIDED) {
             key = symbol_function(IDENTITY);
         }
-        SubLTrampolineFile.checkType(results, LISTP);
-        SubLTrampolineFile.checkType(key, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.checkType(results, LISTP);
+        SubLSystemTrampolineFile.checkType(key, FUNCTION_SPEC_P);
         {
             SubLObject survivors = NIL;
             SubLObject filtered_indices = NIL;
@@ -884,7 +884,7 @@ public final class mysentient_utilities extends SubLTranslatedFile implements V0
     public static final SubLObject myse_summary_sentence(SubLObject v_term) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_term, FORT_P);
+            SubLSystemTrampolineFile.checkType(v_term, FORT_P);
             {
                 SubLObject summary_sentences = rkf_concept_clarifier.rkf_clarifying_sentences(v_term, pph_vars.$pph_domain_mt$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED, UNPROVIDED);
                 SubLObject ans = NIL;
@@ -1052,8 +1052,8 @@ public final class mysentient_utilities extends SubLTranslatedFile implements V0
     }
 
     public static final SubLObject mysentient_is_version_supportedP(SubLObject component, SubLObject version_tag) {
-        SubLTrampolineFile.checkType(component, KEYWORDP);
-        SubLTrampolineFile.checkType(version_tag, LISTP);
+        SubLSystemTrampolineFile.checkType(component, KEYWORDP);
+        SubLSystemTrampolineFile.checkType(version_tag, LISTP);
         {
             SubLObject version_information = get_mysentient_master_version_information();
             SubLObject server_version_tag = getf(version_information, component, UNPROVIDED);
@@ -1080,7 +1080,7 @@ public final class mysentient_utilities extends SubLTranslatedFile implements V0
     public static final SubLObject mysentient_are_versions_supportedP(SubLObject component_version_list) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(component_version_list, LISTP);
+            SubLSystemTrampolineFile.checkType(component_version_list, LISTP);
             {
                 SubLObject evaluation = NIL;
                 SubLObject decidedP = NIL;
@@ -1152,12 +1152,12 @@ public final class mysentient_utilities extends SubLTranslatedFile implements V0
                         if (NIL == tag_a_3) {
                             tag_a_3 = ZERO_INTEGER;
                         } else {
-                            SubLTrampolineFile.checkType(tag_a_3, FIXNUMP);
+                            SubLSystemTrampolineFile.checkType(tag_a_3, FIXNUMP);
                         }
                         if (NIL == tag_b_4) {
                             tag_b_4 = ZERO_INTEGER;
                         } else {
-                            SubLTrampolineFile.checkType(tag_b_4, FIXNUMP);
+                            SubLSystemTrampolineFile.checkType(tag_b_4, FIXNUMP);
                         }
                         if (tag_a_3.numG(tag_b_4)) {
                             decidedP = T;

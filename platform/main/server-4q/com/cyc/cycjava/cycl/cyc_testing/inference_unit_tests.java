@@ -126,7 +126,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class inference_unit_tests extends SubLTranslatedFile {
     public static final SubLFile me = new inference_unit_tests();
@@ -1169,13 +1169,13 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             value = cadr(remainder);
             assert NIL != inference_datastructures_enumerated_types.query_property_p(property) : "inference_datastructures_enumerated_types.query_property_p(property) " + "CommonSymbols.NIL != inference_datastructures_enumerated_types.query_property_p(property) " + property;
         }
-        if (((NIL == result_test) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == bindings.binding_lists_p(expected_result))) {
+        if (((NIL == result_test) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == bindings.binding_lists_p(expected_result))) {
             throw new AssertionError(expected_result);
         }
-        if (((NIL != halt_reason) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_enumerated_types.query_halt_reason_p(halt_reason))) {
+        if (((NIL != halt_reason) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_enumerated_types.query_halt_reason_p(halt_reason))) {
             throw new AssertionError(halt_reason);
         }
-        if (((NIL != result_test) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.function_symbol_p(result_test))) {
+        if (((NIL != result_test) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.function_symbol_p(result_test))) {
             throw new AssertionError(result_test);
         }
         assert NIL != inference_testing.inference_test_comment_p(comment) : "inference_testing.inference_test_comment_p(comment) " + "CommonSymbols.NIL != inference_testing.inference_test_comment_p(comment) " + comment;
@@ -1191,17 +1191,17 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         assert NIL != misc_utilities.subl_variable_binding_list_p(v_bindings) : "misc_utilities.subl_variable_binding_list_p(v_bindings) " + "CommonSymbols.NIL != misc_utilities.subl_variable_binding_list_p(v_bindings) " + v_bindings;
         assert NIL != cyc_testing.cyc_test_kb_p(kb) : "cyc_testing.cyc_test_kb_p(kb) " + "CommonSymbols.NIL != cyc_testing.cyc_test_kb_p(kb) " + kb;
         assert NIL != inference_testing.inference_test_owner_p(owner) : "inference_testing.inference_test_owner_p(owner) " + "CommonSymbols.NIL != inference_testing.inference_test_owner_p(owner) " + owner;
-        if (((NIL != bug_number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(bug_number))) {
+        if (((NIL != bug_number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(bug_number))) {
             throw new AssertionError(bug_number);
         }
-        if (((NIL != creation_date) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numeric_date_utilities.universal_date_p(creation_date))) {
+        if (((NIL != creation_date) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numeric_date_utilities.universal_date_p(creation_date))) {
             throw new AssertionError(creation_date);
         }
-        if (((NIL != creator) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(creator))) {
+        if (((NIL != creator) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(creator))) {
             throw new AssertionError(creator);
         }
         assert NIL != booleanp(workingP) : "Types.booleanp(workingP) " + "CommonSymbols.NIL != Types.booleanp(workingP) " + workingP;
-        if (((NIL != subtype) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == keywordp(subtype))) {
+        if (((NIL != subtype) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == keywordp(subtype))) {
             throw new AssertionError(subtype);
         }
         if ((NIL != el_conditional_sentence_p(sentence)) && (NIL == getf(v_properties, $kw122$CONDITIONAL_SENTENCE_, UNPROVIDED))) {

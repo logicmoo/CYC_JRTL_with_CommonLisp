@@ -86,7 +86,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -665,9 +665,9 @@ public final class hl_prototypes extends SubLTranslatedFile {
     public static SubLObject init_hl_prototypes_file() {
         defparameter("*HL-PROTOTYPES-ENABLED?*", T);
         defparameter("*GATHER-HL-PROTOTYPE-STATISTICS?*", T);
-        deflexical("*HL-PROTOTYPE-HITS*", SubLTrampolineFile.maybeDefault($hl_prototype_hits$, $hl_prototype_hits$, ZERO_INTEGER));
-        deflexical("*HL-PROTOTYPE-HIT-TABLE*", SubLTrampolineFile.maybeDefault($hl_prototype_hit_table$, $hl_prototype_hit_table$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
-        deflexical("*HL-PROTOTYPE-MISSES*", SubLTrampolineFile.maybeDefault($hl_prototype_misses$, $hl_prototype_misses$, ZERO_INTEGER));
+        deflexical("*HL-PROTOTYPE-HITS*", SubLSystemTrampolineFile.maybeDefault($hl_prototype_hits$, $hl_prototype_hits$, ZERO_INTEGER));
+        deflexical("*HL-PROTOTYPE-HIT-TABLE*", SubLSystemTrampolineFile.maybeDefault($hl_prototype_hit_table$, $hl_prototype_hit_table$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*HL-PROTOTYPE-MISSES*", SubLSystemTrampolineFile.maybeDefault($hl_prototype_misses$, $hl_prototype_misses$, ZERO_INTEGER));
         deflexical("*THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE-CACHING-STATE*", NIL);
         return NIL;
     }

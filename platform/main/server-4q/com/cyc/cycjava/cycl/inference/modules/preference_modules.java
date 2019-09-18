@@ -99,7 +99,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -945,7 +945,7 @@ public final class preference_modules extends SubLTranslatedFile {
     }
 
     public static SubLObject preference_level_string(final SubLObject preference_level) {
-        if (((NIL != preference_level) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == preference_level_p(preference_level))) {
+        if (((NIL != preference_level) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == preference_level_p(preference_level))) {
             throw new AssertionError(preference_level);
         }
         if (preference_level.eql($PREFERRED)) {
@@ -1946,14 +1946,14 @@ public final class preference_modules extends SubLTranslatedFile {
         deflexical("*DEFAULT-PREFERENCE-LEVEL*", $DISALLOWED);
         deflexical("*ORDERED-PREFERENCE-LEVELS*", $list41);
         deflexical("*PREFERENCE-MODULE-PROPERTIES*", $list60);
-        deflexical("*PREFERENCE-MODULES-BY-NAME*", SubLTrampolineFile.maybeDefault($preference_modules_by_name$, $preference_modules_by_name$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
-        deflexical("*GENERIC-PREFERENCE-MODULES*", SubLTrampolineFile.maybeDefault($generic_preference_modules$, $generic_preference_modules$, () -> set.new_set(symbol_function(EQ), UNPROVIDED)));
-        deflexical("*SPECIFIC-PREFERENCE-MODULES*", SubLTrampolineFile.maybeDefault($specific_preference_modules$, $specific_preference_modules$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
-        deflexical("*PREFERENCE-MODULE-SUPPLANTS*", SubLTrampolineFile.maybeDefault($preference_module_supplants$, $preference_module_supplants$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*PREFERENCE-MODULES-BY-NAME*", SubLSystemTrampolineFile.maybeDefault($preference_modules_by_name$, $preference_modules_by_name$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*GENERIC-PREFERENCE-MODULES*", SubLSystemTrampolineFile.maybeDefault($generic_preference_modules$, $generic_preference_modules$, () -> set.new_set(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SPECIFIC-PREFERENCE-MODULES*", SubLSystemTrampolineFile.maybeDefault($specific_preference_modules$, $specific_preference_modules$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
+        deflexical("*PREFERENCE-MODULE-SUPPLANTS*", SubLSystemTrampolineFile.maybeDefault($preference_module_supplants$, $preference_module_supplants$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         defconstant("*DTP-PREFERENCE-MODULE*", PREFERENCE_MODULE);
         defparameter("*BINDABLE-VARS-LAMBDA*", NIL);
         deflexical("*PREFERENCE-FUNCTIONS-FROM-MUST-BIND-ARG*", $list153);
-        deflexical("*DOOM-MODULE-STORE*", SubLTrampolineFile.maybeDefault($doom_module_store$, $doom_module_store$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*DOOM-MODULE-STORE*", SubLSystemTrampolineFile.maybeDefault($doom_module_store$, $doom_module_store$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
         return NIL;
     }
 

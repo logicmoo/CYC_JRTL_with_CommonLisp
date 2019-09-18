@@ -45,7 +45,7 @@ package org.jpl7;
  * <hr>
  * 
  * @author Fred Dushin fadushin@syr.edu
- * @version $Revision$
+ * @version $Revision$ 
  */
 public class PrologException extends JPLException {
 	private static final long serialVersionUID = 1L;

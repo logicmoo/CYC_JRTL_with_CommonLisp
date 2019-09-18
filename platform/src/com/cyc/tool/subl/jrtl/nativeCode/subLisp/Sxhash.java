@@ -10,9 +10,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Sxhash extends SubLTrampolineFile {
+public class Sxhash extends SubLSystemTrampolineFile {
   private static int sxhashRotateValue(int num, int highBits) {
     if (highBits >= Sxhash.SXHASH_BIT_LIMIT2)
       return num;

@@ -32,7 +32,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -394,7 +394,7 @@ public final class rkf_event_dispatcher extends SubLTranslatedFile {
 
     public static SubLObject init_rkf_event_dispatcher_file() {
         deflexical("*RKF-EVENT-DISPATCHER-LOCK*", make_lock($str22$RKF_EVENT_DISPATCHER_Lock));
-        deflexical("*RKF-EVENT-DISPATCHER-LISTENERS*", SubLTrampolineFile.maybeDefault($rkf_event_dispatcher_listeners$, $rkf_event_dispatcher_listeners$, NIL));
+        deflexical("*RKF-EVENT-DISPATCHER-LISTENERS*", SubLSystemTrampolineFile.maybeDefault($rkf_event_dispatcher_listeners$, $rkf_event_dispatcher_listeners$, NIL));
         return NIL;
     }
 

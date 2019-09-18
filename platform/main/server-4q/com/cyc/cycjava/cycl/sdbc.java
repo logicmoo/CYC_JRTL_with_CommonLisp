@@ -142,7 +142,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class sdbc extends SubLTranslatedFile {
     public static SubLObject sql_proxy_server_runningP(SubLObject server, SubLObject port, SubLObject timeout) {
@@ -527,14 +527,14 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         final SubLObject timeout_tail = property_list_member($TIMEOUT, current);
         final SubLObject timeout = (NIL != timeout_tail) ? cadr(timeout_tail) : $sql_connection_timeout$.getGlobalValue();
         assert NIL != stringp(db) : "Types.stringp(db) " + "CommonSymbols.NIL != Types.stringp(db) " + db;
-        if (((NIL != user) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(user))) {
+        if (((NIL != user) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(user))) {
             throw new AssertionError(user);
         }
-        if (((NIL != password) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(password))) {
+        if (((NIL != password) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(password))) {
             throw new AssertionError(password);
         }
         assert NIL != stringp(dbms_server) : "Types.stringp(dbms_server) " + "CommonSymbols.NIL != Types.stringp(dbms_server) " + dbms_server;
-        if (((NIL != dbms_port) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(dbms_port))) {
+        if (((NIL != dbms_port) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(dbms_port))) {
             throw new AssertionError(dbms_port);
         }
         assert NIL != integerp(port) : "Types.integerp(port) " + "CommonSymbols.NIL != Types.integerp(port) " + port;
@@ -810,7 +810,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject sqlc_deliver(final SubLObject connection) {
-        SubLTrampolineFile.enforceType(connection, SQL_CONNECTION_P);
+        SubLSystemTrampolineFile.enforceType(connection, SQL_CONNECTION_P);
         SubLObject result = NIL;
         SubLObject ticket = NIL;
         while (true) {
@@ -862,7 +862,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject sqlc_send(final SubLObject connection, final SubLObject ticket, final SubLObject function, final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(connection, SQL_CONNECTION_P);
+        SubLSystemTrampolineFile.enforceType(connection, SQL_CONNECTION_P);
         SubLObject error_message = NIL;
         SubLObject response = NIL;
         try {
@@ -905,7 +905,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject sqlc_receive(final SubLObject connection) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(connection, SQL_CONNECTION_P);
+        SubLSystemTrampolineFile.enforceType(connection, SQL_CONNECTION_P);
         SubLObject error_message = NIL;
         SubLObject response = NIL;
         try {
@@ -2179,7 +2179,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject set_sdbc_db2_port(final SubLObject port) {
-        SubLTrampolineFile.enforceType(port, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(port, NON_NEGATIVE_INTEGER_P);
         $sdbc_db2_port$.setGlobalValue(port);
         return $sdbc_db2_port$.getGlobalValue();
     }
@@ -2189,7 +2189,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject set_sdbc_sybase_iq_port(final SubLObject port) {
-        SubLTrampolineFile.enforceType(port, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(port, NON_NEGATIVE_INTEGER_P);
         $sdbc_sybase_iq_port$.setGlobalValue(port);
         return $sdbc_sybase_iq_port$.getGlobalValue();
     }
@@ -3326,9 +3326,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defparameter("*SDBC-ERROR-DECODING*", list(bq_cons($io_error$.getGlobalValue(), $str167$_IO), bq_cons($sql_error$.getGlobalValue(), $str168$_SQL), bq_cons($unknown_error$.getGlobalValue(), $str169$), bq_cons($client_error$.getGlobalValue(), $str170$_CLIENT), bq_cons($transaction_error$.getGlobalValue(), $str171$_TRANSACTION), bq_cons($rollback_error$.getGlobalValue(), $str172$_ROLLBACK), bq_cons($batch_update_error$.getGlobalValue(), $str173$_BATCH_UPDATE)));
         defconstant("*DTP-SQL-RESULT-SET*", SQL_RESULT_SET);
         defconstant("*DTP-SQL-STATEMENT*", SQL_STATEMENT);
-        deflexical("*SDBC-DATABASE-CONNECTION-URL-DESCRIPTIONS*", SubLTrampolineFile.maybeDefault($sdbc_database_connection_url_descriptions$, $sdbc_database_connection_url_descriptions$, () -> dictionary.new_dictionary(EQUAL, UNPROVIDED)));
-        deflexical("*SDBC-DB2-PORT*", SubLTrampolineFile.maybeDefault($sym331$_SDBC_DB2_PORT_, $sdbc_db2_port$, $int$50001));
-        deflexical("*SDBC-SYBASE-IQ-PORT*", SubLTrampolineFile.maybeDefault($sdbc_sybase_iq_port$, $sdbc_sybase_iq_port$, $int$2638));
+        deflexical("*SDBC-DATABASE-CONNECTION-URL-DESCRIPTIONS*", SubLSystemTrampolineFile.maybeDefault($sdbc_database_connection_url_descriptions$, $sdbc_database_connection_url_descriptions$, () -> dictionary.new_dictionary(EQUAL, UNPROVIDED)));
+        deflexical("*SDBC-DB2-PORT*", SubLSystemTrampolineFile.maybeDefault($sym331$_SDBC_DB2_PORT_, $sdbc_db2_port$, $int$50001));
+        deflexical("*SDBC-SYBASE-IQ-PORT*", SubLSystemTrampolineFile.maybeDefault($sdbc_sybase_iq_port$, $sdbc_sybase_iq_port$, $int$2638));
         deflexical("*SDBC-TEST-ROW-CARDINALITY*", $int$25);
         return NIL;
     }

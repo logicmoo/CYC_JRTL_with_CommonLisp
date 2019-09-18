@@ -38,7 +38,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -201,8 +201,8 @@ public final class constant_completion extends SubLTranslatedFile {
     }
 
     public static SubLObject init_constant_completion_file() {
-        deflexical("*CONSTANT-NAMES-IN-CODE*", SubLTrampolineFile.maybeDefault($constant_names_in_code$, $constant_names_in_code$, NIL));
-        deflexical("*BOGUS-CONSTANT-NAMES-IN-CODE*", SubLTrampolineFile.maybeDefault($bogus_constant_names_in_code$, $bogus_constant_names_in_code$, NIL));
+        deflexical("*CONSTANT-NAMES-IN-CODE*", SubLSystemTrampolineFile.maybeDefault($constant_names_in_code$, $constant_names_in_code$, NIL));
+        deflexical("*BOGUS-CONSTANT-NAMES-IN-CODE*", SubLSystemTrampolineFile.maybeDefault($bogus_constant_names_in_code$, $bogus_constant_names_in_code$, NIL));
         return NIL;
     }
 

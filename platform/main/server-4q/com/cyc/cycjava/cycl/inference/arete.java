@@ -104,7 +104,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1274,7 +1274,7 @@ public final class arete extends SubLTranslatedFile {
     public static SubLObject init_arete_file() {
         deflexical("*ARETE-EXPERIMENT-DIRECTORY*", $str0$_cyc_projects_inference_arete_exp);
         deflexical("*ARETE-ANALYSIS-DIRECTORY*", $str3$_cyc_projects_inference_arete_ana);
-        deflexical("*KBQ-CONTROL-QUERY-SET-RUN*", SubLTrampolineFile.maybeDefault($kbq_control_query_set_run$, $kbq_control_query_set_run$, $UNINITIALIZED));
+        deflexical("*KBQ-CONTROL-QUERY-SET-RUN*", SubLSystemTrampolineFile.maybeDefault($kbq_control_query_set_run$, $kbq_control_query_set_run$, $UNINITIALIZED));
         deflexical("*ARETE-OUTLIER-TIMEOUT*", kbq_query_run.$kbq_default_outlier_timeout$.getGlobalValue());
         return NIL;
     }

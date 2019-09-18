@@ -105,7 +105,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -8058,7 +8058,7 @@ public final class html_tm_browsing extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_more_information_for_integrity_module_link(SubLObject module) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(module, $sym359$TMI_MODULE_);
+            SubLSystemTrampolineFile.checkType(module, $sym359$TMI_MODULE_);
             html_utilities.html_markup(html_macros.$html_anchor_head$.getGlobalValue());
             html_utilities.html_markup(html_macros.$html_anchor_href$.getGlobalValue());
             html_utilities.html_char(CHAR_quotation, UNPROVIDED);
@@ -11010,7 +11010,7 @@ public final class html_tm_browsing extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(relation, $sym477$THESAURUS_PREDICATE_);
+            SubLSystemTrampolineFile.checkType(relation, $sym477$THESAURUS_PREDICATE_);
             {
                 SubLObject arg_index = (index.eql(ONE_INTEGER) || index.eql(TWO_INTEGER)) ? ((SubLObject) (index)) : ONE_INTEGER;
                 SubLObject rel_symbol = tm_internals.tm_pred_arg_symbol(relation, arg_index);

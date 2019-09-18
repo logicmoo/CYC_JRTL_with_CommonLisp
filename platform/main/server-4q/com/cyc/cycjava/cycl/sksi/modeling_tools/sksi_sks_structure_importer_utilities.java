@@ -86,7 +86,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -889,7 +889,7 @@ public final class sksi_sks_structure_importer_utilities extends SubLTranslatedF
         assert NIL != sksi_sks_accessors.sks_p(super_sks) : "sksi_sks_accessors.sks_p(super_sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(super_sks) " + super_sks;
         assert NIL != hlmt.hlmt_p(defining_mt) : "hlmt.hlmt_p(defining_mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(defining_mt) " + defining_mt;
         assert NIL != stringp(table_schema) : "Types.stringp(table_schema) " + "CommonSymbols.NIL != Types.stringp(table_schema) " + table_schema;
-        if (((NIL != row_count) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(row_count))) {
+        if (((NIL != row_count) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(row_count))) {
             throw new AssertionError(row_count);
         }
         final SubLObject sks = sksi_sks_accessors.new_sks_atomic(sks_name, super_sks, defining_mt);

@@ -46,25 +46,21 @@ import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject; 
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class CycEval
-{
+public final class CycEval {
 
 	// ### lisp-eval
 	public static final SpecialOperator LISP_PROGN = new lisp_progn();
 
-	private static final class lisp_progn extends SpecialOperator
-	{
-		lisp_progn()
-		{
+	private static final class lisp_progn extends SpecialOperator {
+		lisp_progn() {
 			super("lisp-progn", Lisp.PACKAGE_EXT, true, "&rest progns");
 			exportInCyc(this);
 		}
 
 		@Override
-		public LispObject execute(LispObject args, Environment env)
-		{
+		public LispObject execute(LispObject args, Environment env) {
 			return BeanShellCntrl.lisp_progn(args, env);
 		}
 	}
@@ -75,8 +71,7 @@ public final class CycEval
 	private static final class cyc_progn extends SpecialOperator
 
 	{
-		cyc_progn()
-		{
+		cyc_progn() {
 			super("cyc-progn", Lisp.PACKAGE_EXT, true, "&rest forms");
 			exportInCyc(this);
 		}
@@ -85,14 +80,14 @@ public final class CycEval
 		public LispObject execute(LispObject args, Environment env)
 
 		{
-			if (args == Lisp.NIL) return args;
+			if (args == Lisp.NIL)
+				return args;
 			SubLCons cons = args.toCons();
 			return apply(cons, SubLEnvironment.currentEnvironment()).toLispObject();
 		}
-		
+
 		@Override
-		public SubLObject apply(SubLCons specialForm, SubLEnvironment env)
-		{
+		public SubLObject apply(SubLCons specialForm, SubLEnvironment env) {
 			return BeanShellCntrl.cyc_progn(specialForm, env);
 		}
 
@@ -119,22 +114,17 @@ public final class CycEval
 	// ### cyc-repl
 	public static final Primitive CYC_REPL = new cyc_repl();
 
-	private static final class cyc_repl extends Primitive
-	{
-		cyc_repl()
-		{
+	private static final class cyc_repl extends Primitive {
+		cyc_repl() {
 			super("cyc-repl-old", Lisp.PACKAGE_EXT, true);
 			exportInCyc(this);
 		}
 
 		@Override
-		public LispObject execute()
-		{
-			try
-			{
+		public LispObject execute() {
+			try {
 				return BeanShellCntrl.cyc_repl();
-			} catch (Throwable e)
-			{
+			} catch (Throwable e) {
 				e.printStackTrace();
 				return new JavaException(e);
 			}
@@ -145,17 +135,14 @@ public final class CycEval
 	// ### lisp-repl
 	public static final lisp_repl LISP_REPL = new lisp_repl();
 
-	public static final class lisp_repl extends Primitive
-	{
-		lisp_repl()
-		{
+	public static final class lisp_repl extends Primitive {
+		lisp_repl() {
 			super("lisp-repl-old", Lisp.PACKAGE_EXT, true);
 			exportInCyc(this);
 		}
 
 		@Override
-		public LispObject execute()
-		{
+		public LispObject execute() {
 			return BeanShellCntrl.lisp_repl();
 		}
 
@@ -164,18 +151,15 @@ public final class CycEval
 	// ### INIT-KB
 	public static final INIT_KB INIT_KB = new INIT_KB();
 
-	public static final class INIT_KB extends Primitive
-	{
-		INIT_KB()
-		{
+	public static final class INIT_KB extends Primitive {
+		INIT_KB() {
 			super("INIT-KB-old", Lisp.PACKAGE_CYC, true);
 			exportInCyc(this);
 		}
 
 		@Override
-		public LispObject execute()
-		{
-			BeanShellCntrl.init_cyc_kb();
+		public LispObject execute() {
+			BeanShellCntrl.load_kb();
 			return T;
 		}
 	}
@@ -183,18 +167,15 @@ public final class CycEval
 	// ### INIT-CYC
 	public static final INIT_CYC INIT_CYC = new INIT_CYC();
 
-	public static final class INIT_CYC extends Primitive
-	{
-		INIT_CYC()
-		{
+	public static final class INIT_CYC extends Primitive {
+		INIT_CYC() {
 			super("INIT-CYC-old", Lisp.PACKAGE_CYC, true);
 			exportInCyc(this);
 		}
 
 		@Override
-		public LispObject execute()
-		{
-			BeanShellCntrl.init_cyc_classes();
+		public LispObject execute() {
+			BeanShellCntrl.load_cyc();
 			return T;
 		}
 	}
@@ -202,24 +183,20 @@ public final class CycEval
 	// ### INIT-SUBL
 	public static final INIT_SUBL INIT_SUBL = new INIT_SUBL();
 
-	public static final class INIT_SUBL extends Primitive
-	{
-		INIT_SUBL()
-		{
+	public static final class INIT_SUBL extends Primitive {
+		INIT_SUBL() {
 			super("INIT-SUBL-old", Lisp.PACKAGE_CYC, true);
 			exportInCyc(this);
 		}
 
 		@Override
-		public LispObject execute()
-		{
+		public LispObject execute() {
 			BeanShellCntrl.init_subl();
 			return T;
 		}
 	}
 
-	static public void exportInCyc(Operator cyc_progn2)
-	{
+	static public void exportInCyc(Operator cyc_progn2) {
 		Symbol symbol = cyc_progn2.getLambdaName().toSymbol().toLispObject();
 		/*		Lisp.PACKAGE_SUBLISP.importSymbol(symbol);
 				Lisp.PACKAGE_CYC.importSymbol(symbol);

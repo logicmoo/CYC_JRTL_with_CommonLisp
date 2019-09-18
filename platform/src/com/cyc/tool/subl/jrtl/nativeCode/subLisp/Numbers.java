@@ -21,9 +21,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Numbers extends SubLTrampolineFile {
+public class Numbers extends SubLSystemTrampolineFile {
 	private static class AdditionDescription implements MultiArgMathFuncDesc {
 		@Override
 		public BigInteger getBinaryValue(BigInteger val1, BigInteger val2) {

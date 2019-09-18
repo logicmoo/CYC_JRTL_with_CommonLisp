@@ -17,6 +17,4 @@ public class ResumeException extends Unhandleable {
 		super(cause);
 	}
 
-	public static void main(String[] args) {
-	}
 }

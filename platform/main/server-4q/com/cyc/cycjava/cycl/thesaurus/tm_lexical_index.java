@@ -41,7 +41,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -140,7 +140,7 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
             if (NIL == $defer_lexical_updateP$.getDynamicValue(thread)) {
-                SubLTrampolineFile.checkType(thesaurus, $sym0$THESAURUS_);
+                SubLSystemTrampolineFile.checkType(thesaurus, $sym0$THESAURUS_);
                 {
                     SubLObject cdolist_list_var = $thesaurus_indices$.getDynamicValue(thread);
                     SubLObject lexpred_multi_index = NIL;
@@ -163,7 +163,7 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
             if (NIL == $defer_lexical_updateP$.getDynamicValue(thread)) {
-                SubLTrampolineFile.checkType(lexpred, $sym1$TM_LEXICAL_PREDICATE_);
+                SubLSystemTrampolineFile.checkType(lexpred, $sym1$TM_LEXICAL_PREDICATE_);
                 {
                     SubLObject lexpred_multi_index = assoc(lexpred, $thesaurus_indices$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
                     if (NIL == lexpred_multi_index) {
@@ -366,8 +366,8 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
                 try {
                     mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
                     mt_relevance_macros.$mt$.bind(tm_datastructures.$tm_mt$.getGlobalValue(), thread);
-                    SubLTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
-                    SubLTrampolineFile.checkType(thesaurus, $sym7$MT_);
+                    SubLSystemTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
+                    SubLSystemTrampolineFile.checkType(thesaurus, $sym7$MT_);
                 } finally {
                     mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
                     mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
@@ -405,8 +405,8 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
                 try {
                     mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
                     mt_relevance_macros.$mt$.bind(tm_datastructures.$tm_mt$.getGlobalValue(), thread);
-                    SubLTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
-                    SubLTrampolineFile.checkType(thesaurus, $sym7$MT_);
+                    SubLSystemTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
+                    SubLSystemTrampolineFile.checkType(thesaurus, $sym7$MT_);
                 } finally {
                     mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
                     mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
@@ -444,8 +444,8 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
                 try {
                     mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
                     mt_relevance_macros.$mt$.bind(tm_datastructures.$tm_mt$.getGlobalValue(), thread);
-                    SubLTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
-                    SubLTrampolineFile.checkType(thesaurus, $sym7$MT_);
+                    SubLSystemTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
+                    SubLSystemTrampolineFile.checkType(thesaurus, $sym7$MT_);
                 } finally {
                     mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
                     mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
@@ -486,7 +486,7 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
                 try {
                     mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
                     mt_relevance_macros.$mt$.bind(tm_datastructures.$tm_mt$.getGlobalValue(), thread);
-                    SubLTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
+                    SubLSystemTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
                 } finally {
                     mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
                     mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
@@ -536,7 +536,7 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
                 try {
                     mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
                     mt_relevance_macros.$mt$.bind(tm_datastructures.$tm_mt$.getGlobalValue(), thread);
-                    SubLTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
+                    SubLSystemTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
                 } finally {
                     mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
                     mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
@@ -584,7 +584,7 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
                 try {
                     mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
                     mt_relevance_macros.$mt$.bind(tm_datastructures.$tm_mt$.getGlobalValue(), thread);
-                    SubLTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
+                    SubLSystemTrampolineFile.checkType(lexpred, $sym6$PREDICATE_);
                 } finally {
                     mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
                     mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
@@ -644,7 +644,7 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
     public static final SubLObject add_lexical_entry(SubLObject sign) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(sign, SIGNP);
+            SubLSystemTrampolineFile.checkType(sign, SIGNP);
             if (NIL != $defer_lexical_updateP$.getDynamicValue(thread)) {
                 return NIL;
             } else {
@@ -696,7 +696,7 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(sign, SIGNP);
+            SubLSystemTrampolineFile.checkType(sign, SIGNP);
             {
                 SubLObject lexpred = tm_datastructures.sign_relation(sign);
                 SubLObject thesaurus = tm_datastructures.sign_thesaurus(sign);

@@ -24,14 +24,14 @@ public class HelloWorldServlet extends HttpServlet {
 
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+			throws IOException { 
 
 		LispThread currentThread = LispThread.currentThread();
 
 		SpecialBindingsMark mark = currentThread.markSpecialBindings();
 		currentThread.bindSpecial(
 			Symbol.STANDARD_OUTPUT, 
-			new Stream(Symbol.SYSTEM_STREAM, resp.getOutputStream(), 
+			Stream.createStream(Symbol.SYSTEM_STREAM, resp.getOutputStream(), 
                                    Symbol.CHARACTER, false));
 
 		try {

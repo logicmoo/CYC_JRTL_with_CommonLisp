@@ -29,6 +29,8 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.unread_
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.defconstant;
 
+import org.logicmoo.system.Startup;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -167,6 +169,8 @@ public final class constant_reader extends SubLTranslatedFile {
         if (NIL == $read_require_constant_exists$.getDynamicValue(thread)) {
             return NIL;
         }
+		if (Startup.BOOTY_HACKZ)
+			return NIL;
         return T;
     }
 
@@ -205,6 +209,5 @@ public final class constant_reader extends SubLTranslatedFile {
         setup_constant_reader_file();
     }
 
-    
 }
 

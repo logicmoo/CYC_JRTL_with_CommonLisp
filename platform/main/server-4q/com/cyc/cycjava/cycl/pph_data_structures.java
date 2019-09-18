@@ -122,7 +122,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class pph_data_structures extends SubLTranslatedFile {
     public static final SubLFile me = new pph_data_structures();
@@ -928,10 +928,10 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (assertion == UNPROVIDED) {
             assertion = NIL;
         }
-        if (((NIL != phrase) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == pph_phrase.pph_phrase_p(phrase, UNPROVIDED))) {
+        if (((NIL != phrase) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == pph_phrase.pph_phrase_p(phrase, UNPROVIDED))) {
             throw new AssertionError(phrase);
         }
-        if (((NIL != assertion) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == assertion_handles.assertion_p(assertion))) {
+        if (((NIL != assertion) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == assertion_handles.assertion_p(assertion))) {
             throw new AssertionError(assertion);
         }
         final SubLObject gen_template = make_generation_template(UNPROVIDED);
@@ -3329,8 +3329,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_pph_data_structures_file() {
         deflexical("*RELATION-CARDINALITY*", $int$12000);
-        deflexical("*GEN-TEMPLATE-STORE*", SubLTrampolineFile.maybeDefault($gen_template_store$, $gen_template_store$, () -> dictionary.new_dictionary(symbol_function(EQ), $relation_cardinality$.getGlobalValue())));
-        deflexical("*GEN-TEMPLATE-STORE-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym3$_GEN_TEMPLATE_STORE_INITIALIZED__, $gen_template_store_initializedP$, NIL));
+        deflexical("*GEN-TEMPLATE-STORE*", SubLSystemTrampolineFile.maybeDefault($gen_template_store$, $gen_template_store$, () -> dictionary.new_dictionary(symbol_function(EQ), $relation_cardinality$.getGlobalValue())));
+        deflexical("*GEN-TEMPLATE-STORE-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($sym3$_GEN_TEMPLATE_STORE_INITIALIZED__, $gen_template_store_initializedP$, NIL));
         defconstant("*DTP-GENERATION-TEMPLATE*", GENERATION_TEMPLATE);
         defconstant("*CFASL-OPCODE-GENERATION-TEMPLATE*", $int$72);
         defconstant("*DTP-PPH-PHRASE-AGR*", PPH_PHRASE_AGR);
@@ -3344,12 +3344,12 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         deflexical("*A-SHITLOAD-OF-NEW-PPH-PHRASES*", $int$500000);
         deflexical("*PPH-INFO-VECTOR-SLOTS*", $list157);
         deflexical("*PPH-INFO-VECTOR-UNSPECIFIED-VALUE*", CHAR_vertical);
-        deflexical("*PPH-PHRASE-ID-INDEX*", SubLTrampolineFile.maybeDefault($pph_phrase_id_index$, $pph_phrase_id_index$, () -> new_id_index(UNPROVIDED, UNPROVIDED)));
+        deflexical("*PPH-PHRASE-ID-INDEX*", SubLSystemTrampolineFile.maybeDefault($pph_phrase_id_index$, $pph_phrase_id_index$, () -> new_id_index(UNPROVIDED, UNPROVIDED)));
         deflexical("*PPH-PHRASE-ID-INDEX-LOCK*", make_lock($$$PPH_phrase_ID_index));
         deflexical("*PPH-LISTIFIED-VECTOR-MARKER*", $LISTIFIED_PPH_VECTOR);
         deflexical("*PPH-PHRASE-SHELL-MARKER*", $PPH_PHRASE_SHELL);
         defconstant("*DTP-PPH-PHRASE-TEMPLATE-GENERATOR*", PPH_PHRASE_TEMPLATE_GENERATOR);
-        deflexical("*FREE-PPH-PHRASE-TEMPLATE-GENERATORS*", SubLTrampolineFile.maybeDefault($free_pph_phrase_template_generators$, $free_pph_phrase_template_generators$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*FREE-PPH-PHRASE-TEMPLATE-GENERATORS*", SubLSystemTrampolineFile.maybeDefault($free_pph_phrase_template_generators$, $free_pph_phrase_template_generators$, () -> queues.create_queue(UNPROVIDED)));
         defconstant("*DTP-PPH-PHRASE-OUTPUT-LIST-ITERATOR*", PPH_PHRASE_OUTPUT_LIST_ITERATOR);
         return NIL;
     }

@@ -62,7 +62,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -228,32 +228,32 @@ public final class dcyc_kernel extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject ccc_machine(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CCC_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCC_P);
         return v_object.getField2();
     }
 
     public static final SubLObject ccc_port(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CCC_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCC_P);
         return v_object.getField3();
     }
 
     public static final SubLObject ccc_id(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CCC_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCC_P);
         return v_object.getField4();
     }
 
     public static final SubLObject _csetf_ccc_machine(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CCC_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCC_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_ccc_port(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CCC_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCC_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_ccc_id(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CCC_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCC_P);
         return v_object.setField4(value);
     }
 
@@ -391,32 +391,32 @@ public final class dcyc_kernel extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject cco_sender(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CCO_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCO_P);
         return v_object.getField2();
     }
 
     public static final SubLObject cco_receiver(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CCO_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCO_P);
         return v_object.getField3();
     }
 
     public static final SubLObject cco_data(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CCO_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCO_P);
         return v_object.getField4();
     }
 
     public static final SubLObject _csetf_cco_sender(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CCO_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCO_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_cco_receiver(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CCO_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCO_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_cco_data(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CCO_P);
+        SubLSystemTrampolineFile.checkType(v_object, CCO_P);
         return v_object.setField4(value);
     }
 

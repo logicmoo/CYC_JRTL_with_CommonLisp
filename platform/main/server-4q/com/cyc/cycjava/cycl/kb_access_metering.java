@@ -49,7 +49,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -502,13 +502,13 @@ public final class kb_access_metering extends SubLTranslatedFile {
         defparameter("*ARETE-ASSERTIONS-TOUCHED*", NIL);
         defparameter("*ARETE-CONSTANTS-TOUCHED*", NIL);
         defparameter("*ARETE-NARTS-TOUCHED*", NIL);
-        deflexical("*ARETE-LAST-ASSERTION-TOUCHED*", SubLTrampolineFile.maybeDefault($arete_last_assertion_touched$, $arete_last_assertion_touched$, NIL));
-        deflexical("*ARETE-LAST-TERM-TOUCHED*", SubLTrampolineFile.maybeDefault($arete_last_term_touched$, $arete_last_term_touched$, NIL));
-        deflexical("*ARETE-LAST-CONSTANT-TOUCHED*", SubLTrampolineFile.maybeDefault($arete_last_constant_touched$, $arete_last_constant_touched$, NIL));
-        deflexical("*ARETE-LAST-NART-TOUCHED*", SubLTrampolineFile.maybeDefault($arete_last_nart_touched$, $arete_last_nart_touched$, NIL));
+        deflexical("*ARETE-LAST-ASSERTION-TOUCHED*", SubLSystemTrampolineFile.maybeDefault($arete_last_assertion_touched$, $arete_last_assertion_touched$, NIL));
+        deflexical("*ARETE-LAST-TERM-TOUCHED*", SubLSystemTrampolineFile.maybeDefault($arete_last_term_touched$, $arete_last_term_touched$, NIL));
+        deflexical("*ARETE-LAST-CONSTANT-TOUCHED*", SubLSystemTrampolineFile.maybeDefault($arete_last_constant_touched$, $arete_last_constant_touched$, NIL));
+        deflexical("*ARETE-LAST-NART-TOUCHED*", SubLSystemTrampolineFile.maybeDefault($arete_last_nart_touched$, $arete_last_nart_touched$, NIL));
         defparameter("*ARETE-ASSERTIONS-TOUCHED-COUNT*", NIL);
         defparameter("*ARETE-TERMS-TOUCHED-COUNT*", NIL);
-        deflexical("*KB-ACCESS-METERING-ENABLED?*", SubLTrampolineFile.maybeDefault($sym4$_KB_ACCESS_METERING_ENABLED__, $kb_access_metering_enabledP$, NIL));
+        deflexical("*KB-ACCESS-METERING-ENABLED?*", SubLSystemTrampolineFile.maybeDefault($sym4$_KB_ACCESS_METERING_ENABLED__, $kb_access_metering_enabledP$, NIL));
         defparameter("*KB-ACCESS-METERING-DOMAINS*", NIL);
         defparameter("*KB-ACCESS-METERING-TABLE*", NIL);
         return NIL;

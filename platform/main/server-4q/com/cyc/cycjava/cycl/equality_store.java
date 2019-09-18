@@ -34,7 +34,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -405,7 +405,7 @@ public final class equality_store extends SubLTranslatedFile {
     }
 
     public static SubLObject init_equality_store_file() {
-        deflexical("*SOME-EQUALITY-ASSERTIONS-SOMEWHERE-SET*", SubLTrampolineFile.maybeDefault($some_equality_assertions_somewhere_set$, $some_equality_assertions_somewhere_set$, NIL));
+        deflexical("*SOME-EQUALITY-ASSERTIONS-SOMEWHERE-SET*", SubLSystemTrampolineFile.maybeDefault($some_equality_assertions_somewhere_set$, $some_equality_assertions_somewhere_set$, NIL));
         return NIL;
     }
 

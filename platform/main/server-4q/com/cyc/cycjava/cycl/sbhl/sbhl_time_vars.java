@@ -33,7 +33,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -335,12 +335,12 @@ public final class sbhl_time_vars extends SubLTranslatedFile {
         defparameter("*SBHL-TEMPORALITY-CONSIDER-LINK-DISJUNCTIONS?*", NIL);
         defparameter("*SBHL-TEMPORALITY-VERBOSE-JUSTS?*", NIL);
         defparameter("*SBHL-TEMPORALITY-INCLUDE-ONLY-LINKS-IN-VERBOSE-JUSTS?*", NIL);
-        deflexical("*SBHL-TEMPORAL-LINK-SUPPORT-TABLE*", SubLTrampolineFile.maybeDefault($sbhl_temporal_link_support_table$, $sbhl_temporal_link_support_table$, () -> make_hash_table($int$40000, symbol_function(EQUAL), UNPROVIDED)));
-        deflexical("*SBHL-TEMPORAL-LINK-DISJUNCTION-SUPPORT-TABLE*", SubLTrampolineFile.maybeDefault($sbhl_temporal_link_disjunction_support_table$, $sbhl_temporal_link_disjunction_support_table$, () -> make_hash_table($int$4000, symbol_function(EQUAL), UNPROVIDED)));
-        deflexical("*SBHL-TEMPORAL-LINK-DISJUNCTION-TERM-TABLE*", SubLTrampolineFile.maybeDefault($sbhl_temporal_link_disjunction_term_table$, $sbhl_temporal_link_disjunction_term_table$, () -> make_hash_table($int$4000, UNPROVIDED, UNPROVIDED)));
-        deflexical("*SBHL-EXTENDED-UNIVERSAL-DATE-LIST*", SubLTrampolineFile.maybeDefault($sbhl_extended_universal_date_list$, $sbhl_extended_universal_date_list$, NIL));
-        deflexical("*SBHL-TIME-PREDICATES*", SubLTrampolineFile.maybeDefault($sbhl_time_predicates$, $sbhl_time_predicates$, NIL));
-        deflexical("*SBHL-TIME-MODULES*", SubLTrampolineFile.maybeDefault($sbhl_time_modules$, $sbhl_time_modules$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SBHL-TEMPORAL-LINK-SUPPORT-TABLE*", SubLSystemTrampolineFile.maybeDefault($sbhl_temporal_link_support_table$, $sbhl_temporal_link_support_table$, () -> make_hash_table($int$40000, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*SBHL-TEMPORAL-LINK-DISJUNCTION-SUPPORT-TABLE*", SubLSystemTrampolineFile.maybeDefault($sbhl_temporal_link_disjunction_support_table$, $sbhl_temporal_link_disjunction_support_table$, () -> make_hash_table($int$4000, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*SBHL-TEMPORAL-LINK-DISJUNCTION-TERM-TABLE*", SubLSystemTrampolineFile.maybeDefault($sbhl_temporal_link_disjunction_term_table$, $sbhl_temporal_link_disjunction_term_table$, () -> make_hash_table($int$4000, UNPROVIDED, UNPROVIDED)));
+        deflexical("*SBHL-EXTENDED-UNIVERSAL-DATE-LIST*", SubLSystemTrampolineFile.maybeDefault($sbhl_extended_universal_date_list$, $sbhl_extended_universal_date_list$, NIL));
+        deflexical("*SBHL-TIME-PREDICATES*", SubLSystemTrampolineFile.maybeDefault($sbhl_time_predicates$, $sbhl_time_predicates$, NIL));
+        deflexical("*SBHL-TIME-MODULES*", SubLSystemTrampolineFile.maybeDefault($sbhl_time_modules$, $sbhl_time_modules$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         defparameter("*SBHL-TEMPORAL-POINTS-BEING-REMOVED*", NIL);
         defparameter("*SBHL-TEMPORAL-LINK-DISJUNCTION-CONSEQUENT-TABLE*", NIL);
         defparameter("*SBHL-TEMPORALITY-DONT-COLLECT-DATES-WHEN-ALL-ACCESSING?*", NIL);

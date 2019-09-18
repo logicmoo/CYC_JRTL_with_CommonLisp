@@ -48,7 +48,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -196,82 +196,82 @@ public final class super_file_hash_table extends SubLTranslatedFile implements V
     }
 
     public static final SubLObject super_file_hash_table_basename(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.getField2();
     }
 
     public static final SubLObject super_file_hash_table_serialization(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.getField3();
     }
 
     public static final SubLObject super_file_hash_table_testfn(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.getField4();
     }
 
     public static final SubLObject super_file_hash_table_count(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.getField5();
     }
 
     public static final SubLObject super_file_hash_table_default_sub_count(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.getField6();
     }
 
     public static final SubLObject super_file_hash_table_default_sub_size(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.getField7();
     }
 
     public static final SubLObject super_file_hash_table_sxhash_two(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.getField8();
     }
 
     public static final SubLObject super_file_hash_table_fhts(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.getField9();
     }
 
     public static final SubLObject _csetf_super_file_hash_table_basename(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_super_file_hash_table_serialization(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_super_file_hash_table_testfn(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_super_file_hash_table_count(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_super_file_hash_table_default_sub_count(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_super_file_hash_table_default_sub_size(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_super_file_hash_table_sxhash_two(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_super_file_hash_table_fhts(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, SUPER_FILE_HASH_TABLE_P);
 	return v_object.setField9(value);
     }
 

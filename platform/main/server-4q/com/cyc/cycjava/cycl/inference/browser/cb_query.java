@@ -247,7 +247,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3122,7 +3122,7 @@ public final class cb_query extends SubLTranslatedFile {
             final ArrayList old_values = extract_dynamic_values(cprogv_var);
             try {
                 bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(v_special_variable_state));
-                SubLTrampolineFile.enforceType(v_special_variable_state, SPECIAL_VARIABLE_STATE_P);
+                SubLSystemTrampolineFile.enforceType(v_special_variable_state, SPECIAL_VARIABLE_STATE_P);
                 Semaphores.semaphore_signal(semaphore);
                 if (NIL != inference_datastructures_inference.valid_inference_p(inference)) {
                     try {
@@ -14527,7 +14527,7 @@ public final class cb_query extends SubLTranslatedFile {
     public static SubLObject init_cb_query_file() {
         deflexical("*CB-INFERENCE-PROGRESS-FRAME-ENABLED?*", T);
         deflexical("*CB-INFERENCE-HELP-FILENAME*", $str26$inference_overview);
-        deflexical("*INFERENCE-PARAMETER-TABLE*", SubLTrampolineFile.maybeDefault($inference_parameter_table$, $inference_parameter_table$, () -> dictionary.new_dictionary(EQ, UNPROVIDED)));
+        deflexical("*INFERENCE-PARAMETER-TABLE*", SubLSystemTrampolineFile.maybeDefault($inference_parameter_table$, $inference_parameter_table$, () -> dictionary.new_dictionary(EQ, UNPROVIDED)));
         deflexical("*INFERENCE-MODE-CUSTOM-VALUE-NUMBER*", FOUR_INTEGER);
         defvar("*CB-INFERENCES*", NIL);
         defvar("*CB-CYC-EDITOR-ENABLED?*", NIL);

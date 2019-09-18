@@ -41,7 +41,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -344,7 +344,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_add_thinking(SubLObject thinking) {
-        SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+        SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
         {
             SubLObject id = tm_thinking_id(thinking);
             dictionary.dictionary_enter($tm_thinking_index$.getGlobalValue(), id, thinking);
@@ -359,7 +359,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_remove_thinking(SubLObject thinking) {
-        SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+        SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
         {
             SubLObject id = tm_thinking_id(thinking);
             dictionary.dictionary_remove($tm_thinking_index$.getGlobalValue(), id);
@@ -377,7 +377,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
      * Retrieve a thinking task by ID.
      */
     public static final SubLObject tm_lookup_thinking(SubLObject id) {
-        SubLTrampolineFile.checkType(id, INTEGERP);
+        SubLSystemTrampolineFile.checkType(id, INTEGERP);
         return dictionary.dictionary_lookup($tm_thinking_index$.getGlobalValue(), id, UNPROVIDED);
     }
 
@@ -398,7 +398,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
      * Start THINKING running FUNCTION on ARG-LIST.
      */
     public static final SubLObject tm_thinking_start(SubLObject thinking, SubLObject function, SubLObject arg_list) {
-        SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+        SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
         process_utilities.thinking_note_property(thinking, $FUNCTION, function);
         process_utilities.thinking_note_property(thinking, $ARGS, arg_list);
         return process_utilities.thinking_start(thinking, TM_THINKING_THREAD_RUN, NIL);
@@ -438,7 +438,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
      * Remember FUNCTION and ARG-LIST so that THINKING can be started on them later.
      */
     public static final SubLObject tm_thinking_delay_start(SubLObject thinking, SubLObject function, SubLObject arg_list) {
-        SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+        SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
         process_utilities.thinking_note_property(thinking, $FUNCTION, function);
         process_utilities.thinking_note_property(thinking, $ARGS, arg_list);
         return thinking;
@@ -451,8 +451,8 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
         {
             SubLObject function = tm_thinking_function(thinking);
             SubLObject args = tm_thinking_args(thinking);
-            SubLTrampolineFile.checkType(function, FUNCTION_SPEC_P);
-            SubLTrampolineFile.checkType(args, CONSP);
+            SubLSystemTrampolineFile.checkType(function, FUNCTION_SPEC_P);
+            SubLSystemTrampolineFile.checkType(args, CONSP);
             return process_utilities.thinking_start(thinking, function, args);
         }
     }
@@ -464,8 +464,8 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
         if (thinking == UNPROVIDED) {
             thinking = process_utilities.thinking_task();
         }
-        SubLTrampolineFile.checkType(sofar, INTEGERP);
-        SubLTrampolineFile.checkType(total, INTEGERP);
+        SubLSystemTrampolineFile.checkType(sofar, INTEGERP);
+        SubLSystemTrampolineFile.checkType(total, INTEGERP);
         if (NIL != process_utilities.thinking_task_p(thinking)) {
             process_utilities.thinking_note_progress_sofar(thinking, sofar);
             process_utilities.thinking_note_progress_total(thinking, total);
@@ -497,7 +497,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
         if (thinking == UNPROVIDED) {
             thinking = process_utilities.thinking_task();
         }
-        SubLTrampolineFile.checkType(sofar, INTEGERP);
+        SubLSystemTrampolineFile.checkType(sofar, INTEGERP);
         if (NIL != process_utilities.thinking_task_p(thinking)) {
             process_utilities.thinking_note_progress_sofar(thinking, sofar);
         }
@@ -511,7 +511,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
         if (thinking == UNPROVIDED) {
             thinking = process_utilities.thinking_task();
         }
-        SubLTrampolineFile.checkType(total, INTEGERP);
+        SubLSystemTrampolineFile.checkType(total, INTEGERP);
         if (NIL != process_utilities.thinking_task_p(thinking)) {
             process_utilities.thinking_note_progress_total(thinking, total);
         }
@@ -522,7 +522,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
         if (thinking == UNPROVIDED) {
             thinking = process_utilities.thinking_task();
         }
-        SubLTrampolineFile.checkType(property, KEYWORDP);
+        SubLSystemTrampolineFile.checkType(property, KEYWORDP);
         if (NIL != process_utilities.thinking_task_p(thinking)) {
             process_utilities.thinking_note_property(thinking, property, value);
         }
@@ -533,7 +533,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
      * Returns all running thinking tasks having type = TYPE.
      */
     public static final SubLObject tm_active_thinking_tasks_of_type(SubLObject type) {
-        SubLTrampolineFile.checkType(type, KEYWORDP);
+        SubLSystemTrampolineFile.checkType(type, KEYWORDP);
         {
             SubLObject result = NIL;
             SubLObject cdolist_list_var = tm_all_thinkings();
@@ -551,8 +551,8 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
      * Returns all thinking tasks of TYPE which involve THESAURUS.
      */
     public static final SubLObject tm_thinking_tasks_of_type_for_thesaurus(SubLObject type, SubLObject thesaurus) {
-        SubLTrampolineFile.checkType(type, KEYWORDP);
-        SubLTrampolineFile.checkType(thesaurus, $sym57$THESAURUS_);
+        SubLSystemTrampolineFile.checkType(type, KEYWORDP);
+        SubLSystemTrampolineFile.checkType(thesaurus, $sym57$THESAURUS_);
         {
             SubLObject result = NIL;
             SubLObject cdolist_list_var = tm_all_thinkings();
@@ -611,8 +611,8 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
      * THESAURUS.
      */
     public static final SubLObject tm_active_thinking_tasks_of_type_for_thesaurus(SubLObject type, SubLObject thesaurus) {
-        SubLTrampolineFile.checkType(type, KEYWORDP);
-        SubLTrampolineFile.checkType(thesaurus, $sym57$THESAURUS_);
+        SubLSystemTrampolineFile.checkType(type, KEYWORDP);
+        SubLSystemTrampolineFile.checkType(thesaurus, $sym57$THESAURUS_);
         {
             SubLObject candidates = tm_thinking_tasks_of_type_for_thesaurus(type, thesaurus);
             SubLObject result = NIL;
@@ -632,7 +632,7 @@ public final class tm_thinking extends SubLTranslatedFile implements V02 {
      * are actively running or not.
      */
     public static final SubLObject tm_any_thinking_task_for_thesaurus(SubLObject thesaurus) {
-        SubLTrampolineFile.checkType(thesaurus, $sym57$THESAURUS_);
+        SubLSystemTrampolineFile.checkType(thesaurus, $sym57$THESAURUS_);
         return makeBoolean(((((NIL != tm_thinking_tasks_of_type_for_thesaurus($COPY_THESAURUS, thesaurus)) || (NIL != tm_thinking_tasks_of_type_for_thesaurus($LOAD_THESAURUS, thesaurus))) || (NIL != tm_thinking_tasks_of_type_for_thesaurus($UPDATE_LOAD, thesaurus))) || (NIL != tm_thinking_tasks_of_type_for_thesaurus($OUTPUT_THESAURUS, thesaurus))) || (NIL != tm_thinking_tasks_of_type_for_thesaurus($BACKUP_THESAURI, thesaurus)));
     }
 

@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -790,7 +790,7 @@ public final class removal_modules_relation_all extends SubLTranslatedFile {
     public static SubLObject init_removal_modules_relation_all_file() {
         defparameter("*ESTIMATED-PER-COLLECTION-RELATION-ALL-FRACTION*", TEN_INTEGER);
         deflexical("*RELATION-ALL-RULE*", $list1);
-        deflexical("*RELATION-ALL-DEFINING-MT*", SubLTrampolineFile.maybeDefault($relation_all_defining_mt$, $relation_all_defining_mt$, $$BaseKB));
+        deflexical("*RELATION-ALL-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($relation_all_defining_mt$, $relation_all_defining_mt$, $$BaseKB));
         defparameter("*REMOVAL-RELATION-ALL-CHECK-COST*", $float$1_5);
         return NIL;
     }

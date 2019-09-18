@@ -216,7 +216,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -4370,7 +4370,7 @@ public final class kb_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject find_object_by_hl_external_id_string(final SubLObject id_string) {
-        SubLTrampolineFile.enforceType(id_string, HL_EXTERNAL_ID_STRING_P);
+        SubLSystemTrampolineFile.enforceType(id_string, HL_EXTERNAL_ID_STRING_P);
         return find_object_by_hl_id_string(id_string, $HEX);
     }
 
@@ -4383,7 +4383,7 @@ public final class kb_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject find_object_by_compact_hl_external_id_string(final SubLObject id_string) {
-        SubLTrampolineFile.enforceType(id_string, COMPACT_HL_EXTERNAL_ID_STRING_P);
+        SubLSystemTrampolineFile.enforceType(id_string, COMPACT_HL_EXTERNAL_ID_STRING_P);
         return find_object_by_hl_id_string(id_string, $64);
     }
 

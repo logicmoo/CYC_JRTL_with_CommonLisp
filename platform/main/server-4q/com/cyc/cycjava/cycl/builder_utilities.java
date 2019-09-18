@@ -164,7 +164,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1485,7 +1485,7 @@ public final class builder_utilities extends SubLTranslatedFile {
         if (target_remote_op_count == UNPROVIDED) {
             target_remote_op_count = transcript_server.total_master_transcript_operations_patient(UNPROVIDED);
         }
-        SubLTrampolineFile.enforceType(target_remote_op_count, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(target_remote_op_count, NON_NEGATIVE_INTEGER_P);
         final SubLObject actual_remote_op_count = operation_communication.kb_op_number();
         return numLE(target_remote_op_count, actual_remote_op_count);
     }
@@ -2228,7 +2228,7 @@ public final class builder_utilities extends SubLTranslatedFile {
 
     public static SubLObject serialize_kb_store_lru_information(final SubLObject directory) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(directory, DIRECTORY_P);
+        SubLSystemTrampolineFile.enforceType(directory, DIRECTORY_P);
         final SubLObject message = cconcatenate($str151$Serializing_LRU_information_for_K, format_nil.format_nil_a_no_copy(directory));
         final SubLObject list_var = list(constant_index_manager.$constant_index_manager$.getGlobalValue(), nart_index_manager.$nart_index_manager$.getGlobalValue(), nart_hl_formula_manager.$nart_hl_formula_manager$.getGlobalValue(), assertion_manager.$assertion_content_manager$.getGlobalValue(), kb_hl_support_manager.$kb_hl_support_content_manager$.getGlobalValue(), deduction_manager.$deduction_content_manager$.getGlobalValue(), unrepresented_term_index_manager.$unrepresented_term_index_manager$.getGlobalValue());
         final SubLObject _prev_bind_0 = $progress_note$.currentBinding(thread);
@@ -2286,7 +2286,7 @@ public final class builder_utilities extends SubLTranslatedFile {
 
     public static SubLObject precache_kb_store_by_lru_information(final SubLObject directory) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(directory, DIRECTORY_P);
+        SubLSystemTrampolineFile.enforceType(directory, DIRECTORY_P);
         final SubLObject message = cconcatenate($str154$Precaching_KB_Store_with_LRU_info, format_nil.format_nil_a_no_copy(directory));
         final SubLObject list_var = list(constant_index_manager.$constant_index_manager$.getGlobalValue(), nart_index_manager.$nart_index_manager$.getGlobalValue(), nart_hl_formula_manager.$nart_hl_formula_manager$.getGlobalValue(), assertion_manager.$assertion_content_manager$.getGlobalValue(), kb_hl_support_manager.$kb_hl_support_content_manager$.getGlobalValue(), deduction_manager.$deduction_content_manager$.getGlobalValue(), unrepresented_term_index_manager.$unrepresented_term_index_manager$.getGlobalValue());
         final SubLObject _prev_bind_0 = $progress_note$.currentBinding(thread);
@@ -3128,7 +3128,7 @@ public final class builder_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject set_build_process_worker_count(final SubLObject workers) {
-        SubLTrampolineFile.enforceType(workers, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(workers, NON_NEGATIVE_INTEGER_P);
         final SubLObject old = $build_process_worker_count$.getGlobalValue();
         $build_process_worker_count$.setGlobalValue(workers);
         return old;
@@ -3305,7 +3305,7 @@ public final class builder_utilities extends SubLTranslatedFile {
             constant_state = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(dump_dir, DIRECTORY_P);
+        SubLSystemTrampolineFile.enforceType(dump_dir, DIRECTORY_P);
         SubLObject changedP = NIL;
         try {
             thread.resetMultipleValues();
@@ -5149,9 +5149,9 @@ public final class builder_utilities extends SubLTranslatedFile {
         deflexical("*STANDARD-REGRESSION-CONDITIONS*", $list97);
         defparameter("*ALL-CYC-PRODUCTS*", NIL);
         defparameter("*CYC-PRODUCT-DEFINITIONS*", NIL);
-        deflexical("*CYC-PRODUCT*", SubLTrampolineFile.maybeDefault($cyc_product$, $cyc_product$, NIL));
+        deflexical("*CYC-PRODUCT*", SubLSystemTrampolineFile.maybeDefault($cyc_product$, $cyc_product$, NIL));
         defconstant("*CODE-PRODUCT*", $STANDARD);
-        deflexical("*KB-PRODUCT*", SubLTrampolineFile.maybeDefault($kb_product$, $kb_product$, NIL));
+        deflexical("*KB-PRODUCT*", SubLSystemTrampolineFile.maybeDefault($kb_product$, $kb_product$, NIL));
         defconstant("*BRANCH-TAG*", $$$head);
         defparameter("*GENERIC-SBHL-CACHING-POLICY-TEMPLATES*", list(new SubLObject[]{ specify_sbhl_caching_policy_template($DEFAULT, $STICKY, $UNDEFINED, $ALL, UNPROVIDED), specify_sbhl_caching_policy_template($$genlMt, $STICKY, $UNDEFINED, $ALL, $ALL), specify_sbhl_caching_policy_template($$isa, $SWAPOUT, $int$10000, $int$8000, $int$2000), specify_sbhl_caching_policy_template($$quotedIsa, $SWAPOUT, $int$5000, $int$4000, $int$1000), specify_sbhl_caching_policy_template($$genls, $SWAPOUT, $int$5000, $int$5000, $int$2000), specify_sbhl_caching_policy_template($$disjointWith, $SWAPOUT, $int$1500, $int$1500, $int$200), specify_sbhl_caching_policy_template($$genlPreds, $SWAPOUT, $int$1500, $int$1500, $int$200), specify_sbhl_caching_policy_template($$genlInverse, $SWAPOUT, $int$1500, $int$1500, $int$200), specify_sbhl_caching_policy_template($$negationPreds, $SWAPOUT, $int$1500, $int$1000, ZERO_INTEGER), specify_sbhl_caching_policy_template($$negationInverse, $SWAPOUT, $int$1500, $int$1000, ZERO_INTEGER) }));
         defparameter("*CYC-TESTS-TO-USE-FOR-SBHL-CACHE-TUNING*", NIL);

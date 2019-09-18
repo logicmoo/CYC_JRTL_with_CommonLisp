@@ -22,7 +22,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -398,7 +398,7 @@ public final class sbhl_module_declarations extends SubLTranslatedFile {
     }
 
     public static SubLObject init_sbhl_module_declarations_file() {
-        deflexical("*SBHL-MODULES-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym74$_SBHL_MODULES_INITIALIZED__, $sbhl_modules_initializedP$, NIL));
+        deflexical("*SBHL-MODULES-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($sym74$_SBHL_MODULES_INITIALIZED__, $sbhl_modules_initializedP$, NIL));
         return NIL;
     }
 

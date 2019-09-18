@@ -72,7 +72,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -315,7 +315,7 @@ public final class wordnet_import_offline_tasks extends SubLTranslatedFile {
         assert NIL != forts.fort_p(pos) : "forts.fort_p(pos) " + "CommonSymbols.NIL != forts.fort_p(pos) " + pos;
         assert NIL != booleanp(only_individualsP) : "Types.booleanp(only_individualsP) " + "CommonSymbols.NIL != Types.booleanp(only_individualsP) " + only_individualsP;
         assert NIL != booleanp(situation_nounsP) : "Types.booleanp(situation_nounsP) " + "CommonSymbols.NIL != Types.booleanp(situation_nounsP) " + situation_nounsP;
-        if (((NIL != restart_synset) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == narts_high.naut_p(restart_synset))) {
+        if (((NIL != restart_synset) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == narts_high.naut_p(restart_synset))) {
             throw new AssertionError(restart_synset);
         }
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == sksi_infrastructure_utilities.sk_source_registeredP($const7$WordNet2_0_KS, UNPROVIDED))) {

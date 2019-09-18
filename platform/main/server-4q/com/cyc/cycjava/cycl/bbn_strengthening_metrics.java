@@ -62,7 +62,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -128,7 +128,7 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
     public static final SubLObject bbn_strengthening_metric_value_type(SubLObject metric) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
+            SubLSystemTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
             {
                 SubLObject value_type = list_utilities.alist_lookup($bbn_strengthening_metrics$.getGlobalValue(), metric, UNPROVIDED, UNPROVIDED).first();
                 if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
@@ -156,7 +156,7 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
     public static final SubLObject bbn_strengthening_metric_subheading_type(SubLObject metric) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
+            SubLSystemTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
             {
                 SubLObject plist = third(list_utilities.alist_lookup($bbn_strengthening_metrics$.getGlobalValue(), metric, UNPROVIDED, UNPROVIDED));
                 SubLObject subheading_type = getf(plist, $SUBHEADING, NIL);
@@ -175,7 +175,7 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
     public static final SubLObject bbn_strengthening_metric_header(SubLObject metric) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
+            SubLSystemTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
             {
                 SubLObject header = second(list_utilities.alist_lookup($bbn_strengthening_metrics$.getGlobalValue(), metric, UNPROVIDED, UNPROVIDED));
                 if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
@@ -195,7 +195,7 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
         if (store == UNPROVIDED) {
             store = bbn_metrics_store();
         }
-        SubLTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
+        SubLSystemTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
         {
             SubLObject value = NIL;
             SubLObject v_default = bbn_strengthening_metric_value_default(metric);
@@ -271,22 +271,22 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
     }
 
     public static final SubLObject bbn_metrics_store_document(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BBN_METRICS_STORE_P);
+        SubLSystemTrampolineFile.checkType(v_object, BBN_METRICS_STORE_P);
         return v_object.getField2();
     }
 
     public static final SubLObject bbn_metrics_store_metrics(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BBN_METRICS_STORE_P);
+        SubLSystemTrampolineFile.checkType(v_object, BBN_METRICS_STORE_P);
         return v_object.getField3();
     }
 
     public static final SubLObject _csetf_bbn_metrics_store_document(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BBN_METRICS_STORE_P);
+        SubLSystemTrampolineFile.checkType(v_object, BBN_METRICS_STORE_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_bbn_metrics_store_metrics(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BBN_METRICS_STORE_P);
+        SubLSystemTrampolineFile.checkType(v_object, BBN_METRICS_STORE_P);
         return v_object.setField3(value);
     }
 
@@ -443,7 +443,7 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
+            SubLSystemTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
             {
                 SubLObject value_type = bbn_strengthening_metric_value_type(metric);
                 if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
@@ -453,10 +453,10 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
                 }
             }
             if (NIL != subheading) {
-                SubLTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_HAS_SUBHEADINGS_P);
+                SubLSystemTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_HAS_SUBHEADINGS_P);
                 {
                     SubLObject subheading_type = bbn_strengthening_metric_subheading_type(metric);
-                    SubLTrampolineFile.checkType(subheading_type, FBOUNDP);
+                    SubLSystemTrampolineFile.checkType(subheading_type, FBOUNDP);
                     if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                         if (NIL == funcall(subheading_type, subheading)) {
                             Errors.error($str_alt36$_S_is_not_a__S, subheading, SUBHEADING_TYPE);
@@ -504,12 +504,12 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
+            SubLSystemTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_P);
             if (NIL != subheading) {
-                SubLTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_HAS_SUBHEADINGS_P);
+                SubLSystemTrampolineFile.checkType(metric, BBN_STRENGTHENING_METRIC_HAS_SUBHEADINGS_P);
                 {
                     SubLObject subheading_type = bbn_strengthening_metric_subheading_type(metric);
-                    SubLTrampolineFile.checkType(subheading_type, FBOUNDP);
+                    SubLSystemTrampolineFile.checkType(subheading_type, FBOUNDP);
                     if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                         if (NIL == funcall(subheading_type, subheading)) {
                             Errors.error($str_alt36$_S_is_not_a__S, subheading, SUBHEADING_TYPE);
@@ -645,7 +645,7 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
         }
-        SubLTrampolineFile.checkType(stream, STREAMP);
+        SubLSystemTrampolineFile.checkType(stream, STREAMP);
         {
             SubLObject cdolist_list_var = bbn_strengthening_metrics();
             SubLObject metric = NIL;
@@ -736,8 +736,8 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
         if (store == UNPROVIDED) {
             store = bbn_metrics_store();
         }
-        SubLTrampolineFile.checkType(stream, STREAMP);
-        SubLTrampolineFile.checkType(store, BBN_METRICS_STORE_P);
+        SubLSystemTrampolineFile.checkType(stream, STREAMP);
+        SubLSystemTrampolineFile.checkType(store, BBN_METRICS_STORE_P);
         {
             SubLObject cdolist_list_var = bbn_strengthening_metrics();
             SubLObject metric = NIL;

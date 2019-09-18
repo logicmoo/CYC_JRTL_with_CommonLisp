@@ -110,7 +110,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1179,7 +1179,7 @@ public final class acip extends SubLTranslatedFile {
             trace_stream = StreamsLow.$standard_output$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != trace_stream) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == streamp(trace_stream))) {
+        if (((NIL != trace_stream) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == streamp(trace_stream))) {
             throw new AssertionError(trace_stream);
         }
         final SubLObject observation_mt = $acip_defender_observation_mt$.getGlobalValue();
@@ -1900,7 +1900,7 @@ public final class acip extends SubLTranslatedFile {
         deflexical("*QUAD-3D-TOLERANCE-ACCEL*", $float$0_1);
         deflexical("*QUAD-3D-TOLERANCE-VELOC*", ONE_INTEGER);
         deflexical("*QUAD-3D-TOLERANCE-LOCAT*", TEN_INTEGER);
-        deflexical("*ACIP-DEFENDER-OBSERVATION-MT*", SubLTrampolineFile.maybeDefault($acip_defender_observation_mt$, $acip_defender_observation_mt$, $$ACIPDefenderObservationMt));
+        deflexical("*ACIP-DEFENDER-OBSERVATION-MT*", SubLSystemTrampolineFile.maybeDefault($acip_defender_observation_mt$, $acip_defender_observation_mt$, $$ACIPDefenderObservationMt));
         deflexical("*ACIP-LOAD-DEFENDER-OBSERVATIONS-CACHING-STATE*", NIL);
         deflexical("*ACIP-PARTITION*", $list130);
         deflexical("*ACIP-BACKGROUND-PARTITION*", $list132);

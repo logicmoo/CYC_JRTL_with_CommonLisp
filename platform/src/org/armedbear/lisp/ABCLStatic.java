@@ -6,49 +6,97 @@ import static org.logicmoo.system.Startup.setSubLisp;
 
 import java.util.concurrent.Callable;
 
+import org.logicmoo.system.Startup;
+import org.logicmoo.system.SystemCurrent;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 
 public class ABCLStatic {
+	static {
+		SystemCurrent.setupIO();
+	}
+
 	@LispMethod
-	public static <T> T subl_preserve_pkg(final boolean tf, boolean keepPackage, final Callable<T> str) {
+	public static <T> T subl_preserve_pkg(final boolean clOrSubL, boolean keepPackage, final Callable<T> str) {
 		boolean wasSubLisp = isSubLisp();
-		SubLPackage package1;
+		Package package1;
 		if (keepPackage) {
 			package1 = Lisp.getCurrentPackage();
 		} else {
 			package1 = null;
 		}
-		setSubLisp(tf);
+		if (wasSubLisp != clOrSubL)
+			setSubLisp(clOrSubL);
 		try {
 			return str.call();
 		} catch (Throwable e) {
 			throw doThrow(e);
-		} finally { 
+		} finally {
 			setSubLisp(wasSubLisp);
+			if (package1 != null) {
+				Lisp.setCurrentPackage(package1);
+			}
 		}
 	}
-	
+
 	@LispMethod
-	public static <T> T subl_preserve_pkg(final boolean tf, boolean keepPackage, final Runnable str) {
+	public static <T> T subl_preserve_pkg(final boolean clOrSubL, boolean keepPackage, final Runnable str) {
 		boolean wasSubLisp = isSubLisp();
-		SubLPackage package1;
+		Package package1;
 		if (keepPackage) {
 			package1 = Lisp.getCurrentPackage();
 		} else {
 			package1 = null;
 		}
-		setSubLisp(tf);
+		if (wasSubLisp != clOrSubL)
+			setSubLisp(clOrSubL);
 		try {
 			str.run();
-			return null;
+			return (T) Lisp.T;
 		} catch (Throwable e) {
 			throw doThrow(e);
-		} finally { 
+		} finally {
 			setSubLisp(wasSubLisp);
+			if (package1 != null) {
+				Lisp.setCurrentPackage(package1);
+			}
 		}
 	}
+
+	@LispMethod
+	public static <T> T with_thread_prefix(String pref, boolean forceCL, final Callable<T> str) {
+		if (forceCL && Startup.optimizeForSpeed) {
+			return subl_preserve_pkg(false, false, str);
+		}
+		Thread ct = null;
+		String tn = null;
+		if (!Startup.optimizeForSpeed) {
+			ct = Thread.currentThread();
+			tn = ct.getName();
+			pref = pref.replace(Startup.getPlatformDir(), "$PLATFORM");
+			if (tn.contains(pref)) {
+				tn = null;
+			} else {
+				final String name = "" + (int) (tn.length() / 8) + ": " + pref + " " + tn;
+				ct.setName(name);
+			}
+		}
+
+		try {
+			if (forceCL) {
+				return subl_preserve_pkg(false, false, str);
+			} else {
+				return str.call();
+			}
+		} catch (Throwable e) {
+			throw doThrow(e);
+		} finally {
+			if (tn != null)
+				ct.setName(tn);
+		}
+	}
+
 	/**
 	 * @param incomingArgs
 	 * @return

@@ -71,7 +71,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class modules extends SubLTranslatedFile {
     public static final SubLFile me = new modules();
@@ -1113,9 +1113,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         deflexical("*MODULE-LOCK*", make_lock($$$Module_Lock));
         deflexical("*SYSTEM-LOCK*", make_lock($$$System_Lock));
         defconstant("*DTP-MODULE*", MODULE);
-        deflexical("*MODULE-INDEX*", SubLTrampolineFile.maybeDefault($module_index$, $module_index$, () -> make_hash_table($int$1024, symbol_function(EQUALP), UNPROVIDED)));
+        deflexical("*MODULE-INDEX*", SubLSystemTrampolineFile.maybeDefault($module_index$, $module_index$, () -> make_hash_table($int$1024, symbol_function(EQUALP), UNPROVIDED)));
         defconstant("*DTP-SYSTEM*", SYSTEM);
-        deflexical("*SYSTEM-INDEX*", SubLTrampolineFile.maybeDefault($system_index$, $system_index$, NIL));
+        deflexical("*SYSTEM-INDEX*", SubLSystemTrampolineFile.maybeDefault($system_index$, $system_index$, NIL));
         return NIL;
     }
 

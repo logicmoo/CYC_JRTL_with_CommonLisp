@@ -137,7 +137,7 @@ public class REPLConsole extends DefaultStyledDocument {
   private final Thread replThread;
 	
 	public REPLConsole(Supplier<LispObject> replFunction) {
-		final LispObject replWrapper = makeReplWrapper(new Stream(Symbol.SYSTEM_STREAM, new BufferedReader(reader)), new Stream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer)), replFunction);
+		final LispObject replWrapper = makeReplWrapper(Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedReader(reader)), Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer)), replFunction);
     replThread = new Thread("REPL-thread-" + System.identityHashCode(this)) {
         @Override
 		public void run() {

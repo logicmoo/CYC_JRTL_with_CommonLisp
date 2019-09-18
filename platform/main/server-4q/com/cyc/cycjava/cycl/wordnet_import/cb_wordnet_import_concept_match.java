@@ -84,7 +84,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -472,7 +472,7 @@ public final class cb_wordnet_import_concept_match extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != narts_high.naut_p(synset) : "narts_high.naut_p(synset) " + "CommonSymbols.NIL != narts_high.naut_p(synset) " + synset;
-        if (((NIL != workflow_alist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == list_utilities.alist_p(workflow_alist))) {
+        if (((NIL != workflow_alist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == list_utilities.alist_p(workflow_alist))) {
             throw new AssertionError(workflow_alist);
         }
         synset = wordnet_import.wni_ensure_naut(synset);
@@ -1382,21 +1382,21 @@ public final class cb_wordnet_import_concept_match extends SubLTranslatedFile {
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != narts_high.naut_p(synset) : "narts_high.naut_p(synset) " + "CommonSymbols.NIL != narts_high.naut_p(synset) " + synset;
         assert NIL != booleanp(new_termP) : "Types.booleanp(new_termP) " + "CommonSymbols.NIL != Types.booleanp(new_termP) " + new_termP;
-        if (((NIL != new_term_genl_name) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(new_term_genl_name))) {
+        if (((NIL != new_term_genl_name) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(new_term_genl_name))) {
             throw new AssertionError(new_term_genl_name);
         }
-        if (((NIL != new_term_additional_genl_name) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(new_term_additional_genl_name))) {
+        if (((NIL != new_term_additional_genl_name) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(new_term_additional_genl_name))) {
             throw new AssertionError(new_term_additional_genl_name);
         }
         assert NIL != listp(genl_terms) : "Types.listp(genl_terms) " + "CommonSymbols.NIL != Types.listp(genl_terms) " + genl_terms;
-        if (((NIL != another_term_name) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(another_term_name))) {
+        if (((NIL != another_term_name) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(another_term_name))) {
             throw new AssertionError(another_term_name);
         }
-        if (((NIL != matched_term) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == forts.fort_p(matched_term))) {
+        if (((NIL != matched_term) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == forts.fort_p(matched_term))) {
             throw new AssertionError(matched_term);
         }
         assert NIL != booleanp(skip_this_synsetP) : "Types.booleanp(skip_this_synsetP) " + "CommonSymbols.NIL != Types.booleanp(skip_this_synsetP) " + skip_this_synsetP;
-        if (((NIL != synset_note) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(synset_note))) {
+        if (((NIL != synset_note) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(synset_note))) {
             throw new AssertionError(synset_note);
         }
         assert NIL != list_utilities.alist_p(workflow_alist) : "list_utilities.alist_p(workflow_alist) " + "CommonSymbols.NIL != list_utilities.alist_p(workflow_alist) " + workflow_alist;
@@ -1623,7 +1623,7 @@ public final class cb_wordnet_import_concept_match extends SubLTranslatedFile {
         } else {
             v_term = NIL;
         }
-        if (((NIL != v_term) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == forts.fort_p(v_term))) {
+        if (((NIL != v_term) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == forts.fort_p(v_term))) {
             throw new AssertionError(v_term);
         }
         return v_term;

@@ -148,7 +148,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class document extends SubLTranslatedFile {
     public static final SubLFile me = new document();
@@ -2554,7 +2554,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (wordifier == UNPROVIDED) {
             wordifier = FST_STRING_WORDIFY;
         }
-        if (((NIL != string) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(string))) {
+        if (((NIL != string) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(string))) {
             throw new AssertionError(string);
         }
         final SubLObject sentence = new_phrase(UNPROVIDED);

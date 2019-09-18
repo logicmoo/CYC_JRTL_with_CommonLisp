@@ -9,6 +9,7 @@ import java.util.Iterator;
 import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.SimpleString;
+import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -23,9 +24,9 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Packages extends SubLTrampolineFile {
+public class Packages extends SubLSystemTrampolineFile {
     public static SubLObject apropos(SubLObject nameSpec, SubLObject packageSpec, SubLObject externalOnly, SubLObject caseInsensitive) {
         if (externalOnly == CommonSymbols.UNPROVIDED)
             externalOnly = SubLNil.NIL;
@@ -55,9 +56,9 @@ public class Packages extends SubLTrampolineFile {
 
     public static SubLObject export(SubLObject symbols, SubLObject thePackage) {
         if (symbols.isSymbol())
-            SubLTrampolineFile.extractPackage(thePackage).export(symbols.toSymbol().toLispObject());
+            SubLSystemTrampolineFile.extractPackage(thePackage).export(symbols.toSymbol().toLispObject());
         else
-            SubLTrampolineFile.extractPackage(thePackage).exportSymbols(symbols);
+            SubLSystemTrampolineFile.extractPackage(thePackage).exportSymbols(symbols);
         return CommonSymbols.T;
     }
 
@@ -84,7 +85,8 @@ public class Packages extends SubLTrampolineFile {
 
     public static SubLObject in_package(SubLObject packageName) {
         SubLString packageNameTyped = packageName.isString() ? packageName.toStr() : Strings.string(packageName).toStr();
-        return SubLPackage.setCurrentPackage(packageNameTyped);
+        Lisp.setCurrentPackage(packageNameTyped.getStringValue());
+        return Lisp.getCurrentPackage();
     }
 
     public static SubLObject intern(SubLObject symbolSpec, SubLObject packageSpec) {
@@ -106,7 +108,7 @@ public class Packages extends SubLTrampolineFile {
     }
 
     public static SubLObject lock_package(SubLObject thePackage) {
-        SubLPackage thePackageTyped = SubLTrampolineFile.extractPackage(thePackage);
+        SubLPackage thePackageTyped = SubLSystemTrampolineFile.extractPackage(thePackage);
         thePackageTyped.setLocked();
         return thePackageTyped;
     }
@@ -124,27 +126,27 @@ public class Packages extends SubLTrampolineFile {
     }
 
     public static SubLObject package_locked_p(SubLObject thePackage) {
-        return SubLObjectFactory.makeBoolean(SubLTrampolineFile.extractPackage(thePackage).isLocked());
+        return SubLObjectFactory.makeBoolean(SubLSystemTrampolineFile.extractPackage(thePackage).isLocked());
     }
 
     public static SubLObject package_name(SubLObject thePackage) {
-        return SubLTrampolineFile.extractPackage(thePackage).getNameAsSubLString();
+        return SubLSystemTrampolineFile.extractPackage(thePackage).getNameAsSubLString();
     }
 
     public static SubLObject package_nicknames(SubLObject thePackage) {
-        return SubLTrampolineFile.extractPackage(thePackage).getNickNames();
+        return SubLSystemTrampolineFile.extractPackage(thePackage).getNickNames();
     }
 
     public static SubLObject package_shadowing_symbols(SubLObject thePackage) {
-        return SubLTrampolineFile.extractPackage(thePackage).getShadowingSymbols();
+        return SubLSystemTrampolineFile.extractPackage(thePackage).getShadowingSymbols();
     }
 
     public static SubLObject package_use_list(SubLObject thePackage) {
-        return SubLTrampolineFile.extractPackage(thePackage).getUseList();
+        return SubLSystemTrampolineFile.extractPackage(thePackage).getUseList();
     }
 
     public static SubLObject package_used_by_list(SubLObject thePackage) {
-        return SubLTrampolineFile.extractPackage(thePackage).getUsedByList();
+        return SubLSystemTrampolineFile.extractPackage(thePackage).getUsedByList();
     }
 
     public static SubLObject print_package(SubLObject thePackage, SubLObject stream) {
@@ -153,9 +155,9 @@ public class Packages extends SubLTrampolineFile {
 
     public static SubLObject sublisp_import(SubLObject symbols, SubLObject thePackage) {
         if (symbols.isSymbol())
-            SubLTrampolineFile.extractPackage(thePackage).importSymbol(symbols);
+            SubLSystemTrampolineFile.extractPackage(thePackage).importSymbol(symbols);
         else
-            SubLTrampolineFile.extractPackage(thePackage).importSymbols(symbols);
+            SubLSystemTrampolineFile.extractPackage(thePackage).importSymbols(symbols);
         return CommonSymbols.T;
     }
 
@@ -169,9 +171,9 @@ public class Packages extends SubLTrampolineFile {
 
     public static SubLObject unexport(SubLObject symbols, SubLObject thePackage) {
         if (symbols.isSymbol())
-            SubLTrampolineFile.extractPackage(thePackage).unexport(symbols.toSymbol().toLispObject());
+            SubLSystemTrampolineFile.extractPackage(thePackage).unexport(symbols.toSymbol().toLispObject());
         else
-            SubLTrampolineFile.extractPackage(thePackage).unexportSymbols(symbols);
+            SubLSystemTrampolineFile.extractPackage(thePackage).unexportSymbols(symbols);
         return CommonSymbols.T;
     }
 
@@ -220,9 +222,9 @@ public class Packages extends SubLTrampolineFile {
     public static SubLSymbol $package$;
     static {
         me = new Packages();
-        Packages.$package$ = SubLFiles.defvar(Packages.me, "*PACKAGE*", SubLPackage.SUBLISP_PACKAGE, Lisp.PACKAGE_CL);
+        Packages.$package$ =  Symbol._PACKAGE_; // SubLFiles.defvar(Packages.me, "*PACKAGE*", SubLPackage.SUBLISP_PACKAGE, Lisp.PACKAGE_CL);
         $package$.setValue(SubLPackage.SUBLISP_PACKAGE);
-        assert SubLPackage.getCurrentPackage() == SubLPackage.SUBLISP_PACKAGE;
+        //assert SubLPackage.getCurrentPackage() == SubLPackage.SUBLISP_PACKAGE;
         /*
         		Packages.$package$ = Symbol._PACKAGE_;
         		SubLPackage p =  SubLPackage.getCurrentPackage();

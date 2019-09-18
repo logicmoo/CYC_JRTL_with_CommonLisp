@@ -32,7 +32,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -971,7 +971,7 @@ public final class czer_vars extends SubLTranslatedFile {
         defparameter("*SEQUENCE-VARIABLE-SPLIT-LIMIT*", FIVE_INTEGER);
         defparameter("*SIMPLIFY-EQUALITY-LITERALS?*", NIL);
         defparameter("*SIMPLIFY-TRUE-SENTENCE-AWAY?*", NIL);
-        deflexical("*SKOLEM-AXIOM-TABLE*", SubLTrampolineFile.maybeDefault($skolem_axiom_table$, $skolem_axiom_table$, () -> make_hash_table($int$2048, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*SKOLEM-AXIOM-TABLE*", SubLSystemTrampolineFile.maybeDefault($skolem_axiom_table$, $skolem_axiom_table$, () -> make_hash_table($int$2048, symbol_function(EQUAL), UNPROVIDED)));
         defparameter("*INFER-SKOLEM-RESULT-ISA-VIA-ARG-CONSTRAINTS?*", T);
         defparameter("*INTERPOLATE-SINGLETON-ARG-ISA?*", NIL);
         defparameter("*CLOTHE-NAKED-SKOLEMS?*", NIL);

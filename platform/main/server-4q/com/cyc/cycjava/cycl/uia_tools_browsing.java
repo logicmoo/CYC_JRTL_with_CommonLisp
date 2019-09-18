@@ -95,7 +95,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -1557,7 +1557,7 @@ public final class uia_tools_browsing extends SubLTranslatedFile implements V02 
 	public static final SubLObject uiat_kescrap_load(SubLObject v_agenda, SubLObject filename) {
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(filename, STRINGP);
+			SubLSystemTrampolineFile.checkType(filename, STRINGP);
 			{
 				SubLObject scrapbook = user_interaction_agenda.uia_state_lookup(v_agenda, $SCRAPBOOK, UNPROVIDED);
 				if (NIL == scrapbook) {
@@ -1619,7 +1619,7 @@ public final class uia_tools_browsing extends SubLTranslatedFile implements V02 
 	public static final SubLObject uiat_kescrap_save(SubLObject v_agenda, SubLObject filename) {
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(filename, STRINGP);
+			SubLSystemTrampolineFile.checkType(filename, STRINGP);
 			{
 				SubLObject stream = NIL;
 				try {
@@ -1799,32 +1799,32 @@ public final class uia_tools_browsing extends SubLTranslatedFile implements V02 
 	}
 
 	public static final SubLObject scrap_book_terms(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
+		SubLSystemTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
 		return v_object.getField2();
 	}
 
 	public static final SubLObject scrap_book_assertions(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
+		SubLSystemTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
 		return v_object.getField3();
 	}
 
 	public static final SubLObject scrap_book_sentences(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
+		SubLSystemTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
 		return v_object.getField4();
 	}
 
 	public static final SubLObject _csetf_scrap_book_terms(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
+		SubLSystemTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
 		return v_object.setField2(value);
 	}
 
 	public static final SubLObject _csetf_scrap_book_assertions(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
+		SubLSystemTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
 		return v_object.setField3(value);
 	}
 
 	public static final SubLObject _csetf_scrap_book_sentences(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
+		SubLSystemTrampolineFile.checkType(v_object, SCRAP_BOOK_P);
 		return v_object.setField4(value);
 	}
 

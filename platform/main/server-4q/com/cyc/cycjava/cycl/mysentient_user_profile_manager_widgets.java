@@ -80,7 +80,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -178,8 +178,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (max_number == UNPROVIDED) {
 			max_number = NIL;
 		}
-		SubLTrampolineFile.checkType(v_term, CYCL_DENOTATIONAL_TERM_P);
-		SubLTrampolineFile.checkType(mt, HLMT_P);
+		SubLSystemTrampolineFile.checkType(v_term, CYCL_DENOTATIONAL_TERM_P);
+		SubLSystemTrampolineFile.checkType(mt, HLMT_P);
 		{
 			SubLObject results = NIL;
 			SubLObject deref_term = get_intended_referent_for_term(v_term, mt);
@@ -220,8 +220,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (max_time == UNPROVIDED) {
 			max_time = $mys_expansion_query_max_time$.getDynamicValue();
 		}
-		SubLTrampolineFile.checkType(v_term, CYCL_DENOTATIONAL_TERM_P);
-		SubLTrampolineFile.checkType(mt, HLMT_P);
+		SubLSystemTrampolineFile.checkType(v_term, CYCL_DENOTATIONAL_TERM_P);
+		SubLSystemTrampolineFile.checkType(mt, HLMT_P);
 		{
 			SubLObject results = NIL;
 			SubLObject relevant_results = NIL;
@@ -245,9 +245,9 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(v_term, CYCL_EXPRESSION_P);
-			SubLTrampolineFile.checkType(known_phrase, STRINGP);
-			SubLTrampolineFile.checkType(mt, MICROTHEORY_P);
+			SubLSystemTrampolineFile.checkType(v_term, CYCL_EXPRESSION_P);
+			SubLSystemTrampolineFile.checkType(known_phrase, STRINGP);
+			SubLSystemTrampolineFile.checkType(mt, MICROTHEORY_P);
 			{
 				SubLObject result = NIL;
 				SubLObject weights = NIL;
@@ -305,7 +305,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * 		the session to wipe
 	 */
 	public static final SubLObject wipe_session_mt_contents(SubLObject session_mt) {
-		SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
 		{
 			SubLObject cdolist_list_var = get_terms_learned_this_session(session_mt);
 			SubLObject v_term = NIL;
@@ -957,8 +957,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 *
 	 */
 	public static final SubLObject assert_peg_dependencies(SubLObject parent_peg, SubLObject child_pegs, SubLObject mt) {
-		SubLTrampolineFile.checkType(parent_peg, FORT_P);
-		SubLTrampolineFile.checkType(child_pegs, LISTP);
+		SubLSystemTrampolineFile.checkType(parent_peg, FORT_P);
+		SubLSystemTrampolineFile.checkType(child_pegs, LISTP);
 		{
 			SubLObject successP = T;
 			SubLObject cdolist_list_var = child_pegs;
@@ -993,7 +993,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * Get the most recent utterance peg.
 	 */
 	public static final SubLObject get_most_recent_utterance_peg(SubLObject session, SubLObject session_mt) {
-		SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
 		{
 			SubLObject peg_sets = ask_utilities.query_template($list_alt181, list($$and, $list_alt182, listS($$nthExpressionOfSession, session, $list_alt181)), session_mt, UNPROVIDED);
 			SubLObject latest_peg_set = Sort.sort(peg_sets, symbol_function($sym183$_), symbol_function(SECOND)).first();
@@ -1019,8 +1019,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * @unknown should all these facts really go in the profile Mt, or are they (or some of them) more properly session based?
 	 */
 	public static final SubLObject add_user_approved_fact(SubLObject assert_sentence, SubLObject profile_mt) {
-		SubLTrampolineFile.checkType(assert_sentence, $sym191$CYCL_SENTENCE_ASSERTIBLE_);
-		SubLTrampolineFile.checkType(profile_mt, HLMT_P);
+		SubLSystemTrampolineFile.checkType(assert_sentence, $sym191$CYCL_SENTENCE_ASSERTIBLE_);
+		SubLSystemTrampolineFile.checkType(profile_mt, HLMT_P);
 		return my_sent_assert_complex_sentence_with_implicature(assert_sentence, profile_mt, T);
 	}
 
@@ -1028,8 +1028,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * If a user agrees to assert something, they're not completely disgusted with the system, so assume they're slightly happy
 	 */
 	public static final SubLObject learn_happiness_from_user_assertion(SubLObject user, SubLObject session_mt) {
-		SubLTrampolineFile.checkType(user, FORT_P);
-		SubLTrampolineFile.checkType(session_mt, HLMT_P);
+		SubLSystemTrampolineFile.checkType(user, FORT_P);
+		SubLSystemTrampolineFile.checkType(session_mt, HLMT_P);
 		return mysentient_utilities.myse_assert_wff_now(listS($$feelsTowardsObject_Ternary, user, list($$NthInteractionOfSessionFn, $$MySeAnswersSession_JaneDoe_001, next_mys_interaction_number(user, session_mt)), $list_alt200), session_mt);
 	}
 
@@ -1044,9 +1044,9 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * 		hlmt-p
 	 */
 	public static final SubLObject learn_happiness_from_user_approval(SubLObject msg_type, SubLObject user, SubLObject session_mt) {
-		SubLTrampolineFile.checkType(msg_type, KEYWORDP);
-		SubLTrampolineFile.checkType(user, FORT_P);
-		SubLTrampolineFile.checkType(session_mt, HLMT_P);
+		SubLSystemTrampolineFile.checkType(msg_type, KEYWORDP);
+		SubLSystemTrampolineFile.checkType(user, FORT_P);
+		SubLSystemTrampolineFile.checkType(session_mt, HLMT_P);
 		{
 			SubLObject pcase_var = msg_type;
 			if (pcase_var.eql($APPROVE)) {
@@ -1105,10 +1105,10 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
 			if (NIL != original) {
-				SubLTrampolineFile.checkType(original, CYCL_SENTENCE_P);
+				SubLSystemTrampolineFile.checkType(original, CYCL_SENTENCE_P);
 			}
-			SubLTrampolineFile.checkType(v_new, CYCL_SENTENCE_P);
-			SubLTrampolineFile.checkType(mt, HLMT_P);
+			SubLSystemTrampolineFile.checkType(v_new, CYCL_SENTENCE_P);
+			SubLSystemTrampolineFile.checkType(mt, HLMT_P);
 			{
 				SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
 				SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1422,7 +1422,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(user, FORT_P);
+			SubLSystemTrampolineFile.checkType(user, FORT_P);
 			{
 				SubLObject session_term = NIL;
 				SubLObject session_context = NIL;
@@ -1679,8 +1679,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user, FORT_P);
-		SubLTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user, FORT_P);
+		SubLSystemTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
 		return ask_utilities.query_variable($UP_MT, listS($$mySentientUserProfile, user, $list_alt287), ask_mt, ask_utilities.query_properties_from_legacy_ask_parameters(ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED)).first();
 	}
 
@@ -1691,8 +1691,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_profile_mt, FORT_P);
-		SubLTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, FORT_P);
+		SubLSystemTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
 		return ask_utilities.query_variable($PARSE_MT, list($$mySentientParsingMtForProfile, $PARSE_MT, user_profile_mt), ask_mt, ask_utilities.query_properties_from_legacy_ask_parameters(ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED)).first();
 	}
 
@@ -1703,8 +1703,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_profile_mt, FORT_P);
-		SubLTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, FORT_P);
+		SubLSystemTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
 		return ask_utilities.query_variable($GEN_MT, list($$mySentientGenerationMtForProfile, $GEN_MT, user_profile_mt), ask_mt, ask_utilities.query_properties_from_legacy_ask_parameters(ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED)).first();
 	}
 
@@ -1715,8 +1715,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_profile_mt, FORT_P);
-		SubLTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, FORT_P);
+		SubLSystemTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
 		return ask_utilities.query_variable($GEN_MT, list($$mySentientLexicalMtForProfile, $GEN_MT, user_profile_mt), ask_mt, ask_utilities.query_properties_from_legacy_ask_parameters(ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED)).first();
 	}
 
@@ -1727,8 +1727,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_profile_mt, FORT_P);
-		SubLTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, FORT_P);
+		SubLSystemTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
 		{
 			SubLObject lexicon_mt = get_mysentient_userprofile_lexical_mt(user_profile_mt, ask_mt);
 			SubLObject parsing_mt = get_mysentient_userprofile_parsing_mt(user_profile_mt, ask_mt);
@@ -1754,7 +1754,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user, FORT_P);
+		SubLSystemTrampolineFile.checkType(user, FORT_P);
 		return ask_utilities.query_template($list_alt308, listS($$and, listS($$mySentientUserProfile, user, $list_alt309), $list_alt310), ask_mt, ask_utilities.query_properties_from_legacy_ask_parameters(ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED)).first();
 	}
 
@@ -1762,10 +1762,10 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * Put them together into the right order for user-mts.
 	 */
 	public static final SubLObject combine_mysentient_user_mts(SubLObject user_profile_mt, SubLObject generation_mt, SubLObject parsing_mt, SubLObject lexical_mt) {
-		SubLTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
-		SubLTrampolineFile.checkType(generation_mt, POSSIBLY_HLMT_P);
-		SubLTrampolineFile.checkType(parsing_mt, POSSIBLY_HLMT_P);
-		SubLTrampolineFile.checkType(lexical_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(generation_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(parsing_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(lexical_mt, POSSIBLY_HLMT_P);
 		return list(user_profile_mt, generation_mt, parsing_mt, lexical_mt);
 	}
 
@@ -1773,7 +1773,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * Extract just the user profile mt
 	 */
 	public static final SubLObject get_mysentient_user_profile_mt_from_user_mts(SubLObject user_mts) {
-		SubLTrampolineFile.checkType(user_mts, LISTP);
+		SubLSystemTrampolineFile.checkType(user_mts, LISTP);
 		return user_mts.first();
 	}
 
@@ -1781,7 +1781,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * Extract just the user profile generation mt
 	 */
 	public static final SubLObject get_mysentient_userprofile_generation_mt_from_user_mts(SubLObject user_mts) {
-		SubLTrampolineFile.checkType(user_mts, LISTP);
+		SubLSystemTrampolineFile.checkType(user_mts, LISTP);
 		return second(user_mts);
 	}
 
@@ -1789,7 +1789,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * Extract just the user profile parsing mt
 	 */
 	public static final SubLObject get_mysentient_userprofile_parsing_mt_from_user_mts(SubLObject user_mts) {
-		SubLTrampolineFile.checkType(user_mts, LISTP);
+		SubLSystemTrampolineFile.checkType(user_mts, LISTP);
 		return third(user_mts);
 	}
 
@@ -1800,7 +1800,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
 		{
 			SubLObject sessions = NIL;
 			SubLObject session_mts = get_all_mysentient_userprofile_session_mts_from_user_profile(user_profile_mt, ask_mt);
@@ -1826,7 +1826,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
 		return backward.removal_ask_variable($SESSION_MT, listS($$mySentientProfileSessionRecords, user_profile_mt, $list_alt329), ask_mt, UNPROVIDED, UNPROVIDED);
 	}
 
@@ -1837,7 +1837,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
 		return ask_utilities.query_template($list_alt332, listS($$and, listS($$mySentientProfileSessionRecords, user_profile_mt, $list_alt333), $list_alt334), ask_mt, $list_alt335).first();
 	}
 
@@ -1845,7 +1845,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * Given the session information, piece out the session term.
 	 */
 	public static final SubLObject get_active_mysentient_session_term_from_session_information(SubLObject session_information) {
-		SubLTrampolineFile.checkType(session_information, LISTP);
+		SubLSystemTrampolineFile.checkType(session_information, LISTP);
 		return session_information.first();
 	}
 
@@ -1853,7 +1853,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * Given the session information, piece out the session mt
 	 */
 	public static final SubLObject get_active_mysentient_session_mt_from_session_information(SubLObject session_information) {
-		SubLTrampolineFile.checkType(session_information, LISTP);
+		SubLSystemTrampolineFile.checkType(session_information, LISTP);
 		return second(session_information);
 	}
 
@@ -1884,9 +1884,9 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(id_string, STRINGP);
-			SubLTrampolineFile.checkType(user_database, FORT_P);
-			SubLTrampolineFile.checkType(assert_mt, POSSIBLY_HLMT_P);
+			SubLSystemTrampolineFile.checkType(id_string, STRINGP);
+			SubLSystemTrampolineFile.checkType(user_database, FORT_P);
+			SubLSystemTrampolineFile.checkType(assert_mt, POSSIBLY_HLMT_P);
 			{
 				SubLObject user_term = NIL;
 				SubLObject user_profile_mt = NIL;
@@ -1990,7 +1990,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 
 	public static final SubLObject set_mysentient_session_language(SubLObject session, SubLObject session_mt, SubLObject language_code) {
 		if (NIL != language_code) {
-			SubLTrampolineFile.checkType(language_code, STRINGP);
+			SubLSystemTrampolineFile.checkType(language_code, STRINGP);
 		}
 		{
 			SubLObject language = mysentient_language_code_to_language(language_code);
@@ -2028,9 +2028,9 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(id_string, STRINGP);
-		SubLTrampolineFile.checkType(user_database, FORT_P);
-		SubLTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(id_string, STRINGP);
+		SubLSystemTrampolineFile.checkType(user_database, FORT_P);
+		SubLSystemTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
 		return ask_utilities.query_variable($USER, list($$synonymousExternalConcept, $USER, user_database, id_string), ask_mt, ask_utilities.query_properties_from_legacy_ask_parameters(ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED)).first();
 	}
 
@@ -2044,9 +2044,9 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (ask_mt == UNPROVIDED) {
 			ask_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
-		SubLTrampolineFile.checkType(persistence_store, FORT_P);
-		SubLTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(persistence_store, FORT_P);
+		SubLSystemTrampolineFile.checkType(ask_mt, POSSIBLY_HLMT_P);
 		return ask_utilities.query_variable($STORAGE_KEY, listS($$synonymousExternalConcept, user_profile_mt, persistence_store, $list_alt378), ask_mt, ask_utilities.query_properties_from_legacy_ask_parameters(ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED)).first();
 	}
 
@@ -2060,10 +2060,10 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (assert_mt == UNPROVIDED) {
 			assert_mt = mysentient_utilities.$mysentient_user_profile_information_mt$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
-		SubLTrampolineFile.checkType(storage_key, STRINGP);
-		SubLTrampolineFile.checkType(persistence_store, FORT_P);
-		SubLTrampolineFile.checkType(assert_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, POSSIBLY_HLMT_P);
+		SubLSystemTrampolineFile.checkType(storage_key, STRINGP);
+		SubLSystemTrampolineFile.checkType(persistence_store, FORT_P);
+		SubLSystemTrampolineFile.checkType(assert_mt, POSSIBLY_HLMT_P);
 		return list_utilities.sublisp_boolean(mysentient_utilities.myse_assert_wff_now(list($$synonymousExternalConcept, user_profile_mt, persistence_store, storage_key), assert_mt));
 	}
 
@@ -2071,7 +2071,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * Check whether the user profile mt is loaded on this image already (ie has KB content).
 	 */
 	public static final SubLObject mysentient_user_profile_mt_loadedP(SubLObject user_profile_mt) {
-		SubLTrampolineFile.checkType(user_profile_mt, FORT_P);
+		SubLSystemTrampolineFile.checkType(user_profile_mt, FORT_P);
 		return kb_indexing.num_mt_index(user_profile_mt);
 	}
 
@@ -2082,7 +2082,7 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 	 * Load the mysentient user information from the partition in the CFASL encoding blob.
 	 */
 	public static final SubLObject load_mysentient_user_information(SubLObject partition) {
-		SubLTrampolineFile.checkType(partition, CFASL_ENCODING_P);
+		SubLSystemTrampolineFile.checkType(partition, CFASL_ENCODING_P);
 		return arg2(resetMultipleValues(), multiple_value_list(load_mysentient_user_partition(partition, UNPROVIDED)));
 	}
 
@@ -2096,8 +2096,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (remove_informationP == UNPROVIDED) {
 			remove_informationP = $mysentient_auto_excise_saved_user_informationP$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_mts, LISTP);
-		SubLTrampolineFile.checkType(remove_informationP, BOOLEANP);
+		SubLSystemTrampolineFile.checkType(user_mts, LISTP);
+		SubLSystemTrampolineFile.checkType(remove_informationP, BOOLEANP);
 		{
 			SubLObject hex_string = save_mysentient_user_information_as_hex_string(user_mts, user_session_records, remove_informationP);
 			return vector_utilities.hex_char_string_to_byte_vector(hex_string);
@@ -2128,8 +2128,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		if (remove_informationP == UNPROVIDED) {
 			remove_informationP = $mysentient_auto_excise_saved_user_informationP$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(user_mts, LISTP);
-		SubLTrampolineFile.checkType(remove_informationP, BOOLEANP);
+		SubLSystemTrampolineFile.checkType(user_mts, LISTP);
+		SubLSystemTrampolineFile.checkType(remove_informationP, BOOLEANP);
 		{
 			SubLObject hex_string = save_mysentient_user_information_as_hex_string(user_mts, user_session_records, remove_informationP);
 			return hex_string;
@@ -2148,8 +2148,8 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(user_mts, LISTP);
-			SubLTrampolineFile.checkType(remove_informationP, BOOLEANP);
+			SubLSystemTrampolineFile.checkType(user_mts, LISTP);
+			SubLSystemTrampolineFile.checkType(remove_informationP, BOOLEANP);
 			{
 				SubLObject encoding = save_mysentient_user_information(user_mts, user_session_records, remove_informationP);
 				SubLObject xml_string = NIL;

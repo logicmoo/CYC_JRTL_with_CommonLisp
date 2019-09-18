@@ -142,7 +142,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class learning_reader extends SubLTranslatedFile {
     public static final SubLFile me = new learning_reader();
@@ -5285,7 +5285,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         deflexical("*LONG-INFERENCE-CUTOFF*", $int$600);
         defparameter("*CURRENT-LONG-INFERENCE-INFO*", NIL);
         defconstant("*DTP-L2R-DOCUMENT-READER*", L2R_DOCUMENT_READER);
-        deflexical("*L2R-READER-IMAGE-DOCUMENT-READER*", SubLTrampolineFile.maybeDefault($sym242$_L2R_READER_IMAGE_DOCUMENT_READER_, $l2r_reader_image_document_reader$, NIL));
+        deflexical("*L2R-READER-IMAGE-DOCUMENT-READER*", SubLSystemTrampolineFile.maybeDefault($sym242$_L2R_READER_IMAGE_DOCUMENT_READER_, $l2r_reader_image_document_reader$, NIL));
         deflexical("*L2R-SENTENCE-LEVEL-PEG-CREATION-TEMPLATE-CACHING-STATE*", NIL);
         deflexical("*L2R-SENTENCE-LEVEL-PEG-EXEMPLAR-CACHING-STATE*", NIL);
         deflexical("*L2R-SENTENCE-LEVEL-PEG-CREATION-TEMPLATE-SENTENCES-CACHING-STATE*", NIL);

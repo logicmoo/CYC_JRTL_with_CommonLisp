@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -400,9 +400,9 @@ public final class constants_low extends SubLTranslatedFile {
     }
 
     public static SubLObject init_constants_low_file() {
-        deflexical("*CONSTANT-GUID-TABLE*", SubLTrampolineFile.maybeDefault($constant_guid_table$, $constant_guid_table$, $UNINITIALIZED));
-        deflexical("*CONSTANT-MERGED-GUID-TABLE*", SubLTrampolineFile.maybeDefault($constant_merged_guid_table$, $constant_merged_guid_table$, $UNINITIALIZED));
-        deflexical("*CONSTANT-FROM-GUID*", SubLTrampolineFile.maybeDefault($constant_from_guid$, $constant_from_guid$, NIL));
+        deflexical("*CONSTANT-GUID-TABLE*", SubLSystemTrampolineFile.maybeDefault($constant_guid_table$, $constant_guid_table$, $UNINITIALIZED));
+        deflexical("*CONSTANT-MERGED-GUID-TABLE*", SubLSystemTrampolineFile.maybeDefault($constant_merged_guid_table$, $constant_merged_guid_table$, $UNINITIALIZED));
+        deflexical("*CONSTANT-FROM-GUID*", SubLSystemTrampolineFile.maybeDefault($constant_from_guid$, $constant_from_guid$, NIL));
         return NIL;
     }
 

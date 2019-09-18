@@ -60,7 +60,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2279,7 +2279,7 @@ public final class morphology extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != stringp(word) : "Types.stringp(word) " + "CommonSymbols.NIL != Types.stringp(word) " + word;
-        if (((NIL != pos_keyword) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == pos_keyword_p(pos_keyword))) {
+        if (((NIL != pos_keyword) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == pos_keyword_p(pos_keyword))) {
             throw new AssertionError(pos_keyword);
         }
         final SubLObject pos_keywords = (NIL != pos_keyword) ? list(pos_keyword) : $pos_keywords$.getDynamicValue(thread);

@@ -156,7 +156,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -672,7 +672,7 @@ public final class lexification_utilities extends SubLTranslatedFile {
 
     public static SubLObject set_lexification_reviewer(final SubLObject cyclist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == forts.fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == forts.fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
         $lexification_reviewer$.setDynamicValue(cyclist, thread);
@@ -4315,9 +4315,9 @@ public final class lexification_utilities extends SubLTranslatedFile {
         defconstant("*LEX-MOST-VERBOSE*", SEVEN_INTEGER);
         defconstant("*LEX-ALL*", NINE_INTEGER);
         defvar("*LEX-TRACE-LEVEL*", $lex_basic$.getGlobalValue());
-        deflexical("*LEXIFICATION-CHECK-MAX-DAYS*", SubLTrampolineFile.maybeDefault($lexification_check_max_days$, $lexification_check_max_days$, $int$30));
+        deflexical("*LEXIFICATION-CHECK-MAX-DAYS*", SubLSystemTrampolineFile.maybeDefault($lexification_check_max_days$, $lexification_check_max_days$, $int$30));
         defvar("*LEXIFICATION-REVIEWER*", NIL);
-        deflexical("*NUM-PREDICATE-EXAMPLES*", SubLTrampolineFile.maybeDefault($num_predicate_examples$, $num_predicate_examples$, THREE_INTEGER));
+        deflexical("*NUM-PREDICATE-EXAMPLES*", SubLSystemTrampolineFile.maybeDefault($num_predicate_examples$, $num_predicate_examples$, THREE_INTEGER));
         defparameter("*LEX-WHITE-SPACE-CHARS*", string_utilities.whitespace_chars());
         defparameter("*LEX-PUNCTUATION-CHARS*", $list5);
         deflexical("*KEYWORD-FOR-POS-CACHING-STATE*", NIL);

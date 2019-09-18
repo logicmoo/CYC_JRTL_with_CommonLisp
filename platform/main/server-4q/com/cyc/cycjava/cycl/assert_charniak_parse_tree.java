@@ -26,7 +26,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -49,7 +49,7 @@ public final class assert_charniak_parse_tree extends SubLTranslatedFile impleme
         if (tokenization == UNPROVIDED) {
             tokenization = NIL;
         }
-        SubLTrampolineFile.checkType(sentence, STRING_OR_UNICODE_NAUT_P);
+        SubLSystemTrampolineFile.checkType(sentence, STRING_OR_UNICODE_NAUT_P);
         {
             SubLObject subl_sentence = (NIL != unicode_nauts.unicode_naut_p(sentence, UNPROVIDED_SYM)) ? ((SubLObject) (unicode_strings.display_to_subl_string(cycl_utilities.nat_arg1(sentence, UNPROVIDED), UNPROVIDED, UNPROVIDED))) : sentence;
             SubLObject charniak_parse = parser.charniak_parse(subl_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -145,7 +145,7 @@ public final class assert_charniak_parse_tree extends SubLTranslatedFile impleme
     public static final SubLObject create_charniak_parse_tree_nodes(SubLObject charniak_parse, SubLObject tokenization, SubLObject new_tokenizationP) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType($charniak_token_number_isg$.getDynamicValue(thread), INTEGER_SEQUENCE_GENERATOR_P);
+            SubLSystemTrampolineFile.checkType($charniak_token_number_isg$.getDynamicValue(thread), INTEGER_SEQUENCE_GENERATOR_P);
             {
                 SubLObject tree_rest = copy_tree(charniak_parse);
                 SubLObject constituent_stack = NIL;

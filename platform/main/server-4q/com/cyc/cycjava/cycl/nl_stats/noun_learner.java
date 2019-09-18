@@ -61,7 +61,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -87,23 +87,23 @@ public final class noun_learner extends SubLTranslatedFile implements V02 {
     public static final SubLObject type_conjecture_based_on_usages_of_noun_with_verbs(SubLObject as_subject_verbs, SubLObject as_object_verbs) {
         {
             SubLObject list_var = as_subject_verbs;
-            SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+            SubLSystemTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
             {
                 SubLObject cdolist_list_var = list_var;
                 SubLObject elem = NIL;
                 for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
-                    SubLTrampolineFile.checkType(elem, STRINGP);
+                    SubLSystemTrampolineFile.checkType(elem, STRINGP);
                 }
             }
         }
         {
             SubLObject list_var = as_object_verbs;
-            SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+            SubLSystemTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
             {
                 SubLObject cdolist_list_var = list_var;
                 SubLObject elem = NIL;
                 for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
-                    SubLTrampolineFile.checkType(elem, STRINGP);
+                    SubLSystemTrampolineFile.checkType(elem, STRINGP);
                 }
             }
         }
@@ -193,7 +193,7 @@ public final class noun_learner extends SubLTranslatedFile implements V02 {
         if (listifyP == UNPROVIDED) {
             listifyP = T;
         }
-        SubLTrampolineFile.checkType(sentence, STRINGP);
+        SubLSystemTrampolineFile.checkType(sentence, STRINGP);
         return learn_unknown_nouns_single_sentence_int(sentence, listifyP);
     }
 
@@ -204,7 +204,7 @@ public final class noun_learner extends SubLTranslatedFile implements V02 {
         if (listifyP == UNPROVIDED) {
             listifyP = T;
         }
-        SubLTrampolineFile.checkType(v_parse_tree, PARSE_TREE_P);
+        SubLSystemTrampolineFile.checkType(v_parse_tree, PARSE_TREE_P);
         return learn_unknown_nouns_single_sentence_int(v_parse_tree, listifyP);
     }
 
@@ -274,9 +274,9 @@ public final class noun_learner extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(subj_pairs_file, STRINGP);
-            SubLTrampolineFile.checkType(obj_pairs_file, STRINGP);
-            SubLTrampolineFile.checkType(complex_nouns_file, STRINGP);
+            SubLSystemTrampolineFile.checkType(subj_pairs_file, STRINGP);
+            SubLSystemTrampolineFile.checkType(obj_pairs_file, STRINGP);
+            SubLSystemTrampolineFile.checkType(complex_nouns_file, STRINGP);
             {
                 SubLObject calculate_tag_methods = learned_nouns.get_learned_nouns_calculate_tag_methods(LEARNED_NOUNS);
                 if (NIL != tag_calculation_method) {
@@ -287,7 +287,7 @@ public final class noun_learner extends SubLTranslatedFile implements V02 {
                     }
                 }
             }
-            SubLTrampolineFile.checkType(noun_relevance_count_threshold, POSITIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(noun_relevance_count_threshold, POSITIVE_INTEGER_P);
             {
                 SubLObject learned = learned_nouns.new_learned_nouns(noun_relevance_count_threshold, tag_calculation_method, $int$50);
                 methods.funcall_instance_method_with_3_args(learned, COMPILE_RAW_DATA_FROM_TEXT_FILES, subj_pairs_file, obj_pairs_file, complex_nouns_file);
@@ -327,10 +327,10 @@ public final class noun_learner extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(input_directory, DIRECTORY_P);
-            SubLTrampolineFile.checkType(subj_pairs_file_suffix, STRINGP);
-            SubLTrampolineFile.checkType(obj_pairs_file_suffix, STRINGP);
-            SubLTrampolineFile.checkType(complex_nouns_file_suffix, STRINGP);
+            SubLSystemTrampolineFile.checkType(input_directory, DIRECTORY_P);
+            SubLSystemTrampolineFile.checkType(subj_pairs_file_suffix, STRINGP);
+            SubLSystemTrampolineFile.checkType(obj_pairs_file_suffix, STRINGP);
+            SubLSystemTrampolineFile.checkType(complex_nouns_file_suffix, STRINGP);
             {
                 SubLObject calculate_tag_methods = learned_nouns.get_learned_nouns_calculate_tag_methods(LEARNED_NOUNS);
                 if (NIL != tag_calculation_method) {
@@ -341,7 +341,7 @@ public final class noun_learner extends SubLTranslatedFile implements V02 {
                     }
                 }
             }
-            SubLTrampolineFile.checkType(noun_relevance_count_threshold, POSITIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(noun_relevance_count_threshold, POSITIVE_INTEGER_P);
             {
                 SubLObject learned = learned_nouns.new_learned_nouns(noun_relevance_count_threshold, tag_calculation_method, $int$50);
                 methods.funcall_instance_method_with_4_args(learned, COMPILE_RAW_DATA_FROM_TEXT_FILES_DIRECTORY, input_directory, subj_pairs_file_suffix, obj_pairs_file_suffix, complex_nouns_file_suffix);

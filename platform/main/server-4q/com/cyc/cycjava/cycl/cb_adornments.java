@@ -103,7 +103,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class cb_adornments extends SubLTranslatedFile {
     public static final SubLFile me = new cb_adornments();
@@ -1127,7 +1127,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (pred == UNPROVIDED) {
             pred = NIL;
         }
-        if (((NIL != adornment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == adornment_p(adornment))) {
+        if (((NIL != adornment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == adornment_p(adornment))) {
             throw new AssertionError(adornment);
         }
         if (image.isKeyword()) {
@@ -2167,7 +2167,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defparameter("*ADORNMENT-TYPE*", NIL);
         deflexical("*ADORNMENT-SORTED-LIST*", $list1);
         defconstant("*DTP-ADORNMENT*", ADORNMENT);
-        deflexical("*CB-ADORNMENT-TABLE*", SubLTrampolineFile.maybeDefault($cb_adornment_table$, $cb_adornment_table$, NIL));
+        deflexical("*CB-ADORNMENT-TABLE*", SubLSystemTrampolineFile.maybeDefault($cb_adornment_table$, $cb_adornment_table$, NIL));
         defparameter("*DEBUG-ADORNMENTS-P*", NIL);
         return NIL;
     }

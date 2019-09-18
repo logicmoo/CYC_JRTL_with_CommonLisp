@@ -27,7 +27,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -205,7 +205,7 @@ public final class constant_completion_low extends SubLTranslatedFile {
     }
 
     public static SubLObject init_constant_completion_low_file() {
-        deflexical("*CONSTANT-COMPLETION-TABLE*", SubLTrampolineFile.maybeDefault($constant_completion_table$, $constant_completion_table$, () -> tries.create_trie(T, $$$Constant_Completion_Table, UNPROVIDED, UNPROVIDED)));
+        deflexical("*CONSTANT-COMPLETION-TABLE*", SubLSystemTrampolineFile.maybeDefault($constant_completion_table$, $constant_completion_table$, () -> tries.create_trie(T, $$$Constant_Completion_Table, UNPROVIDED, UNPROVIDED)));
         defparameter("*REQUIRE-VALID-CONSTANTS*", T);
         return NIL;
     }

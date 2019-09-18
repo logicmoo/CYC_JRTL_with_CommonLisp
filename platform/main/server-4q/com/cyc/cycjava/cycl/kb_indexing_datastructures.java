@@ -84,7 +84,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1652,7 +1652,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
         if (NIL != final_topn_index_p(final_index)) {
             return final_topn_index_leaf_count(final_index);
         }
-        SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
+        SubLSystemTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
     }
 
@@ -1666,7 +1666,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
         if (NIL != final_topn_index_p(final_index)) {
             return final_topn_index_leaves(final_index);
         }
-        SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
+        SubLSystemTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
     }
 
@@ -1680,7 +1680,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
         if (NIL != final_topn_index_p(final_index)) {
             return final_topn_index_memberP(final_index, leaf);
         }
-        SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
+        SubLSystemTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
     }
 
@@ -1694,7 +1694,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
         if (NIL != final_topn_index_p(final_index)) {
             return final_topn_index_arbitrary_leaf(final_index);
         }
-        SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
+        SubLSystemTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
     }
 
@@ -1708,7 +1708,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
         if (NIL != final_topn_index_p(final_index)) {
             return final_topn_index_leaves_reset(final_index, new_leaves);
         }
-        SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
+        SubLSystemTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
     }
 
@@ -1722,7 +1722,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
         if (NIL != final_topn_index_p(final_index)) {
             return final_topn_index_insert(final_index, leaf);
         }
-        SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
+        SubLSystemTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
     }
 
@@ -1736,7 +1736,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
         if (NIL != final_topn_index_p(final_index)) {
             return final_topn_index_delete(final_index, leaf);
         }
-        SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
+        SubLSystemTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
     }
 
@@ -1750,7 +1750,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
         if (NIL != final_topn_index_p(final_index)) {
             return new_final_topn_index_iterator(final_index);
         }
-        SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
+        SubLSystemTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
     }
 
@@ -2560,7 +2560,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject set_final_topn_index_count(final SubLObject final_topn_index, final SubLObject number) {
-        SubLTrampolineFile.enforceType(number, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(number, NON_NEGATIVE_INTEGER_P);
         set_nth(ZERO_INTEGER, final_topn_index, number);
         return final_topn_index;
     }
@@ -2609,7 +2609,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject upgrade_final_index(final SubLObject final_index) {
-        SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
+        SubLSystemTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         if (NIL != final_topn_index_p(final_index)) {
             return final_index;
         }
@@ -2931,7 +2931,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile {
                             }
                         }
                     } else {
-                        SubLTrampolineFile.enforceType(augment, FINAL_INDEX_P);
+                        SubLSystemTrampolineFile.enforceType(augment, FINAL_INDEX_P);
                     }
 
 

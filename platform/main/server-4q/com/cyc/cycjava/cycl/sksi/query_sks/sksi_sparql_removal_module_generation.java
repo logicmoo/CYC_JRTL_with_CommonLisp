@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -466,7 +466,7 @@ public final class sksi_sparql_removal_module_generation extends SubLTranslatedF
     }
 
     public static SubLObject init_sksi_sparql_removal_module_generation_file() {
-        deflexical("*SKSI-SPARQL-REMOVAL-MODULES*", SubLTrampolineFile.maybeDefault($sksi_sparql_removal_modules$, $sksi_sparql_removal_modules$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*SKSI-SPARQL-REMOVAL-MODULES*", SubLSystemTrampolineFile.maybeDefault($sksi_sparql_removal_modules$, $sksi_sparql_removal_modules$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
         return NIL;
     }
 

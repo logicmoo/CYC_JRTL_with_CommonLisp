@@ -67,7 +67,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -795,7 +795,7 @@ public final class cb_wordnet_utilities extends SubLTranslatedFile {
         } 
         assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
         assert NIL != list_utilities.alist_p(workflow_alist) : "list_utilities.alist_p(workflow_alist) " + "CommonSymbols.NIL != list_utilities.alist_p(workflow_alist) " + workflow_alist;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         assert NIL != booleanp(nowP) : "Types.booleanp(nowP) " + "CommonSymbols.NIL != Types.booleanp(nowP) " + nowP;
@@ -846,7 +846,7 @@ public final class cb_wordnet_utilities extends SubLTranslatedFile {
         } 
         assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
         assert NIL != list_utilities.alist_p(workflow_alist) : "list_utilities.alist_p(workflow_alist) " + "CommonSymbols.NIL != list_utilities.alist_p(workflow_alist) " + workflow_alist;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         assert NIL != booleanp(nowP) : "Types.booleanp(nowP) " + "CommonSymbols.NIL != Types.booleanp(nowP) " + nowP;

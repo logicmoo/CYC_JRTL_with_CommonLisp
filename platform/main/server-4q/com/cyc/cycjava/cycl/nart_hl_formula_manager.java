@@ -21,7 +21,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -229,10 +229,10 @@ public final class nart_hl_formula_manager extends SubLTranslatedFile {
     }
 
     public static SubLObject init_nart_hl_formula_manager_file() {
-        deflexical("*NART-HL-FORMULA-MANAGER*", SubLTrampolineFile.maybeDefault($nart_hl_formula_manager$, $nart_hl_formula_manager$, $UNINITIALIZED));
+        deflexical("*NART-HL-FORMULA-MANAGER*", SubLSystemTrampolineFile.maybeDefault($nart_hl_formula_manager$, $nart_hl_formula_manager$, $UNINITIALIZED));
         deflexical("*NART-HL-FORMULA-LRU-SIZE-PERCENTAGE*", FIVE_INTEGER);
         deflexical("*NART-HL-FORMULA-LRU-SIZE-MAX*", $int$10000);
-        deflexical("*NART-HL-FORMULA-TABLE*", SubLTrampolineFile.maybeDefault($nart_hl_formula_table$, $nart_hl_formula_table$, NIL));
+        deflexical("*NART-HL-FORMULA-TABLE*", SubLSystemTrampolineFile.maybeDefault($nart_hl_formula_table$, $nart_hl_formula_table$, NIL));
         return NIL;
     }
 

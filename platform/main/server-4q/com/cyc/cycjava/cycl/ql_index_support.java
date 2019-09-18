@@ -71,7 +71,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1376,10 +1376,10 @@ public final class ql_index_support extends SubLTranslatedFile {
         defparameter("*QL-INDEX-THRESHOLD*", red_infrastructure_macros.red_def_helper($list7.isSymbol() ? symbol_value($list7) : $list7, $ql_index_threshold$, $$$3380.isSymbol() ? symbol_value($$$3380) : $$$3380, $PARAMETER, UNPROVIDED));
         defparameter("*QL-INDEX-DISTANCE*", red_infrastructure_macros.red_def_helper($list12.isSymbol() ? symbol_value($list12) : $list12, $ql_index_distance$, $$$3381.isSymbol() ? symbol_value($$$3381) : $$$3381, $PARAMETER, UNPROVIDED));
         deflexical("*GET-OBJECT-BY-HL-ID-STRING-CACHING-STATE*", NIL);
-        deflexical("*QL-INDEX-UPDATE-PROCEDURE*", SubLTrampolineFile.maybeDefault($ql_index_update_procedure$, $ql_index_update_procedure$, ENQUEUE_FOR_QL_INDEXING));
-        deflexical("*QL-INDEX-UPDATE-QUEUE*", SubLTrampolineFile.maybeDefault($ql_index_update_queue$, $ql_index_update_queue$, NIL));
-        deflexical("*QL-INDEX-DEQUEUE-PROCEDURE*", SubLTrampolineFile.maybeDefault($ql_index_dequeue_procedure$, $ql_index_dequeue_procedure$, PROCESS_QL_INDEX_QUEUE_ENTRIES));
-        deflexical("*QL-INDEX-UPDATE-PROCESS*", SubLTrampolineFile.maybeDefault($ql_index_update_process$, $ql_index_update_process$, $str55$The_process_object_responsible_fo));
+        deflexical("*QL-INDEX-UPDATE-PROCEDURE*", SubLSystemTrampolineFile.maybeDefault($ql_index_update_procedure$, $ql_index_update_procedure$, ENQUEUE_FOR_QL_INDEXING));
+        deflexical("*QL-INDEX-UPDATE-QUEUE*", SubLSystemTrampolineFile.maybeDefault($ql_index_update_queue$, $ql_index_update_queue$, NIL));
+        deflexical("*QL-INDEX-DEQUEUE-PROCEDURE*", SubLSystemTrampolineFile.maybeDefault($ql_index_dequeue_procedure$, $ql_index_dequeue_procedure$, PROCESS_QL_INDEX_QUEUE_ENTRIES));
+        deflexical("*QL-INDEX-UPDATE-PROCESS*", SubLSystemTrampolineFile.maybeDefault($ql_index_update_process$, $ql_index_update_process$, $str55$The_process_object_responsible_fo));
         return NIL;
     }
 

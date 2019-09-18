@@ -21,7 +21,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -248,7 +248,7 @@ public final class deduction_manager extends SubLTranslatedFile {
     }
 
     public static SubLObject init_deduction_manager_file() {
-        deflexical("*DEDUCTION-CONTENT-MANAGER*", SubLTrampolineFile.maybeDefault($deduction_content_manager$, $deduction_content_manager$, $UNINITIALIZED));
+        deflexical("*DEDUCTION-CONTENT-MANAGER*", SubLSystemTrampolineFile.maybeDefault($deduction_content_manager$, $deduction_content_manager$, $UNINITIALIZED));
         deflexical("*DEDUCTION-LRU-SIZE-PERCENTAGE*", EIGHT_INTEGER);
         deflexical("*DEDUCTION-LRU-SIZE-MAX*", $int$400000);
         return NIL;

@@ -53,7 +53,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -650,10 +650,10 @@ public final class somewhere_cache extends SubLTranslatedFile {
     public static SubLObject init_somewhere_cache_file() {
         defparameter("*USE-SOMEWHERE-CACHE?*", T);
         deflexical("*SOMEWHERE-CACHED-PREDS-TABLE*", listS($list0, new SubLObject[]{ $list1, $list2, $list3, $list4, $list5, $list6, $list7, $list8, $list9, $list10, $list11, $list12, $list13, $list14, $list15, $list16, $list17, $list18, $list19, $list20, $list21, $list22, $list23, $list24, $list25, $list26, $list27, $list28, bq_cons(kb_control_vars.$backchain_forbidden_unless_arg_chosen$.getGlobalValue(), ONE_INTEGER), $list29 }));
-        deflexical("*SOME-PRED-ASSERTION-SOMEWHERE-CACHE*", SubLTrampolineFile.maybeDefault($some_pred_assertion_somewhere_cache$, $some_pred_assertion_somewhere_cache$, $UNINITIALIZED));
-        deflexical("*SOMEWHERE-CACHED-PRED-ARGNUM-DICT*", SubLTrampolineFile.maybeDefault($somewhere_cached_pred_argnum_dict$, $somewhere_cached_pred_argnum_dict$, $UNINITIALIZED));
+        deflexical("*SOME-PRED-ASSERTION-SOMEWHERE-CACHE*", SubLSystemTrampolineFile.maybeDefault($some_pred_assertion_somewhere_cache$, $some_pred_assertion_somewhere_cache$, $UNINITIALIZED));
+        deflexical("*SOMEWHERE-CACHED-PRED-ARGNUM-DICT*", SubLSystemTrampolineFile.maybeDefault($somewhere_cached_pred_argnum_dict$, $somewhere_cached_pred_argnum_dict$, $UNINITIALIZED));
         deflexical("*SOMEWHERE-CACHE-GAF-AFTER-ADDING-INFO*", $list40);
-        deflexical("*INTER-ARG-RESULT-ISA-SOMEWHERE-CACHE*", SubLTrampolineFile.maybeDefault($inter_arg_result_isa_somewhere_cache$, $inter_arg_result_isa_somewhere_cache$, () -> misc_utilities.uninitialized()));
+        deflexical("*INTER-ARG-RESULT-ISA-SOMEWHERE-CACHE*", SubLSystemTrampolineFile.maybeDefault($inter_arg_result_isa_somewhere_cache$, $inter_arg_result_isa_somewhere_cache$, () -> misc_utilities.uninitialized()));
         return NIL;
     }
 

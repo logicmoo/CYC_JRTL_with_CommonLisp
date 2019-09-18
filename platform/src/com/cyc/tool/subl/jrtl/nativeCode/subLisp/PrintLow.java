@@ -14,9 +14,9 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class PrintLow extends SubLTrampolineFile implements CommonSymbols {
+public class PrintLow extends SubLSystemTrampolineFile implements CommonSymbols {
     public static boolean controlPrintLength() {
 	return $print_length$.getValue().isNumber();
     }

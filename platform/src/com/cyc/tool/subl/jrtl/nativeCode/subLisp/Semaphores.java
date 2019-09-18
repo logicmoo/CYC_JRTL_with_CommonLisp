@@ -8,9 +8,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Semaphores extends SubLTrampolineFile {
+public class Semaphores extends SubLSystemTrampolineFile {
     public static SubLObject new_semaphore(SubLObject name, SubLObject count) {
         if (count == CommonSymbols.UNPROVIDED)
             count = CommonSymbols.ONE_INTEGER;

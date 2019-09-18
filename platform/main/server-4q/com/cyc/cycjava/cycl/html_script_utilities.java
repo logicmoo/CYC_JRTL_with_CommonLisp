@@ -56,7 +56,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1536,7 +1536,7 @@ public final class html_script_utilities extends SubLTranslatedFile {
         deflexical("*HTML-COMPLETING-INPUT-BUTTON-SCRIPT*", $str34$onClick__with__this_form_elements);
         defparameter("*HTML-CLEAR-RADIO-INPUT-SCRIPT*", $str36$onClick__with__this_form_elements);
         defparameter("*HTML-FOCUS-RADIO-INPUT-SCRIPT*", $str37$onClick__with__this_form_elements);
-        deflexical("*HTML-AUTO-SELECT-RADIO-BUTTON-SCRIPT*", SubLTrampolineFile.maybeDefault($html_auto_select_radio_button_script$, $html_auto_select_radio_button_script$, $str39$onkeypress__this_form__A__A__chec));
+        deflexical("*HTML-AUTO-SELECT-RADIO-BUTTON-SCRIPT*", SubLSystemTrampolineFile.maybeDefault($html_auto_select_radio_button_script$, $html_auto_select_radio_button_script$, $str39$onkeypress__this_form__A__A__chec));
         defparameter("*HTML-BACK-ONLOAD-SCRIPT*", $str40$onLoad__setTimeout__self_history_);
         defparameter("*HTML-MULTI-SUBMIT-SCRIPT-PREAMBLE*", $str43$_onClick__);
         defparameter("*HTML-MULTI-SUBMIT-SCRIPT-POSTAMBLE*", $str44$_this_form_submit____);

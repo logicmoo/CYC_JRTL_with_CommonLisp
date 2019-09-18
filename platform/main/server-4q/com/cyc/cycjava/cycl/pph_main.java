@@ -92,7 +92,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -546,16 +546,16 @@ public final class pph_main extends SubLTranslatedFile {
         if (focus_arg == UNPROVIDED) {
             focus_arg = NIL;
         }
-        SubLTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
-        SubLTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
-        SubLTrampolineFile.enforceType(determiner, KEYWORD_OR_NIL_P);
-        SubLTrampolineFile.enforceType(language_mt, $sym5$HLMT_);
-        SubLTrampolineFile.enforceType(domain_mt, $sym5$HLMT_);
-        SubLTrampolineFile.enforceType(mode, KEYWORDP);
-        SubLTrampolineFile.enforceType(top, BOOLEANP);
-        SubLTrampolineFile.enforceType(focus_arg, NON_NEGATIVE_INTEGER_OR_NIL_P);
-        SubLTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
-        SubLTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+        SubLSystemTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
+        SubLSystemTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+        SubLSystemTrampolineFile.enforceType(determiner, KEYWORD_OR_NIL_P);
+        SubLSystemTrampolineFile.enforceType(language_mt, $sym5$HLMT_);
+        SubLSystemTrampolineFile.enforceType(domain_mt, $sym5$HLMT_);
+        SubLSystemTrampolineFile.enforceType(mode, KEYWORDP);
+        SubLSystemTrampolineFile.enforceType(top, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(focus_arg, NON_NEGATIVE_INTEGER_OR_NIL_P);
+        SubLSystemTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
+        SubLSystemTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
         return generate_phrase_no_checks(v_object, nl_preds, determiner, language_mt, domain_mt, mode, top, focus_arg);
     }
 
@@ -1150,9 +1150,9 @@ public final class pph_main extends SubLTranslatedFile {
         if (mode == UNPROVIDED) {
             mode = $HTML;
         }
-        SubLTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
-        SubLTrampolineFile.enforceType(language_mt, $sym26$VALID_PPH_LANGUAGE_MT_SPECIFIER_);
-        SubLTrampolineFile.enforceType(domain_mt, POSSIBLY_MT_P);
+        SubLSystemTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+        SubLSystemTrampolineFile.enforceType(language_mt, $sym26$VALID_PPH_LANGUAGE_MT_SPECIFIER_);
+        SubLSystemTrampolineFile.enforceType(domain_mt, POSSIBLY_MT_P);
         return generate_phrase_for_java_no_checks(v_object, nl_preds, force, language_mt, domain_mt, mode);
     }
 
@@ -1161,7 +1161,7 @@ public final class pph_main extends SubLTranslatedFile {
             fallback_method = PRINC_TO_STRING;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
+        SubLSystemTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
         SubLObject string = NIL;
         SubLObject item = NIL;
         if (NIL != forts.fort_p(v_object)) {
@@ -1562,13 +1562,13 @@ public final class pph_main extends SubLTranslatedFile {
             use_cached_generations = $REQUIRED;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(objects, LISTP);
-        SubLTrampolineFile.enforceType(force, KEYWORDP);
-        SubLTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
-        SubLTrampolineFile.enforceType(language_mt, $sym5$HLMT_);
-        SubLTrampolineFile.enforceType(domain_mt, $sym5$HLMT_);
-        SubLTrampolineFile.enforceType(forbidden_strings, LIST_OF_STRING_P);
-        SubLTrampolineFile.enforceType(use_cached_generations, USE_CACHED_GENERATIONS_P);
+        SubLSystemTrampolineFile.enforceType(objects, LISTP);
+        SubLSystemTrampolineFile.enforceType(force, KEYWORDP);
+        SubLSystemTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+        SubLSystemTrampolineFile.enforceType(language_mt, $sym5$HLMT_);
+        SubLSystemTrampolineFile.enforceType(domain_mt, $sym5$HLMT_);
+        SubLSystemTrampolineFile.enforceType(forbidden_strings, LIST_OF_STRING_P);
+        SubLSystemTrampolineFile.enforceType(use_cached_generations, USE_CACHED_GENERATIONS_P);
         SubLObject ans = NIL;
         final SubLObject _prev_bind_0 = pph_macros.$free_pph_problem_store_pointers$.currentBinding(thread);
         try {
@@ -2846,19 +2846,19 @@ public final class pph_main extends SubLTranslatedFile {
         if (focus_arg == UNPROVIDED) {
             focus_arg = NIL;
         }
-        SubLTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
-        SubLTrampolineFile.enforceType(force, PPH_FORCE_P);
-        SubLTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
-        SubLTrampolineFile.enforceType(language_mt, $sym26$VALID_PPH_LANGUAGE_MT_SPECIFIER_);
-        SubLTrampolineFile.enforceType(domain_mt, $sym83$KEYWORD_OR_HLMT_);
-        SubLTrampolineFile.enforceType(mode, KEYWORDP);
+        SubLSystemTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
+        SubLSystemTrampolineFile.enforceType(force, PPH_FORCE_P);
+        SubLSystemTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+        SubLSystemTrampolineFile.enforceType(language_mt, $sym26$VALID_PPH_LANGUAGE_MT_SPECIFIER_);
+        SubLSystemTrampolineFile.enforceType(domain_mt, $sym83$KEYWORD_OR_HLMT_);
+        SubLSystemTrampolineFile.enforceType(mode, KEYWORDP);
         if (NIL != focus_arg) {
-            SubLTrampolineFile.enforceType(focus_arg, NON_NEGATIVE_INTEGER_P);
+            SubLSystemTrampolineFile.enforceType(focus_arg, NON_NEGATIVE_INTEGER_P);
         }
-        SubLTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
-        SubLTrampolineFile.enforceType(force, PPH_FORCE_P);
-        SubLTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
-        SubLTrampolineFile.enforceType(language_mt, $sym26$VALID_PPH_LANGUAGE_MT_SPECIFIER_);
+        SubLSystemTrampolineFile.enforceType(v_object, CYCL_EXPRESSION_P);
+        SubLSystemTrampolineFile.enforceType(force, PPH_FORCE_P);
+        SubLSystemTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+        SubLSystemTrampolineFile.enforceType(language_mt, $sym26$VALID_PPH_LANGUAGE_MT_SPECIFIER_);
         return generate_text_wXsentential_force_no_checks(v_object, force, nl_preds, language_mt, domain_mt, mode, focus_arg);
     }
 
@@ -5891,9 +5891,9 @@ public final class pph_main extends SubLTranslatedFile {
 
     public static SubLObject init_pph_main_file() {
         defconstant("*PPH-SBHL-SPACES-TO-RESOURCE*", SIX_INTEGER);
-        deflexical("*GENERATE-TEXT-BAD-RESULTS*", SubLTrampolineFile.maybeDefault($generate_text_bad_results$, $generate_text_bad_results$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
-        deflexical("*PPH-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym106$_PPH_INITIALIZED__, $pph_initializedP$, NIL));
-        deflexical("*PPH-RECURSION-LIMIT*", SubLTrampolineFile.maybeDefault($pph_recursion_limit$, $pph_recursion_limit$, $int$100));
+        deflexical("*GENERATE-TEXT-BAD-RESULTS*", SubLSystemTrampolineFile.maybeDefault($generate_text_bad_results$, $generate_text_bad_results$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*PPH-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($sym106$_PPH_INITIALIZED__, $pph_initializedP$, NIL));
+        deflexical("*PPH-RECURSION-LIMIT*", SubLSystemTrampolineFile.maybeDefault($pph_recursion_limit$, $pph_recursion_limit$, $int$100));
         defparameter("*PPH-METHOD-STACK*", NIL);
         defparameter("*PPH-PHRASE-METHOD-TIMES*", misc_utilities.uninitialized());
         defparameter("*CURRENTLY-METERED-PPH-PHRASE-METHODS*", NIL);

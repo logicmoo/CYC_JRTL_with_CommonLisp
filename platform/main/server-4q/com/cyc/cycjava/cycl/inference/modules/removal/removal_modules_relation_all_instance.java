@@ -84,7 +84,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2425,12 +2425,12 @@ public final class removal_modules_relation_all_instance extends SubLTranslatedF
     public static SubLObject init_removal_modules_relation_all_instance_file() {
         defparameter("*ESTIMATED-PER-COLLECTION-REMOVAL-ALL-INSTANCE-COUNT*", TWO_INTEGER);
         defparameter("*RELATION-ALL-INSTANCE-RULE*", $list9);
-        deflexical("*RELATION-ALL-INSTANCE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($relation_all_instance_defining_mt$, $relation_all_instance_defining_mt$, $$BaseKB));
+        deflexical("*RELATION-ALL-INSTANCE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($relation_all_instance_defining_mt$, $relation_all_instance_defining_mt$, $$BaseKB));
         defparameter("*REMOVAL-RELATION-ALL-INSTANCE-CHECK-COST*", $float$1_5);
         defparameter("*MINIMUM-RELATION-ALL-INSTANCE-UNIFY-COST*", TWO_INTEGER);
         defparameter("*ESTIMATED-PER-COLLECTION-REMOVAL-INSTANCE-ALL-COUNT*", TWO_INTEGER);
         deflexical("*RELATION-INSTANCE-ALL-RULE*", $list41);
-        deflexical("*RELATION-INSTANCE-ALL-DEFINING-MT*", SubLTrampolineFile.maybeDefault($relation_instance_all_defining_mt$, $relation_instance_all_defining_mt$, $$BaseKB));
+        deflexical("*RELATION-INSTANCE-ALL-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($relation_instance_all_defining_mt$, $relation_instance_all_defining_mt$, $$BaseKB));
         defparameter("*REMOVAL-RELATION-INSTANCE-ALL-CHECK-COST*", $float$1_5);
         defparameter("*MINIMUM-RELATION-INSTANCE-ALL-UNIFY-COST*", TWO_INTEGER);
         return NIL;

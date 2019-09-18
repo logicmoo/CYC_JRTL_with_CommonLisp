@@ -61,7 +61,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -390,7 +390,7 @@ public final class kbi_assertion extends SubLTranslatedFile implements V02 {
                             SubLObject idx = assertion_handles.do_assertions_table();
                             SubLObject total = id_index.id_index_count(idx);
                             SubLObject sofar = ZERO_INTEGER;
-                            SubLTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
+                            SubLSystemTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
                             {
                                 SubLObject _prev_bind_0_6 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                 SubLObject _prev_bind_1_7 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -490,7 +490,7 @@ public final class kbi_assertion extends SubLTranslatedFile implements V02 {
                                 SubLObject idx = assertion_handles.do_assertions_table();
                                 SubLObject total = id_index.id_index_count(idx);
                                 SubLObject sofar = ZERO_INTEGER;
-                                SubLTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
+                                SubLSystemTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
                                 {
                                     SubLObject _prev_bind_0_11 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                     SubLObject _prev_bind_1_12 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2478,7 +2478,7 @@ public final class kbi_assertion extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject indexed_by_mtP(SubLObject leaf, SubLObject mt) {
-        SubLTrampolineFile.checkType(leaf, INDEXING_LEAF_P);
+        SubLSystemTrampolineFile.checkType(leaf, INDEXING_LEAF_P);
         return NIL != kb_indexing_datastructures.simple_indexed_term_p(mt) ? ((SubLObject) (subl_promotions.memberP(leaf, kb_indexing_datastructures.term_index(mt), UNPROVIDED, UNPROVIDED))) : subl_promotions.memberP(leaf, kb_indexing_datastructures.final_index_leaves(kb_indexing.get_mt_subindex(mt)), UNPROVIDED, UNPROVIDED);
     }
 
@@ -7503,7 +7503,7 @@ public final class kbi_assertion extends SubLTranslatedFile implements V02 {
                 SubLObject idx = assertion_handles.do_assertions_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt315$mapping_Cyc_assertions_for_unedit, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt315$mapping_Cyc_assertions_for_unedit, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);

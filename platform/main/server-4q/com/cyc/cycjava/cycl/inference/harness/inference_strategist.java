@@ -110,7 +110,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1203,7 +1203,7 @@ public final class inference_strategist extends SubLTranslatedFile {
             patience = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(inference, RUNNING_INFERENCE_P);
+        SubLSystemTrampolineFile.enforceType(inference, RUNNING_INFERENCE_P);
         if (NIL == valid_process_p(inference_datastructures_inference.inference_control_process(inference))) {
             final SubLObject error_message = $str75$Inference_control_process_was_kil;
             inference_suspend(inference, inference_datastructures_enumerated_types.new_inference_error_suspend_status(error_message));

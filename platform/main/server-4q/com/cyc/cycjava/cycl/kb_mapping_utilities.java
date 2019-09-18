@@ -47,7 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -307,10 +307,10 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, index_arg, pred)) {
             final SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, index_arg, pred);
@@ -364,11 +364,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -391,11 +391,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mts, LISTP);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mts, LISTP);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
@@ -418,10 +418,10 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -447,10 +447,10 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -635,11 +635,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
         if (truth == UNPROVIDED) {
             truth = $TRUE;
         }
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         final SubLObject assertion = fpred_value_gaf(v_term, pred, index_arg, truth);
         if (NIL != assertion) {
             return assertions_high.gaf_arg(assertion, gather_arg);
@@ -658,12 +658,12 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -689,12 +689,12 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mts, LISTP);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mts, LISTP);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
@@ -720,11 +720,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -753,11 +753,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -907,11 +907,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject values = NIL;
         if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, index_arg, pred)) {
             final SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, index_arg, pred);
@@ -972,12 +972,12 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1003,12 +1003,12 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mts, LISTP);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mts, LISTP);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
@@ -1034,11 +1034,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1067,11 +1067,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -1095,9 +1095,9 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         SubLObject answer_already_calculated = NIL;
         if (NIL == $mapping_assertion_bookkeeping_fn$.getDynamicValue(thread)) {
@@ -1259,10 +1259,10 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1285,10 +1285,10 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(mts, LISTP);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mts, LISTP);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
@@ -1311,9 +1311,9 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1339,9 +1339,9 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(gather_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(gather_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -1729,12 +1729,12 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(u, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(v, HL_TERM_P);
-        SubLTrampolineFile.enforceType(u_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(v_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(u, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(u_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(v_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(u, u_arg, pred)) {
             final SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(u, u_arg, pred);
@@ -1791,13 +1791,13 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(u, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(v, HL_TERM_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
-        SubLTrampolineFile.enforceType(u_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(v_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(u, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(u_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(v_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1823,13 +1823,13 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(u, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(v, HL_TERM_P);
-        SubLTrampolineFile.enforceType(mts, LISTP);
-        SubLTrampolineFile.enforceType(u_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(v_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(u, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(mts, LISTP);
+        SubLSystemTrampolineFile.enforceType(u_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(v_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
@@ -1855,12 +1855,12 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(u, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(v, HL_TERM_P);
-        SubLTrampolineFile.enforceType(u_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(v_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(u, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(u_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(v_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1889,12 +1889,12 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(u, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(v, HL_TERM_P);
-        SubLTrampolineFile.enforceType(u_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(v_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(u, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(u_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(v_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -2809,11 +2809,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_args, LISTP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_args, LISTP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == list_utilities.every_in_list(symbol_function(INTEGERP), gather_args, UNPROVIDED))) {
             Errors.error($str99$_S_is_not_a_valid_arg_position_li);
         }
@@ -2880,12 +2880,12 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_args, LISTP);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_args, LISTP);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -2905,12 +2905,12 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_args, LISTP);
-        SubLTrampolineFile.enforceType(mts, LISTP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_args, LISTP);
+        SubLSystemTrampolineFile.enforceType(mts, LISTP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
@@ -2930,11 +2930,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_args, LISTP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_args, LISTP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -2957,11 +2957,11 @@ public final class kb_mapping_utilities extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(pred, FORT_P);
-        SubLTrampolineFile.enforceType(index_arg, INTEGERP);
-        SubLTrampolineFile.enforceType(gather_args, LISTP);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(pred, FORT_P);
+        SubLSystemTrampolineFile.enforceType(index_arg, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(gather_args, LISTP);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         SubLObject v_answer = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);

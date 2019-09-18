@@ -59,7 +59,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -418,7 +418,7 @@ public final class java_api_kernel extends SubLTranslatedFile {
             abnormalP = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(uuid_string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(uuid_string, STRINGP);
         if (task_processor.get_task_processor_verbosity().numG(ZERO_INTEGER)) {
             task_processor.push_tpool_background_msg(format(NIL, $str11$Releasing_java_API_resources_iden, uuid_string), task_processor.$api_task_process_pool$.getGlobalValue());
         }
@@ -509,8 +509,8 @@ public final class java_api_kernel extends SubLTranslatedFile {
 
     public static SubLObject acquire_api_services_lease(final SubLObject lease_duration_in_milliseconds, final SubLObject uuid_string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(lease_duration_in_milliseconds, INTEGERP);
-        SubLTrampolineFile.enforceType(uuid_string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(lease_duration_in_milliseconds, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(uuid_string, STRINGP);
         if (lease_duration_in_milliseconds.numG($maximum_api_services_lease_duration_in_milliseconds$.getGlobalValue())) {
             dictionary_utilities.synchronized_dictionary_remove($java_api_leases$.getGlobalValue(), uuid_string);
             if (NIL != task_processor.java_api_lease_activity_display()) {
@@ -584,7 +584,7 @@ public final class java_api_kernel extends SubLTranslatedFile {
     }
 
     public static SubLObject initialize_java_api_passive_socket(final SubLObject uuid_string) {
-        SubLTrampolineFile.enforceType(uuid_string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(uuid_string, STRINGP);
         final SubLObject api_socket = get_current_api_socket();
         if (task_processor.get_task_processor_verbosity().numG(ZERO_INTEGER)) {
             task_processor.push_tpool_background_msg(format(NIL, $str39$Initializing_java_client_socket__, api_socket, uuid_string), task_processor.$api_task_process_pool$.getGlobalValue());
@@ -636,7 +636,7 @@ public final class java_api_kernel extends SubLTranslatedFile {
 
     public static SubLObject close_java_api_socket(final SubLObject uuid_string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(uuid_string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(uuid_string, STRINGP);
         if (NIL == $java_api_sockets$.getGlobalValue()) {
             return NIL;
         }

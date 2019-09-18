@@ -215,7 +215,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2554,7 +2554,7 @@ public final class cb_inference_browser extends SubLTranslatedFile {
                         ignore_reason = cb_strategy_uninterestingness_explanation_string(ignore_reason, strategic_context);
                     }
                 }
-                if (((NIL != ignore_reason) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(ignore_reason))) {
+                if (((NIL != ignore_reason) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(ignore_reason))) {
                     throw new AssertionError(ignore_reason);
                 }
                 final SubLObject uninterestingness_string = strategic_uninterestingness_reason_string(uninterestingness_reason);
@@ -8389,7 +8389,7 @@ public final class cb_inference_browser extends SubLTranslatedFile {
             final_link = NIL;
         }
         assert NIL != inference_datastructures_inference.problem_or_inference_p(supported_object) : "inference_datastructures_inference.problem_or_inference_p(supported_object) " + "CommonSymbols.NIL != inference_datastructures_inference.problem_or_inference_p(supported_object) " + supported_object;
-        if (((NIL != final_link) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.problem_link_p(final_link))) {
+        if (((NIL != final_link) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.problem_link_p(final_link))) {
             throw new AssertionError(final_link);
         }
         final SubLObject ancestors = (NIL != inference_datastructures_problem.problem_p(supported_object)) ? problem_store_visualization.problem_oldest_ancestor_path(supported_object) : list(supported_object);

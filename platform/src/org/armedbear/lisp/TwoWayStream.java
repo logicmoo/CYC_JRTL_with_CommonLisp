@@ -37,11 +37,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInOutTextStreamImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
 
-public class TwoWayStream extends SubLInOutTextStreamImpl
-{
-    //public final Stream inStream;
-    //public final Stream outStream;
-//
+public class TwoWayStream extends SubLInOutTextStreamImpl {
+	//public final Stream inStream;
+	//public final Stream outStream;
+	//
 	@Override
 	public SubLInputStream toInputStream() {
 		return (SubLInputStream) inStream;
@@ -52,243 +51,212 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
 		return (SubLOutputStream) outStream;
 	}
 
-    public static TwoWayStream createTwoWayStream(Stream in, Stream out, boolean interactive) {
+	public static TwoWayStream createTwoWayStream(Stream in, Stream out, boolean interactive) {
 		return new TwoWayStream(in, out, interactive);
 	}
-//
-//	public static TwoWayStream createTwoWayStream(Stream in, Stream out) {
-//		return new TwoWayStream(in, out);
-//	}
+	//
+	//	public static TwoWayStream createTwoWayStream(Stream in, Stream out) {
+	//		return new TwoWayStream(in, out);
+	//	}
 
-	protected TwoWayStream(Stream in, Stream out)
-    {
-        super(Symbol.TWO_WAY_STREAM);
-        direction = Keyword.IO;
-        if(in!=null)setElementType(in.getElementType());
-        this.inStream = in;
-        this.outStream = out;
-        isInputStream = true;
-        isOutputStream = true;
-    }
+	protected TwoWayStream(Stream in, Stream out) {
+		super(Symbol.TWO_WAY_STREAM);
+		direction = Keyword.IO;
+		if (in != null)
+			setElementType(in.getElementType());
+		this.inStream = in;
+		this.outStream = out;
+		isInputStream = true;
+		isOutputStream = true;
+	}
 
+	public TwoWayStream(Stream in, Stream out, boolean interactive) {
+		this(in, out);
+		setInteractive(interactive);
+	}
 
-    public TwoWayStream(Stream in, Stream out, boolean interactive)
-    {
-        this(in, out);
-        setInteractive(interactive);
-    }
+	@Override
+	public LispObject getStreamElementType() {
+		LispObject itype = inStream.getStreamElementType();
+		LispObject otype = outStream.getStreamElementType();
+		if (itype.equal(otype))
+			return itype;
+		return list(Symbol.AND, itype, otype);
+	}
 
-    @Override
-	public LispObject getStreamElementType()
-    {
-        LispObject itype = inStream.getStreamElementType();
-        LispObject otype = outStream.getStreamElementType();
-        if (itype.equal(otype))
-            return itype;
-        return list(Symbol.AND, itype, otype);
-    }
+	public Stream getInputStream() {
+		return inStream;
+	}
 
-    public Stream getInputStream()
-    {
-        return inStream;
-    }
+	public Stream getOutputStream() {
+		return outStream;
+	}
 
-    public Stream getOutputStream()
-    {
-        return outStream;
-    }
+	@Override
+	public boolean isCharacterInputStream() {
+		return inStream.isCharacterInputStream();
+	}
 
-    @Override
-	public boolean isCharacterInputStream()
-    {
-        return inStream.isCharacterInputStream();
-    }
+	@Override
+	public boolean isBinaryInputStream() {
+		return inStream.isBinaryInputStream();
+	}
 
-    @Override
-	public boolean isBinaryInputStream()
-    {
-        return inStream.isBinaryInputStream();
-    }
+	@Override
+	public boolean isCharacterOutputStream() {
+		return outStream.isCharacterOutputStream();
+	}
 
-    @Override
-	public boolean isCharacterOutputStream()
-    {
-        return outStream.isCharacterOutputStream();
-    }
+	@Override
+	public boolean isBinaryOutputStream() {
+		return outStream.isBinaryOutputStream();
+	}
 
-    @Override
-	public boolean isBinaryOutputStream()
-    {
-        return outStream.isBinaryOutputStream();
-    }
+	@Override
+	public LispObject typeOf() {
+		return Symbol.TWO_WAY_STREAM;
+	}
 
-    @Override
-	public LispObject typeOf()
-    {
-        return Symbol.TWO_WAY_STREAM;
-    }
+	@Override
+	public LispObject classOf() {
+		return BuiltInClass.TWO_WAY_STREAM;
+	}
 
-    @Override
-	public LispObject classOf()
-    {
-        return BuiltInClass.TWO_WAY_STREAM;
-    }
+	@Override
+	public LispObject typep(LispObject type) {
+		if (type == Symbol.TWO_WAY_STREAM)
+			return T;
+		if (type == BuiltInClass.TWO_WAY_STREAM)
+			return T;
+		return super.typep(type);
+	}
 
-    @Override
-	public LispObject typep(LispObject type)
-    {
-        if (type == Symbol.TWO_WAY_STREAM)
-            return T;
-        if (type == BuiltInClass.TWO_WAY_STREAM)
-            return T;
-        return super.typep(type);
-    }
+	// Returns -1 at end of file.
+	@Override
+	protected int _readChar() throws java.io.IOException {
+		if (!Main.maybeTooSlow)
+			flush();
+		return inStream._readChar();
+	}
 
-    // Returns -1 at end of file.
-    @Override
-	protected int _readChar() throws java.io.IOException
-    {
-  		flush();
-        return inStream._readChar();
-    }
+	@Override
+	protected void _unreadChar(int n) throws java.io.IOException {
+		inStream._unreadChar(n);
+	}
 
-    @Override
-	protected void _unreadChar(int n) throws java.io.IOException
-    {
-        inStream._unreadChar(n);
-    }
+	@Override
+	protected boolean _charReady() throws java.io.IOException {
+		return inStream._charReady();
+	}
 
-    @Override
-	protected boolean _charReady() throws java.io.IOException
-    {
-        return inStream._charReady();
-    }
+	@Override
+	public void _writeChar(char c) {
+		outStream._writeChar(c);
+	}
 
-    @Override
-	public void _writeChar(char c)
-    {
-        outStream._writeChar(c);
-    }
-
-    @Override
+	@Override
 	public void _writeChars(char[] chars, int start, int end)
 
-    {
-        outStream._writeChars(chars, start, end);
-    }
+	{
+		outStream._writeChars(chars, start, end);
+	}
 
-    @Override
-	public void _writeString(String s)
-    {
-        outStream._writeString(s);
-    }
+	@Override
+	public void _writeString(String s) {
+		outStream._writeString(s);
+	}
 
-    @Override
-	public void _writeLine(String s)
-    {
-        outStream._writeLine(s);
-    }
+	@Override
+	public void _writeLine(String s) {
+		outStream._writeLine(s);
+	}
 
-    // Reads an 8-bit byte.
-    @Override
-	public int _readByte()
-    {
-        return inStream._readByte();
-    }
+	// Reads an 8-bit byte.
+	@Override
+	public int _readByte() {
+		return inStream._readByte();
+	}
 
-    // Writes an 8-bit byte.
-    @Override
-	public void _writeByte(int n)
-    {
-        outStream._writeByte(n);
-    }
+	// Writes an 8-bit byte.
+	@Override
+	public void _writeByte(int n) {
+		outStream._writeByte(n);
+	}
 
-    @Override
-	public void _finishOutput()
-    {
-        outStream._finishOutput();
-    }
+	@Override
+	public void _finishOutput() {
+		outStream._finishOutput();
+	}
 
-    @Override
-	public void _clearInput()
-    {
-        inStream._clearInput();
-    }
+	@Override
+	public void _clearInput() {
+		inStream._clearInput();
+	}
 
-    @Override
-	public LispObject listen()
-    {
-        return inStream.listen();
-    }
+	@Override
+	public LispObject listen() {
+		return inStream.listen();
+	}
 
-    @Override
-	public LispObject FRESH_LINE()
-    {
-        return outStream.FRESH_LINE();
-    }
+	@Override
+	public LispObject FRESH_LINE() {
+		return outStream.FRESH_LINE();
+	}
 
-    @Override
-	public LispObject close(LispObject abort)
-    {
-        // "The effect of CLOSE on a constructed stream is to close the
-        // argument stream only. There is no effect on the constituents of
-        // composite streams."
-        setOpen(false);
-        return T;
-    }
+	@Override
+	public LispObject close(LispObject abort) {
+		// "The effect of CLOSE on a constructed stream is to close the
+		// argument stream only. There is no effect on the constituents of
+		// composite streams."
+		setOpen(false);
+		return T;
+	}
 
 	@Override
 	public String printObjectImpl() {
-		if (isPrintReadable(null)) {
-		Symbol s = Lisp.standardSymbolValue(this);
-		if(s!=null) return s.cl_symbol_name();
-		}		
+		if (!Main.maybeTooSlow) {
+			if (isPrintReadable(null)) {
+				Symbol s = Lisp.standardSymbolValue(this);
+				if (s != null)
+					return s.cl_symbol_name();
+			}
+		}
 		return unreadableString("TWO-WAY-STREAM");
 	}
 
-    // ### make-two-way-stream input-stream output-stream => two-way-stream
-    private static final Primitive MAKE_TWO_WAY_STREAM =
-        new Primitive(Symbol.MAKE_TWO_WAY_STREAM, "input-stream output-stream")
-    {
-        @Override
+	// ### make-two-way-stream input-stream output-stream => two-way-stream
+	private static final Primitive MAKE_TWO_WAY_STREAM = new Primitive(Symbol.MAKE_TWO_WAY_STREAM, "input-stream output-stream") {
+		@Override
 		public LispObject execute(LispObject first, LispObject second)
 
-        {
-            final Stream in = checkStream(first);
-            final Stream out = checkStream(second);
-            if (!in.isInputStream())
-                return type_error(in, list(Symbol.SATISFIES,
-                                                 Symbol.INPUT_STREAM_P));
-            if (!out.isOutputStream())
-                return type_error(out, list(Symbol.SATISFIES,
-                                                  Symbol.OUTPUT_STREAM_P));
-            return createTwoWayStream(in, out, false);
-        }
-    };
+		{
+			final Stream in = checkStream(first);
+			final Stream out = checkStream(second);
+			if (!in.isInputStream())
+				return type_error(in, list(Symbol.SATISFIES, Symbol.INPUT_STREAM_P));
+			if (!out.isOutputStream())
+				return type_error(out, list(Symbol.SATISFIES, Symbol.OUTPUT_STREAM_P));
+			return createTwoWayStream(in, out, false);
+		}
+	};
 
-    // ### two-way-stream-input-stream two-way-stream => input-stream
-    private static final Primitive TWO_WAY_STREAM_INPUT_STREAM =
-        new Primitive(Symbol.TWO_WAY_STREAM_INPUT_STREAM, "two-way-stream")
-    {
-        @Override
-		public LispObject execute(LispObject arg)
-        {
-           if (arg instanceof TwoWayStream)
-               return ((TwoWayStream)arg).inStream;
-           return type_error(arg, Symbol.TWO_WAY_STREAM);
-        }
-    };
+	// ### two-way-stream-input-stream two-way-stream => input-stream
+	private static final Primitive TWO_WAY_STREAM_INPUT_STREAM = new Primitive(Symbol.TWO_WAY_STREAM_INPUT_STREAM, "two-way-stream") {
+		@Override
+		public LispObject execute(LispObject arg) {
+			if (arg instanceof TwoWayStream)
+				return ((TwoWayStream) arg).inStream;
+			return type_error(arg, Symbol.TWO_WAY_STREAM);
+		}
+	};
 
-    // ### two-way-stream-output-stream two-way-stream => output-stream
-    private static final Primitive TWO_WAY_STREAM_OUTPUT_STREAM =
-        new Primitive(Symbol.TWO_WAY_STREAM_OUTPUT_STREAM, "two-way-stream")
-    {
-        @Override
-		public LispObject execute(LispObject arg)
-        {
-           if (arg instanceof TwoWayStream)
-               return ((TwoWayStream)arg).outStream;
-           return type_error(arg, Symbol.TWO_WAY_STREAM);
-        }
-    };
+	// ### two-way-stream-output-stream two-way-stream => output-stream
+	private static final Primitive TWO_WAY_STREAM_OUTPUT_STREAM = new Primitive(Symbol.TWO_WAY_STREAM_OUTPUT_STREAM, "two-way-stream") {
+		@Override
+		public LispObject execute(LispObject arg) {
+			if (arg instanceof TwoWayStream)
+				return ((TwoWayStream) arg).outStream;
+			return type_error(arg, Symbol.TWO_WAY_STREAM);
+		}
+	};
 }

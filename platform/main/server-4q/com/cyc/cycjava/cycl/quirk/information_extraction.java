@@ -46,7 +46,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -347,7 +347,7 @@ public final class information_extraction extends SubLTranslatedFile {
         try {
             thread.throwStack.push($sym25$OUTER_CATCH_FOR_INFORMATION_EXTRACTION_NODE_METHOD);
             try {
-                if (((NIL != filters) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(filters))) {
+                if (((NIL != filters) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(filters))) {
                     throw new AssertionError(filters);
                 }
                 if (NIL == filters) {

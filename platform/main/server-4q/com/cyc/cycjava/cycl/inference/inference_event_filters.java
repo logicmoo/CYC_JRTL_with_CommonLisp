@@ -41,7 +41,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -432,9 +432,9 @@ public final class inference_event_filters extends SubLTranslatedFile {
     }
 
     public static SubLObject init_inference_event_filters_file() {
-        deflexical("*INFERENCE-EVENT-FILTER-LOCK*", SubLTrampolineFile.maybeDefault($inference_event_filter_lock$, $inference_event_filter_lock$, () -> make_lock($$$Inference_Event_Filter_Lock)));
-        deflexical("*INFERENCE-EVENT-FILTER-LISTENERS*", SubLTrampolineFile.maybeDefault($inference_event_filter_listeners$, $inference_event_filter_listeners$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*INFERENCE-EVENT-FILTER-RELAYER*", SubLTrampolineFile.maybeDefault($inference_event_filter_relayer$, $inference_event_filter_relayer$, () -> event_broker.describe_funcall_listener($INFERENCE_EVENT, RELAY_INFERENCE_EVENT, UNPROVIDED, UNPROVIDED)));
+        deflexical("*INFERENCE-EVENT-FILTER-LOCK*", SubLSystemTrampolineFile.maybeDefault($inference_event_filter_lock$, $inference_event_filter_lock$, () -> make_lock($$$Inference_Event_Filter_Lock)));
+        deflexical("*INFERENCE-EVENT-FILTER-LISTENERS*", SubLSystemTrampolineFile.maybeDefault($inference_event_filter_listeners$, $inference_event_filter_listeners$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*INFERENCE-EVENT-FILTER-RELAYER*", SubLSystemTrampolineFile.maybeDefault($inference_event_filter_relayer$, $inference_event_filter_relayer$, () -> event_broker.describe_funcall_listener($INFERENCE_EVENT, RELAY_INFERENCE_EVENT, UNPROVIDED, UNPROVIDED)));
         deflexical("*KNOWN-INFERENCE-EVENTS*", Mapping.mapcar(symbol_function(EVENT_CLASS_SELF), event_model.children_of_event_class_in_hierarchy($INFERENCE_EVENT, event_model.core_event_hierarchy())));
         return NIL;
     }

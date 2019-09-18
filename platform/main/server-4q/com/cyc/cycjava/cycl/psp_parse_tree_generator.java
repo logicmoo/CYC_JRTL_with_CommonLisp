@@ -49,7 +49,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class psp_parse_tree_generator extends SubLTranslatedFile {
     public static final SubLFile me = new psp_parse_tree_generator();
@@ -819,7 +819,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_psp_parse_tree_generator_file() {
         defconstant("*DTP-PSP-EDGE-EQUIVALENCE-SET*", PSP_EDGE_EQUIVALENCE_SET);
-        deflexical("*PSP-CHART-TOKENIZATIONS*", SubLTrampolineFile.maybeDefault($psp_chart_tokenizations$, $psp_chart_tokenizations$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*PSP-CHART-TOKENIZATIONS*", SubLSystemTrampolineFile.maybeDefault($psp_chart_tokenizations$, $psp_chart_tokenizations$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         return NIL;
     }
 

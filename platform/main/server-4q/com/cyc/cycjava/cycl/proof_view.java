@@ -165,7 +165,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class proof_view extends SubLTranslatedFile {
@@ -1271,7 +1271,7 @@ public final class proof_view extends SubLTranslatedFile {
 		if (v_answer == UNPROVIDED) {
 			v_answer = NIL;
 		}
-		if (((NIL != proof) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_proof.proof_p(proof))) {
+		if (((NIL != proof) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_proof.proof_p(proof))) {
 			throw new AssertionError(proof);
 		}
 		final SubLObject id = get_next_proof_view_id();
@@ -6348,7 +6348,7 @@ public final class proof_view extends SubLTranslatedFile {
 		defparameter("*PROOF-VIEW-ENTITY-MENTION-PADDING*", $int$150);
 		defparameter("*PROOF-VIEW-CITATION-FORMAT*", $SUPERSCRIPTS);
 		defconstant("*DTP-PROOF-VIEW*", PROOF_VIEW);
-		deflexical("*PROOF-VIEW-ID-INDEX*", SubLTrampolineFile.maybeDefault($proof_view_id_index$, $proof_view_id_index$, () -> new_id_index(UNPROVIDED, UNPROVIDED)));
+		deflexical("*PROOF-VIEW-ID-INDEX*", SubLSystemTrampolineFile.maybeDefault($proof_view_id_index$, $proof_view_id_index$, () -> new_id_index(UNPROVIDED, UNPROVIDED)));
 		defconstant("*PROOF-VIEW-ROOT-ENTRY-ID*", ZERO_INTEGER);
 		defparameter("*BREAK-ON-PROOF-VIEW-FILTERING?*", NIL);
 		defconstant("*DTP-PROOF-VIEW-ENTRY*", PROOF_VIEW_ENTRY);

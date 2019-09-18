@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.mortbay.jetty</groupId>
+    <artifactId>jetty-jsp</artifactId>
+    <version>2.1.v20100127</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>jsp-api-2.1-glassfish</artifactId>
+  <name>Glassfish :: Jasper API JSP 2.1</name>
+  <description>JSP2.1 API</description>
+  <packaging>jar</packaging>
+  <licenses>
+    <license>
+      <name>CDDL 1.0</name>
+      <url>https://glassfish.dev.java.net/public/CDDLv1.0.html</url>
+    </license>
+  </licenses>
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <resources>
+      <resource>
+        <directory>target/generated-sources/main/resources</directory>
+        <includes>
+          <include>**/**</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>export</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <ant antfile="checkout.xml" target="extract-src">
+                  <property name="glassfish.tag" value="${glassfish-tag-version}" />
+                </ant>
+              </tasks>
+              <sourceRoot>${project.build.directory}/generated-sources/main/java</sourceRoot>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+      <!-- patch that replaces the obsolete jsp_2._0.xsd file
+      by the one on sun's website: http://java.sun.com/xml/ns/j2ee/jsp_2_0.xsd
+      the obsolete one carries a proprietary license.
+      the new one on the website has the glassfish license (CDDL+GPL-2.0)-->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-patch-plugin</artifactId>
+        <version>1.0</version>
+        <configuration>
+           <targetDirectory>${project.build.directory}/generated-sources/main/resources</targetDirectory>
+           <skipApplication>false</skipApplication>
+        </configuration>
+        <executions>
+           <execution>
+              <id>bugfix-patches</id>
+              <configuration>
+                 <patchDirectory>${basedir}/src/main/patches</patchDirectory>
+                 <naturalOrderProcessing>true</naturalOrderProcessing>
+              </configuration>
+              <phase>process-sources</phase>
+              <goals>
+                 <goal>apply</goal>
+              </goals>
+           </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>manifest</goal>
+            </goals>
+            <configuration>
+              <instructions>
+                <Implementation-Vendor>JCP</Implementation-Vendor>
+                <Specification-Version>2.1</Specification-Version>
+                <Bundle-Version>2.1</Bundle-Version>
+                <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
+                <Import-Package>!javax.el.*,!javax.servlet.jsp.*,!org.apache.taglibs.*,*</Import-Package>
+              </instructions>
+            </configuration>
+           </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+              <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>

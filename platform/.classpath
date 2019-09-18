@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/slf4j-api-1.7.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/slf4j-log4j12-1.7.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/java.desktop.modpatch-1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/javax.servlet-api-3.1.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jdk.jsobject.modpatch-1.jar"/>
-	<classpathentry kind="lib" path="lib/larkc/cycSparqlEndpoint.jar"/>
 	<classpathentry kind="src" path=".apt_generated">
 		<attributes>
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry excluding="lib/|src/|src2/net/wimpi/telnetd/" kind="src" path="main/telnetd-2.0"/>
+	<classpathentry kind="src" path="webapps/docs/appdev/sample/src"/>
+	<classpathentry kind="src" path="webapps/docs/appdev/sample/web"/>
+	<classpathentry kind="src" path="webapps/manager"/>
+	<classpathentry kind="src" path="webapps/host-manager"/>
 	<classpathentry kind="src" path="examples/google-app-engine/src"/>
 	<classpathentry kind="src" path="examples/gui"/>
 	<classpathentry kind="src" path="examples/java-exception"/>
@@ -22,53 +21,16 @@
 	<classpathentry kind="src" path="examples/misc"/>
 	<classpathentry kind="src" path="examples/pure-lisp-to-java"/>
 	<classpathentry excluding="org/abcl/util/StreamTaskTest.java" kind="src" path="test/src"/>
-	<classpathentry excluding="src/" kind="src" path="test"/>
-	<classpathentry kind="src" path="main/objectweb-asm-src"/>
 	<classpathentry kind="src" path="main/cycjava-persistence-hacks"/>
 	<classpathentry kind="src" path="main/armedbear-j-src"/>
 	<classpathentry kind="src" path="main/jpl7-hacked"/>
-	<classpathentry kind="src" path="main/embedded-jetty/main/java"/>
-	<classpathentry kind="src" path="main/embedded-jetty/main/resources"/>
-	<classpathentry kind="src" path="main/embedded-jetty/test/java"/>
 	<classpathentry kind="src" path="main/java"/>
-	<classpathentry excluding="test/" including="**/*" kind="src" path="main/beanshell"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry including="**/*" kind="src" path="main/beanshell"/>
+	<classpathentry kind="src" path="main/opencyc-0.0.1-SNAPSHOT-src"/>
 	<classpathentry kind="src" path="main/server-4q"/>
-	<classpathentry excluding="bsh/|org/logicmoo/system/spoon/gen/|org/logicmoo/translate/spoon/gen/|org/logicmoo/translate/spoon/spoon_test.java|com/cyc/cycjava_2/cycl/" kind="src" path="main/logicmoo-main"/>
-	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLHashtable_broken.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/guava-12.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/iri.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/junit.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/log4j-1.2.13.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/openrdf-sesame-2.2.4-onejar.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/ordi-model-0.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/larkc/ordi-trree-adapter-3.1.a6.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-annotations-9.4.12.v20180830.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1567736608227/source/jetty-annotations-9.4.12.v20180830-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-http-9.4.12.v20180830.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1567736608227/source/jetty-http-9.4.12.v20180830-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-io-9.4.12.v20180830.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-jndi-9.4.12.v20180830.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-plus-9.4.12.v20180830.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-schemas-3.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-security-9.4.12.v20180830.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-server-9.4.12.v20180830.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1567736608227/source/jetty-server-9.4.12.v20180830-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-servlet-9.4.12.v20180830.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1567736608227/source/jetty-servlet-9.4.12.v20180830-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-util-9.4.12.v20180830.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1567736608227/source/jetty-util-9.4.12.v20180830-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-webapp-9.4.12.v20180830.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1567736608227/source/jetty-webapp-9.4.12.v20180830-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-libs/jetty-xml-9.4.12.v20180830.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/apache-el-8.5.24.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/apache-jsp-8.5.24.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/apache-jsp-9.4.12.v20180830.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1567736608227/source/apache-jsp-9.4.12.v20180830-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/asm-6.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/asm-analysis-6.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/asm-commons-6.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/asm-tree-6.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ecj-3.12.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/hamcrest-core-1.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/javax.annotation-api-1.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/junit-4.12.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/taglibs-standard-impl-1.2.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/taglibs-standard-spec-1.2.5.jar"/>
-	<classpathentry kind="lib" path="lib/larkc/GAT-API.jar"/>
-	<classpathentry kind="lib" path="lib/larkc/mpj.jar"/>
+	<classpathentry kind="src" path="main/logicmoo-main"/>
+	<classpathentry excluding="com/cyc/tool/subl/~webserver~/|com/cyc/tool/subl/webserver/Tomcat.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="lib/all-deps"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -112,7 +112,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class psp_semantics extends SubLTranslatedFile {
     public static final SubLFile me = new psp_semantics();
@@ -4108,7 +4108,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defparameter("*PSP-CONTEXT*", NIL);
         defconstant("*DTP-PHRASE-STRUCTURE-PARSER-WEIGHTED-CYCL*", PHRASE_STRUCTURE_PARSER_WEIGHTED_CYCL);
         deflexical("*PSP-CATEGORY-FROM-FRAME-CACHING-STATE*", NIL);
-        deflexical("*PSP-SPECIAL-SEMANTIC-METHODS*", SubLTrampolineFile.maybeDefault($psp_special_semantic_methods$, $psp_special_semantic_methods$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*PSP-SPECIAL-SEMANTIC-METHODS*", SubLSystemTrampolineFile.maybeDefault($psp_special_semantic_methods$, $psp_special_semantic_methods$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         deflexical("*PSP-HEAD-KEY-FOR-CATEGORY-CACHING-STATE*", NIL);
         deflexical("*PSP-REFORMULATOR-MODULES-TO-SKIP*", $list139);
         deflexical("*PSP-GENL-POS?-CACHING-STATE*", NIL);

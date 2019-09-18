@@ -43,7 +43,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -546,7 +546,7 @@ public final class subl_macro_promotions extends SubLTranslatedFile {
     }
 
     public static SubLObject init_subl_macro_promotions_file() {
-        deflexical("*CATCH-ERROR-MESSAGE-TARGET*", SubLTrampolineFile.maybeDefault($catch_error_message_target$, $catch_error_message_target$, () -> make_symbol($$$ERROR)));
+        deflexical("*CATCH-ERROR-MESSAGE-TARGET*", SubLSystemTrampolineFile.maybeDefault($catch_error_message_target$, $catch_error_message_target$, () -> make_symbol($$$ERROR)));
         defparameter("*WITHIN-WITH-TIMEOUT*", NIL);
         defparameter("*WITH-TIMEOUT-NESTING-DEPTH*", ZERO_INTEGER);
         return NIL;

@@ -122,7 +122,7 @@ public abstract class LispThread extends SLispObject {
 
 		creator = BeanShellCntrl.getStackTraceString(new Throwable());
 		this.name = name;
-		SafeRunnable r = new SafeRunnable() {
+		SafeRunnable r = new SafeRunnable(null) {
 			@Override
 			public void safeRun() {
 				Throwable problem = null;

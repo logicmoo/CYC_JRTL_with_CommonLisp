@@ -74,7 +74,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -959,8 +959,8 @@ public final class after_adding extends SubLTranslatedFile {
     public static SubLObject init_after_adding_file() {
         defparameter("*DEBUG-AFTER-ADDINGS?*", NIL);
         deflexical("*GAF-AFTER-ADDING-PREDICATES*", $list0);
-        deflexical("*GAF-AFTER-ADDINGS-HASH*", SubLTrampolineFile.maybeDefault($gaf_after_addings_hash$, $gaf_after_addings_hash$, NIL));
-        deflexical("*GAF-AFTER-REMOVINGS-HASH*", SubLTrampolineFile.maybeDefault($gaf_after_removings_hash$, $gaf_after_removings_hash$, NIL));
+        deflexical("*GAF-AFTER-ADDINGS-HASH*", SubLSystemTrampolineFile.maybeDefault($gaf_after_addings_hash$, $gaf_after_addings_hash$, NIL));
+        deflexical("*GAF-AFTER-REMOVINGS-HASH*", SubLSystemTrampolineFile.maybeDefault($gaf_after_removings_hash$, $gaf_after_removings_hash$, NIL));
         defparameter("*AFTER-ADDINGS-DISABLED?*", NIL);
         return NIL;
     }

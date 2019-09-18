@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ordi</groupId>
+		<artifactId>super-project</artifactId>
+		<version>0.5</version>
+	</parent>
+	
+	<groupId>ordi</groupId>
+	<artifactId>ordi-trree-adapter</artifactId>
+	<packaging>jar</packaging>
+	<version>3.1.a2</version>
+	<name>TRREE Adapter</name>
+	<description>Implementation of tripleset data model using unified TRREE.</description>
+	
+	<!-- To use file based version uncomment this repository
+	     To gain access please follow the instructions at http://www.ontotext.com/owlim/
+	
+	<repositories>
+		<repository>
+			<id>ontotext-internal</id>
+			<url>http://namerimi.sirma.int:8989/archiva/repository/owlim/</url>
+		</repository>
+	</repositories>
+	
+	-->
+
+	<dependencies>
+		<dependency>
+			<groupId>ordi</groupId>
+			<artifactId>ordi-model</artifactId>
+			<version>0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>ordi</groupId>
+			<artifactId>ordi-test</artifactId>
+			<version>0.5</version>
+		</dependency>
+		
+		<!--
+		
+		<dependency>
+			<groupId>owlim</groupId>
+			<artifactId>swift-trree</artifactId>
+			<version>3.1.a2</version>
+		</dependency>	
+		
+		-->
+		
+		<dependency>
+			<groupId>owlim</groupId>
+			<artifactId>big-trree</artifactId>
+			<version>3.1.a6</version>
+		</dependency>
+
+		
+	</dependencies>
+</project>

@@ -37,7 +37,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class system_parameter_types extends SubLTranslatedFile implements V10 {
@@ -289,7 +289,7 @@ public final class system_parameter_types extends SubLTranslatedFile implements 
 	}
 
 	public static SubLObject init_system_parameter_types_file() {
-		deflexical("*SYSTEM-PARAMETER-TYPE-DEFINITIONS*", SubLTrampolineFile.maybeDefault($system_parameter_type_definitions$, $system_parameter_type_definitions$, NIL));
+		deflexical("*SYSTEM-PARAMETER-TYPE-DEFINITIONS*", SubLSystemTrampolineFile.maybeDefault($system_parameter_type_definitions$, $system_parameter_type_definitions$, NIL));
 		return NIL;
 	}
 

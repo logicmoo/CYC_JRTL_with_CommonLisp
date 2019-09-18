@@ -139,7 +139,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -158,7 +158,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return an iterator for the values in the old-objects part of ID-INDEX")
 	public static final SubLObject new_id_index_old_objects_values_iterator(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject old_objects = id_index_old_objects(v_id_index);
 			SubLObject subiterator = iteration.new_vector_iterator(old_objects);
@@ -171,7 +171,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return an iterator for the old-objects part of ID-INDEX")
 	public static final SubLObject new_id_index_old_objects_iterator(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject old_objects = id_index_old_objects(v_id_index);
 			SubLObject subiterator = iteration.new_vector_index_iterator(old_objects);
@@ -184,7 +184,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return an iterator for the new-objects part of ID-INDEX")
 	public static final SubLObject new_id_index_new_objects_values_iterator(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject new_objects = id_index_new_objects(v_id_index);
 			return iteration.new_hash_table_values_iterator(new_objects);
@@ -196,7 +196,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return an iterator for the new-objects part of ID-INDEX")
 	public static final SubLObject new_id_index_new_objects_iterator(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject new_objects = id_index_new_objects(v_id_index);
 			return iteration.new_hash_table_iterator(new_objects);
@@ -225,12 +225,12 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject idix_old_objects(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.getField5();
 	}
 
 	public static final SubLObject idix_new_objects(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.getField6();
 	}
 
@@ -239,7 +239,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return the vector for old objects in ID-INDEX")
 	public static final SubLObject id_index_old_objects(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		return idix_old_objects(v_id_index);
 	}
 
@@ -252,7 +252,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return the number of old objects in ID-INDEX.")
 	public static final SubLObject id_index_old_object_count(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		return subtract(id_index_count(v_id_index), id_index_new_object_count(v_id_index));
 	}
 
@@ -265,7 +265,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return the hashtable for new objects in ID-INDEX")
 	public static final SubLObject id_index_new_objects(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		return idix_new_objects(v_id_index);
 	}
 
@@ -282,7 +282,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return the number of new objects in ID-INDEX.")
 	public static final SubLObject id_index_new_object_count(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		return hash_table_count(id_index_new_objects(v_id_index));
 	}
 
@@ -291,7 +291,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return the ID at which new objects start in ID-INDEX.")
 	public static final SubLObject id_index_new_id_threshold(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		return length(id_index_old_objects(v_id_index));
 	}
 
@@ -543,12 +543,12 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_idix_old_objects(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.setField5(value);
 	}
 
 	public static final SubLObject _csetf_idix_new_objects(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.setField6(value);
 	}
 
@@ -939,7 +939,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject idix_lock_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.getField2();
 	}
 
@@ -949,7 +949,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject idix_count_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.getField3();
 	}
 
@@ -959,7 +959,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject idix_next_id_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.getField4();
 	}
 
@@ -979,7 +979,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_idix_lock_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.setField2(value);
 	}
 
@@ -989,7 +989,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_idix_count_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.setField3(value);
 	}
 
@@ -999,7 +999,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_idix_next_id_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_object, ID_INDEX_P);
 		return v_object.setField4(value);
 	}
 
@@ -1205,7 +1205,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return the total number of objects indexed in ID-INDEX.")
 	public static final SubLObject id_index_count_alt(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		return idix_count(v_id_index);
 	}
 
@@ -1254,7 +1254,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return the next internal ID which would be used in ID-INDEX.")
 	public static final SubLObject id_index_next_id_alt(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		return idix_next_id(v_id_index);
 	}
 
@@ -1272,8 +1272,8 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Start reserving internal IDs in ID-INDEX at NEXT-ID.")
 	public static final SubLObject set_id_index_next_id_alt(SubLObject v_id_index, SubLObject next_id) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
-		SubLTrampolineFile.checkType(next_id, INTEGERP);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(next_id, INTEGERP);
 		_csetf_idix_next_id(v_id_index, next_id);
 		return next_id;
 	}
@@ -1355,7 +1355,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject convert_id_index_key_test(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject new_objects_table = id_index_new_objects(v_id_index);
 			if (new_objects_table.isHashtable()) {
@@ -1435,8 +1435,8 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 		if (new_id_start == UNPROVIDED) {
 			new_id_start = old_objects_size;
 		}
-		SubLTrampolineFile.checkType(new_id_start, NON_NEGATIVE_INTEGER_P);
-		SubLTrampolineFile.checkType(old_objects_size, NON_NEGATIVE_INTEGER_P);
+		SubLSystemTrampolineFile.checkType(new_id_start, NON_NEGATIVE_INTEGER_P);
+		SubLSystemTrampolineFile.checkType(old_objects_size, NON_NEGATIVE_INTEGER_P);
 		{
 			SubLObject new_objects_size = max(TEN_INTEGER, integerDivide(old_objects_size, $id_index_default_scaling_factor$.getGlobalValue()));
 			SubLObject v_id_index = make_id_index(UNPROVIDED);
@@ -1484,7 +1484,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Reserve an internal ID from ID-INDEX and return it.")
 	public static final SubLObject id_index_reserve_alt(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject id = NIL;
 			SubLObject id_index_lock = id_index_lock(v_id_index);
@@ -1597,8 +1597,8 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return the object associated with ID in ID-INDEX.")
 	public static final SubLObject id_index_lookup_int_alt(SubLObject v_id_index, SubLObject id) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
-		SubLTrampolineFile.checkType(id, INTEGERP);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(id, INTEGERP);
 		if (NIL != id_index_old_object_id_p(v_id_index, id)) {
 			{
 				SubLObject old_objects = id_index_old_objects(v_id_index);
@@ -1674,8 +1674,8 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Enter OBJECT in ID-INDEX as the object associated with the key ID.\r\nID-INDEX is assumed to be already locked from the outside.\nEnter OBJECT in ID-INDEX as the object associated with the key ID.\nID-INDEX is assumed to be already locked from the outside.")
 	public static final SubLObject id_index_enter_unlocked_alt(SubLObject v_id_index, SubLObject id, SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
-		SubLTrampolineFile.checkType(id, INTEGERP);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(id, INTEGERP);
 		{
 			SubLObject existing = id_index_lookup_int(v_id_index, id);
 			SubLObject dwimmed_object = (NIL != v_object) ? ((SubLObject) (v_object)) : id_index_empty_list();
@@ -1800,8 +1800,8 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Remove any association for ID in ID-INDEX.")
 	public static final SubLObject id_index_remove_alt(SubLObject v_id_index, SubLObject id) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
-		SubLTrampolineFile.checkType(id, INTEGERP);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(id, INTEGERP);
 		{
 			SubLObject id_index_lock = id_index_lock(v_id_index);
 			SubLObject lock = id_index_lock;
@@ -1869,7 +1869,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Remove all ID associations in ID-INDEX.")
 	public static final SubLObject clear_id_index_alt(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject id_index_lock = id_index_lock(v_id_index);
 			SubLObject lock = id_index_lock;
@@ -1953,7 +1953,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Returns an iterator for ID-INDEX.\r\nValues returned are tuples of the form (<id> <object>).\nReturns an iterator for ID-INDEX.\nValues returned are tuples of the form (<id> <object>).")
 	public static final SubLObject new_id_index_iterator_alt(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		return iteration.new_factory_iterator($list_alt47, list(v_id_index), UNPROVIDED);
 	}
 
@@ -1972,7 +1972,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Returns an iterator for the values in ID-INDEX.")
 	public static final SubLObject new_id_index_values_iterator_alt(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		return iteration.new_factory_iterator($list_alt48, list(v_id_index), UNPROVIDED);
 	}
 
@@ -3284,9 +3284,9 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 		if (size == UNPROVIDED) {
 			size = NIL;
 		}
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		if (NIL != size) {
-			SubLTrampolineFile.checkType(size, NON_NEGATIVE_INTEGER_P);
+			SubLSystemTrampolineFile.checkType(size, NON_NEGATIVE_INTEGER_P);
 		}
 		{
 			SubLObject id_index_lock = id_index_lock(v_id_index);
@@ -3451,7 +3451,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+			SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 			if (NIL != id_index_compact_p(v_id_index)) {
 				return v_id_index;
 			}
@@ -3467,7 +3467,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 						SubLObject next_id = ZERO_INTEGER;
 						SubLObject total = id_index_count(v_id_index);
 						SubLObject sofar = ZERO_INTEGER;
-						SubLTrampolineFile.checkType($$$Compacting_ID_index, STRINGP);
+						SubLSystemTrampolineFile.checkType($$$Compacting_ID_index, STRINGP);
 						{
 							SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
 							SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
@@ -3510,11 +3510,11 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 						clrhash(id_index_new_objects(v_id_index));
 					}
 					if (NIL != new_id_notification_function) {
-						SubLTrampolineFile.checkType(new_id_notification_function, FUNCTION_SPEC_P);
+						SubLSystemTrampolineFile.checkType(new_id_notification_function, FUNCTION_SPEC_P);
 						{
 							SubLObject total = id_index_count(v_id_index);
 							SubLObject sofar = ZERO_INTEGER;
-							SubLTrampolineFile.checkType($$$Updating_object_IDs, STRINGP);
+							SubLSystemTrampolineFile.checkType($$$Updating_object_IDs, STRINGP);
 							{
 								SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
 								SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
@@ -3753,7 +3753,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return a new, optimized id-index in which all the ids of ID-INDEX are mapped\r\nto ids in a compact ID space.  The new index thus provides a mapping between\r\nan old id and its new \'compacted id\' without having to actually compact ID-INDEX.\nReturn a new, optimized id-index in which all the ids of ID-INDEX are mapped\nto ids in a compact ID space.  The new index thus provides a mapping between\nan old id and its new \'compacted id\' without having to actually compact ID-INDEX.")
 	public static final SubLObject new_indirect_compact_id_index_alt(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject compact_id = ZERO_INTEGER;
 			SubLObject new_id_index = NIL;
@@ -3905,7 +3905,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@return listp; a list of the ids used as keys in ID-INDEX.")
 	public static final SubLObject id_index_ids_alt(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject ids = NIL;
 			if (NIL == do_id_index_empty_p(v_id_index, $SKIP)) {
@@ -3982,7 +3982,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@return listp; a list of the values of ID-INDEX.")
 	public static final SubLObject id_index_values_alt(SubLObject v_id_index) {
-		SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+		SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 		{
 			SubLObject values = NIL;
 			if (NIL == do_id_index_empty_p(v_id_index, $SKIP)) {
@@ -4174,7 +4174,7 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(v_id_index, ID_INDEX_P);
+			SubLSystemTrampolineFile.checkType(v_id_index, ID_INDEX_P);
 			if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
 				if (NIL == member(type, $list_alt160, UNPROVIDED, UNPROVIDED)) {
 					Errors.error($str_alt161$Type_must_be_one_of_____ALL__OLD_);

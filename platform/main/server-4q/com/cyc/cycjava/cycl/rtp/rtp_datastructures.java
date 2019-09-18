@@ -154,7 +154,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -4080,18 +4080,18 @@ public final class rtp_datastructures extends SubLTranslatedFile {
 
     public static SubLObject init_rtp_datastructures_file() {
         deflexical("*PRINT-RULE-ABBREVIATED*", T);
-        deflexical("*TEMPLATE-META-MARKER-MAPPINGS*", SubLTrampolineFile.maybeDefault($template_meta_marker_mappings$, $template_meta_marker_mappings$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*TEMPLATE-META-MARKER-MAPPINGS*", SubLSystemTrampolineFile.maybeDefault($template_meta_marker_mappings$, $template_meta_marker_mappings$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         deflexical("*TEMPLATE-META-MARKER-PREDICATE*", $$templateMarkerRepresentation);
-        deflexical("*TEMPLATE-CATEGORY-FILL-WORDS*", SubLTrampolineFile.maybeDefault($template_category_fill_words$, $template_category_fill_words$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*TEMPLATE-CATEGORY-FILL-WORDS*", SubLSystemTrampolineFile.maybeDefault($template_category_fill_words$, $template_category_fill_words$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         deflexical("*TEMPLATE-CATEGORY-FILL-WORD-PREDICATE*", $$templateCategoryFillWord);
         deflexical("*MAKE-OPTIONAL-WORD-LIST-CACHING-STATE*", NIL);
         defconstant("*DTP-TEMPLATE-RULE*", TEMPLATE_RULE);
         deflexical("*TEMPLATE-RULE-SXHASHING-PRIME-A*", FIVE_INTEGER);
         deflexical("*TEMPLATE-RULE-SXHASHING-PRIME-B*", SEVEN_INTEGER);
-        deflexical("*USE-BETTER-TEMPLATE-RULE-SXHASH?*", SubLTrampolineFile.maybeDefault($sym54$_USE_BETTER_TEMPLATE_RULE_SXHASH__, $use_better_template_rule_sxhashP$, NIL));
+        deflexical("*USE-BETTER-TEMPLATE-RULE-SXHASH?*", SubLSystemTrampolineFile.maybeDefault($sym54$_USE_BETTER_TEMPLATE_RULE_SXHASH__, $use_better_template_rule_sxhashP$, NIL));
         defparameter("*TEMPLATE-RULE-DEFAULT-ASSERTION*", NIL);
         defparameter("*TEMPLATE-RULE-DEFAULT-MEANING*", constants_high.find_constant($$$assertTemplate));
-        deflexical("*TEMPLATE-RULE-ISG*", SubLTrampolineFile.maybeDefault($template_rule_isg$, $template_rule_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*TEMPLATE-RULE-ISG*", SubLSystemTrampolineFile.maybeDefault($template_rule_isg$, $template_rule_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
         defconstant("*CFASL-OPCODE-TEMPLATE-RULE*", $int$97);
         defconstant("*DTP-TEMPLATE-SPAN-ITEM*", TEMPLATE_SPAN_ITEM);
         defparameter("*TEMPLATE-TERMINAL-STYLE*", $STANDARD);
@@ -4099,13 +4099,13 @@ public final class rtp_datastructures extends SubLTranslatedFile {
         deflexical("*DENOTATIONS-OF-CONSTANT-CACHING-STATE*", NIL);
         deflexical("*ALL-PHRASES-FILTER-FROM-TERM-PHRASES-CONSTRAINT-CACHING-STATE*", NIL);
         defparameter("*RTP-CONTRACTIONS-TABLE*", NIL);
-        deflexical("*RTP-RULES*", SubLTrampolineFile.maybeDefault($rtp_rules$, $rtp_rules$, NIL));
+        deflexical("*RTP-RULES*", SubLSystemTrampolineFile.maybeDefault($rtp_rules$, $rtp_rules$, NIL));
         deflexical("*RTP-RULES-INITIAL-SIZE*", $int$256);
-        deflexical("*TEMPLATE-RULES-MASTER-INDEX*", SubLTrampolineFile.maybeDefault($template_rules_master_index$, $template_rules_master_index$, NIL));
+        deflexical("*TEMPLATE-RULES-MASTER-INDEX*", SubLSystemTrampolineFile.maybeDefault($template_rules_master_index$, $template_rules_master_index$, NIL));
         defconstant("*DTP-CATEGORIZED-TEMPLATE-RULE-SET*", CATEGORIZED_TEMPLATE_RULE_SET);
         defparameter("*ASSUME-EMPTY-ASSOCIATIVE-MEMORY?*", NIL);
         deflexical("*RELEVANT-TEMPLATE-MTS-CACHING-STATE*", NIL);
-        deflexical("*TEMPLATE-MTS*", SubLTrampolineFile.maybeDefault($template_mts$, $template_mts$, NIL));
+        deflexical("*TEMPLATE-MTS*", SubLSystemTrampolineFile.maybeDefault($template_mts$, $template_mts$, NIL));
         defparameter("*RTP-ASSERTS-INITIALIZED-SO-FAR*", ZERO_INTEGER);
         defconstant("*DTP-RTP-CHART-ENTRY*", RTP_CHART_ENTRY);
         defconstant("*DTP-SUBCONSTIT*", SUBCONSTIT);

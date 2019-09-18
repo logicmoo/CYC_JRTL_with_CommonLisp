@@ -80,7 +80,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -747,7 +747,7 @@ public final class sksi_csql_utilities extends SubLTranslatedFile {
             comparison_literal_reorderings = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != equivalent_field_map) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == dictionary.dictionary_p(equivalent_field_map))) {
+        if (((NIL != equivalent_field_map) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == dictionary.dictionary_p(equivalent_field_map))) {
             throw new AssertionError(equivalent_field_map);
         }
         final SubLObject where_exp = contract_where_clause(where);
@@ -1117,7 +1117,7 @@ public final class sksi_csql_utilities extends SubLTranslatedFile {
             existential_scope_fields = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != equivalent_field_map) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == dictionary.dictionary_p(equivalent_field_map))) {
+        if (((NIL != equivalent_field_map) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == dictionary.dictionary_p(equivalent_field_map))) {
             throw new AssertionError(equivalent_field_map);
         }
         final SubLObject equivalence_map = dictionary.new_dictionary(symbol_function(EQUAL), length(fields));

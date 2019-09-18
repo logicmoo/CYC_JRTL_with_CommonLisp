@@ -124,7 +124,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class inference_worker_transformation extends SubLTranslatedFile {
     public static final SubLFile me = new inference_worker_transformation();
@@ -467,7 +467,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject new_transformation_link(final SubLObject supported_problem, final SubLObject supporting_mapped_problem, final SubLObject hl_module, final SubLObject transformation_bindings, final SubLObject rule_assertion, final SubLObject more_supports, final SubLObject non_explanatory_subquery) {
         assert NIL != inference_datastructures_problem.problem_p(supported_problem) : "inference_datastructures_problem.problem_p(supported_problem) " + "CommonSymbols.NIL != inference_datastructures_problem.problem_p(supported_problem) " + supported_problem;
-        if (((NIL != supporting_mapped_problem) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.mapped_problem_p(supporting_mapped_problem))) {
+        if (((NIL != supporting_mapped_problem) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.mapped_problem_p(supporting_mapped_problem))) {
             throw new AssertionError(supporting_mapped_problem);
         }
         final SubLObject supports = cons(rule_assertion, more_supports);
@@ -1831,7 +1831,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject new_transformation_proof(final SubLObject transformation_link, final SubLObject subproof, final SubLObject variable_map) {
         assert NIL != transformation_link_p(transformation_link) : "inference_worker_transformation.transformation_link_p(transformation_link) " + "CommonSymbols.NIL != inference_worker_transformation.transformation_link_p(transformation_link) " + transformation_link;
-        if (((NIL != subproof) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_proof.proof_p(subproof))) {
+        if (((NIL != subproof) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_proof.proof_p(subproof))) {
             throw new AssertionError(subproof);
         }
         final SubLObject transformation_bindings = transformation_link_bindings(transformation_link);
@@ -2705,7 +2705,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_inference_worker_transformation_file() {
         defconstant("*DTP-TRANSFORMATION-LINK-DATA*", TRANSFORMATION_LINK_DATA);
-        deflexical("*DETERMINE-NEW-TRANSFORMATION-TACTICS-MODULE*", SubLTrampolineFile.maybeDefault($determine_new_transformation_tactics_module$, $determine_new_transformation_tactics_module$, () -> inference_modules.inference_meta_transformation_module($DETERMINE_NEW_TRANSFORMATION_TACTICS, UNPROVIDED)));
+        deflexical("*DETERMINE-NEW-TRANSFORMATION-TACTICS-MODULE*", SubLSystemTrampolineFile.maybeDefault($determine_new_transformation_tactics_module$, $determine_new_transformation_tactics_module$, () -> inference_modules.inference_meta_transformation_module($DETERMINE_NEW_TRANSFORMATION_TACTICS, UNPROVIDED)));
         defparameter("*TRANSFORMATION-TACTIC-ITERATION-THRESHOLD*", TWO_INTEGER);
         defparameter("*STITCH-UP-BINDINGS-LOOP?*", T);
         defparameter("*INFERENCE-TRANSFORMATION-TYPE-CHECKING-ENABLED?*", NIL);

@@ -115,7 +115,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class assertion_handles extends SubLTranslatedFile {
     public static final SubLFile me = new assertion_handles();
@@ -967,7 +967,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject assertion_id(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return as_id(assertion);
     }
 
@@ -981,7 +981,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject find_assertion_by_id(final SubLObject id) {
-        SubLTrampolineFile.enforceType(id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(id, INTEGERP);
         return lookup_assertion(id);
     }
 
@@ -1049,8 +1049,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_assertion_handles_file() {
-        deflexical("*ASSERTION-FROM-ID*", SubLTrampolineFile.maybeDefault($assertion_from_id$, $assertion_from_id$, NIL));
-        deflexical("*NEW-ASSERTION-ID-THRESHOLD*", SubLTrampolineFile.maybeDefault($new_assertion_id_threshold$, $new_assertion_id_threshold$, NIL));
+        deflexical("*ASSERTION-FROM-ID*", SubLSystemTrampolineFile.maybeDefault($assertion_from_id$, $assertion_from_id$, NIL));
+        deflexical("*NEW-ASSERTION-ID-THRESHOLD*", SubLSystemTrampolineFile.maybeDefault($new_assertion_id_threshold$, $new_assertion_id_threshold$, NIL));
         defconstant("*DTP-ASSERTION*", ASSERTION);
         defparameter("*PRINT-ASSERTIONS-IN-CNF*", NIL);
         return NIL;

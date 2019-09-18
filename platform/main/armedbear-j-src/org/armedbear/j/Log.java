@@ -23,7 +23,6 @@ package org.armedbear.j;
 
 import java.io.IOException;
 
-import org.eclipse.jetty.util.log.Slf4jLog;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;

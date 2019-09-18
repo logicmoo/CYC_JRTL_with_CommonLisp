@@ -90,7 +90,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -453,7 +453,7 @@ public final class system_parameters extends SubLTranslatedFile implements V12 {
      */
     @LispMethod(comment = "@param NAME:\r\n\t\tsymbolp\r\n\t\tRemove NAME from the system parameters.")
     public static final SubLObject remove_system_parameter_alt(SubLObject name) {
-        SubLTrampolineFile.checkType(name, SYMBOLP);
+        SubLSystemTrampolineFile.checkType(name, SYMBOLP);
         $system_parameters$.setGlobalValue(delete(name, $system_parameters$.getGlobalValue(), symbol_function(EQ), symbol_function(CAR), UNPROVIDED, UNPROVIDED, UNPROVIDED));
         return NIL;
     }
@@ -1535,7 +1535,7 @@ public final class system_parameters extends SubLTranslatedFile implements V12 {
 
     public static SubLObject init_system_parameters_file() {
         if (SubLFiles.USE_V1) {
-            deflexical("*SYSTEM-PARAMETERS*", SubLTrampolineFile.maybeDefault($system_parameters$, $system_parameters$, NIL));
+            deflexical("*SYSTEM-PARAMETERS*", SubLSystemTrampolineFile.maybeDefault($system_parameters$, $system_parameters$, NIL));
             defvar("*AUTO-CONTINUE-TRANSCRIPT-PROBLEMS*", $UNSET);
             defvar("*CONTINUE-AGENDA-ON-ERROR*", $UNSET);
             defvar("*SUSPEND-SBHL-TYPE-CHECKING?*", $UNSET);
@@ -1578,7 +1578,7 @@ public final class system_parameters extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject init_system_parameters_file_Previous() {
-        deflexical("*SYSTEM-PARAMETERS*", SubLTrampolineFile.maybeDefault($system_parameters$, $system_parameters$, NIL));
+        deflexical("*SYSTEM-PARAMETERS*", SubLSystemTrampolineFile.maybeDefault($system_parameters$, $system_parameters$, NIL));
         defvar("*AUTO-CONTINUE-TRANSCRIPT-PROBLEMS*", $UNSET);
         defvar("*CONTINUE-AGENDA-ON-ERROR*", $UNSET);
         defvar("*SUSPEND-SBHL-TYPE-CHECKING?*", $UNSET);

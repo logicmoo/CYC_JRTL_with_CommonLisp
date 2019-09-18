@@ -111,7 +111,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1489,7 +1489,7 @@ public final class sbhl_link_methods extends SubLTranslatedFile {
         if (module == UNPROVIDED) {
             module = NIL;
         }
-        if (((NIL != module) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
+        if (((NIL != module) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
             throw new AssertionError(module);
         }
         SubLObject link = NIL;
@@ -1498,7 +1498,7 @@ public final class sbhl_link_methods extends SubLTranslatedFile {
     }
 
     public static SubLObject create_and_store_sbhl_link(final SubLObject arg1, final SubLObject arg2, final SubLObject direction, final SubLObject mt, final SubLObject tv, final SubLObject module) {
-        if (((NIL != module) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
+        if (((NIL != module) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
             throw new AssertionError(module);
         }
         sbhl_graphs.set_sbhl_graph_link(arg1, create_new_sbhl_link(direction, mt, tv, arg2, module), module);
@@ -2162,7 +2162,7 @@ public final class sbhl_link_methods extends SubLTranslatedFile {
         if (module == UNPROVIDED) {
             module = NIL;
         }
-        if (((NIL != module) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
+        if (((NIL != module) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
             throw new AssertionError(module);
         }
         sbhl_graphs.set_sbhl_graph_link(node, d_link, module);
@@ -2173,7 +2173,7 @@ public final class sbhl_link_methods extends SubLTranslatedFile {
         if (module == UNPROVIDED) {
             module = NIL;
         }
-        if (((NIL != module) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
+        if (((NIL != module) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
             throw new AssertionError(module);
         }
         if (NIL != member_of_sbhl_link_nodesP(link_node, node, direction, mt, tv)) {
@@ -2188,7 +2188,7 @@ public final class sbhl_link_methods extends SubLTranslatedFile {
         if (module == UNPROVIDED) {
             module = NIL;
         }
-        if (((NIL != module) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
+        if (((NIL != module) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sbhl_module_vars.sbhl_module_p(module))) {
             throw new AssertionError(module);
         }
         final SubLObject forward_direction = sbhl_module_utilities.get_sbhl_module_forward_direction(sbhl_module_vars.get_sbhl_module(UNPROVIDED));
@@ -3668,10 +3668,10 @@ public final class sbhl_link_methods extends SubLTranslatedFile {
         deflexical("*MAKE-SBHL-GRAPH-LINK-GENL-PREDS-CACHING-STATE*", NIL);
         deflexical("*MAKE-SBHL-GRAPH-LINK-GENL-MT-CACHING-STATE*", NIL);
         deflexical("*MAKE-SBHL-GRAPH-LINK-OTHER-CACHING-STATE*", NIL);
-        deflexical("*ISA-ARG2-NAUT-TABLE*", SubLTrampolineFile.maybeDefault($sym63$_ISA_ARG2_NAUT_TABLE_, $isa_arg2_naut_table$, NIL));
-        deflexical("*QUOTED-ISA-ARG2-NAUT-TABLE*", SubLTrampolineFile.maybeDefault($sym88$_QUOTED_ISA_ARG2_NAUT_TABLE_, $quoted_isa_arg2_naut_table$, NIL));
-        deflexical("*NON-FORT-ISA-TABLE*", SubLTrampolineFile.maybeDefault($non_fort_isa_table$, $non_fort_isa_table$, () -> misc_utilities.uninitialized()));
-        deflexical("*NON-FORT-INSTANCE-TABLE*", SubLTrampolineFile.maybeDefault($non_fort_instance_table$, $non_fort_instance_table$, () -> misc_utilities.uninitialized()));
+        deflexical("*ISA-ARG2-NAUT-TABLE*", SubLSystemTrampolineFile.maybeDefault($sym63$_ISA_ARG2_NAUT_TABLE_, $isa_arg2_naut_table$, NIL));
+        deflexical("*QUOTED-ISA-ARG2-NAUT-TABLE*", SubLSystemTrampolineFile.maybeDefault($sym88$_QUOTED_ISA_ARG2_NAUT_TABLE_, $quoted_isa_arg2_naut_table$, NIL));
+        deflexical("*NON-FORT-ISA-TABLE*", SubLSystemTrampolineFile.maybeDefault($non_fort_isa_table$, $non_fort_isa_table$, () -> misc_utilities.uninitialized()));
+        deflexical("*NON-FORT-INSTANCE-TABLE*", SubLSystemTrampolineFile.maybeDefault($non_fort_instance_table$, $non_fort_instance_table$, () -> misc_utilities.uninitialized()));
         return NIL;
     }
 

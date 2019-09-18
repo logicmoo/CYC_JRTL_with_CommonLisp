@@ -8,9 +8,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Characters extends SubLTrampolineFile {
+public class Characters extends SubLSystemTrampolineFile {
 	public static SubLObject alpha_char_p(SubLObject c) {
 		if (c.toChar().isAlphaChar())
 			return CommonSymbols.T;

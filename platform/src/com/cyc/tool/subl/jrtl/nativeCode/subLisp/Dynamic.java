@@ -10,9 +10,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Dynamic extends SubLTrampolineFile {
+public class Dynamic extends SubLSystemTrampolineFile {
     public static void bind(SubLSymbol symbol, SubLObject newValue) {
 	symbol.bind(newValue, SubLProcess.currentSubLThread().bindingsList);
     }

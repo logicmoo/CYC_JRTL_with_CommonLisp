@@ -38,73 +38,60 @@ import org.armedbear.j.Editor;
 import org.logicmoo.system.JVMImpl;
 import org.logicmoo.system.Startup;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess.TerminationRequest;
 
 public final class Main extends Startup {
 
 	public static void main(String[] args) throws InterruptedException {
-		if (args == null || args.length == 0) {
-			args = new String[] { "--abcl" };
-		}
-		String[] argsNew = extractOptions(Main.class, args);
-		if (jlisp && guiRequested) {
-			Editor.main(prependArgs("--no-session", prependArgs("--force-new-instance", argsNew)));
-			return;
-		}
 		try {
-			if (needIOConsole) {
-				needIOConsole = false;
-				noExit = false;
-				Runnable t = mainUnjoined(argsNew);
-				runThread(Main.class.getName(), t);
-			} else {
-				Thread.yield();
+			if (args == null || args.length == 0) {
+				args = new String[] { "--abcl" };
+				leanABCL = true;
 			}
+
+			String[] argsNew = extractOptions(Main.class, args);
+
+			if (Startup.guiJRequested) {
+				//  --guij
+				Editor.main(prependArgs("--no-session", prependArgs("--force-new-instance", argsNew)));
+
+			} else if (needIOConsole) {
+				Runnable t = Interpreter.createDefaultInstance(argsNew);
+				runThread(t);
+			}
+
 		} finally {
+			Thread.yield();
+			noExit = false;
 			exit(exitCode);
 		}
 	}
 
-	/**
-	 * TODO Describe the purpose of this method.
-	 * @param t
-	 */
-	public static void runThread(String name, Runnable r) {
-		// TODO Auto-generated method stub
-		Thread t = new Thread(null, r, name, 1 << 30L);//.asJavaTread();
-		final UncaughtExceptionHandler uncaughtExceptionHandlerOrignal = t.getUncaughtExceptionHandler();
-		if (uncaughtExceptionHandlerOrignal == null)
-			t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
-		runThread(t);
-	}
-
-	public static Runnable mainUnjoined(final String[] args) throws InterruptedException {
-		// Run the interpreter in a secondary thread so we can control the stack
-		// size.
-		// Lisp.checkOutput(Symbol.STANDARD_OUTPUT,Lisp.stdout);
-		Runnable r = mainRunnable(args, new Runnable() {
-			@Override
-			public void run() {
-				Interpreter interpreter = Interpreter.getInstance();
-				interpreter.run();
-			}
-		});
-
-		return r;
-	}
-
-	public static void runThread(Thread t) {
+	public static void runThread(Runnable r) {
+		Thread currentThread = Thread.currentThread();
+		String name = currentThread.getName();
 		try {
-			if (useMainThread) {
-				t.run();
+			if (useMainThread || !Startup.needNewThread()) {
+
+				r.run();
+
 			} else {
-				final Thread currentThread = Thread.currentThread();
+
 				currentThread.setName("Old-" + currentThread.getName());
-				t.setName("main");
-				t.start();
-				t.join();
+
+				Thread newThread;
+				if (r instanceof Thread) {
+
+					newThread = (Thread) r;
+					newThread.setName(name);
+
+				} else {
+					newThread = new Thread(null, r, name, 1 << 30L);
+				}
+
+				newThread.start();
+				newThread.join();
+
 			}
 		} catch (InterruptedException e) {
 			exitCode = 3;
@@ -117,39 +104,6 @@ public final class Main extends Startup {
 		} finally {
 			Startup.reportUncaughts();
 		}
-	}
-
-	public static Runnable mainRunnable(final String[] args, Runnable after) {
-		globalContext.set(true);
-
-		return new Runnable()// SubLProcess("main")
-		{
-			@Override
-			public void run() {
-				boolean wasSubLisp = isSubLisp();
-				try {
-					try {
-
-						// File initialDir = new File("./");
-						Interpreter.createDefaultInstance(args);
-
-						/*
-						 * Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in,
-						 * SystemCurrent.out, initialDir.getCanonicalPath(),
-						 * Version.getLongVersionString());
-						 */
-						if (after != null)
-							after.run();
-					} catch (ProcessingTerminated e) {
-						Lisp.exit(e.getStatus());
-					} catch (Throwable e) {
-						throw JVMImpl.doThrow(e);
-					}
-				} finally {
-					setSubLisp(wasSubLisp);
-				}
-			}
-		};
 	}
 
 }

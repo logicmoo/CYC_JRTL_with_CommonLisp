@@ -150,7 +150,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class number_utilities extends SubLTranslatedFile {
@@ -706,7 +706,7 @@ public final class number_utilities extends SubLTranslatedFile {
 
 	public static SubLObject significant_digits(final SubLObject number, final SubLObject digits) {
 		assert NIL != extended_potentially_infinite_number_p(number) : "number_utilities.extended_potentially_infinite_number_p(number) " + "CommonSymbols.NIL != number_utilities.extended_potentially_infinite_number_p(number) " + number;
-		SubLTrampolineFile.enforceType(digits, POSITIVE_INTEGER_P);
+		SubLSystemTrampolineFile.enforceType(digits, POSITIVE_INTEGER_P);
 		if (NIL != infinite_number_p(number)) {
 			return number;
 		}
@@ -2656,7 +2656,7 @@ public final class number_utilities extends SubLTranslatedFile {
 		}
 		assert NIL != subl_promotions.non_negative_integer_p(n) : "subl_promotions.non_negative_integer_p(n) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(n) " + n;
 		assert NIL != subl_promotions.positive_integer_p(limit) : "subl_promotions.positive_integer_p(limit) " + "CommonSymbols.NIL != subl_promotions.positive_integer_p(limit) " + limit;
-		if (((NIL != sort_function) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(sort_function))) {
+		if (((NIL != sort_function) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(sort_function))) {
 			throw new AssertionError(sort_function);
 		}
 		final SubLObject list = non_negative_integers_less_than(limit);

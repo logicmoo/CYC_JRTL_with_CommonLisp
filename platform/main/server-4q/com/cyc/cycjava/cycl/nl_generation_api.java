@@ -29,7 +29,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -171,7 +171,7 @@ public final class nl_generation_api extends SubLTranslatedFile {
         if (param_values == UNPROVIDED) {
             param_values = NIL;
         }
-        SubLTrampolineFile.enforceType(param_values, PPH_API_PARAM_LIST_P);
+        SubLSystemTrampolineFile.enforceType(param_values, PPH_API_PARAM_LIST_P);
         final SubLObject pph_params = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
         SubLObject remainder;
         SubLObject param;
@@ -538,7 +538,7 @@ public final class nl_generation_api extends SubLTranslatedFile {
     }
 
     public static SubLObject pph_output_map_get_items(final SubLObject map) {
-        SubLTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
+        SubLSystemTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
         if (NIL != pph_utilities.pph_javalist_item_p(map)) {
             return NIL;
         }
@@ -546,7 +546,7 @@ public final class nl_generation_api extends SubLTranslatedFile {
     }
 
     public static SubLObject pph_output_map_get_string(final SubLObject map) {
-        SubLTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
+        SubLSystemTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
         if (NIL != pph_utilities.pph_javalist_item_p(map)) {
             return pph_utilities.pph_javalist_item_string(map);
         }
@@ -554,7 +554,7 @@ public final class nl_generation_api extends SubLTranslatedFile {
     }
 
     public static SubLObject pph_output_map_get_cycl(final SubLObject map) {
-        SubLTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
+        SubLSystemTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
         if (NIL != pph_utilities.pph_javalist_item_p(map)) {
             return pph_utilities.pph_javalist_item_cycl(map);
         }
@@ -562,7 +562,7 @@ public final class nl_generation_api extends SubLTranslatedFile {
     }
 
     public static SubLObject pph_output_map_get_string_offset(final SubLObject map) {
-        SubLTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
+        SubLSystemTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
         if (NIL != pph_utilities.pph_javalist_item_p(map)) {
             return pph_utilities.pph_javalist_item_start_char(map);
         }
@@ -570,7 +570,7 @@ public final class nl_generation_api extends SubLTranslatedFile {
     }
 
     public static SubLObject pph_output_map_get_arg_position(final SubLObject map) {
-        SubLTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
+        SubLSystemTrampolineFile.enforceType(map, PPH_OUTPUT_MAP_P);
         if (NIL != pph_utilities.pph_javalist_item_p(map)) {
             return pph_utilities.pph_javalist_item_arg_position(map);
         }

@@ -47,7 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -612,7 +612,7 @@ public final class kb_logging extends SubLTranslatedFile implements V02 {
      * @return positive-integer-p; the number of rows affected
      */
     public static final SubLObject unlexified_db_reset(SubLObject fort) {
-        SubLTrampolineFile.checkType(function_terms.naut_to_nart(fort), FORT_P);
+        SubLSystemTrampolineFile.checkType(function_terms.naut_to_nart(fort), FORT_P);
         ensure_unlexified_logging_initialized();
         return sdbc.sqls_execute_update($unlex_logging_statement$.getGlobalValue(), format(NIL, $str_alt45$UPDATE__a_SET_count_since_fixed__, $unlexified_table$.getGlobalValue(), kb_paths.fort_name(function_terms.naut_to_nart(fort))));
     }
@@ -624,8 +624,8 @@ public final class kb_logging extends SubLTranslatedFile implements V02 {
     have been reported as unlexified more than N times in all mts matching MT-WILDCARD
      */
     public static final SubLObject unlexified_db_reportedG(SubLObject n, SubLObject mt_wildcard) {
-        SubLTrampolineFile.checkType(n, NON_NEGATIVE_INTEGER_P);
-        SubLTrampolineFile.checkType(mt_wildcard, STRINGP);
+        SubLSystemTrampolineFile.checkType(n, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(mt_wildcard, STRINGP);
         ensure_unlexified_logging_initialized();
         return sdbc.sqls_execute_query($unlex_logging_statement$.getGlobalValue(), format(NIL, $str_alt48$SELECT___FROM__a_WHERE_languageMt, new SubLObject[]{ $unlexified_table$.getGlobalValue(), mt_wildcard, n }), UNPROVIDED);
     }

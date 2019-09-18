@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -154,42 +154,42 @@ public final class cyclifier_testing extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject crs_sentence_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
         return v_object.getField2();
     }
 
     public static final SubLObject crs_literal_counts(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
         return v_object.getField3();
     }
 
     public static final SubLObject crs_parse_counts(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
         return v_object.getField4();
     }
 
     public static final SubLObject crs_unparsed_counts(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
         return v_object.getField5();
     }
 
     public static final SubLObject _csetf_crs_sentence_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_crs_literal_counts(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_crs_parse_counts(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_crs_unparsed_counts(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYCLIFY_RESULT_STATS_P);
         return v_object.setField5(value);
     }
 

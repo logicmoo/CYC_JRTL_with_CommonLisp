@@ -74,7 +74,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rbp_rule_bank extends SubLTranslatedFile {
     public static final SubLFile me = new rbp_rule_bank();
@@ -1488,9 +1488,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_rbp_rule_bank_file() {
-        deflexical("*RBP-RULE-BANK*", SubLTrampolineFile.maybeDefault($rbp_rule_bank$, $rbp_rule_bank$, () -> rbp_new_rule_bank()));
-        deflexical("*RBP-RULE-INDEX*", SubLTrampolineFile.maybeDefault($rbp_rule_index$, $rbp_rule_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*RBP-RB-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym2$_RBP_RB_INITIALIZED__, $rbp_rb_initializedP$, NIL));
+        deflexical("*RBP-RULE-BANK*", SubLSystemTrampolineFile.maybeDefault($rbp_rule_bank$, $rbp_rule_bank$, () -> rbp_new_rule_bank()));
+        deflexical("*RBP-RULE-INDEX*", SubLSystemTrampolineFile.maybeDefault($rbp_rule_index$, $rbp_rule_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*RBP-RB-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($sym2$_RBP_RB_INITIALIZED__, $rbp_rb_initializedP$, NIL));
         deflexical("*RBP-RULE-BANK-LOCK*", make_lock($$$RBP_Rule_Bank_Lock));
         defconstant("*RBP-SYNTACTIC-CONSTRAINT-TYPES*", $list6);
         defconstant("*RBP-SEMANTIC-CONSTRAINT-TYPES*", $list7);

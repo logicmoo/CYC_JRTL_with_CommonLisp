@@ -92,7 +92,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -694,7 +694,7 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile {
     public static SubLObject tactic_preference_level(final SubLObject tactic) {
         assert NIL != tactic_p(tactic) : "inference_datastructures_tactic.tactic_p(tactic) " + "CommonSymbols.NIL != inference_datastructures_tactic.tactic_p(tactic) " + tactic;
         final SubLObject completeness_or_preference = tact_completeness(tactic);
-        if (((NIL != completeness_or_preference) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == preference_modules.preference_level_p(completeness_or_preference))) {
+        if (((NIL != completeness_or_preference) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == preference_modules.preference_level_p(completeness_or_preference))) {
             throw new AssertionError(completeness_or_preference);
         }
         return completeness_or_preference;

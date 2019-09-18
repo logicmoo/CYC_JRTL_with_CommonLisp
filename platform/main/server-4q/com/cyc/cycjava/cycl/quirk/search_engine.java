@@ -128,7 +128,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -6599,7 +6599,7 @@ public final class search_engine extends SubLTranslatedFile {
         if (super_mt == UNPROVIDED) {
             super_mt = NIL;
         }
-        if (((NIL != super_mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == fort_types_interface.microtheory_p(super_mt))) {
+        if (((NIL != super_mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == fort_types_interface.microtheory_p(super_mt))) {
             throw new AssertionError(super_mt);
         }
         final SubLObject spec_mt = fi.fi_create_int(princ_to_string(gensym($str671$TEMP_MT_)), UNPROVIDED);

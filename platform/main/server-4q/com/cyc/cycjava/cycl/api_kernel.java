@@ -71,7 +71,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -827,9 +827,9 @@ public final class api_kernel extends SubLTranslatedFile {
             timeout = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(api_request, CONSP);
-        SubLTrampolineFile.enforceType(machine, STRINGP);
-        SubLTrampolineFile.enforceType(port, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(api_request, CONSP);
+        SubLSystemTrampolineFile.enforceType(machine, STRINGP);
+        SubLSystemTrampolineFile.enforceType(port, INTEGERP);
         SubLObject result = NIL;
         SubLObject valid = NIL;
         SubLObject channel = NIL;
@@ -958,7 +958,7 @@ public final class api_kernel extends SubLTranslatedFile {
         defparameter("*API-OUTPUT-PROTOCOL*", $default_api_output_protocol$.getDynamicValue());
         defparameter("*API-IN-STREAM*", NIL);
         defparameter("*API-OUT-STREAM*", NIL);
-        deflexical("*API-INPUT-EOF-MARKER*", SubLTrampolineFile.maybeDefault($api_input_eof_marker$, $api_input_eof_marker$, () -> make_symbol($$$API_Input_EOF_Marker)));
+        deflexical("*API-INPUT-EOF-MARKER*", SubLSystemTrampolineFile.maybeDefault($api_input_eof_marker$, $api_input_eof_marker$, () -> make_symbol($$$API_Input_EOF_Marker)));
         defparameter("*RECORD-API-MESSAGES?*", NIL);
         defparameter("*API-MESSAGE-SINK*", NIL);
         defparameter("*API-SUCCESS-CODE*", $int$200);

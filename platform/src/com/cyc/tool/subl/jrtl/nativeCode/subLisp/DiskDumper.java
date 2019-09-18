@@ -22,9 +22,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class DiskDumper extends SubLTrampolineFile {
+public class DiskDumper extends SubLSystemTrampolineFile {
 
 	volatile public static Map bowls = new HashMap();
 	volatile public static Map<Object, LinkedList<WeakReference<Object>>> mapClass2Refs = new HashMap<Object, LinkedList<WeakReference<Object>>>();

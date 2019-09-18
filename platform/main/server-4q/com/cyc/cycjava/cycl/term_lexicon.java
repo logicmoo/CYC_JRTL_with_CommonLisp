@@ -42,7 +42,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -836,7 +836,7 @@ public final class term_lexicon extends SubLTranslatedFile {
         try {
             thread.throwStack.push($sym101$OUTER_CATCH_FOR_TERM_LEXICON_METHOD);
             try {
-                if (((NIL != target) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == term_lexicon_p(target))) {
+                if (((NIL != target) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == term_lexicon_p(target))) {
                     throw new AssertionError(target);
                 }
                 target = abstract_lexicon.abstract_lexicon_copy_method(self, target);

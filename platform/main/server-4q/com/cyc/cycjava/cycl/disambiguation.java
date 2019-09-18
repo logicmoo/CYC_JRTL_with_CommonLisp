@@ -51,7 +51,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -510,7 +510,7 @@ public final class disambiguation extends SubLTranslatedFile {
             missing_terms = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != missing_terms) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hash_table_p(missing_terms))) {
+        if (((NIL != missing_terms) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hash_table_p(missing_terms))) {
             throw new AssertionError(missing_terms);
         }
         if (NIL == Filesys.probe_file(input_filename)) {
@@ -698,7 +698,7 @@ public final class disambiguation extends SubLTranslatedFile {
     public static SubLObject init_disambiguation_file() {
         deflexical("*DISAMBIGUATION-TERM-COUNTS*", NIL);
         deflexical("*DISAMBIGUATION-TERM-COUNTS-LOAD-ATTEMPTED*", NIL);
-        deflexical("*DISAMBIGUATION-TERM-COUNTS-LOCK*", SubLTrampolineFile.maybeDefault($disambiguation_term_counts_lock$, $disambiguation_term_counts_lock$, () -> make_lock($$$Disambiguation_Term_Counts_Lock)));
+        deflexical("*DISAMBIGUATION-TERM-COUNTS-LOCK*", SubLSystemTrampolineFile.maybeDefault($disambiguation_term_counts_lock$, $disambiguation_term_counts_lock$, () -> make_lock($$$Disambiguation_Term_Counts_Lock)));
         defparameter("*DISAMBIGUATION-TERM-COUNTS-FILE*", $str2$data_sense_disambiguation_disambi);
         return NIL;
     }

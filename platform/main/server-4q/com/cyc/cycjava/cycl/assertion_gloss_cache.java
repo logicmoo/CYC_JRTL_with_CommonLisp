@@ -37,7 +37,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -246,7 +246,7 @@ public final class assertion_gloss_cache extends SubLTranslatedFile implements V
                                                                                         SubLObject idx = assertion_handles.do_assertions_table();
                                                                                         SubLObject total = id_index.id_index_count(idx);
                                                                                         SubLObject sofar = ZERO_INTEGER;
-                                                                                        SubLTrampolineFile.checkType($str_alt15$Generating_assertion_gloss_string, STRINGP);
+                                                                                        SubLSystemTrampolineFile.checkType($str_alt15$Generating_assertion_gloss_string, STRINGP);
                                                                                         {
                                                                                             SubLObject _prev_bind_0_5 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                                                                             SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -381,7 +381,7 @@ public final class assertion_gloss_cache extends SubLTranslatedFile implements V
                         SubLObject idx = assertion_handles.do_assertions_table();
                         SubLObject total = id_index.id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        SubLTrampolineFile.checkType($str_alt21$Writing_empty_assertion_gloss_str, STRINGP);
+                        SubLSystemTrampolineFile.checkType($str_alt21$Writing_empty_assertion_gloss_str, STRINGP);
                         {
                             SubLObject _prev_bind_0_9 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                             SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -646,13 +646,13 @@ public final class assertion_gloss_cache extends SubLTranslatedFile implements V
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fbc, FILE_BACKED_CACHE_P);
+            SubLSystemTrampolineFile.checkType(fbc, FILE_BACKED_CACHE_P);
             {
                 SubLObject bad_assertions = NIL;
                 SubLObject idx = assertion_handles.do_assertions_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt29$Looking_up_assertion_gloss_status, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt29$Looking_up_assertion_gloss_status, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -741,7 +741,7 @@ public final class assertion_gloss_cache extends SubLTranslatedFile implements V
                         try {
                             Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
                             try {
-                                SubLTrampolineFile.checkType(fbc, FILE_BACKED_CACHE_P);
+                                SubLSystemTrampolineFile.checkType(fbc, FILE_BACKED_CACHE_P);
                                 if (NIL == $assertion_gloss_cache$.getGlobalValue()) {
                                     {
                                         SubLObject msg_21 = NIL;
@@ -806,7 +806,7 @@ public final class assertion_gloss_cache extends SubLTranslatedFile implements V
             if (NIL == $use_assertion_gloss_cacheP$.getDynamicValue(thread)) {
                 return NIL;
             }
-            SubLTrampolineFile.checkType(fbc, FILE_BACKED_CACHE_P);
+            SubLSystemTrampolineFile.checkType(fbc, FILE_BACKED_CACHE_P);
             if (NIL == $assertion_gloss_cache$.getGlobalValue()) {
                 {
                     SubLObject msg = NIL;

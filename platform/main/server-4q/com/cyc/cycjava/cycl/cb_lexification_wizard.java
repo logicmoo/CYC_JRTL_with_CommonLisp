@@ -97,7 +97,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2386,9 +2386,9 @@ public final class cb_lexification_wizard extends SubLTranslatedFile {
     }
 
     public static SubLObject init_cb_lexification_wizard_file() {
-        deflexical("*SKIPPED-LEXWIZ-TERMS*", SubLTrampolineFile.maybeDefault($skipped_lexwiz_terms$, $skipped_lexwiz_terms$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
-        deflexical("*STREAMLINED-LEXWIZ?*", SubLTrampolineFile.maybeDefault($sym1$_STREAMLINED_LEXWIZ__, $streamlined_lexwizP$, NIL));
-        deflexical("*KNOWN-LEXIFIED-TERMS*", SubLTrampolineFile.maybeDefault($known_lexified_terms$, $known_lexified_terms$, () -> set.new_set(EQUAL, UNPROVIDED)));
+        deflexical("*SKIPPED-LEXWIZ-TERMS*", SubLSystemTrampolineFile.maybeDefault($skipped_lexwiz_terms$, $skipped_lexwiz_terms$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
+        deflexical("*STREAMLINED-LEXWIZ?*", SubLSystemTrampolineFile.maybeDefault($sym1$_STREAMLINED_LEXWIZ__, $streamlined_lexwizP$, NIL));
+        deflexical("*KNOWN-LEXIFIED-TERMS*", SubLSystemTrampolineFile.maybeDefault($known_lexified_terms$, $known_lexified_terms$, () -> set.new_set(EQUAL, UNPROVIDED)));
         return NIL;
     }
 

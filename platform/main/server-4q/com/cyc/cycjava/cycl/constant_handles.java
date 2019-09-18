@@ -130,7 +130,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class constant_handles extends SubLTranslatedFile {
     public static final SubLFile me = new constant_handles();
@@ -1568,10 +1568,10 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_constant_handles_file() {
-        deflexical("*CONSTANT-FROM-SUID*", SubLTrampolineFile.maybeDefault($constant_from_suid$, $constant_from_suid$, NIL));
-        deflexical("*NEW-CONSTANT-SUID-THRESHOLD*", SubLTrampolineFile.maybeDefault($new_constant_suid_threshold$, $new_constant_suid_threshold$, NIL));
+        deflexical("*CONSTANT-FROM-SUID*", SubLSystemTrampolineFile.maybeDefault($constant_from_suid$, $constant_from_suid$, NIL));
+        deflexical("*NEW-CONSTANT-SUID-THRESHOLD*", SubLSystemTrampolineFile.maybeDefault($new_constant_suid_threshold$, $new_constant_suid_threshold$, NIL));
         defconstant("*DTP-CONSTANT*", CONSTANT);
-        deflexical("*INVALID-CONSTANTS*", SubLTrampolineFile.maybeDefault($invalid_constants$, $invalid_constants$, () -> make_hash_table($int$4000, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*INVALID-CONSTANTS*", SubLSystemTrampolineFile.maybeDefault($invalid_constants$, $invalid_constants$, () -> make_hash_table($int$4000, symbol_function(EQUAL), UNPROVIDED)));
         return NIL;
     }
 

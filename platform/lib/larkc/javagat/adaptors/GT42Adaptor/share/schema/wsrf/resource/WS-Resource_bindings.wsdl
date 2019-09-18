@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="WS-Resource" targetNamespace="http://docs.oasis-open.org/wsrf/rw-2/bindings" xmlns:porttype="http://docs.oasis-open.org/wsrf/rw-2" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://docs.oasis-open.org/wsrf/rw-2" location="rw-2.wsdl"/>
-</wsdl:definitions>

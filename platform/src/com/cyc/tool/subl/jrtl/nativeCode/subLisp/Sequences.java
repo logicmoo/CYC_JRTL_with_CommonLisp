@@ -7,9 +7,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Sequences extends SubLTrampolineFile {
+public class Sequences extends SubLSystemTrampolineFile {
 	public static SubLObject cconcatenate(SubLObject sequence1, SubLObject sequence2) {
 		SubLSequence sequence1Typed = sequence1.toSeq();
 		SubLSequence sequence2Typed = sequence2.toSeq();
@@ -34,10 +34,10 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject count(SubLObject item, SubLObject sequence, SubLObject test, SubLObject key,
 			SubLObject start, SubLObject end) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		int result = sequenceTyped.count(item, testFunction, keyFunction, startTyped, endTyped);
 		return result == -2 ? SubLNil.NIL : SubLNumberFactory.makeInteger(result);
 	}
@@ -45,10 +45,10 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject count_if(SubLObject test, SubLObject sequence, SubLObject key, SubLObject start,
 			SubLObject end) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		UnaryFunction testFunction = SubLTrampolineFile.extractUnaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		UnaryFunction testFunction = SubLSystemTrampolineFile.extractUnaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		int result = sequenceTyped.countIf(testFunction, keyFunction, startTyped, endTyped);
 		if (result == -2)
 			return SubLNil.NIL;
@@ -60,9 +60,9 @@ public class Sequences extends SubLTrampolineFile {
 		SubLSequence sequenceTyped = sequence.toSeq();
 		if (initValue == CommonSymbols.UNPROVIDED)
 			initValue = SubLSequence.NO_INIT_VALUE;
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(function);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(function);
 		SubLObject result = sequenceTyped.reduce(testFunction, startTyped, endTyped, initValue);
 		return result;
 	}
@@ -70,11 +70,11 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject delete(SubLObject item, SubLObject sequence, SubLObject test, SubLObject key,
 			SubLObject start, SubLObject end, SubLObject count) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		int countTyped = SubLTrampolineFile.extractCount(count);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		int countTyped = SubLSystemTrampolineFile.extractCount(count);
 		SubLObject result = sequenceTyped.remove(item, true, testFunction, keyFunction, startTyped, endTyped,
 				countTyped);
 		return result;
@@ -83,10 +83,10 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject delete_duplicates(SubLObject sequence, SubLObject test, SubLObject key, SubLObject start,
 			SubLObject end) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLSequence result = sequenceTyped.removeDuplicates(true, testFunction, keyFunction, startTyped, endTyped);
 		return result;
 	}
@@ -94,11 +94,11 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject delete_if(SubLObject test, SubLObject sequence, SubLObject key, SubLObject start,
 			SubLObject end, SubLObject count) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		UnaryFunction testFunction = SubLTrampolineFile.extractUnaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		int countTyped = SubLTrampolineFile.extractCount(count);
+		UnaryFunction testFunction = SubLSystemTrampolineFile.extractUnaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		int countTyped = SubLSystemTrampolineFile.extractCount(count);
 		SubLSequence result = sequenceTyped.removeIf(testFunction, true, keyFunction, startTyped, endTyped, countTyped);
 		return result;
 	}
@@ -109,8 +109,8 @@ public class Sequences extends SubLTrampolineFile {
 
 	public static SubLObject fill(SubLObject sequence, SubLObject item, SubLObject start, SubLObject end) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		sequenceTyped.fill(item, startTyped, endTyped);
 		return sequenceTyped;
 	}
@@ -118,10 +118,10 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject find(SubLObject item, SubLObject sequence, SubLObject test, SubLObject key,
 			SubLObject start, SubLObject end) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLObject result = sequenceTyped.find(item, testFunction, keyFunction, startTyped, endTyped);
 		return result;
 	}
@@ -129,10 +129,10 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject find_if(SubLObject test, SubLObject sequence, SubLObject key, SubLObject start,
 			SubLObject end) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		UnaryFunction testFunction = SubLTrampolineFile.extractUnaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		UnaryFunction testFunction = SubLSystemTrampolineFile.extractUnaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLObject result = sequenceTyped.findIf(testFunction, keyFunction, startTyped, endTyped);
 		return result;
 	}
@@ -149,12 +149,12 @@ public class Sequences extends SubLTrampolineFile {
 			SubLObject start1, SubLObject end1, SubLObject start2, SubLObject end2) {
 		SubLSequence sequence1Typed = sequence1.toSeq();
 		SubLSequence sequence2Typed = sequence2.toSeq();
-		int start1Typed = SubLTrampolineFile.extractStart(start1);
-		int end1Typed = SubLTrampolineFile.extractEnd(end1);
-		int start2Typed = SubLTrampolineFile.extractStart(start2);
-		int end2Typed = SubLTrampolineFile.extractEnd(end2);
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
+		int start1Typed = SubLSystemTrampolineFile.extractStart(start1);
+		int end1Typed = SubLSystemTrampolineFile.extractEnd(end1);
+		int start2Typed = SubLSystemTrampolineFile.extractStart(start2);
+		int end2Typed = SubLSystemTrampolineFile.extractEnd(end2);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
 		int result = sequence1Typed.indexOfMismatch(sequence2Typed, testFunction, keyFunction, start1Typed, end1Typed,
 				start2Typed, end2Typed);
 		if (result == -3)
@@ -169,11 +169,11 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject nsubstitute(SubLObject newItem, SubLObject oldItem, SubLObject sequence, SubLObject test,
 			SubLObject key, SubLObject start, SubLObject end, SubLObject count) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		int countTyped = SubLTrampolineFile.extractCount(count);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		int countTyped = SubLSystemTrampolineFile.extractCount(count);
 		SubLSequence result = sequenceTyped.substitute(newItem, oldItem, true, testFunction, keyFunction, startTyped,
 				endTyped, countTyped);
 		return result;
@@ -182,11 +182,11 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject nsubstitute_if(SubLObject newItem, SubLObject test, SubLObject sequence, SubLObject key,
 			SubLObject start, SubLObject end, SubLObject count) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		UnaryFunction testFunction = SubLTrampolineFile.extractUnaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		int countTyped = SubLTrampolineFile.extractCount(count);
+		UnaryFunction testFunction = SubLSystemTrampolineFile.extractUnaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		int countTyped = SubLSystemTrampolineFile.extractCount(count);
 		SubLSequence result = sequenceTyped.substituteIf(newItem, testFunction, true, keyFunction, startTyped, endTyped,
 				countTyped);
 		return result;
@@ -197,10 +197,10 @@ public class Sequences extends SubLTrampolineFile {
 		if (sequence == SubLNil.NIL)
 			return SubLNil.NIL;
 		SubLSequence sequenceTyped = sequence.toSeq();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		BinaryFunction testBFF = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyUF = SubLTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		BinaryFunction testBFF = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyUF = SubLSystemTrampolineFile.extractUnaryFunc(key);
 		int result = sequenceTyped.positionOf(item, testBFF, keyUF, startTyped, endTyped);
 		if (result == -2)
 			return SubLNil.NIL;
@@ -212,10 +212,10 @@ public class Sequences extends SubLTrampolineFile {
 		if (sequence == SubLNil.NIL)
 			return SubLNil.NIL;
 		SubLSequence sequenceTyped = sequence.toSeq();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		UnaryFunction testBFF = SubLTrampolineFile.extractUnaryFunc(test);
-		UnaryFunction keyUF = SubLTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		UnaryFunction testBFF = SubLSystemTrampolineFile.extractUnaryFunc(test);
+		UnaryFunction keyUF = SubLSystemTrampolineFile.extractUnaryFunc(key);
 		int result = sequenceTyped.positionOfIf(testBFF, keyUF, startTyped, endTyped);
 		if (result == -2)
 			return SubLNil.NIL;
@@ -225,21 +225,21 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject remove(SubLObject item, SubLObject sequence, SubLObject test, SubLObject key,
 			SubLObject start, SubLObject end, SubLObject count) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		int countTyped = SubLTrampolineFile.extractCount(count);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		int countTyped = SubLSystemTrampolineFile.extractCount(count);
 		return sequenceTyped.remove(item, false, testFunction, keyFunction, startTyped, endTyped, countTyped);
 	}
 
 	public static SubLObject remove_duplicates(SubLObject sequence, SubLObject test, SubLObject key, SubLObject start,
 			SubLObject end) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLSequence result = sequenceTyped.removeDuplicates(false, testFunction, keyFunction, startTyped, endTyped);
 		return result;
 	}
@@ -247,11 +247,11 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject remove_if(SubLObject test, SubLObject sequence, SubLObject key, SubLObject start,
 			SubLObject end, SubLObject count) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		UnaryFunction testFunction = SubLTrampolineFile.extractUnaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		int countTyped = SubLTrampolineFile.extractCount(count);
+		UnaryFunction testFunction = SubLSystemTrampolineFile.extractUnaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		int countTyped = SubLSystemTrampolineFile.extractCount(count);
 		SubLSequence result = sequenceTyped.removeIf(testFunction, false, keyFunction, startTyped, endTyped,
 				countTyped);
 		return result;
@@ -261,10 +261,10 @@ public class Sequences extends SubLTrampolineFile {
 			SubLObject start2, SubLObject end2) {
 		SubLSequence sequence1Typed = sequence1.toSeq();
 		SubLSequence sequence2Typed = sequence2.toSeq();
-		int start1Typed = SubLTrampolineFile.extractStart(start1);
-		int end1Typed = SubLTrampolineFile.extractEnd(end1);
-		int start2Typed = SubLTrampolineFile.extractStart(start2);
-		int end2Typed = SubLTrampolineFile.extractEnd(end2);
+		int start1Typed = SubLSystemTrampolineFile.extractStart(start1);
+		int end1Typed = SubLSystemTrampolineFile.extractEnd(end1);
+		int start2Typed = SubLSystemTrampolineFile.extractStart(start2);
+		int end2Typed = SubLSystemTrampolineFile.extractEnd(end2);
 		SubLObject result = sequence1Typed.replace(sequence2Typed, start1Typed, end1Typed, start2Typed, end2Typed);
 		return result;
 	}
@@ -277,12 +277,12 @@ public class Sequences extends SubLTrampolineFile {
 			SubLObject start1, SubLObject end1, SubLObject start2, SubLObject end2) {
 		SubLSequence sequence1Typed = sequence1.toSeq();
 		SubLSequence sequence2Typed = sequence2.toSeq();
-		int start1Typed = SubLTrampolineFile.extractStart(start1);
-		int end1Typed = SubLTrampolineFile.extractEnd(end1);
-		int start2Typed = SubLTrampolineFile.extractStart(start2);
-		int end2Typed = SubLTrampolineFile.extractEnd(end2);
-		BinaryFunction testBFF = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyUF = SubLTrampolineFile.extractUnaryFunc(key);
+		int start1Typed = SubLSystemTrampolineFile.extractStart(start1);
+		int end1Typed = SubLSystemTrampolineFile.extractEnd(end1);
+		int start2Typed = SubLSystemTrampolineFile.extractStart(start2);
+		int end2Typed = SubLSystemTrampolineFile.extractEnd(end2);
+		BinaryFunction testBFF = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyUF = SubLSystemTrampolineFile.extractUnaryFunc(key);
 		int result = sequence1Typed.search(sequence2Typed, testBFF, keyUF, start1Typed, end1Typed, start2Typed,
 				end2Typed);
 		if (result == -2)
@@ -292,8 +292,8 @@ public class Sequences extends SubLTrampolineFile {
 
 	public static SubLObject subseq(SubLObject sequence, SubLObject start, SubLObject end) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		int startTyped = SubLTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
 		SubLObject result = sequenceTyped.subSeq(startTyped, endTyped);
 		return result;
 	}
@@ -301,11 +301,11 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject substitute(SubLObject newItem, SubLObject oldItem, SubLObject sequence, SubLObject test,
 			SubLObject key, SubLObject start, SubLObject end, SubLObject count) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction testFunction = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		int countTyped = SubLTrampolineFile.extractCount(count);
+		BinaryFunction testFunction = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		int countTyped = SubLSystemTrampolineFile.extractCount(count);
 		SubLSequence result = sequenceTyped.substitute(newItem, oldItem, false, testFunction, keyFunction, startTyped,
 				endTyped, countTyped);
 		return result;
@@ -314,11 +314,11 @@ public class Sequences extends SubLTrampolineFile {
 	public static SubLObject substitute_if(SubLObject newItem, SubLObject test, SubLObject sequence, SubLObject key,
 			SubLObject start, SubLObject end, SubLObject count) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		UnaryFunction testFunction = SubLTrampolineFile.extractUnaryFunc(test);
-		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
-		int countTyped = SubLTrampolineFile.extractCount(count);
+		UnaryFunction testFunction = SubLSystemTrampolineFile.extractUnaryFunc(test);
+		UnaryFunction keyFunction = SubLSystemTrampolineFile.extractUnaryFunc(key);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
+		int countTyped = SubLSystemTrampolineFile.extractCount(count);
 		SubLSequence result = sequenceTyped.substituteIf(newItem, testFunction, false, keyFunction, startTyped,
 				endTyped, countTyped);
 		return result;

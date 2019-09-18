@@ -82,7 +82,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -287,24 +287,24 @@ public final class inference_kernel extends SubLTranslatedFile {
             query_properties = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_INFERENCE_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_INFERENCE_SENTENCE_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
-        SubLTrampolineFile.enforceType(query_properties, QUERY_PROPERTIES_P);
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_INFERENCE_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(query_properties, QUERY_PROPERTIES_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_INFERENCE_SENTENCE_P);
         final SubLObject plist_var = query_properties;
-        SubLTrampolineFile.enforceType(plist_var, PROPERTY_LIST_P);
+        SubLSystemTrampolineFile.enforceType(plist_var, PROPERTY_LIST_P);
         SubLObject remainder;
         SubLObject property;
         SubLObject value;
         for (remainder = NIL, remainder = plist_var; NIL != remainder; remainder = cddr(remainder)) {
             property = remainder.first();
             value = cadr(remainder);
-            SubLTrampolineFile.enforceType(property, QUERY_PROPERTY_P);
+            SubLSystemTrampolineFile.enforceType(property, QUERY_PROPERTY_P);
         }
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
         SubLObject result = NIL;
         SubLObject halt_reason = NIL;
@@ -399,7 +399,7 @@ public final class inference_kernel extends SubLTranslatedFile {
             query_properties = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
             throw new AssertionError(mt);
         }
         assert NIL != listp(scoped_vars) : "Types.listp(scoped_vars) " + "CommonSymbols.NIL != Types.listp(scoped_vars) " + scoped_vars;
@@ -557,7 +557,7 @@ public final class inference_kernel extends SubLTranslatedFile {
             query_static_properties = NIL;
         }
         assert NIL != possibly_inference_sentence_p(sentence) : "el_utilities.possibly_inference_sentence_p(sentence) " + "CommonSymbols.NIL != el_utilities.possibly_inference_sentence_p(sentence) " + sentence;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
             throw new AssertionError(mt);
         }
         assert NIL != inference_datastructures_enumerated_types.query_static_or_meta_properties_p(query_static_properties) : "inference_datastructures_enumerated_types.query_static_or_meta_properties_p(query_static_properties) " + "CommonSymbols.NIL != inference_datastructures_enumerated_types.query_static_or_meta_properties_p(query_static_properties) " + query_static_properties;
@@ -680,7 +680,7 @@ public final class inference_kernel extends SubLTranslatedFile {
         if (query_dynamic_properties == UNPROVIDED) {
             query_dynamic_properties = NIL;
         }
-        SubLTrampolineFile.enforceType(inference, CONTINUABLE_INFERENCE_P);
+        SubLSystemTrampolineFile.enforceType(inference, CONTINUABLE_INFERENCE_P);
         assert NIL != inference_datastructures_enumerated_types.query_dynamic_properties_p(query_dynamic_properties) : "inference_datastructures_enumerated_types.query_dynamic_properties_p(query_dynamic_properties) " + "CommonSymbols.NIL != inference_datastructures_enumerated_types.query_dynamic_properties_p(query_dynamic_properties) " + query_dynamic_properties;
         final SubLObject input_dynamic_properties = copy_list(query_dynamic_properties);
         final SubLObject overridden_dynamic_properties = inference_datastructures_enumerated_types.extract_query_dynamic_properties(inference_strategist.explicify_inference_mode_defaults(query_dynamic_properties));

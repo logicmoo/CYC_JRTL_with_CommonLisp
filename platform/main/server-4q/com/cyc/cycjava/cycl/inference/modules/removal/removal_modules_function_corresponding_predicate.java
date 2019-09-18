@@ -102,7 +102,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2972,7 +2972,7 @@ public final class removal_modules_function_corresponding_predicate extends SubL
     }
 
     public static SubLObject init_removal_modules_function_corresponding_predicate_file() {
-        deflexical("*USE-FCP-REMOVAL-MODULE?*", SubLTrampolineFile.maybeDefault($sym0$_USE_FCP_REMOVAL_MODULE__, $use_fcp_removal_moduleP$, NIL));
+        deflexical("*USE-FCP-REMOVAL-MODULE?*", SubLSystemTrampolineFile.maybeDefault($sym0$_USE_FCP_REMOVAL_MODULE__, $use_fcp_removal_moduleP$, NIL));
         return NIL;
     }
 

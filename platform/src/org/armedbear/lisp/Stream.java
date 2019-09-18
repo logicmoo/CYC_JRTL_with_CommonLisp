@@ -32,9 +32,7 @@
  */
 
 package org.armedbear.lisp;
-import static org.armedbear.lisp.Lisp.*;
 
-import static org.armedbear.lisp.Lisp.*;
 import static org.logicmoo.system.Startup.bp;
 
 import java.io.BufferedInputStream;
@@ -58,6 +56,7 @@ import java.util.Set;
 import java.util.SortedMap;
 
 import org.armedbear.lisp.util.DecodingReader;
+import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.AbstractRandomAccessSubLStream;
@@ -75,10 +74,140 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
  * A base class for all Lisp built-in streams.
  *
  */
-public class Stream extends AbstractRandomAccessSubLStream implements ILispStream, SubLOutputStream, SubLInputStream, SubLInputTextStream, SubLInputBinaryStream, SubLOutputBinaryStream, SubLOutputTextStream {
+abstract public class Stream extends AbstractRandomAccessSubLStream implements ILispStream, SubLOutputStream, SubLInputStream, SubLInputTextStream, SubLInputBinaryStream, SubLOutputBinaryStream, SubLOutputTextStream {
+
+	/**
+	 * Attempts to read characters into the specified character buffer.
+	 * The buffer is used as a repository of characters as-is: the only
+	 * changes made are the results of a put operation. No flipping or
+	 * rewinding of the buffer is performed.
+	 *
+	 * @param cb the buffer to read characters into
+	 * @return The number of {@code char} values added to the buffer,
+	 *                 or -1 if this source of characters is at its end
+	 * @throws IOException if an I/O error occurs
+	 * @throws NullPointerException if cb is null
+	 * @throws java.nio.ReadOnlyBufferException if cb is a read only buffer
+	 * @since 1.5
+	 */
+	public int read(java.nio.CharBuffer target) throws IOException {
+		int len = target.remaining();
+		char[] cbuf = new char[len];
+		int n = read(cbuf, 0, len);
+		if (n > 0)
+			target.put(cbuf, 0, n);
+		return n;
+	}
+
+	public int read(char[] b, int off, int len) {
+		int curChar = -1;
+		int i = 0;
+		for (int size = off + len; i < size;) {
+			curChar = this.read();
+			if (curChar == -1)
+				break;
+			b[i] = (char) curChar;
+			i++;
+		}
+		return i;
+	}
+
+	/**
+	 * Appends the specified character sequence to this output stream.
+	 *
+	 * <p> An invocation of this method of the form <tt>out.append(csq)</tt>
+	 * behaves in exactly the same way as the invocation
+	 *
+	 * <pre>
+	 *     out.print(csq.toString()) </pre>
+	 *
+	 * <p> Depending on the specification of <tt>toString</tt> for the
+	 * character sequence <tt>csq</tt>, the entire sequence may not be
+	 * appended.  For instance, invoking then <tt>toString</tt> method of a
+	 * character buffer will return a subsequence whose content depends upon
+	 * the buffer's position and limit.
+	 *
+	 * @param  csq
+	 *         The character sequence to append.  If <tt>csq</tt> is
+	 *         <tt>null</tt>, then the four characters <tt>"null"</tt> are
+	 *         appended to this output stream.
+	 *
+	 * @return  This output stream
+	 *
+	 * @since  1.5
+	 */
+	public Stream append(CharSequence csq) {
+		if (csq == null)
+			_writeString("null");
+		else
+			_writeString(csq.toString());
+		return this;
+	}
+
+	/**
+	 * Appends a subsequence of the specified character sequence to this output
+	 * stream.
+	 *
+	 * <p> An invocation of this method of the form <tt>out.append(csq, start,
+	 * end)</tt> when <tt>csq</tt> is not <tt>null</tt>, behaves in
+	 * exactly the same way as the invocation
+	 *
+	 * <pre>
+	 *     out.print(csq.subSequence(start, end).toString()) </pre>
+	 *
+	 * @param  csq
+	 *         The character sequence from which a subsequence will be
+	 *         appended.  If <tt>csq</tt> is <tt>null</tt>, then characters
+	 *         will be appended as if <tt>csq</tt> contained the four
+	 *         characters <tt>"null"</tt>.
+	 *
+	 * @param  start
+	 *         The index of the first character in the subsequence
+	 *
+	 * @param  end
+	 *         The index of the character following the last character in the
+	 *         subsequence
+	 *
+	 * @return  This output stream
+	 *
+	 * @throws  IndexOutOfBoundsException
+	 *          If <tt>start</tt> or <tt>end</tt> are negative, <tt>start</tt>
+	 *          is greater than <tt>end</tt>, or <tt>end</tt> is greater than
+	 *          <tt>csq.length()</tt>
+	 *
+	 * @since  1.5
+	 */
+	public Stream append(CharSequence csq, int start, int end) {
+		CharSequence cs = (csq == null ? "null" : csq);
+		_writeString(cs.subSequence(start, end).toString());
+		return this;
+	}
+
+	/**
+	 * Appends the specified character to this output stream.
+	 *
+	 * <p> An invocation of this method of the form <tt>out.append(c)</tt>
+	 * behaves in exactly the same way as the invocation
+	 *
+	 * <pre>
+	 *     out.print(c) </pre>
+	 *
+	 * @param  c
+	 *         The 16-bit character to append
+	 *
+	 * @return  This output stream
+	 *
+	 * @since  1.5
+	 */
+	public Stream append(char c) {
+		print(c);
+		return this;
+	}
 
 	public static Stream createStream(Symbol structureClass, InputStream stream) {
-		return (Stream) SubLObjectFactory.makeInputTextStream(stream);
+		final Stream makeInputTextStream = (Stream) SubLObjectFactory.makeInputTextStream(stream);
+		makeInputTextStream.setStructureClass(structureClass);
+		return makeInputTextStream;
 	}
 
 	public static Stream createStream(Symbol structureClass, InputStream inputStream, LispObject elementType, LispObject format) {
@@ -96,12 +225,16 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 
 	public static Stream createStream(Symbol structureClass, Writer w) {
-		return (Stream) SubLObjectFactory.makeOutputTextStream(new WriterOutputStream(w));
+		final Stream makeOutputTextStream = (Stream) SubLObjectFactory.makeOutputTextStream(new WriterOutputStream(w));
+		makeOutputTextStream.setStructureClass(structureClass);
+		return makeOutputTextStream;
 		// return new Stream(structureClass, w);
 	}
 
 	public static Stream createStream(Symbol structureClass, Reader r) {
-		return (Stream) SubLObjectFactory.makeInputTextStream(new ReaderInputStream(r));
+		final Stream makeInputTextStream = (Stream) SubLObjectFactory.makeInputTextStream(new ReaderInputStream(r));
+		makeInputTextStream.setStructureClass(structureClass);
+		return makeInputTextStream;
 		// return new Stream(structureClass, r);
 	}
 
@@ -116,7 +249,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 		Stream s = createStream(structureClass, outputStream, elementType);
 		s.setInteractive(interactive);
 		return s;
-//		return new Stream(structureClass, outputStream, elementType, interactive);
+		//		return new Stream(structureClass, outputStream, elementType, interactive);
 	}
 
 	public static Stream createStream(Symbol structureClass, InputStream inputStream, LispObject elementType) {
@@ -127,6 +260,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 			s = (Stream) SubLObjectFactory.makeInputBinaryStream(inputStream);
 		}
 		s.setStreamElementType(elementType);
+		s.setStructureClass(structureClass);
 		return s;
 		// return new Stream(structureClass, inputStream, elementType);
 	}
@@ -139,6 +273,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 			s = (Stream) SubLObjectFactory.makeOutputBinaryStream(outputStream);
 		}
 		s.setStreamElementType(elementType);
+		s.setStructureClass(structureClass);
 		return s;
 		// return new Stream(structureClass, outputStream, elementType);
 	}
@@ -284,9 +419,9 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 
 	protected void initAsCharacterInputStream(Reader reader) {
-		if (!(reader instanceof PushbackReader))
+		if (!(reader instanceof PushbackReader)) {
 			this.reader = new PushbackReader(reader, 5);
-		else
+		} else
 			this.reader = (PushbackReader) reader;
 
 		// if(elementType==null)elementType = (LispObject) Symbol.CHARACTER;
@@ -632,6 +767,13 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
 	@Override
 	public LispObject read(boolean eofError, LispObject eofValue, boolean recursive, LispThread thread, ReadtableAccessor rta) {
+		if (true) {
+			return read0(eofError, eofValue, recursive, thread, rta);
+		}
+		return with_thread_prefix("cl:read " + this, forcedCLRead, () -> read0(eofError, eofValue, recursive, thread, rta));
+	}
+
+	public LispObject read0(boolean eofError, LispObject eofValue, boolean recursive, LispThread thread, ReadtableAccessor rta) {
 		LispObject result = readPreservingWhitespace(eofError, eofValue, recursive, thread, rta);
 		if (result != eofValue && !recursive) {
 			try {
@@ -660,7 +802,13 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	private static final Symbol _SHARP_SHARP_ALIST_ = internSpecial("*SHARP-SHARP-ALIST*", PACKAGE_SYS, NIL);
 
 	@Override
-	public LispObject readPreservingWhitespace(boolean eofError, LispObject eofValue, boolean recursive, LispThread thread, ReadtableAccessor rta)
+	public LispObject readPreservingWhitespace(boolean eofError, LispObject eofValue, boolean recursive, LispThread thread, ReadtableAccessor rta) {
+		if (true)
+			return readPreservingWhitespace0(eofError, eofValue, recursive, thread, rta);
+		return with_thread_prefix("lisp:read " + this, forcedCLRead, () -> readPreservingWhitespace0(eofError, eofValue, recursive, thread, rta));
+	}
+
+	public LispObject readPreservingWhitespace0(boolean eofError, LispObject eofValue, boolean recursive, LispThread thread, ReadtableAccessor rta)
 
 	{
 		if (recursive) {
@@ -1215,7 +1363,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 					}
 				}
 				final int radix = getReadBase(thread);
-				if ("+-.0123456789".indexOf(firstChar) >= 0) {
+				final int indexOf = "+-.0123456789".indexOf(firstChar);
+				if (indexOf > 2 || (indexOf >= 0 && length > 1)) {
 					LispObject number = makeNumber(token, length, radix);
 					if (number != null)
 						return number;
@@ -1973,6 +2122,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 			}
 		} catch (NullPointerException e) {
 			// writer is null
+			Startup.printStackTrace(e);
 			streamNotCharacterOutputStream();
 		} catch (IOException e) {
 			ioe(e);
@@ -2358,23 +2508,23 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	/*
 	 * public static Stream createStream(Symbol structureClass, OutputStream stream)
 	 * { return new Stream(structureClass, stream); }
-	 * 
+	 *
 	 * public static Stream createStream(Symbol structureClass, InputStream stream)
 	 * { return new Stream(structureClass, stream); }
 	 */
-//	public static Stream createStream(Symbol structureClass, InputStream inputStream, LispObject elementType) {
-//		return new Stream(structureClass, inputStream, elementType);
-//	}
-//
-//	public static Stream createStream(Symbol structureClass, InputStream inputStream, LispObject elementType,
-//			boolean interactive) {
-//		return new Stream(structureClass, inputStream, elementType, interactive);
-//	}
-//
-//	public static Stream createStream(Symbol structureClass, OutputStream outputStream, LispObject elementType,
-//			boolean interactive) {
-//		return new Stream(structureClass, outputStream, elementType, interactive);
-//	}
+	//	public static Stream createStream(Symbol structureClass, InputStream inputStream, LispObject elementType) {
+	//		return new Stream(structureClass, inputStream, elementType);
+	//	}
+	//
+	//	public static Stream createStream(Symbol structureClass, InputStream inputStream, LispObject elementType,
+	//			boolean interactive) {
+	//		return new Stream(structureClass, inputStream, elementType, interactive);
+	//	}
+	//
+	//	public static Stream createStream(Symbol structureClass, OutputStream outputStream, LispObject elementType,
+	//			boolean interactive) {
+	//		return new Stream(structureClass, outputStream, elementType, interactive);
+	//	}
 
 	// ### clear-input &optional input-stream => nil
 	private static final Primitive CLEAR_INPUT = new Primitive(Symbol.CLEAR_INPUT, "&optional input-stream") {
@@ -2888,7 +3038,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	@Override
 	public void flush() {
@@ -2941,7 +3091,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	// }
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.armedbear.lisp.StructureObject#isReady()
 	 */
 	@Override
@@ -2951,7 +3101,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct#isDontTrack()
 	 */

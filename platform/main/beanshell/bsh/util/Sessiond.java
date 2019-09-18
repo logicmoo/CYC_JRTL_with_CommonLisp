@@ -31,6 +31,10 @@ import java.io.Reader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.Startup;
+import org.logicmoo.system.SystemCurrent;
+
 import bsh.FileReader;
 import bsh.Interpreter;
 import bsh.NameSpace;
@@ -53,15 +57,25 @@ public class Sessiond extends Thread {
 	public Sessiond(NameSpace globalNameSpace, int port) throws IOException {
 		ss = new ServerSocket(port);
 		this.globalNameSpace = globalNameSpace;
+		setDaemon(true);
+		setName("Sessiond " + port);
 	}
 
+	@Override
 	public void run() {
 		try {
-			while (true)
-				new SessiondConnection(globalNameSpace, ss.accept()).start();
-		} catch (IOException e) {
-			System.out.println(e);
+			while (true) {
+				try {
+					final SessiondConnection sessiondConnection = new SessiondConnection(getName(), globalNameSpace, ss.accept());
+					sessiondConnection.start();
+				} catch (Throwable e) {
+					System.out.println(e);
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		Startup.ignoreExceptions(() -> ss.close());
 	}
 }
 
@@ -70,19 +84,37 @@ class SessiondConnection extends Thread {
 	Socket client;
 	Interpreter i;
 
-	SessiondConnection(NameSpace globalNameSpace, Socket client) {
+	SessiondConnection(String name, NameSpace globalNameSpace, Socket client) {
 		this.client = client;
 		this.globalNameSpace = globalNameSpace;
+		this.setDaemon(false);
+		setName(name + " c= " + client);
 	}
 
+	@Override
 	public void run() {
 		try (Reader in = new FileReader(client.getInputStream())) {
 			PrintStream out = new PrintStream(client.getOutputStream(), true, "UTF-8");
-			i = new Interpreter(in, out, out, true, globalNameSpace);
+			SystemCurrent.setIn(in);
+			SystemCurrent.setOut(out);
+			SystemCurrent.setErr(out);
+			//final bsh.ConsoleAssignable console = new Interpreter.Console(in, out, out);
+			i = new Interpreter(in, out, out, true, globalNameSpace, BeanShellCntrl.ensureBSH(), "");
 			i.setExitOnEOF(false); // don't exit interpreter
 			i.run();
 		} catch (IOException e) {
 			System.out.println(e);
+		} finally {
+			dispose();
 		}
+	}
+
+	public void dispose() {
+		if (i != null) {
+			Interpreter ii = i;
+			i = null;
+			ii.dispose();
+		}
+		Startup.ignoreExceptions(() -> client.close());
 	}
 }

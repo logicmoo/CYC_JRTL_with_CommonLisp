@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rkf_rule_constructor extends SubLTranslatedFile {
     public static final SubLFile me = new rkf_rule_constructor();
@@ -1974,8 +1974,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_rkf_rule_constructor_file() {
         deflexical("*RC-LOCK*", make_lock($$$Rule_Constructor_Lock));
-        deflexical("*RC-ISG*", SubLTrampolineFile.maybeDefault($rc_isg$, $rc_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-        deflexical("*RC-INDEX*", SubLTrampolineFile.maybeDefault($rc_index$, $rc_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*RC-ISG*", SubLSystemTrampolineFile.maybeDefault($rc_isg$, $rc_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*RC-INDEX*", SubLSystemTrampolineFile.maybeDefault($rc_index$, $rc_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-RC-LHS*", RC_LHS);
         defconstant("*DTP-RC-RHS*", RC_RHS);
         defconstant("*DTP-RC-STATE*", RC_STATE);

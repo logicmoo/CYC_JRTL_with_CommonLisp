@@ -32,7 +32,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -455,7 +455,7 @@ public final class gt_utilities extends SubLTranslatedFile {
         final SubLObject _prev_bind_0 = gt_vars.$gt_result$.currentBinding(thread);
         try {
             gt_vars.$gt_result$.bind(T, thread);
-            if (((NIL != symbol_function($sym16$GT_SEARCHED_)) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(symbol_function($sym16$GT_SEARCHED_)))) {
+            if (((NIL != symbol_function($sym16$GT_SEARCHED_)) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(symbol_function($sym16$GT_SEARCHED_)))) {
                 throw new AssertionError(symbol_function($sym16$GT_SEARCHED_));
             }
             final SubLObject _prev_bind_0_$1 = gt_vars.$gt_step_fn$.currentBinding(thread);

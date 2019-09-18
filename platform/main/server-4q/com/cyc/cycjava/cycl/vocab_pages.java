@@ -80,7 +80,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1504,7 +1504,7 @@ public final class vocab_pages extends SubLTranslatedFile implements V02 {
     public static final SubLObject generate_term_html(SubLObject fort) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fort, FORT_P);
+            SubLSystemTrampolineFile.checkType(fort, FORT_P);
             html_utilities.html_terpri(UNPROVIDED);
             {
                 SubLObject name = misc_kb_utilities.coerce_name(fort);
@@ -2275,7 +2275,7 @@ public final class vocab_pages extends SubLTranslatedFile implements V02 {
      * @return nil.
      */
     public static final SubLObject html_fort_markup(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
+        SubLSystemTrampolineFile.checkType(fort, FORT_P);
         if (NIL != constant_handles.constant_p(fort)) {
             html_utilities.html_markup(fort);
         } else {

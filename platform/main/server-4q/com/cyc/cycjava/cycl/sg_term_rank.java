@@ -56,7 +56,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -472,7 +472,7 @@ public final class sg_term_rank extends SubLTranslatedFile implements V02 {
                 SubLObject idx = assertion_handles.do_assertions_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt16$Initializing_Term_connectivity_fr, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt16$Initializing_Term_connectivity_fr, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -898,7 +898,7 @@ public final class sg_term_rank extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject sg_tr_compute_term_rank(SubLObject v_term) {
-        SubLTrampolineFile.checkType(v_term, FORT_P);
+        SubLSystemTrampolineFile.checkType(v_term, FORT_P);
         {
             SubLObject consequent_terms = sg_tr_term_consequents(v_term);
             SubLObject antecedent_terms = sg_tr_term_antecedents(v_term);
@@ -1197,7 +1197,7 @@ public final class sg_term_rank extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject sg_tr_term_set_utility(SubLObject set_of_terms) {
-        SubLTrampolineFile.checkType(set_of_terms, SET_P);
+        SubLSystemTrampolineFile.checkType(set_of_terms, SET_P);
         {
             SubLObject term_values = NIL;
             SubLObject total_term_value = ZERO_INTEGER;

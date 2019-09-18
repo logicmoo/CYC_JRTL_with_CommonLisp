@@ -183,7 +183,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -5237,9 +5237,9 @@ public final class forward extends SubLTranslatedFile {
         defparameter("*FORWARD-INFERENCE-CALLBACK-REASONS*", $list1);
         defparameter("*SUPPRESSED-FORWARD-INFERENCE-CALLBACK-REASONS*", NIL);
         defparameter("*FORCED-FORWARD-INFERENCE-CALLBACK-REASONS*", NIL);
-        deflexical("*GLOBAL-FORWARD-INFERENCE-ENVIRONMENT-LOCK*", SubLTrampolineFile.maybeDefault($global_forward_inference_environment_lock$, $global_forward_inference_environment_lock$, () -> make_lock($str7$Global_forward_inference_environm)));
+        deflexical("*GLOBAL-FORWARD-INFERENCE-ENVIRONMENT-LOCK*", SubLSystemTrampolineFile.maybeDefault($global_forward_inference_environment_lock$, $global_forward_inference_environment_lock$, () -> make_lock($str7$Global_forward_inference_environm)));
         defparameter("*GLOBAL-FORWARD-INFERENCE-ENVIRONMENT*", queues.create_queue(UNPROVIDED));
-        deflexical("*CURRENTLY-FORWARD-PROPAGATING-SUPPORTS*", SubLTrampolineFile.maybeDefault($currently_forward_propagating_supports$, $currently_forward_propagating_supports$, () -> set.new_set(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*CURRENTLY-FORWARD-PROPAGATING-SUPPORTS*", SubLSystemTrampolineFile.maybeDefault($currently_forward_propagating_supports$, $currently_forward_propagating_supports$, () -> set.new_set(symbol_function(EQUAL), UNPROVIDED)));
         deflexical("*CURRENTLY-FORWARD-PROPAGATING-SUPPORTS-LOCK*", make_lock($str9$Currently_Forward_Propagating_Sup));
         defparameter("*FORWARD-INFERENCE-GAF*", NIL);
         defparameter("*FORWARD-INFERENCE-RULE*", NIL);

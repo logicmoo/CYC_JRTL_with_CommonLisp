@@ -22,46 +22,63 @@ public abstract class SafeRunnable extends FromSubLisp implements Runnable {
 	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
 		return this; // self-evaluating
 	}
-    protected boolean outerSubLisp;
-    protected Package outerPackage;
 
-    public SafeRunnable() {
-        this.outerSubLisp = Main.isSubLisp();
-        this.outerPackage = Lisp.getCurrentPackage();
-    }
+	protected boolean outerSubLisp;
+	protected Package outerPackage;
+
+	public SafeRunnable() {
+		this(Main.isSubLisp());
+	}
+
+	public SafeRunnable(boolean tf) {
+		this(tf, (tf ? null : Lisp.getCurrentPackage()));
+	}
+
+	public SafeRunnable(Package pkg) {
+		this(Main.isSubLisp(), pkg != null ? pkg : (Main.isSubLisp() ? null : Lisp.getCurrentPackage()));
+	}
+
+	public SafeRunnable(boolean tf, Package pkg) {
+		this.outerSubLisp = tf;
+		this.outerPackage = pkg;
+	}
 
 	@Override
-    public SafeRunnable toLispObject() {
+	public SafeRunnable toLispObject() {
 		return this;
 	}
-	
+
 	@Override
 	public void run() {
 
-        final boolean wasSubLisp = Main.isSubLisp();
-        final SubLPackage prevPackage = Lisp.getCurrentPackage();
+		final boolean wasSubLisp = Main.isSubLisp();
+		SubLPackage prevPackage = null;
 		try {
-            Main.setSubLisp(outerSubLisp);
-            if (outerSubLisp) {
-			SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
-            } else {
-                SubLPackage.setCurrentPackage(outerPackage);
-            }
+			Main.setSubLisp(outerSubLisp);
+			if (outerSubLisp) {
+				if (outerPackage != null) {
+					prevPackage = Lisp.getCurrentPackage();
+					SubLPackage.setCurrentPackage(outerPackage);
+				} else {
+					prevPackage = Lisp.getCurrentPackage();
+					SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
+				}
+			} else {
+				if (outerPackage != null) {
+					prevPackage = Lisp.getCurrentPackage();
+					SubLPackage.setCurrentPackage(outerPackage);
+				}
+			}
 			safeRun();
 		} catch (ControlTransfer tr) {
 			throw tr;
-		} catch (SubLProcess.TerminationRequest tr) {	
+		} catch (SubLProcess.TerminationRequest tr) {
 		} catch (Throwable e) {
 			Errors.handleError(e);
-        } finally {
-            Main.setSubLisp(outerSubLisp);
-            if (!outerSubLisp) {
-                SubLPackage.setCurrentPackage(prevPackage);
-                Main.setSubLisp(wasSubLisp);
-            } else {
-
-            }
-            //   SubLPackage.setCurrentPackage(outerPackage);
+		} finally {
+			Main.setSubLisp(wasSubLisp);
+			if (prevPackage != null)
+				SubLPackage.setCurrentPackage(prevPackage);
 		}
 	}
 

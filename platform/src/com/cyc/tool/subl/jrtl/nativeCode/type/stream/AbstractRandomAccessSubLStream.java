@@ -16,6 +16,7 @@ import java.nio.channels.FileChannel;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Symbol;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -253,16 +254,31 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		}
 	}
 
-	private String correctFileMode(File theFile, String fileMode) {
-		if ("w".equals(fileMode))
-			fileMode = "rw";
-		if ("rww".equals(fileMode))
-			fileMode = "rw";
-		if (!theFile.canWrite()) {
-			fileMode = "r";
+	private String correctFileMode(File rTheFile, String rFileMode) {
+
+		if ("rww".equals(rFileMode))
+			rFileMode = "rw";
+		if ("w".equals(rFileMode)) {
+			try {
+				if (!rTheFile.canRead() && rTheFile.exists()) {
+					rFileMode = "w";
+				} else {
+					rFileMode = "rw";
+				}
+			} catch (SecurityException e) {
+				rFileMode = "rw";
+			}
+		} else if ("rw".equals(rFileMode)) {
+			try {
+				if (!rTheFile.canWrite()) {
+					rFileMode = "r";
+				}
+			} catch (SecurityException e) {
+				rFileMode = "r";
+			}
 		}
-		this.fileMode = fileMode;
-		return fileMode;
+		this.fileMode = rFileMode;
+		return rFileMode;
 	}
 
 	private boolean isNullFile(String fileName) {
@@ -271,13 +287,16 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 
 	private int readInternalARASS() {
 		try {
+			int remaining = readByteBuffer.remaining();
+			if (remaining < 1) {
+				return this.readMoreData() <= 0 ? -1 : this.read();
+			}
+			final byte b = readByteBuffer.get();
 			incrementFilePosition(1L);
-			return 0xFF & readByteBuffer.get();
+			return 0xFF & b;
 		} catch (BufferUnderflowException bue) {
-			incrementFilePosition(-1L);
 			return this.readMoreData() <= 0 ? -1 : this.read();
 		} catch (Exception e) {
-			incrementFilePosition(-1L);
 			Errors.error("Unable to read character from stream: " + this, e);
 			return -1;
 		}
@@ -549,7 +568,12 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			Errors.error("Bytes in integer is bad: " + bytesInInteger);
 		long result = 0L;
 		byte[] tmpBuffer = SubLProcess.currentSubLThread().byteBuffer;
+		boolean expectedUnderFlow = false;
 		try {
+			int remaining = readByteBuffer.remaining();
+			if (remaining < bytesInInteger) {
+				expectedUnderFlow = true;
+			}
 			readByteBuffer.get(tmpBuffer, 0, bytesInInteger);
 			incrementFilePosition(bytesInInteger);
 			if (useNetworkByteOrder)
@@ -560,6 +584,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 				}
 			return result;
 		} catch (BufferUnderflowException bue) {
+			if (!expectedUnderFlow)
+				BeanShellCntrl.bp();
 			long curChar = -1L;
 			if (useNetworkByteOrder)
 				for (int j = (bytesInInteger - 1) * 8; j >= 0; j -= 8) {

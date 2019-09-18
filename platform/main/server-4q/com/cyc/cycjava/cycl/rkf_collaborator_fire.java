@@ -99,7 +99,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rkf_collaborator_fire extends SubLTranslatedFile {
     public static final SubLFile me = new rkf_collaborator_fire();
@@ -3308,7 +3308,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         deflexical("*KQML-READ-TABLE*", create_kqml_read_table());
         defparameter("*KMQL-PACKAGE-PREFIXES*", $list91);
         defconstant("*DTP-FIRE-SESSION*", FIRE_SESSION);
-        deflexical("*CURRENT-FIRE-SESSION*", SubLTrampolineFile.maybeDefault($current_fire_session$, $current_fire_session$, NIL));
+        deflexical("*CURRENT-FIRE-SESSION*", SubLSystemTrampolineFile.maybeDefault($current_fire_session$, $current_fire_session$, NIL));
         defparameter("*RKF-FIRE-TRACE-ANALOGY*", NIL);
         defconstant("*FIRE-SERVER-NIL*", intern($$$nil, $$$CYC));
         return NIL;

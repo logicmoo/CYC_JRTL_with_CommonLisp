@@ -55,7 +55,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -943,7 +943,7 @@ public final class cb_parameters extends SubLTranslatedFile implements V12 {
     public static final SubLObject cb_glob_find_all_if_alt(SubLObject pred) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(pred, FUNCTION_SPEC_P);
+            SubLSystemTrampolineFile.checkType(pred, FUNCTION_SPEC_P);
             {
                 SubLObject result = NIL;
                 SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(glob.do_glob_index($cb_glob$.getDynamicValue(thread))));

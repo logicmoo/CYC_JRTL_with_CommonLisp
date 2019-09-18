@@ -102,7 +102,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class clause_strucs extends SubLTranslatedFile {
     public static final SubLFile me = new clause_strucs();
@@ -1377,8 +1377,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defconstant("*DTP-CLAUSE-STRUC*", CLAUSE_STRUC);
         deflexical("*CLAUSE-STRUC-FREE-LIST*", NIL);
         deflexical("*CLAUSE-STRUC-FREE-LOCK*", make_lock($str31$CLAUSE_STRUC_resource_lock));
-        deflexical("*CLAUSE-STRUC-FROM-ID*", SubLTrampolineFile.maybeDefault($clause_struc_from_id$, $clause_struc_from_id$, NIL));
-        deflexical("*NEW-CLAUSE-STRUC-ID-THRESHOLD*", SubLTrampolineFile.maybeDefault($new_clause_struc_id_threshold$, $new_clause_struc_id_threshold$, NIL));
+        deflexical("*CLAUSE-STRUC-FROM-ID*", SubLSystemTrampolineFile.maybeDefault($clause_struc_from_id$, $clause_struc_from_id$, NIL));
+        deflexical("*NEW-CLAUSE-STRUC-ID-THRESHOLD*", SubLSystemTrampolineFile.maybeDefault($new_clause_struc_id_threshold$, $new_clause_struc_id_threshold$, NIL));
         defparameter("*CLAUSE-STRUC-DUMP-ID-TABLE*", NIL);
         return NIL;
     }

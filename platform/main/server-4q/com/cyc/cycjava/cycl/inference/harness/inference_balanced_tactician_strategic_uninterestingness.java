@@ -48,7 +48,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -101,7 +101,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
     public static final SubLObject balanced_strategy_note_uninterestingness_explanation(SubLObject explanation_type, SubLObject problem, SubLObject tactic, SubLObject link, SubLObject subexplanation) {
 	{
 	    SubLObject explanation = make_balanced_strategy_uninterestingness_explanation(explanation_type, problem, tactic, link, subexplanation);
-	    SubLTrampolineFile.checkType(explanation, BALANCED_STRATEGY_UNINTERESTINGNESS_EXPLANATION_P);
+	    SubLSystemTrampolineFile.checkType(explanation, BALANCED_STRATEGY_UNINTERESTINGNESS_EXPLANATION_P);
 	    $balanced_strategy_uninterestingness_explanation$.setDynamicValue(explanation);
 	    return explanation;
 	}
@@ -237,24 +237,24 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
 	if (subexplanation == UNPROVIDED) {
 	    subexplanation = NIL;
 	}
-	SubLTrampolineFile.checkType(explanation_type, BALANCED_STRATEGY_UNINTERESTINGNESS_EXPLANATION_TYPE_P);
+	SubLSystemTrampolineFile.checkType(explanation_type, BALANCED_STRATEGY_UNINTERESTINGNESS_EXPLANATION_TYPE_P);
 	if (NIL != problem) {
-	    SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	    SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	}
 	if (NIL != tactic) {
-	    SubLTrampolineFile.checkType(tactic, TACTIC_P);
+	    SubLSystemTrampolineFile.checkType(tactic, TACTIC_P);
 	}
 	if (NIL != link) {
-	    SubLTrampolineFile.checkType(link, PROBLEM_LINK_P);
+	    SubLSystemTrampolineFile.checkType(link, PROBLEM_LINK_P);
 	}
 	if (NIL != subexplanation) {
-	    SubLTrampolineFile.checkType(subexplanation, BALANCED_STRATEGY_UNINTERESTINGNESS_EXPLANATION_P);
+	    SubLSystemTrampolineFile.checkType(subexplanation, BALANCED_STRATEGY_UNINTERESTINGNESS_EXPLANATION_P);
 	}
 	return list(explanation_type, problem, tactic, link, subexplanation);
     }
 
     public static final SubLObject balanced_strategy_uninterestingness_explanation_type(SubLObject explanation) {
-	SubLTrampolineFile.checkType(explanation, BALANCED_STRATEGY_UNINTERESTINGNESS_EXPLANATION_P);
+	SubLSystemTrampolineFile.checkType(explanation, BALANCED_STRATEGY_UNINTERESTINGNESS_EXPLANATION_P);
 	return explanation.first();
     }
 
@@ -295,7 +295,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
      * @return balanced-strategy-uninterestingness-explanation-type-p
      */
     public static final SubLObject balanced_strategy_why_problem_already_thrown_awayP(SubLObject strategy, SubLObject problem, SubLObject motivation) {
-	SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	if (NIL != rederive_why_balanced_strategy_chooses_to_throw_away_problemP(strategy, problem, motivation)) {
 	    {
 		SubLObject explanation = balanced_strategy_last_uninterestingness_explanation();
@@ -321,7 +321,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
     public static final SubLObject rederive_why_balanced_strategy_chooses_to_throw_away_problemP(SubLObject strategy, SubLObject problem, SubLObject motivation) {
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	    SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	    {
 		SubLObject throw_awayP = NIL;
 		{
@@ -352,7 +352,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	    SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	    if (NIL != balanced_strategy_chooses_to_throw_away_problem_uncacheableP(strategy, problem, motivation, consider_all_tacticsP)) {
 		return T;
 	    } else {
@@ -488,7 +488,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	    SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	    if ((motivation == $REMOVAL) && (NIL != balanced_strategy_deems_tactic_harmless_wrt_removal_motivationP(strategy, tactic))) {
 		return NIL;
 	    } else if (NIL != balanced_strategy_chooses_to_throw_away_tactic_uncacheableP(strategy, tactic, motivation, problem_already_consideredP, siblings_already_consideredP)) {
@@ -686,7 +686,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	    SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	    if (NIL == problem_already_consideredP) {
 		{
 		    SubLObject problem = inference_datastructures_problem_link.problem_link_supported_problem(link);
@@ -765,7 +765,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	    SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	    if (NIL != balanced_strategy_chooses_to_set_aside_problem_uncacheableP(strategy, problem, motivation, consider_all_tacticsP, thrown_away_already_consideredP)) {
 		return T;
 	    } else {
@@ -881,7 +881,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	    SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	    if ((motivation == $REMOVAL) && (NIL != balanced_strategy_deems_tactic_harmless_wrt_removal_motivationP(strategy, tactic))) {
 		return NIL;
 	    } else if (NIL != balanced_strategy_chooses_to_set_aside_tactic_uncacheableP(strategy, tactic, motivation, problem_already_consideredP, siblings_already_consideredP, thrown_away_already_consideredP)) {
@@ -1061,7 +1061,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	    SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	    if (NIL == problem_already_consideredP) {
 		{
 		    SubLObject problem = inference_datastructures_problem_link.problem_link_supported_problem(link);
@@ -1432,9 +1432,9 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
     but is no longer active or set-aside.
      */
     public static final SubLObject balanced_strategy_problem_thrown_awayP(SubLObject strategy, SubLObject problem, SubLObject motivation) {
-	SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	return makeBoolean((NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_pendingP(strategy, problem, motivation)) && (NIL == inference_balanced_tactician_datastructures.balanced_strategy_problem_set_asideP(strategy, problem, motivation)));
     }
 
@@ -1493,7 +1493,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
     public static final SubLObject balanced_strategy_chooses_to_throw_away_tactic_lookahead_problemP(SubLObject strategy, SubLObject logical_tactic, SubLObject motivation) {
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	    SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	    if (NIL != inference_worker_join.join_tactic_p(logical_tactic)) {
 		thread.resetMultipleValues();
 		{
@@ -1638,7 +1638,7 @@ public final class inference_balanced_tactician_strategic_uninterestingness exte
     public static final SubLObject balanced_strategy_chooses_not_to_activate_any_strategems_on_problemP(SubLObject strategy, SubLObject problem, SubLObject motivation) {
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+	    SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
 	    {
 		SubLObject resultP = NIL;
 		{

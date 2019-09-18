@@ -38,7 +38,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -168,13 +168,13 @@ public final class sksi_sks_accessors extends SubLTranslatedFile {
             sks_type = NIL;
         }
         assert NIL != string_utilities.non_empty_stringP(sks_name) : "string_utilities.non_empty_stringP(sks_name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(sks_name) " + sks_name;
-        if (((NIL != super_sks) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_complex_p(super_sks))) {
+        if (((NIL != super_sks) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_complex_p(super_sks))) {
             throw new AssertionError(super_sks);
         }
-        if (((NIL != defining_mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(defining_mt))) {
+        if (((NIL != defining_mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(defining_mt))) {
             throw new AssertionError(defining_mt);
         }
-        if (((NIL != sks_type) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_type_p(sks_type))) {
+        if (((NIL != sks_type) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_type_p(sks_type))) {
             throw new AssertionError(sks_type);
         }
         final SubLObject sks_description = make_new_sks_description(sks_name, super_sks);
@@ -229,13 +229,13 @@ public final class sksi_sks_accessors extends SubLTranslatedFile {
             sks_type = NIL;
         }
         assert NIL != string_utilities.non_empty_stringP(sks_name) : "string_utilities.non_empty_stringP(sks_name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(sks_name) " + sks_name;
-        if (((NIL != super_sks) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_complex_p(super_sks))) {
+        if (((NIL != super_sks) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_complex_p(super_sks))) {
             throw new AssertionError(super_sks);
         }
-        if (((NIL != defining_mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(defining_mt))) {
+        if (((NIL != defining_mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(defining_mt))) {
             throw new AssertionError(defining_mt);
         }
-        if (((NIL != sks_type) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_type_p(sks_type))) {
+        if (((NIL != sks_type) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_type_p(sks_type))) {
             throw new AssertionError(sks_type);
         }
         final SubLObject sks = new_sks(sks_name, super_sks, defining_mt, sks_type);
@@ -251,10 +251,10 @@ public final class sksi_sks_accessors extends SubLTranslatedFile {
             defining_mt = NIL;
         }
         assert NIL != string_utilities.non_empty_stringP(sks_name) : "string_utilities.non_empty_stringP(sks_name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(sks_name) " + sks_name;
-        if (((NIL != super_sks) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_complex_p(super_sks))) {
+        if (((NIL != super_sks) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_complex_p(super_sks))) {
             throw new AssertionError(super_sks);
         }
-        if (((NIL != defining_mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(defining_mt))) {
+        if (((NIL != defining_mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(defining_mt))) {
             throw new AssertionError(defining_mt);
         }
         final SubLObject sks = new_sks(sks_name, super_sks, defining_mt, UNPROVIDED);
@@ -272,7 +272,7 @@ public final class sksi_sks_accessors extends SubLTranslatedFile {
             super_sks = NIL;
         }
         assert NIL != string_utilities.non_empty_stringP(sks_name) : "string_utilities.non_empty_stringP(sks_name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(sks_name) " + sks_name;
-        if (((NIL != super_sks) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_p(super_sks))) {
+        if (((NIL != super_sks) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_p(super_sks))) {
             throw new AssertionError(super_sks);
         }
         SubLObject result = NIL;
@@ -289,7 +289,7 @@ public final class sksi_sks_accessors extends SubLTranslatedFile {
             super_sks = NIL;
         }
         assert NIL != string_utilities.non_empty_stringP(sks_name) : "string_utilities.non_empty_stringP(sks_name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(sks_name) " + sks_name;
-        if (((NIL != super_sks) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_p(super_sks))) {
+        if (((NIL != super_sks) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_p(super_sks))) {
             throw new AssertionError(super_sks);
         }
         SubLObject result = NIL;
@@ -310,7 +310,7 @@ public final class sksi_sks_accessors extends SubLTranslatedFile {
             super_sks = NIL;
         }
         assert NIL != string_utilities.non_empty_stringP(sks_name) : "string_utilities.non_empty_stringP(sks_name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(sks_name) " + sks_name;
-        if (((NIL != super_sks) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_complex_p(super_sks))) {
+        if (((NIL != super_sks) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sks_complex_p(super_sks))) {
             throw new AssertionError(super_sks);
         }
         final SubLObject sks_constant_name = make_new_sks_constant_name(sks_name, super_sks);
@@ -324,7 +324,7 @@ public final class sksi_sks_accessors extends SubLTranslatedFile {
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         assert NIL != forts.fort_p(pred) : "forts.fort_p(pred) " + "CommonSymbols.NIL != forts.fort_p(pred) " + pred;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmt_p(mt))) {
             throw new AssertionError(mt);
         }
         if (NIL == mt) {

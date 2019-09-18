@@ -433,7 +433,7 @@
                            "run-program.lisp"
                            "run-shell-command.lisp"
                            "runtime-class.lisp"
-                           "asm-runtime-class.lisp"
+                           ;; "asm-runtime-class.lisp"
                            "search.lisp"
                            "sequences.lisp"
                            "sets.lisp"

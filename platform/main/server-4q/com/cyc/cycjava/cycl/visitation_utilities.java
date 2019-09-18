@@ -19,7 +19,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -56,7 +56,7 @@ public final class visitation_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject get_defstruct_recipe_constructor(final SubLObject recipe) {
-        if (((!recipe.first().eql($defstruct_recipe_constructor$.getGlobalValue())) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == defstruct_recipe_p(recipe))) {
+        if (((!recipe.first().eql($defstruct_recipe_constructor$.getGlobalValue())) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == defstruct_recipe_p(recipe))) {
             throw new AssertionError(recipe);
         }
         final SubLObject constructor = second(recipe);

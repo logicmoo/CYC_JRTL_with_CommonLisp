@@ -8,9 +8,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Symbols extends SubLTrampolineFile {
+public class Symbols extends SubLSystemTrampolineFile {
 
     public static SubLObject boundp(SubLObject symbol) {
 	if (Loader.nothingBoundP()) {
@@ -43,7 +43,7 @@ public class Symbols extends SubLTrampolineFile {
     public static SubLObject gentemp(SubLObject prefix, SubLObject thePackage) {
 	if (prefix == CommonSymbols.UNPROVIDED)
 	    prefix = SubLNil.NIL;
-	return AbstractSubLSymbol.gentemp(prefix, SubLTrampolineFile.extractPackage(thePackage));
+	return AbstractSubLSymbol.gentemp(prefix, SubLSystemTrampolineFile.extractPackage(thePackage));
     }
 
     public static SubLObject get(SubLObject symbol, SubLObject indicator, SubLObject value) {

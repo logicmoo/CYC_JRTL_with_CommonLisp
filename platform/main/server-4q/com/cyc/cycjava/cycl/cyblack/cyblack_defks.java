@@ -95,7 +95,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -770,12 +770,12 @@ public final class cyblack_defks extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject integer_reference_value(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, INTEGER_REFERENCE_P);
+	SubLSystemTrampolineFile.checkType(v_object, INTEGER_REFERENCE_P);
 	return v_object.getField2();
     }
 
     public static final SubLObject _csetf_integer_reference_value(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, INTEGER_REFERENCE_P);
+	SubLSystemTrampolineFile.checkType(v_object, INTEGER_REFERENCE_P);
 	return v_object.setField2(value);
     }
 

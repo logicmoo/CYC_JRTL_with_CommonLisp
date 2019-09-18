@@ -145,7 +145,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class process_utilities extends SubLTranslatedFile implements V12 {
@@ -1302,7 +1302,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_lock_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField2();
 	}
 
@@ -1312,7 +1312,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_thread_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField3();
 	}
 
@@ -1322,7 +1322,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_name_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField4();
 	}
 
@@ -1332,7 +1332,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_status_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField5();
 	}
 
@@ -1342,7 +1342,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_progress_message_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField6();
 	}
 
@@ -1352,7 +1352,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_progress_sofar_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField7();
 	}
 
@@ -1362,7 +1362,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_progress_total_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField8();
 	}
 
@@ -1372,7 +1372,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_start_time_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField9();
 	}
 
@@ -1382,7 +1382,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_finish_time_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField10();
 	}
 
@@ -1392,7 +1392,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_result_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField11();
 	}
 
@@ -1402,7 +1402,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_error_message_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField12();
 	}
 
@@ -1412,7 +1412,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject t_task_properties_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.getField13();
 	}
 
@@ -1422,7 +1422,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_lock_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField2(value);
 	}
 
@@ -1432,7 +1432,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_thread_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField3(value);
 	}
 
@@ -1442,7 +1442,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_name_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField4(value);
 	}
 
@@ -1452,7 +1452,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_status_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField5(value);
 	}
 
@@ -1462,7 +1462,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_progress_message_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField6(value);
 	}
 
@@ -1472,7 +1472,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_progress_sofar_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField7(value);
 	}
 
@@ -1482,7 +1482,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_progress_total_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField8(value);
 	}
 
@@ -1492,7 +1492,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_start_time_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField9(value);
 	}
 
@@ -1502,7 +1502,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_finish_time_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField10(value);
 	}
 
@@ -1512,7 +1512,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_result_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField11(value);
 	}
 
@@ -1522,7 +1522,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_error_message_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField12(value);
 	}
 
@@ -1532,7 +1532,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_t_task_properties_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(v_object, THINKING_TASK_P);
 		return v_object.setField13(value);
 	}
 
@@ -1623,10 +1623,10 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 		if (v_properties == UNPROVIDED) {
 			v_properties = NIL;
 		}
-		SubLTrampolineFile.checkType(name, STRINGP);
-		SubLTrampolineFile.checkType(progress_message, STRINGP);
+		SubLSystemTrampolineFile.checkType(name, STRINGP);
+		SubLSystemTrampolineFile.checkType(progress_message, STRINGP);
 		if (NIL != v_properties) {
-			SubLTrampolineFile.checkType(v_properties, PROPERTY_LIST_P);
+			SubLSystemTrampolineFile.checkType(v_properties, PROPERTY_LIST_P);
 		}
 		{
 			SubLObject thinking = make_thinking_task(UNPROVIDED);
@@ -1726,8 +1726,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_note_thread_alt(SubLObject thinking, SubLObject thread) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(thread, PROCESSP);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thread, PROCESSP);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_1 = lock;
@@ -1761,7 +1761,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_clear_thread_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		_csetf_t_task_thread(thinking, NIL);
 		return thinking;
 	}
@@ -1773,8 +1773,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_note_status_alt(SubLObject thinking, SubLObject status) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(status, KEYWORDP);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(status, KEYWORDP);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_2 = lock;
@@ -1812,8 +1812,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Set the progress message for THINKING to MESSAGE.")
 	public static final SubLObject thinking_note_progress_message_alt(SubLObject thinking, SubLObject message) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(message, STRINGP);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(message, STRINGP);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_3 = lock;
@@ -1855,8 +1855,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Set the progress count for THINKING to SOFAR.")
 	public static final SubLObject thinking_note_progress_sofar_alt(SubLObject thinking, SubLObject sofar) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(sofar, INTEGERP);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(sofar, INTEGERP);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_4 = lock;
@@ -1898,8 +1898,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Set the total work count for THINKING to TOTAL.")
 	public static final SubLObject thinking_note_progress_total_alt(SubLObject thinking, SubLObject total) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(total, INTEGERP);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(total, INTEGERP);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_5 = lock;
@@ -1937,8 +1937,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_note_start_time_alt(SubLObject thinking, SubLObject time) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(time, UNIVERSAL_TIME_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(time, UNIVERSAL_TIME_P);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_6 = lock;
@@ -1972,8 +1972,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_note_finish_time_alt(SubLObject thinking, SubLObject time) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(time, UNIVERSAL_TIME_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(time, UNIVERSAL_TIME_P);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_7 = lock;
@@ -2007,7 +2007,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_note_result_alt(SubLObject thinking, SubLObject result) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_8 = lock;
@@ -2040,8 +2040,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_note_error_message_alt(SubLObject thinking, SubLObject error_message) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(error_message, STRINGP);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(error_message, STRINGP);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_9 = lock;
@@ -2075,8 +2075,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_note_property_alt(SubLObject thinking, SubLObject property, SubLObject value) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(property, KEYWORDP);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(property, KEYWORDP);
 		{
 			SubLObject lock = thinking_lock(thinking);
 			SubLObject lock_10 = lock;
@@ -2110,7 +2110,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_lock_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_lock(thinking);
 	}
 
@@ -2120,7 +2120,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_thread_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_thread(thinking);
 	}
 
@@ -2130,7 +2130,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_name_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_name(thinking);
 	}
 
@@ -2140,7 +2140,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_status_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_status(thinking);
 	}
 
@@ -2150,7 +2150,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_progress_message_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_progress_message(thinking);
 	}
 
@@ -2160,7 +2160,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_progress_sofar_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_progress_sofar(thinking);
 	}
 
@@ -2170,7 +2170,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_progress_total_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_progress_total(thinking);
 	}
 
@@ -2180,7 +2180,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_start_time_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_start_time(thinking);
 	}
 
@@ -2190,7 +2190,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_finish_time_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_finish_time(thinking);
 	}
 
@@ -2200,7 +2200,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_result_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_result(thinking);
 	}
 
@@ -2210,7 +2210,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_error_message_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return t_task_error_message(thinking);
 	}
 
@@ -2220,8 +2220,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_property_alt(SubLObject thinking, SubLObject property) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(property, KEYWORDP);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(property, KEYWORDP);
 		return getf(t_task_properties(thinking), property, UNPROVIDED);
 	}
 
@@ -2232,7 +2232,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject thinking_properties_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		return copy_list(t_task_properties(thinking));
 	}
 
@@ -2279,9 +2279,9 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@param thinking\nthinking-task-p\r\n\t\t\r\n@param function\nfunction-spec-p\r\n\t\t\r\n@param arg-list\nlistp\r\n\t\t\r\n@return processp\r\nLaunch a new thread for the thinking task THINKING, which will run FUNCTION\r\nby calling APPLY on FUNCTION and ARG-LIST.")
 	public static final SubLObject thinking_start_alt(SubLObject thinking, SubLObject function, SubLObject arg_list) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
-		SubLTrampolineFile.checkType(function, FUNCTION_SPEC_P);
-		SubLTrampolineFile.checkType(arg_list, LISTP);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(function, FUNCTION_SPEC_P);
+		SubLSystemTrampolineFile.checkType(arg_list, LISTP);
 		{
 			SubLObject v_answer = NIL;
 			SubLObject lock = thinking_lock(thinking);
@@ -2363,7 +2363,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@param thinking\nthinking-task-p\r\n\t\t\r\n@return boolean\r\nHalt the thread associated with the task THINKING.")
 	public static final SubLObject thinking_stop_alt(SubLObject thinking) {
-		SubLTrampolineFile.checkType(thinking, THINKING_TASK_P);
+		SubLSystemTrampolineFile.checkType(thinking, THINKING_TASK_P);
 		{
 			SubLObject v_answer = NIL;
 			SubLObject lock = thinking_lock(thinking);
@@ -2662,7 +2662,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject ipc_queue_lock_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, IPC_QUEUE_P);
 		return v_object.getField2();
 	}
 
@@ -2672,7 +2672,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject ipc_queue_semaphore_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, IPC_QUEUE_P);
 		return v_object.getField3();
 	}
 
@@ -2682,7 +2682,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject ipc_queue_data_queue_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, IPC_QUEUE_P);
 		return v_object.getField4();
 	}
 
@@ -2692,7 +2692,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_ipc_queue_lock_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, IPC_QUEUE_P);
 		return v_object.setField2(value);
 	}
 
@@ -2702,7 +2702,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_ipc_queue_semaphore_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, IPC_QUEUE_P);
 		return v_object.setField3(value);
 	}
 
@@ -2712,7 +2712,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_ipc_queue_data_queue_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, IPC_QUEUE_P);
 		return v_object.setField4(value);
 	}
 
@@ -3002,8 +3002,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 		if (n == UNPROVIDED) {
 			n = $int$100;
 		}
-		SubLTrampolineFile.checkType(n, POSITIVE_INTEGER_P);
-		SubLTrampolineFile.checkType(ipc_queue, IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(n, POSITIVE_INTEGER_P);
+		SubLSystemTrampolineFile.checkType(ipc_queue, IPC_QUEUE_P);
 		if (n.numE(ONE_INTEGER)) {
 			return ipc_dequeue(ipc_queue);
 		}
@@ -3285,7 +3285,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject ordrd_ipcq_lock_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
 		return (($ordered_ipc_queue_native) v_object).$lock;
 	}
 
@@ -3295,7 +3295,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject ordrd_ipcq_producer_isg_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
 		return (($ordered_ipc_queue_native) v_object).$producer_isg;
 	}
 
@@ -3305,7 +3305,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject ordrd_ipcq_consumer_isg_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
 		return (($ordered_ipc_queue_native) v_object).$consumer_isg;
 	}
 
@@ -3315,7 +3315,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject ordrd_ipcq_payload_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
 		return (($ordered_ipc_queue_native) v_object).$payload;
 	}
 
@@ -3330,7 +3330,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_ordrd_ipcq_lock_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
 		return (($ordered_ipc_queue_native) v_object).$lock = (value);
 	}
 
@@ -3340,7 +3340,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_ordrd_ipcq_producer_isg_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
 		return (($ordered_ipc_queue_native) v_object).$producer_isg = (value);
 	}
 
@@ -3350,7 +3350,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_ordrd_ipcq_consumer_isg_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
 		return (($ordered_ipc_queue_native) v_object).$consumer_isg = (value);
 	}
 
@@ -3360,7 +3360,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_ordrd_ipcq_payload_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(v_object, process_utilities.ORDERED_IPC_QUEUE_P);
 		return (($ordered_ipc_queue_native) v_object).$payload = (value);
 	}
 
@@ -3466,7 +3466,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 		if (size_limit == UNPROVIDED) {
 			size_limit = NIL;
 		}
-		SubLTrampolineFile.checkType(name, STRINGP);
+		SubLSystemTrampolineFile.checkType(name, STRINGP);
 		{
 			SubLObject o_ipcq = make_ordered_ipc_queue(UNPROVIDED);
 			SubLObject lock_name = cconcatenate($str_alt131$Lock_for_Ordered_IPC_Queue_, name);
@@ -3506,7 +3506,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Enqueue element ITEM with the ordered IPC queue O-IPCQ. Return T if that resulted\r\nin awakening a waiting process, NIL if not.\nEnqueue element ITEM with the ordered IPC queue O-IPCQ. Return T if that resulted\nin awakening a waiting process, NIL if not.")
 	public static final SubLObject ordered_ipc_enqueue_alt(SubLObject item, SubLObject o_ipcq) {
-		SubLTrampolineFile.checkType(o_ipcq, ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(o_ipcq, ORDERED_IPC_QUEUE_P);
 		{
 			SubLObject ticket = integer_sequence_generator.integer_sequence_generator_next(ordrd_ipcq_producer_isg(o_ipcq));
 			SubLObject lock = ordrd_ipcq_lock(o_ipcq);
@@ -3584,7 +3584,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Block until an element becomes available, then dequeue the element from the\r\nordered IPC queue O-IPCQ and return it to the caller.\nBlock until an element becomes available, then dequeue the element from the\nordered IPC queue O-IPCQ and return it to the caller.")
 	public static final SubLObject ordered_ipc_dequeue_alt(SubLObject o_ipcq) {
-		SubLTrampolineFile.checkType(o_ipcq, ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(o_ipcq, ORDERED_IPC_QUEUE_P);
 		{
 			SubLObject ticket = integer_sequence_generator.integer_sequence_generator_next(ordrd_ipcq_consumer_isg(o_ipcq));
 			SubLObject lock = ordrd_ipcq_lock(o_ipcq);
@@ -3680,7 +3680,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Returns the FIXNUM-P of elments currently waiting in O-IPCQ.\r\n\r\n@unknown There is no way to ask an ISG for its current value, so we need this\r\nexpensive way.")
 	public static final SubLObject ordered_ipc_current_queue_size(SubLObject o_ipcq) {
-		SubLTrampolineFile.checkType(o_ipcq, ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(o_ipcq, ORDERED_IPC_QUEUE_P);
 		return length(ordered_ipc_current_queue_contents(o_ipcq));
 	}
 
@@ -3703,7 +3703,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Returns a LISTP of the elements currently awaiting pickup in O-IPCQ.\r\n\r\n@unknown This assumes that processes are never stored there -- which may be wrong.")
 	public static final SubLObject ordered_ipc_current_queue_contents_alt(SubLObject o_ipcq) {
-		SubLTrampolineFile.checkType(o_ipcq, ORDERED_IPC_QUEUE_P);
+		SubLSystemTrampolineFile.checkType(o_ipcq, ORDERED_IPC_QUEUE_P);
 		return remove_if(PROCESSP, dictionary.dictionary_values(ordrd_ipcq_payload(o_ipcq)), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
 	}
 
@@ -3732,7 +3732,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@param NAME;\r\n\t\tstringp\r\n\t\tKills any process having the given process name. Note\r\n\t\tthat kill-process is not yet supported on Win32.")
 	public static final SubLObject kill_process_named_alt(SubLObject name) {
-		SubLTrampolineFile.checkType(name, STRINGP);
+		SubLSystemTrampolineFile.checkType(name, STRINGP);
 		{
 			SubLObject cdolist_list_var = all_processes();
 			SubLObject process = NIL;
@@ -3758,7 +3758,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@param NAME;\r\n\t\tstringp\r\n\t\tKills any process having the given process name. Note\r\n\t\tthat kill-process is not yet supported on Win32.")
 	public static SubLObject kill_process_named(final SubLObject name) {
-		SubLTrampolineFile.enforceType(name, STRINGP);
+		SubLSystemTrampolineFile.enforceType(name, STRINGP);
 		SubLObject cdolist_list_var = all_processes();
 		SubLObject process = NIL;
 		process = cdolist_list_var.first();
@@ -3782,7 +3782,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@param NAME;\r\n\t\tstringp\r\n\t\tReturns the first process having the given process name.")
 	public static final SubLObject process_named_alt(SubLObject name) {
-		SubLTrampolineFile.checkType(name, STRINGP);
+		SubLSystemTrampolineFile.checkType(name, STRINGP);
 		{
 			SubLObject cdolist_list_var = all_processes();
 			SubLObject process = NIL;
@@ -3909,7 +3909,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject process_wrapper_id_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.getField2();
 	}
 
@@ -3919,7 +3919,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject process_wrapper_process_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.getField3();
 	}
 
@@ -3929,7 +3929,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject process_wrapper_state_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.getField4();
 	}
 
@@ -3939,7 +3939,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject process_wrapper_lock_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.getField5();
 	}
 
@@ -3949,7 +3949,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject process_wrapper_plist_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.getField6();
 	}
 
@@ -3959,7 +3959,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_process_wrapper_id_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.setField2(value);
 	}
 
@@ -3969,7 +3969,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_process_wrapper_process_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.setField3(value);
 	}
 
@@ -3979,7 +3979,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_process_wrapper_state_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.setField4(value);
 	}
 
@@ -3989,7 +3989,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_process_wrapper_lock_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.setField5(value);
 	}
 
@@ -3999,7 +3999,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_process_wrapper_plist_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROCESS_WRAPPER_P);
 		return v_object.setField6(value);
 	}
 
@@ -5434,8 +5434,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 
 	public static SubLObject init_process_utilities_file() {
 		if (SubLFiles.USE_V1) {
-			deflexical("*ACTIVE-PROCESSES-AT-STARTUP*", SubLTrampolineFile.maybeDefault(process_utilities.$active_processes_at_startup$, process_utilities.$active_processes_at_startup$, NIL));
-			deflexical("*PROCESS-FORM-MAP*", SubLTrampolineFile.maybeDefault(process_utilities.$process_form_map$, process_utilities.$process_form_map$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
+			deflexical("*ACTIVE-PROCESSES-AT-STARTUP*", SubLSystemTrampolineFile.maybeDefault(process_utilities.$active_processes_at_startup$, process_utilities.$active_processes_at_startup$, NIL));
+			deflexical("*PROCESS-FORM-MAP*", SubLSystemTrampolineFile.maybeDefault(process_utilities.$process_form_map$, process_utilities.$process_form_map$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
 			deflexical("*PROCESS-FORM-LOCK*", make_lock(process_utilities.$$$Process_Form));
 			defconstant("*DTP-TASK*", TASK);
 			defconstant("*DTP-THINKING-TASK*", process_utilities.THINKING_TASK);
@@ -5447,7 +5447,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 			defconstant("*ORDERED-IPCQ-EMPTY*", make_symbol(process_utilities.$$$empty_ordered_IPC_queue_entry));
 			defparameter("*ORDERED-IPC-CURRENT-QUEUE-SIZE-ESTIMATION-THRESHOLD*", process_utilities.$int$212);
 			defconstant("*DTP-PROCESS-WRAPPER*", process_utilities.PROCESS_WRAPPER);
-			deflexical("*PROCESS-WRAPPER-ISG*", SubLTrampolineFile.maybeDefault(process_utilities.$process_wrapper_isg$, process_utilities.$process_wrapper_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+			deflexical("*PROCESS-WRAPPER-ISG*", SubLSystemTrampolineFile.maybeDefault(process_utilities.$process_wrapper_isg$, process_utilities.$process_wrapper_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
 		}
 		if (SubLFiles.USE_V2) {
 			// $dtp_task$ = defconstant("*DTP-TASK*", $sym7$TASK);
@@ -5459,8 +5459,8 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static SubLObject init_process_utilities_file_Previous() {
-		deflexical("*ACTIVE-PROCESSES-AT-STARTUP*", SubLTrampolineFile.maybeDefault(process_utilities.$active_processes_at_startup$, process_utilities.$active_processes_at_startup$, NIL));
-		deflexical("*PROCESS-FORM-MAP*", SubLTrampolineFile.maybeDefault(process_utilities.$process_form_map$, process_utilities.$process_form_map$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
+		deflexical("*ACTIVE-PROCESSES-AT-STARTUP*", SubLSystemTrampolineFile.maybeDefault(process_utilities.$active_processes_at_startup$, process_utilities.$active_processes_at_startup$, NIL));
+		deflexical("*PROCESS-FORM-MAP*", SubLSystemTrampolineFile.maybeDefault(process_utilities.$process_form_map$, process_utilities.$process_form_map$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
 		deflexical("*PROCESS-FORM-LOCK*", make_lock(process_utilities.$$$Process_Form));
 		defconstant("*DTP-TASK*", TASK);
 		defconstant("*DTP-THINKING-TASK*", process_utilities.THINKING_TASK);
@@ -5472,7 +5472,7 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 		defconstant("*ORDERED-IPCQ-EMPTY*", make_symbol(process_utilities.$$$empty_ordered_IPC_queue_entry));
 		defparameter("*ORDERED-IPC-CURRENT-QUEUE-SIZE-ESTIMATION-THRESHOLD*", process_utilities.$int$212);
 		defconstant("*DTP-PROCESS-WRAPPER*", process_utilities.PROCESS_WRAPPER);
-		deflexical("*PROCESS-WRAPPER-ISG*", SubLTrampolineFile.maybeDefault(process_utilities.$process_wrapper_isg$, process_utilities.$process_wrapper_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+		deflexical("*PROCESS-WRAPPER-ISG*", SubLSystemTrampolineFile.maybeDefault(process_utilities.$process_wrapper_isg$, process_utilities.$process_wrapper_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
 		return NIL;
 	}
 

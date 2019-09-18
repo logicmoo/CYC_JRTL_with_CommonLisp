@@ -1,75 +1,93 @@
 #!/bin/bash
 
-# abcl.in
+#ln -s $BASEDIR/lib $JARPREFIX
+# source $BASEDIR/set_classpath.sh
 
-# Copyright (C) 2004 Peter Graves
-# Copyright (C) 2009 Erik Huelsmann
-
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-export PRJS=${BASH_SOURCE[0]}
-#unset CLASSPATH
-export LCD=`pwd`
+( export PRJS=${BASH_SOURCE[0]}
 export BASEDIR=$(dirname $(realpath "$0"))
-export JARPREFIX=/tmp/lib-larkc-$USER
+echo "############################################################################"
+echo "############################################################################"
+echo "############################ LarKC BEGIN ###################################"
+echo "############################################################################"
+echo "############################################################################"
+echo BASEDIR=$BASEDIR
 
-export JAVA_OPTS1="-agentlib:jdwp=transport=dt_socket,server=n,address=10.0.0.122:5005,suspend=n"
-export JAVA_OPTS2="-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=y"
-export _JAVA_SR_SIGNUM=20 
+export JAVA_OPTS="-XX:+AggressiveOpts -XX:CompileThreshold=10 -Xmx8000m -XX:ReservedCodeCacheSize=1024m -XX:MinHeapFreeRatio=5 -XX:+FailOverToOldVerifier -Xss=256m"
+
+export _JAVA_SR_SIGNUM=20
+
+echo " "
+echo ";;; toplevel:  $PRJS $@"
+echo " "
 
 # cls
 
-export CATALINA_HOME=$BASEDIR
-export CLASSPATH=$BASEDIR/target/classes
+function unless_set {
+ if [  -z "${!1}" ]; then
+   export $1="${2}"
+ fi
+ echo "export ${1}=${!1}"
+ }
 
-echo BASEDIR=$BASEDIR
-echo LCD=$LCD
-echo JARPREFIX=$JARPREFIX
-#ln -s $BASEDIR/lib $JARPREFIX
-# source $BASEDIR/set_classpath.sh
-#echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-#echo JAVA_HOME=$JAVA_HOME
-#echo LD_PRELOAD=$LD_PRELOAD
-#echo LARKC_HOME=$LARKC_HOME
-#echo SWI_HOME=$SWI_HOME
-echo JAVA_OPTS=$JAVA_OPTS
-echo ";"
-echo ";;; toplevel:  $PRJS $@"
-echo ";"  
+unless_set LARKC_HOME $BASEDIR
+unless_set JARPREFIX ./lib/
+unless_set SWI_HOME $(dirname $(dirname $(dirname `readlink -f \`which swipl\``)))
+unless_set JAVA_HOME $(readlink -f `which javac` | sed "s:/bin/javac::")
+unless_set LD_PRELOAD `find $SWI_HOME /usr/lib -name libswipl.so -print -quit`
+export OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH;
+echo export OLD_LD_LIBRARY_PATH=$OLD_LD_LIBRARY_PATH
 
-export ARGV=$(printf '%q' $@)
+export LD_LIBRARY_PATH=$(dirname $LD_PRELOAD):$JAVA_HOME/lib:`find $SWI_HOME -type f -name 'libjpl*' | sed -r 's|/[^/]+$||' |sort |uniq`:/usr/lib/guile/2.2/extensions:.
+if [ -z "$OLD_LD_LIBRARY_PATH" ]; then
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OLD_LD_LIBRARY_PATH
+fi
+echo export LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+unless_set CATALINA_HOME $BASEDIR
+unless_set OLD_CLASSPATH $CLASSPATH
+unless_set CLASSPATH $LARKC_HOME/target/classes:$JAVA_HOME/lib/tools.jar
+unless_set JAVA_OPTS $JAVA_OPTS
+unless_set JAVA_OPTS1 "-agentlib:jdwp=transport=dt_socket,server=n,address=10.0.0.122:5005,suspend=n"
+unless_set JAVA_OPTS2 "-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=y"
+unless_set LCD `pwd`
+unless_set ARGV $(printf '%q' $@)
+unless_set ANT_OPTS "-d64 -XX:+UseG1GC -XshowSettings:vm -Xms4096m -Xmx8g -Xss512m \
+	-XX:+CMSClassUnloadingEnabled -XX:+AggressiveOpts -XX:CompileThreshold=10 \
+	-XX:ReservedCodeCacheSize=1024m -XX:MinHeapFreeRatio=5 -XX:+FailOverToOldVerifier"
+#  -d64 -XX:+UseG1GC -XshowSettings:vm -Xms1024m -Xmx8g -Xss4g -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g
+export RUN_COMMAND="-server \
+$ANT_OPTS
+-Djava.library.path=$LD_LIBRARY_PATH \
+-Dfile.lcd=\"$LCD\" \
+-Duser.home=\"$LARKC_HOME/\" \
+-Dplatform.dir=\"$LARKC_HOME\" \
+-Dlisp.jargv=\"$ARGV\" \
+-Dold.claspath=\"$OLD_LASSPATH\" \
+-Dswi.home=\"$SWI_HOME\" \
+-XshowSettings:vm
+org.armedbear.lisp.Main"
 
-#alias abcl='java -server -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96meAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -agentlib:jdwp=transport=dt_socket,server=y,address=6789,suspend=n -cp /opt/CYC_JRTL_with_CommonLisp/platform/target/classes:/usr/lib/jvm/java-8-openjdk-amd64/lib/tools.jar org.armedbear.lisp.Main
+echo "
+;;; Run... ;;;;
 
-export RUN_COMMAND="-server -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
- -Dfile.lcd=\"$LCD\" -Duser.home=\"$LARKC_HOME/\" -Dplatform.dir=\"$LARKC_HOME\" -Dlisp.jargv=\"$ARGV\" -Dswi.home=\"$SWI_HOME\" -Djava.library.path=$LD_LIBRARY_PATH:. \
- -XshowSettings:vm \
- org.armedbear.lisp.Main"
+  java -cp $CLASSPATH \\"
 
-echo ";;; Running: java -cp \$CLASSPATH $RUN_COMMAND $@"
-echo ""
-
+for item in $RUN_COMMAND
+do
+echo "    $item \\"
+done
+echo "                       \\"
+echo "    $@ "
+echo "
+;;; Now... ;;;;
+"
 java -cp "$CLASSPATH" $JAVA_OPTS1 $RUN_COMMAND $@ 2> /dev/null
-
 if [ "$?" -eq "2" ]; then
-
-java -cp "$CLASSPATH" $JAVA_OPTS2,suspend=n $RUN_COMMAND $@
- 
+java -cp "$CLASSPATH" $JAVA_OPTS2,suspend=n $RUN_COMMAND $@ 2> /dev/null
 if [ "$?" -eq "2" ]; then
   java -cp "$CLASSPATH" $RUN_COMMAND $@
 fi
-
 fi
- 
+
+
+)
+

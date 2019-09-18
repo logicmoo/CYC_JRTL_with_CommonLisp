@@ -101,7 +101,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2087,7 +2087,7 @@ public final class system_benchmarks extends SubLTranslatedFile {
         defvar("*BENCHMARK-CYCLOPS-ONTOLOGY-ROOT*", $$Individual);
         deflexical("*CYCLOPS-THROWAWAY-DEFAULT*", $int$33);
         defparameter("*CYCLOPS-LOCKED?*", NIL);
-        deflexical("*CYCLOPS-LOCK*", SubLTrampolineFile.maybeDefault($cyclops_lock$, $cyclops_lock$, () -> make_lock($$$CycLOPs_lock)));
+        deflexical("*CYCLOPS-LOCK*", SubLSystemTrampolineFile.maybeDefault($cyclops_lock$, $cyclops_lock$, () -> make_lock($$$CycLOPs_lock)));
         defparameter("*CYCLOPS-RULE-EXPENSIVENESS-THRESHOLD*", TWO_INTEGER);
         return NIL;
     }

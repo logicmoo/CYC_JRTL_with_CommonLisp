@@ -1,2 +1,0 @@
-PermitOverride org.globus.security.authorization.providers.PermitOverrideAlg
-FirstApplicable org.globus.security.authorization.providers.FirstApplicableAlg

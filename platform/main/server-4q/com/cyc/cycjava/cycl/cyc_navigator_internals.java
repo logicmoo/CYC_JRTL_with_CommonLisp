@@ -117,7 +117,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3238,8 +3238,8 @@ public final class cyc_navigator_internals extends SubLTranslatedFile {
         defparameter("*NAVIGATOR-LINE-SPACING*", $$$single);
         defparameter("*NAVIGATOR-TABLE-BORDER*", ZERO_INTEGER);
         deflexical("*NAVIGATOR-VECTOR-LENGTH*", TWENTY_INTEGER);
-        deflexical("*NAVIGATOR-LINK-DEFINITION-TABLE*", SubLTrampolineFile.maybeDefault($navigator_link_definition_table$, $navigator_link_definition_table$, () -> make_hash_table($int$100, UNPROVIDED, UNPROVIDED)));
-        deflexical("*NAVIGATOR-LINK-CATEGORY-TABLE*", SubLTrampolineFile.maybeDefault($navigator_link_category_table$, $navigator_link_category_table$, () -> make_hash_table($int$50, UNPROVIDED, UNPROVIDED)));
+        deflexical("*NAVIGATOR-LINK-DEFINITION-TABLE*", SubLSystemTrampolineFile.maybeDefault($navigator_link_definition_table$, $navigator_link_definition_table$, () -> make_hash_table($int$100, UNPROVIDED, UNPROVIDED)));
+        deflexical("*NAVIGATOR-LINK-CATEGORY-TABLE*", SubLSystemTrampolineFile.maybeDefault($navigator_link_category_table$, $navigator_link_category_table$, () -> make_hash_table($int$50, UNPROVIDED, UNPROVIDED)));
         deflexical("*NAVIGATOR-LINK-TYPES*", $list10);
         deflexical("*NAVIGATOR-LINK-CATEGORIES*", $list11);
         defparameter("*NAVIGATOR-LINK-DEFINITION-KEYS*", $list12);

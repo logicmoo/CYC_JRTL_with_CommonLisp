@@ -1,0 +1,350 @@
+  }
+
+// ---------------------------------------------------------------------------------------------------
+
+  /**
+   * Name of the parameter that specifies the XSD number type.
+   */
+  private static final String CARDINALITY_TYPE_PARAM = "cardinality-datatype";
+    
+  /**
+   * The cardinality type used in schema, e.g. xsd:integer or xsd:nonNegativeInteger.
+   */
+  private String XSD_INTEGER;
+
+  /**
+   * The repository on which this inferencer operates.
+   */
+  private AbstractRepository Rep;
+  
+  /**
+   * The entity pool used to retrieve entities to IDs and vice versa.
+   */
+  private EntityPool Entities;
+  
+  /**
+   * Map of namespaces used internally during the initialization process.
+   */
+  private Map Namespaces = new HashMap();
+  
+  /**
+   * Allows or denies the inference of (entity rdf:type rdf:Property) when
+   * that entity appears to be predicate for the first time.
+   * This inference is denied during initialization.
+   */
+  private boolean InferTypeProperty = true;
+  
+  /**
+   * List of predicates collected during initialization.
+   */
+  private List PredList = new ArrayList();
+    
+  /**
+   * Flag for switching the inference on and off.
+   */
+  private boolean InferStatements = true;
+  
+  /**
+   * Flag that is raised when the initialization ends.
+   */
+  private boolean Initialized = false;
+  
+  /**
+   * Stack of statements to be performed inference with.
+   */
+  private FileStack Stack;
+  
+  /**
+   * The owl:sameAs collection is a special predicate collection.
+   */
+  private EquivalenceClassCollection SameAsCollection;
+
+  /**
+   * A tuple used in addStatement().
+   */
+  private int[] Tuple = new int[5];
+
+  /**
+   * The ID which the inferred statements will have after new explicit statements are added.
+   */
+  private long TransactionNumber;
+  
+// ---------------------------------------------------------------------------------------------------
+
+  public Map getNamespaceMappings() {
+    return Namespaces;
+  }
+
+  public void setInferStatementsFlag(boolean flag) {
+    InferStatements = flag;
+  }
+
+  private HashSet MergedClasses = new HashSet();
+
+  public void mergeEquivalents() {
+    if (MergedClasses.size() > 0)
+      doMergeClasses();
+  }
+
+  public boolean addStatement(int subj, int pred, int obj, int context, int tripleset, byte status) {
+    if ((status & StatementIdIterator.EXPLICIT_STATEMENT_STATUS) > 0)
+      mergeEquivalents();
+
+    int subjClass = getEquivalenceClassId(subj);
+    int predClass = getEquivalenceClassId(pred);
+    int objClass = getEquivalenceClassId(obj);
+
+    if (subj == subjClass && pred == predClass && obj == objClass) {
+      if (! Rep.putStatement(subj, pred, obj, context, tripleset, status))
+        return false;
+    } else {
+      boolean added = Rep.putStatement(subj, pred, obj, context, tripleset, (byte) (status | StatementIdIterator.SKIP_ON_BROWSE_STATEMENT_STATUS));
+      added = Rep.putStatement(subjClass, predClass, objClass, context, tripleset, StatementIdIterator.SKIP_ON_REINFER_STATEMENT_STATUS) || added;
+      if (! added)  
+        return false;
+    }
+    if (InferStatements)
+      doInference(subj, pred, obj, status, subjClass, predClass, objClass);
+    return true;
+  }
+   
+  private void doInference(int subj, int pred, int obj, byte status, int subjClass, int predClass, int objClass) {
+    int code = _$x$y$z;
+    do {
+
+      if (pred == owl_sameAs || predClass == owl_sameAs) {
+
+        if (subjClass != objClass) {
+          Long l = new Long( ( ((long) subjClass) << 32) + objClass);
+          MergedClasses.add(l);
+          mergeEquivalents();
+        }
+//        if ((status & (StatementIdIterator.AXIOM_STATEMENT_STATUS | StatementIdIterator.EXPLICIT_STATEMENT_STATUS)) != 0)
+//          Rep.putStatement(subj, owl_sameAs, obj, status, 0, 0);
+
+      } else {
+
+        doInference(subjClass, predClass, objClass, code);
+
+      }
+      
+      if (! Stack.pop(Tuple))
+        break;
+      subj = Tuple[0];
+      pred = Tuple[1];
+      obj = Tuple[2];
+      status = (byte) (Tuple[4] >> 8); //StatementIdIterator.INFERRED_STATEMENT_STATUS;
+      code = Tuple[4] & 0xFF;
+      if (code == 0)
+      	code = _$x$y$z;
+  
+      subjClass = getEquivalenceClassId(subj);
+      predClass = getEquivalenceClassId(pred);
+      objClass = getEquivalenceClassId(obj);
+
+    } while (true);
+  }
+
+  private int getEquivalenceClassId(int entity) {
+    return SameAsCollection.getEqClass(entity);
+  }
+
+  public void doMergeClasses() {
+
+    for (Iterator longIter = MergedClasses.iterator(); longIter.hasNext(); ) {
+
+      long l = ((Long) longIter.next()).longValue();
+      int subj1 = (int) (l >> 32);
+      int obj1 = (int) l;
+
+      if (subj1 < obj1)
+        doMergeEntities(subj1, obj1);
+      else
+        doMergeEntities(obj1, subj1);
+
+    }
+
+    MergedClasses.clear();
+
+  }
+
+  private void doMergeEntities(int subj1, int obj1) {
+
+    if (Entities.getEntityType(subj1) == EntityPool.LITERAL_ENTITY_TYPE || Entities.getEntityType(obj1) == EntityPool.LITERAL_ENTITY_TYPE)
+      return;
+
+    for (StatementIdIterator iter = Rep.getStatements(obj1, 0, 0, AbstractRepository.SKIP_ON_BROWSE); iter.hasNext(); iter.next()) {
+      byte status = StatementIdIterator.INFERRED_STATEMENT_STATUS; //sameBNodes ? del : reinfer;
+      int pred = iter.pred; if (pred == obj1) pred = subj1;
+      if (pred == owl_sameAs)
+        continue;
+      int obj = iter.obj; if (obj == obj1) obj = subj1;
+      if (! Rep.hasStatement(subj1, pred, obj) && Rep.putStatement(subj1, pred, obj, 0, 0, status))
+        Stack.push(subj1, pred, obj, 0, status);
+    }
+    if (obj1 != owl_sameAs) {
+      for (StatementIdIterator iter = Rep.getStatements(0, obj1, 0, AbstractRepository.SKIP_ON_BROWSE); iter.hasNext(); iter.next()) {
+        byte status = StatementIdIterator.INFERRED_STATEMENT_STATUS; //sameBNodes ? del : reinfer;
+        int subj = iter.subj; if (subj == obj1) subj = subj1;
+        int obj = iter.obj; if (obj == obj1) obj = subj1;
+        if (! Rep.hasStatement(subj, subj1, obj) && Rep.putStatement(subj, subj1, obj, 0, 0, status))
+          Stack.push(subj, subj1, obj, 0, status);
+      }
+    }
+    for (StatementIdIterator iter = Rep.getStatements(0, 0, obj1, AbstractRepository.SKIP_ON_BROWSE); iter.hasNext(); iter.next()) {
+      byte status = StatementIdIterator.INFERRED_STATEMENT_STATUS; //sameBNodes ? del : reinfer;
+      int subj = iter.subj; if (subj == obj1) subj = subj1;
+      int pred = iter.pred; if (pred == obj1) pred = subj1;
+      if (pred == owl_sameAs)
+        continue;
+      if (! Rep.hasStatement(subj, pred, subj1) && Rep.putStatement(subj, pred, subj1, 0, 0, status))
+        Stack.push(subj, pred, subj1, 0, status);
+    }
+    
+    SameAsCollection.merge(subj1, obj1, (byte) 0);
+  }
+  
+  private int BNodeCounter = 1;
+  
+  private int getNewBNodeNumber() {
+    return BNodeCounter++;
+  }
+
+  public void onNewPredicate(int pred) {
+    if (! InferStatements)
+      return;
+    if (InferTypeProperty) {
+      addStatement(pred, rdf_type, rdf_Property, 0, 0, StatementIdIterator.INFERRED_STATEMENT_STATUS);
+      addStatement(pred, rdfs_subPropertyOf, pred, 0, 0, StatementIdIterator.INFERRED_STATEMENT_STATUS);
+    } else {
+      PredList.add(new Integer(pred));
+    }
+  }
+
+  public AbstractRepository reinfer() {
+    if (! InferStatements || ! Initialized)
+      return Rep;
+    if (! Rep.hasDeletedStatements())
+      return Rep;
+
+    StatementIdIterator iter = Rep.getStatements(0, 0, 0, 0, 0, AbstractRepository.SKIP_ON_REINFER);
+    if (! iter.hasNext())
+      return Rep;
+
+    AbstractRepository oldRep = Rep;
+    String storageFolder = Rep.getStorageFolder();
+    if (storageFolder.endsWith("/1/"))
+      storageFolder = storageFolder.substring(0, storageFolder.length() - 2);
+    else
+      storageFolder += "1/";
+    Rep = oldRep.newObject(storageFolder);
+    Rep.setSystemNodes(rdf_type, rdfs_Resource, rdf_Property, rdfs_subPropertyOf, owl_sameAs, rdfs_subClassOf, owl_SymmetricProperty, owl_TransitiveProperty, owl_equivalentProperty, owl_equivalentClass);
+    SameAsCollection = Rep.getEquivalenceClassCollection();
+
+    for (; iter.hasNext(); iter.next()) {
+      // Deleted and skip-on-reinfer statements are already filtered
+      byte status = (byte) (iter.status & ~StatementIdIterator.SKIP_ON_BROWSE_STATEMENT_STATUS);
+      if (status == 0)
+        continue;
+      if ( (status == StatementIdIterator.INFERRED_STATEMENT_STATUS &&
+            iter.pred == rdf_type &&
+           (iter.obj == rdfs_Resource || iter.obj == rdf_Property)) ||
+        status != StatementIdIterator.INFERRED_STATEMENT_STATUS) {
+
+        addStatement(iter.subj, iter.pred, iter.obj, iter.context, iter.tripleset, status);
+      }
+    } // for
+
+    oldRep.clearAndShutdown();
+    return Rep;    
+  }
+
+  public FileStack getStack() {
+    return Stack;
+  }
+  
+  public void addAxiom(String subject, String predicate, String object) {
+    int subj = retrieveNode(subject);
+    int pred = retrieveNode(predicate);
+    int obj = retrieveNode(object);
+
+    addStatement(subj, pred, obj, 0, 0, StatementIdIterator.AXIOM_STATEMENT_STATUS);
+  }
+
+  private Value generalize(String entity) {
+
+    if (entity.startsWith("\"")) {
+      Value v = null;
+      if (entity.lastIndexOf("^^") >= 0) {
+        String datatype = entity.substring(entity.lastIndexOf("^^") + 2);
+        v = generalize(datatype);
+      }
+      entity = entity.substring(1, entity.lastIndexOf("\""));
+      if (v != null)
+        return new LiteralImpl(entity, (URI) v);
+      else
+        return new LiteralImpl(entity);
+    }
+
+    String prefix = null;
+    if (entity.startsWith("<") && entity.endsWith(">")) {
+      entity = entity.substring(1, entity.length() - 1);
+    }
+
+    if (entity.startsWith("http://") ||
+        entity.startsWith("ftp://") ||
+        entity.startsWith("rmi://")) {
+
+      if (entity.indexOf("#") >= 0) {
+        prefix = entity.substring(0, entity.indexOf("#") + 1);
+        entity = entity.substring(entity.indexOf("#") + 1);
+      }
+      else {
+        return new URIImpl(entity);
+      }
+    } else if (entity.indexOf(":") >= 0) {
+
+      prefix = entity.substring(0, entity.indexOf(":"));
+      if (prefix.equals("_")) {
+        return new BNodeImpl(entity.substring(2));
+      } else if (prefix.equals("")) {
+        throw new RuntimeException("Prefix cannot be empty string: '" + entity + "'");
+      }
+      entity = entity.substring(entity.indexOf(":") + 1);
+
+      if (Namespaces.get(prefix) == null) {
+        throw new RuntimeException("Unknown prefix: '" + prefix + "'");
+      }
+
+      prefix = (String) Namespaces.get(prefix);
+
+    } else {
+      throw new RuntimeException("Invalid entity: '" + entity + "'");
+    }
+
+    return new URIImpl(prefix + entity);
+  }
+
+  private int retrieveNode(String entity) {
+    Value v = generalize(entity);
+    int id = Entities.createId(v);
+    if (InferStatements && id > 0)
+      Rep.putStatement(id, rdf_type, rdfs_Resource, 0, 0, StatementIdIterator.INFERRED_STATEMENT_STATUS);
+    return id;
+  }
+
+  public java.util.Map getNameSpaceMapping() {
+    return Namespaces;
+  }
+
+  public void setTransactionNumber(long transNo) {
+    TransactionNumber = transNo;
+  }
+
+  public void shutdown() {
+    Stack.shutdown();
+    Initialized = false;
+  }
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------
+

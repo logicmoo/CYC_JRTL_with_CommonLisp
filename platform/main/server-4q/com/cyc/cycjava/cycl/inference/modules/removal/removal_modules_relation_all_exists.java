@@ -76,7 +76,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1481,12 +1481,12 @@ public final class removal_modules_relation_all_exists extends SubLTranslatedFil
     public static SubLObject init_removal_modules_relation_all_exists_file() {
         deflexical("*ESTIMATED-PER-COLLECTION-RELATION-ALL-EXISTS-COUNT*", TWO_INTEGER);
         deflexical("*RELATION-ALL-EXISTS-RULE*", list_to_elf($list12));
-        deflexical("*RELATION-ALL-EXISTS-DEFINING-MT*", SubLTrampolineFile.maybeDefault($relation_all_exists_defining_mt$, $relation_all_exists_defining_mt$, $$BaseKB));
+        deflexical("*RELATION-ALL-EXISTS-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($relation_all_exists_defining_mt$, $relation_all_exists_defining_mt$, $$BaseKB));
         deflexical("*DEFAULT-RELATION-ALL-EXISTS-CHECK-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
         deflexical("*MINIMUM-RELATION-ALL-EXISTS-UNIFY-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
         deflexical("*ESTIMATED-PER-COLLECTION-RELATION-EXISTS-ALL-COUNT*", TWO_INTEGER);
         deflexical("*RELATION-EXISTS-ALL-RULE*", list_to_elf($list44));
-        deflexical("*RELATION-EXISTS-ALL-DEFINING-MT*", SubLTrampolineFile.maybeDefault($relation_exists_all_defining_mt$, $relation_exists_all_defining_mt$, $$BaseKB));
+        deflexical("*RELATION-EXISTS-ALL-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($relation_exists_all_defining_mt$, $relation_exists_all_defining_mt$, $$BaseKB));
         deflexical("*DEFAULT-RELATION-EXISTS-ALL-CHECK-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
         deflexical("*MINIMUM-RELATION-EXISTS-ALL-UNIFY-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
         return NIL;

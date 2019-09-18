@@ -134,6 +134,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -143,7 +144,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -610,7 +611,13 @@ public final class html_kernel extends SubLTranslatedFile {
         thread.resetMultipleValues();
         final SubLObject user = prelim_parse_html_message(message);
         final SubLObject host = thread.secondMultipleValue();
-        final SubLObject function_name = thread.thirdMultipleValue();
+		SubLObject function_name = thread.thirdMultipleValue();
+		if (SubLMain.BOOTY_HACKZ) {
+			String fuString = function_name.getStringValue();
+			if (fuString.startsWith("CGI-BIN/")) {
+				function_name = function_name.toStr().subSeq(8);
+			}
+		}
         final SubLObject arg_index = thread.fourthMultipleValue();
         thread.resetMultipleValues();
         SubLObject handled_ok = NIL;
@@ -643,14 +650,11 @@ public final class html_kernel extends SubLTranslatedFile {
                 }
                 if ((NIL == function_name) && (NIL == function_symbol)) {
                     handle_error_during_html($$$No_handler_function_was_specified);
-                } else
-                    if (NIL == function_symbol) {
+				} else if (NIL == function_symbol) {
                         handle_error_during_html(format(NIL, $str15$No_handler_for_function__A_is_def, function_name));
-                    } else
-                        if (NIL == fboundp(function_symbol)) {
+				} else if (NIL == fboundp(function_symbol)) {
                             handle_error_during_html(format(NIL, $str15$No_handler_for_function__A_is_def, function_name));
-                        } else
-                            if (NIL == html_macros.cgi_handler_functionP(function_symbol)) {
+				} else if (NIL == html_macros.cgi_handler_functionP(function_symbol)) {
                                 handle_error_during_html(format(NIL, $str16$_S_is_not_an_CGI_handler_function, function_symbol));
                             } else {
                                 handle_html_message_internal(user, host, function_symbol, message, arg_index);
@@ -2124,14 +2128,14 @@ public final class html_kernel extends SubLTranslatedFile {
         defparameter("*HTML-MESSAGE-RECORD*", NIL);
         defparameter("*HTTP-REMOTE-USER*", NIL);
         defparameter("*HTTP-REMOTE-HOST*", NIL);
-        deflexical("*DEFAULT-HTML-HANDLER*", SubLTrampolineFile.maybeDefault($default_html_handler$, $default_html_handler$, NIL));
+        deflexical("*DEFAULT-HTML-HANDLER*", SubLSystemTrampolineFile.maybeDefault($default_html_handler$, $default_html_handler$, NIL));
         defparameter("*HTTP-RESTRICTED-FUNCTIONS*", NIL);
         defparameter("*HTML-ARG-SEPARATOR-CHARS*", $str29$__);
         defparameter("*HTML-ARG-SYNTAX-CHAR*", cconcatenate($str31$_, $html_arg_separator_chars$.getDynamicValue()));
         defparameter("*HTML-JAVASCRIPT-COMPATIBILITY-SCRIPT*", $str49$_var_path___location_href__var_ne);
         defparameter("*MAIN-MENU-LIST*", $list53);
         defparameter("*HTML-MACHINE-STATE-LOCK*", NIL);
-        deflexical("*HTML-MACHINE-STATE-HASH*", SubLTrampolineFile.maybeDefault($html_machine_state_hash$, $html_machine_state_hash$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQUALP), UNPROVIDED)));
+        deflexical("*HTML-MACHINE-STATE-HASH*", SubLSystemTrampolineFile.maybeDefault($html_machine_state_hash$, $html_machine_state_hash$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQUALP), UNPROVIDED)));
         deflexical("*HTML-MACHINE-STATE-UPDATE-LOCK*", make_lock($$$HTML_Machine_State));
         deflexical("*MACHINE-IS-MYSELF-TIMEOUT*", $float$0_1);
         deflexical("*MACHINE-IS-MYSELF-VIA-CYC-API-CACHING-STATE*", NIL);
@@ -2172,7 +2176,6 @@ public final class html_kernel extends SubLTranslatedFile {
         setup_html_kernel_file();
     }
 
-    
 }
 
 /**

@@ -81,7 +81,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -403,7 +403,7 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject string = get_noun_string(self);
-                SubLTrampolineFile.checkType(self, INSTANCE_P);
+                SubLSystemTrampolineFile.checkType(self, INSTANCE_P);
                 {
                     SubLObject instance = self;
                     SubLObject stream_1 = stream;
@@ -526,7 +526,7 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
      * @return integerp or NIL (if it's not among the ranked conjectures) or keywordp (if we don't have any ranking)
      */
     public static final SubLObject noun_get_ranking_of_method(SubLObject self, SubLObject collection) {
-        SubLTrampolineFile.checkType(collection, COLLECTION_P);
+        SubLSystemTrampolineFile.checkType(collection, COLLECTION_P);
         {
             SubLObject ranking = methods.funcall_instance_method_with_0_args(self, GET_TAG_RANKING);
             if (ranking.isKeyword()) {
@@ -961,7 +961,7 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
         {
             SubLObject lexicon = get_noun_lexicon(self);
             SubLObject string = get_noun_string(self);
-            SubLTrampolineFile.checkType(fort, FORT_P);
+            SubLSystemTrampolineFile.checkType(fort, FORT_P);
             {
                 SubLObject lexes = methods.funcall_instance_method_with_1_args(lexicon, GET, string);
                 SubLObject result = NIL;
@@ -1081,7 +1081,7 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
     }
 
     public static final SubLObject new_simple_noun(SubLObject learned, SubLObject noun_string) {
-        SubLTrampolineFile.checkType(noun_string, SINGLE_WORD_STRING_P);
+        SubLSystemTrampolineFile.checkType(noun_string, SINGLE_WORD_STRING_P);
         {
             SubLObject new_noun = object.new_class_instance(SIMPLE_NOUN);
             set_noun_learned(new_noun, learned);
@@ -1189,7 +1189,7 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
             try {
                 try {
                     if (NIL != max_length) {
-                        SubLTrampolineFile.checkType(max_length, POSITIVE_INTEGER_P);
+                        SubLSystemTrampolineFile.checkType(max_length, POSITIVE_INTEGER_P);
                     }
                     if ((NIL != recalculate_if_existsP) || (typicality_sum_by_collection == $DONT_KNOW_YET)) {
                         typicality_sum_by_collection = methods.funcall_instance_method_with_0_args(self, CALCULATE_TYPICALITY_SUM_BY_COLLECTION);
@@ -1256,7 +1256,7 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
             SubLObject total_count_as_object = get_simple_noun_total_count_as_object(self);
             SubLObject total_count_as_subject = get_simple_noun_total_count_as_subject(self);
             if (NIL != relation) {
-                SubLTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
+                SubLSystemTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
             }
             {
                 SubLObject pcase_var = relation;
@@ -1287,9 +1287,9 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
         {
             SubLObject count_as_object_by_verb = get_simple_noun_count_as_object_by_verb(self);
             SubLObject count_as_subject_by_verb = get_simple_noun_count_as_subject_by_verb(self);
-            SubLTrampolineFile.checkType(verb, STRINGP);
+            SubLSystemTrampolineFile.checkType(verb, STRINGP);
             if (NIL != relation) {
-                SubLTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
+                SubLSystemTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
             }
             {
                 SubLObject pcase_var = relation;
@@ -1318,8 +1318,8 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
             SubLObject total_count_as_subject = get_simple_noun_total_count_as_subject(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(verb, STRINGP);
-                    SubLTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
+                    SubLSystemTrampolineFile.checkType(verb, STRINGP);
+                    SubLSystemTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
                     {
                         SubLObject pcase_var = relation;
                         if (pcase_var.eql($SUBJ)) {
@@ -1454,7 +1454,7 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
             SubLObject complex_nouns = get_simple_noun_complex_nouns(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(complex_noun, COMPLEX_NOUN_P);
+                    SubLSystemTrampolineFile.checkType(complex_noun, COMPLEX_NOUN_P);
                     complex_nouns = cons(complex_noun, complex_nouns);
                     sublisp_throw($sym238$OUTER_CATCH_FOR_SIMPLE_NOUN_METHOD, NIL);
                 } finally {
@@ -1703,7 +1703,7 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
      * 		simple-noun-p
      */
     public static final SubLObject new_complex_noun(SubLObject learned, SubLObject noun_string, SubLObject head_noun) {
-        SubLTrampolineFile.checkType(noun_string, MULTI_WORD_STRING);
+        SubLSystemTrampolineFile.checkType(noun_string, MULTI_WORD_STRING);
         {
             SubLObject new_noun = object.new_class_instance(COMPLEX_NOUN);
             set_noun_learned(new_noun, learned);

@@ -53,7 +53,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -705,10 +705,10 @@ public final class sksi_hl_support_utilities extends SubLTranslatedFile {
     public static SubLObject init_sksi_hl_support_utilities_file() {
         defparameter("*SKSI-SUPPORTS*", $UNINITIALIZED);
         deflexical("*SKSI-SUPPORT-PREDICATE-ORDERING*", $list2);
-        deflexical("*SCHEMA-OBJECT-FN-IDENTITY-RULE*", SubLTrampolineFile.maybeDefault($schema_object_fn_identity_rule$, $schema_object_fn_identity_rule$, $list10));
-        deflexical("*SOURCE-SCHEMA-OBJECT-FN-IDENTITY-RULE*", SubLTrampolineFile.maybeDefault($source_schema_object_fn_identity_rule$, $source_schema_object_fn_identity_rule$, $list12));
-        deflexical("*SCHEMA-OBJECT-ID-FN-SKS-CODE-MAPPING-RULE*", SubLTrampolineFile.maybeDefault($schema_object_id_fn_sks_code_mapping_rule$, $schema_object_id_fn_sks_code_mapping_rule$, $list14));
-        deflexical("*SOURCE-SCHEMA-OBJECT-ID-FN-SKS-CODE-MAPPING-RULE*", SubLTrampolineFile.maybeDefault($source_schema_object_id_fn_sks_code_mapping_rule$, $source_schema_object_id_fn_sks_code_mapping_rule$, $list16));
+        deflexical("*SCHEMA-OBJECT-FN-IDENTITY-RULE*", SubLSystemTrampolineFile.maybeDefault($schema_object_fn_identity_rule$, $schema_object_fn_identity_rule$, $list10));
+        deflexical("*SOURCE-SCHEMA-OBJECT-FN-IDENTITY-RULE*", SubLSystemTrampolineFile.maybeDefault($source_schema_object_fn_identity_rule$, $source_schema_object_fn_identity_rule$, $list12));
+        deflexical("*SCHEMA-OBJECT-ID-FN-SKS-CODE-MAPPING-RULE*", SubLSystemTrampolineFile.maybeDefault($schema_object_id_fn_sks_code_mapping_rule$, $schema_object_id_fn_sks_code_mapping_rule$, $list14));
+        deflexical("*SOURCE-SCHEMA-OBJECT-ID-FN-SKS-CODE-MAPPING-RULE*", SubLSystemTrampolineFile.maybeDefault($source_schema_object_id_fn_sks_code_mapping_rule$, $source_schema_object_id_fn_sks_code_mapping_rule$, $list16));
         defparameter("*CSQL-SUPPORTS*", NIL);
         deflexical("*CSQL-SUPPORT-PREDICATE-ORDERING*", $list36);
         deflexical("*SOURCE-SCHEMA-OBJECT-FN-EQUALS-RULE-EL*", $list37);

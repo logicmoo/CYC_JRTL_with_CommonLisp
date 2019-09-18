@@ -72,7 +72,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -257,7 +257,7 @@ public final class inference_ipc_queue_processor extends SubLTranslatedFile {
         }
         assert NIL != inference_datastructures_inference.valid_inference_p(inference) : "inference_datastructures_inference.valid_inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.valid_inference_p(inference) " + inference;
         assert NIL != process_utilities.ipc_queue_p(ipc_queue) : "process_utilities.ipc_queue_p(ipc_queue) " + "CommonSymbols.NIL != process_utilities.ipc_queue_p(ipc_queue) " + ipc_queue;
-        if (((NIL != inference_answer_process_function) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(inference_answer_process_function))) {
+        if (((NIL != inference_answer_process_function) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(inference_answer_process_function))) {
             throw new AssertionError(inference_answer_process_function);
         }
         assert NIL != list_utilities.property_list_p(nl_generation_properties) : "list_utilities.property_list_p(nl_generation_properties) " + "CommonSymbols.NIL != list_utilities.property_list_p(nl_generation_properties) " + nl_generation_properties;

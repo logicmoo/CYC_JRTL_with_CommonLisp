@@ -27,7 +27,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -352,7 +352,7 @@ public final class inference_event extends SubLTranslatedFile {
 
     public static SubLObject init_inference_event_file() {
         deflexical("*INFERENCE-EVENT-DISPATCHER-LOCK*", make_lock($str18$INFERENCE_EVENT_DISPATCHER_Lock));
-        deflexical("*INFERENCE-EVENT-DISPATCHER-LISTENERS*", SubLTrampolineFile.maybeDefault($inference_event_dispatcher_listeners$, $inference_event_dispatcher_listeners$, NIL));
+        deflexical("*INFERENCE-EVENT-DISPATCHER-LISTENERS*", SubLSystemTrampolineFile.maybeDefault($inference_event_dispatcher_listeners$, $inference_event_dispatcher_listeners$, NIL));
         return NIL;
     }
 

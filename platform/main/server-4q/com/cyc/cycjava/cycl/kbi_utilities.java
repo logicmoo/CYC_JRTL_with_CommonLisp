@@ -74,7 +74,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2074,7 +2074,7 @@ public final class kbi_utilities extends SubLTranslatedFile implements V02 {
     public static final SubLObject kbi_check_predicate_doneP(SubLObject predicate) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(predicate, CONSTANT_P);
+            SubLSystemTrampolineFile.checkType(predicate, CONSTANT_P);
             return gethash(predicate, kbi_vars.$kbi_predicate_table$.getDynamicValue(thread), UNPROVIDED);
         }
     }
@@ -2190,7 +2190,7 @@ public final class kbi_utilities extends SubLTranslatedFile implements V02 {
                         SubLObject idx = assertion_handles.do_assertions_table();
                         SubLObject total = id_index.id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        SubLTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
+                        SubLSystemTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
                         {
                             SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                             SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);

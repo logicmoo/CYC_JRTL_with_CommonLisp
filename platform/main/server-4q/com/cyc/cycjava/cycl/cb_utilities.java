@@ -185,7 +185,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class cb_utilities extends SubLTranslatedFile {
@@ -2070,10 +2070,10 @@ public final class cb_utilities extends SubLTranslatedFile {
 		}
 		assert NIL != keywordp(frame_spec) : "Types.keywordp(frame_spec) " + "CommonSymbols.NIL != Types.keywordp(frame_spec) " + frame_spec;
 		assert NIL != stringp(name) : "Types.stringp(name) " + "CommonSymbols.NIL != Types.stringp(name) " + name;
-		if (((NIL != src) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(src))) {
+		if (((NIL != src) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(src))) {
 			throw new AssertionError(src);
 		}
-		if (((NIL != src_format) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(src_format))) {
+		if (((NIL != src_format) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(src_format))) {
 			throw new AssertionError(src_format);
 		}
 		SubLObject existing = cb_frame_info(frame_spec);
@@ -6323,12 +6323,12 @@ public final class cb_utilities extends SubLTranslatedFile {
 
 	public static SubLObject init_cb_utilities_file() {
 		deflexical("*CB-HTML-FOR-CYCLIST-IN-NL-CACHING-STATE*", NIL);
-		deflexical("*CB-AVAILABLE-TOOLS*", SubLTrampolineFile.maybeDefault($cb_available_tools$, $cb_available_tools$, NIL));
+		deflexical("*CB-AVAILABLE-TOOLS*", SubLSystemTrampolineFile.maybeDefault($cb_available_tools$, $cb_available_tools$, NIL));
 		deflexical("*CB-C-DEFINITIONAL-TYPE-PRED-MAP*", $list57);
 		defparameter("*CB-MAX-MTS-TO-SORT-TEMPORALLY*", $int$2000);
 		deflexical("*CB-BACK-BUTTON-PREDEFINED-SCRIPT*", $str73$onClick___A_history_back____);
 		deflexical("*CB-BACK-BUTTON-SCRIPT*", $str74$onClick__var_frame_name_____A___i);
-		deflexical("*CB-FRAME-TABLE*", SubLTrampolineFile.maybeDefault($cb_frame_table$, $cb_frame_table$, NIL));
+		deflexical("*CB-FRAME-TABLE*", SubLSystemTrampolineFile.maybeDefault($cb_frame_table$, $cb_frame_table$, NIL));
 		deflexical("*MAX-CB-LINK-ARG-COUNT*", FIVE_INTEGER);
 		defparameter("*CB-DEFAULT-FORT-HANDLER*", $str137$cb_cf);
 		defparameter("*CB-DEFAULT-FORT-LINK-EMITTER*", NIL);
@@ -6351,8 +6351,8 @@ public final class cb_utilities extends SubLTranslatedFile {
 		defparameter("*CB-STRING-LENGTH-WRAP*", $int$60);
 		defparameter("*CB-WRAP-AFTER-ARG-1*", $list255);
 		defparameter("*CB-FORM-CONS-METHODS-ACTIVE*", NIL);
-		deflexical("*CB-FORM-CONS-METHODS*", SubLTrampolineFile.maybeDefault($cb_form_cons_methods$, $cb_form_cons_methods$, NIL));
-		deflexical("*CB-FORM-CONS-METHODS-BY-KEYWORD*", SubLTrampolineFile.maybeDefault($cb_form_cons_methods_by_keyword$, $cb_form_cons_methods_by_keyword$, () -> make_hash_table(TEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+		deflexical("*CB-FORM-CONS-METHODS*", SubLSystemTrampolineFile.maybeDefault($cb_form_cons_methods$, $cb_form_cons_methods$, NIL));
+		deflexical("*CB-FORM-CONS-METHODS-BY-KEYWORD*", SubLSystemTrampolineFile.maybeDefault($cb_form_cons_methods_by_keyword$, $cb_form_cons_methods_by_keyword$, () -> make_hash_table(TEN_INTEGER, UNPROVIDED, UNPROVIDED)));
 		defconstant("*DTP-CB-FORM-CONS-METHOD*", CB_FORM_CONS_METHOD);
 		defparameter("*ALWAYS-ACTIVE-CB-FORM-CONS-METHODS*", NIL);
 		defvar("*CB-FORM-SUPPRESS-NAUT-LINK-FUNCTIONS*", NIL);
@@ -6366,7 +6366,7 @@ public final class cb_utilities extends SubLTranslatedFile {
 		deflexical("*CB-NART-ID-PREFIX*", $$$nart);
 		deflexical("*CB-ASSERTION-ID-PREFIX*", $$$a);
 		deflexical("*CB-ASSERTION-ID-PREFIX-LENGTH*", length($cb_assertion_id_prefix$.getGlobalValue()));
-		deflexical("*CB-IMAGE-INDEPENDENT-FORT-IDENTIFIERS?*", SubLTrampolineFile.maybeDefault($sym378$_CB_IMAGE_INDEPENDENT_FORT_IDENTIFIERS__, $cb_image_independent_fort_identifiersP$, NIL));
+		deflexical("*CB-IMAGE-INDEPENDENT-FORT-IDENTIFIERS?*", SubLSystemTrampolineFile.maybeDefault($sym378$_CB_IMAGE_INDEPENDENT_FORT_IDENTIFIERS__, $cb_image_independent_fort_identifiersP$, NIL));
 		deflexical("*CB-IMAGE-INDEPENDENT-ID-MARKER*", string_utilities.substring(kb_utilities.compact_hl_external_id_string(ONE_INTEGER), ZERO_INTEGER, ONE_INTEGER));
 		deflexical("*CB-IMAGE-INDEPENDENT-CONSTANT-ID-PREFIX*", cconcatenate($cb_constant_id_prefix$.getGlobalValue(), $cb_image_independent_id_marker$.getGlobalValue()));
 		deflexical("*CB-IMAGE-INDEPENDENT-NART-ID-PREFIX*", cconcatenate($cb_nart_id_prefix$.getGlobalValue(), $cb_image_independent_id_marker$.getGlobalValue()));

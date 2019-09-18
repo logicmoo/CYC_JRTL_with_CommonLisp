@@ -57,7 +57,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -488,7 +488,7 @@ public final class sksi_sks_mt_indexing extends SubLTranslatedFile {
 
     public static SubLObject init_sksi_sks_mt_indexing_file() {
         defconstant("*DTP-SKSI-SUPPORTED-MT-CACHE-ENTRY*", SKSI_SUPPORTED_MT_CACHE_ENTRY);
-        deflexical("*SKSI-SUPPORTED-MT-CACHE*", SubLTrampolineFile.maybeDefault($sksi_supported_mt_cache$, $sksi_supported_mt_cache$, () -> dictionary.new_dictionary(EQUAL, UNPROVIDED)));
+        deflexical("*SKSI-SUPPORTED-MT-CACHE*", SubLSystemTrampolineFile.maybeDefault($sksi_supported_mt_cache$, $sksi_supported_mt_cache$, () -> dictionary.new_dictionary(EQUAL, UNPROVIDED)));
         return NIL;
     }
 

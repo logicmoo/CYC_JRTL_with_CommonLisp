@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -932,7 +932,7 @@ public final class sksi_conjunctive_removal_module_generation extends SubLTransl
     }
 
     public static SubLObject init_sksi_conjunctive_removal_module_generation_file() {
-        deflexical("*SKSI-CONJUNCTIVE-REMOVAL-MODULES*", SubLTrampolineFile.maybeDefault($sksi_conjunctive_removal_modules$, $sksi_conjunctive_removal_modules$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKSI-CONJUNCTIVE-REMOVAL-MODULES*", SubLSystemTrampolineFile.maybeDefault($sksi_conjunctive_removal_modules$, $sksi_conjunctive_removal_modules$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         deflexical("*REMOVAL-SKSI-CONJUNCTION-WITH-UNKNOWN-SENTENCE-POS-LITS-COST*", THREE_INTEGER);
         return NIL;
     }

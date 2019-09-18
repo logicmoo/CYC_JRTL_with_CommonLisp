@@ -86,7 +86,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -226,72 +226,72 @@ public final class task_scheduler extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tst_process(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.getField2();
     }
 
     public static final SubLObject tst_next_scheduled_time(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.getField3();
     }
 
     public static final SubLObject tst_expression(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.getField4();
     }
 
     public static final SubLObject tst_result(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.getField5();
     }
 
     public static final SubLObject tst_regular_time_interval(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.getField6();
     }
 
     public static final SubLObject tst_time_pattern(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.getField7();
     }
 
     public static final SubLObject tst_date_pattern(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.getField8();
     }
 
     public static final SubLObject _csetf_tst_process(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_tst_next_scheduled_time(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_tst_expression(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_tst_result(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_tst_regular_time_interval(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_tst_time_pattern(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_tst_date_pattern(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_TASK_P);
         return v_object.setField8(value);
     }
 
@@ -583,52 +583,52 @@ public final class task_scheduler extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject ts_task_table(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.getField2();
     }
 
     public static final SubLObject ts_task_table_lock(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.getField3();
     }
 
     public static final SubLObject ts_main_process(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.getField4();
     }
 
     public static final SubLObject ts_main_process_task_list(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.getField5();
     }
 
     public static final SubLObject ts_main_process_task_list_lock(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.getField6();
     }
 
     public static final SubLObject _csetf_ts_task_table(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_ts_task_table_lock(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_ts_main_process(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_ts_main_process_task_list(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_ts_main_process_task_list_lock(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
+        SubLSystemTrampolineFile.checkType(v_object, TASK_SCHEDULER_P);
         return v_object.setField6(value);
     }
 
@@ -3626,8 +3626,8 @@ public final class task_scheduler extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(universal_date, UNIVERSAL_DATE_P);
-            SubLTrampolineFile.checkType(delta, NON_NEGATIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(universal_date, UNIVERSAL_DATE_P);
+            SubLSystemTrampolineFile.checkType(delta, NON_NEGATIVE_INTEGER_P);
             thread.resetMultipleValues();
             {
                 SubLObject day = numeric_date_utilities.decode_universal_date(universal_date);
@@ -3674,8 +3674,8 @@ public final class task_scheduler extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(universal_second, UNIVERSAL_SECOND_P);
-            SubLTrampolineFile.checkType(delta, NON_NEGATIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(universal_second, UNIVERSAL_SECOND_P);
+            SubLSystemTrampolineFile.checkType(delta, NON_NEGATIVE_INTEGER_P);
             thread.resetMultipleValues();
             {
                 SubLObject second = numeric_date_utilities.decode_universal_second(universal_second);
@@ -3726,7 +3726,7 @@ public final class task_scheduler extends SubLTranslatedFile implements V02 {
         if (delta == UNPROVIDED) {
             delta = ONE_INTEGER;
         }
-        SubLTrampolineFile.checkType(universal_time, UNIVERSAL_TIME_P);
+        SubLSystemTrampolineFile.checkType(universal_time, UNIVERSAL_TIME_P);
         return add(universal_time, delta);
     }
 

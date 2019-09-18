@@ -75,7 +75,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -454,12 +454,12 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject kb_hls_id(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, KB_HL_SUPPORT_P);
+        SubLSystemTrampolineFile.checkType(v_object, KB_HL_SUPPORT_P);
         return v_object.getField2();
     }
 
     public static final SubLObject _csetf_kb_hls_id(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, KB_HL_SUPPORT_P);
+        SubLSystemTrampolineFile.checkType(v_object, KB_HL_SUPPORT_P);
         return v_object.setField2(value);
     }
 
@@ -591,22 +591,22 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject kb_hlsc_argument(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, KB_HL_SUPPORT_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, KB_HL_SUPPORT_CONTENT_P);
         return v_object.getField2();
     }
 
     public static final SubLObject kb_hlsc_dependents(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, KB_HL_SUPPORT_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, KB_HL_SUPPORT_CONTENT_P);
         return v_object.getField3();
     }
 
     public static final SubLObject _csetf_kb_hlsc_argument(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, KB_HL_SUPPORT_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, KB_HL_SUPPORT_CONTENT_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_kb_hlsc_dependents(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, KB_HL_SUPPORT_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, KB_HL_SUPPORT_CONTENT_P);
         return v_object.setField3(value);
     }
 
@@ -1097,7 +1097,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                         SubLObject idx = do_kb_hl_supports_table();
                         SubLObject total = id_index.id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        SubLTrampolineFile.checkType($str_alt55$Determining_maximum_KB_HL_support, STRINGP);
+                        SubLSystemTrampolineFile.checkType($str_alt55$Determining_maximum_KB_HL_support, STRINGP);
                         {
                             SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                             SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -1391,7 +1391,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($$$mapping_Cyc_KB_HL_supports, STRINGP);
+                SubLSystemTrampolineFile.checkType($$$mapping_Cyc_KB_HL_supports, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -1782,7 +1782,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($$$reindexing_KB_HL_supports, STRINGP);
+                SubLSystemTrampolineFile.checkType($$$reindexing_KB_HL_supports, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -1903,7 +1903,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($$$Freeing_KB_HL_supports, STRINGP);
+                SubLSystemTrampolineFile.checkType($$$Freeing_KB_HL_supports, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2324,7 +2324,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($$$Verifying_KB_HL_support_indexing, STRINGP);
+                SubLSystemTrampolineFile.checkType($$$Verifying_KB_HL_support_indexing, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2376,7 +2376,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt81$Searching_for_circular_KB_HL_supp, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt81$Searching_for_circular_KB_HL_supp, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2429,7 +2429,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt82$Searching_for_duplicate_KB_HL_sup, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt82$Searching_for_duplicate_KB_HL_sup, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2501,7 +2501,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt85$Searching_for_KB_HL_supports_with, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt85$Searching_for_KB_HL_supports_with, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2556,7 +2556,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt86$Searching_for_KB_HL_supports_with, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt86$Searching_for_KB_HL_supports_with, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2608,7 +2608,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt87$Searching_for_KB_HL_supports_with, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt87$Searching_for_KB_HL_supports_with, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2660,7 +2660,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt88$Searching_for_KB_HL_supports_with, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt88$Searching_for_KB_HL_supports_with, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2733,7 +2733,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                                     SubLObject idx = do_kb_hl_supports_table();
                                     SubLObject total = id_index.id_index_count(idx);
                                     SubLObject sofar = ZERO_INTEGER;
-                                    SubLTrampolineFile.checkType($$$Verifying_KB_HL_supports, STRINGP);
+                                    SubLSystemTrampolineFile.checkType($$$Verifying_KB_HL_supports, STRINGP);
                                     {
                                         SubLObject _prev_bind_0_19 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                         SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -3254,7 +3254,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt114$Eliminating_duplicate_KB_HL_suppo, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt114$Eliminating_duplicate_KB_HL_suppo, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -3338,7 +3338,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt115$Eliminating_invalid_KB_HL_support, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt115$Eliminating_invalid_KB_HL_support, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -3417,7 +3417,7 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
                 SubLObject idx = do_kb_hl_supports_table();
                 SubLObject total = id_index.id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt117$Eliminating_KB_HL_supports_with_i, STRINGP);
+                SubLSystemTrampolineFile.checkType($str_alt117$Eliminating_KB_HL_supports_with_i, STRINGP);
                 {
                     SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                     SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);

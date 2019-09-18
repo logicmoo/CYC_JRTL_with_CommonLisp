@@ -268,7 +268,7 @@ public class Eval extends ABCLStatic implements SubLFile {
 	public static SubLObject load_external_code(SubLObject path) {
 		String stringTyped = path.getStringValue();
 		try {
-			Eval.isolatedClassLoader.addCode(stringTyped);
+			Eval.isolatedClassLoader.addCode(null, stringTyped, true);
 			return CommonSymbols.T;
 		} catch (Exception e) {
 			Errors.error("Error loading jar!class: " + stringTyped, e);

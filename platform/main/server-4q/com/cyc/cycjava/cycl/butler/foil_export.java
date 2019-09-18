@@ -204,7 +204,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -6950,7 +6950,7 @@ public final class foil_export extends SubLTranslatedFile {
         defparameter("*ILP-EXPORT-INSTANCE-TO-TYPE-INFORMATION*", NIL);
         deflexical("*ILP-EXPORT-CONVERSION-PLUG-NAME-CACHING-STATE*", NIL);
         deflexical("*ILP-EXPORT-MODE-NAME-FOR-TERM-CACHING-STATE*", NIL);
-        deflexical("*VARIABLES-FOR-ARITY*", SubLTrampolineFile.maybeDefault($variables_for_arity$, $variables_for_arity$, $list166));
+        deflexical("*VARIABLES-FOR-ARITY*", SubLSystemTrampolineFile.maybeDefault($variables_for_arity$, $variables_for_arity$, $list166));
         deflexical("*ILP-EXPORT-GATHER-PREDICATE-EXTENT-INDEX-CACHING-STATE*", NIL);
         defvar("*ILP-EXPORT-ALLOW-VARIABLES-IN-NEGATIVE-EXAMPLES?*", T);
         deflexical("*ILP-EXPORT-NEGATIVE-EXAMPLE-ARGNUM-VARIABLE-CACHING-STATE*", NIL);

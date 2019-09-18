@@ -16,6 +16,10 @@ import bsh.util.JConsole;
 import bsh.util.NameCompletionTable;
 import org.logicmoo.system.*;
 
+makeConsole()
+{
+	makeConsole( "makeWorkspace"+java.time.LocalDate.now());
+}
 makeConsole( String name )
 {
 	if ( bsh.system.desktop == void ) {
@@ -91,29 +95,31 @@ makeConsole( String name )
 	frame.toFront();
 	frame.setSelected(true);
 
-	this.haveSysIO=false;
-	this.sysIn = System.in;
-	this.sysOut = System.out;
-	this.sysErr = System.err;
 
-	captureSysIO() {
+    this.haveSysIO=false;
+    this.sysIn = System.in;
+    this.sysOut = System.out;
+    this.sysErr = System.err;
 
+    captureSysIO() {
+    	if(super.haveSysIO) return;
 		this.sysIn = System.in;
 		this.sysOut = System.out;
 		this.sysErr = System.err;
+    	super.haveSysIO = true; // old scoping rules
+        System.setIn( console.getInputStream() );
+        System.setOut( console.getOut() );
+        System.setErr( console.getErr() );
+    }
 
-		super.haveSysIO = true; // old scoping rules
-		System.setIn( console.getInputStream() );
-		System.setOut( console.getOut() );
-		System.setErr( console.getErr() );
-	}
+    returnSysIO() {
+    	if(!super.haveSysIO) return;
+        super.haveSysIO = false; // old scoping rules
+        System.setIn( sysIn );
+        System.setOut( sysOut );
+        System.setErr( sysErr );
+    }
 
-	returnSysIO() {
-		super.haveSysIO = false; // old scoping rules
-		System.setIn( sysIn );
-		System.setOut( sysOut );
-		System.setErr( sysErr );
-	}
 
     BeanShellCntrl.addConsole(this, this.console);
 

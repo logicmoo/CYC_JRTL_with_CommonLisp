@@ -6,14 +6,17 @@ import org.armedbear.lisp.LispInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public abstract class AbstractSubLInteger extends LispInteger
-		implements SubLInteger, SubLNumber, SubLObject, Comparable {
+public abstract class AbstractSubLInteger extends LispInteger implements SubLInteger, SubLNumber, SubLObject, Comparable {
 	@Override
 	public SubLInteger and(SubLInteger num) {
 		Errors.unimplementedMethod("AbstractSubLInteger.and");
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return "" + getNativeNumber();
+	}
 
 	@Override
 	public SubLInteger ceiling() {
@@ -96,7 +99,7 @@ public abstract class AbstractSubLInteger extends LispInteger
 
 	@Override
 	public SubLDoubleFloat toDouble() {
-		org.armedbear.lisp.Lisp.lisp_type_error(this,"FLOAT");
+		org.armedbear.lisp.Lisp.lisp_type_error(this, "FLOAT");
 		return null;
 	}
 

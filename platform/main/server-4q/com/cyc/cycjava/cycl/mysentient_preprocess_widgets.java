@@ -57,7 +57,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -265,9 +265,9 @@ public final class mysentient_preprocess_widgets extends SubLTranslatedFile impl
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(np_string, STRINGP);
-	    SubLTrampolineFile.checkType(mt, $sym23$HLMT_);
-	    SubLTrampolineFile.checkType(spelling_corrections, LISTP);
+	    SubLSystemTrampolineFile.checkType(np_string, STRINGP);
+	    SubLSystemTrampolineFile.checkType(mt, $sym23$HLMT_);
+	    SubLSystemTrampolineFile.checkType(spelling_corrections, LISTP);
 	    {
 		SubLObject ans = NIL;
 		SubLObject strings_and_multipliers = list(list(np_string, ONE_INTEGER));
@@ -721,9 +721,9 @@ public final class mysentient_preprocess_widgets extends SubLTranslatedFile impl
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(verb_string, STRINGP);
-	    SubLTrampolineFile.checkType(mt, $sym23$HLMT_);
-	    SubLTrampolineFile.checkType(spelling_corrections, LISTP);
+	    SubLSystemTrampolineFile.checkType(verb_string, STRINGP);
+	    SubLSystemTrampolineFile.checkType(mt, $sym23$HLMT_);
+	    SubLSystemTrampolineFile.checkType(spelling_corrections, LISTP);
 	    {
 		SubLObject ans = NIL;
 		SubLObject strings_and_multipliers = list(list(verb_string, ONE_INTEGER));
@@ -907,8 +907,8 @@ public final class mysentient_preprocess_widgets extends SubLTranslatedFile impl
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(string, STRINGP);
-	    SubLTrampolineFile.checkType(mt, $sym23$HLMT_);
+	    SubLSystemTrampolineFile.checkType(string, STRINGP);
+	    SubLSystemTrampolineFile.checkType(mt, $sym23$HLMT_);
 	    {
 		SubLObject cycls = question_semantics(string, mt, UNPROVIDED);
 		SubLObject sentence_type = NIL;
@@ -941,10 +941,10 @@ public final class mysentient_preprocess_widgets extends SubLTranslatedFile impl
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(string, STRINGP);
-	    SubLTrampolineFile.checkType(sentence_type, KEYWORDP);
-	    SubLTrampolineFile.checkType(mt, $sym23$HLMT_);
-	    SubLTrampolineFile.checkType(spelling_corrections, LISTP);
+	    SubLSystemTrampolineFile.checkType(string, STRINGP);
+	    SubLSystemTrampolineFile.checkType(sentence_type, KEYWORDP);
+	    SubLSystemTrampolineFile.checkType(mt, $sym23$HLMT_);
+	    SubLSystemTrampolineFile.checkType(spelling_corrections, LISTP);
 	    if (NIL != list_utilities.lengthG(string, $sentence_of_type_semantics_length_cutoff$.getGlobalValue(), UNPROVIDED)) {
 		mysentient_utilities.myselog_warn(cconcatenate($str_alt62$String_is_too_long_for_SENTENCE_O,
 			new SubLObject[] { format_nil.format_nil_s_no_copy($sentence_of_type_semantics_length_cutoff$.getGlobalValue()), $str_alt63$__, format_nil.$format_nil_percent$.getGlobalValue(), $str_alt64$_, format_nil.format_nil_s_no_copy(string) }));
@@ -1004,9 +1004,9 @@ public final class mysentient_preprocess_widgets extends SubLTranslatedFile impl
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(string, STRINGP);
-	    SubLTrampolineFile.checkType(mt, $sym23$HLMT_);
-	    SubLTrampolineFile.checkType(spelling_corrections, LISTP);
+	    SubLSystemTrampolineFile.checkType(string, STRINGP);
+	    SubLSystemTrampolineFile.checkType(mt, $sym23$HLMT_);
+	    SubLSystemTrampolineFile.checkType(spelling_corrections, LISTP);
 	    {
 		SubLObject cycls = NIL;
 		SubLObject weights = NIL;
@@ -1045,8 +1045,8 @@ public final class mysentient_preprocess_widgets extends SubLTranslatedFile impl
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(string, STRINGP);
-	    SubLTrampolineFile.checkType(mt, $sym23$HLMT_);
+	    SubLSystemTrampolineFile.checkType(string, STRINGP);
+	    SubLSystemTrampolineFile.checkType(mt, $sym23$HLMT_);
 	    {
 		SubLObject cycls = NIL;
 		SubLObject weights = NIL;
@@ -1168,8 +1168,8 @@ public final class mysentient_preprocess_widgets extends SubLTranslatedFile impl
     public static final SubLObject mysentient_pp_note_session_iteration(SubLObject session, SubLObject iteration_id, SubLObject session_mt) {
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(session, FORT_P);
-	    SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+	    SubLSystemTrampolineFile.checkType(session, FORT_P);
+	    SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
 	    {
 		SubLObject n = next_iteration_number_wrt_session(session, session_mt);
 		SubLObject constant = mysentient_utilities.myse_create(cconcatenate($str_alt84$Iteration_, new SubLObject[] { kb_paths.fort_name(session), $str_alt85$_, string_utilities.to_string(n) }), UNPROVIDED, UNPROVIDED, UNPROVIDED);

@@ -123,7 +123,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1538,9 +1538,9 @@ public final class predicate_suggestor extends SubLTranslatedFile {
     }
 
     public static SubLObject init_predicate_suggestor_file() {
-        deflexical("*FTS-ANTECEDENT-INDEX*", SubLTrampolineFile.maybeDefault($fts_antecedent_index$, $fts_antecedent_index$, NIL));
-        deflexical("*FTS-CONSEQUENT-INDEX*", SubLTrampolineFile.maybeDefault($fts_consequent_index$, $fts_consequent_index$, NIL));
-        deflexical("*FTS-JOINT-ANTECEDENT-INDEX*", SubLTrampolineFile.maybeDefault($fts_joint_antecedent_index$, $fts_joint_antecedent_index$, NIL));
+        deflexical("*FTS-ANTECEDENT-INDEX*", SubLSystemTrampolineFile.maybeDefault($fts_antecedent_index$, $fts_antecedent_index$, NIL));
+        deflexical("*FTS-CONSEQUENT-INDEX*", SubLSystemTrampolineFile.maybeDefault($fts_consequent_index$, $fts_consequent_index$, NIL));
+        deflexical("*FTS-JOINT-ANTECEDENT-INDEX*", SubLSystemTrampolineFile.maybeDefault($fts_joint_antecedent_index$, $fts_joint_antecedent_index$, NIL));
         defconstant("*FTS-EXPERT-TERM-COLL*", $$TermSuggestorExpertOnlyTerm);
         defparameter("*FTS-EXPERT-TERMS*", keyhash.new_keyhash($int$5000, UNPROVIDED));
         defconstant("*FTS-EXCLUDED-TERM-COLL*", $$TermSuggestorNonIndexedTerm);

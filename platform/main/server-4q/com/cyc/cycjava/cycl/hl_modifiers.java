@@ -16,7 +16,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -59,13 +59,13 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
      * with TRUTH and STRENGTH.
      */
     public static final SubLObject replace_assertion_asserted_argument(SubLObject assertion, SubLObject new_truth, SubLObject new_strength, SubLObject enforce_existence_of_old_asserted_argumentP) {
-        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-        SubLTrampolineFile.checkType(new_truth, TRUTH_P);
-        SubLTrampolineFile.checkType(new_strength, EL_STRENGTH_P);
+        SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(new_truth, TRUTH_P);
+        SubLSystemTrampolineFile.checkType(new_strength, EL_STRENGTH_P);
         {
             SubLObject old_asserted_argument = assertions_high.get_asserted_argument(assertion);
             if (NIL != enforce_existence_of_old_asserted_argumentP) {
-                SubLTrampolineFile.checkType(old_asserted_argument, ASSERTED_ARGUMENT_P);
+                SubLSystemTrampolineFile.checkType(old_asserted_argument, ASSERTED_ARGUMENT_P);
             }
             {
                 SubLObject old_who = assertions_high.asserted_by(assertion);
@@ -98,9 +98,9 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
     public static final SubLObject kb_create_asserted_argument(SubLObject assertion, SubLObject truth, SubLObject strength) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            SubLTrampolineFile.checkType(truth, TRUTH_P);
-            SubLTrampolineFile.checkType(strength, EL_STRENGTH_P);
+            SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(truth, TRUTH_P);
+            SubLSystemTrampolineFile.checkType(strength, EL_STRENGTH_P);
             {
                 SubLObject result = NIL;
                 hl_interface_infrastructure.define_hl_modifier_preamble();
@@ -148,8 +148,8 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
     public static final SubLObject kb_remove_asserted_argument(SubLObject assertion, SubLObject asserted_argument) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            SubLTrampolineFile.checkType(asserted_argument, ASSERTED_ARGUMENT_P);
+            SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(asserted_argument, ASSERTED_ARGUMENT_P);
             {
                 SubLObject result = NIL;
                 hl_interface_infrastructure.define_hl_modifier_preamble();
@@ -198,8 +198,8 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
     public static final SubLObject hl_assert_bookkeeping_binary_gaf(SubLObject pred, SubLObject arg1, SubLObject arg2, SubLObject mt) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(pred, FORT_P);
-            SubLTrampolineFile.checkType(mt, HLMT_P);
+            SubLSystemTrampolineFile.checkType(pred, FORT_P);
+            SubLSystemTrampolineFile.checkType(mt, HLMT_P);
             {
                 SubLObject result = NIL;
                 hl_interface_infrastructure.define_hl_modifier_preamble();
@@ -241,8 +241,8 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
     public static final SubLObject hl_unassert_bookkeeping_binary_gaf(SubLObject pred, SubLObject arg1, SubLObject arg2, SubLObject mt) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(pred, FORT_P);
-            SubLTrampolineFile.checkType(mt, HLMT_P);
+            SubLSystemTrampolineFile.checkType(pred, FORT_P);
+            SubLSystemTrampolineFile.checkType(mt, HLMT_P);
             {
                 SubLObject result = NIL;
                 hl_interface_infrastructure.define_hl_modifier_preamble();

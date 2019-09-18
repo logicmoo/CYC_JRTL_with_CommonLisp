@@ -114,7 +114,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -1410,10 +1410,10 @@ public final class java_backend extends SubLTranslatedFile {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(ts_file, TRANS_SUBL_FILE_P);
-			SubLTrampolineFile.checkType(output_filename, STRINGP);
+			SubLSystemTrampolineFile.checkType(ts_file, TRANS_SUBL_FILE_P);
+			SubLSystemTrampolineFile.checkType(output_filename, STRINGP);
 			if (NIL != finger_print) {
-				SubLTrampolineFile.checkType(finger_print, STRINGP);
+				SubLSystemTrampolineFile.checkType(finger_print, STRINGP);
 			}
 			{
 				SubLObject result = NIL;
@@ -1462,7 +1462,7 @@ public final class java_backend extends SubLTranslatedFile {
 		final SubLThread thread = SubLProcess.currentSubLThread();
 		assert NIL != file_translation.trans_subl_file_p(ts_file) : "! file_translation.trans_subl_file_p(ts_file) " + ("file_translation.trans_subl_file_p(ts_file) " + "CommonSymbols.NIL != file_translation.trans_subl_file_p(ts_file) ") + ts_file;
 		assert NIL != stringp(output_filename) : "! stringp(output_filename) " + ("Types.stringp(output_filename) " + "CommonSymbols.NIL != Types.stringp(output_filename) ") + output_filename;
-		if (((NIL != finger_print) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(finger_print))) {
+		if (((NIL != finger_print) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(finger_print))) {
 			throw new AssertionError(finger_print);
 		}
 		SubLObject result = NIL;
@@ -1515,7 +1515,7 @@ public final class java_backend extends SubLTranslatedFile {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(ts_file, TRANS_SUBL_FILE_P);
+			SubLSystemTrampolineFile.checkType(ts_file, TRANS_SUBL_FILE_P);
 			{
 				SubLObject _prev_bind_0 = $read_default_float_format$.currentBinding(thread);
 				SubLObject _prev_bind_1 = c_backend.$anonymous_variable_counter$.currentBinding(thread);
@@ -1778,7 +1778,7 @@ public final class java_backend extends SubLTranslatedFile {
 	}
 
 	public static final SubLObject current_system_translation_module_subdirs_alt(SubLObject module) {
-		SubLTrampolineFile.checkType(module, STRINGP);
+		SubLSystemTrampolineFile.checkType(module, STRINGP);
 		{
 			SubLObject system_prefix = com.cyc.cycjava.cycl.java_backend.current_system_translation_system_subdir_prefix();
 			SubLObject strings = string_utilities.split_string(system_translation.sys_tran_module_output_filename(system_translation.current_system_translation(), module), $list_alt18);
@@ -2992,7 +2992,7 @@ public final class java_backend extends SubLTranslatedFile {
 						name = com.cyc.cycjava.cycl.java_backend.java_backend_compute_local_variable_name(variable);
 					}
 				}
-				SubLTrampolineFile.checkType(name, STRINGP);
+				SubLSystemTrampolineFile.checkType(name, STRINGP);
 				return name;
 			}
 		}
@@ -9736,7 +9736,7 @@ public final class java_backend extends SubLTranslatedFile {
 							current = temp;
 							{
 								SubLObject body = current;
-								SubLTrampolineFile.checkType(type, STRINGP);
+								SubLSystemTrampolineFile.checkType(type, STRINGP);
 								{
 									SubLObject _prev_bind_0 = $java_backend_previous_local_variable_scope$.currentBinding(thread);
 									SubLObject _prev_bind_1 = $java_backend_current_local_variable_scope$.currentBinding(thread);
@@ -9894,7 +9894,7 @@ public final class java_backend extends SubLTranslatedFile {
 	}
 
 	public static final SubLObject java_backend_write_unary_function_class_alt(SubLObject function, SubLObject stream) {
-		SubLTrampolineFile.checkType(function, SYMBOLP);
+		SubLSystemTrampolineFile.checkType(function, SYMBOLP);
 		{
 			SubLObject class_name = com.cyc.cycjava.cycl.java_backend.java_backend_unary_function_class_name(function);
 			SubLObject function_name = system_translation.current_system_translation_secure_symbol_name(function);
@@ -9916,7 +9916,7 @@ public final class java_backend extends SubLTranslatedFile {
 	}
 
 	public static final SubLObject java_backend_write_unary_function_class_initializer_alt(SubLObject function, SubLObject stream) {
-		SubLTrampolineFile.checkType(function, SYMBOLP);
+		SubLSystemTrampolineFile.checkType(function, SYMBOLP);
 		{
 			SubLObject class_name = com.cyc.cycjava.cycl.java_backend.java_backend_unary_function_class_name(function);
 			format(stream, $java_backend_unary_function_class_initializer_template$.getGlobalValue(), class_name);
@@ -10146,7 +10146,7 @@ public final class java_backend extends SubLTranslatedFile {
 	}
 
 	public static final SubLObject java_backend_write_binary_function_class_alt(SubLObject function, SubLObject stream) {
-		SubLTrampolineFile.checkType(function, SYMBOLP);
+		SubLSystemTrampolineFile.checkType(function, SYMBOLP);
 		{
 			SubLObject class_name = com.cyc.cycjava.cycl.java_backend.java_backend_binary_function_class_name(function);
 			SubLObject function_name = system_translation.current_system_translation_secure_symbol_name(function);
@@ -10170,7 +10170,7 @@ public final class java_backend extends SubLTranslatedFile {
 	}
 
 	public static final SubLObject java_backend_write_binary_function_class_initializer_alt(SubLObject function, SubLObject stream) {
-		SubLTrampolineFile.checkType(function, SYMBOLP);
+		SubLSystemTrampolineFile.checkType(function, SYMBOLP);
 		{
 			SubLObject class_name = com.cyc.cycjava.cycl.java_backend.java_backend_binary_function_class_name(function);
 			format(stream, $java_backend_binary_function_class_initializer_template$.getGlobalValue(), class_name);
@@ -10362,7 +10362,7 @@ public final class java_backend extends SubLTranslatedFile {
 	}
 
 	public static final SubLObject java_backend_write_zero_arity_function_class_alt(SubLObject function, SubLObject stream) {
-		SubLTrampolineFile.checkType(function, SYMBOLP);
+		SubLSystemTrampolineFile.checkType(function, SYMBOLP);
 		{
 			SubLObject class_name = com.cyc.cycjava.cycl.java_backend.java_backend_zero_arity_function_class_name(function);
 			SubLObject function_name = system_translation.current_system_translation_secure_symbol_name(function);
@@ -10382,7 +10382,7 @@ public final class java_backend extends SubLTranslatedFile {
 	}
 
 	public static final SubLObject java_backend_write_zero_arity_function_class_initializer_alt(SubLObject function, SubLObject stream) {
-		SubLTrampolineFile.checkType(function, SYMBOLP);
+		SubLSystemTrampolineFile.checkType(function, SYMBOLP);
 		{
 			SubLObject class_name = com.cyc.cycjava.cycl.java_backend.java_backend_zero_arity_function_class_name(function);
 			format(stream, $java_backend_zero_arity_function_class_initializer_template$.getGlobalValue(), class_name);
@@ -11742,7 +11742,7 @@ public final class java_backend extends SubLTranslatedFile {
 			defparameter("*JAVA-BACKEND-NEW-ARRAY-ITEMS-ON-SEPARATE-LINES?*", NIL);
 			defparameter("*JAVA-BACKEND-CURRENT-LOCAL-VARIABLE-SCOPE*", NIL);
 			defparameter("*JAVA-BACKEND-PREVIOUS-LOCAL-VARIABLE-SCOPE*", NIL);
-			deflexical("*JAVA-BACKEND-ELIMINATE-UNINTERESTING-VARIANCE*", SubLTrampolineFile.maybeDefault($java_backend_eliminate_uninteresting_variance$, $java_backend_eliminate_uninteresting_variance$, NIL));
+			deflexical("*JAVA-BACKEND-ELIMINATE-UNINTERESTING-VARIANCE*", SubLSystemTrampolineFile.maybeDefault($java_backend_eliminate_uninteresting_variance$, $java_backend_eliminate_uninteresting_variance$, NIL));
 			defparameter("*JAVA-BACKEND-CURRENT-CLASS*", NIL);
 			defparameter("*JAVA-BACKEND-INITIALIZER-METHODS*", NIL);
 			deflexical("*JAVA-BACKEND-WRITERS*", $list144);
@@ -11755,7 +11755,7 @@ public final class java_backend extends SubLTranslatedFile {
 			deflexical("*TARGET-MOST-POSITIVE-INT*", subtract(expt(TWO_INTEGER, $int$31), ONE_INTEGER));
 			deflexical("*TARGET-MOST-NEGATIVE-INT*", minus(expt(TWO_INTEGER, $int$31)));
 			defparameter("*JAVA-BACKEND-CURRENT-THREAD-VARIABLE*", NIL);
-			deflexical("*TRANSLATE-EQ-AS-EQL*", SubLTrampolineFile.maybeDefault($translate_eq_as_eql$, $translate_eq_as_eql$, T));
+			deflexical("*TRANSLATE-EQ-AS-EQL*", SubLSystemTrampolineFile.maybeDefault($translate_eq_as_eql$, $translate_eq_as_eql$, T));
 			deflexical("*JAVA-BACKEND-UNARY-FUNCTION-CLASS-TEMPLATE*", $str497$___public_static_final_class__A_e);
 			deflexical("*JAVA-BACKEND-UNARY-FUNCTION-CLASS-INITIALIZER-TEMPLATE*", $str500$__new__A__);
 			deflexical("*JAVA-BACKEND-BINARY-FUNCTION-CLASS-TEMPLATE*", $str504$___public_static_final_class__A_e);
@@ -11791,7 +11791,7 @@ public final class java_backend extends SubLTranslatedFile {
 		defparameter("*JAVA-BACKEND-NEW-ARRAY-ITEMS-ON-SEPARATE-LINES?*", NIL);
 		defparameter("*JAVA-BACKEND-CURRENT-LOCAL-VARIABLE-SCOPE*", NIL);
 		defparameter("*JAVA-BACKEND-PREVIOUS-LOCAL-VARIABLE-SCOPE*", NIL);
-		deflexical("*JAVA-BACKEND-ELIMINATE-UNINTERESTING-VARIANCE*", SubLTrampolineFile.maybeDefault($java_backend_eliminate_uninteresting_variance$, $java_backend_eliminate_uninteresting_variance$, NIL));
+		deflexical("*JAVA-BACKEND-ELIMINATE-UNINTERESTING-VARIANCE*", SubLSystemTrampolineFile.maybeDefault($java_backend_eliminate_uninteresting_variance$, $java_backend_eliminate_uninteresting_variance$, NIL));
 		defparameter("*JAVA-BACKEND-CURRENT-CLASS*", NIL);
 		defparameter("*JAVA-BACKEND-INITIALIZER-METHODS*", NIL);
 		deflexical("*JAVA-BACKEND-WRITERS*", $list144);
@@ -11804,7 +11804,7 @@ public final class java_backend extends SubLTranslatedFile {
 		deflexical("*TARGET-MOST-POSITIVE-INT*", subtract(expt(TWO_INTEGER, $int$31), ONE_INTEGER));
 		deflexical("*TARGET-MOST-NEGATIVE-INT*", minus(expt(TWO_INTEGER, $int$31)));
 		defparameter("*JAVA-BACKEND-CURRENT-THREAD-VARIABLE*", NIL);
-		deflexical("*TRANSLATE-EQ-AS-EQL*", SubLTrampolineFile.maybeDefault($translate_eq_as_eql$, $translate_eq_as_eql$, T));
+		deflexical("*TRANSLATE-EQ-AS-EQL*", SubLSystemTrampolineFile.maybeDefault($translate_eq_as_eql$, $translate_eq_as_eql$, T));
 		deflexical("*JAVA-BACKEND-UNARY-FUNCTION-CLASS-TEMPLATE*", $str497$___public_static_final_class__A_e);
 		deflexical("*JAVA-BACKEND-UNARY-FUNCTION-CLASS-INITIALIZER-TEMPLATE*", $str500$__new__A__);
 		deflexical("*JAVA-BACKEND-BINARY-FUNCTION-CLASS-TEMPLATE*", $str504$___public_static_final_class__A_e);

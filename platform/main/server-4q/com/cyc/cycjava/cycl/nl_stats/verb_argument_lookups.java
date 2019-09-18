@@ -35,7 +35,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -333,7 +333,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
         if (v_default == UNPROVIDED) {
             v_default = NIL;
         }
-        SubLTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
         {
             SubLObject fht = typical_subjects_by_verb_fht();
             if (NIL != file_hash_table.file_hash_table_p(fht)) {
@@ -351,7 +351,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
         if (v_default == UNPROVIDED) {
             v_default = NIL;
         }
-        SubLTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
         {
             SubLObject fht = typical_objects_by_verb_fht();
             if (NIL != file_hash_table.file_hash_table_p(fht)) {
@@ -369,7 +369,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
         if (v_default == UNPROVIDED) {
             v_default = NIL;
         }
-        SubLTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
+        SubLSystemTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
         {
             SubLObject pcase_var = relation;
             if (pcase_var.eql($SUBJ)) {
@@ -421,7 +421,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * Returns NIL if the selectiveness is unknown
      */
     public static final SubLObject selectiveness_wrt_subject(SubLObject verb) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
         {
             SubLObject fht = subject_selectiveness_fht();
             return NIL != file_hash_table.file_hash_table_p(fht) ? ((SubLObject) (file_hash_table.get_file_hash_table(verb, fht, UNPROVIDED))) : NIL;
@@ -432,7 +432,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * Returns NIL if the selectiveness is unknown
      */
     public static final SubLObject selectiveness_wrt_object(SubLObject verb) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
         {
             SubLObject fht = object_selectiveness_fht();
             return NIL != file_hash_table.file_hash_table_p(fht) ? ((SubLObject) (file_hash_table.get_file_hash_table(verb, fht, UNPROVIDED))) : NIL;
@@ -443,7 +443,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * Returns NIL if the selectiveness is unknown
      */
     public static final SubLObject selectiveness(SubLObject verb, SubLObject relation) {
-        SubLTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
+        SubLSystemTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
         {
             SubLObject pcase_var = relation;
             if (pcase_var.eql($SUBJ)) {
@@ -482,7 +482,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * Returns NIL if the selectional preference strength is unknown
      */
     public static final SubLObject selectional_preference_strength_wrt_subject(SubLObject verb) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
         {
             SubLObject fht = subject_selectional_preference_strengths_fht();
             return NIL != file_hash_table.file_hash_table_p(fht) ? ((SubLObject) (file_hash_table.get_file_hash_table(verb, fht, UNPROVIDED))) : NIL;
@@ -493,7 +493,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * Returns NIL if the selectional preference strength is unknown
      */
     public static final SubLObject selectional_preference_strength_wrt_object(SubLObject verb) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
         {
             SubLObject fht = object_selectional_preference_strengths_fht();
             return NIL != file_hash_table.file_hash_table_p(fht) ? ((SubLObject) (file_hash_table.get_file_hash_table(verb, fht, UNPROVIDED))) : NIL;
@@ -504,7 +504,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * Returns NIL if the selectional preference strength is unknown
      */
     public static final SubLObject selectional_preference_strength(SubLObject verb, SubLObject relation) {
-        SubLTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
+        SubLSystemTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
         {
             SubLObject pcase_var = relation;
             if (pcase_var.eql($SUBJ)) {
@@ -546,8 +546,8 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
     Returns NIL if the APMI is unknown
      */
     public static final SubLObject adjusted_pointwise_mutual_information_wrt_subject(SubLObject verb, SubLObject collection) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
-        SubLTrampolineFile.checkType(collection, COLLECTION_P);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(collection, COLLECTION_P);
         {
             SubLObject fht = subject_adjusted_pointwise_mutual_information_fht();
             return NIL != file_hash_table.file_hash_table_p(fht) ? ((SubLObject) (file_hash_table.get_file_hash_table(list(verb, collection), fht, UNPROVIDED))) : NIL;
@@ -561,8 +561,8 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
     Returns NIL if the APMI is unknown
      */
     public static final SubLObject adjusted_pointwise_mutual_information_wrt_object(SubLObject verb, SubLObject collection) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
-        SubLTrampolineFile.checkType(collection, COLLECTION_P);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(collection, COLLECTION_P);
         {
             SubLObject fht = object_adjusted_pointwise_mutual_information_fht();
             return NIL != file_hash_table.file_hash_table_p(fht) ? ((SubLObject) (file_hash_table.get_file_hash_table(list(verb, collection), fht, UNPROVIDED))) : NIL;
@@ -580,7 +580,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
     Returns NIL if the APMI is unknown
      */
     public static final SubLObject adjusted_pointwise_mutual_information(SubLObject verb, SubLObject collection, SubLObject relation) {
-        SubLTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
+        SubLSystemTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
         {
             SubLObject pcase_var = relation;
             if (pcase_var.eql($SUBJ)) {
@@ -622,8 +622,8 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
     Returns NIL if the selectional association is unknown
      */
     public static final SubLObject selectional_association_wrt_subject(SubLObject verb, SubLObject collection) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
-        SubLTrampolineFile.checkType(collection, COLLECTION_P);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(collection, COLLECTION_P);
         {
             SubLObject fht = subject_selectional_associations_fht();
             return NIL != file_hash_table.file_hash_table_p(fht) ? ((SubLObject) (file_hash_table.get_file_hash_table(list(verb, collection), fht, UNPROVIDED))) : NIL;
@@ -637,8 +637,8 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
     Returns NIL if the selectional association is unknown
      */
     public static final SubLObject selectional_association_wrt_object(SubLObject verb, SubLObject collection) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
-        SubLTrampolineFile.checkType(collection, COLLECTION_P);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(collection, COLLECTION_P);
         {
             SubLObject fht = object_selectional_associations_fht();
             return NIL != file_hash_table.file_hash_table_p(fht) ? ((SubLObject) (file_hash_table.get_file_hash_table(list(verb, collection), fht, UNPROVIDED))) : NIL;
@@ -656,7 +656,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
     Returns NIL if the selectional association is unknown
      */
     public static final SubLObject selectional_association(SubLObject verb, SubLObject collection, SubLObject relation) {
-        SubLTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
+        SubLSystemTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
         {
             SubLObject pcase_var = relation;
             if (pcase_var.eql($SUBJ)) {
@@ -674,7 +674,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * Returns NIL if the possible subjects are unknown
      */
     public static final SubLObject possible_subjects(SubLObject verb) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
         {
             SubLObject fht = subject_matching_collections_by_verb_fht();
             if (NIL != file_hash_table.file_hash_table_p(fht)) {
@@ -692,7 +692,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * Returns NIL if the possible objects are unknown
      */
     public static final SubLObject possible_objects(SubLObject verb) {
-        SubLTrampolineFile.checkType(verb, STRINGP);
+        SubLSystemTrampolineFile.checkType(verb, STRINGP);
         {
             SubLObject fht = object_matching_collections_by_verb_fht();
             if (NIL != file_hash_table.file_hash_table_p(fht)) {
@@ -710,7 +710,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * Returns NIL if the possible args are unknown
      */
     public static final SubLObject possible_args(SubLObject verb, SubLObject relation) {
-        SubLTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
+        SubLSystemTrampolineFile.checkType(relation, NL_STATS_SUPPORTED_VERB_ARG_POSITION_P);
         {
             SubLObject pcase_var = relation;
             if (pcase_var.eql($SUBJ)) {
@@ -732,7 +732,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
         if (n == UNPROVIDED) {
             n = FIVE_INTEGER;
         }
-        SubLTrampolineFile.checkType(noun, STRINGP);
+        SubLSystemTrampolineFile.checkType(noun, STRINGP);
         {
             SubLObject fht = noun_conjectures_fht();
             if (NIL != file_hash_table.file_hash_table_p(fht)) {
@@ -755,7 +755,7 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
      * or NIL if there are no stored conjectures for NOUN
      */
     public static final SubLObject noun_conjecture(SubLObject noun) {
-        SubLTrampolineFile.checkType(noun, STRINGP);
+        SubLSystemTrampolineFile.checkType(noun, STRINGP);
         {
             SubLObject list = noun_conjectures(noun, ONE_INTEGER);
             return NIL != list_utilities.non_empty_list_p(list) ? ((SubLObject) (list.first())) : NIL;

@@ -7,9 +7,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class ReadWriteLocks extends SubLTrampolineFile {
+public class ReadWriteLocks extends SubLSystemTrampolineFile {
 	public static SubLObject new_rw_lock(SubLObject name) {
 		return SubLObjectFactory.makeReadWriteLock(name.toStr());
 	}

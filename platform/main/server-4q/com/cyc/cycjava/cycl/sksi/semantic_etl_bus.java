@@ -106,7 +106,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -6641,7 +6641,7 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
         }
         assert NIL != stringp(column) : "Types.stringp(column) " + "CommonSymbols.NIL != Types.stringp(column) " + column;
         assert NIL != stringp(type) : "Types.stringp(type) " + "CommonSymbols.NIL != Types.stringp(type) " + type;
-        if (((NIL != size) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(size))) {
+        if (((NIL != size) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(size))) {
             throw new AssertionError(size);
         }
         final SubLObject list_var = constraints;
@@ -8753,19 +8753,19 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
 
     public static SubLObject init_semantic_etl_bus_file() {
         defvar("*SEMANTIC-ETL-DEBUG?*", NIL);
-        deflexical("*DATABASE-OUTPUT-SPECS*", SubLTrampolineFile.maybeDefault($database_output_specs$, $database_output_specs$, () -> dictionary.new_dictionary(EQL, UNPROVIDED)));
-        deflexical("*DATABASE-OUTPUT-SPECS-LOCK*", SubLTrampolineFile.maybeDefault($database_output_specs_lock$, $database_output_specs_lock$, () -> make_lock($$$Database_Output_Specs)));
+        deflexical("*DATABASE-OUTPUT-SPECS*", SubLSystemTrampolineFile.maybeDefault($database_output_specs$, $database_output_specs$, () -> dictionary.new_dictionary(EQL, UNPROVIDED)));
+        deflexical("*DATABASE-OUTPUT-SPECS-LOCK*", SubLSystemTrampolineFile.maybeDefault($database_output_specs_lock$, $database_output_specs_lock$, () -> make_lock($$$Database_Output_Specs)));
         deflexical("*SEMANTIC-ETL-FUSE-DATABASES-CACHING-STATE*", NIL);
         deflexical("*FIND-CORRESPONDING-ITEM-IN-SEMANTICS-METHOD-TABLE*", make_vector($int$256, NIL));
         deflexical("*SEMANTIC-OBJECT-COMPARISON-NAME-METHOD-TABLE*", make_vector($int$256, NIL));
         defconstant("*DTP-SEMANTICS*", SEMANTICS);
         defconstant("*DTP-TABLE-SEMANTICS*", TABLE_SEMANTICS);
-        deflexical("*SEMANTIC-ETL-TABLE-ISG*", SubLTrampolineFile.maybeDefault($semantic_etl_table_isg$, $semantic_etl_table_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*SEMANTIC-ETL-TABLE-ISG*", SubLSystemTrampolineFile.maybeDefault($semantic_etl_table_isg$, $semantic_etl_table_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-FOREIGN-KEY-CONSTRAINT*", FOREIGN_KEY_CONSTRAINT);
         defconstant("*DTP-PRIMARY-KEY-CONSTRAINT*", PRIMARY_KEY_CONSTRAINT);
         defconstant("*DTP-COLUMN-SEMANTICS*", COLUMN_SEMANTICS);
         defconstant("*DTP-VALUE-SEMANTICS*", VALUE_SEMANTICS);
-        deflexical("*DB-OUTPUT-SPEC-ISG*", SubLTrampolineFile.maybeDefault($db_output_spec_isg$, $db_output_spec_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*DB-OUTPUT-SPEC-ISG*", SubLSystemTrampolineFile.maybeDefault($db_output_spec_isg$, $db_output_spec_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-DATABASE-OUTPUT-SPEC*", DATABASE_OUTPUT_SPEC);
         defparameter("*RECIPE-MARKER*", $str257$____________________________);
         deflexical("*SEMANTIC-RECIPE-STEP-P-METHOD-TABLE*", make_vector($int$256, NIL));
@@ -8805,16 +8805,16 @@ public final class semantic_etl_bus extends SubLTranslatedFile {
         defconstant("*DTP-SQL-FK-TABLE-CONSTRAINT*", SQL_FK_TABLE_CONSTRAINT);
         defconstant("*DTP-SQL-UPDATE*", SQL_UPDATE);
         defconstant("*DTP-SQL-DROP-TABLE*", SQL_DROP_TABLE);
-        deflexical("*ACCESS-PATH-MAP*", SubLTrampolineFile.maybeDefault($access_path_map$, $access_path_map$, NIL));
-        deflexical("*BLN1-ACCESS-PATH*", SubLTrampolineFile.maybeDefault($sym795$_BLN1_ACCESS_PATH_, $bln1_access_path$, NIL));
-        deflexical("*BLN2-ACCESS-PATH*", SubLTrampolineFile.maybeDefault($sym796$_BLN2_ACCESS_PATH_, $bln2_access_path$, NIL));
-        deflexical("*USGS-ACCESS-PATH*", SubLTrampolineFile.maybeDefault($usgs_access_path$, $usgs_access_path$, NIL));
-        deflexical("*NGA-ACCESS-PATH*", SubLTrampolineFile.maybeDefault($nga_access_path$, $nga_access_path$, NIL));
-        deflexical("*GNDB-ACCESS-PATH*", SubLTrampolineFile.maybeDefault($gndb_access_path$, $gndb_access_path$, NIL));
-        deflexical("*BATHYMETRIC-DATA-ACCESS-PATH*", SubLTrampolineFile.maybeDefault($bathymetric_data_access_path$, $bathymetric_data_access_path$, NIL));
-        deflexical("*BATHYMETRIC-HEADER-ACCESS-PATH*", SubLTrampolineFile.maybeDefault($bathymetric_header_access_path$, $bathymetric_header_access_path$, NIL));
-        deflexical("*SPORTING-GOODS-ACCESS-PATH*", SubLTrampolineFile.maybeDefault($sporting_goods_access_path$, $sporting_goods_access_path$, NIL));
-        deflexical("*NORTHWIND-ACCESS-PATH*", SubLTrampolineFile.maybeDefault($northwind_access_path$, $northwind_access_path$, NIL));
+        deflexical("*ACCESS-PATH-MAP*", SubLSystemTrampolineFile.maybeDefault($access_path_map$, $access_path_map$, NIL));
+        deflexical("*BLN1-ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($sym795$_BLN1_ACCESS_PATH_, $bln1_access_path$, NIL));
+        deflexical("*BLN2-ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($sym796$_BLN2_ACCESS_PATH_, $bln2_access_path$, NIL));
+        deflexical("*USGS-ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($usgs_access_path$, $usgs_access_path$, NIL));
+        deflexical("*NGA-ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($nga_access_path$, $nga_access_path$, NIL));
+        deflexical("*GNDB-ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($gndb_access_path$, $gndb_access_path$, NIL));
+        deflexical("*BATHYMETRIC-DATA-ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($bathymetric_data_access_path$, $bathymetric_data_access_path$, NIL));
+        deflexical("*BATHYMETRIC-HEADER-ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($bathymetric_header_access_path$, $bathymetric_header_access_path$, NIL));
+        deflexical("*SPORTING-GOODS-ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($sporting_goods_access_path$, $sporting_goods_access_path$, NIL));
+        deflexical("*NORTHWIND-ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($northwind_access_path$, $northwind_access_path$, NIL));
         return NIL;
     }
 

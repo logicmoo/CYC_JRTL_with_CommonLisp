@@ -83,7 +83,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class keyhash extends SubLTranslatedFile {
     public static final SubLFile me = new keyhash();
@@ -412,7 +412,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject maybe_swizzle_old_vector_to_hash(final SubLObject v_keyhash) {
         if (NIL == new_keyhash_format_p(v_keyhash)) {
-            SubLTrampolineFile.enforceType(v_keyhash, LEGACY_KEYHASH_FORMAT_P);
+            SubLSystemTrampolineFile.enforceType(v_keyhash, LEGACY_KEYHASH_FORMAT_P);
             final SubLObject old_nodes = keyhash_nodes(v_keyhash);
             final SubLObject size = length(old_nodes);
             final SubLObject test = legacy_keyhash_test_function(v_keyhash);
@@ -755,7 +755,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_keyhash_file() {
         defconstant("*DTP-KEYHASH*", KEYHASH);
-        deflexical("*KEYHASH-EMPTY-KEY*", SubLTrampolineFile.maybeDefault($keyhash_empty_key$, $keyhash_empty_key$, () -> make_symbol($$$The_Empty_KEYHASH_Key)));
+        deflexical("*KEYHASH-EMPTY-KEY*", SubLSystemTrampolineFile.maybeDefault($keyhash_empty_key$, $keyhash_empty_key$, () -> make_symbol($$$The_Empty_KEYHASH_Key)));
         defconstant("*CFASL-OPCODE-KEYHASH*", $int$68);
         return NIL;
     }

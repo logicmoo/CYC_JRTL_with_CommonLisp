@@ -99,7 +99,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1118,9 +1118,9 @@ public final class suggestions_review_tool extends SubLTranslatedFile implements
         if (evaluation_properties == UNPROVIDED) {
             evaluation_properties = NIL;
         }
-        SubLTrampolineFile.checkType(sent, CYCL_SENTENCE_P);
-        SubLTrampolineFile.checkType(mt, POSSIBLY_MT_P);
-        SubLTrampolineFile.checkType(evaluation_properties, PROPERTY_LIST_P);
+        SubLSystemTrampolineFile.checkType(sent, CYCL_SENTENCE_P);
+        SubLSystemTrampolineFile.checkType(mt, POSSIBLY_MT_P);
+        SubLSystemTrampolineFile.checkType(evaluation_properties, PROPERTY_LIST_P);
         {
             SubLObject submit_time = get_universal_time();
             SubLObject user = current_sentence_reviewer();

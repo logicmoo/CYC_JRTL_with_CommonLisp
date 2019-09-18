@@ -126,7 +126,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1036,9 +1036,9 @@ public final class operation_communication extends SubLTranslatedFile {
         if (application == UNPROVIDED) {
             application = $cyclist_authenticating_app$.getDynamicValue();
         }
-        SubLTrampolineFile.enforceType(name, STRINGP);
-        SubLTrampolineFile.enforceType(encrypted_password, STRINGP);
-        SubLTrampolineFile.enforceType(application, FORT_P);
+        SubLSystemTrampolineFile.enforceType(name, STRINGP);
+        SubLSystemTrampolineFile.enforceType(encrypted_password, STRINGP);
+        SubLSystemTrampolineFile.enforceType(application, FORT_P);
         set_the_cyclist(UNPROVIDED);
         final SubLObject cyclist = map_cyclist_name_to_cyclist_term(name);
         if (!cyclist.equal($$Guest)) {
@@ -1093,8 +1093,8 @@ public final class operation_communication extends SubLTranslatedFile {
             application = $cyclist_authenticating_app$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(cyclist, FORT_P);
-        SubLTrampolineFile.enforceType(passphrase, STRINGP);
+        SubLSystemTrampolineFile.enforceType(cyclist, FORT_P);
+        SubLSystemTrampolineFile.enforceType(passphrase, STRINGP);
         if (NIL != the_cyclist_is_guestP()) {
             return values(NIL, $str49$Please_login_to_specify_authentic);
         }
@@ -3724,19 +3724,19 @@ public final class operation_communication extends SubLTranslatedFile {
         defparameter("*AVAILABLE-COMMUNICATION-MODES*", $list0);
         defparameter("*ALL-COMMUNICATION-MODES*", compile_legacy_communication_mode_information());
         defvar("*STARTUP-COMMUNICATION-MODE*", $UNSET);
-        deflexical("*ALLOW-TRANSMITTING*", SubLTrampolineFile.maybeDefault($allow_transmitting$, $allow_transmitting$, T));
-        deflexical("*KB-FULL-TRANSCRIPT-LOADED*", SubLTrampolineFile.maybeDefault($kb_full_transcript_loaded$, $kb_full_transcript_loaded$, NIL));
+        deflexical("*ALLOW-TRANSMITTING*", SubLSystemTrampolineFile.maybeDefault($allow_transmitting$, $allow_transmitting$, T));
+        deflexical("*KB-FULL-TRANSCRIPT-LOADED*", SubLSystemTrampolineFile.maybeDefault($kb_full_transcript_loaded$, $kb_full_transcript_loaded$, NIL));
         defparameter("*EXPERIMENTAL-IMAGE*", NIL);
         defparameter("*READ-TRANSCRIPT-OP-LIMIT*", $int$200);
-        deflexical("*RECEIVING-REMOTE-OPERATIONS?*", SubLTrampolineFile.maybeDefault($sym20$_RECEIVING_REMOTE_OPERATIONS__, $receiving_remote_operationsP$, T));
-        deflexical("*PROCESS-LOCAL-OPERATIONS?*", SubLTrampolineFile.maybeDefault($sym21$_PROCESS_LOCAL_OPERATIONS__, $process_local_operationsP$, T));
-        deflexical("*PROCESS-AUXILIARY-OPERATIONS?*", SubLTrampolineFile.maybeDefault($sym22$_PROCESS_AUXILIARY_OPERATIONS__, $process_auxiliary_operationsP$, T));
-        deflexical("*TOTAL-REMOTE-OPERATIONS-RUN*", SubLTrampolineFile.maybeDefault($total_remote_operations_run$, $total_remote_operations_run$, ZERO_INTEGER));
-        deflexical("*TOTAL-AUXILIARY-OPERATIONS-RUN*", SubLTrampolineFile.maybeDefault($total_auxiliary_operations_run$, $total_auxiliary_operations_run$, ZERO_INTEGER));
-        deflexical("*TOTAL-LOCAL-OPERATIONS-RECORDED*", SubLTrampolineFile.maybeDefault($total_local_operations_recorded$, $total_local_operations_recorded$, ZERO_INTEGER));
-        deflexical("*TOTAL-LOCAL-OPERATIONS-TRANSMITTED*", SubLTrampolineFile.maybeDefault($total_local_operations_transmitted$, $total_local_operations_transmitted$, ZERO_INTEGER));
-        deflexical("*READ-MASTER-TRANSCRIPT-OP-NUMBER*", SubLTrampolineFile.maybeDefault($read_master_transcript_op_number$, $read_master_transcript_op_number$, ZERO_INTEGER));
-        deflexical("*TOTAL-MASTER-TRANSCRIPT-OPERATIONS-PROCESSED*", SubLTrampolineFile.maybeDefault($total_master_transcript_operations_processed$, $total_master_transcript_operations_processed$, ZERO_INTEGER));
+        deflexical("*RECEIVING-REMOTE-OPERATIONS?*", SubLSystemTrampolineFile.maybeDefault($sym20$_RECEIVING_REMOTE_OPERATIONS__, $receiving_remote_operationsP$, T));
+        deflexical("*PROCESS-LOCAL-OPERATIONS?*", SubLSystemTrampolineFile.maybeDefault($sym21$_PROCESS_LOCAL_OPERATIONS__, $process_local_operationsP$, T));
+        deflexical("*PROCESS-AUXILIARY-OPERATIONS?*", SubLSystemTrampolineFile.maybeDefault($sym22$_PROCESS_AUXILIARY_OPERATIONS__, $process_auxiliary_operationsP$, T));
+        deflexical("*TOTAL-REMOTE-OPERATIONS-RUN*", SubLSystemTrampolineFile.maybeDefault($total_remote_operations_run$, $total_remote_operations_run$, ZERO_INTEGER));
+        deflexical("*TOTAL-AUXILIARY-OPERATIONS-RUN*", SubLSystemTrampolineFile.maybeDefault($total_auxiliary_operations_run$, $total_auxiliary_operations_run$, ZERO_INTEGER));
+        deflexical("*TOTAL-LOCAL-OPERATIONS-RECORDED*", SubLSystemTrampolineFile.maybeDefault($total_local_operations_recorded$, $total_local_operations_recorded$, ZERO_INTEGER));
+        deflexical("*TOTAL-LOCAL-OPERATIONS-TRANSMITTED*", SubLSystemTrampolineFile.maybeDefault($total_local_operations_transmitted$, $total_local_operations_transmitted$, ZERO_INTEGER));
+        deflexical("*READ-MASTER-TRANSCRIPT-OP-NUMBER*", SubLSystemTrampolineFile.maybeDefault($read_master_transcript_op_number$, $read_master_transcript_op_number$, ZERO_INTEGER));
+        deflexical("*TOTAL-MASTER-TRANSCRIPT-OPERATIONS-PROCESSED*", SubLSystemTrampolineFile.maybeDefault($total_master_transcript_operations_processed$, $total_master_transcript_operations_processed$, ZERO_INTEGER));
         deflexical("*IMAGE-REQUIRES-AUTHENTICATION?*", NIL);
         defparameter("*CYCLIST-AUTHENTICATING-APP*", $$CycBrowser);
         defparameter("*DEFAULT-CYCLIST-AUTHENTICATION-MT*", $$CyclistsMt);
@@ -3746,11 +3746,11 @@ public final class operation_communication extends SubLTranslatedFile {
         defparameter("*SAVE-TRANSCRIPT-OPS-LOCK*", make_lock($$$Save_Transcript_OPS_lock));
         defparameter("*SAVE-HL-TRANSCRIPT-OPS-LOCK*", make_lock($str96$Save_Hl_Transcript_OPS_lock));
         defvar("*TRANSCRIPT-LOAD-SUCCEEDED*", NIL);
-        deflexical("*TRANSCRIPT-READ-ATTEMPTED*", SubLTrampolineFile.maybeDefault($transcript_read_attempted$, $transcript_read_attempted$, NIL));
-        deflexical("*INITIAL-READ-TRANSCRIPT-SIZE*", SubLTrampolineFile.maybeDefault($initial_read_transcript_size$, $initial_read_transcript_size$, ZERO_INTEGER));
+        deflexical("*TRANSCRIPT-READ-ATTEMPTED*", SubLSystemTrampolineFile.maybeDefault($transcript_read_attempted$, $transcript_read_attempted$, NIL));
+        deflexical("*INITIAL-READ-TRANSCRIPT-SIZE*", SubLSystemTrampolineFile.maybeDefault($initial_read_transcript_size$, $initial_read_transcript_size$, ZERO_INTEGER));
         defparameter("*CATCH-UP-KB-TRANSCRIPT-SERVER-WAIT-TIME*", $int$600);
         defparameter("*CATCH-UP-KB-AGENDA-HALT-WAIT-TIME*", NIL);
-        deflexical("*REMOTE-OPERATIONS-KB-CHECK-POINT*", SubLTrampolineFile.maybeDefault($remote_operations_kb_check_point$, $remote_operations_kb_check_point$, NIL));
+        deflexical("*REMOTE-OPERATIONS-KB-CHECK-POINT*", SubLSystemTrampolineFile.maybeDefault($remote_operations_kb_check_point$, $remote_operations_kb_check_point$, NIL));
         return NIL;
     }
 

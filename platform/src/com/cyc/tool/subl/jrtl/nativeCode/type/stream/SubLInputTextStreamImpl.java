@@ -230,7 +230,7 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 	@Override
 	public int readChar(char[] b) {
 		this.ensureOpen("READ-CHAR");
-		Errors.unimplementedMethod("SubLInputTextStreamImpl.read(byte[])");
+		Errors.unimplementedMethod("SubLInputTextStreamImpl.read(char[])");
 		return -1;
 	}
 

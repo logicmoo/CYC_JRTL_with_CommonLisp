@@ -108,7 +108,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2555,7 +2555,7 @@ public final class sksi_query_utilities extends SubLTranslatedFile {
 
     public static SubLObject init_sksi_query_utilities_file() {
         deflexical("*SKSI-QUERY-HISTORY-LIMIT*", TEN_INTEGER);
-        deflexical("*SKSI-QUERY-COSTS*", SubLTrampolineFile.maybeDefault($sksi_query_costs$, $sksi_query_costs$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*SKSI-QUERY-COSTS*", SubLSystemTrampolineFile.maybeDefault($sksi_query_costs$, $sksi_query_costs$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
         defparameter("*SKSI-COST-RECORDING-SUSPENDED-FOR-CURRENT-ITERATOR?*", NIL);
         deflexical("*SKSI-DEFAULT-QUERY-COST*", SEVENTEEN_INTEGER);
         return NIL;

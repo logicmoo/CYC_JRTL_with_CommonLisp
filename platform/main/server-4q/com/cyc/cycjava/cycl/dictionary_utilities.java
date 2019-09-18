@@ -111,7 +111,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class dictionary_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new dictionary_utilities();
@@ -2247,7 +2247,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_dictionary_utilities_file() {
         defparameter("*DICTIONARY-KEYS-SORTER-CURRENT-SORTING-INFORMATION*", NIL);
         deflexical("*KEY-MISSING*", make_symbol($str59$KEY_MISSING));
-        deflexical("*SUB-DICTIONARY-NOT-FOUND*", SubLTrampolineFile.maybeDefault($sub_dictionary_not_found$, $sub_dictionary_not_found$, () -> gensym(UNPROVIDED)));
+        deflexical("*SUB-DICTIONARY-NOT-FOUND*", SubLSystemTrampolineFile.maybeDefault($sub_dictionary_not_found$, $sub_dictionary_not_found$, () -> gensym(UNPROVIDED)));
         defconstant("*DTP-SYNCHRONIZED-DICTIONARY*", SYNCHRONIZED_DICTIONARY);
         return NIL;
     }

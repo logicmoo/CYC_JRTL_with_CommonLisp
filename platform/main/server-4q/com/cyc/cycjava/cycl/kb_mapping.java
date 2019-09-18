@@ -92,7 +92,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2111,7 +2111,7 @@ public final class kb_mapping extends SubLTranslatedFile {
 
     public static SubLObject map_term(final SubLObject function, final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
         SubLObject catch_var = NIL;
         try {
             thread.throwStack.push($MAPPING_DONE);
@@ -2224,8 +2224,8 @@ public final class kb_mapping extends SubLTranslatedFile {
             truth = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
-        SubLTrampolineFile.enforceType(test, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(test, FUNCTION_SPEC_P);
         final SubLObject _prev_bind_0 = $map_term_selective_action$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $map_term_selective_test$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $mapping_truth$.currentBinding(thread);
@@ -2262,7 +2262,7 @@ public final class kb_mapping extends SubLTranslatedFile {
         if (truth == UNPROVIDED) {
             truth = NIL;
         }
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
         selected_map_term(function, v_term, truth, T);
         return NIL;
     }
@@ -2275,7 +2275,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             gafs_only = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
         if (NIL != forts.fort_p(v_term)) {
             if (NIL != kb_indexing.broad_mtP(v_term)) {
                 if (NIL != mt_relevance_macros.relevant_mtP(v_term)) {
@@ -2397,7 +2397,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             gafs_only = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
         if (NIL != forts.fort_p(mt)) {
             SubLObject catch_var = NIL;
             try {
@@ -2448,7 +2448,7 @@ public final class kb_mapping extends SubLTranslatedFile {
         if (gafs_only == UNPROVIDED) {
             gafs_only = NIL;
         }
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
         if (NIL != hlmt.hlmt_p(v_term)) {
             map_hlmt_index(function, v_term, truth, gafs_only);
         }
@@ -2463,7 +2463,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             gafs_only = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
         if (NIL != hlmt.hlmtP(mt)) {
             final SubLObject _prev_bind_0 = $mapping_truth$.currentBinding(thread);
             try {
@@ -2501,7 +2501,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             gafs_only = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
         final SubLObject type = (NIL != gafs_only) ? $GAF : NIL;
         SubLObject catch_var = NIL;
         try {
@@ -2692,7 +2692,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             truth = $TRUE;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(argnum, POSITIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(argnum, POSITIVE_INTEGER_P);
         SubLObject result = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -2803,7 +2803,7 @@ public final class kb_mapping extends SubLTranslatedFile {
         if (func == UNPROVIDED) {
             func = NIL;
         }
-        SubLTrampolineFile.enforceType(argnum, POSITIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(argnum, POSITIVE_INTEGER_P);
         SubLObject result = NIL;
         if (NIL != func) {
             if (NIL != kb_mapping_macros.do_nart_arg_index_key_validator(v_term, argnum, func)) {
@@ -3023,7 +3023,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             direction = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sense, SENSE_P);
+        SubLSystemTrampolineFile.enforceType(sense, SENSE_P);
         SubLObject result = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -3141,7 +3141,7 @@ public final class kb_mapping extends SubLTranslatedFile {
         if (direction == UNPROVIDED) {
             direction = NIL;
         }
-        SubLTrampolineFile.enforceType(sense, SENSE_P);
+        SubLSystemTrampolineFile.enforceType(sense, SENSE_P);
         SubLObject result = NIL;
         if (NIL != direction) {
             if (NIL != kb_mapping_macros.do_decontextualized_ist_predicate_rule_index_key_validator(pred, sense, direction)) {
@@ -3234,7 +3234,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             direction = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sense, SENSE_P);
+        SubLSystemTrampolineFile.enforceType(sense, SENSE_P);
         SubLObject result = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -3337,7 +3337,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             direction = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sense, SENSE_P);
+        SubLSystemTrampolineFile.enforceType(sense, SENSE_P);
         SubLObject result = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -3440,7 +3440,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             direction = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sense, SENSE_P);
+        SubLSystemTrampolineFile.enforceType(sense, SENSE_P);
         SubLObject result = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -3543,7 +3543,7 @@ public final class kb_mapping extends SubLTranslatedFile {
             direction = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sense, SENSE_P);
+        SubLSystemTrampolineFile.enforceType(sense, SENSE_P);
         SubLObject result = NIL;
         final SubLObject mt_var = rule_mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);

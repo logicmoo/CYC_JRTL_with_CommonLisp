@@ -27,7 +27,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -76,12 +76,12 @@ public final class nl_logging extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(utterance, STRINGP);
-            SubLTrampolineFile.checkType(parses, LISTP);
-            SubLTrampolineFile.checkType(approved, LISTP);
-            SubLTrampolineFile.checkType(disapproved, LISTP);
-            SubLTrampolineFile.checkType(added, LISTP);
-            SubLTrampolineFile.checkType(discarded, LISTP);
+            SubLSystemTrampolineFile.checkType(utterance, STRINGP);
+            SubLSystemTrampolineFile.checkType(parses, LISTP);
+            SubLSystemTrampolineFile.checkType(approved, LISTP);
+            SubLSystemTrampolineFile.checkType(disapproved, LISTP);
+            SubLSystemTrampolineFile.checkType(added, LISTP);
+            SubLSystemTrampolineFile.checkType(discarded, LISTP);
             lexical_mt = min_genl_mt_non_ephemeral(lexical_mt);
             domain_mt = min_genl_mt_non_ephemeral(domain_mt);
             {
@@ -204,7 +204,7 @@ public final class nl_logging extends SubLTranslatedFile implements V02 {
      * Writes a list of unpacked parses to XML
      */
     public static final SubLObject parses_to_xml(SubLObject unpacked_parses) {
-        SubLTrampolineFile.checkType(unpacked_parses, LISTP);
+        SubLSystemTrampolineFile.checkType(unpacked_parses, LISTP);
         {
             SubLObject cdolist_list_var = unpacked_parses;
             SubLObject unpacked = NIL;
@@ -224,7 +224,7 @@ public final class nl_logging extends SubLTranslatedFile implements V02 {
      * Writes a list of disapproved unpacked parses to XML
      */
     public static final SubLObject disapproved_parses_to_xml(SubLObject unpacked_parses) {
-        SubLTrampolineFile.checkType(unpacked_parses, LISTP);
+        SubLSystemTrampolineFile.checkType(unpacked_parses, LISTP);
         {
             SubLObject cdolist_list_var = unpacked_parses;
             SubLObject unpacked = NIL;

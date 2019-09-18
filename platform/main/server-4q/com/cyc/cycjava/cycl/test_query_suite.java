@@ -43,7 +43,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class test_query_suite extends SubLTranslatedFile {
     public static final SubLFile me = new test_query_suite();
@@ -300,7 +300,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (NIL == isa.isaP(constant_id, $$KBContentTestSpecificationType, mt, UNPROVIDED)) {
             Errors.error($str36$Got_bad_constant_id_in_test_query);
         }
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == fort_types_interface.microtheory_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == fort_types_interface.microtheory_p(mt))) {
             throw new AssertionError(mt);
         }
         final SubLObject result = test_query_suite_new(constant_id, mt);

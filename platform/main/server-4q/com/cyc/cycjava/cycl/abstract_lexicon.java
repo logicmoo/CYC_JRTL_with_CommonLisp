@@ -122,7 +122,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -1779,7 +1779,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject textract_lemma_paragraph_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.getField2();
 	}
 
@@ -1789,7 +1789,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject textract_lemma_sentence_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.getField3();
 	}
 
@@ -1799,7 +1799,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject textract_lemma_word_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.getField4();
 	}
 
@@ -1809,7 +1809,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject textract_lemma_string_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.getField5();
 	}
 
@@ -1819,7 +1819,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject textract_lemma_canon_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.getField6();
 	}
 
@@ -1829,7 +1829,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject textract_lemma_type_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.getField7();
 	}
 
@@ -1839,7 +1839,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_textract_lemma_paragraph_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.setField2(value);
 	}
 
@@ -1849,7 +1849,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_textract_lemma_sentence_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.setField3(value);
 	}
 
@@ -1859,7 +1859,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_textract_lemma_word_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.setField4(value);
 	}
 
@@ -1869,7 +1869,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_textract_lemma_string_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.setField5(value);
 	}
 
@@ -1879,7 +1879,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_textract_lemma_canon_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.setField6(value);
 	}
 
@@ -1889,7 +1889,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject _csetf_textract_lemma_type_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
+		SubLSystemTrampolineFile.checkType(v_object, TEXTRACT_LEMMA_P);
 		return v_object.setField7(value);
 	}
 
@@ -1995,7 +1995,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Returns a new textract lemma whose fields are those in LINE, nil if LINE couldn\'t be parsed")
 	public static final SubLObject new_textract_lemma_alt(SubLObject line) {
-		SubLTrampolineFile.checkType(line, STRINGP);
+		SubLSystemTrampolineFile.checkType(line, STRINGP);
 		{
 			SubLObject lemma = make_textract_lemma(UNPROVIDED);
 			SubLObject coordsXstring = string_utilities.split_string(string_utilities.trim_whitespace(string_utilities.string_upto(line, CHAR_lparen)), UNPROVIDED);
@@ -5690,7 +5690,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject allowed_mts = get_abstract_lexicon_allowed_mts(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(mt, POSSIBLY_HLMT_P);
+					SubLSystemTrampolineFile.checkType(mt, POSSIBLY_HLMT_P);
 					set.set_add(mt, allowed_mts);
 					set.set_remove(mt, excluded_mts);
 					root_mt = $UNINITIALIZED;
@@ -5773,7 +5773,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject allowed_mts = get_abstract_lexicon_allowed_mts(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(mt, POSSIBLY_HLMT_P);
+					SubLSystemTrampolineFile.checkType(mt, POSSIBLY_HLMT_P);
 					set.set_add(mt, allowed_mts);
 					set.set_remove(mt, excluded_mts);
 					{
@@ -5870,7 +5870,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject root_mt = get_abstract_lexicon_root_mt(self);
 			SubLObject excluded_mts = get_abstract_lexicon_excluded_mts(self);
 			SubLObject allowed_mts = get_abstract_lexicon_allowed_mts(self);
-			SubLTrampolineFile.checkType(mt, POSSIBLY_HLMT_P);
+			SubLSystemTrampolineFile.checkType(mt, POSSIBLY_HLMT_P);
 			set.set_add(mt, excluded_mts);
 			set.set_remove(mt, allowed_mts);
 			root_mt = $UNINITIALIZED;
@@ -6204,7 +6204,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			try {
 				try {
 					if (NIL != target) {
-						SubLTrampolineFile.checkType(target, ABSTRACT_LEXICON_P);
+						SubLSystemTrampolineFile.checkType(target, ABSTRACT_LEXICON_P);
 					}
 					if (NIL == target) {
 						target = methods.funcall_instance_method_with_0_args(self, CLONE);
@@ -6273,7 +6273,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 		try {
 			thread.throwStack.push($sym379$OUTER_CATCH_FOR_ABSTRACT_LEXICON_METHOD);
 			try {
-				if (((NIL != target) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == abstract_lexicon_p(target))) {
+				if (((NIL != target) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == abstract_lexicon_p(target))) {
 					throw new AssertionError(target);
 				}
 				if (NIL == target) {
@@ -6339,7 +6339,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 				SubLObject trie = get_abstract_lexicon_trie(self);
 				try {
 					try {
-						SubLTrampolineFile.checkType(string, STRINGP);
+						SubLSystemTrampolineFile.checkType(string, STRINGP);
 						if (NIL != methods.funcall_instance_method_with_1_args(self, STOP_WORD_P, string)) {
 							sublisp_throw($sym380$OUTER_CATCH_FOR_ABSTRACT_LEXICON_METHOD, NIL);
 						}
@@ -6553,7 +6553,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject trie = get_abstract_lexicon_trie(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(string, STRINGP);
+					SubLSystemTrampolineFile.checkType(string, STRINGP);
 					{
 						SubLObject trie_key = nl_trie.nl_trie_string_tokenize(string);
 						SubLObject trie_entries = strie.strie_lookup(trie, trie_key);
@@ -6650,8 +6650,8 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject trie = get_abstract_lexicon_trie(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(string, STRINGP);
-					SubLTrampolineFile.checkType(lex_entry, LEX_ENTRY_P);
+					SubLSystemTrampolineFile.checkType(string, STRINGP);
+					SubLSystemTrampolineFile.checkType(lex_entry, LEX_ENTRY_P);
 					{
 						SubLObject trie_key = nl_trie.nl_trie_string_tokenize(string);
 						strie.strie_unassociate(trie, trie_key, lex_entry);
@@ -6779,7 +6779,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject trie = get_abstract_lexicon_trie(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(lex_entry, LEX_ENTRY_P);
+					SubLSystemTrampolineFile.checkType(lex_entry, LEX_ENTRY_P);
 					{
 						SubLObject string = methods.funcall_instance_method_with_1_args(lex_entry, GET, $STRING);
 						SubLObject result = NIL;
@@ -7130,7 +7130,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject trie = get_abstract_lexicon_trie(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(strings, LISTP);
+					SubLSystemTrampolineFile.checkType(strings, LISTP);
 					sublisp_throw($sym413$OUTER_CATCH_FOR_ABSTRACT_LEXICON_METHOD, valid_prefixes(nl_trie_accessors.nl_trie_prefixes(trie, strings, case_sensitivity), self));
 				} finally {
 					{
@@ -7210,7 +7210,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject trie = get_abstract_lexicon_trie(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(string, STRINGP);
+					SubLSystemTrampolineFile.checkType(string, STRINGP);
 					{
 						SubLObject prefix_keys = nl_trie_accessors.nl_trie_prefix_keys_from_string(trie, string, case_sensitivity);
 						SubLObject nl_trie_entry = second(prefix_keys.first());
@@ -7446,7 +7446,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject trie = get_abstract_lexicon_trie(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(strings, LISTP);
+					SubLSystemTrampolineFile.checkType(strings, LISTP);
 					sublisp_throw($sym424$OUTER_CATCH_FOR_ABSTRACT_LEXICON_METHOD, valid_prefix_keys(nl_trie_accessors.nl_trie_prefixes(trie, strings, case_sensitivity), self, case_sensitivity));
 				} finally {
 					{
@@ -7522,7 +7522,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject trie = get_abstract_lexicon_trie(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(string, STRINGP);
+					SubLSystemTrampolineFile.checkType(string, STRINGP);
 					{
 						SubLObject my_prefix_keys = nl_trie_accessors.nl_trie_prefix_keys_from_string(trie, string, case_sensitivity);
 						SubLObject nl_trie_entry = second(my_prefix_keys.first());
@@ -7612,7 +7612,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 			SubLObject active_learners = get_abstract_lexicon_active_learners(self);
 			try {
 				try {
-					SubLTrampolineFile.checkType(text, STRINGP);
+					SubLSystemTrampolineFile.checkType(text, STRINGP);
 					if (NIL == learners) {
 						learners = active_learners;
 					}
@@ -8611,7 +8611,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@param DOC\ndocument-p;\r\n\t\t\r\n@return document-p; a new version of DOC with adjacent words collapsed into\r\nsingle words and nl-trie-entries associated with the words in DOC")
 	public static final SubLObject abstract_lexicon_lexify_document_method_alt(SubLObject self, SubLObject doc) {
-		SubLTrampolineFile.checkType(doc, DOCUMENT_P);
+		SubLSystemTrampolineFile.checkType(doc, DOCUMENT_P);
 		{
 			SubLObject lexified = document.make_document(UNPROVIDED);
 			SubLObject paragraphs = NIL;
@@ -8702,7 +8702,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@param PAR\nparagraph-p;\r\n\t\t\r\n@return paraphraph-p; a new version of PAR with adjacent words collapsed into\r\nsingle words and nl-trie-entries associated with the words in PAR")
 	public static final SubLObject abstract_lexicon_lexify_paragraph_method_alt(SubLObject self, SubLObject par) {
-		SubLTrampolineFile.checkType(par, PARAGRAPH_P);
+		SubLSystemTrampolineFile.checkType(par, PARAGRAPH_P);
 		{
 			SubLObject lexified = document.make_paragraph(UNPROVIDED);
 			SubLObject sentences = NIL;
@@ -8789,7 +8789,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 				SubLObject trie = get_abstract_lexicon_trie(self);
 				try {
 					try {
-						SubLTrampolineFile.checkType(sentence, SENTENCE_P);
+						SubLSystemTrampolineFile.checkType(sentence, SENTENCE_P);
 						if (document.sentence_length(sentence).isZero()) {
 							sublisp_throw($sym479$OUTER_CATCH_FOR_ABSTRACT_LEXICON_METHOD, sentence);
 						}
@@ -10048,9 +10048,9 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "guess the category of multi-word lexeme TOKENS")
 	public static final SubLObject guess_category_alt(SubLObject lexicon, SubLObject string, SubLObject tokens) {
-		SubLTrampolineFile.checkType(lexicon, ABSTRACT_LEXICON_P);
-		SubLTrampolineFile.checkType(string, STRINGP);
-		SubLTrampolineFile.checkType(tokens, LISTP);
+		SubLSystemTrampolineFile.checkType(lexicon, ABSTRACT_LEXICON_P);
+		SubLSystemTrampolineFile.checkType(string, STRINGP);
+		SubLSystemTrampolineFile.checkType(tokens, LISTP);
 		{
 			SubLObject first_word = tokens.first();
 			SubLObject last_word = last(tokens, UNPROVIDED).first();
@@ -10117,7 +10117,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 				SubLObject trie = get_abstract_lexicon_trie(self);
 				try {
 					try {
-						SubLTrampolineFile.checkType(words, LISTP);
+						SubLSystemTrampolineFile.checkType(words, LISTP);
 						{
 							SubLObject record_length = ZERO_INTEGER;
 							SubLObject lexified_tokens = NIL;
@@ -10706,7 +10706,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@param KB-SPEC;\r\n\t\tthe CycL type of the lexicon that you want to create.  This must be a specialization of #$AbstractLexiconSpecification\r\n@return ABSTRACT-LEXICON-P; the fully-instantiated lexicon object")
 	public static final SubLObject new_lexicon_from_kb_spec_alt(SubLObject kb_spec) {
-		SubLTrampolineFile.checkType(kb_spec, FORT_P);
+		SubLSystemTrampolineFile.checkType(kb_spec, FORT_P);
 		{
 			SubLObject class_name = lexicon_spec_class_name(kb_spec);
 			SubLObject lex = object.new_class_instance(class_name);
@@ -10725,7 +10725,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@param KB-SPEC;\r\n\t\tthe CycL type of the lexicon that you want to create.  This must be a specialization of #$AbstractLexiconSpecification\r\n@return ABSTRACT-LEXICON-P; the fully-instantiated lexicon object")
 	public static SubLObject new_lexicon_from_kb_spec(final SubLObject kb_spec) {
-		SubLTrampolineFile.enforceType(kb_spec, FORT_P);
+		SubLSystemTrampolineFile.enforceType(kb_spec, FORT_P);
 		final SubLObject class_name = lexicon_spec_class_name(kb_spec);
 		final SubLObject lex = object.new_class_instance(class_name);
 		methods.funcall_instance_method_with_1_args(lex, INITIALIZE_ALLOWED_MTS, kb_spec);
@@ -10866,7 +10866,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject abstract_lexicon_iterator_state_trie_iterator_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
+		SubLSystemTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
 		return v_object.getField2();
 	}
 
@@ -10878,7 +10878,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	static private final SubLList $list_alt287 = list(makeString("do not allow POS to be used by this lexicon for lexical lookup"), list(makeSymbol("CPUSHNEW"), makeSymbol("POS"), makeSymbol("EXCLUDED-POS-LIST")), list(RET, makeSymbol("SELF")));
 
 	public static final SubLObject abstract_lexicon_iterator_state_next_entries_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
+		SubLSystemTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
 		return v_object.getField3();
 	}
 
@@ -10890,7 +10890,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	static private final SubLSymbol $sym288$OUTER_CATCH_FOR_ABSTRACT_LEXICON_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-ABSTRACT-LEXICON-METHOD");
 
 	public static final SubLObject abstract_lexicon_iterator_state_lexicon_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
+		SubLSystemTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
 		return v_object.getField4();
 	}
 
@@ -10904,7 +10904,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	static private final SubLList $list_alt291 = list(makeString("is POS a part of speech that can not be used in from this lexicon?"), list(RET, list(makeSymbol("GENL-POS-MEMBER?"), makeSymbol("POS"), makeSymbol("EXCLUDED-POS-LIST"))));
 
 	public static final SubLObject _csetf_abstract_lexicon_iterator_state_trie_iterator_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
+		SubLSystemTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
 		return v_object.setField2(value);
 	}
 
@@ -10918,7 +10918,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	static private final SubLSymbol $sym293$ABSTRACT_LEXICON_EXCLUDED_POS__METHOD = makeSymbol("ABSTRACT-LEXICON-EXCLUDED-POS?-METHOD");
 
 	public static final SubLObject _csetf_abstract_lexicon_iterator_state_next_entries_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
+		SubLSystemTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
 		return v_object.setField3(value);
 	}
 
@@ -10932,7 +10932,7 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 	static private final SubLSymbol $sym295$OUTER_CATCH_FOR_ABSTRACT_LEXICON_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-ABSTRACT-LEXICON-METHOD");
 
 	public static final SubLObject _csetf_abstract_lexicon_iterator_state_lexicon_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
+		SubLSystemTrampolineFile.checkType(v_object, ABSTRACT_LEXICON_ITERATOR_STATE_P);
 		return v_object.setField4(value);
 	}
 

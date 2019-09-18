@@ -31,7 +31,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -270,7 +270,7 @@ public final class kb_indexing_declarations extends SubLTranslatedFile {
 
     public static SubLObject init_kb_indexing_declarations_file() {
         deflexical("*DEFAULT-INTERMEDIATE-INDEX-EQUAL-TEST*", symbol_function(EQL));
-        deflexical("*KB-INDEXING-DECLARATION-STORE*", SubLTrampolineFile.maybeDefault($kb_indexing_declaration_store$, $kb_indexing_declaration_store$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
+        deflexical("*KB-INDEXING-DECLARATION-STORE*", SubLSystemTrampolineFile.maybeDefault($kb_indexing_declaration_store$, $kb_indexing_declaration_store$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
         return NIL;
     }
 

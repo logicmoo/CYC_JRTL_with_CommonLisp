@@ -62,7 +62,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1943,9 +1943,9 @@ public final class tva_utilities extends SubLTranslatedFile {
 
     public static SubLObject init_tva_utilities_file() {
         deflexical("*TVA-PREDICATES*", $list0);
-        deflexical("*TVA-PRECOMPUTES-SKSI-CLOSURES?*", SubLTrampolineFile.maybeDefault($sym7$_TVA_PRECOMPUTES_SKSI_CLOSURES__, $tva_precomputes_sksi_closuresP$, NIL));
-        deflexical("*TVA-ITERATES-KB-PREDICATE-EXTENT?*", SubLTrampolineFile.maybeDefault($sym8$_TVA_ITERATES_KB_PREDICATE_EXTENT__, $tva_iterates_kb_predicate_extentP$, T));
-        deflexical("*TVA-ITERATES-SKSI-PREDICATE-EXTENT?*", SubLTrampolineFile.maybeDefault($sym9$_TVA_ITERATES_SKSI_PREDICATE_EXTENT__, $tva_iterates_sksi_predicate_extentP$, NIL));
+        deflexical("*TVA-PRECOMPUTES-SKSI-CLOSURES?*", SubLSystemTrampolineFile.maybeDefault($sym7$_TVA_PRECOMPUTES_SKSI_CLOSURES__, $tva_precomputes_sksi_closuresP$, NIL));
+        deflexical("*TVA-ITERATES-KB-PREDICATE-EXTENT?*", SubLSystemTrampolineFile.maybeDefault($sym8$_TVA_ITERATES_KB_PREDICATE_EXTENT__, $tva_iterates_kb_predicate_extentP$, T));
+        deflexical("*TVA-ITERATES-SKSI-PREDICATE-EXTENT?*", SubLSystemTrampolineFile.maybeDefault($sym9$_TVA_ITERATES_SKSI_PREDICATE_EXTENT__, $tva_iterates_sksi_predicate_extentP$, NIL));
         defparameter("*TVA-FORCE-ARG-ADMITTANCE-CHECKING?*", NIL);
         defparameter("*TVA-PRECOMPUTE-CLOSURE-THRESHOLD*", $int$1500);
         deflexical("*CACHED-SOME-TVA-FOR-PREDICATE-CACHING-STATE*", NIL);

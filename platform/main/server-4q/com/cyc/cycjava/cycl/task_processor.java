@@ -113,7 +113,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class task_processor extends SubLTranslatedFile {
     public static final SubLFile me = new task_processor();
@@ -3260,7 +3260,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         deflexical("*TPOOL-BACKGROUND-MSG-PATH*", NIL);
         deflexical("*TPOOL-BACKGROUND-MSG-STREAM*", NIL);
         defparameter("*QUEUE-TPOOL-BACKGROUND-MSGS-WHEN-NO-PATH?*", NIL);
-        deflexical("*TPOOL-BACKGROUND-MSG-LOCK*", SubLTrampolineFile.maybeDefault($tpool_background_msg_lock$, $tpool_background_msg_lock$, () -> make_lock($str157$tpool_background_msg_lock)));
+        deflexical("*TPOOL-BACKGROUND-MSG-LOCK*", SubLSystemTrampolineFile.maybeDefault($tpool_background_msg_lock$, $tpool_background_msg_lock$, () -> make_lock($str157$tpool_background_msg_lock)));
         defparameter("*EVAL-WITH-BINDINGS*", NIL);
         deflexical("*PROCESS-TO-TASK-PROCESS-POOL*", dictionary_utilities.new_synchronized_dictionary(UNPROVIDED, UNPROVIDED));
         deflexical("*TASK-PROCESSES-BEING-WORKED-ON-LOCK*", make_lock($$$Task_processes_being_worked_on));
@@ -3281,7 +3281,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         deflexical("*BG-TASK-PROCESSOR-REQUEST-ID*", ZERO_INTEGER);
         deflexical("*CONSOLE-TASK-PROCESS-POOL*", NIL);
         defconstant("*CONSOLE-TASK-PROCESS-POOL-LOCK*", make_lock($str277$task_processor_initialization_loc));
-        deflexical("*TASK-PROCESSOR-CONSOLE-ID*", SubLTrampolineFile.maybeDefault($task_processor_console_id$, $task_processor_console_id$, ZERO_INTEGER));
+        deflexical("*TASK-PROCESSOR-CONSOLE-ID*", SubLSystemTrampolineFile.maybeDefault($task_processor_console_id$, $task_processor_console_id$, ZERO_INTEGER));
         return NIL;
     }
 

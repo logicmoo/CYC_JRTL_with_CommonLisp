@@ -121,7 +121,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -6639,12 +6639,12 @@ public final class hl_supports extends SubLTranslatedFile {
 
     public static SubLObject init_hl_supports_file() {
         deflexical("*HL-PREDICATES*", $list0);
-        deflexical("*HL-SUPPORT-MODULES*", SubLTrampolineFile.maybeDefault($hl_support_modules$, $hl_support_modules$, NIL));
+        deflexical("*HL-SUPPORT-MODULES*", SubLSystemTrampolineFile.maybeDefault($hl_support_modules$, $hl_support_modules$, NIL));
         defparameter("*HL-SUPPORT-MODULE-PLIST-INDICATORS*", $list3);
         defparameter("*HL-FORWARD-MT-COMBOS-MAX-RECURSION-DEPTH*", FIVE_INTEGER);
         defparameter("*DEBUG-NULL-HL-FORWARD-MT-COMBOS?*", NIL);
         defparameter("*PERFORM-OPAQUE-SUPPORT-VERIFICATION*", NIL);
-        deflexical("*BOOKKEEPING-JUSTIFICATION-ASSERTION-MT*", SubLTrampolineFile.maybeDefault($bookkeeping_justification_assertion_mt$, $bookkeeping_justification_assertion_mt$, $$BaseKB));
+        deflexical("*BOOKKEEPING-JUSTIFICATION-ASSERTION-MT*", SubLSystemTrampolineFile.maybeDefault($bookkeeping_justification_assertion_mt$, $bookkeeping_justification_assertion_mt$, $$BaseKB));
         deflexical("*CACHED-FIND-ASSERTION-CYCL-CACHING-STATE*", NIL);
         deflexical("*HL-FORWARD-MT-COMBOS-ISA-CACHING-STATE*", NIL);
         defparameter("*DEFAULT-HL-VERIFY-QUERY-PROPERTIES*", $list218);

@@ -190,7 +190,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class api_widgets extends SubLTranslatedFile {
@@ -1255,7 +1255,7 @@ public final class api_widgets extends SubLTranslatedFile {
 	}
 
 	public static SubLObject foo_test(final SubLObject obj) {
-		SubLTrampolineFile.enforceType(obj, FOO_P);
+		SubLSystemTrampolineFile.enforceType(obj, FOO_P);
 		return foo_bar(obj);
 	}
 
@@ -1365,8 +1365,8 @@ public final class api_widgets extends SubLTranslatedFile {
 		if (client == UNPROVIDED) {
 			client = task_processor.get_current_task_processor_client();
 		}
-		SubLTrampolineFile.enforceType(prefix, STRINGP);
-		SubLTrampolineFile.enforceType(client, STRINGP);
+		SubLSystemTrampolineFile.enforceType(prefix, STRINGP);
+		SubLSystemTrampolineFile.enforceType(client, STRINGP);
 		final SubLObject variable = gentemp(prefix);
 		register_session_symbol_cleanup_form(variable, client);
 		return variable;
@@ -11077,7 +11077,7 @@ public final class api_widgets extends SubLTranslatedFile {
 		defconstant("*DTP-FOO*", FOO);
 		defparameter("*A-FOO*", make_foo(UNPROVIDED));
 		deflexical("*API-WIDGET-SESSION-RESOURCE-LOCK*", make_lock($$$Api_Widget_Session_Resource_Lock));
-		deflexical("*API-WIDGET-SESSION-RESOURCE-MAP*", SubLTrampolineFile.maybeDefault($api_widget_session_resource_map$, $api_widget_session_resource_map$, () -> dictionary.new_dictionary(EQUAL, UNPROVIDED)));
+		deflexical("*API-WIDGET-SESSION-RESOURCE-MAP*", SubLSystemTrampolineFile.maybeDefault($api_widget_session_resource_map$, $api_widget_session_resource_map$, () -> dictionary.new_dictionary(EQUAL, UNPROVIDED)));
 		deflexical("*API-WIDGETS-GET-COLLECTION-INSTANCES-ARG-COOCCURRENCE*", dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED));
 		deflexical("*GET-COLLECTION-INSTANCES-CACHING-STATE*", NIL);
 		defparameter("*WS-INSTANCE-DICT*", dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED));
@@ -11095,7 +11095,7 @@ public final class api_widgets extends SubLTranslatedFile {
 		deflexical("*GET-REFORMULATION-SPECIFICATION-FROM-KB-CACHING-STATE*", NIL);
 		defparameter("*FET-EVALUATION-MT*", $$TKBEvaluatedSentencesMt);
 		deflexical("*FUTURE-ASSERTION-MESSAGE-STRING*", $str177$Future_assertion_only_possibility);
-		deflexical("*FUTURE-ASSERTION-COUNTER*", SubLTrampolineFile.maybeDefault($future_assertion_counter$, $future_assertion_counter$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+		deflexical("*FUTURE-ASSERTION-COUNTER*", SubLSystemTrampolineFile.maybeDefault($future_assertion_counter$, $future_assertion_counter$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
 		deflexical("*MICROTHEORY-INDEXICAL-REFERENT-CURRENT-MT*", $list182);
 		deflexical("*MICROTHEORY-MENTIONING-CONSTRUCTS*", $list183);
 		defparameter("*PARSE-SENTENCE-CONTEXT*", NIL);
@@ -11118,7 +11118,7 @@ public final class api_widgets extends SubLTranslatedFile {
 		defparameter("*EVERYTHING-PSC-DWIMMED-AWAY?*", NIL);
 		deflexical("*GET-POSSIBLE-RENDERERS-FOR-FOLLOWUP-INT-CACHING-STATE*", NIL);
 		deflexical("*FET-CATEGORIZED-SOURCE-PRED*", NIL);
-		deflexical("*FET-CATEGORIZED-SOURCES*", SubLTrampolineFile.maybeDefault($fet_categorized_sources$, $fet_categorized_sources$, $UNINITIALIZED));
+		deflexical("*FET-CATEGORIZED-SOURCES*", SubLSystemTrampolineFile.maybeDefault($fet_categorized_sources$, $fet_categorized_sources$, $UNINITIALIZED));
 		deflexical("*FET-EMPTY-SOURCE-DICTIONARY*", NIL);
 		deflexical("*COLLECTION-CREATION-TEMPLATE-CACHING-STATE*", NIL);
 		deflexical("*TERM-QUA-INFERENCE-ANSWER-PATTERN*", $list469);

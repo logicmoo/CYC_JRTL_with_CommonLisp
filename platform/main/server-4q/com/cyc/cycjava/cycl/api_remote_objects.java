@@ -13,7 +13,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -190,9 +190,9 @@ public final class api_remote_objects extends SubLTranslatedFile {
     }
 
     public static SubLObject init_api_remote_objects_file() {
-        deflexical("*REMO-SESSION-MAP*", SubLTrampolineFile.maybeDefault($remo_session_map$, $remo_session_map$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*REMO-SESSION-ID-GENERATOR*", SubLTrampolineFile.maybeDefault($remo_session_id_generator$, $remo_session_id_generator$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-        deflexical("*REMO-OBJECT-NOT-FOUND*", SubLTrampolineFile.maybeDefault($remo_object_not_found$, $remo_object_not_found$, () -> make_symbol($$$Remote_Object_Not_Found)));
+        deflexical("*REMO-SESSION-MAP*", SubLSystemTrampolineFile.maybeDefault($remo_session_map$, $remo_session_map$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*REMO-SESSION-ID-GENERATOR*", SubLSystemTrampolineFile.maybeDefault($remo_session_id_generator$, $remo_session_id_generator$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*REMO-OBJECT-NOT-FOUND*", SubLSystemTrampolineFile.maybeDefault($remo_object_not_found$, $remo_object_not_found$, () -> make_symbol($$$Remote_Object_Not_Found)));
         return NIL;
     }
 

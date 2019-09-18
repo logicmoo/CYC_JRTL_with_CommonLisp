@@ -149,7 +149,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -2298,7 +2298,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject make_el_extensional_set_alt(SubLObject objects) {
-		SubLTrampolineFile.checkType(objects, LISTP);
+		SubLSystemTrampolineFile.checkType(objects, LISTP);
 		if (NIL == objects) {
 			return $$TheEmptySet;
 		} else {
@@ -2604,7 +2604,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 		if (domain_mt == UNPROVIDED) {
 			domain_mt = NIL;
 		}
-		SubLTrampolineFile.checkType(formula, EL_FORMULA_P);
+		SubLSystemTrampolineFile.checkType(formula, EL_FORMULA_P);
 		if (NIL == language_mt) {
 			language_mt = pph_vars.pph_language_mt();
 		}
@@ -2648,7 +2648,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 		if (domain_mt == UNPROVIDED) {
 			domain_mt = NIL;
 		}
-		SubLTrampolineFile.checkType(formula, EL_FORMULA_P);
+		SubLSystemTrampolineFile.checkType(formula, EL_FORMULA_P);
 		if (NIL == language_mt) {
 			language_mt = pph_vars.pph_language_mt();
 		}
@@ -2691,8 +2691,8 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 		if (domain_mt == UNPROVIDED) {
 			domain_mt = NIL;
 		}
-		SubLTrampolineFile.checkType(var, $sym46$EL_VAR_);
-		SubLTrampolineFile.checkType(formula, EL_FORMULA_P);
+		SubLSystemTrampolineFile.checkType(var, $sym46$EL_VAR_);
+		SubLSystemTrampolineFile.checkType(formula, EL_FORMULA_P);
 		if (NIL == language_mt) {
 			language_mt = pph_vars.pph_language_mt();
 		}
@@ -2778,7 +2778,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Convert all EL variables in EL-SENTENCE to standard one-letter names like ?X.")
 	public static final SubLObject xyz_ify_el_formula_variable_names_alt(SubLObject el_sentence) {
-		SubLTrampolineFile.checkType(el_sentence, EL_SENTENCE_P);
+		SubLSystemTrampolineFile.checkType(el_sentence, EL_SENTENCE_P);
 		{
 			SubLObject new_sentence = copy_expression(el_sentence);
 			SubLObject query_vars = obsolete.formula_variables(el_sentence, $sym46$EL_VAR_, UNPROVIDED);
@@ -3349,7 +3349,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject opaquify_subl_escape_alt(SubLObject subl_escape) {
-		SubLTrampolineFile.checkType(subl_escape, SUBL_ESCAPE_P);
+		SubLSystemTrampolineFile.checkType(subl_escape, SUBL_ESCAPE_P);
 		{
 			SubLObject pcase_var = cycl_utilities.formula_operator(subl_escape);
 			if (pcase_var.eql($$ExpandSubLFn)) {
@@ -4129,7 +4129,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject el_list_items_alt(SubLObject el_list) {
-		SubLTrampolineFile.checkType(el_list, EL_LIST_P);
+		SubLSystemTrampolineFile.checkType(el_list, EL_LIST_P);
 		if (el_list == $$TheEmptyList) {
 			return NIL;
 		} else {
@@ -4146,7 +4146,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject el_list_length_alt(SubLObject el_list) {
-		SubLTrampolineFile.checkType(el_list, EL_LIST_P);
+		SubLSystemTrampolineFile.checkType(el_list, EL_LIST_P);
 		if (el_list == $$TheEmptyList) {
 			return ZERO_INTEGER;
 		} else {
@@ -4291,7 +4291,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject el_list_to_subl_list_recursively_alt(SubLObject el_list) {
-		SubLTrampolineFile.checkType(el_list, EL_LIST_P);
+		SubLSystemTrampolineFile.checkType(el_list, EL_LIST_P);
 		return el_list_to_subl_list_recursively_int(el_list);
 	}
 
@@ -4442,7 +4442,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject el_extensional_set_elements_alt(SubLObject el_set) {
-		SubLTrampolineFile.checkType(el_set, EL_SET_P);
+		SubLSystemTrampolineFile.checkType(el_set, EL_SET_P);
 		if (el_set == $$TheEmptySet) {
 			return NIL;
 		} else {
@@ -4474,7 +4474,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Returns an EL formula constructed from the list LIST.\r\nCurrently this just returns the list itself, since we implement\r\nEL formulas as lists.  You can\'t destructively modify\r\nthe returned EL formula without affecting LIST.\nReturns an EL formula constructed from the list LIST.\nCurrently this just returns the list itself, since we implement\nEL formulas as lists.  You can\'t destructively modify\nthe returned EL formula without affecting LIST.")
 	public static final SubLObject list_to_elf_alt(SubLObject list) {
-		SubLTrampolineFile.checkType(list, CONSP);
+		SubLSystemTrampolineFile.checkType(list, CONSP);
 		return list;
 	}
 
@@ -4492,7 +4492,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Returns a list constructed from the EL formula FORMULA.\r\nCurrently this just returns the formula itself, since we implement\r\nEL formulas as lists.  You can\'t destructively modify\r\nthe returned list without affecting FORMULA.\nReturns a list constructed from the EL formula FORMULA.\nCurrently this just returns the formula itself, since we implement\nEL formulas as lists.  You can\'t destructively modify\nthe returned list without affecting FORMULA.")
 	public static final SubLObject elf_to_list_alt(SubLObject formula) {
-		SubLTrampolineFile.checkType(formula, ELF_P);
+		SubLSystemTrampolineFile.checkType(formula, ELF_P);
 		return formula;
 	}
 
@@ -4930,7 +4930,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 		if (sequence_var == UNPROVIDED) {
 			sequence_var = NIL;
 		}
-		SubLTrampolineFile.checkType(list, LISTP);
+		SubLSystemTrampolineFile.checkType(list, LISTP);
 		if (NIL == list) {
 			if (NIL != sequence_var) {
 				return make_el_formula($$TheList, NIL, sequence_var);
@@ -4960,7 +4960,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 		if (sequence_var == UNPROVIDED) {
 			sequence_var = NIL;
 		}
-		SubLTrampolineFile.checkType(list, LISTP);
+		SubLSystemTrampolineFile.checkType(list, LISTP);
 		if (NIL == list) {
 			if (NIL != sequence_var) {
 				return make_el_formula($$TheList, NIL, sequence_var);
@@ -5053,7 +5053,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 		if (sequence_var == UNPROVIDED) {
 			sequence_var = NIL;
 		}
-		SubLTrampolineFile.checkType(v_set, LIST_WITHOUT_REPETITION_P);
+		SubLSystemTrampolineFile.checkType(v_set, LIST_WITHOUT_REPETITION_P);
 		if (NIL == v_set) {
 			if (NIL != sequence_var) {
 				return make_el_formula($$TheSet, NIL, sequence_var);
@@ -5080,7 +5080,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject el_set_items_alt(SubLObject el_set) {
-		SubLTrampolineFile.checkType(el_set, EL_SET_P);
+		SubLSystemTrampolineFile.checkType(el_set, EL_SET_P);
 		if (el_set == $$TheEmptySet) {
 			return NIL;
 		} else {
@@ -10544,7 +10544,7 @@ public final class el_utilities extends SubLTranslatedFile implements V12 {
 		if (include_sequence_varsP == UNPROVIDED) {
 			include_sequence_varsP = T;
 		}
-		SubLTrampolineFile.checkType(sentence, EL_IMPLICATION_P);
+		SubLSystemTrampolineFile.checkType(sentence, EL_IMPLICATION_P);
 		{
 			SubLObject antecedent = cycl_utilities.sentence_arg1(sentence, UNPROVIDED);
 			SubLObject antecedent_free_vars = sentence_free_variables(antecedent, bound_vars, var_func, include_sequence_varsP);

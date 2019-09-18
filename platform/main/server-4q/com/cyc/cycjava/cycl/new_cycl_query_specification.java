@@ -70,7 +70,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class new_cycl_query_specification extends SubLTranslatedFile {
     public static final SubLFile me = new new_cycl_query_specification();
@@ -1274,7 +1274,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_new_cycl_query_specification_file() {
         defconstant("*DTP-NEW-CYCL-QUERY-SPECIFICATION*", NEW_CYCL_QUERY_SPECIFICATION);
-        deflexical("*NEW-CYCL-QUERY-PARAMETER-SET*", SubLTrampolineFile.maybeDefault($new_cycl_query_parameter_set$, $new_cycl_query_parameter_set$, NIL));
+        deflexical("*NEW-CYCL-QUERY-PARAMETER-SET*", SubLSystemTrampolineFile.maybeDefault($new_cycl_query_parameter_set$, $new_cycl_query_parameter_set$, NIL));
         deflexical("*NEW-CYCL-QUERY-ENCODING-EXTENT*", $$CycAPIMt);
         return NIL;
     }

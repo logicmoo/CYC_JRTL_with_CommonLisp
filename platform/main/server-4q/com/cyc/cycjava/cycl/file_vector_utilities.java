@@ -96,7 +96,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class file_vector_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new file_vector_utilities();
@@ -1856,8 +1856,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject register_indexical_file_vector_reference(final SubLObject indexical, final SubLObject v_file_vector) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(indexical, FILE_VECTOR_INDEXICAL_P);
-        SubLTrampolineFile.enforceType(v_file_vector, FILE_VECTOR_P);
+        SubLSystemTrampolineFile.enforceType(indexical, FILE_VECTOR_INDEXICAL_P);
+        SubLSystemTrampolineFile.enforceType(v_file_vector, FILE_VECTOR_P);
         if (NIL == subl_promotions.memberP(indexical, dumper.kb_dump_default_common_symbols(), UNPROVIDED, UNPROVIDED)) {
             Errors.warn($str80$File_Vector_indexical__S_is_not_a, indexical);
         }
@@ -2052,7 +2052,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject new_indexical_backed_map(final SubLObject map, final SubLObject indexical) {
-        SubLTrampolineFile.enforceType(indexical, FILE_VECTOR_INDEXICAL_P);
+        SubLSystemTrampolineFile.enforceType(indexical, FILE_VECTOR_INDEXICAL_P);
         return new_backed_map(map, indexical, NIL);
     }
 
@@ -3377,8 +3377,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defconstant("*CFASL-OPCODE-FVECTOR-REFERENCE*", $int$69);
         defparameter("*FILE-VECTOR-BACKED-MAP-READ-LOCK*", NIL);
         defparameter("*FILE-VECTOR-GET-RECURSION-GUARD*", NIL);
-        deflexical("*FILE-VECTOR-INDEXICAL-REGISTRY*", SubLTrampolineFile.maybeDefault($file_vector_indexical_registry$, $file_vector_indexical_registry$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*FILE-VECTOR-INDEXICAL-LOCK-REGISTRY*", SubLTrampolineFile.maybeDefault($file_vector_indexical_lock_registry$, $file_vector_indexical_lock_registry$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*FILE-VECTOR-INDEXICAL-REGISTRY*", SubLSystemTrampolineFile.maybeDefault($file_vector_indexical_registry$, $file_vector_indexical_registry$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*FILE-VECTOR-INDEXICAL-LOCK-REGISTRY*", SubLSystemTrampolineFile.maybeDefault($file_vector_indexical_lock_registry$, $file_vector_indexical_lock_registry$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-BACKED-MAP*", BACKED_MAP);
         defconstant("*CFASL-OPCODE-BACKED-MAP*", $int$76);
         defparameter("*CFASL-OUTER-FVECTOR-FOR-BACKED-MAPS*", NIL);

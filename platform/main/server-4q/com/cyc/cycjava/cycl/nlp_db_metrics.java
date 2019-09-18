@@ -81,7 +81,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -674,7 +674,7 @@ public final class nlp_db_metrics extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != stringp(corpus) : "Types.stringp(corpus) " + "CommonSymbols.NIL != Types.stringp(corpus) " + corpus;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         SubLObject i = ZERO_INTEGER;
@@ -777,7 +777,7 @@ public final class nlp_db_metrics extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != stringp(corpus) : "Types.stringp(corpus) " + "CommonSymbols.NIL != Types.stringp(corpus) " + corpus;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         SubLObject i = ZERO_INTEGER;
@@ -925,7 +925,7 @@ public final class nlp_db_metrics extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != stringp(corpus) : "Types.stringp(corpus) " + "CommonSymbols.NIL != Types.stringp(corpus) " + corpus;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         SubLObject i = ZERO_INTEGER;
@@ -1070,7 +1070,7 @@ public final class nlp_db_metrics extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != stringp(corpus) : "Types.stringp(corpus) " + "CommonSymbols.NIL != Types.stringp(corpus) " + corpus;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         SubLObject i = ZERO_INTEGER;
@@ -1291,7 +1291,7 @@ public final class nlp_db_metrics extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != stringp(corpus) : "Types.stringp(corpus) " + "CommonSymbols.NIL != Types.stringp(corpus) " + corpus;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         SubLObject i = ZERO_INTEGER;
@@ -1444,7 +1444,7 @@ public final class nlp_db_metrics extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != subl_promotions.positive_integer_p(old_run_id) : "subl_promotions.positive_integer_p(old_run_id) " + "CommonSymbols.NIL != subl_promotions.positive_integer_p(old_run_id) " + old_run_id;
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         SubLObject i = ZERO_INTEGER;
@@ -2602,7 +2602,7 @@ public final class nlp_db_metrics extends SubLTranslatedFile {
         }
         assert NIL != stringp(sentence) : "Types.stringp(sentence) " + "CommonSymbols.NIL != Types.stringp(sentence) " + sentence;
         assert NIL != sdbc.sql_statement_p(stmt) : "sdbc.sql_statement_p(stmt) " + "CommonSymbols.NIL != sdbc.sql_statement_p(stmt) " + stmt;
-        if (((NIL != lexicon) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == abstract_lexicon.abstract_lexicon_p(lexicon))) {
+        if (((NIL != lexicon) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == abstract_lexicon.abstract_lexicon_p(lexicon))) {
             throw new AssertionError(lexicon);
         }
         final SubLObject ls = db_get_link_structure(sentence, stmt, lexicon);
@@ -2622,7 +2622,7 @@ public final class nlp_db_metrics extends SubLTranslatedFile {
         }
         assert NIL != stringp(sentence) : "Types.stringp(sentence) " + "CommonSymbols.NIL != Types.stringp(sentence) " + sentence;
         assert NIL != sdbc.sql_statement_p(stmt) : "sdbc.sql_statement_p(stmt) " + "CommonSymbols.NIL != sdbc.sql_statement_p(stmt) " + stmt;
-        if (((NIL != lexicon) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == abstract_lexicon.abstract_lexicon_p(lexicon))) {
+        if (((NIL != lexicon) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == abstract_lexicon.abstract_lexicon_p(lexicon))) {
             throw new AssertionError(lexicon);
         }
         final SubLObject ls = db_get_link_structure(sentence, stmt, lexicon);

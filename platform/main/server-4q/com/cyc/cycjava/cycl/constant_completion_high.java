@@ -39,7 +39,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -202,12 +202,12 @@ public final class constant_completion_high extends SubLTranslatedFile {
     private static final SubLSymbol NEW_DIRECTED_CONSTANT_COMPLETION_ITERATOR = makeSymbol("NEW-DIRECTED-CONSTANT-COMPLETION-ITERATOR");
 
     public static SubLObject valid_constant_name_char(final SubLObject v_char) {
-        SubLTrampolineFile.enforceType(v_char, CHARACTERP);
+        SubLSystemTrampolineFile.enforceType(v_char, CHARACTERP);
         return valid_constant_name_char_p(v_char);
     }
 
     public static SubLObject valid_constant_name_char_p(final SubLObject v_char) {
-        SubLTrampolineFile.enforceType(v_char, CHARACTERP);
+        SubLSystemTrampolineFile.enforceType(v_char, CHARACTERP);
         return makeBoolean(((NIL != alphanumericp(v_char)) && (NIL != unicode_strings.ascii_char_p(v_char))) || (NIL != find(v_char, $str7$___, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)));
     }
 
@@ -229,7 +229,7 @@ public final class constant_completion_high extends SubLTranslatedFile {
 
     public static SubLObject constant_name_available(final SubLObject name) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(name, STRINGP);
+        SubLSystemTrampolineFile.enforceType(name, STRINGP);
         if (NIL == valid_constant_name_p(name)) {
             return NIL;
         }
@@ -243,8 +243,8 @@ public final class constant_completion_high extends SubLTranslatedFile {
         if (sequentialP == UNPROVIDED) {
             sequentialP = NIL;
         }
-        SubLTrampolineFile.enforceType(name, VALID_CONSTANT_NAME_P);
-        SubLTrampolineFile.enforceType(sequentialP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(name, VALID_CONSTANT_NAME_P);
+        SubLSystemTrampolineFile.enforceType(sequentialP, BOOLEANP);
         if (NIL != constant_name_available(name)) {
             return name;
         }
@@ -282,14 +282,14 @@ public final class constant_completion_high extends SubLTranslatedFile {
     }
 
     public static SubLObject constant_name_case_collisions(final SubLObject string) {
-        SubLTrampolineFile.enforceType(string, VALID_CONSTANT_NAME_P);
+        SubLSystemTrampolineFile.enforceType(string, VALID_CONSTANT_NAME_P);
         SubLObject uses = constant_complete(string, NIL, T, UNPROVIDED, UNPROVIDED);
         uses = delete(string, uses, symbol_function(EQUAL), symbol_function(CONSTANT_NAME), UNPROVIDED, UNPROVIDED, UNPROVIDED);
         return uses;
     }
 
     public static SubLObject constant_name_case_collision(final SubLObject string) {
-        SubLTrampolineFile.enforceType(string, VALID_CONSTANT_NAME_P);
+        SubLSystemTrampolineFile.enforceType(string, VALID_CONSTANT_NAME_P);
         return constant_name_case_collisions(string).first();
     }
 
@@ -301,8 +301,8 @@ public final class constant_completion_high extends SubLTranslatedFile {
             end = NIL;
         }
         // com.cyc.cycjava.cycl.constants_low.lookup_constant_by_guid();
-        SubLTrampolineFile.enforceType(string, STRINGP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         return constant_completion_interface.kb_constant_complete_exact(string, start, end);
     }
 
@@ -319,10 +319,10 @@ public final class constant_completion_high extends SubLTranslatedFile {
         if (end == UNPROVIDED) {
             end = NIL;
         }
-        SubLTrampolineFile.enforceType(prefix, STRINGP);
-        SubLTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
-        SubLTrampolineFile.enforceType(exact_lengthP, BOOLEANP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(prefix, STRINGP);
+        SubLSystemTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(exact_lengthP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         return constant_completion_interface.kb_constant_complete(prefix, case_sensitiveP, exact_lengthP, start, end);
     }
 
@@ -336,9 +336,9 @@ public final class constant_completion_high extends SubLTranslatedFile {
         if (end == UNPROVIDED) {
             end = NIL;
         }
-        SubLTrampolineFile.enforceType(substring, STRINGP);
-        SubLTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(substring, STRINGP);
+        SubLSystemTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         return constant_completion_interface.kb_constant_apropos(substring, case_sensitiveP, start, end);
     }
 
@@ -352,9 +352,9 @@ public final class constant_completion_high extends SubLTranslatedFile {
         if (end == UNPROVIDED) {
             end = NIL;
         }
-        SubLTrampolineFile.enforceType(postfix, STRINGP);
-        SubLTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(postfix, STRINGP);
+        SubLSystemTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         return constant_completion_interface.kb_constant_postfix(postfix, case_sensitiveP, start, end);
     }
 

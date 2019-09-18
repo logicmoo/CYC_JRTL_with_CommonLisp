@@ -50,7 +50,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -642,10 +642,10 @@ public final class mwp_affix_matcher extends SubLTranslatedFile {
     }
 
     public static SubLObject init_mwp_affix_matcher_file() {
-        deflexical("*MWP-SUFFIX-MATCHER-DERIV*", SubLTrampolineFile.maybeDefault($mwp_suffix_matcher_deriv$, $mwp_suffix_matcher_deriv$, () -> new_mwp_suffix_matcher()));
-        deflexical("*MWP-SUFFIX-MATCHER-INFL*", SubLTrampolineFile.maybeDefault($mwp_suffix_matcher_infl$, $mwp_suffix_matcher_infl$, () -> new_mwp_suffix_matcher()));
-        deflexical("*MWP-PREFIX-MATCHER-DERIV*", SubLTrampolineFile.maybeDefault($mwp_prefix_matcher_deriv$, $mwp_prefix_matcher_deriv$, () -> new_mwp_prefix_matcher()));
-        deflexical("*MWP-PREFIX-MATCHER-INFL*", SubLTrampolineFile.maybeDefault($mwp_prefix_matcher_infl$, $mwp_prefix_matcher_infl$, () -> new_mwp_prefix_matcher()));
+        deflexical("*MWP-SUFFIX-MATCHER-DERIV*", SubLSystemTrampolineFile.maybeDefault($mwp_suffix_matcher_deriv$, $mwp_suffix_matcher_deriv$, () -> new_mwp_suffix_matcher()));
+        deflexical("*MWP-SUFFIX-MATCHER-INFL*", SubLSystemTrampolineFile.maybeDefault($mwp_suffix_matcher_infl$, $mwp_suffix_matcher_infl$, () -> new_mwp_suffix_matcher()));
+        deflexical("*MWP-PREFIX-MATCHER-DERIV*", SubLSystemTrampolineFile.maybeDefault($mwp_prefix_matcher_deriv$, $mwp_prefix_matcher_deriv$, () -> new_mwp_prefix_matcher()));
+        deflexical("*MWP-PREFIX-MATCHER-INFL*", SubLSystemTrampolineFile.maybeDefault($mwp_prefix_matcher_infl$, $mwp_prefix_matcher_infl$, () -> new_mwp_prefix_matcher()));
         defparameter("*USE-SUFFIX-VARIANTS?*", NIL);
         return NIL;
     }

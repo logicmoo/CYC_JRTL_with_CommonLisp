@@ -102,7 +102,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1000,8 +1000,8 @@ public final class date_utilities extends SubLTranslatedFile {
 
     public static SubLObject el_millisecond_compare(final SubLObject early_millisecond, final SubLObject later_millisecond) {
         SubLObject result = NIL;
-        SubLTrampolineFile.enforceType(early_millisecond, POSSIBLY_EL_TIME_MILLISECOND_P);
-        SubLTrampolineFile.enforceType(later_millisecond, POSSIBLY_EL_TIME_MILLISECOND_P);
+        SubLSystemTrampolineFile.enforceType(early_millisecond, POSSIBLY_EL_TIME_MILLISECOND_P);
+        SubLSystemTrampolineFile.enforceType(later_millisecond, POSSIBLY_EL_TIME_MILLISECOND_P);
         final SubLObject sub_early = cycl_utilities.el_formula_arg2(early_millisecond, UNPROVIDED);
         final SubLObject sub_later = cycl_utilities.el_formula_arg2(later_millisecond, UNPROVIDED);
         final SubLObject pcase_var;
@@ -1018,8 +1018,8 @@ public final class date_utilities extends SubLTranslatedFile {
 
     public static SubLObject el_second_compare(final SubLObject early_second, final SubLObject later_second) {
         SubLObject result = NIL;
-        SubLTrampolineFile.enforceType(early_second, POSSIBLY_EL_TIME_SECOND_P);
-        SubLTrampolineFile.enforceType(later_second, POSSIBLY_EL_TIME_SECOND_P);
+        SubLSystemTrampolineFile.enforceType(early_second, POSSIBLY_EL_TIME_SECOND_P);
+        SubLSystemTrampolineFile.enforceType(later_second, POSSIBLY_EL_TIME_SECOND_P);
         final SubLObject sub_early = cycl_utilities.el_formula_arg2(early_second, UNPROVIDED);
         final SubLObject sub_later = cycl_utilities.el_formula_arg2(later_second, UNPROVIDED);
         final SubLObject pcase_var;
@@ -1036,8 +1036,8 @@ public final class date_utilities extends SubLTranslatedFile {
 
     public static SubLObject el_minute_compare(final SubLObject early_minute, final SubLObject later_minute) {
         SubLObject result = NIL;
-        SubLTrampolineFile.enforceType(early_minute, POSSIBLY_EL_TIME_MINUTE_P);
-        SubLTrampolineFile.enforceType(later_minute, POSSIBLY_EL_TIME_MINUTE_P);
+        SubLSystemTrampolineFile.enforceType(early_minute, POSSIBLY_EL_TIME_MINUTE_P);
+        SubLSystemTrampolineFile.enforceType(later_minute, POSSIBLY_EL_TIME_MINUTE_P);
         final SubLObject sub_early = cycl_utilities.el_formula_arg2(early_minute, UNPROVIDED);
         final SubLObject sub_later = cycl_utilities.el_formula_arg2(later_minute, UNPROVIDED);
         final SubLObject pcase_var;
@@ -1054,8 +1054,8 @@ public final class date_utilities extends SubLTranslatedFile {
 
     public static SubLObject el_hour_compare(final SubLObject early_hour, final SubLObject later_hour) {
         SubLObject result = NIL;
-        SubLTrampolineFile.enforceType(early_hour, POSSIBLY_EL_TIME_HOUR_P);
-        SubLTrampolineFile.enforceType(later_hour, POSSIBLY_EL_TIME_HOUR_P);
+        SubLSystemTrampolineFile.enforceType(early_hour, POSSIBLY_EL_TIME_HOUR_P);
+        SubLSystemTrampolineFile.enforceType(later_hour, POSSIBLY_EL_TIME_HOUR_P);
         final SubLObject sub_early = cycl_utilities.el_formula_arg2(early_hour, UNPROVIDED);
         final SubLObject sub_later = cycl_utilities.el_formula_arg2(later_hour, UNPROVIDED);
         final SubLObject pcase_var;
@@ -1072,8 +1072,8 @@ public final class date_utilities extends SubLTranslatedFile {
 
     public static SubLObject el_day_compare(final SubLObject early_day, final SubLObject later_day) {
         SubLObject result = NIL;
-        SubLTrampolineFile.enforceType(early_day, POSSIBLY_EL_DATE_DAY_P);
-        SubLTrampolineFile.enforceType(later_day, POSSIBLY_EL_DATE_DAY_P);
+        SubLSystemTrampolineFile.enforceType(early_day, POSSIBLY_EL_DATE_DAY_P);
+        SubLSystemTrampolineFile.enforceType(later_day, POSSIBLY_EL_DATE_DAY_P);
         final SubLObject sub_early = cycl_utilities.el_formula_arg2(early_day, UNPROVIDED);
         final SubLObject sub_later = cycl_utilities.el_formula_arg2(later_day, UNPROVIDED);
         final SubLObject pcase_var;
@@ -1090,8 +1090,8 @@ public final class date_utilities extends SubLTranslatedFile {
 
     public static SubLObject el_month_compare(final SubLObject early_month, final SubLObject later_month) {
         SubLObject result = NIL;
-        SubLTrampolineFile.enforceType(early_month, POSSIBLY_EL_DATE_MONTH_P);
-        SubLTrampolineFile.enforceType(later_month, POSSIBLY_EL_DATE_MONTH_P);
+        SubLSystemTrampolineFile.enforceType(early_month, POSSIBLY_EL_DATE_MONTH_P);
+        SubLSystemTrampolineFile.enforceType(later_month, POSSIBLY_EL_DATE_MONTH_P);
         final SubLObject sub_early = cycl_utilities.el_formula_arg2(early_month, UNPROVIDED);
         final SubLObject sub_later = cycl_utilities.el_formula_arg2(later_month, UNPROVIDED);
         final SubLObject pcase_var;
@@ -1107,8 +1107,8 @@ public final class date_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject el_year_compare(final SubLObject early_year, final SubLObject later_year) {
-        SubLTrampolineFile.enforceType(early_year, POSSIBLY_EL_DATE_YEAR_P);
-        SubLTrampolineFile.enforceType(later_year, POSSIBLY_EL_DATE_YEAR_P);
+        SubLSystemTrampolineFile.enforceType(early_year, POSSIBLY_EL_DATE_YEAR_P);
+        SubLSystemTrampolineFile.enforceType(later_year, POSSIBLY_EL_DATE_YEAR_P);
         return number_compare(cycl_utilities.el_formula_arg1(early_year, UNPROVIDED), cycl_utilities.el_formula_arg1(later_year, UNPROVIDED));
     }
 
@@ -6294,7 +6294,7 @@ public final class date_utilities extends SubLTranslatedFile {
         deflexical("*HOURS-OF-DAY*", $list124);
         defparameter("*DURATION-DENOTING-FUNCTIONS-ORDERED*", $list156);
         defconstant("*U-DATE-YEAR-DIV*", $int$10000000000);
-        deflexical("*TEMPORAL-INDEXICALS*", SubLTrampolineFile.maybeDefault($temporal_indexicals$, $temporal_indexicals$, $list162));
+        deflexical("*TEMPORAL-INDEXICALS*", SubLSystemTrampolineFile.maybeDefault($temporal_indexicals$, $temporal_indexicals$, $list162));
         defparameter("*INFERENCE-NOW*", NIL);
         defconstant("*START-OF-1970*", encode_universal_time(ZERO_INTEGER, ZERO_INTEGER, ZERO_INTEGER, ONE_INTEGER, ONE_INTEGER, $int$1970, UNPROVIDED));
         defparameter("*PARSE-TO-TWO-DIGIT-YEARS-IN-DATES?*", T);

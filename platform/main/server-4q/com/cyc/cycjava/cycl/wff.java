@@ -122,7 +122,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -546,7 +546,7 @@ public final class wff extends SubLTranslatedFile {
                         final ArrayList old_values = extract_dynamic_values(cprogv_var);
                         try {
                             bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                            SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                            SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                             wffP = wffP(sentence, $ELF, mt);
                         } finally {
                             rebind_dynamic_vars(cprogv_var, old_values);
@@ -624,7 +624,7 @@ public final class wff extends SubLTranslatedFile {
                 final ArrayList old_values = extract_dynamic_values(cprogv_var);
                 try {
                     bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                    SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                    SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                     ans = el_wffP(formula, mt, UNPROVIDED);
                 } finally {
                     rebind_dynamic_vars(cprogv_var, old_values);
@@ -1371,7 +1371,7 @@ public final class wff extends SubLTranslatedFile {
                     final ArrayList old_values = extract_dynamic_values(cprogv_var);
                     try {
                         bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                        SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                        SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                         result = el_wff_syntaxP(formula, UNPROVIDED);
                     } finally {
                         rebind_dynamic_vars(cprogv_var, old_values);
@@ -2396,7 +2396,7 @@ public final class wff extends SubLTranslatedFile {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(formula, LISTP);
+        SubLSystemTrampolineFile.enforceType(formula, LISTP);
         SubLObject okP = NIL;
         final SubLObject _prev_bind_0 = wff_utilities.$check_arg_typesP$.currentBinding(thread);
         final SubLObject _prev_bind_2 = wff_utilities.$check_arityP$.currentBinding(thread);
@@ -2440,7 +2440,7 @@ public final class wff extends SubLTranslatedFile {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(formula, LISTP);
+        SubLSystemTrampolineFile.enforceType(formula, LISTP);
         SubLObject okP = NIL;
         final SubLObject _prev_bind_0 = wff_utilities.$check_arg_typesP$.currentBinding(thread);
         final SubLObject _prev_bind_2 = wff_utilities.$check_arityP$.currentBinding(thread);
@@ -2607,7 +2607,7 @@ public final class wff extends SubLTranslatedFile {
             final ArrayList old_values = extract_dynamic_values(cprogv_var);
             try {
                 bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                 result = el_wfeP(v_term, mt, UNPROVIDED);
             } finally {
                 rebind_dynamic_vars(cprogv_var, old_values);
@@ -2662,7 +2662,7 @@ public final class wff extends SubLTranslatedFile {
                         final ArrayList old_values = extract_dynamic_values(cprogv_var);
                         try {
                             bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                            SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                            SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                             wfeP = wfeP(expression, mt);
                         } finally {
                             rebind_dynamic_vars(cprogv_var, old_values);
@@ -3212,7 +3212,7 @@ public final class wff extends SubLTranslatedFile {
         if (io_mode == UNPROVIDED) {
             io_mode = $NL;
         }
-        SubLTrampolineFile.enforceType(sentence, LISTP);
+        SubLSystemTrampolineFile.enforceType(sentence, LISTP);
         final SubLObject pcase_var = io_mode;
         if (pcase_var.eql($NL)) {
             return explain_why_not_wff(sentence, mt, UNPROVIDED);
@@ -3281,7 +3281,7 @@ public final class wff extends SubLTranslatedFile {
                 final ArrayList old_values = extract_dynamic_values(cprogv_var);
                 try {
                     bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                    SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                    SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                     el_wffP(sentence, mt, UNPROVIDED);
                     if ((NIL != hlmt.hlmt_p(mt)) && (NIL == wff_violations())) {
                         final SubLObject mt_var = mt;
@@ -3345,7 +3345,7 @@ public final class wff extends SubLTranslatedFile {
                 final ArrayList old_values = extract_dynamic_values(cprogv_var);
                 try {
                     bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                    SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                    SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                     result = why_not_wff(sentence, mt, UNPROVIDED);
                 } finally {
                     rebind_dynamic_vars(cprogv_var, old_values);
@@ -3400,7 +3400,7 @@ public final class wff extends SubLTranslatedFile {
                 final ArrayList old_values = extract_dynamic_values(cprogv_var);
                 try {
                     bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                    SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                    SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                     el_wftP(v_term, mt, UNPROVIDED);
                     if ((NIL != hlmt.hlmt_p(mt)) && (NIL == wff_violations())) {
                         final SubLObject mt_var = mt;
@@ -3472,7 +3472,7 @@ public final class wff extends SubLTranslatedFile {
                 final ArrayList old_values = extract_dynamic_values(cprogv_var);
                 try {
                     bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                    SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                    SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                     wff_queryP(sentence, mt, UNPROVIDED);
                     result = wff_violations();
                 } finally {
@@ -3940,7 +3940,7 @@ public final class wff extends SubLTranslatedFile {
             final ArrayList old_values = extract_dynamic_values(cprogv_var);
             try {
                 bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-                SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+                SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
                 if (NIL == violations) {
                     if (wff_context.eql($ASK)) {
                         violations = why_not_wff_ask(sentence, mt, UNPROVIDED);

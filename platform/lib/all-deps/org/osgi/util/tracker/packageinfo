@@ -1,0 +1,1 @@
+include class ServiceTracker$Tracked.class ServiceTracker.class ServiceTrackerCustomizer.class version 1.2.0

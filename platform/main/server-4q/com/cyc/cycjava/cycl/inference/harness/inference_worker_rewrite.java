@@ -73,7 +73,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -252,7 +252,7 @@ public final class inference_worker_rewrite extends SubLTranslatedFile {
 
     public static SubLObject new_rewrite_link(final SubLObject supported_problem, final SubLObject supporting_mapped_problem, final SubLObject hl_module, final SubLObject supports) {
         assert NIL != inference_datastructures_problem.problem_p(supported_problem) : "inference_datastructures_problem.problem_p(supported_problem) " + "CommonSymbols.NIL != inference_datastructures_problem.problem_p(supported_problem) " + supported_problem;
-        if (((NIL != supporting_mapped_problem) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.mapped_problem_p(supporting_mapped_problem))) {
+        if (((NIL != supporting_mapped_problem) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.mapped_problem_p(supporting_mapped_problem))) {
             throw new AssertionError(supporting_mapped_problem);
         }
         assert NIL != inference_modules.hl_module_p(hl_module) : "inference_modules.hl_module_p(hl_module) " + "CommonSymbols.NIL != inference_modules.hl_module_p(hl_module) " + hl_module;
@@ -713,7 +713,7 @@ public final class inference_worker_rewrite extends SubLTranslatedFile {
 
     public static SubLObject new_rewrite_proof(final SubLObject rewrite_link, final SubLObject subproof, final SubLObject variable_map) {
         assert NIL != rewrite_link_p(rewrite_link) : "inference_worker_rewrite.rewrite_link_p(rewrite_link) " + "CommonSymbols.NIL != inference_worker_rewrite.rewrite_link_p(rewrite_link) " + rewrite_link;
-        if (((NIL != subproof) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_proof.proof_p(subproof))) {
+        if (((NIL != subproof) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_proof.proof_p(subproof))) {
             throw new AssertionError(subproof);
         }
         final SubLObject subproofs = (NIL != subproof) ? list(subproof) : NIL;

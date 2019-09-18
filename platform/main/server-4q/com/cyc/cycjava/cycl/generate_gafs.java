@@ -128,7 +128,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -297,42 +297,42 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	}
 
 	public static final SubLObject kag_focus(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, KAG_P);
+		SubLSystemTrampolineFile.checkType(v_object, KAG_P);
 		return v_object.getField2();
 	}
 
 	public static final SubLObject kag_constraining_col(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, KAG_P);
+		SubLSystemTrampolineFile.checkType(v_object, KAG_P);
 		return v_object.getField3();
 	}
 
 	public static final SubLObject kag_fact_gathering_process(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, KAG_P);
+		SubLSystemTrampolineFile.checkType(v_object, KAG_P);
 		return v_object.getField4();
 	}
 
 	public static final SubLObject kag_psg_methods(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, KAG_P);
+		SubLSystemTrampolineFile.checkType(v_object, KAG_P);
 		return v_object.getField5();
 	}
 
 	public static final SubLObject _csetf_kag_focus(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, KAG_P);
+		SubLSystemTrampolineFile.checkType(v_object, KAG_P);
 		return v_object.setField2(value);
 	}
 
 	public static final SubLObject _csetf_kag_constraining_col(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, KAG_P);
+		SubLSystemTrampolineFile.checkType(v_object, KAG_P);
 		return v_object.setField3(value);
 	}
 
 	public static final SubLObject _csetf_kag_fact_gathering_process(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, KAG_P);
+		SubLSystemTrampolineFile.checkType(v_object, KAG_P);
 		return v_object.setField4(value);
 	}
 
 	public static final SubLObject _csetf_kag_psg_methods(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, KAG_P);
+		SubLSystemTrampolineFile.checkType(v_object, KAG_P);
 		return v_object.setField5(value);
 	}
 
@@ -970,15 +970,15 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(kag, KAG_P);
-			SubLTrampolineFile.checkType(search_string_mt, $sym57$ISA_MT_);
+			SubLSystemTrampolineFile.checkType(kag, KAG_P);
+			SubLSystemTrampolineFile.checkType(search_string_mt, $sym57$ISA_MT_);
 			{
 				SubLObject partial_gaf = kag_focus(kag);
 				SubLObject fact_gathering_process = kag_fact_gathering_process(kag);
 				if (NIL == el_grammar.el_sentence_p(partial_gaf)) {
 					{
 						SubLObject transformed = cycl_utilities.transform_hl_to_el(partial_gaf);
-						SubLTrampolineFile.checkType(transformed, EL_SENTENCE_P);
+						SubLSystemTrampolineFile.checkType(transformed, EL_SENTENCE_P);
 						partial_gaf = transformed;
 					}
 				}
@@ -1057,13 +1057,13 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		if (NIL == el_grammar.el_sentence_p(partial_gaf)) {
 			{
 				SubLObject transformed = cycl_utilities.transform_hl_to_el(partial_gaf);
-				SubLTrampolineFile.checkType(transformed, EL_SENTENCE_P);
+				SubLSystemTrampolineFile.checkType(transformed, EL_SENTENCE_P);
 				partial_gaf = transformed;
 			}
 		}
-		SubLTrampolineFile.checkType(constraining_col, COLLECTION_P);
-		SubLTrampolineFile.checkType(search_string_mt, $sym57$ISA_MT_);
-		SubLTrampolineFile.checkType(show_resultsP, BOOLEANP);
+		SubLSystemTrampolineFile.checkType(constraining_col, COLLECTION_P);
+		SubLSystemTrampolineFile.checkType(search_string_mt, $sym57$ISA_MT_);
+		SubLSystemTrampolineFile.checkType(show_resultsP, BOOLEANP);
 		{
 			SubLObject gg_metrics = add_gafs_using_text_corpus_for_kag(new_kag(partial_gaf, constraining_col, UNPROVIDED, UNPROVIDED), search_string_mt, show_resultsP, UNPROVIDED, UNPROVIDED);
 			SubLObject gafs = NIL;
@@ -1185,7 +1185,7 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(input_kag, KAG_P);
+			SubLSystemTrampolineFile.checkType(input_kag, KAG_P);
 			{
 				SubLObject v_term = kag_focus(input_kag);
 				SubLObject psg_methods = kag_psg_methods(input_kag);
@@ -1244,10 +1244,10 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		if (show_resultsP == UNPROVIDED) {
 			show_resultsP = T;
 		}
-		SubLTrampolineFile.checkType(v_term, CYCL_TERM_P);
-		SubLTrampolineFile.checkType(psg_methods, LISTP);
-		SubLTrampolineFile.checkType(search_string_mt, CYCL_TERM_P);
-		SubLTrampolineFile.checkType(show_resultsP, BOOLEANP);
+		SubLSystemTrampolineFile.checkType(v_term, CYCL_TERM_P);
+		SubLSystemTrampolineFile.checkType(psg_methods, LISTP);
+		SubLSystemTrampolineFile.checkType(search_string_mt, CYCL_TERM_P);
+		SubLSystemTrampolineFile.checkType(show_resultsP, BOOLEANP);
 		{
 			SubLObject gg_metrics_list = gather_facts_about_term_kag(new_kag(v_term, NIL, NIL, psg_methods), search_string_mt, show_resultsP, UNPROVIDED, UNPROVIDED);
 			SubLObject facts = NIL;
@@ -1486,10 +1486,10 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(search_engine_result, CONSP);
-			SubLTrampolineFile.checkType(kag, KAG_P);
-			SubLTrampolineFile.checkType(search_string, STRINGP);
-			SubLTrampolineFile.checkType(mode, SYMBOLP);
+			SubLSystemTrampolineFile.checkType(search_engine_result, CONSP);
+			SubLSystemTrampolineFile.checkType(kag, KAG_P);
+			SubLSystemTrampolineFile.checkType(search_string, STRINGP);
+			SubLSystemTrampolineFile.checkType(mode, SYMBOLP);
 			{
 				SubLObject metrics = NIL;
 				SubLObject total_milliseconds = NIL;
@@ -2436,7 +2436,7 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	}
 
 	public static final SubLObject parse_search_engine_result_set(SubLObject search_engine_result) {
-		SubLTrampolineFile.checkType(search_engine_result, CONSP);
+		SubLSystemTrampolineFile.checkType(search_engine_result, CONSP);
 		{
 			SubLObject ans_string = search_engine_result.first();
 			SubLObject offset = second(search_engine_result);
@@ -2469,7 +2469,7 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	public static final SubLObject constituents_of_answer_text(SubLObject ans_sent) {
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(ans_sent, STRINGP);
+			SubLSystemTrampolineFile.checkType(ans_sent, STRINGP);
 			{
 				SubLObject cp = parser.new_charniak_parser(UNPROVIDED, UNPROVIDED);
 				SubLObject constituents = NIL;
@@ -2824,7 +2824,7 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(name, STRINGP);
+			SubLSystemTrampolineFile.checkType(name, STRINGP);
 			{
 				SubLObject constant = NIL;
 				SubLObject unique_name = cconcatenate(name, new SubLObject[] { $str_alt189$_, string_utilities.to_string(random.random($int$10000000000)) });
@@ -2861,7 +2861,7 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	public static final SubLObject gg_assert_gaf_gathering() {
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType($gaf_gathering_event$.getDynamicValue(thread), CONSP);
+			SubLSystemTrampolineFile.checkType($gaf_gathering_event$.getDynamicValue(thread), CONSP);
 			{
 				SubLObject datum = $gaf_gathering_event$.getDynamicValue(thread);
 				SubLObject current = datum;
@@ -2883,8 +2883,8 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 				current = current.rest();
 				if (NIL == current) {
 					$gaf_gathering_event$.setDynamicValue(gg_create_unique($$$GAFGathering, master_cyc_host, master_cyc_port), thread);
-					SubLTrampolineFile.checkType($gaf_gathering_event$.getDynamicValue(thread), FORT_P);
-					SubLTrampolineFile.checkType(partial_gaf, CONSP);
+					SubLSystemTrampolineFile.checkType($gaf_gathering_event$.getDynamicValue(thread), FORT_P);
+					SubLSystemTrampolineFile.checkType(partial_gaf, CONSP);
 					gg_assert(listS($$isa, $gaf_gathering_event$.getDynamicValue(thread), $list_alt198), master_cyc_host, master_cyc_port);
 					gg_assert(list($$gafGatheringTriggerSentence, $gaf_gathering_event$.getDynamicValue(thread), list($$Quote, partial_gaf)), master_cyc_host, master_cyc_port);
 					gg_assert(list($$properSubEvents, fact_gathering_process, $gaf_gathering_event$.getDynamicValue(thread)), master_cyc_host, master_cyc_port);
@@ -2913,7 +2913,7 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	public static final SubLObject gg_assert_string_based_searching() {
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType($string_based_searching_event$.getDynamicValue(thread), CONSP);
+			SubLSystemTrampolineFile.checkType($string_based_searching_event$.getDynamicValue(thread), CONSP);
 			{
 				SubLObject datum = $string_based_searching_event$.getDynamicValue(thread);
 				SubLObject current = datum;
@@ -2947,15 +2947,15 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 						current = current.rest();
 						if (NIL == current) {
 							$string_based_searching_event$.setDynamicValue(gg_create_unique($$$StringBasedSearching, master_cyc_host, master_cyc_port), thread);
-							SubLTrampolineFile.checkType($string_based_searching_event$.getDynamicValue(thread), FORT_P);
+							SubLSystemTrampolineFile.checkType($string_based_searching_event$.getDynamicValue(thread), FORT_P);
 							if (NIL == forts.fort_p($gaf_gathering_event$.getDynamicValue(thread))) {
 								gg_assert_gaf_gathering();
 							}
-							SubLTrampolineFile.checkType($gaf_gathering_event$.getDynamicValue(thread), FORT_P);
-							SubLTrampolineFile.checkType(date_of_event, CYCL_REPRESENTED_TERM_P);
-							SubLTrampolineFile.checkType(v_search_engine, FORT_P);
-							SubLTrampolineFile.checkType(nbr_search_results, INTEGERP);
-							SubLTrampolineFile.checkType(seconds_duration, CYCL_REPRESENTED_TERM_P);
+							SubLSystemTrampolineFile.checkType($gaf_gathering_event$.getDynamicValue(thread), FORT_P);
+							SubLSystemTrampolineFile.checkType(date_of_event, CYCL_REPRESENTED_TERM_P);
+							SubLSystemTrampolineFile.checkType(v_search_engine, FORT_P);
+							SubLSystemTrampolineFile.checkType(nbr_search_results, INTEGERP);
+							SubLSystemTrampolineFile.checkType(seconds_duration, CYCL_REPRESENTED_TERM_P);
 							gg_assert(listS($$isa, $string_based_searching_event$.getDynamicValue(thread), $list_alt206), master_cyc_host, master_cyc_port);
 							gg_assert(list($$properSubEvents, $gaf_gathering_event$.getDynamicValue(thread), $string_based_searching_event$.getDynamicValue(thread)), master_cyc_host, master_cyc_port);
 							gg_assert(list($$dateOfEvent, $string_based_searching_event$.getDynamicValue(thread), date_of_event), master_cyc_host, master_cyc_port);
@@ -2989,9 +2989,9 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
-			SubLTrampolineFile.checkType(nbr_of_supports, INTEGERP);
-			SubLTrampolineFile.checkType($string_based_searching_event$.getDynamicValue(thread), FORT_P);
+			SubLSystemTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
+			SubLSystemTrampolineFile.checkType(nbr_of_supports, INTEGERP);
+			SubLSystemTrampolineFile.checkType($string_based_searching_event$.getDynamicValue(thread), FORT_P);
 			gg_assert(list($$numberOfResultsThatSupportBinding, $string_based_searching_event$.getDynamicValue(thread), binding, nbr_of_supports), master_cyc_host, master_cyc_port);
 			return NIL;
 		}
@@ -3032,13 +3032,13 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 						current = current.rest();
 						if (NIL == current) {
 							$obtaining_a_search_result_event$.setDynamicValue(gg_create_unique($$$ObtainingASearchResult, master_cyc_host, master_cyc_port), thread);
-							SubLTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
-							SubLTrampolineFile.checkType(url, CYCL_REPRESENTED_TERM_P);
-							SubLTrampolineFile.checkType(rank_of_result, INTEGERP);
+							SubLSystemTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
+							SubLSystemTrampolineFile.checkType(url, CYCL_REPRESENTED_TERM_P);
+							SubLSystemTrampolineFile.checkType(rank_of_result, INTEGERP);
 							if (NIL == forts.fort_p($string_based_searching_event$.getDynamicValue(thread))) {
 								gg_assert_string_based_searching();
 							}
-							SubLTrampolineFile.checkType($string_based_searching_event$.getDynamicValue(thread), FORT_P);
+							SubLSystemTrampolineFile.checkType($string_based_searching_event$.getDynamicValue(thread), FORT_P);
 							gg_assert(listS($$isa, $obtaining_a_search_result_event$.getDynamicValue(thread), $list_alt215), master_cyc_host, master_cyc_port);
 							gg_assert(list($$properSubEvents, $string_based_searching_event$.getDynamicValue(thread), $obtaining_a_search_result_event$.getDynamicValue(thread)), master_cyc_host, master_cyc_port);
 							gg_assert(list($$objectFound, $obtaining_a_search_result_event$.getDynamicValue(thread), url), master_cyc_host, master_cyc_port);
@@ -3072,13 +3072,13 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(ans_string, STRINGP);
-			SubLTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
-			SubLTrampolineFile.checkType(completed_gaf, CONSP);
+			SubLSystemTrampolineFile.checkType(ans_string, STRINGP);
+			SubLSystemTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
+			SubLSystemTrampolineFile.checkType(completed_gaf, CONSP);
 			if (NIL == forts.fort_p($obtaining_a_search_result_event$.getDynamicValue(thread))) {
 				gg_assert_obtaining_a_search_result();
 			}
-			SubLTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
+			SubLSystemTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
 			gg_assert(list($$focalBasisString, $obtaining_a_search_result_event$.getDynamicValue(thread), ans_string), master_cyc_host, master_cyc_port);
 			gg_assert(list($$evincesBinding, $obtaining_a_search_result_event$.getDynamicValue(thread), binding), master_cyc_host, master_cyc_port);
 			gg_assert(list($$evincesVerifiedGAF, $obtaining_a_search_result_event$.getDynamicValue(thread), completed_gaf), master_cyc_host, master_cyc_port);
@@ -3104,13 +3104,13 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(ans_string, STRINGP);
-			SubLTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
-			SubLTrampolineFile.checkType(completed_gaf, CONSP);
+			SubLSystemTrampolineFile.checkType(ans_string, STRINGP);
+			SubLSystemTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
+			SubLSystemTrampolineFile.checkType(completed_gaf, CONSP);
 			if (NIL == forts.fort_p($obtaining_a_search_result_event$.getDynamicValue(thread))) {
 				gg_assert_obtaining_a_search_result();
 			}
-			SubLTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
+			SubLSystemTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
 			gg_assert(list($$focalBasisString, $obtaining_a_search_result_event$.getDynamicValue(thread), ans_string), master_cyc_host, master_cyc_port);
 			gg_assert(list($$evincesBinding, $obtaining_a_search_result_event$.getDynamicValue(thread), binding), master_cyc_host, master_cyc_port);
 			gg_assert(list($$evincesRefutableGAF, $obtaining_a_search_result_event$.getDynamicValue(thread), completed_gaf), master_cyc_host, master_cyc_port);
@@ -3136,13 +3136,13 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(ans_string, STRINGP);
-			SubLTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
-			SubLTrampolineFile.checkType(completed_gaf, CONSP);
+			SubLSystemTrampolineFile.checkType(ans_string, STRINGP);
+			SubLSystemTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
+			SubLSystemTrampolineFile.checkType(completed_gaf, CONSP);
 			if (NIL == forts.fort_p($obtaining_a_search_result_event$.getDynamicValue(thread))) {
 				gg_assert_obtaining_a_search_result();
 			}
-			SubLTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
+			SubLSystemTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
 			gg_assert(list($$focalBasisString, $obtaining_a_search_result_event$.getDynamicValue(thread), ans_string), master_cyc_host, master_cyc_port);
 			gg_assert(list($$evincesBinding, $obtaining_a_search_result_event$.getDynamicValue(thread), binding), master_cyc_host, master_cyc_port);
 			gg_assert(list($$evincesUnverifiedGAF, $obtaining_a_search_result_event$.getDynamicValue(thread), completed_gaf), master_cyc_host, master_cyc_port);
@@ -3168,13 +3168,13 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(ans_string, STRINGP);
-			SubLTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
-			SubLTrampolineFile.checkType(completed_gaf, CONSP);
+			SubLSystemTrampolineFile.checkType(ans_string, STRINGP);
+			SubLSystemTrampolineFile.checkType(binding, CYCL_REPRESENTED_TERM_P);
+			SubLSystemTrampolineFile.checkType(completed_gaf, CONSP);
 			if (NIL == forts.fort_p($obtaining_a_search_result_event$.getDynamicValue(thread))) {
 				gg_assert_obtaining_a_search_result();
 			}
-			SubLTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
+			SubLSystemTrampolineFile.checkType($obtaining_a_search_result_event$.getDynamicValue(thread), FORT_P);
 			gg_assert(list($$focalBasisString, $obtaining_a_search_result_event$.getDynamicValue(thread), ans_string), master_cyc_host, master_cyc_port);
 			gg_assert(list($$evincesBinding, $obtaining_a_search_result_event$.getDynamicValue(thread), binding), master_cyc_host, master_cyc_port);
 			gg_assert(list($$evincesKnownGAF, $obtaining_a_search_result_event$.getDynamicValue(thread), completed_gaf), master_cyc_host, master_cyc_port);
@@ -3257,8 +3257,8 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	 * from ANS-STRING, or extended by ANS-STRING if it ANS-STRING does not contain 'and' '&' or 'or'.
 	 */
 	public static final SubLObject gg_expand_coordinations(SubLObject ans_string, SubLObject mode, SubLObject ans_strings, SubLObject offset) {
-		SubLTrampolineFile.checkType(ans_string, STRINGP);
-		SubLTrampolineFile.checkType(mode, SYMBOLP);
+		SubLSystemTrampolineFile.checkType(ans_string, STRINGP);
+		SubLSystemTrampolineFile.checkType(mode, SYMBOLP);
 		{
 			SubLObject result_strings = ans_strings;
 			if (!((((mode == $BETWEEN) || (NIL != string_utilities.substringP($str_alt222$_and_, ans_string, UNPROVIDED, UNPROVIDED, UNPROVIDED))) || (NIL != string_utilities.substringP($str_alt223$_or_, ans_string, UNPROVIDED, UNPROVIDED, UNPROVIDED))) || (NIL != string_utilities.substringP($str_alt224$___, ans_string, UNPROVIDED, UNPROVIDED, UNPROVIDED)))) {
@@ -3313,7 +3313,7 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	 * Returns NIL if the ANS-STRING is doomed, otherwise removes certain words from the end of the string.
 	 */
 	public static final SubLObject gg_remove_backward_words(SubLObject ans_string) {
-		SubLTrampolineFile.checkType(ans_string, STRINGP);
+		SubLSystemTrampolineFile.checkType(ans_string, STRINGP);
 		{
 			SubLObject words = nreverse(string_utilities.split_string(ans_string, UNPROVIDED));
 			SubLObject word = NIL;
@@ -3361,7 +3361,7 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	 * Returns NIL if the ANS-STRING is doomed, otherwise removes certain words from the start of the string.
 	 */
 	public static final SubLObject gg_remove_forward_words(SubLObject ans_string) {
-		SubLTrampolineFile.checkType(ans_string, STRINGP);
+		SubLSystemTrampolineFile.checkType(ans_string, STRINGP);
 		{
 			SubLObject words = string_utilities.split_string(ans_string, UNPROVIDED);
 			SubLObject word = NIL;
@@ -3426,8 +3426,8 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 		if (threshold == UNPROVIDED) {
 			threshold = $gg_web_hit_verified_gaf_threshold$.getGlobalValue();
 		}
-		SubLTrampolineFile.checkType(partial_gaf, CONSP);
-		SubLTrampolineFile.checkType(ans_cycl, FORT_P);
+		SubLSystemTrampolineFile.checkType(partial_gaf, CONSP);
+		SubLSystemTrampolineFile.checkType(ans_cycl, FORT_P);
 		{
 			SubLObject mt = gaf_gathering_paraphrase_mt();
 			SubLObject search_strings = list(cons(mt, search_strings(partial_gaf, mt)));
@@ -3792,10 +3792,10 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	 * formed from the SEARCH-STRING and any of the ANS-STRINGS with MODE could be false.
 	 */
 	public static final SubLObject gg_untrue_sentenceP(SubLObject raw_ans_string, SubLObject search_string, SubLObject ans_strings, SubLObject mode) {
-		SubLTrampolineFile.checkType(raw_ans_string, STRINGP);
-		SubLTrampolineFile.checkType(search_string, STRINGP);
-		SubLTrampolineFile.checkType(ans_strings, LISTP);
-		SubLTrampolineFile.checkType(mode, SYMBOLP);
+		SubLSystemTrampolineFile.checkType(raw_ans_string, STRINGP);
+		SubLSystemTrampolineFile.checkType(search_string, STRINGP);
+		SubLSystemTrampolineFile.checkType(ans_strings, LISTP);
+		SubLSystemTrampolineFile.checkType(mode, SYMBOLP);
 		if (mode == $BACKWARD) {
 			{
 				SubLObject cdolist_list_var = ans_strings;
@@ -3930,8 +3930,8 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	public static final SubLObject gg_refuted_gaf_int_internal(SubLObject completed_gaf, SubLObject domain_mt) {
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(completed_gaf, CONSP);
-			SubLTrampolineFile.checkType(domain_mt, HLMT_P);
+			SubLSystemTrampolineFile.checkType(completed_gaf, CONSP);
+			SubLSystemTrampolineFile.checkType(domain_mt, HLMT_P);
 			if (NIL == $gg_refutation_problem_store$.getDynamicValue(thread)) {
 				gg_create_named_problem_store_for_refutation_queries();
 			}
@@ -4327,9 +4327,9 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	 * 		microtheory in which the assertions would be made.
 	 */
 	public static final SubLObject add_gafs_using_definitions(SubLObject partial_gaf, SubLObject definitions, SubLObject mt) {
-		SubLTrampolineFile.checkType(partial_gaf, EL_SENTENCE_P);
-		SubLTrampolineFile.checkType(definitions, LISTP);
-		SubLTrampolineFile.checkType(mt, $sym57$ISA_MT_);
+		SubLSystemTrampolineFile.checkType(partial_gaf, EL_SENTENCE_P);
+		SubLSystemTrampolineFile.checkType(definitions, LISTP);
+		SubLSystemTrampolineFile.checkType(mt, $sym57$ISA_MT_);
 		{
 			SubLObject var_pos = variable_position_in_gaf(partial_gaf);
 			SubLObject cdolist_list_var = definitions;
@@ -4371,8 +4371,8 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 	 * 		microtheory in which the assertions would be made.
 	 */
 	public static final SubLObject add_gafs_using_web_verification(SubLObject partial_gaf, SubLObject mt) {
-		SubLTrampolineFile.checkType(partial_gaf, EL_SENTENCE_P);
-		SubLTrampolineFile.checkType(mt, $sym57$ISA_MT_);
+		SubLSystemTrampolineFile.checkType(partial_gaf, EL_SENTENCE_P);
+		SubLSystemTrampolineFile.checkType(mt, $sym57$ISA_MT_);
 		{
 			SubLObject var_pos = variable_position_in_gaf(partial_gaf);
 			SubLObject completed_gafs = gg_completed_gafs_for_verification(partial_gaf);

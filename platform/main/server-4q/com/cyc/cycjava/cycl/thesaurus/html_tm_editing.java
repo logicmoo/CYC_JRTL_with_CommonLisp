@@ -111,7 +111,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -4744,7 +4744,7 @@ public final class html_tm_editing extends SubLTranslatedFile implements V02 {
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(relation, $sym265$THESAURUS_PREDICATE_);
+	    SubLSystemTrampolineFile.checkType(relation, $sym265$THESAURUS_PREDICATE_);
 	    {
 		SubLObject arg_index = (index.eql(ONE_INTEGER) || index.eql(TWO_INTEGER)) ? ((SubLObject) (index)) : ONE_INTEGER;
 		SubLObject inv_index = (arg_index.eql(ONE_INTEGER)) ? ((SubLObject) (TWO_INTEGER)) : ONE_INTEGER;
@@ -4794,7 +4794,7 @@ public final class html_tm_editing extends SubLTranslatedFile implements V02 {
 	}
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(relation, $sym265$THESAURUS_PREDICATE_);
+	    SubLSystemTrampolineFile.checkType(relation, $sym265$THESAURUS_PREDICATE_);
 	    {
 		SubLObject arg_index = (index.eql(ONE_INTEGER) || index.eql(TWO_INTEGER)) ? ((SubLObject) (index)) : ONE_INTEGER;
 		SubLObject inv_index = (arg_index.eql(ONE_INTEGER)) ? ((SubLObject) (TWO_INTEGER)) : ONE_INTEGER;

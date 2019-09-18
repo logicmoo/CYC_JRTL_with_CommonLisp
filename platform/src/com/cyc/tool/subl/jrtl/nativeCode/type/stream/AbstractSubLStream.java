@@ -1,7 +1,9 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
+import java.io.Closeable;
 import java.io.File;
+import java.io.Flushable;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
@@ -30,7 +32,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class AbstractSubLStream extends StructureObject implements SubLStream {
+public abstract class AbstractSubLStream extends StructureObject implements SubLStream, Closeable {
 	public AbstractSubLStream(SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists,
 			SubLSymbol ifNotExists) {
 		this();

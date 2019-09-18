@@ -47,7 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -206,7 +206,7 @@ public final class word_frequencies extends SubLTranslatedFile {
 
     public static SubLObject init_word_frequencies_file() {
         deflexical("*FREQUENCY-HASH-INITIAL-SIZE*", $int$64000);
-        deflexical("*WORD-FREQUENCY-HASH*", SubLTrampolineFile.maybeDefault($word_frequency_hash$, $word_frequency_hash$, () -> make_hash_table($int$64000, symbol_function(EQUALP), UNPROVIDED)));
+        deflexical("*WORD-FREQUENCY-HASH*", SubLSystemTrampolineFile.maybeDefault($word_frequency_hash$, $word_frequency_hash$, () -> make_hash_table($int$64000, symbol_function(EQUALP), UNPROVIDED)));
         defparameter("*FREQUENCY-HASH-SAVE-NAME*", Filesys.construct_filename($list2, $str3$word_frequencies, $$$hash, T));
         return NIL;
     }

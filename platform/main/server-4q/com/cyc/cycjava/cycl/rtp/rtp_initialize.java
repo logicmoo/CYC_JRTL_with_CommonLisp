@@ -16,7 +16,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -141,7 +141,7 @@ public final class rtp_initialize extends SubLTranslatedFile {
 
     public static SubLObject init_rtp_initialize_file() {
         deflexical("*RTP-CORE-CONSTANTS*", $list0);
-        deflexical("*RTP-INITIALIZED*", SubLTrampolineFile.maybeDefault($rtp_initialized$, $rtp_initialized$, NIL));
+        deflexical("*RTP-INITIALIZED*", SubLSystemTrampolineFile.maybeDefault($rtp_initialized$, $rtp_initialized$, NIL));
         defparameter("*RTP-DEFAULT-TEMPLATE-TYPES*", $list3);
         return NIL;
     }

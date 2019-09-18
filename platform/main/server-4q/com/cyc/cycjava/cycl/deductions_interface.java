@@ -17,7 +17,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -121,10 +121,10 @@ public final class deductions_interface extends SubLTranslatedFile {
         if (pragmatic_support_mts == UNPROVIDED) {
             pragmatic_support_mts = NIL;
         }
-        SubLTrampolineFile.enforceType(assertion, SUPPORT_P);
-        SubLTrampolineFile.enforceType(supports, HL_JUSTIFICATION_P);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
-        SubLTrampolineFile.enforceType(strength, EL_STRENGTH_P);
+        SubLSystemTrampolineFile.enforceType(assertion, SUPPORT_P);
+        SubLSystemTrampolineFile.enforceType(supports, HL_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(strength, EL_STRENGTH_P);
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_CREATE_DEDUCTION, assertion, supports, truth, strength, v_bindings, pragmatic_support_mts, UNPROVIDED);
         if (NIL != hl_interface_infrastructure.hl_modify_anywhereP()) {
@@ -181,7 +181,7 @@ public final class deductions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_remove_deduction(final SubLObject deduction) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_REMOVE_DEDUCTION, deduction, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -224,9 +224,9 @@ public final class deductions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_lookup_deduction(final SubLObject assertion, final SubLObject supports, final SubLObject truth) {
-        SubLTrampolineFile.enforceType(assertion, SUPPORT_P);
-        SubLTrampolineFile.enforceType(supports, HL_JUSTIFICATION_P);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(assertion, SUPPORT_P);
+        SubLSystemTrampolineFile.enforceType(supports, HL_JUSTIFICATION_P);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_LOOKUP_DEDUCTION, list(QUOTE, assertion), list(QUOTE, supports), list(QUOTE, truth)));
         }
@@ -234,7 +234,7 @@ public final class deductions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_deduction_supported_object(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_DEDUCTION_SUPPORTED_OBJECT, list(QUOTE, deduction)));
         }
@@ -242,7 +242,7 @@ public final class deductions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_deduction_supports(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_DEDUCTION_SUPPORTS, list(QUOTE, deduction)));
         }
@@ -250,7 +250,7 @@ public final class deductions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_deduction_bindings(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_DEDUCTION_BINDINGS, list(QUOTE, deduction)));
         }
@@ -258,7 +258,7 @@ public final class deductions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_deduction_pragmatic_support_mts(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_DEDUCTION_PRAGMATIC_SUPPORT_MTS, list(QUOTE, deduction)));
         }
@@ -266,7 +266,7 @@ public final class deductions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_deduction_truth(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_DEDUCTION_TRUTH, list(QUOTE, deduction)));
         }
@@ -274,7 +274,7 @@ public final class deductions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_deduction_strength(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_DEDUCTION_STRENGTH, list(QUOTE, deduction)));
         }
@@ -283,8 +283,8 @@ public final class deductions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_set_deduction_strength(final SubLObject deduction, final SubLObject new_strength) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
-        SubLTrampolineFile.enforceType(new_strength, EL_STRENGTH_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(new_strength, EL_STRENGTH_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_SET_DEDUCTION_STRENGTH, deduction, new_strength, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);

@@ -1107,7 +1107,7 @@ public class NameSpace
     /** Implements NameSource.
      * @return all variable and method names in this and all parent
      *         namespaces */
-    public String[] getAllNames() {
+    public String[] getAllNames(long milisecs) {
         final List<String> vec = new ArrayList<String>();
         this.getAllNamesAux(vec);
         return vec.toArray(new String[vec.size()]);

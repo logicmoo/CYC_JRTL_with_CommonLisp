@@ -210,7 +210,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class cae_query_search extends SubLTranslatedFile {
     public static final SubLFile me = new cae_query_search();
@@ -9962,10 +9962,10 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject new_token_record(final SubLObject string, final SubLObject denotations, final SubLObject offset, final SubLObject end) {
         assert NIL != stringp(string) : "Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) " + string;
         assert NIL != listp(denotations) : "Types.listp(denotations) " + "CommonSymbols.NIL != Types.listp(denotations) " + denotations;
-        if (((NIL != offset) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(offset))) {
+        if (((NIL != offset) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(offset))) {
             throw new AssertionError(offset);
         }
-        if (((NIL != end) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(end))) {
+        if (((NIL != end) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(end))) {
             throw new AssertionError(end);
         }
         final SubLObject record = make_token_record(UNPROVIDED);
@@ -11403,12 +11403,12 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defparameter("*CAE-QUERY-SEARCH-SKIP-NL-GENERATION?*", NIL);
         defparameter("*CURRENT-CAE-TASK*", $UNINITIALIZED);
         defparameter("*CAE-QUERY-SEARCH-DEFAULT-MT*", NIL);
-        deflexical("*GENL-ARGS-TO-QUERIES*", SubLTrampolineFile.maybeDefault($genl_args_to_queries$, $genl_args_to_queries$, () -> misc_utilities.uninitialized()));
-        deflexical("*ISA-ARGS-TO-QUERIES*", SubLTrampolineFile.maybeDefault($isa_args_to_queries$, $isa_args_to_queries$, () -> misc_utilities.uninitialized()));
-        deflexical("*GENL-ARGS-TO-SUPPRESSED-QUERIES*", SubLTrampolineFile.maybeDefault($genl_args_to_suppressed_queries$, $genl_args_to_suppressed_queries$, () -> misc_utilities.uninitialized()));
-        deflexical("*ISA-ARGS-TO-SUPPRESSED-QUERIES*", SubLTrampolineFile.maybeDefault($isa_args_to_suppressed_queries$, $isa_args_to_suppressed_queries$, () -> misc_utilities.uninitialized()));
+        deflexical("*GENL-ARGS-TO-QUERIES*", SubLSystemTrampolineFile.maybeDefault($genl_args_to_queries$, $genl_args_to_queries$, () -> misc_utilities.uninitialized()));
+        deflexical("*ISA-ARGS-TO-QUERIES*", SubLSystemTrampolineFile.maybeDefault($isa_args_to_queries$, $isa_args_to_queries$, () -> misc_utilities.uninitialized()));
+        deflexical("*GENL-ARGS-TO-SUPPRESSED-QUERIES*", SubLSystemTrampolineFile.maybeDefault($genl_args_to_suppressed_queries$, $genl_args_to_suppressed_queries$, () -> misc_utilities.uninitialized()));
+        deflexical("*ISA-ARGS-TO-SUPPRESSED-QUERIES*", SubLSystemTrampolineFile.maybeDefault($isa_args_to_suppressed_queries$, $isa_args_to_suppressed_queries$, () -> misc_utilities.uninitialized()));
         deflexical("*CAE-QUERY-SEARCH-INITIALIZED-MTS*", NIL);
-        deflexical("*CAE-COMBINE-FRAGMENTS?*", SubLTrampolineFile.maybeDefault($sym21$_CAE_COMBINE_FRAGMENTS__, $cae_combine_fragmentsP$, NIL));
+        deflexical("*CAE-COMBINE-FRAGMENTS?*", SubLSystemTrampolineFile.maybeDefault($sym21$_CAE_COMBINE_FRAGMENTS__, $cae_combine_fragmentsP$, NIL));
         deflexical("*MAKE-FORMULA-FOR-RULE-RHS-CACHED-CACHING-STATE*", NIL);
         deflexical("*STANDARD-XYZ-ARGLIST-CACHING-STATE*", NIL);
         deflexical("*QUERY-SEARCH-TABLE-PREDS-CACHING-STATE*", NIL);
@@ -11437,7 +11437,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         deflexical("*MNEMONIC-VARMAP-FOR-FORMULA-CACHED-CACHING-STATE*", NIL);
         deflexical("*GENERATE-TEMPLATE-FOR-ISA-CONSTRAINT-CACHED-CACHING-STATE*", NIL);
         deflexical("*GET-VARIABLES-OF-TYPE-IN-FORMULA-CACHING-STATE*", NIL);
-        deflexical("*CAE-FRAGMENT-REFINEMENTS*", SubLTrampolineFile.maybeDefault($cae_fragment_refinements$, $cae_fragment_refinements$, () -> misc_utilities.uninitialized()));
+        deflexical("*CAE-FRAGMENT-REFINEMENTS*", SubLSystemTrampolineFile.maybeDefault($cae_fragment_refinements$, $cae_fragment_refinements$, () -> misc_utilities.uninitialized()));
         deflexical("*CONCEPTS-TO-ADD-FOR-CONCEPT-CACHING-STATE*", NIL);
         deflexical("*GET-TYPES-TO-EXISTENTIALLY-BIND-CACHING-STATE*", NIL);
         defparameter("*CAE-QUERY-TRANSLATION-PARSER*", NIL);

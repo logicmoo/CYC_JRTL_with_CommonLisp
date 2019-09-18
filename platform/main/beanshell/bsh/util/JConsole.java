@@ -70,10 +70,10 @@ import bsh.FileReader;
 /**
  * A JFC/Swing based console for the BeanShell desktop. This is a descendant of
  * the old AWTConsole.
- * 
+ *
  * Improvements by: Mark Donszelmann <Mark.Donszelmann@cern.ch> including Cut &
  * Paste
- * 
+ *
  * Improvements by: Daniel Leuck including Color and Image support, key press
  * bug workaround
  */
@@ -133,6 +133,17 @@ public class JConsole extends JScrollPane implements GUIConsoleInterface, Runnab
 	final int SHOW_AMBIG_MAX = 10;
 	// hack to prevent key repeat for some reason?
 	private boolean gotUp = true;
+	final Thread inputPipeWatcher = new Thread(this);
+	{
+		inputPipeWatcher.setDaemon(true);
+		inputPipeWatcher.setName("pipeWatcher for " + super.toString());
+	}
+
+	@Override
+	public void setName(String name) {
+		inputPipeWatcher.setName("pipeWatcher for " + name);
+		super.setName(name);
+	}
 
 	public JConsole() {
 		this(null, null);
@@ -199,7 +210,7 @@ public class JConsole extends JScrollPane implements GUIConsoleInterface, Runnab
 			}
 		}
 		// Start the inpipe watcher
-		new Thread(this).start();
+		inputPipeWatcher.start();
 		requestFocus();
 	}
 
@@ -344,7 +355,10 @@ public class JConsole extends JScrollPane implements GUIConsoleInterface, Runnab
 			return;
 		// System.out.println("completing part: "+part);
 		// no completion
-		String[] complete = nameCompletion.completeName(part);
+
+		final List completionList = NameCompletionTable.getCompletionList(part);
+		String[] complete = nameCompletion.completeName(part, completionList, (int) 3000 + System.currentTimeMillis());
+		//String[] complete = completionList.toArray();
 		if (complete.length == 0) {
 			java.awt.Toolkit.getDefaultToolkit().beep();
 			return;
@@ -732,9 +746,9 @@ public class JConsole extends JScrollPane implements GUIConsoleInterface, Runnab
 	 * IOExceptions; It will simply wait for new writers and data. This is used by
 	 * the JConsole internal read thread to allow writers in different (and in
 	 * particular ephemeral) threads to write to the pipe.
-	 * 
+	 *
 	 * It also checks a little more frequently than the original read().
-	 * 
+	 *
 	 * Warning: read() will not even error on a read to an explicitly closed pipe
 	 * (override closed to for that).
 	 */

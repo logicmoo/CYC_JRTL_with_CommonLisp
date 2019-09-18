@@ -25,7 +25,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -172,7 +172,7 @@ public final class cb_events extends SubLTranslatedFile {
             v_properties = NIL;
         }
         assert NIL != possibly_inference_sentence_p(query_sentence) : "el_utilities.possibly_inference_sentence_p(query_sentence) " + "CommonSymbols.NIL != el_utilities.possibly_inference_sentence_p(query_sentence) " + query_sentence;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
             throw new AssertionError(mt);
         }
         final SubLObject plist_var = v_properties;
@@ -241,7 +241,7 @@ public final class cb_events extends SubLTranslatedFile {
 
     public static SubLObject init_cb_events_file() {
         deflexical("*CB-EVENT-DISPATCHER-LOCK*", make_lock($str8$CB_EVENT_DISPATCHER_Lock));
-        deflexical("*CB-EVENT-DISPATCHER-LISTENERS*", SubLTrampolineFile.maybeDefault($cb_event_dispatcher_listeners$, $cb_event_dispatcher_listeners$, NIL));
+        deflexical("*CB-EVENT-DISPATCHER-LISTENERS*", SubLSystemTrampolineFile.maybeDefault($cb_event_dispatcher_listeners$, $cb_event_dispatcher_listeners$, NIL));
         return NIL;
     }
 

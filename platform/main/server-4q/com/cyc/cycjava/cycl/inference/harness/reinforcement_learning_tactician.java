@@ -76,7 +76,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -465,7 +465,7 @@ public final class reinforcement_learning_tactician extends SubLTranslatedFile i
 	    {
 		SubLObject os_process = os_process_utilities.make_os_process($$$Forked_RLTactician, $reinforcement_learning_tactician_executable_pathname$.getGlobalValue(), list($reinforcement_learning_tactician_executable_param$.getDynamicValue(thread)), $STREAM, $STREAM, $OUTPUT);
 		sleep($float$0_5);
-		SubLTrampolineFile.checkType(os_process, $sym29$OS_PROCESS_RUNNING_);
+		SubLSystemTrampolineFile.checkType(os_process, $sym29$OS_PROCESS_RUNNING_);
 		$reinforcement_learning_tactician_os_process$.setGlobalValue(os_process);
 		os_process_utilities.show_os_processes();
 		$reinforcement_learning_tactician_input_stream$.setGlobalValue(os_process_utilities.os_process_stdout_stream(os_process));
@@ -543,7 +543,7 @@ public final class reinforcement_learning_tactician extends SubLTranslatedFile i
 	    final SubLThread thread = SubLProcess.currentSubLThread();
 	    {
 		SubLObject tactic_count = length(tactics);
-		SubLTrampolineFile.checkType(tactic_count, POSITIVE_INTEGER_P);
+		SubLSystemTrampolineFile.checkType(tactic_count, POSITIVE_INTEGER_P);
 		format_nil.force_format($reinforcement_learning_tactician_output_stream$.getGlobalValue(), $str_alt34$_a__, tactic_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
 		if (NIL != $reinforcement_learning_tactician_debug_outputP$.getDynamicValue(thread)) {
 		    Errors.warn($str_alt35$tc__a__, tactic_count);
@@ -592,10 +592,10 @@ public final class reinforcement_learning_tactician extends SubLTranslatedFile i
 	    SubLObject productivity = inference_datastructures_strategy.tactic_strategic_productivity(tactic, strategy);
 	    SubLObject completeness_code = reinforcement_learning_tactician_completeness_code(NIL != inference_worker.content_tactic_p(tactic) ? ((SubLObject) (inference_datastructures_strategy.tactic_strategic_completeness(tactic, strategy))) : NIL);
 	    SubLObject preference_level_code = reinforcement_learning_tactician_preference_level_code(NIL != inference_worker.structural_tactic_p(tactic) ? ((SubLObject) (inference_datastructures_strategy.tactic_strategic_preference_level(tactic, strategy))) : NIL);
-	    SubLTrampolineFile.checkType(type_code, NON_NEGATIVE_INTEGER_P);
-	    SubLTrampolineFile.checkType(productivity, NON_NEGATIVE_INTEGER_P);
-	    SubLTrampolineFile.checkType(completeness_code, NON_NEGATIVE_INTEGER_P);
-	    SubLTrampolineFile.checkType(preference_level_code, NON_NEGATIVE_INTEGER_P);
+	    SubLSystemTrampolineFile.checkType(type_code, NON_NEGATIVE_INTEGER_P);
+	    SubLSystemTrampolineFile.checkType(productivity, NON_NEGATIVE_INTEGER_P);
+	    SubLSystemTrampolineFile.checkType(completeness_code, NON_NEGATIVE_INTEGER_P);
+	    SubLSystemTrampolineFile.checkType(preference_level_code, NON_NEGATIVE_INTEGER_P);
 	    return values(type_code, productivity, completeness_code, preference_level_code);
 	}
     }

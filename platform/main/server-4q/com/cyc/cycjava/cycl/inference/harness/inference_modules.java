@@ -118,7 +118,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2955,31 +2955,31 @@ public final class inference_modules extends SubLTranslatedFile {
     }
 
     public static SubLObject init_inference_modules_file() {
-        deflexical("*META-REMOVAL-MODULES*", SubLTrampolineFile.maybeDefault($meta_removal_modules$, $meta_removal_modules$, NIL));
+        deflexical("*META-REMOVAL-MODULES*", SubLSystemTrampolineFile.maybeDefault($meta_removal_modules$, $meta_removal_modules$, NIL));
         deflexical("*HL-MODULE-PROPERTIES*", $list1);
         deflexical("*VALID-HL-MODULE-SUBTYPES*", $list10);
         deflexical("*DEFAULT-HL-MODULE-SUBTYPE*", $KB);
         deflexical("*HL-MODULE-PROPERTY-DEFAULTS*", dictionary_utilities.new_dictionary_from_alist(reverse(listS($list12, list($MODULE_SUBTYPE, $default_hl_module_subtype$.getGlobalValue()), $list14)), symbol_function(EQL)));
         defconstant("*DTP-HL-MODULE*", HL_MODULE);
         deflexical("*CFASL-CREATE-INVALID-HL-MODULE-CACHING-STATE*", NIL);
-        deflexical("*HL-MODULE-STORE*", SubLTrampolineFile.maybeDefault($hl_module_store$, $hl_module_store$, () -> make_hash_table($int$212, symbol_function(EQUAL), UNPROVIDED)));
-        deflexical("*REMOVAL-MODULES*", SubLTrampolineFile.maybeDefault($removal_modules$, $removal_modules$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
-        deflexical("*REMOVAL-MODULES-EXTERNAL*", SubLTrampolineFile.maybeDefault($removal_modules_external$, $removal_modules_external$, NIL));
-        deflexical("*REMOVAL-MODULES-GENERIC*", SubLTrampolineFile.maybeDefault($removal_modules_generic$, $removal_modules_generic$, NIL));
-        deflexical("*REMOVAL-MODULES-UNIVERSAL*", SubLTrampolineFile.maybeDefault($removal_modules_universal$, $removal_modules_universal$, NIL));
-        deflexical("*REMOVAL-MODULES-SPECIFIC*", SubLTrampolineFile.maybeDefault($removal_modules_specific$, $removal_modules_specific$, () -> make_hash_table($int$32, UNPROVIDED, UNPROVIDED)));
-        deflexical("*REMOVAL-MODULES-SPECIFIC-USE-GENERIC*", SubLTrampolineFile.maybeDefault($removal_modules_specific_use_generic$, $removal_modules_specific_use_generic$, NIL));
-        deflexical("*REMOVAL-MODULES-SPECIFIC-USE-META-REMOVAL*", SubLTrampolineFile.maybeDefault($removal_modules_specific_use_meta_removal$, $removal_modules_specific_use_meta_removal$, NIL));
-        deflexical("*REMOVAL-MODULES-SPECIFIC-DONT-USE-UNIVERSAL*", SubLTrampolineFile.maybeDefault($removal_modules_specific_dont_use_universal$, $removal_modules_specific_dont_use_universal$, NIL));
-        deflexical("*SOLELY-SPECIFIC-REMOVAL-MODULE-PREDICATE-STORE*", SubLTrampolineFile.maybeDefault($solely_specific_removal_module_predicate_store$, $solely_specific_removal_module_predicate_store$, () -> set.new_set(EQL, $int$50)));
+        deflexical("*HL-MODULE-STORE*", SubLSystemTrampolineFile.maybeDefault($hl_module_store$, $hl_module_store$, () -> make_hash_table($int$212, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*REMOVAL-MODULES*", SubLSystemTrampolineFile.maybeDefault($removal_modules$, $removal_modules$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
+        deflexical("*REMOVAL-MODULES-EXTERNAL*", SubLSystemTrampolineFile.maybeDefault($removal_modules_external$, $removal_modules_external$, NIL));
+        deflexical("*REMOVAL-MODULES-GENERIC*", SubLSystemTrampolineFile.maybeDefault($removal_modules_generic$, $removal_modules_generic$, NIL));
+        deflexical("*REMOVAL-MODULES-UNIVERSAL*", SubLSystemTrampolineFile.maybeDefault($removal_modules_universal$, $removal_modules_universal$, NIL));
+        deflexical("*REMOVAL-MODULES-SPECIFIC*", SubLSystemTrampolineFile.maybeDefault($removal_modules_specific$, $removal_modules_specific$, () -> make_hash_table($int$32, UNPROVIDED, UNPROVIDED)));
+        deflexical("*REMOVAL-MODULES-SPECIFIC-USE-GENERIC*", SubLSystemTrampolineFile.maybeDefault($removal_modules_specific_use_generic$, $removal_modules_specific_use_generic$, NIL));
+        deflexical("*REMOVAL-MODULES-SPECIFIC-USE-META-REMOVAL*", SubLSystemTrampolineFile.maybeDefault($removal_modules_specific_use_meta_removal$, $removal_modules_specific_use_meta_removal$, NIL));
+        deflexical("*REMOVAL-MODULES-SPECIFIC-DONT-USE-UNIVERSAL*", SubLSystemTrampolineFile.maybeDefault($removal_modules_specific_dont_use_universal$, $removal_modules_specific_dont_use_universal$, NIL));
+        deflexical("*SOLELY-SPECIFIC-REMOVAL-MODULE-PREDICATE-STORE*", SubLSystemTrampolineFile.maybeDefault($solely_specific_removal_module_predicate_store$, $solely_specific_removal_module_predicate_store$, () -> set.new_set(EQL, $int$50)));
         defparameter("*CLASSIFY-REMOVAL-MODULES-WITH-DETERMINISTIC-SORT?*", T);
         deflexical("*REMOVAL-PRUNING-MODULE-PROPERTIES*", $list171);
-        deflexical("*CONJUNCTIVE-REMOVAL-MODULES*", SubLTrampolineFile.maybeDefault($conjunctive_removal_modules$, $conjunctive_removal_modules$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
-        deflexical("*TRANSFORMATION-MODULES*", SubLTrampolineFile.maybeDefault($transformation_modules$, $transformation_modules$, NIL));
-        deflexical("*META-TRANSFORMATION-MODULES*", SubLTrampolineFile.maybeDefault($meta_transformation_modules$, $meta_transformation_modules$, NIL));
-        deflexical("*REWRITE-MODULES*", SubLTrampolineFile.maybeDefault($rewrite_modules$, $rewrite_modules$, NIL));
-        deflexical("*STRUCTURAL-MODULES*", SubLTrampolineFile.maybeDefault($structural_modules$, $structural_modules$, NIL));
-        deflexical("*META-STRUCTURAL-MODULES*", SubLTrampolineFile.maybeDefault($meta_structural_modules$, $meta_structural_modules$, NIL));
+        deflexical("*CONJUNCTIVE-REMOVAL-MODULES*", SubLSystemTrampolineFile.maybeDefault($conjunctive_removal_modules$, $conjunctive_removal_modules$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
+        deflexical("*TRANSFORMATION-MODULES*", SubLSystemTrampolineFile.maybeDefault($transformation_modules$, $transformation_modules$, NIL));
+        deflexical("*META-TRANSFORMATION-MODULES*", SubLSystemTrampolineFile.maybeDefault($meta_transformation_modules$, $meta_transformation_modules$, NIL));
+        deflexical("*REWRITE-MODULES*", SubLSystemTrampolineFile.maybeDefault($rewrite_modules$, $rewrite_modules$, NIL));
+        deflexical("*STRUCTURAL-MODULES*", SubLSystemTrampolineFile.maybeDefault($structural_modules$, $structural_modules$, NIL));
+        deflexical("*META-STRUCTURAL-MODULES*", SubLSystemTrampolineFile.maybeDefault($meta_structural_modules$, $meta_structural_modules$, NIL));
         defconstant("*CFASL-WIDE-OPCODE-HL-MODULE*", $int$256);
         return NIL;
     }

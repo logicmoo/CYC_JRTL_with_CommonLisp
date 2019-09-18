@@ -97,7 +97,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2464,11 +2464,11 @@ public final class sksi_sks_manager extends SubLTranslatedFile {
     public static SubLObject init_sksi_sks_manager_file() {
         defparameter("*SKSI-SKS-MANAGER-STORAGE-MODULE-SUPPORT-ENABLED?*", NIL);
         defparameter("*SKSI-SKS-MANAGER-CHECK-SKS-STATUS-ENABLED?*", NIL);
-        deflexical("*SKSI-REMOVAL-MODULES-REGISTERED-KNOWLEDGE-SOURCES*", SubLTrampolineFile.maybeDefault($sksi_removal_modules_registered_knowledge_sources$, $sksi_removal_modules_registered_knowledge_sources$, NIL));
-        deflexical("*SKSI-CONTENT-MTS-WITH-REGISTERED-REMOVAL-MODULE*", SubLTrampolineFile.maybeDefault($sksi_content_mts_with_registered_removal_module$, $sksi_content_mts_with_registered_removal_module$, NIL));
-        deflexical("*SKSI-STORAGE-MODULES-REGISTERED-KNOWLEDGE-SOURCES*", SubLTrampolineFile.maybeDefault($sksi_storage_modules_registered_knowledge_sources$, $sksi_storage_modules_registered_knowledge_sources$, NIL));
-        deflexical("*SKSI-CONTENT-MTS-WITH-REGISTERED-STORAGE-MODULE*", SubLTrampolineFile.maybeDefault($sksi_content_mts_with_registered_storage_module$, $sksi_content_mts_with_registered_storage_module$, NIL));
-        deflexical("*SKSI-EXPANDED-KNOWLEDGE-SOURCES*", SubLTrampolineFile.maybeDefault($sksi_expanded_knowledge_sources$, $sksi_expanded_knowledge_sources$, NIL));
+        deflexical("*SKSI-REMOVAL-MODULES-REGISTERED-KNOWLEDGE-SOURCES*", SubLSystemTrampolineFile.maybeDefault($sksi_removal_modules_registered_knowledge_sources$, $sksi_removal_modules_registered_knowledge_sources$, NIL));
+        deflexical("*SKSI-CONTENT-MTS-WITH-REGISTERED-REMOVAL-MODULE*", SubLSystemTrampolineFile.maybeDefault($sksi_content_mts_with_registered_removal_module$, $sksi_content_mts_with_registered_removal_module$, NIL));
+        deflexical("*SKSI-STORAGE-MODULES-REGISTERED-KNOWLEDGE-SOURCES*", SubLSystemTrampolineFile.maybeDefault($sksi_storage_modules_registered_knowledge_sources$, $sksi_storage_modules_registered_knowledge_sources$, NIL));
+        deflexical("*SKSI-CONTENT-MTS-WITH-REGISTERED-STORAGE-MODULE*", SubLSystemTrampolineFile.maybeDefault($sksi_content_mts_with_registered_storage_module$, $sksi_content_mts_with_registered_storage_module$, NIL));
+        deflexical("*SKSI-EXPANDED-KNOWLEDGE-SOURCES*", SubLSystemTrampolineFile.maybeDefault($sksi_expanded_knowledge_sources$, $sksi_expanded_knowledge_sources$, NIL));
         defparameter("*URL-EXPAND-IMAGE*", $str37$_cycdoc_img_cb_right_triangle_blu);
         defparameter("*URL-CONTRACT-IMAGE*", $str38$_cycdoc_img_cb_down_triangle_blue);
         defparameter("*URL-BLANK-IMAGE*", $str39$_cycdoc_img_cb_blank_gif);

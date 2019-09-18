@@ -160,7 +160,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2884,7 +2884,7 @@ public final class inference_analysis extends SubLTranslatedFile {
                 Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
                 try {
                     query_info = cfasl_input(stream, NIL, UNPROVIDED);
-                    if ((($EOF != query_info) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == query_info_p(query_info))) {
+                    if ((($EOF != query_info) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == query_info_p(query_info))) {
                         throw new AssertionError(query_info);
                     }
                 } catch (final Throwable catch_var) {
@@ -3438,24 +3438,24 @@ public final class inference_analysis extends SubLTranslatedFile {
     }
 
     public static SubLObject init_inference_analysis_file() {
-        deflexical("*TRANSFORMATION-RULE-STATISTICS-TABLE*", SubLTrampolineFile.maybeDefault($transformation_rule_statistics_table$, $transformation_rule_statistics_table$, () -> make_hash_table($int$64, symbol_function(EQL), UNPROVIDED)));
-        deflexical("*TRANSFORMATION-RULE-STATISTICS-LOCK*", SubLTrampolineFile.maybeDefault($transformation_rule_statistics_lock$, $transformation_rule_statistics_lock$, () -> make_lock($str3$Transformation_Rule_Statistics_Lo)));
-        deflexical("*TRANSFORMATION-RULE-STATISTICS-FILENAME-LOAD-HISTORY*", SubLTrampolineFile.maybeDefault($transformation_rule_statistics_filename_load_history$, $transformation_rule_statistics_filename_load_history$, NIL));
-        deflexical("*TRANSFORMATION-RULE-STATISTICS-RECEIVED-FILENAME-LOAD-HISTORY*", SubLTrampolineFile.maybeDefault($transformation_rule_statistics_received_filename_load_history$, $transformation_rule_statistics_received_filename_load_history$, NIL));
+        deflexical("*TRANSFORMATION-RULE-STATISTICS-TABLE*", SubLSystemTrampolineFile.maybeDefault($transformation_rule_statistics_table$, $transformation_rule_statistics_table$, () -> make_hash_table($int$64, symbol_function(EQL), UNPROVIDED)));
+        deflexical("*TRANSFORMATION-RULE-STATISTICS-LOCK*", SubLSystemTrampolineFile.maybeDefault($transformation_rule_statistics_lock$, $transformation_rule_statistics_lock$, () -> make_lock($str3$Transformation_Rule_Statistics_Lo)));
+        deflexical("*TRANSFORMATION-RULE-STATISTICS-FILENAME-LOAD-HISTORY*", SubLSystemTrampolineFile.maybeDefault($transformation_rule_statistics_filename_load_history$, $transformation_rule_statistics_filename_load_history$, NIL));
+        deflexical("*TRANSFORMATION-RULE-STATISTICS-RECEIVED-FILENAME-LOAD-HISTORY*", SubLSystemTrampolineFile.maybeDefault($transformation_rule_statistics_received_filename_load_history$, $transformation_rule_statistics_received_filename_load_history$, NIL));
         defvar("*TRANSFORMATION-RULE-STATISTICS-UPDATE-ENABLED?*", T);
         defvar("*TRANSFORMATION-RULE-HISTORICAL-SUCCESS-PRUNING-THRESHOLD*", ZERO_INTEGER);
         defparameter("*SAVE-RECENT-EXPERIENCE-LOCK*", make_lock($$$Save_recent_experience_lock));
         defparameter("*AVERAGE-RULE-HISTORICAL-SUCCESS-PROBABILITY*", $float$0_02939361143247565);
         defparameter("*RULE-HISTORICAL-SUCCESS-HAPPINESS-SCALING-FACTOR*", TEN_INTEGER);
-        deflexical("*TRANSFORMATION-RULE-HISTORICAL-CONNECTIVITY-GRAPH*", SubLTrampolineFile.maybeDefault($transformation_rule_historical_connectivity_graph$, $transformation_rule_historical_connectivity_graph$, () -> make_hash_table($int$256, symbol_function(EQL), UNPROVIDED)));
-        deflexical("*TRANSFORMATION-RULE-HISTORICAL-CONNECTIVITY-GRAPH-LOCK*", SubLTrampolineFile.maybeDefault($transformation_rule_historical_connectivity_graph_lock$, $transformation_rule_historical_connectivity_graph_lock$, () -> make_lock($str75$Rule_Historical_Connectivity_Grap)));
+        deflexical("*TRANSFORMATION-RULE-HISTORICAL-CONNECTIVITY-GRAPH*", SubLSystemTrampolineFile.maybeDefault($transformation_rule_historical_connectivity_graph$, $transformation_rule_historical_connectivity_graph$, () -> make_hash_table($int$256, symbol_function(EQL), UNPROVIDED)));
+        deflexical("*TRANSFORMATION-RULE-HISTORICAL-CONNECTIVITY-GRAPH-LOCK*", SubLSystemTrampolineFile.maybeDefault($transformation_rule_historical_connectivity_graph_lock$, $transformation_rule_historical_connectivity_graph_lock$, () -> make_lock($str75$Rule_Historical_Connectivity_Grap)));
         defvar("*HL-MODULE-EXPAND-COUNTS-ENABLED?*", NIL);
         defvar("*HL-MODULE-EXPAND-COUNTS*", dictionary.new_dictionary(UNPROVIDED, UNPROVIDED));
-        deflexical("*ASKED-QUERIES-QUEUE*", SubLTrampolineFile.maybeDefault($asked_queries_queue$, $asked_queries_queue$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*ASKED-QUERIES-QUEUE*", SubLSystemTrampolineFile.maybeDefault($asked_queries_queue$, $asked_queries_queue$, () -> queues.create_queue(UNPROVIDED)));
         defparameter("*SAVE-RECENT-ASKED-QUERIES-LOCK*", make_lock($$$Query_logging_lock));
         deflexical("*ASKED-QUERIES-QUEUE-LIMIT*", $int$300);
-        deflexical("*ASKED-QUERY-COMMON-SYMBOLS*", SubLTrampolineFile.maybeDefault($asked_query_common_symbols$, $asked_query_common_symbols$, NIL));
-        deflexical("*ASKED-QUERY-COMMON-SYMBOLS-SIMPLE*", SubLTrampolineFile.maybeDefault($asked_query_common_symbols_simple$, $asked_query_common_symbols_simple$, NIL));
+        deflexical("*ASKED-QUERY-COMMON-SYMBOLS*", SubLSystemTrampolineFile.maybeDefault($asked_query_common_symbols$, $asked_query_common_symbols$, NIL));
+        deflexical("*ASKED-QUERY-COMMON-SYMBOLS-SIMPLE*", SubLSystemTrampolineFile.maybeDefault($asked_query_common_symbols_simple$, $asked_query_common_symbols_simple$, NIL));
         return NIL;
     }
 

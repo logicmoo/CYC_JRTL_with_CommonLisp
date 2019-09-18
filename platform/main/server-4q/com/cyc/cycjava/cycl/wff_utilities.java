@@ -102,7 +102,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2460,16 +2460,16 @@ public final class wff_utilities extends SubLTranslatedFile {
         defparameter("*CHECK-VAR-TYPES?*", T);
         defparameter("*CHECK-ARITY?*", T);
         defparameter("*USE-CYCL-GRAMMAR-IF-SEMANTIC-CHECKING-DISABLED?*", T);
-        deflexical("*NON-WFF-LIST*", SubLTrampolineFile.maybeDefault($non_wff_list$, $non_wff_list$, NIL));
-        deflexical("*NUM-ASSERTIONS-CHECKED*", SubLTrampolineFile.maybeDefault($num_assertions_checked$, $num_assertions_checked$, ZERO_INTEGER));
-        deflexical("*LAST-CHECKED-ASSERTION-ID*", SubLTrampolineFile.maybeDefault($last_checked_assertion_id$, $last_checked_assertion_id$, ZERO_INTEGER));
-        deflexical("*NON-WFF-ERROR*", SubLTrampolineFile.maybeDefault($non_wff_error$, $non_wff_error$, NIL));
-        deflexical("*NON-WFF-ERROR-LIST*", SubLTrampolineFile.maybeDefault($non_wff_error_list$, $non_wff_error_list$, NIL));
-        deflexical("*PRE-WFF-HASH*", SubLTrampolineFile.maybeDefault($pre_wff_hash$, $pre_wff_hash$, NIL));
-        deflexical("*POST-WFF-HASH*", SubLTrampolineFile.maybeDefault($post_wff_hash$, $post_wff_hash$, NIL));
+        deflexical("*NON-WFF-LIST*", SubLSystemTrampolineFile.maybeDefault($non_wff_list$, $non_wff_list$, NIL));
+        deflexical("*NUM-ASSERTIONS-CHECKED*", SubLSystemTrampolineFile.maybeDefault($num_assertions_checked$, $num_assertions_checked$, ZERO_INTEGER));
+        deflexical("*LAST-CHECKED-ASSERTION-ID*", SubLSystemTrampolineFile.maybeDefault($last_checked_assertion_id$, $last_checked_assertion_id$, ZERO_INTEGER));
+        deflexical("*NON-WFF-ERROR*", SubLSystemTrampolineFile.maybeDefault($non_wff_error$, $non_wff_error$, NIL));
+        deflexical("*NON-WFF-ERROR-LIST*", SubLSystemTrampolineFile.maybeDefault($non_wff_error_list$, $non_wff_error_list$, NIL));
+        deflexical("*PRE-WFF-HASH*", SubLSystemTrampolineFile.maybeDefault($pre_wff_hash$, $pre_wff_hash$, NIL));
+        deflexical("*POST-WFF-HASH*", SubLSystemTrampolineFile.maybeDefault($post_wff_hash$, $post_wff_hash$, NIL));
         defvar("*NON-WFF-STORE*", make_hash_table($int$2048, symbol_function(EQUAL), UNPROVIDED));
-        deflexical("*NON-WFF-START*", SubLTrampolineFile.maybeDefault($non_wff_start$, $non_wff_start$, NIL));
-        deflexical("*NON-WFF-END*", SubLTrampolineFile.maybeDefault($non_wff_end$, $non_wff_end$, NIL));
+        deflexical("*NON-WFF-START*", SubLSystemTrampolineFile.maybeDefault($non_wff_start$, $non_wff_start$, NIL));
+        deflexical("*NON-WFF-END*", SubLSystemTrampolineFile.maybeDefault($non_wff_end$, $non_wff_end$, NIL));
         defparameter("*NON-WFF-CURRENT-ASSERTION*", NIL);
         defparameter("*NON-WFF-OUTLIER-TIMEOUT*", $int$30);
         defparameter("*NON-WFF-COUNT*", NIL);

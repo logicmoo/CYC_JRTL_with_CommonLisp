@@ -55,7 +55,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -371,7 +371,7 @@ public final class removal_modules_known_antecedent_rule extends SubLTranslatedF
         defvar("*KNOWN-ANTECEDENT-RULE-ENABLED?*", NIL);
         deflexical("*VIA-KNOWN-ANTECEDENT-RULE-STRING*", $str1$_via_known_antecedent_rule);
         defparameter("*WITHIN-REMOVAL-KNOWN-ANTECEDENT-RULE-COST?*", NIL);
-        deflexical("*KNOWN-ANTECEDENT-RULE-HL-MODULE-INDEX*", SubLTrampolineFile.maybeDefault($known_antecedent_rule_hl_module_index$, $known_antecedent_rule_hl_module_index$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
+        deflexical("*KNOWN-ANTECEDENT-RULE-HL-MODULE-INDEX*", SubLSystemTrampolineFile.maybeDefault($known_antecedent_rule_hl_module_index$, $known_antecedent_rule_hl_module_index$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
         return NIL;
     }
 

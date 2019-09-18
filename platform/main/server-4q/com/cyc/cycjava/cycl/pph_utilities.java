@@ -239,7 +239,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class pph_utilities extends SubLTranslatedFile {
@@ -7749,11 +7749,11 @@ public final class pph_utilities extends SubLTranslatedFile {
 			minimize_change_from_formula = NIL;
 		}
 		final SubLThread thread = SubLProcess.currentSubLThread();
-		SubLTrampolineFile.enforceType(formula, EL_FORMULA_P);
-		SubLTrampolineFile.enforceType(language_mt, $sym446$HLMT_);
-		SubLTrampolineFile.enforceType(domain_mt, $sym446$HLMT_);
+		SubLSystemTrampolineFile.enforceType(formula, EL_FORMULA_P);
+		SubLSystemTrampolineFile.enforceType(language_mt, $sym446$HLMT_);
+		SubLSystemTrampolineFile.enforceType(domain_mt, $sym446$HLMT_);
 		if (NIL != minimize_change_from_formula) {
-			SubLTrampolineFile.enforceType(minimize_change_from_formula, EL_FORMULA_P);
+			SubLSystemTrampolineFile.enforceType(minimize_change_from_formula, EL_FORMULA_P);
 		}
 		assert NIL != el_formula_p(formula) : "el_utilities.el_formula_p(formula) " + "CommonSymbols.NIL != el_utilities.el_formula_p(formula) " + formula;
 		final SubLObject vars_to_optimize = pph_vars_to_optimize(formula, domain_mt, minimize_change_from_formula);
@@ -14264,7 +14264,7 @@ public final class pph_utilities extends SubLTranslatedFile {
 		defconstant("*ALWAYS-USE-INSTANCES-NAMES*", NIL);
 		defconstant("*PPH-REMOVE-SPACES-BEFORE*", $list4);
 		defconstant("*PPH-REMOVE-SPACES-AFTER*", $list5);
-		deflexical("*PPH-NBAR-NART*", SubLTrampolineFile.maybeDefault($pph_nbar_nart$, $pph_nbar_nart$, NIL));
+		deflexical("*PPH-NBAR-NART*", SubLSystemTrampolineFile.maybeDefault($pph_nbar_nart$, $pph_nbar_nart$, NIL));
 		deflexical("*PARAPHRASE-CORE-CONSTANTS*", $list8);
 		defparameter("*PPH-CURRENT-ENVIRONMENT*", NIL);
 		deflexical("*RESOURCED-PPH-ENVIRONMENT-STACKS*", queues.create_queue(UNPROVIDED));
@@ -14293,7 +14293,7 @@ public final class pph_utilities extends SubLTranslatedFile {
 		defparameter("*PPH-QUERY-STACK*", $UNINITIALIZED);
 		defparameter("*PPH-QUERY-STACK-MAX-SIZE*", FOUR_INTEGER);
 		deflexical("*PPH-INFERENCE-DESTROYER-GRACE-PERIOD*", $int$600);
-		deflexical("*PPH-INFERENCE-DESTROYER*", SubLTrampolineFile.maybeDefault($pph_inference_destroyer$, $pph_inference_destroyer$, () -> delayed_processor.new_delayed_processor($pph_inference_destroyer_grace_period$.getGlobalValue(), $sym397$DESTROYABLE_PPH_INFERENCE_, PPH_DESTROY_INFERENCE)));
+		deflexical("*PPH-INFERENCE-DESTROYER*", SubLSystemTrampolineFile.maybeDefault($pph_inference_destroyer$, $pph_inference_destroyer$, () -> delayed_processor.new_delayed_processor($pph_inference_destroyer_grace_period$.getGlobalValue(), $sym397$DESTROYABLE_PPH_INFERENCE_, PPH_DESTROY_INFERENCE)));
 		defparameter("*PPH-QUERY-CUMULATIVE-TIME*", misc_utilities.uninitialized());
 		defparameter("*VERIFY-PPH-REMOVAL-ASK-BOOLEAN?*", NIL);
 		defparameter("*PPH-OPTIMIZED-VARS*", NIL);

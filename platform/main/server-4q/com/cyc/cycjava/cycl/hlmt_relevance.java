@@ -37,7 +37,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -944,7 +944,7 @@ public final class hlmt_relevance extends SubLTranslatedFile {
     }
 
     public static SubLObject init_hlmt_relevance_file() {
-        deflexical("*TIME-INFERENCE-MT*", SubLTrampolineFile.maybeDefault($time_inference_mt$, $time_inference_mt$, $$UniversalVocabularyMt));
+        deflexical("*TIME-INFERENCE-MT*", SubLSystemTrampolineFile.maybeDefault($time_inference_mt$, $time_inference_mt$, $$UniversalVocabularyMt));
         defparameter("*HLMT-SLIDING-TYPE*", NIL);
         deflexical("*DATE-RANGE-TIME-MT-PATTERN*", $list26);
         defparameter("*TEMPORAL-INTERSECTION-CALL-ARGS*", NIL);

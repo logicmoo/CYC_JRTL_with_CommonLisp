@@ -46,7 +46,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3771,7 +3771,7 @@ public final class wales extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(phrase, STRINGP);
+            SubLSystemTrampolineFile.checkType(phrase, STRINGP);
             {
                 SubLObject strings = preprocessor.preprocess_phrase(phrase);
                 SubLObject mw_strings = NIL;
@@ -3948,7 +3948,7 @@ public final class wales extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(phrase, STRINGP);
+            SubLSystemTrampolineFile.checkType(phrase, STRINGP);
             {
                 SubLObject strings = preprocessor.preprocess_phrase(phrase);
                 SubLObject compound_strings = NIL;

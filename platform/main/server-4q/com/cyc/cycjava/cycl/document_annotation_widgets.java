@@ -156,7 +156,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -7361,7 +7361,7 @@ public final class document_annotation_widgets extends SubLTranslatedFile {
         defparameter("*REMOVE-DOTS-REGEXP*", $str296$_____________);
         defparameter("*REMOVE-UNICODE-REGEXP*", $str297$__0_9a_fA_F___);
         defparameter("*CACHED-REGEXPS*", NIL);
-        deflexical("*DOCUMENT-INTERPRETATION-RULES-BY-MT*", SubLTrampolineFile.maybeDefault($document_interpretation_rules_by_mt$, $document_interpretation_rules_by_mt$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*DOCUMENT-INTERPRETATION-RULES-BY-MT*", SubLSystemTrampolineFile.maybeDefault($document_interpretation_rules_by_mt$, $document_interpretation_rules_by_mt$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
         defparameter("*DOCUMENT-INTERPRETATION-DEFAULT-ELMT*", $$PiracyReportInterpretationMt);
         defparameter("*MANUAL-DOCUMENT-ANNOTATION-INSTRUCTIONS*", $str378$For_each_string____concept_mappin);
         return NIL;

@@ -41,7 +41,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -550,7 +550,7 @@ public final class corba_module_utilities extends SubLTranslatedFile {
 
     public static SubLObject init_corba_module_utilities_file() {
         deflexical("*CORBA-CONNECTIONS-BY-SKS*", NIL);
-        deflexical("*SKSI-CORBA-MODULES*", SubLTrampolineFile.maybeDefault($sksi_corba_modules$, $sksi_corba_modules$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*SKSI-CORBA-MODULES*", SubLSystemTrampolineFile.maybeDefault($sksi_corba_modules$, $sksi_corba_modules$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
         return NIL;
     }
 

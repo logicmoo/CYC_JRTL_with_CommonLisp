@@ -74,7 +74,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -121,7 +121,7 @@ public final class bbn_strengthening extends SubLTranslatedFile implements V02 {
 						destructuring_bind_must_listp(current, datum, $list_alt0);
 						current = current.rest();
 						if (NIL == current) {
-							SubLTrampolineFile.checkType(level, INTEGERP);
+							SubLSystemTrampolineFile.checkType(level, INTEGERP);
 							return list(PWHEN, list($sym3$__, $bbn_trace_level$, level), list(FORMAT, T, list(BUNGE, list(LIST, $str_alt8$____BBN____, format_str)), arg1, arg2, arg3));
 						} else {
 							cdestructuring_bind_error(datum, $list_alt0);
@@ -3515,7 +3515,7 @@ public final class bbn_strengthening extends SubLTranslatedFile implements V02 {
 				SubLObject ctr = ZERO_INTEGER;
 				SubLObject time = NIL;
 				if (NIL != with_outputP) {
-					SubLTrampolineFile.checkType($str_alt381$DOC____S__, STRINGP);
+					SubLSystemTrampolineFile.checkType($str_alt381$DOC____S__, STRINGP);
 					format(T, cconcatenate($str_alt73$_A, $str_alt381$DOC____S__), with_outputP.isString() ? ((SubLObject) (with_outputP)) : $str_alt382$, the_doc);
 				}
 				{
@@ -3637,8 +3637,8 @@ public final class bbn_strengthening extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(this_many, POSITIVE_INTEGER_P);
-			SubLTrampolineFile.checkType(start, NON_NEGATIVE_INTEGER_P);
+			SubLSystemTrampolineFile.checkType(this_many, POSITIVE_INTEGER_P);
+			SubLSystemTrampolineFile.checkType(start, NON_NEGATIVE_INTEGER_P);
 			if (NIL == start) {
 				start = ZERO_INTEGER;
 			}
@@ -4197,7 +4197,7 @@ public final class bbn_strengthening extends SubLTranslatedFile implements V02 {
 										Errors.sublisp_break($str_alt411$__entry_gaf___S__, new SubLObject[] { bbn_quasi_gaf_with_headwords(raw_gaf, the_hyp) });
 									} else {
 										if (NIL != with_outputP) {
-											SubLTrampolineFile.checkType($str_alt411$__entry_gaf___S__, STRINGP);
+											SubLSystemTrampolineFile.checkType($str_alt411$__entry_gaf___S__, STRINGP);
 											format(T, cconcatenate($str_alt73$_A, $str_alt411$__entry_gaf___S__), with_outputP.isString() ? ((SubLObject) (with_outputP)) : $str_alt382$, reified_gaf);
 										}
 									}
@@ -4966,7 +4966,7 @@ public final class bbn_strengthening extends SubLTranslatedFile implements V02 {
 		if (hyp_of_pred == UNPROVIDED) {
 			hyp_of_pred = NIL;
 		}
-		SubLTrampolineFile.checkType(the_gaf, EL_BINARY_FORMULA_P);
+		SubLSystemTrampolineFile.checkType(the_gaf, EL_BINARY_FORMULA_P);
 		{
 			SubLObject datum = the_gaf;
 			SubLObject current = datum;

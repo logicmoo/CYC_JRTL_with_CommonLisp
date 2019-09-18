@@ -154,7 +154,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -6292,7 +6292,7 @@ public final class folification extends SubLTranslatedFile {
         defparameter("*FOL-CURRENT-ASSERTION*", NIL);
         deflexical("*FOL-SEQUENCE-VARIABLE-ARGS-FOR-ARITY-CACHING-STATE*", NIL);
         deflexical("*COMPUTE-TPTP-QUERY-INDEX-NUMBER-CACHING-STATE*", NIL);
-        deflexical("*TPTP-LONG-SYMBOL-NAME-CACHE*", SubLTrampolineFile.maybeDefault($tptp_long_symbol_name_cache$, $tptp_long_symbol_name_cache$, () -> make_hash_table($int$256, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*TPTP-LONG-SYMBOL-NAME-CACHE*", SubLSystemTrampolineFile.maybeDefault($tptp_long_symbol_name_cache$, $tptp_long_symbol_name_cache$, () -> make_hash_table($int$256, symbol_function(EQUAL), UNPROVIDED)));
         defparameter("*TPTP-LONG-SYMBOL-MIN-LENGTH*", $int$256);
         defparameter("*INCLUDE-ALCHEMY-COMMENTS?*", T);
         defparameter("*ALCHEMY-OUTPUT-MONOTONIC-RULE-INDICATOR*", NIL);

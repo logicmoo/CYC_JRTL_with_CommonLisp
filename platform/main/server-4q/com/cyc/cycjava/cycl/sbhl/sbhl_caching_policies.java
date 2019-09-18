@@ -61,7 +61,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -786,7 +786,7 @@ public final class sbhl_caching_policies extends SubLTranslatedFile {
     }
 
     public static SubLObject init_sbhl_caching_policies_file() {
-        deflexical("*ACTIVE-SBHL-CACHING-POLICIES*", SubLTrampolineFile.maybeDefault($active_sbhl_caching_policies$, $active_sbhl_caching_policies$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*ACTIVE-SBHL-CACHING-POLICIES*", SubLSystemTrampolineFile.maybeDefault($active_sbhl_caching_policies$, $active_sbhl_caching_policies$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         deflexical("*VALID-SBHL-CACHING-INSTRUCTION-VERB*", $list1);
         deflexical("*VALID-SBHL-CACHING-POLICY-TYPES*", $list2);
         return NIL;

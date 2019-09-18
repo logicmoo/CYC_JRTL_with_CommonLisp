@@ -23,7 +23,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -56,7 +56,7 @@ public final class sunit_utilities extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(test_method_symbol, SYMBOLP);
+            SubLSystemTrampolineFile.checkType(test_method_symbol, SYMBOLP);
             if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                 if (NIL == classes.subclassp(test_case_symbol, TEST_CASE)) {
                     Errors.error($str_alt2$_A_is_not_a_known_test_case_subcl, test_case_symbol);
@@ -150,7 +150,7 @@ public final class sunit_utilities extends SubLTranslatedFile implements V02 {
             {
                 SubLObject test_suite = sunit_classes.get_test_suite_by_name(test_suite_name);
                 SubLObject result = NIL;
-                SubLTrampolineFile.checkType(test_suite, TEST_SUITE_P);
+                SubLSystemTrampolineFile.checkType(test_suite, TEST_SUITE_P);
                 {
                     SubLObject test_runner = methods.funcall_class_method_with_1_args(TEST_RUNNER, NEW, stream);
                     {
@@ -179,8 +179,8 @@ public final class sunit_utilities extends SubLTranslatedFile implements V02 {
         if (break_on_failure == UNPROVIDED) {
             break_on_failure = NIL;
         }
-        SubLTrampolineFile.checkType(category_name, STRINGP);
-        SubLTrampolineFile.checkType(stream, OUTPUT_STREAM_P);
+        SubLSystemTrampolineFile.checkType(category_name, STRINGP);
+        SubLSystemTrampolineFile.checkType(stream, OUTPUT_STREAM_P);
         {
             SubLObject return_value = $SUCCESS;
             SubLObject last_return = NIL;
@@ -247,9 +247,9 @@ public final class sunit_utilities extends SubLTranslatedFile implements V02 {
      * Load test file MODULE in SYSTEM with location PATHNAME
      */
     public static final SubLObject load_tests(SubLObject module_name, SubLObject system_name, SubLObject pathname) {
-        SubLTrampolineFile.checkType(module_name, STRINGP);
-        SubLTrampolineFile.checkType(system_name, STRINGP);
-        SubLTrampolineFile.checkType(pathname, STRINGP);
+        SubLSystemTrampolineFile.checkType(module_name, STRINGP);
+        SubLSystemTrampolineFile.checkType(system_name, STRINGP);
+        SubLSystemTrampolineFile.checkType(pathname, STRINGP);
         modules.ensure_provisional_module(module_name, system_name, pathname);
         rebuild_module_tests(module_name, system_name);
         return T;

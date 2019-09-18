@@ -24,7 +24,7 @@ package org.armedbear.j;
 
 //import org.armedbear.prolog.PrologThread;
 import static org.logicmoo.system.Startup.init_swipl_server;
-import static org.logicmoo.system.Startup.started_from_prolog;
+import static org.logicmoo.system.Startup.app_started_from_prolog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -111,7 +111,7 @@ public class PrologShell extends Shell
 	@Override
 	protected void startProcess()
 	{
-		if (!started_from_prolog)
+		if (!app_started_from_prolog)
 		{
 			init_swipl_server();
 		}

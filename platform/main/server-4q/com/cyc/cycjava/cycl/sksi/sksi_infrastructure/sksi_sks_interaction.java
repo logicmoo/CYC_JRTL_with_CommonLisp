@@ -151,7 +151,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -4722,7 +4722,7 @@ public final class sksi_sks_interaction extends SubLTranslatedFile {
         defparameter("*SKSI-OPEN-SQL-SOURCE-DEFAULT-INTERVAL*", $float$0_1);
         deflexical("*SKSI-FHT-SOURCE-DEFAULT-SIZE*", $int$32);
         deflexical("*SKSI-FHT-SOURCE-DEFAULT-AVERAGE-BUCKET-SIZE*", $int$256);
-        deflexical("*RESULT-SET-SQL-CONNECTION-STATEMENT-CACHE*", SubLTrampolineFile.maybeDefault($result_set_sql_connection_statement_cache$, $result_set_sql_connection_statement_cache$, () -> dictionary_utilities.new_synchronized_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*RESULT-SET-SQL-CONNECTION-STATEMENT-CACHE*", SubLSystemTrampolineFile.maybeDefault($result_set_sql_connection_statement_cache$, $result_set_sql_connection_statement_cache$, () -> dictionary_utilities.new_synchronized_dictionary(symbol_function(EQ), UNPROVIDED)));
         deflexical("*CACHED-GET-RESULT-SET-FROM-SQL-SOURCE-CACHING-STATE*", NIL);
         defparameter("*SKSI-SPARQL-REQUEST-OPEN-CONNECTION-TIMEOUT*", FIVE_INTEGER);
         defparameter("*SKSI-SPARQL-REQUEST-OVERALL-TIMEOUT*", $int$3600);
@@ -4737,14 +4737,14 @@ public final class sksi_sks_interaction extends SubLTranslatedFile {
         deflexical("*SPARQL-ORACLE-HT-PREFIX-PRAGMA-TEMPLATE*", $str150$http___oracle_com_semtech_ALL_PUL);
         defparameter("*SPARQL-ORACLE-TIMEOUT*", NIL);
         deflexical("*CACHED-GET-RESULT-SET-FROM-SPARQL-SOURCE-CACHING-STATE*", NIL);
-        deflexical("*ACCESS-PATH*", SubLTrampolineFile.maybeDefault($access_path$, $access_path$, NIL));
+        deflexical("*ACCESS-PATH*", SubLSystemTrampolineFile.maybeDefault($access_path$, $access_path$, NIL));
         deflexical("*STRUCTURED-KNOWLEDGE-SOURCES-ASSUMED-AVAILABLE*", NIL);
         deflexical("*SKSI-SQL-STATEMENT-POOL-MAX-SIZE*", TEN_INTEGER);
-        deflexical("*SKSI-RESOURCING-CACHE*", SubLTrampolineFile.maybeDefault($sksi_resourcing_cache$, $sksi_resourcing_cache$, NIL));
+        deflexical("*SKSI-RESOURCING-CACHE*", SubLSystemTrampolineFile.maybeDefault($sksi_resourcing_cache$, $sksi_resourcing_cache$, NIL));
         defparameter("*SKSI-GLOBAL-RESOURCING?*", T);
         deflexical("*SKSI-DEFAULT-CONNECTION-MAX-IDLE-SECONDS*", $int$600);
         defconstant("*DTP-SKSI-RESOURCING-CACHE*", SKSI_RESOURCING_CACHE);
-        deflexical("*SKSI-CONNECTION-GLOBAL-CACHE-LOCK*", SubLTrampolineFile.maybeDefault($sksi_connection_global_cache_lock$, $sksi_connection_global_cache_lock$, () -> make_lock(Strings.string(gensym($str254$SKSI_SQL_global_connection_cache_)))));
+        deflexical("*SKSI-CONNECTION-GLOBAL-CACHE-LOCK*", SubLSystemTrampolineFile.maybeDefault($sksi_connection_global_cache_lock$, $sksi_connection_global_cache_lock$, () -> make_lock(Strings.string(gensym($str254$SKSI_SQL_global_connection_cache_)))));
         defparameter("*SKSI-SALIENT-QUERY-STRING*", NIL);
         return NIL;
     }

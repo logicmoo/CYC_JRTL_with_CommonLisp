@@ -59,7 +59,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -610,7 +610,7 @@ public final class sksi_sks_predicate_indexing extends SubLTranslatedFile {
 
     public static SubLObject init_sksi_sks_predicate_indexing_file() {
         defconstant("*DTP-SKSI-SUPPORTED-PREDICATE-CACHE-ENTRY*", SKSI_SUPPORTED_PREDICATE_CACHE_ENTRY);
-        deflexical("*SKSI-SUPPORTED-PREDICATE-CACHE*", SubLTrampolineFile.maybeDefault($sksi_supported_predicate_cache$, $sksi_supported_predicate_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKSI-SUPPORTED-PREDICATE-CACHE*", SubLSystemTrampolineFile.maybeDefault($sksi_supported_predicate_cache$, $sksi_supported_predicate_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         return NIL;
     }
 

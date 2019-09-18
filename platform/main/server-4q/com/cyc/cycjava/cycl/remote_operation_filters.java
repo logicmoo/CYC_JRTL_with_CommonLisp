@@ -43,7 +43,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -147,7 +147,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
      * Add FORT to the set of terms being filtered from remote operations.
      */
     public static final SubLObject add_remote_operation_filter_term(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
+        SubLSystemTrampolineFile.checkType(fort, FORT_P);
         {
             SubLObject lock = $remote_operation_filter_lock$.getGlobalValue();
             SubLObject release = NIL;
@@ -170,7 +170,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
      * Remove FORT from the set of terms being filtered from remote operations.
      */
     public static final SubLObject remove_remote_operation_filter_term(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
+        SubLSystemTrampolineFile.checkType(fort, FORT_P);
         {
             SubLObject lock = $remote_operation_filter_lock$.getGlobalValue();
             SubLObject release = NIL;
@@ -202,7 +202,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
      * filtered from remote operations.
      */
     public static final SubLObject add_remote_operation_filter_collection(SubLObject collection) {
-        SubLTrampolineFile.checkType(collection, FORT_P);
+        SubLSystemTrampolineFile.checkType(collection, FORT_P);
         {
             SubLObject lock = $remote_operation_filter_lock$.getGlobalValue();
             SubLObject release = NIL;
@@ -227,7 +227,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
      * being filtered from remote operations.
      */
     public static final SubLObject remove_remote_operation_filter_collection(SubLObject collection) {
-        SubLTrampolineFile.checkType(collection, FORT_P);
+        SubLSystemTrampolineFile.checkType(collection, FORT_P);
         {
             SubLObject lock = $remote_operation_filter_lock$.getGlobalValue();
             SubLObject release = NIL;
@@ -266,7 +266,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
      * @unknown william
      */
     public static final SubLObject add_remote_operation_filter(SubLObject filter) {
-        SubLTrampolineFile.checkType(filter, FILTER_P);
+        SubLSystemTrampolineFile.checkType(filter, FILTER_P);
         {
             SubLObject lock = $remote_operation_filter_lock$.getGlobalValue();
             SubLObject release = NIL;
@@ -294,7 +294,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
      * @unknown william
      */
     public static final SubLObject remove_remote_operation_filter(SubLObject filter) {
-        SubLTrampolineFile.checkType(filter, FORT_P);
+        SubLSystemTrampolineFile.checkType(filter, FORT_P);
         {
             SubLObject lock = $remote_operation_filter_lock$.getGlobalValue();
             SubLObject release = NIL;
@@ -349,7 +349,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
      * @unknown william
      */
     public static final SubLObject filter_terms(SubLObject filter) {
-        SubLTrampolineFile.checkType(filter, FILTER_P);
+        SubLSystemTrampolineFile.checkType(filter, FILTER_P);
         return kb_mapping_utilities.pred_values_in_any_mt(filter, $$filterTerms, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -360,7 +360,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
      * @unknown william
      */
     public static final SubLObject filter_collections(SubLObject filter) {
-        SubLTrampolineFile.checkType(filter, FILTER_P);
+        SubLSystemTrampolineFile.checkType(filter, FILTER_P);
         return kb_mapping_utilities.pred_values_in_any_mt(filter, $$filterCollections, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -481,7 +481,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
     public static final SubLObject save_transcript_filters_to_file(SubLObject filename) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
             {
                 SubLObject saved = NIL;
                 SubLObject stream = NIL;
@@ -542,7 +542,7 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
      * @return boolean; t if successful.
      */
     public static final SubLObject load_transcript_filters_from_file(SubLObject filename) {
-        SubLTrampolineFile.checkType(filename, STRINGP);
+        SubLSystemTrampolineFile.checkType(filename, STRINGP);
         {
             SubLObject restored = NIL;
             SubLObject error_message = NIL;

@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -388,7 +388,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+            SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
             {
                 SubLObject id = user_interaction_agenda.ui_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -590,7 +590,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_agenda(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+            SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
             {
                 SubLObject id = user_interaction_agenda.uia_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -737,7 +737,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_meta_agenda(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+            SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
             {
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
                 html_utilities.html_markup(html_macros.$html_anchor_head$.getGlobalValue());
@@ -998,7 +998,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_sf_state(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, SF_STATE_P);
+            SubLSystemTrampolineFile.checkType(v_object, SF_STATE_P);
             {
                 SubLObject id = rkf_solution_finder.sf_state_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -1157,7 +1157,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_qc_state(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, QC_STATE_P);
+            SubLSystemTrampolineFile.checkType(v_object, QC_STATE_P);
             {
                 SubLObject id = rkf_query_constructor.qc_state_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -1416,7 +1416,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_qc_query(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, QC_QUERY_P);
+            SubLSystemTrampolineFile.checkType(v_object, QC_QUERY_P);
             {
                 SubLObject id = rkf_query_constructor.qc_query_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -1594,7 +1594,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_sc_state(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, SC_STATE_P);
+            SubLSystemTrampolineFile.checkType(v_object, SC_STATE_P);
             {
                 SubLObject id = rkf_scenario_constructor.sc_state_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -1734,7 +1734,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_sc_session(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, SC_SESSION_P);
+            SubLSystemTrampolineFile.checkType(v_object, SC_SESSION_P);
             {
                 SubLObject id = rkf_scenario_constructor.sc_session_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -1928,7 +1928,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_sm_scenario(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, SM_SCENARIO_P);
+            SubLSystemTrampolineFile.checkType(v_object, SM_SCENARIO_P);
             {
                 SubLObject id = rkf_scenario_manipulator.sm_scenario_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -2109,7 +2109,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_sm_indexical_record(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, SM_INDEXICAL_RECORD_P);
+            SubLSystemTrampolineFile.checkType(v_object, SM_INDEXICAL_RECORD_P);
             {
                 SubLObject id = rkf_scenario_manipulator.sm_indexical_record_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -2225,7 +2225,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_sm_constraint_record(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, SM_CONSTRAINT_RECORD_P);
+            SubLSystemTrampolineFile.checkType(v_object, SM_CONSTRAINT_RECORD_P);
             {
                 SubLObject id = rkf_scenario_manipulator.sm_constraint_record_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -2380,7 +2380,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_sm_merge_info(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, SM_MERGE_INFO_P);
+            SubLSystemTrampolineFile.checkType(v_object, SM_MERGE_INFO_P);
             {
                 SubLObject id = rkf_scenario_manipulator.sm_merge_info_id(v_object);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
@@ -2592,7 +2592,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_rc_state(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, RC_STATE_P);
+            SubLSystemTrampolineFile.checkType(v_object, RC_STATE_P);
             {
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
                 html_utilities.html_markup(html_macros.$html_anchor_head$.getGlobalValue());
@@ -2733,7 +2733,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_rc_lhs(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, RC_LHS_P);
+            SubLSystemTrampolineFile.checkType(v_object, RC_LHS_P);
             {
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
                 html_utilities.html_markup(html_macros.$html_anchor_head$.getGlobalValue());
@@ -2867,7 +2867,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_rc_rhs(SubLObject v_object) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, RC_RHS_P);
+            SubLSystemTrampolineFile.checkType(v_object, RC_RHS_P);
             {
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($UIA_INTERACTION);
                 html_utilities.html_markup(html_macros.$html_anchor_head$.getGlobalValue());
@@ -2955,22 +2955,22 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject ar_context_interaction(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, AR_CONTEXT_P);
+        SubLSystemTrampolineFile.checkType(v_object, AR_CONTEXT_P);
         return v_object.getField2();
     }
 
     public static final SubLObject ar_context_ar_state(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, AR_CONTEXT_P);
+        SubLSystemTrampolineFile.checkType(v_object, AR_CONTEXT_P);
         return v_object.getField3();
     }
 
     public static final SubLObject _csetf_ar_context_interaction(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, AR_CONTEXT_P);
+        SubLSystemTrampolineFile.checkType(v_object, AR_CONTEXT_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_ar_context_ar_state(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, AR_CONTEXT_P);
+        SubLSystemTrampolineFile.checkType(v_object, AR_CONTEXT_P);
         return v_object.setField3(value);
     }
 
@@ -3091,7 +3091,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_ar_context(SubLObject arctxt) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(arctxt, AR_CONTEXT_P);
+            SubLSystemTrampolineFile.checkType(arctxt, AR_CONTEXT_P);
             {
                 SubLObject state = ar_context_ar_state(arctxt);
                 SubLObject interaction = ar_context_interaction(arctxt);
@@ -3427,7 +3427,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_ar_state(SubLObject state) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(state, AR_STATE_P);
+            SubLSystemTrampolineFile.checkType(state, AR_STATE_P);
             {
                 SubLObject interaction = cb_uiat_smart.cb_uiat_sr_find_interaction_by_state(state);
                 SubLObject id = user_interaction_agenda.ui_id(interaction);
@@ -3577,7 +3577,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_ar_sentence(SubLObject sentence) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(sentence, AR_SENTENCE_P);
+            SubLSystemTrampolineFile.checkType(sentence, AR_SENTENCE_P);
             {
                 SubLObject state = $cb_uia_current_ar_state$.getDynamicValue(thread);
                 if (NIL != state) {
@@ -3710,7 +3710,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_ar_token(SubLObject token) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(token, AR_TOKEN_P);
+            SubLSystemTrampolineFile.checkType(token, AR_TOKEN_P);
             {
                 SubLObject state = $cb_uia_current_ar_state$.getDynamicValue(thread);
                 if (NIL != state) {
@@ -4059,7 +4059,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_ar_phrase(SubLObject phrase) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(phrase, AR_PHRASE_P);
+            SubLSystemTrampolineFile.checkType(phrase, AR_PHRASE_P);
             {
                 SubLObject state = $cb_uia_current_ar_state$.getDynamicValue(thread);
                 if (NIL != state) {
@@ -4330,7 +4330,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_ar_concept(SubLObject concept) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(concept, AR_CONCEPT_P);
+            SubLSystemTrampolineFile.checkType(concept, AR_CONCEPT_P);
             {
                 SubLObject state = $cb_uia_current_ar_state$.getDynamicValue(thread);
                 if (NIL != state) {
@@ -4585,7 +4585,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_ar_template(SubLObject template) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(template, AR_TEMPLATE_P);
+            SubLSystemTrampolineFile.checkType(template, AR_TEMPLATE_P);
             {
                 SubLObject state = $cb_uia_current_ar_state$.getDynamicValue(thread);
                 if (NIL != state) {
@@ -4636,7 +4636,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_rkf_salient_descriptor_prompter(SubLObject prompter) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(prompter, RKF_SALIENT_DESCRIPTOR_PROMPTER_P);
+            SubLSystemTrampolineFile.checkType(prompter, RKF_SALIENT_DESCRIPTOR_PROMPTER_P);
             {
                 SubLObject interaction = rkf_salient_descriptor_datastructures.rkf_salient_descriptor_prompter_lookup(prompter, $INTERACTION, UNPROVIDED);
                 SubLObject id = (NIL != user_interaction_agenda.user_interaction_p(interaction)) ? ((SubLObject) (user_interaction_agenda.ui_id(interaction))) : NIL;
@@ -4686,7 +4686,7 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
     public static final SubLObject cb_link_uia_debug_rkf_salient_descriptor_prompt(SubLObject prompt) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(prompt, RKF_SALIENT_DESCRIPTOR_PROMPT_P);
+            SubLSystemTrampolineFile.checkType(prompt, RKF_SALIENT_DESCRIPTOR_PROMPT_P);
             {
                 SubLObject prompter = rkf_salient_descriptor_datastructures.rkf_salient_descriptor_prompt_prompter(prompt);
                 SubLObject prompt_id = rkf_salient_descriptor_datastructures.rkf_salient_descriptor_prompt_id(prompt);

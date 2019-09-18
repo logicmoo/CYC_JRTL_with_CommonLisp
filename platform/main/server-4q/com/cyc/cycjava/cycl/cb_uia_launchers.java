@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -130,12 +130,12 @@ public final class cb_uia_launchers extends SubLTranslatedFile implements V02 {
         if (on_click == UNPROVIDED) {
             on_click = NIL;
         }
-        SubLTrampolineFile.checkType(launcher_spec, KEYWORDP);
-        SubLTrampolineFile.checkType(section_spec, KEYWORDP);
-        SubLTrampolineFile.checkType(launcher_name, STRINGP);
-        SubLTrampolineFile.checkType(launcher_url, STRINGP);
+        SubLSystemTrampolineFile.checkType(launcher_spec, KEYWORDP);
+        SubLSystemTrampolineFile.checkType(section_spec, KEYWORDP);
+        SubLSystemTrampolineFile.checkType(launcher_name, STRINGP);
+        SubLSystemTrampolineFile.checkType(launcher_url, STRINGP);
         if (NIL != target) {
-            SubLTrampolineFile.checkType(target, STRINGP);
+            SubLSystemTrampolineFile.checkType(target, STRINGP);
         }
         {
             SubLObject launcher_info = assoc(launcher_spec, $cb_uia_launchers$.getGlobalValue(), UNPROVIDED, UNPROVIDED);

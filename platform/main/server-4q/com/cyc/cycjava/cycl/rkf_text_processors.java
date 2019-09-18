@@ -90,7 +90,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rkf_text_processors extends SubLTranslatedFile {
     public static final SubLFile me = new rkf_text_processors();
@@ -2993,9 +2993,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             mt = $$RKFParsingMt;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, STRINGP);
-        SubLTrampolineFile.enforceType(mt, $sym207$HLMT_);
-        SubLTrampolineFile.enforceType(v_properties, PROPERTY_LIST_P);
+        SubLSystemTrampolineFile.enforceType(sentence, STRINGP);
+        SubLSystemTrampolineFile.enforceType(mt, $sym207$HLMT_);
+        SubLSystemTrampolineFile.enforceType(v_properties, PROPERTY_LIST_P);
         v_properties = list_utilities.maybe_putf(v_properties, $STRENGTHEN_, T);
         v_properties = list_utilities.maybe_putf(v_properties, $MULTIPLE_QUANTIFICATIONS, NIL);
         v_properties = list_utilities.maybe_putf(v_properties, $kw211$WFF_CHECK_, NIL);
@@ -3054,9 +3054,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             v_properties = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, STRINGP);
-        SubLTrampolineFile.enforceType(mt, $sym207$HLMT_);
-        SubLTrampolineFile.enforceType(v_properties, PROPERTY_LIST_P);
+        SubLSystemTrampolineFile.enforceType(sentence, STRINGP);
+        SubLSystemTrampolineFile.enforceType(mt, $sym207$HLMT_);
+        SubLSystemTrampolineFile.enforceType(v_properties, PROPERTY_LIST_P);
         if (NIL == string_utilities.ends_with(sentence, $str222$_, UNPROVIDED)) {
             if (NIL != string_utilities.ends_with_punctuation_p(sentence)) {
                 sentence = cconcatenate(format_nil.format_nil_a_no_copy(string_utilities.strip_final(sentence, UNPROVIDED)), $str222$_);
@@ -3343,12 +3343,12 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         deflexical("*RKF-TERM-READER-CYCL-TEMPLATE-MAPPINGS*", $list58);
         deflexical("*RKF-UTTRDR-ARG-TYPE-TO-TEMPLATE-CATEGORIES*", NIL);
         defparameter("*PMG-ORDERING*", NIL);
-        deflexical("*RKF-TERMS-FORAGER-LOCK*", SubLTrampolineFile.maybeDefault($rkf_terms_forager_lock$, $rkf_terms_forager_lock$, () -> make_lock($$$Terms_Forager)));
+        deflexical("*RKF-TERMS-FORAGER-LOCK*", SubLSystemTrampolineFile.maybeDefault($rkf_terms_forager_lock$, $rkf_terms_forager_lock$, () -> make_lock($$$Terms_Forager)));
         defconstant("*DTP-PARSE-MODULE-DEFINITION*", PARSE_MODULE_DEFINITION);
         deflexical("*RKF-UTTRDR-DEFAULT-COST*", TEN_INTEGER);
         deflexical("*RKF-UTTRDR-DEFAULT-EXPECTED-EXPANSIONS*", FIVE_INTEGER);
         defconstant("*DTP-PARSE-MODULE-GROUP*", PARSE_MODULE_GROUP);
-        deflexical("*RKF-UTTRDR-KNOWN-PARSERS*", SubLTrampolineFile.maybeDefault($rkf_uttrdr_known_parsers$, $rkf_uttrdr_known_parsers$, NIL));
+        deflexical("*RKF-UTTRDR-KNOWN-PARSERS*", SubLSystemTrampolineFile.maybeDefault($rkf_uttrdr_known_parsers$, $rkf_uttrdr_known_parsers$, NIL));
         deflexical("*RKF-UTTRDR-RESOLVABLES*", NIL);
         defparameter("*RKF-UTTRDR-PSP-RETURN-MODE*", $BEST_ONLY);
         deflexical("*RKF-UTTRDR-KNOWN-PARSERS-LOCK*", make_lock($$$Known_Parsers));

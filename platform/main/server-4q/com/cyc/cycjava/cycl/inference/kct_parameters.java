@@ -156,7 +156,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -459,7 +459,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
         }
-        SubLTrampolineFile.checkType(experiment_denoting_symbol, BOUND_SYMBOL_P);
+        SubLSystemTrampolineFile.checkType(experiment_denoting_symbol, BOUND_SYMBOL_P);
         {
             SubLObject query_set_run = symbol_value(experiment_denoting_symbol);
             SubLObject name = symbol_name(experiment_denoting_symbol);
@@ -491,8 +491,8 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(baseline_denoting_symbol, BOUND_SYMBOL_P);
-            SubLTrampolineFile.checkType(experiment_denoting_symbol, BOUND_SYMBOL_P);
+            SubLSystemTrampolineFile.checkType(baseline_denoting_symbol, BOUND_SYMBOL_P);
+            SubLSystemTrampolineFile.checkType(experiment_denoting_symbol, BOUND_SYMBOL_P);
             {
                 SubLObject baseline = symbol_value(baseline_denoting_symbol);
                 SubLObject baseline_name = symbol_name(baseline_denoting_symbol);
@@ -1417,7 +1417,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
                 SubLObject stripped_query_set_run = kbq_query_run.kbq_discard_query_set_run_properties(query_set_run, $list_alt122);
                 SubLObject suffixless_filename = string_utilities.strip_final(filename, length(kbq_query_run.$query_set_run_file_extension$.getGlobalValue()));
                 SubLObject new_filename = cconcatenate(suffixless_filename, new SubLObject[]{ suffix, kbq_query_run.$query_set_run_file_extension$.getGlobalValue() });
-                SubLTrampolineFile.checkType(new_filename, FILE_VALID_FOR_WRITING_P);
+                SubLSystemTrampolineFile.checkType(new_filename, FILE_VALID_FOR_WRITING_P);
                 return kbq_query_run.kbq_save_query_set_run(stripped_query_set_run, new_filename);
             }
         }
@@ -2060,7 +2060,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
      * Creates a region containing all of inference parameter space that is at least as efficient as POINT.
      */
     public static final SubLObject new_inference_parameter_matrix_region_under(SubLObject point) {
-        SubLTrampolineFile.checkType(point, INFERENCE_PARAMETER_MATRIX_POINT_P);
+        SubLSystemTrampolineFile.checkType(point, INFERENCE_PARAMETER_MATRIX_POINT_P);
         return cons($REGION_UNDER, point);
     }
 
@@ -2069,14 +2069,14 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
      * and at least as efficient as MORE-COMPLETE-POINT.
      */
     public static final SubLObject new_inference_parameter_matrix_region_between(SubLObject more_efficient_point, SubLObject more_complete_point) {
-        SubLTrampolineFile.checkType(more_efficient_point, INFERENCE_PARAMETER_MATRIX_POINT_P);
-        SubLTrampolineFile.checkType(more_complete_point, INFERENCE_PARAMETER_MATRIX_POINT_P);
+        SubLSystemTrampolineFile.checkType(more_efficient_point, INFERENCE_PARAMETER_MATRIX_POINT_P);
+        SubLSystemTrampolineFile.checkType(more_complete_point, INFERENCE_PARAMETER_MATRIX_POINT_P);
         return list($REGION_BETWEEN, more_efficient_point, more_complete_point);
     }
 
     public static final SubLObject inference_parameter_matrix_point_in_regionP(SubLObject point, SubLObject region) {
-        SubLTrampolineFile.checkType(point, INFERENCE_PARAMETER_MATRIX_POINT_P);
-        SubLTrampolineFile.checkType(region, INFERENCE_PARAMETER_MATRIX_REGION_P);
+        SubLSystemTrampolineFile.checkType(point, INFERENCE_PARAMETER_MATRIX_POINT_P);
+        SubLSystemTrampolineFile.checkType(region, INFERENCE_PARAMETER_MATRIX_REGION_P);
         {
             SubLObject pcase_var = region.first();
             if (pcase_var.eql($REGION_UNDER)) {
@@ -2185,7 +2185,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject points_in_region(SubLObject region) {
-        SubLTrampolineFile.checkType(region, INFERENCE_PARAMETER_MATRIX_REGION_P);
+        SubLSystemTrampolineFile.checkType(region, INFERENCE_PARAMETER_MATRIX_REGION_P);
         {
             SubLObject points = NIL;
             SubLObject cdolist_list_var = inference_parameter_matrix();
@@ -2200,7 +2200,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject number_of_points_in_region(SubLObject region) {
-        SubLTrampolineFile.checkType(region, INFERENCE_PARAMETER_MATRIX_REGION_P);
+        SubLSystemTrampolineFile.checkType(region, INFERENCE_PARAMETER_MATRIX_REGION_P);
         {
             SubLObject count = ZERO_INTEGER;
             SubLObject cdolist_list_var = inference_parameter_matrix();
@@ -2577,7 +2577,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
             end = NIL;
         }
         if (NIL != filename) {
-            SubLTrampolineFile.checkType(filename, FILE_VALID_FOR_WRITING_P);
+            SubLSystemTrampolineFile.checkType(filename, FILE_VALID_FOR_WRITING_P);
         }
         return kct_verify_most_efficient_inference_parameters_int(filename, just_these_queries, start, end);
     }
@@ -2600,7 +2600,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
                 SubLObject doneP = NIL;
                 format(T, $str_alt163$__run_starting_at__A__, numeric_date_utilities.timestring(UNPROVIDED));
                 force_output(UNPROVIDED);
-                SubLTrampolineFile.checkType(kct_parameters_experiment_full_filename($kct_baseline_filename$.getGlobalValue(), UNPROVIDED), STRINGP);
+                SubLSystemTrampolineFile.checkType(kct_parameters_experiment_full_filename($kct_baseline_filename$.getGlobalValue(), UNPROVIDED), STRINGP);
                 {
                     SubLObject stream = NIL;
                     try {
@@ -3169,7 +3169,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
     public static final SubLObject completeness_estimate_3_for_point(SubLObject point, SubLObject parameter, SubLObject new_value) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(point, INFERENCE_PARAMETER_MATRIX_POINT_P);
+            SubLSystemTrampolineFile.checkType(point, INFERENCE_PARAMETER_MATRIX_POINT_P);
             {
                 SubLObject old_value = inference_parameter_matrix_point_value_for_dimension(point, parameter);
                 if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
@@ -3301,18 +3301,18 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject make_inference_parameter_cluster(SubLObject region, SubLObject canonical_point) {
-        SubLTrampolineFile.checkType(region, INFERENCE_PARAMETER_MATRIX_REGION_P);
-        SubLTrampolineFile.checkType(canonical_point, INFERENCE_PARAMETER_MATRIX_POINT_P);
+        SubLSystemTrampolineFile.checkType(region, INFERENCE_PARAMETER_MATRIX_REGION_P);
+        SubLSystemTrampolineFile.checkType(canonical_point, INFERENCE_PARAMETER_MATRIX_POINT_P);
         return list(region, canonical_point);
     }
 
     public static final SubLObject inference_parameter_cluster_region(SubLObject cluster) {
-        SubLTrampolineFile.checkType(cluster, INFERENCE_PARAMETER_CLUSTER_P);
+        SubLSystemTrampolineFile.checkType(cluster, INFERENCE_PARAMETER_CLUSTER_P);
         return cluster.first();
     }
 
     public static final SubLObject inference_parameter_cluster_canonical_point(SubLObject cluster) {
-        SubLTrampolineFile.checkType(cluster, INFERENCE_PARAMETER_CLUSTER_P);
+        SubLSystemTrampolineFile.checkType(cluster, INFERENCE_PARAMETER_CLUSTER_P);
         return second(cluster);
     }
 
@@ -4679,7 +4679,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject error_info = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
-                SubLTrampolineFile.checkType($kct_parameters_log_directory$.getGlobalValue(), DIRECTORY_P);
+                SubLSystemTrampolineFile.checkType($kct_parameters_log_directory$.getGlobalValue(), DIRECTORY_P);
                 {
                     SubLObject directory_contents_var = Filesys.directory($kct_parameters_log_directory$.getGlobalValue(), T);
                     SubLObject progress_message_var = $$$Analyzing_logs;
@@ -4788,7 +4788,7 @@ public final class kct_parameters extends SubLTranslatedFile implements V02 {
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject queries = NIL;
-                SubLTrampolineFile.checkType(filename, STRINGP);
+                SubLSystemTrampolineFile.checkType(filename, STRINGP);
                 {
                     SubLObject stream = NIL;
                     try {

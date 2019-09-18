@@ -33,7 +33,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -241,7 +241,7 @@ public final class agent_manager extends SubLTranslatedFile {
         deflexical("*AGENT-MGR-PORT*", $int$4444);
         deflexical("*AGENT-MGR-SOCKET*", NIL);
         deflexical("*API-SERVICE-AGENT-NAME*", NIL);
-        deflexical("*AGENT-RECEIVED-MESSAGE-HANDLER*", SubLTrampolineFile.maybeDefault($agent_received_message_handler$, $agent_received_message_handler$, NIL));
+        deflexical("*AGENT-RECEIVED-MESSAGE-HANDLER*", SubLSystemTrampolineFile.maybeDefault($agent_received_message_handler$, $agent_received_message_handler$, NIL));
         return NIL;
     }
 

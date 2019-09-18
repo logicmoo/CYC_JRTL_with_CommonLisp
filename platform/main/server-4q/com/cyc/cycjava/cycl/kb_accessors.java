@@ -141,7 +141,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1734,7 +1734,7 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(argnum, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(argnum, INTEGERP);
         return argn_isa_int(relation, argnum, mt);
     }
 
@@ -1742,7 +1742,7 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(argnum, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(argnum, INTEGERP);
         return argn_sometimes_isa_int(relation, argnum, mt);
     }
 
@@ -1750,7 +1750,7 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(argnum, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(argnum, INTEGERP);
         if (NIL != czer_trampolines.within_czer_memoization_stateP()) {
             return copy_list(czer_trampolines.czer_argn_quoted_isa_int(relation, argnum, mt_relevance_macros.mt_info(mt)));
         }
@@ -2264,8 +2264,8 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(relation, INDEXED_TERM_P);
-        SubLTrampolineFile.enforceType(n, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(relation, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(n, INTEGERP);
         if (NIL != forts.fort_p(relation)) {
             return genls.min_cols(argn_isa(relation, n, mt), mt, UNPROVIDED);
         }
@@ -2444,7 +2444,7 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(argnum, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(argnum, INTEGERP);
         if (NIL != forts.fort_p(collection)) {
             SubLObject result = args_isa_of(collection, mt);
             final SubLObject arg_isa_pred = arg_isa_pred_int(argnum);
@@ -2514,7 +2514,7 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(argnum, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(argnum, INTEGERP);
         if (NIL != forts.fort_p(relation)) {
             SubLObject result = NIL;
             SubLObject cdolist_list_var = arg_genl_preds(argnum, relation, mt);
@@ -2693,7 +2693,7 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(n, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(n, INTEGERP);
         return genls.min_cols(argn_genl(relation, n, mt), mt, UNPROVIDED);
     }
 
@@ -2790,7 +2790,7 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(argnum, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(argnum, INTEGERP);
         if (NIL != forts.fort_p(collection)) {
             SubLObject result = args_genl_of(collection, mt);
             final SubLObject arg_genl_pred = arg_genl_pred_int(argnum);
@@ -5933,8 +5933,8 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = $$BookkeepingMt;
         }
-        SubLTrampolineFile.enforceType(fort, FORT_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
         return kb_mapping_utilities.fpred_value_in_mt(fort, $$myReviewer, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -5942,7 +5942,7 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, FORT_P);
         return kb_mapping_utilities.fpred_value_in_relevant_mts(fort, $$comment, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -6635,7 +6635,7 @@ public final class kb_accessors extends SubLTranslatedFile {
         if (remove_duplicatesP == UNPROVIDED) {
             remove_duplicatesP = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v_term, INDEXED_TERM_P);
         return term_assertions(v_term, $$InferencePSC, remove_duplicatesP);
     }
 

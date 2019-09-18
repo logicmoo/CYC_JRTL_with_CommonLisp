@@ -24,7 +24,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -226,7 +226,7 @@ public final class cyc_bookkeeping extends SubLTranslatedFile {
     }
 
     public static SubLObject init_cyc_bookkeeping_file() {
-        deflexical("*BOOKKEEPING-ENABLED?*", SubLTrampolineFile.maybeDefault($sym0$_BOOKKEEPING_ENABLED__, $bookkeeping_enabledP$, T));
+        deflexical("*BOOKKEEPING-ENABLED?*", SubLSystemTrampolineFile.maybeDefault($sym0$_BOOKKEEPING_ENABLED__, $bookkeeping_enabledP$, T));
         defparameter("*CYC-BOOKKEEPING-INFO*", NIL);
         return NIL;
     }

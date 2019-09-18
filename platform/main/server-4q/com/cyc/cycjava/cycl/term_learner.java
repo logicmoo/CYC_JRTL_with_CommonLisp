@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -168,8 +168,8 @@ public final class term_learner extends SubLTranslatedFile implements V02 {
     public static final SubLObject term_learner_incomplete_binary_pred_gaf_wffP(SubLObject pred, SubLObject arg_binding, SubLObject arg_pos) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(pred, PREDICATE_P);
-            SubLTrampolineFile.checkType(arg_pos, POSITIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(pred, PREDICATE_P);
+            SubLSystemTrampolineFile.checkType(arg_pos, POSITIVE_INTEGER_P);
             {
                 SubLObject result = NIL;
                 {
@@ -567,7 +567,7 @@ public final class term_learner extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_term, STRINGP);
+            SubLSystemTrampolineFile.checkType(v_term, STRINGP);
             {
                 SubLObject sentences = term_learner_web_sentences_with_term(v_term);
                 SubLObject relevant_preds = NIL;
@@ -720,7 +720,7 @@ public final class term_learner extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_term, STRINGP);
+            SubLSystemTrampolineFile.checkType(v_term, STRINGP);
             {
                 SubLObject sentences = term_learner_web_sentences_with_term(v_term);
                 SubLObject constraining_collection = NIL;
@@ -783,7 +783,7 @@ public final class term_learner extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(string, STRINGP);
+            SubLSystemTrampolineFile.checkType(string, STRINGP);
             if (NIL != narts_high.naut_p(constraining_collection)) {
                 constraining_collection = czer_main.cyc_find_or_create_nart(constraining_collection, UNPROVIDED);
             }
@@ -831,9 +831,9 @@ public final class term_learner extends SubLTranslatedFile implements V02 {
     public static final SubLObject get_info_on_term_via_cyclifier(SubLObject v_term, SubLObject term_type, SubLObject domain_mt) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_term, STRINGP);
-            SubLTrampolineFile.checkType(term_type, $sym38$ISA_COLLECTION_);
-            SubLTrampolineFile.checkType(domain_mt, $sym39$ISA_MT_);
+            SubLSystemTrampolineFile.checkType(v_term, STRINGP);
+            SubLSystemTrampolineFile.checkType(term_type, $sym38$ISA_COLLECTION_);
+            SubLSystemTrampolineFile.checkType(domain_mt, $sym39$ISA_MT_);
             {
                 SubLObject instance = term_learner_find_or_create_instance(v_term, term_type, domain_mt, UNPROVIDED);
                 thread.resetMultipleValues();
@@ -1263,7 +1263,7 @@ public final class term_learner extends SubLTranslatedFile implements V02 {
     MOMENTS" ...)
      */
     public static final SubLObject term_learner_web_sentences_with_term(SubLObject v_term) {
-        SubLTrampolineFile.checkType(v_term, STRINGP);
+        SubLSystemTrampolineFile.checkType(v_term, STRINGP);
         {
             SubLObject search_results = generate_gafs.search_engine_results(string_utilities.quote_string(v_term, UNPROVIDED), UNPROVIDED, UNPROVIDED);
             SubLObject relevant_sentences = NIL;

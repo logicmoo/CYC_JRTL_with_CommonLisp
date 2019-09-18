@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -248,7 +248,7 @@ public final class forward_propagate_assertions extends SubLTranslatedFile {
 
     public static SubLObject inference_forward_propagate_mt(final SubLObject forward_propagate, final SubLObject target_mt, final SubLObject number, final SubLObject time, final SubLObject depth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != forward_propagate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_forward_propagate.forward_propagate_p(forward_propagate))) {
+        if (((NIL != forward_propagate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_forward_propagate.forward_propagate_p(forward_propagate))) {
             throw new AssertionError(forward_propagate);
         }
         SubLObject result = NIL;

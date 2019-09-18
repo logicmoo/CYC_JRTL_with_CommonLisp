@@ -54,7 +54,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class red_infrastructure extends SubLTranslatedFile {
     public static final SubLFile me = new red_infrastructure();
@@ -745,11 +745,11 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_red_infrastructure_file() {
-        deflexical("*RED-VARIABLES-DICTIONARY*", SubLTrampolineFile.maybeDefault($red_variables_dictionary$, $red_variables_dictionary$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*RED-SYMBOLS-LIST*", SubLTrampolineFile.maybeDefault($red_symbols_list$, $red_symbols_list$, NIL));
-        deflexical("*RED-KEYS-DICTIONARY*", SubLTrampolineFile.maybeDefault($red_keys_dictionary$, $red_keys_dictionary$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*RED-RELOAD-CALLBACK-MONIKER-DICTIONARY*", SubLTrampolineFile.maybeDefault($red_reload_callback_moniker_dictionary$, $red_reload_callback_moniker_dictionary$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*REPOSITORIES-LOADED*", SubLTrampolineFile.maybeDefault($repositories_loaded$, $repositories_loaded$, NIL));
+        deflexical("*RED-VARIABLES-DICTIONARY*", SubLSystemTrampolineFile.maybeDefault($red_variables_dictionary$, $red_variables_dictionary$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*RED-SYMBOLS-LIST*", SubLSystemTrampolineFile.maybeDefault($red_symbols_list$, $red_symbols_list$, NIL));
+        deflexical("*RED-KEYS-DICTIONARY*", SubLSystemTrampolineFile.maybeDefault($red_keys_dictionary$, $red_keys_dictionary$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*RED-RELOAD-CALLBACK-MONIKER-DICTIONARY*", SubLSystemTrampolineFile.maybeDefault($red_reload_callback_moniker_dictionary$, $red_reload_callback_moniker_dictionary$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*REPOSITORIES-LOADED*", SubLSystemTrampolineFile.maybeDefault($repositories_loaded$, $repositories_loaded$, NIL));
         defconstant("*DTP-RED-SYMBOL*", RED_SYMBOL);
         return NIL;
     }

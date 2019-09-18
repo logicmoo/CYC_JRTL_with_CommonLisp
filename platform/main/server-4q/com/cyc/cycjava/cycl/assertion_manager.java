@@ -30,7 +30,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -293,7 +293,7 @@ public final class assertion_manager extends SubLTranslatedFile {
     }
 
     public static SubLObject init_assertion_manager_file() {
-        deflexical("*ASSERTION-CONTENT-MANAGER*", SubLTrampolineFile.maybeDefault($assertion_content_manager$, $assertion_content_manager$, $UNINITIALIZED));
+        deflexical("*ASSERTION-CONTENT-MANAGER*", SubLSystemTrampolineFile.maybeDefault($assertion_content_manager$, $assertion_content_manager$, $UNINITIALIZED));
         deflexical("*ASSERTION-LRU-SIZE-PERCENTAGE*", SIXTEEN_INTEGER);
         deflexical("*ASSERTION-LRU-SIZE-MAX*", $int$600000);
         return NIL;

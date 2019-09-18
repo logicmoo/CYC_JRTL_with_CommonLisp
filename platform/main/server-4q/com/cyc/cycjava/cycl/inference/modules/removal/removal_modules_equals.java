@@ -39,7 +39,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -614,11 +614,11 @@ public final class removal_modules_equals extends SubLTranslatedFile {
         defparameter("*DEFAULT-UNIQUE-NAMES-COST*", $hl_module_check_cost$.getDynamicValue());
         defparameter("*DEFAULT-NOT-EQUALS-COST*", ONE_INTEGER);
         defparameter("*DEFAULT-NOT-EQUALS-NON-ATOMIC-COST*", $float$1_1);
-        deflexical("*EQUAL-SYMBOLS-DEFINING-MT*", SubLTrampolineFile.maybeDefault($equal_symbols_defining_mt$, $equal_symbols_defining_mt$, $$BaseKB));
+        deflexical("*EQUAL-SYMBOLS-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($equal_symbols_defining_mt$, $equal_symbols_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-EQUAL-SYMBOLS-CHECK-COST*", $hl_module_check_cost$.getDynamicValue());
         defparameter("*DEFAULT-EQUAL-SYMBOLS-UNIFY-COST*", $hl_module_check_cost$.getDynamicValue());
         defparameter("*DEFAULT-NOT-EQUAL-SYMBOLS-COST*", $hl_module_check_cost$.getDynamicValue());
-        deflexical("*EQUAL-STRINGS-CASE-INSENSITIVE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($equal_strings_case_insensitive_defining_mt$, $equal_strings_case_insensitive_defining_mt$, $$BaseKB));
+        deflexical("*EQUAL-STRINGS-CASE-INSENSITIVE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($equal_strings_case_insensitive_defining_mt$, $equal_strings_case_insensitive_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-EQUAL-STRINGS-CASE-INSENSITIVE-CHECK-COST*", $hl_module_check_cost$.getDynamicValue());
         defparameter("*DEFAULT-NOT-EQUAL-STRINGS-CASE-INSENSITIVE-COST*", $hl_module_check_cost$.getDynamicValue());
         defparameter("*DEFAULT-EQUALS-VIA-NUMERICALLY-EQUALS-COST*", $hl_module_check_cost$.getDynamicValue());

@@ -38,11 +38,17 @@ import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
 import static org.armedbear.lisp.Lisp.T;
 import static org.armedbear.lisp.Lisp.exportSpecial;
 
+import org.logicmoo.system.Startup;
+
 public final class Debug {
 
 	public static final void assertTrue(boolean b) {
+		String msg = "ABCL Debug.assertTrue(false) assertion failed!";
+		assertTrue(b, msg);
+	}
+
+	public static final void assertTrue(boolean b, String msg) {
 		if (!b) {
-			String msg = "ABCL Debug.assertTrue(false) assertion failed!";
 			assertViolation(msg);
 		}
 	}
@@ -50,9 +56,10 @@ public final class Debug {
 	public static final void assertViolation(String msg) {
 		final String m = "Assert violation: " + msg;
 		Error e = new Error(m);
-
-		System.err.println(m);
-		e.printStackTrace(System.err);
+		Startup.printStackTrace(e);
+		Startup.addUncaught(e);
+		//		System.err.println(m);
+		//		e.printStackTrace(System.err);
 
 		StringBuffer buffer = new StringBuffer();
 		final String CR = "\n";
@@ -74,11 +81,11 @@ public final class Debug {
 	 * TODO Describe the purpose of this method.
 	 */
 	public static void forkInterpreter() {
-//      try {
-//			BeanShellCntrl.bsh_repl();
-//		} catch (EvalError e) {
-//			Debug.trace(e);
-//		}
+		//      try {
+		//			BeanShellCntrl.bsh_repl();
+		//		} catch (EvalError e) {
+		//			Debug.trace(e);
+		//		}
 		final Interpreter globalInterpreter = Interpreter.globalInterpreter;
 		if (globalInterpreter != null) {
 			final LispThread thread = LispThread.currentThread();
@@ -129,6 +136,6 @@ public final class Debug {
 		// TODO Auto-generated method stub
 		// debugIO.println(msg);
 		// to some loggers
-	
+
 	}
 }

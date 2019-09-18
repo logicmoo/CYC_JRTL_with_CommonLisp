@@ -43,7 +43,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -499,17 +499,17 @@ public final class deductions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject deduction_assertion(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         return NIL != deduction_handles.deduction_handle_validP(deduction) ? deductions_interface.kb_deduction_supported_object(deduction) : NIL;
     }
 
     public static SubLObject deduction_supported_object(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         return NIL != deduction_handles.deduction_handle_validP(deduction) ? deductions_interface.kb_deduction_supported_object(deduction) : NIL;
     }
 
     public static SubLObject deduction_truth(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         if (NIL == deduction_handles.deduction_handle_validP(deduction)) {
             return $UNKNOWN;
         }
@@ -517,7 +517,7 @@ public final class deductions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject deduction_strength(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         return NIL != deduction_handles.deduction_handle_validP(deduction) ? deductions_interface.kb_deduction_strength(deduction) : NIL;
     }
 

@@ -5,14 +5,14 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSequence;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Sort extends SubLTrampolineFile {
+public class Sort extends SubLSystemTrampolineFile {
 	public static SubLObject cmerge(SubLObject seq1, SubLObject seq2, SubLObject predicate, SubLObject key) {
 		if (key == CommonSymbols.UNPROVIDED)
 			key = CommonSymbols.IDENTITY;
-		BinaryFunction predicateTyped = SubLTrampolineFile.extractBinaryFunc(predicate);
-		UnaryFunction keyTyped = SubLTrampolineFile.extractUnaryFunc(key);
+		BinaryFunction predicateTyped = SubLSystemTrampolineFile.extractBinaryFunc(predicate);
+		UnaryFunction keyTyped = SubLSystemTrampolineFile.extractUnaryFunc(key);
 		return seq1.toSeq().merge(seq2.toSeq(), predicateTyped, keyTyped);
 	}
 
@@ -26,7 +26,7 @@ public class Sort extends SubLTrampolineFile {
 
 	public static SubLObject stable_sort(SubLObject sequence, SubLObject predicate) {
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction predicateTyped = SubLTrampolineFile.extractBinaryFunc(predicate);
+		BinaryFunction predicateTyped = SubLSystemTrampolineFile.extractBinaryFunc(predicate);
 		SubLObject result = sequenceTyped.sort(true, predicateTyped);
 		return result;
 	}
@@ -37,8 +37,8 @@ public class Sort extends SubLTrampolineFile {
 		if (key == CommonSymbols.IDENTITY)
 			return stable_sort(sequence, predicate);
 		SubLSequence sequenceTyped = sequence.toSeq();
-		BinaryFunction predicateTyped = SubLTrampolineFile.extractBinaryFunc(predicate);
-		UnaryFunction keyTyped = SubLTrampolineFile.extractUnaryFunc(key);
+		BinaryFunction predicateTyped = SubLSystemTrampolineFile.extractBinaryFunc(predicate);
+		UnaryFunction keyTyped = SubLSystemTrampolineFile.extractUnaryFunc(key);
 		SubLObject result = sequenceTyped.sort(true, predicateTyped, keyTyped);
 		return result;
 	}

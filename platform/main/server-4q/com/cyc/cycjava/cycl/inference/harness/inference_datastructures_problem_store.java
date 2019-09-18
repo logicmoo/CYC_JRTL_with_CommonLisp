@@ -151,7 +151,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_datastructures_problem_store extends SubLTranslatedFile {
     public static final SubLFile me = new inference_datastructures_problem_store();
@@ -9353,7 +9353,7 @@ public final class inference_datastructures_problem_store extends SubLTranslated
     public static SubLObject init_inference_datastructures_problem_store_file() {
         defparameter("*PROBLEM-STORE-MODIFICATION-PERMITTED?*", NIL);
         defparameter("*PROBLEM-STORE-MULTIPLE-SUBQUERIES-COUNT*", NIL);
-        deflexical("*PROBLEM-STORE-ID-INDEX*", SubLTrampolineFile.maybeDefault($problem_store_id_index$, $problem_store_id_index$, () -> new_id_index(UNPROVIDED, UNPROVIDED)));
+        deflexical("*PROBLEM-STORE-ID-INDEX*", SubLSystemTrampolineFile.maybeDefault($problem_store_id_index$, $problem_store_id_index$, () -> new_id_index(UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-PROBLEM-STORE*", PROBLEM_STORE);
         deflexical("*DEFAULT-PROBLEM-STORE-PROBLEM-SIZE*", $int$80);
         deflexical("*DEFAULT-PROBLEM-STORE-LINK-SIZE*", $int$120);
@@ -9365,8 +9365,8 @@ public final class inference_datastructures_problem_store extends SubLTranslated
         defparameter("*DISABLE-PROBLEM-STORE-ALLOWS-PROBLEM-HL-FREE-VARS-OPTIMIZATION?*", NIL);
         defparameter("*FORCE-PROBLEM-IDENTITY-DEPENDS-ON-FREE-HL-VARS*", NIL);
         defconstant("*DTP-PROBLEM-STORE-JANITOR*", PROBLEM_STORE_JANITOR);
-        deflexical("*PROBLEM-STORE-ID-TO-NAME-TABLE*", SubLTrampolineFile.maybeDefault($problem_store_id_to_name_table$, $problem_store_id_to_name_table$, () -> make_hash_table(ONE_INTEGER, symbol_function(EQL), UNPROVIDED)));
-        deflexical("*PROBLEM-STORE-NAME-TO-ID-TABLE*", SubLTrampolineFile.maybeDefault($problem_store_name_to_id_table$, $problem_store_name_to_id_table$, () -> make_hash_table(ONE_INTEGER, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*PROBLEM-STORE-ID-TO-NAME-TABLE*", SubLSystemTrampolineFile.maybeDefault($problem_store_id_to_name_table$, $problem_store_id_to_name_table$, () -> make_hash_table(ONE_INTEGER, symbol_function(EQL), UNPROVIDED)));
+        deflexical("*PROBLEM-STORE-NAME-TO-ID-TABLE*", SubLSystemTrampolineFile.maybeDefault($problem_store_name_to_id_table$, $problem_store_name_to_id_table$, () -> make_hash_table(ONE_INTEGER, symbol_function(EQUAL), UNPROVIDED)));
         deflexical("*PROBLEM-STORE-HASH-WATERMARK*", $int$50);
         return NIL;
     }

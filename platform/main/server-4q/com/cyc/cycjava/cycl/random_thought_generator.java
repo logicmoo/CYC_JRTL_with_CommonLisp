@@ -116,7 +116,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class random_thought_generator extends SubLTranslatedFile {
     public static final SubLFile me = new random_thought_generator();
@@ -561,7 +561,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             start_after_fort = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != number_of_terms) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(number_of_terms))) {
+        if (((NIL != number_of_terms) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(number_of_terms))) {
             throw new AssertionError(number_of_terms);
         }
         assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
@@ -2179,11 +2179,11 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_random_thought_generator_file() {
         defparameter("*RANDOM-THOUGHT-SERVER-HOST*", red_infrastructure_macros.red_def_helper($list34.isSymbol() ? symbol_value($list34) : $list34, $random_thought_server_host$, $str36$random_thoughts_cyc_com.isSymbol() ? symbol_value($str36$random_thoughts_cyc_com) : $str36$random_thoughts_cyc_com, $PARAMETER, UNPROVIDED));
         defparameter("*RANDOM-THOUGHT-SERVER-PORT*", red_infrastructure_macros.red_def_helper($list38.isSymbol() ? symbol_value($list38) : $list38, $random_thought_server_port$, $int$3634.isSymbol() ? symbol_value($int$3634) : $int$3634, $PARAMETER, UNPROVIDED));
-        deflexical("*REMOTE-RANDOM-THOUGHT-IMAGE*", SubLTrampolineFile.maybeDefault($remote_random_thought_image$, $remote_random_thought_image$, NIL));
-        deflexical("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL*", SubLTrampolineFile.maybeDefault($remote_random_thought_connection_pool$, $remote_random_thought_connection_pool$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*REMOTE-RANDOM-THOUGHT-IMAGE*", SubLSystemTrampolineFile.maybeDefault($remote_random_thought_image$, $remote_random_thought_image$, NIL));
+        deflexical("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL*", SubLSystemTrampolineFile.maybeDefault($remote_random_thought_connection_pool$, $remote_random_thought_connection_pool$, () -> queues.create_queue(UNPROVIDED)));
         deflexical("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL-LOCK*", make_lock($str44$Remote_Random_Thought_Connection_));
         deflexical("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL-MAX-SIZE*", NINE_INTEGER);
-        deflexical("*RANDOM-THOUGHT-GENERATORS-FOR-USERS*", SubLTrampolineFile.maybeDefault($random_thought_generators_for_users$, $random_thought_generators_for_users$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*RANDOM-THOUGHT-GENERATORS-FOR-USERS*", SubLSystemTrampolineFile.maybeDefault($random_thought_generators_for_users$, $random_thought_generators_for_users$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-RANDOM-THOUGHT-GENERATOR*", RANDOM_THOUGHT_GENERATOR);
         defparameter("*PRINT-RTG-NOTES?*", NIL);
         return NIL;

@@ -40,7 +40,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class gke_template_specification extends SubLTranslatedFile {
     public static final SubLFile me = new gke_template_specification();
@@ -559,7 +559,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_gke_template_specification_file() {
-        deflexical("*GKE-TEMPLATE-CURRENT-TEMPLATE*", SubLTrampolineFile.maybeDefault($gke_template_current_template$, $gke_template_current_template$, NIL));
+        deflexical("*GKE-TEMPLATE-CURRENT-TEMPLATE*", SubLSystemTrampolineFile.maybeDefault($gke_template_current_template$, $gke_template_current_template$, NIL));
         defconstant("*DTP-GKE-TEMPLATE-SPECIFICATION*", GKE_TEMPLATE_SPECIFICATION);
         return NIL;
     }

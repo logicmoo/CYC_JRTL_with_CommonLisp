@@ -191,7 +191,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2995,7 +2995,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
         defparameter("*INSIDE-CLEAR-ISA-DEPENDENT-CACHES?*", NIL);
         defparameter("*INSIDE-CLEAR-QUOTED-ISA-DEPENDENT-CACHES?*", NIL);
         defparameter("*TRUE-RULE-TEMPLATE*", $list54);
-        deflexical("*TRUE-RULE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($true_rule_defining_mt$, $true_rule_defining_mt$, $$CoreCycLMt));
+        deflexical("*TRUE-RULE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($true_rule_defining_mt$, $true_rule_defining_mt$, $$CoreCycLMt));
         defparameter("*CYC-EXCEPT-MT-REPROPAGATE-MT-CONTENTS-CUTOFF*", $int$256);
         defparameter("*DEBUG-DO-CREATE-FROM-DESCRIPTION?*", NIL);
         defparameter("*INSTANTIATE-FROM-SUBCOLLECTION-EXPRESSION-CONSTANT-PREFIX*", $$$INST);

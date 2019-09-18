@@ -72,7 +72,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class nl_parsing_api extends SubLTranslatedFile {
     public static final SubLFile me = new nl_parsing_api();
@@ -962,8 +962,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (optional_arg_plist == UNPROVIDED) {
             optional_arg_plist = NIL;
         }
-        SubLTrampolineFile.enforceType(string, STRINGP);
-        SubLTrampolineFile.enforceType(optional_arg_plist, PHRASAL_MEANINGS_OPTIONAL_ARGS_P);
+        SubLSystemTrampolineFile.enforceType(string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(optional_arg_plist, PHRASAL_MEANINGS_OPTIONAL_ARGS_P);
         return iteration.iterator_value_list(string_phrasal_meanings_iterator(string, optional_arg_plist));
     }
 
@@ -971,8 +971,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (optional_arg_plist == UNPROVIDED) {
             optional_arg_plist = NIL;
         }
-        SubLTrampolineFile.enforceType(string, STRINGP);
-        SubLTrampolineFile.enforceType(optional_arg_plist, PHRASAL_MEANINGS_OPTIONAL_ARGS_P);
+        SubLSystemTrampolineFile.enforceType(string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(optional_arg_plist, PHRASAL_MEANINGS_OPTIONAL_ARGS_P);
         return phrasal_meanings_iterator(document.new_phrase(list($STRING, string)), optional_arg_plist);
     }
 
@@ -980,8 +980,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (optional_arg_plist == UNPROVIDED) {
             optional_arg_plist = NIL;
         }
-        SubLTrampolineFile.enforceType(phrase, PHRASE_P);
-        SubLTrampolineFile.enforceType(optional_arg_plist, PHRASAL_MEANINGS_OPTIONAL_ARGS_P);
+        SubLSystemTrampolineFile.enforceType(phrase, PHRASE_P);
+        SubLSystemTrampolineFile.enforceType(optional_arg_plist, PHRASAL_MEANINGS_OPTIONAL_ARGS_P);
         return iteration.iterator_value_list(phrasal_meanings_iterator(phrase, optional_arg_plist));
     }
 
@@ -989,8 +989,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (optional_arg_plist == UNPROVIDED) {
             optional_arg_plist = NIL;
         }
-        SubLTrampolineFile.enforceType(phrase, PHRASE_P);
-        SubLTrampolineFile.enforceType(optional_arg_plist, PHRASAL_MEANINGS_OPTIONAL_ARGS_P);
+        SubLSystemTrampolineFile.enforceType(phrase, PHRASE_P);
+        SubLSystemTrampolineFile.enforceType(optional_arg_plist, PHRASAL_MEANINGS_OPTIONAL_ARGS_P);
         optional_arg_plist = list_utilities.augment_plist_with_defaults(optional_arg_plist, listS($OUTPUT_SPEC, new SubLObject[]{ nl_api_datastructures.new_nl_output_spec($SUBL, nl_api_datastructures.new_nl_interpretation_spec(UNPROVIDED)), $LEARNERS, $list104, $FILTER, NIL, $SYNTACTIC_RESTRICTION, NIL, $PHRASE_CYCLIFIER, LEXICAL_PHRASE_CYCLIFIER, $LEXICON, term_lexicon.new_case_sensitivity_preferred_term_lexicon(), $DOMAIN_MT, default_relation_tagging_domain_mt(), $list108 }));
         return iteration.new_list_iterator(funcall(getf(optional_arg_plist, $PHRASE_CYCLIFIER, UNPROVIDED), phrase, optional_arg_plist));
     }

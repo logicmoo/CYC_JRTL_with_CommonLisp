@@ -116,7 +116,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3201,7 +3201,7 @@ public final class inference_proof_spec extends SubLTranslatedFile {
     }
 
     public static SubLObject init_inference_proof_spec_file() {
-        deflexical("*KBQ-PROOF-SPEC-TABLE*", SubLTrampolineFile.maybeDefault($kbq_proof_spec_table$, $kbq_proof_spec_table$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
+        deflexical("*KBQ-PROOF-SPEC-TABLE*", SubLSystemTrampolineFile.maybeDefault($kbq_proof_spec_table$, $kbq_proof_spec_table$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
         defparameter("*USE-KBQ-PROOF-SPEC-TABLE?*", NIL);
         deflexical("*PROOF-SPEC-EXPERIMENT-METRICS*", $list119);
         return NIL;

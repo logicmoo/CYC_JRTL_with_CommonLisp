@@ -111,7 +111,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class sbhl_cache extends SubLTranslatedFile {
@@ -4482,30 +4482,30 @@ public final class sbhl_cache extends SubLTranslatedFile {
     }
 
     public static SubLObject init_sbhl_cache_file() {
-	deflexical("*SBHL-CACHES-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym0$_SBHL_CACHES_INITIALIZED__, $sbhl_caches_initializedP$, NIL));
+	deflexical("*SBHL-CACHES-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($sym0$_SBHL_CACHES_INITIALIZED__, $sbhl_caches_initializedP$, NIL));
 	deflexical("*CACHED-GENL-PREDICATES*", $list1);
 	deflexical("*CACHED-GENL-PREDICATES-SET*", set_utilities.construct_set_from_list($cached_genl_predicates$.getGlobalValue(), symbol_function(EQL), UNPROVIDED));
-	deflexical("*GENL-PREDICATE-CACHE*", SubLTrampolineFile.maybeDefault($genl_predicate_cache$, $genl_predicate_cache$, NIL));
-	deflexical("*GENL-INVERSE-CACHE*", SubLTrampolineFile.maybeDefault($genl_inverse_cache$, $genl_inverse_cache$, NIL));
-	deflexical("*ALL-MTS-GENL-PREDICATE-CACHE*", SubLTrampolineFile.maybeDefault($all_mts_genl_predicate_cache$, $all_mts_genl_predicate_cache$, NIL));
-	deflexical("*ALL-MTS-GENL-INVERSE-CACHE*", SubLTrampolineFile.maybeDefault($all_mts_genl_inverse_cache$, $all_mts_genl_inverse_cache$, NIL));
+	deflexical("*GENL-PREDICATE-CACHE*", SubLSystemTrampolineFile.maybeDefault($genl_predicate_cache$, $genl_predicate_cache$, NIL));
+	deflexical("*GENL-INVERSE-CACHE*", SubLSystemTrampolineFile.maybeDefault($genl_inverse_cache$, $genl_inverse_cache$, NIL));
+	deflexical("*ALL-MTS-GENL-PREDICATE-CACHE*", SubLSystemTrampolineFile.maybeDefault($all_mts_genl_predicate_cache$, $all_mts_genl_predicate_cache$, NIL));
+	deflexical("*ALL-MTS-GENL-INVERSE-CACHE*", SubLSystemTrampolineFile.maybeDefault($all_mts_genl_inverse_cache$, $all_mts_genl_inverse_cache$, NIL));
 	deflexical("*CACHED-GENLS*", $list6);
 	deflexical("*CACHED-GENLS-SET*", set_utilities.construct_set_from_list($cached_genls$.getGlobalValue(), symbol_function(EQL), UNPROVIDED));
-	deflexical("*GENLS-CACHE*", SubLTrampolineFile.maybeDefault($genls_cache$, $genls_cache$, NIL));
-	deflexical("*ALL-MTS-GENLS-CACHE*", SubLTrampolineFile.maybeDefault($all_mts_genls_cache$, $all_mts_genls_cache$, NIL));
+	deflexical("*GENLS-CACHE*", SubLSystemTrampolineFile.maybeDefault($genls_cache$, $genls_cache$, NIL));
+	deflexical("*ALL-MTS-GENLS-CACHE*", SubLSystemTrampolineFile.maybeDefault($all_mts_genls_cache$, $all_mts_genls_cache$, NIL));
 	defconstant("*DEFINITIONAL-FORT-TYPING-COLLECTIONS*", $list9);
 	deflexical("*ADDITIONAL-FORT-TYPING-COLLECTIONS*", $list10);
 	defconstant("*APPLICATION-SPECIFIC-FORT-TYPING-COLLECTIONS*", $list11);
 	deflexical("*IMPLICIT-FORT-TYPING-COLLECTIONS*", $list12);
 	deflexical("*CACHED-ISAS*", append($definitional_fort_typing_collections$.getGlobalValue(), $additional_fort_typing_collections$.getGlobalValue(), $application_specific_fort_typing_collections$.getGlobalValue(), $implicit_fort_typing_collections$.getGlobalValue()));
 	deflexical("*CACHED-ISAS-SET*", set_utilities.construct_set_from_list(reverse($cached_isas$.getGlobalValue()), symbol_function(EQL), UNPROVIDED));
-	deflexical("*ISA-CACHE*", SubLTrampolineFile.maybeDefault($isa_cache$, $isa_cache$, NIL));
-	deflexical("*IMPLICIT-FORT-TYPE-MAPPING*", SubLTrampolineFile.maybeDefault($implicit_fort_type_mapping$, $implicit_fort_type_mapping$, NIL));
-	deflexical("*ALL-MTS-ISA-CACHE*", SubLTrampolineFile.maybeDefault($all_mts_isa_cache$, $all_mts_isa_cache$, NIL));
+	deflexical("*ISA-CACHE*", SubLSystemTrampolineFile.maybeDefault($isa_cache$, $isa_cache$, NIL));
+	deflexical("*IMPLICIT-FORT-TYPE-MAPPING*", SubLSystemTrampolineFile.maybeDefault($implicit_fort_type_mapping$, $implicit_fort_type_mapping$, NIL));
+	deflexical("*ALL-MTS-ISA-CACHE*", SubLSystemTrampolineFile.maybeDefault($all_mts_isa_cache$, $all_mts_isa_cache$, NIL));
 	deflexical("*CACHED-QUOTED-ISAS*", $list18);
 	deflexical("*CACHED-QUOTED-ISAS-SET*", set_utilities.construct_set_from_list(reverse($cached_quoted_isas$.getGlobalValue()), symbol_function(EQL), UNPROVIDED));
-	deflexical("*QUOTED-ISA-CACHE*", SubLTrampolineFile.maybeDefault($quoted_isa_cache$, $quoted_isa_cache$, NIL));
-	deflexical("*ALL-MTS-QUOTED-ISA-CACHE*", SubLTrampolineFile.maybeDefault($all_mts_quoted_isa_cache$, $all_mts_quoted_isa_cache$, NIL));
+	deflexical("*QUOTED-ISA-CACHE*", SubLSystemTrampolineFile.maybeDefault($quoted_isa_cache$, $quoted_isa_cache$, NIL));
+	deflexical("*ALL-MTS-QUOTED-ISA-CACHE*", SubLSystemTrampolineFile.maybeDefault($all_mts_quoted_isa_cache$, $all_mts_quoted_isa_cache$, NIL));
 	deflexical("*CACHED-PREDS*", $list22);
 	defvar("*SBHL-CACHE-MISSES-HASH-TABLE*", NIL);
 	return NIL;

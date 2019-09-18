@@ -90,7 +90,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -637,7 +637,7 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_cnf(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return NIL != assertion_handles.assertion_handle_validP(assertion) ? assertions_interface.kb_assertion_cnf(assertion) : NIL;
     }
 
@@ -663,7 +663,7 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_mt(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return NIL != assertion_handles.assertion_handle_validP(assertion) ? assertions_interface.kb_assertion_mt(assertion) : NIL;
     }
 
@@ -684,32 +684,32 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_direction(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return NIL != assertion_handles.assertion_handle_validP(assertion) ? assertions_interface.kb_assertion_direction(assertion) : NIL;
     }
 
     public static SubLObject assertion_truth(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return NIL != assertion_handles.assertion_handle_validP(assertion) ? assertions_interface.kb_assertion_truth(assertion) : NIL;
     }
 
     public static SubLObject assertion_strength(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return NIL != assertion_handles.assertion_handle_validP(assertion) ? assertions_interface.kb_assertion_strength(assertion) : NIL;
     }
 
     public static SubLObject assertion_variable_names(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return NIL != assertion_handles.assertion_handle_validP(assertion) ? assertions_interface.kb_assertion_variable_names(assertion) : NIL;
     }
 
     public static SubLObject asserted_by(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return NIL != assertion_handles.assertion_handle_validP(assertion) ? assertions_interface.kb_assertion_asserted_by(assertion) : NIL;
     }
 
     public static SubLObject asserted_when(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return NIL != assertion_handles.assertion_handle_validP(assertion) ? assertions_interface.kb_assertion_asserted_when(assertion) : NIL;
     }
 
@@ -745,7 +745,7 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_formula(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != gaf_assertionP(assertion)) {
             return gaf_el_formula(assertion);
         }
@@ -757,7 +757,7 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_ist_formula(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return list($$ist, assertion_mt(assertion), assertion_formula(assertion));
     }
 
@@ -791,8 +791,8 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_mentions_termP(final SubLObject assertion, final SubLObject v_term) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         final SubLObject cons = assertion_cons(assertion);
         if (NIL != list_utilities.tree_find(v_term, cons, symbol_function(EQUAL), UNPROVIDED)) {
             return T;
@@ -819,8 +819,8 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_mentions_term(final SubLObject assertion, final SubLObject v_term) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         return assertion_mentions_termP(assertion, v_term);
     }
 
@@ -1005,37 +1005,37 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject gaf_predicate(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return cycl_utilities.formula_arg0(gaf_hl_formula(assertion));
     }
 
     public static SubLObject gaf_arg0(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return cycl_utilities.formula_arg0(gaf_hl_formula(assertion));
     }
 
     public static SubLObject gaf_arg1(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return gaf_arg(assertion, ONE_INTEGER);
     }
 
     public static SubLObject gaf_arg2(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return gaf_arg(assertion, TWO_INTEGER);
     }
 
     public static SubLObject gaf_arg3(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return gaf_arg(assertion, THREE_INTEGER);
     }
 
     public static SubLObject gaf_arg4(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return gaf_arg(assertion, FOUR_INTEGER);
     }
 
     public static SubLObject gaf_arg5(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return gaf_arg(assertion, FIVE_INTEGER);
     }
 
@@ -1062,14 +1062,14 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_has_truthP(final SubLObject assertion, final SubLObject truth) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         return eq(assertion_truth(assertion), truth);
     }
 
     public static SubLObject assertion_has_truth(final SubLObject assertion, final SubLObject truth) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         return assertion_has_truthP(assertion, truth);
     }
 
@@ -1654,12 +1654,12 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject asserted_assertionP(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return list_utilities.sublisp_boolean(find_if(symbol_function(ASSERTED_ARGUMENT_P), assertion_arguments(assertion), UNPROVIDED, UNPROVIDED, UNPROVIDED));
     }
 
     public static SubLObject deduced_assertionP(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return list_utilities.sublisp_boolean(find_if(symbol_function(DEDUCTION_P), assertion_arguments(assertion), UNPROVIDED, UNPROVIDED, UNPROVIDED));
     }
 
@@ -1675,7 +1675,7 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject get_asserted_argument(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return find_if(symbol_function(ASSERTED_ARGUMENT_P), assertion_arguments(assertion), UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -1696,7 +1696,7 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject assertion_has_dependents_p(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         return assertions_low.assertion_has_dependents_p_internal(assertion);
     }
 
@@ -1925,7 +1925,7 @@ public final class assertions_high extends SubLTranslatedFile {
     }
 
     public static SubLObject init_assertions_high_file() {
-        deflexical("*TL-ASSERTION-LOOKASIDE-TABLE*", SubLTrampolineFile.maybeDefault($tl_assertion_lookaside_table$, $tl_assertion_lookaside_table$, NIL));
+        deflexical("*TL-ASSERTION-LOOKASIDE-TABLE*", SubLSystemTrampolineFile.maybeDefault($tl_assertion_lookaside_table$, $tl_assertion_lookaside_table$, NIL));
         deflexical("*TL-ASSERTION-CAPACITY*", FIVE_INTEGER);
         defparameter("*ASSERTION-DUMP-ID-TABLE*", NIL);
         return NIL;

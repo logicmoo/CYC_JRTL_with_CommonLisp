@@ -28,7 +28,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -265,7 +265,7 @@ public final class cyc_kernel extends SubLTranslatedFile {
 
     public static SubLObject cyc_create_new_permanent(final SubLObject name) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(name, NEW_CONSTANT_NAME_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(name, NEW_CONSTANT_NAME_SPEC_P);
         final SubLObject creation_form = list(FI_CREATE, name, constants_high.make_constant_external_id());
         SubLObject constant = NIL;
         final SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding(thread);
@@ -279,14 +279,14 @@ public final class cyc_kernel extends SubLTranslatedFile {
     }
 
     public static SubLObject cyc_create_new_ephemeral(final SubLObject name) {
-        SubLTrampolineFile.enforceType(name, NEW_CONSTANT_NAME_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(name, NEW_CONSTANT_NAME_SPEC_P);
         return cyc_create(name, constants_high.make_constant_external_id());
     }
 
     public static SubLObject cyc_create(final SubLObject name, final SubLObject external_id) {
-        SubLTrampolineFile.enforceType(name, NEW_CONSTANT_NAME_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(name, NEW_CONSTANT_NAME_SPEC_P);
         if (NIL != external_id) {
-            SubLTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
+            SubLSystemTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
         }
         SubLObject result = NIL;
         result = fi.fi_create_int(name, external_id);
@@ -295,9 +295,9 @@ public final class cyc_kernel extends SubLTranslatedFile {
     }
 
     public static SubLObject cyc_find_or_create(final SubLObject name, final SubLObject external_id) {
-        SubLTrampolineFile.enforceType(name, VALID_CONSTANT_NAME_P);
+        SubLSystemTrampolineFile.enforceType(name, VALID_CONSTANT_NAME_P);
         if (NIL != external_id) {
-            SubLTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
+            SubLSystemTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
         }
         SubLObject result = NIL;
         result = fi.fi_find_int(name);
@@ -318,13 +318,13 @@ public final class cyc_kernel extends SubLTranslatedFile {
     }
 
     public static SubLObject cyc_rename(final SubLObject constant, final SubLObject name) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
-        SubLTrampolineFile.enforceType(name, VALID_CONSTANT_NAME_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(name, VALID_CONSTANT_NAME_P);
         return fi.fi_rename_int(constant, name);
     }
 
     public static SubLObject cyc_recreate(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         constants_high.remove_everything_about_constant(constant);
         return constant;
     }
@@ -334,22 +334,22 @@ public final class cyc_kernel extends SubLTranslatedFile {
     }
 
     public static SubLObject cyc_kill(final SubLObject fort) {
-        SubLTrampolineFile.enforceType(fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, FORT_P);
         SubLObject result = NIL;
         result = fi.fi_kill_int(fort);
         return result;
     }
 
     public static SubLObject cyc_rewrite(final SubLObject source_fort, final SubLObject target_fort) {
-        SubLTrampolineFile.enforceType(source_fort, FORT_P);
-        SubLTrampolineFile.enforceType(target_fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(source_fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(target_fort, FORT_P);
         Errors.error($str35$cyc_rewrite_is_not_implemented_ye);
         return target_fort;
     }
 
     public static SubLObject cyc_merge(final SubLObject kill_fort, final SubLObject keep_fort) {
-        SubLTrampolineFile.enforceType(kill_fort, FORT_P);
-        SubLTrampolineFile.enforceType(keep_fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(kill_fort, FORT_P);
+        SubLSystemTrampolineFile.enforceType(keep_fort, FORT_P);
         return fi.fi_merge_int(kill_fort, keep_fort);
     }
 
@@ -376,11 +376,11 @@ public final class cyc_kernel extends SubLTranslatedFile {
             v_properties = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
-        SubLTrampolineFile.enforceType(v_properties, ASSERT_PROPERTIES_P);
+        SubLSystemTrampolineFile.enforceType(v_properties, ASSERT_PROPERTIES_P);
         SubLObject result = NIL;
         final SubLObject strength = get_assert_property(v_properties, $STRENGTH, $DEFAULT);
         final SubLObject direction = get_assert_property(v_properties, $DIRECTION, UNPROVIDED);
@@ -427,11 +427,11 @@ public final class cyc_kernel extends SubLTranslatedFile {
             v_properties = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
-        SubLTrampolineFile.enforceType(v_properties, ASSERT_PROPERTIES_P);
+        SubLSystemTrampolineFile.enforceType(v_properties, ASSERT_PROPERTIES_P);
         SubLObject result = NIL;
         final SubLObject direction = get_assert_property(v_properties, $DIRECTION, UNPROVIDED);
         final SubLObject check_wffP = get_assert_property(v_properties, $kw53$CHECK_WFF_, makeBoolean(NIL == fi.$assume_assert_sentence_is_wfP$.getDynamicValue(thread)));
@@ -455,9 +455,9 @@ public final class cyc_kernel extends SubLTranslatedFile {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
         SubLObject result = NIL;
         thread.resetMultipleValues();
@@ -479,13 +479,13 @@ public final class cyc_kernel extends SubLTranslatedFile {
             v_properties = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(old_sentence, POSSIBLY_SENTENCE_P);
-        SubLTrampolineFile.enforceType(new_sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(old_sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(new_sentence, POSSIBLY_SENTENCE_P);
         if (NIL != old_mt) {
-            SubLTrampolineFile.enforceType(old_mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(old_mt, POSSIBLY_MT_P);
         }
         if (NIL != new_mt) {
-            SubLTrampolineFile.enforceType(new_mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(new_mt, POSSIBLY_MT_P);
         }
         SubLObject result = NIL;
         final SubLObject strength = getf(v_properties, $STRENGTH, UNPROVIDED);
@@ -514,13 +514,13 @@ public final class cyc_kernel extends SubLTranslatedFile {
             verify_supports = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
-        SubLTrampolineFile.enforceType(cycl_supports, LIST_OF_CYCL_SUPPORT_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(cycl_supports, LIST_OF_CYCL_SUPPORT_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
-        SubLTrampolineFile.enforceType(v_properties, ASSERT_PROPERTIES_P);
-        SubLTrampolineFile.enforceType(verify_supports, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(v_properties, ASSERT_PROPERTIES_P);
+        SubLSystemTrampolineFile.enforceType(verify_supports, BOOLEANP);
         SubLObject result = NIL;
         final SubLObject direction = getf(v_properties, $DIRECTION, UNPROVIDED);
         final SubLObject check_wffP = get_assert_property(v_properties, $kw53$CHECK_WFF_, makeBoolean(NIL == fi.$assume_assert_sentence_is_wfP$.getDynamicValue(thread)));
@@ -543,10 +543,10 @@ public final class cyc_kernel extends SubLTranslatedFile {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
-        SubLTrampolineFile.enforceType(cycl_supports, LIST_OF_CYCL_SUPPORT_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(cycl_supports, LIST_OF_CYCL_SUPPORT_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
         SubLObject result = NIL;
         thread.resetMultipleValues();
@@ -562,9 +562,9 @@ public final class cyc_kernel extends SubLTranslatedFile {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
         SubLObject result = NIL;
         thread.resetMultipleValues();
@@ -591,11 +591,11 @@ public final class cyc_kernel extends SubLTranslatedFile {
             v_properties = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
-        SubLTrampolineFile.enforceType(v_properties, LEGACY_QUERY_PROPERTIES_P);
+        SubLSystemTrampolineFile.enforceType(v_properties, LEGACY_QUERY_PROPERTIES_P);
         final SubLObject backchain = getf(v_properties, $BACKCHAIN, UNPROVIDED);
         final SubLObject number = getf(v_properties, $NUMBER, UNPROVIDED);
         final SubLObject time = getf(v_properties, $TIME, UNPROVIDED);
@@ -662,8 +662,8 @@ public final class cyc_kernel extends SubLTranslatedFile {
         if (v_properties == UNPROVIDED) {
             v_properties = NIL;
         }
-        SubLTrampolineFile.enforceType(query_id, QUERY_ID_P);
-        SubLTrampolineFile.enforceType(v_properties, LEGACY_QUERY_PROPERTIES_P);
+        SubLSystemTrampolineFile.enforceType(query_id, QUERY_ID_P);
+        SubLSystemTrampolineFile.enforceType(v_properties, LEGACY_QUERY_PROPERTIES_P);
         Errors.error($str94$cyc_continue_query_is_deprecated_);
         return NIL;
     }
@@ -673,9 +673,9 @@ public final class cyc_kernel extends SubLTranslatedFile {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
         SubLObject result = NIL;
         thread.resetMultipleValues();
@@ -701,11 +701,11 @@ public final class cyc_kernel extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.enforceType(sentence, POSSIBLY_SENTENCE_P);
         if (NIL != mt) {
-            SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+            SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
         }
-        SubLTrampolineFile.enforceType(rename_variable_list, ALIST_P);
+        SubLSystemTrampolineFile.enforceType(rename_variable_list, ALIST_P);
         return fi.fi_rename_variables_int(sentence, mt, rename_variable_list);
     }
 

@@ -25,7 +25,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -149,7 +149,7 @@ public final class sksi_preference_module_generation extends SubLTranslatedFile 
     }
 
     public static SubLObject init_sksi_preference_module_generation_file() {
-        deflexical("*SKS-PREFERENCE-MODULES-CACHE*", SubLTrampolineFile.maybeDefault($sks_preference_modules_cache$, $sks_preference_modules_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKS-PREFERENCE-MODULES-CACHE*", SubLSystemTrampolineFile.maybeDefault($sks_preference_modules_cache$, $sks_preference_modules_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         return NIL;
     }
 

@@ -7,8 +7,8 @@ import static org.armedbear.lisp.Lisp.addFeature;
 import static org.armedbear.lisp.Lisp.checkSymbol;
 import static org.armedbear.lisp.Lisp.cold;
 import static org.armedbear.lisp.Lisp.getDotName;
-import static org.armedbear.lisp.Lisp.initialized;
 import static org.armedbear.lisp.Lisp.internKeyword;
+//import static org.armedbear.lisp.Lisp.isInitialized;
 import static org.armedbear.lisp.Lisp.isTooSoon;
 import static org.armedbear.lisp.Lisp.list;
 import static org.armedbear.lisp.Lisp.quote;
@@ -62,9 +62,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-public class LispSync extends SubLTrampolineFile {
+public class LispSync extends SubLSystemTrampolineFile {
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
@@ -81,7 +81,7 @@ public class LispSync extends SubLTrampolineFile {
 	private static volatile Set<String> skippedTypes = new HashSet<String>();
 
 	static {
-		if (!Main.disableLispSync)
+		if (!Main.noLispSync)
 			synchronized (syncedTypes) {
 				if (true) {
 					skippedTypes.add("CONSTANT.*");
@@ -145,7 +145,7 @@ public class LispSync extends SubLTrampolineFile {
 	private static boolean lispReady = true;
 
 	public static void addLater(final AbstractSubLStruct struct) {
-		if (Main.disableLispSync)
+		if (Main.noLispSync)
 			return;
 
 		if (struct.getTermRef() == null) {
@@ -165,7 +165,7 @@ public class LispSync extends SubLTrampolineFile {
 	}
 
 	public static void addSingleton(SubLFile file) {
-		if (Main.disableLispSync)
+		if (Main.noLispSync)
 			return;
 		addAnyTypeThing("SUBLFILE", file);
 		// TODO SLOW
@@ -173,7 +173,7 @@ public class LispSync extends SubLTrampolineFile {
 	}
 
 	private static void addStaticFields(String prefix, Class class1) {
-		if (Main.disableLispSync)
+		if (Main.noLispSync)
 			return;
 		if (prefix == null) {
 			prefix = getDotName(class1) + ".";
@@ -219,7 +219,7 @@ public class LispSync extends SubLTrampolineFile {
 
 	synchronized public static void addThis(AbstractSubLStruct struct) {
 
-		if (Main.disableLispSync)
+		if (Main.noLispSync)
 			return;
 
 		if (struct instanceof SubLStream) {
@@ -230,7 +230,7 @@ public class LispSync extends SubLTrampolineFile {
 		if (!Main.trackStructs) {
 			return;
 		}
-		if (cold || !initialized)
+		if (cold || !Lisp.isLispInitialized())
 			return;
 
 		if (lastStruct == struct)
@@ -330,7 +330,7 @@ public class LispSync extends SubLTrampolineFile {
 
 	private static Atom checkReady(AbstractSubLStruct struct) {
 
-		if (Main.disableLispSync)
+		if (Main.noLispSync)
 			return IGNORED;
 
 		// if (Main.noBSH) return;
@@ -635,7 +635,7 @@ public class LispSync extends SubLTrampolineFile {
 
 	{
 		Object was = struct.getTermRef();
-		if (!Main.disableLispSync) {
+		if (!Main.noLispSync) {
 			try {
 				final String constname = nthInstance(className, serial);
 				final Atom shouldBe = new Atom(constname);// .SynctoLisp(constname, struct, new LinkedList());
@@ -776,7 +776,7 @@ public class LispSync extends SubLTrampolineFile {
 		if (!lispReady)
 			return null;
 
-		if (Main.disableLispSync) {
+		if (Main.noLispSync) {
 			return null;
 		}
 
@@ -1105,9 +1105,9 @@ public class LispSync extends SubLTrampolineFile {
 	}
 
 	private static boolean doSyncStruct(AbstractSubLStruct struct) {
-		if (!Main.trackStructs || Main.disableLispSync)
+		if (!Main.trackStructs || Main.noLispSync)
 			return false;
-		if (cold || !initialized || !lispReady) {
+		if (cold || !Lisp.isLispInitialized() || !lispReady) {
 			addLater(struct);
 			return false;
 		}
@@ -1278,6 +1278,7 @@ public class LispSync extends SubLTrampolineFile {
 	private static Thread neddsDoneThread = new Thread() {
 		{
 			setName("LispSync.doReadyList");
+			setDaemon(false);
 		}
 
 		@Override
@@ -1286,8 +1287,11 @@ public class LispSync extends SubLTrampolineFile {
 			while (true) {
 				if (needsDone == 0 || !lispReady) {
 					try {
+						if (Startup.shutdownhook != null) {
+							return;
+						}
 						Thread.sleep((long) 250);
-						if (Main.disableLispSync)
+						if (Main.noLispSync)
 							continue;
 						final int size;
 						synchronized (laterList) {

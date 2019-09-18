@@ -49,7 +49,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class pph_regression extends SubLTranslatedFile {
     public static final SubLFile me = new pph_regression();
@@ -401,19 +401,19 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             domain = pph_vars.$pph_domain_mt$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != exc) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == list_utilities.proper_list_p(exc))) {
+        if (((NIL != exc) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == list_utilities.proper_list_p(exc))) {
             throw new AssertionError(exc);
         }
         if (NIL == lang) {
             lang = pph_vars.$pph_language_mt$.getDynamicValue(thread);
         }
-        if (((NIL != lang) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmtP(lang))) {
+        if (((NIL != lang) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmtP(lang))) {
             throw new AssertionError(lang);
         }
         if (NIL == domain) {
             domain = pph_vars.$pph_domain_mt$.getDynamicValue(thread);
         }
-        if (((NIL != domain) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmtP(domain))) {
+        if (((NIL != domain) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.hlmtP(domain))) {
             throw new AssertionError(domain);
         }
         final SubLObject reg_item = make_pph_regression_item(UNPROVIDED);

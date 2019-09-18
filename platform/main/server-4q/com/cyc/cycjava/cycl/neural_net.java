@@ -55,7 +55,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class neural_net extends SubLTranslatedFile {
     public static final SubLFile me = new neural_net();
@@ -515,7 +515,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defconstant("*DTP-NEURAL-NET*", NEURAL_NET);
         defconstant("*DTP-NN-INPUT-NODE*", NN_INPUT_NODE);
         deflexical("*RL-TACTICIAN-NEURAL-NET-WEIGHTS-LIST*", $list39);
-        deflexical("*RL-TACTICIAN-NEURAL-NET*", SubLTrampolineFile.maybeDefault($rl_tactician_neural_net$, $rl_tactician_neural_net$, NIL));
+        deflexical("*RL-TACTICIAN-NEURAL-NET*", SubLSystemTrampolineFile.maybeDefault($rl_tactician_neural_net$, $rl_tactician_neural_net$, NIL));
         deflexical("*TEST-RL-TACTICIAN-EVALUATE-NEURAL-NET-TOLERANCE*", $float$0_01);
         return NIL;
     }

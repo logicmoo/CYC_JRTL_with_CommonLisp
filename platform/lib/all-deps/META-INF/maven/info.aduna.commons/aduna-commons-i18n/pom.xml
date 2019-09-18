@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.aduna.commons</groupId>
+		<artifactId>aduna-commons</artifactId>
+		<version>6</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>aduna-commons-i18n</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+
+	<name>Aduna Commons: I18N</name>
+	<description>Internationalization and localization utilities.</description>
+	<url>https://wiki.aduna-software.org/confluence/display/COM/I18N</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
+	<issueManagement>
+		<system>jira</system>
+		<url>https://issues.aduna-software.org/jira/browse/COMI18N</url>
+	</issueManagement>
+
+	<scm>
+		<connection>scm:svn:http://repo.aduna-software.org/svn/info.aduna/commons/i18n/tags/1.0</connection>
+		<developerConnection>scm:svn:https://repo.aduna-software.org/svn/info.aduna/commons/i18n/tags/1.0</developerConnection>
+		<url>http://repo.aduna-software.org/viewvc/info.aduna/commons/i18n/tags/1.0</url>
+	</scm>
+
+</project>

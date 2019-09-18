@@ -116,7 +116,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -435,7 +435,7 @@ public final class uncanonicalizer extends SubLTranslatedFile {
 
     public static SubLObject assertion_el_formula(SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         final SubLObject formula = assertions_high.assertion_formula(assertion);
         SubLObject mt = NIL;
         SubLObject result = NIL;
@@ -503,7 +503,7 @@ public final class uncanonicalizer extends SubLTranslatedFile {
 
     public static SubLObject assertion_el_ist_formula(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         thread.resetMultipleValues();
         final SubLObject el_formula = assertion_el_formula(assertion);
         final SubLObject elmt = thread.secondMultipleValue();

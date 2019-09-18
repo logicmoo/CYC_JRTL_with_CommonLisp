@@ -75,7 +75,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -951,8 +951,8 @@ public final class nl_reformulator extends SubLTranslatedFile {
         defparameter("*NL-REFORMULATIONS-SIMPLIFIED*", ZERO_INTEGER);
         deflexical("*NL-REF-SHOW-REFORMULATIONS?*", NIL);
         defvar("*NL-REFORMULATOR-SETTINGS*", NIL);
-        deflexical("*NL-REFORMULATE-QUEUE*", SubLTrampolineFile.maybeDefault($nl_reformulate_queue$, $nl_reformulate_queue$, NIL));
-        deflexical("*NL-REFORMULATE-DAEMON*", SubLTrampolineFile.maybeDefault($nl_reformulate_daemon$, $nl_reformulate_daemon$, NIL));
+        deflexical("*NL-REFORMULATE-QUEUE*", SubLSystemTrampolineFile.maybeDefault($nl_reformulate_queue$, $nl_reformulate_queue$, NIL));
+        deflexical("*NL-REFORMULATE-DAEMON*", SubLSystemTrampolineFile.maybeDefault($nl_reformulate_daemon$, $nl_reformulate_daemon$, NIL));
         defparameter("*WITHIN-NL-REFORMULATE-DAEMON*", NIL);
         deflexical("*NL-REFORMULATE-INT-CACHED-CACHING-STATE*", NIL);
         return NIL;

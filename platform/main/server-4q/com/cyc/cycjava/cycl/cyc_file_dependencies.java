@@ -66,7 +66,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class cyc_file_dependencies extends SubLTranslatedFile {
@@ -1013,16 +1013,16 @@ public final class cyc_file_dependencies extends SubLTranslatedFile {
 	}
 
 	public static SubLObject init_cyc_file_dependencies_file() {
-		deflexical("*EXTERNAL-FILE-DEFINITIONS*", SubLTrampolineFile.maybeDefault($external_file_definitions$, $external_file_definitions$, () -> make_hash_table($int$64, UNPROVIDED, UNPROVIDED)));
+		deflexical("*EXTERNAL-FILE-DEFINITIONS*", SubLSystemTrampolineFile.maybeDefault($external_file_definitions$, $external_file_definitions$, () -> make_hash_table($int$64, UNPROVIDED, UNPROVIDED)));
 		defparameter("*HTML-EMITTED-FILE-DEPENDENCIES*", $UNINITIALIZED);
 		deflexical("*JAVA-DEFAULT-DIRECTORY*", $str44$java_);
-		deflexical("*HTML-ICON-DEFINITIONS*", SubLTrampolineFile.maybeDefault($html_icon_definitions$, $html_icon_definitions$, () -> make_hash_table($int$32, UNPROVIDED, UNPROVIDED)));
+		deflexical("*HTML-ICON-DEFINITIONS*", SubLSystemTrampolineFile.maybeDefault($html_icon_definitions$, $html_icon_definitions$, () -> make_hash_table($int$32, UNPROVIDED, UNPROVIDED)));
 		deflexical("*HTML-ICON-DEFAULT-DIRECTORY*", $str52$);
 		deflexical("*HTML-MISSING-ICON*", $str53$missing_gif);
-		deflexical("*CB-HELP-DEFINITIONS*", SubLTrampolineFile.maybeDefault($cb_help_definitions$, $cb_help_definitions$, () -> make_hash_table($int$32, UNPROVIDED, UNPROVIDED)));
+		deflexical("*CB-HELP-DEFINITIONS*", SubLSystemTrampolineFile.maybeDefault($cb_help_definitions$, $cb_help_definitions$, () -> make_hash_table($int$32, UNPROVIDED, UNPROVIDED)));
 		deflexical("*CB-HELP-DEFAULT-DIRECTORY*", $str81$help_);
 		deflexical($javascript_definitions$, make_hash_table($int$32, UNPROVIDED, UNPROVIDED));
-		deflexical("*CB-ICON-DEFINITIONS*", SubLTrampolineFile.maybeDefault($cb_icon_definitions$, $cb_icon_definitions$, () -> make_hash_table($int$32, UNPROVIDED, UNPROVIDED)));
+		deflexical("*CB-ICON-DEFINITIONS*", SubLSystemTrampolineFile.maybeDefault($cb_icon_definitions$, $cb_icon_definitions$, () -> make_hash_table($int$32, UNPROVIDED, UNPROVIDED)));
 		deflexical("*CB-ICON-DEFAULT-DIRECTORY*", $str84$cb_);
 		deflexical("*CB-MISSING-ICON*", $str53$missing_gif);
 		return NIL;

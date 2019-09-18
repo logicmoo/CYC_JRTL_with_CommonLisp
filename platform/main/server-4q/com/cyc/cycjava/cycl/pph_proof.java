@@ -177,7 +177,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -9320,7 +9320,7 @@ public final class pph_proof extends SubLTranslatedFile {
         } finally {
             $pph_meta_support_level$.rebind(_prev_bind_0, thread);
         }
-        if (((NIL != meta_support_tree) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == pph_support_tree_p(meta_support_tree))) {
+        if (((NIL != meta_support_tree) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == pph_support_tree_p(meta_support_tree))) {
             throw new AssertionError(meta_support_tree);
         }
         return meta_support_tree;
@@ -9940,10 +9940,10 @@ public final class pph_proof extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != inference_datastructures_inference.inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != interrupt_time_cutoff) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(interrupt_time_cutoff))) {
+        if (((NIL != interrupt_time_cutoff) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(interrupt_time_cutoff))) {
             throw new AssertionError(interrupt_time_cutoff);
         }
-        if (((NIL != abort_time_cutoff) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(abort_time_cutoff))) {
+        if (((NIL != abort_time_cutoff) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(abort_time_cutoff))) {
             throw new AssertionError(abort_time_cutoff);
         }
         SubLObject explanation_strings = NIL;
@@ -10594,10 +10594,10 @@ public final class pph_proof extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != inference_datastructures_inference.inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
-        if (((NIL != interrupt_time_cutoff) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(interrupt_time_cutoff))) {
+        if (((NIL != interrupt_time_cutoff) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(interrupt_time_cutoff))) {
             throw new AssertionError(interrupt_time_cutoff);
         }
-        if (((NIL != abort_time_cutoff) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(abort_time_cutoff))) {
+        if (((NIL != abort_time_cutoff) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(abort_time_cutoff))) {
             throw new AssertionError(abort_time_cutoff);
         }
         SubLObject report_strings = NIL;

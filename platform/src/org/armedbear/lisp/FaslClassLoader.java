@@ -152,7 +152,8 @@ public class FaslClassLoader extends JavaClassLoader {
 
         @Override
         public LispObject execute(LispObject baseName) {
-            return new FaslClassLoader(baseName.getStringValue()).boxedThis;
+            final FaslClassLoader faslClassLoader = new FaslClassLoader(baseName.getStringValue());
+			return faslClassLoader.boxedThis;
         }
 
     };

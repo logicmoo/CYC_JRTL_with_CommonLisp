@@ -87,7 +87,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -366,7 +366,7 @@ public final class butler_inference_store extends SubLTranslatedFile {
             statement = NIL;
         }
         assert NIL != stringp(sql) : "Types.stringp(sql) " + "CommonSymbols.NIL != Types.stringp(sql) " + sql;
-        if (((NIL != statement) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sdbc.sql_statement_p(statement))) {
+        if (((NIL != statement) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sdbc.sql_statement_p(statement))) {
             throw new AssertionError(statement);
         }
         if (NIL != statement) {
@@ -385,7 +385,7 @@ public final class butler_inference_store extends SubLTranslatedFile {
             statement = NIL;
         }
         assert NIL != stringp(sql) : "Types.stringp(sql) " + "CommonSymbols.NIL != Types.stringp(sql) " + sql;
-        if (((NIL != statement) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sdbc.sql_statement_p(statement))) {
+        if (((NIL != statement) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sdbc.sql_statement_p(statement))) {
             throw new AssertionError(statement);
         }
         if (NIL != statement) {

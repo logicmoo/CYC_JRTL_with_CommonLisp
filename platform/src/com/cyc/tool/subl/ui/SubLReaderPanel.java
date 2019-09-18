@@ -467,7 +467,7 @@ public class SubLReaderPanel extends JPanel {
 	}
 
 	private void resetUIAfterProcessing() {
-		Runnable runnable = new SafeRunnable() {
+		Runnable runnable = new SafeRunnable(true,null) {
 			@Override
 			public void safeRun() {
 				resultsTextArea.setCaretPosition(resultsTextArea.getText().length());

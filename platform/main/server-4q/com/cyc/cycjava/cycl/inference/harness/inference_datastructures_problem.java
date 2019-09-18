@@ -155,7 +155,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class inference_datastructures_problem extends SubLTranslatedFile {
@@ -786,7 +786,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject _csetf_prob_argument_link_bindings_index_alt(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.setField10(value);
     }
 
@@ -796,7 +796,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject _csetf_prob_argument_links_alt(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.setField7(value);
     }
 
@@ -811,7 +811,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject _csetf_prob_dependent_links_alt(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.setField6(value);
     }
 
@@ -831,7 +831,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject _csetf_prob_proof_bindings_index_alt(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.setField9(value);
     }
 
@@ -841,7 +841,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject _csetf_prob_query_alt(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.setField4(value);
     }
 
@@ -851,7 +851,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject _csetf_prob_status_alt(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.setField5(value);
     }
 
@@ -861,7 +861,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject _csetf_prob_store_alt(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.setField3(value);
     }
 
@@ -871,7 +871,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject _csetf_prob_suid_alt(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.setField2(value);
     }
 
@@ -881,7 +881,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject _csetf_prob_tactics_alt(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.setField8(value);
     }
 
@@ -896,8 +896,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Puts ARGUMENT-LINK _below_ PROBLEM.
      */
     public static final SubLObject add_problem_argument_link_alt(SubLObject problem, SubLObject argument_link) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(argument_link, PROBLEM_LINK_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(argument_link, PROBLEM_LINK_P);
 	_csetf_prob_argument_links(problem, set_contents.set_contents_add(argument_link, prob_argument_links(problem), symbol_function(EQ)));
 	return problem;
     }
@@ -917,8 +917,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Puts DEPENDENT-LINK _above_ PROBLEM.
      */
     public static final SubLObject add_problem_dependent_link_alt(SubLObject problem, SubLObject dependent_link) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(dependent_link, PROBLEM_LINK_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(dependent_link, PROBLEM_LINK_P);
 	_csetf_prob_dependent_links(problem, set_contents.set_contents_add(dependent_link, prob_dependent_links(problem), symbol_function(EQ)));
 	inference_metrics.increment_dependent_link_historical_count();
 	if (NIL != single_literal_problem_p(problem)) {
@@ -939,8 +939,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject add_problem_proof_alt(SubLObject problem, SubLObject proof) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(proof, PROOF_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(proof, PROOF_P);
 	{
 	    SubLObject index = prob_proof_bindings_index(problem);
 	    SubLObject v_bindings = inference_datastructures_proof.proof_bindings(proof);
@@ -965,8 +965,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     public static final SubLObject add_problem_tactic_alt(SubLObject problem, SubLObject tactic) {
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	    SubLTrampolineFile.checkType(tactic, TACTIC_P);
+	    SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	    SubLSystemTrampolineFile.checkType(tactic, TACTIC_P);
 	    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
 		if (!problem_tactic_count(problem).numLE($max_problem_tactics$.getGlobalValue())) {
 		    Errors.error(alt_str188$Tried_to_add__s_to__s__which_woul, new SubLObject[] { tactic, problem, $max_problem_tactics$.getGlobalValue(), problem });
@@ -3178,7 +3178,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
 	if (NIL == completeness_spec) {
 	    return T;
 	} else {
-	    SubLTrampolineFile.checkType(completeness_spec, COMPLETENESS_P);
+	    SubLSystemTrampolineFile.checkType(completeness_spec, COMPLETENESS_P);
 	    return eq(completeness_spec, inference_datastructures_tactic.tactic_completeness(tactic));
 	}
     }
@@ -3195,7 +3195,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
 	if (NIL == hl_module_spec) {
 	    return T;
 	} else {
-	    SubLTrampolineFile.checkType(hl_module_spec, HL_MODULE_P);
+	    SubLSystemTrampolineFile.checkType(hl_module_spec, HL_MODULE_P);
 	    return eq(hl_module_spec, inference_datastructures_tactic.tactic_hl_module(tactic));
 	}
     }
@@ -3212,7 +3212,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
 	if (NIL == preference_level_spec) {
 	    return T;
 	} else {
-	    SubLTrampolineFile.checkType(preference_level_spec, PREFERENCE_LEVEL_P);
+	    SubLSystemTrampolineFile.checkType(preference_level_spec, PREFERENCE_LEVEL_P);
 	    return eq(preference_level_spec, inference_datastructures_tactic.tactic_preference_level(tactic));
 	}
     }
@@ -3230,7 +3230,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
 	if (NIL == productivity_spec) {
 	    return T;
 	} else {
-	    SubLTrampolineFile.checkType(productivity_spec, PRODUCTIVITY_P);
+	    SubLSystemTrampolineFile.checkType(productivity_spec, PRODUCTIVITY_P);
 	    return inference_datastructures_enumerated_types.productivity_E(productivity_spec, inference_datastructures_tactic.tactic_productivity(tactic));
 	}
     }
@@ -3439,7 +3439,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
 
     public static final SubLObject init_inference_datastructures_problem_file() {
 	defconstant("*DTP-PROBLEM*", PROBLEM);
-	deflexical("*EMPTY-CLAUSES*", SubLTrampolineFile.maybeDefault($empty_clauses$, $empty_clauses$, () -> list(clauses.empty_clause())));
+	deflexical("*EMPTY-CLAUSES*", SubLSystemTrampolineFile.maybeDefault($empty_clauses$, $empty_clauses$, () -> list(clauses.empty_clause())));
 	deflexical("*GENERALIZED-TACTIC-TYPES*", $list99);
 	defvar("*TRANSFORMATION-DEPTH-COMPUTATION*", $COUNTERINTUITIVE);
 	defparameter("*PROBLEM-MIN-TRANSFORMATION-DEPTH-FROM-SIGNATURE-ENABLED?*", T);
@@ -3611,7 +3611,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     public static final SubLObject new_problem_alt(final SubLObject store, final SubLObject query, SubLObject free_hl_vars) {
 	final SubLThread thread = SubLProcess.currentSubLThread();
 	assert NIL != inference_datastructures_problem_store.problem_store_p(store) : "inference_datastructures_problem_store.problem_store_p(store) " + "CommonSymbols.NIL != inference_datastructures_problem_store.problem_store_p(store) " + store;
-	SubLTrampolineFile.enforceType(query, CONTEXTUALIZED_DNF_CLAUSES_P);
+	SubLSystemTrampolineFile.enforceType(query, CONTEXTUALIZED_DNF_CLAUSES_P);
 	if (NIL == com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store.problem_identity_depends_on_free_hl_varsP(store)) {
 	    free_hl_vars = NIL;
 	}
@@ -3648,8 +3648,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     public static final SubLObject new_problem(SubLObject store, SubLObject query) {
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(store, PROBLEM_STORE_P);
-	    SubLTrampolineFile.checkType(query, CONTEXTUALIZED_DNF_CLAUSES_P);
+	    SubLSystemTrampolineFile.checkType(store, PROBLEM_STORE_P);
+	    SubLSystemTrampolineFile.checkType(query, CONTEXTUALIZED_DNF_CLAUSES_P);
 	    leviathan.note_new_problem_created();
 	    if ((NIL != control_vars.$inference_debugP$.getDynamicValue(thread)) && (NIL != inference_datastructures_problem_store.problem_store_crazy_max_problem_count_exactly_reachedP(store))) {
 		Errors.cerror($$$Ignore_the_crazy_problems, alt_str44$Crazy_amount_of_problems___a__in_, inference_datastructures_problem_store.problem_store_problem_count(store), store);
@@ -3803,7 +3803,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject prob_argument_link_bindings_index_alt(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.getField10();
     }
 
@@ -3813,7 +3813,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject prob_argument_links_alt(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.getField7();
     }
 
@@ -3828,7 +3828,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject prob_dependent_links_alt(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.getField6();
     }
 
@@ -3848,7 +3848,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject prob_proof_bindings_index_alt(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.getField9();
     }
 
@@ -3858,7 +3858,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject prob_query_alt(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.getField4();
     }
 
@@ -3868,7 +3868,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject prob_status_alt(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.getField5();
     }
 
@@ -3878,7 +3878,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject prob_store_alt(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.getField3();
     }
 
@@ -3888,7 +3888,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject prob_suid_alt(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.getField2();
     }
 
@@ -3898,7 +3898,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject prob_tactics_alt(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(v_object, PROBLEM_P);
 	return v_object.getField8();
     }
 
@@ -3937,8 +3937,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_all_argument_links_have_typeP_alt(SubLObject problem, SubLObject link_type) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(link_type, PROBLEM_LINK_TYPE_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(link_type, PROBLEM_LINK_TYPE_P);
 	{
 	    SubLObject failedP = NIL;
 	    SubLObject set_contents_var = problem_argument_links(problem);
@@ -4124,7 +4124,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_discarded_tactics_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return list_utilities.remove_if_not($sym170$TACTIC_DISCARDED_, problem_tactics(problem), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -4146,7 +4146,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Return an EL formula for the problem query of PROBLEM.
      */
     public static final SubLObject problem_el_formula_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return inference_czer.problem_query_el_formula(problem_query(problem));
     }
 
@@ -4175,7 +4175,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Tuples are of the form (HL-MODULE-NAME ESTIMATED ACTUAL)
      */
     public static final SubLObject problem_executed_removal_tactic_productivities_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	{
 	    SubLObject tuples = NIL;
 	    SubLObject cdolist_list_var = problem_tactics(problem);
@@ -4209,7 +4209,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_executed_tactics_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return list_utilities.remove_if_not($sym169$TACTIC_EXECUTED_, problem_tactics(problem), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -4265,7 +4265,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Return an HL formula for the problem query of PROBLEM.
      */
     public static final SubLObject problem_formula_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return inference_czer.problem_query_formula(problem_query(problem));
     }
 
@@ -4367,8 +4367,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_has_complete_possible_removal_tacticP_alt(SubLObject problem, SubLObject strategic_context) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
 	{
 	    SubLObject cdolist_list_var = problem_tactics(problem);
 	    SubLObject tactic = NIL;
@@ -4608,8 +4608,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_has_possible_removal_tacticP_alt(SubLObject problem, SubLObject strategic_context) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
 	return problem_has_tactic_of_type_with_statusP(problem, $REMOVAL, $POSSIBLE);
     }
 
@@ -4619,7 +4619,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_has_possible_tacticsP_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return list_utilities.sublisp_boolean(find_if($sym168$TACTIC_POSSIBLE_, problem_tactics(problem), UNPROVIDED, UNPROVIDED, UNPROVIDED));
     }
 
@@ -5221,7 +5221,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_possible_removal_tactics_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	{
 	    SubLObject tactics = NIL;
 	    SubLObject cdolist_list_var = problem_tactics(problem);
@@ -5249,7 +5249,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_possible_tactics_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return list_utilities.remove_if_not($sym168$TACTIC_POSSIBLE_, problem_tactics(problem), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -5379,7 +5379,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_query_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return prob_query(problem);
     }
 
@@ -5921,7 +5921,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_status_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return prob_status(problem);
     }
 
@@ -6032,7 +6032,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     //    }
 
     public static final SubLObject problem_store_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return prob_store(problem);
     }
 
@@ -6042,7 +6042,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_suid_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return prob_suid(problem);
     }
 
@@ -6225,10 +6225,10 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
 	    status = NIL;
 	}
 	assert NIL != problem_p(problem) : "inference_datastructures_problem.problem_p(problem) " + "CommonSymbols.NIL != inference_datastructures_problem.problem_p(problem) " + problem;
-	if (((NIL != type) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == generalized_tactic_type_p(type))) {
+	if (((NIL != type) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == generalized_tactic_type_p(type))) {
 	    throw new AssertionError(type);
 	}
-	if (((NIL != status) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_enumerated_types.tactic_status_p(status))) {
+	if (((NIL != status) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_enumerated_types.tactic_status_p(status))) {
 	    throw new AssertionError(status);
 	}
 	SubLObject count = ZERO_INTEGER;
@@ -6257,12 +6257,12 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
 	if (status == UNPROVIDED) {
 	    status = NIL;
 	}
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	if (NIL != type) {
-	    SubLTrampolineFile.checkType(type, GENERALIZED_TACTIC_TYPE_P);
+	    SubLSystemTrampolineFile.checkType(type, GENERALIZED_TACTIC_TYPE_P);
 	}
 	if (NIL != status) {
-	    SubLTrampolineFile.checkType(status, TACTIC_STATUS_P);
+	    SubLSystemTrampolineFile.checkType(status, TACTIC_STATUS_P);
 	}
 	{
 	    SubLObject count = ZERO_INTEGER;
@@ -6326,7 +6326,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject problem_tactics_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	return prob_tactics(problem);
     }
 
@@ -6353,7 +6353,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * @return productivity-p; the sum of the actual productivities of all the non-discarded removal tactics on PROBLEM.
      */
     public static final SubLObject problem_total_actual_removal_productivity_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	{
 	    SubLObject total_productivity = ZERO_INTEGER;
 	    SubLObject cdolist_list_var = problem_tactics(problem);
@@ -6395,7 +6395,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * @return productivity-p; the sum of the productivities of all the possible removal tactics on PROBLEM.
      */
     public static final SubLObject problem_total_deductive_removal_productivity_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	{
 	    SubLObject total_productivity = ZERO_INTEGER;
 	    SubLObject cdolist_list_var = problem_tactics(problem);
@@ -6437,7 +6437,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * @return productivity-p; the sum of the productivities of all the possible removal tactics on PROBLEM.
      */
     public static final SubLObject problem_total_removal_productivity_alt(SubLObject problem) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 	{
 	    SubLObject total_productivity = ZERO_INTEGER;
 	    SubLObject cdolist_list_var = problem_tactics(problem);
@@ -6488,8 +6488,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Removes ARGUMENT-LINK from _below_ PROBLEM.
      */
     public static final SubLObject remove_problem_argument_link_alt(SubLObject problem, SubLObject argument_link) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(argument_link, PROBLEM_LINK_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(argument_link, PROBLEM_LINK_P);
 	_csetf_prob_argument_links(problem, set_contents.set_contents_delete(argument_link, prob_argument_links(problem), symbol_function(EQ)));
 	return problem;
     }
@@ -6505,8 +6505,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Removes DEPENDENT-LINK from _above_ PROBLEM.
      */
     public static final SubLObject remove_problem_dependent_link_alt(SubLObject problem, SubLObject dependent_link) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(dependent_link, PROBLEM_LINK_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(dependent_link, PROBLEM_LINK_P);
 	_csetf_prob_dependent_links(problem, set_contents.set_contents_delete(dependent_link, prob_dependent_links(problem), symbol_function(EQ)));
 	return problem;
     }
@@ -6561,9 +6561,9 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject remove_problem_proof_with_bindings_alt(SubLObject problem, SubLObject proof, SubLObject v_bindings) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(proof, PROOF_P);
-	SubLTrampolineFile.checkType(v_bindings, BINDINGS_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(proof, PROOF_P);
+	SubLSystemTrampolineFile.checkType(v_bindings, BINDINGS_P);
 	{
 	    SubLObject set_contents_var = problem_dependent_links(problem);
 	    SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
@@ -6616,7 +6616,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject remove_problem_tactic_alt(SubLObject problem, SubLObject tactic) {
-	SubLTrampolineFile.checkType(tactic, TACTIC_P);
+	SubLSystemTrampolineFile.checkType(tactic, TACTIC_P);
 	_csetf_prob_tactics(problem, delete(tactic, prob_tactics(problem), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
 	return problem;
     }
@@ -6640,8 +6640,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Primitively sets PROBLEM's max depth to DEPTH.
      */
     public static final SubLObject set_problem_min_depth_alt(SubLObject problem, SubLObject depth) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(depth, NON_NEGATIVE_INTEGER_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(depth, NON_NEGATIVE_INTEGER_P);
 	{
 	    SubLObject store = problem_store(problem);
 	    SubLObject hash = inference_datastructures_problem_store.problem_store_min_depth_index(store);
@@ -6668,9 +6668,9 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Primitively sets PROBLEM's proof depth wrt INFERENCE to DEPTH.
      */
     public static final SubLObject set_problem_min_proof_depth_alt(SubLObject problem, SubLObject inference, SubLObject depth) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(inference, INFERENCE_P);
-	SubLTrampolineFile.checkType(depth, NON_NEGATIVE_INTEGER_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(inference, INFERENCE_P);
+	SubLSystemTrampolineFile.checkType(depth, NON_NEGATIVE_INTEGER_P);
 	{
 	    SubLObject store = problem_store(problem);
 	    SubLObject hash = dictionary.dictionary_lookup_without_values(inference_datastructures_problem_store.problem_store_min_proof_depth_index(store), inference, UNPROVIDED);
@@ -6702,9 +6702,9 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Primitively sets PROBLEM's transformation depth wrt INFERENCE to DEPTH.
      */
     public static final SubLObject set_problem_min_transformation_depth_alt(SubLObject problem, SubLObject inference, SubLObject depth) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(inference, INFERENCE_P);
-	SubLTrampolineFile.checkType(depth, NON_NEGATIVE_INTEGER_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(inference, INFERENCE_P);
+	SubLSystemTrampolineFile.checkType(depth, NON_NEGATIVE_INTEGER_P);
 	{
 	    SubLObject store = problem_store(problem);
 	    SubLObject hash = dictionary.dictionary_lookup_without_values(inference_datastructures_problem_store.problem_store_min_transformation_depth_index(store), inference, UNPROVIDED);
@@ -6738,9 +6738,9 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
      * Primitively sets PROBLEM's transformation depth signature wrt INFERENCE to PQDS.
      */
     public static final SubLObject set_problem_min_transformation_depth_signature_alt(SubLObject problem, SubLObject inference, SubLObject pqds) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(inference, INFERENCE_P);
-	SubLTrampolineFile.checkType(pqds, PROBLEM_QUERY_DEPTH_SIGNATURE_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(inference, INFERENCE_P);
+	SubLSystemTrampolineFile.checkType(pqds, PROBLEM_QUERY_DEPTH_SIGNATURE_P);
 	{
 	    SubLObject store = problem_store(problem);
 	    SubLObject hash = dictionary.dictionary_lookup_without_values(inference_datastructures_problem_store.problem_store_min_transformation_depth_signature_index(store), inference, UNPROVIDED);
@@ -6769,8 +6769,8 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
     }
 
     public static final SubLObject set_problem_status_alt(SubLObject problem, SubLObject status) {
-	SubLTrampolineFile.checkType(problem, PROBLEM_P);
-	SubLTrampolineFile.checkType(status, PROBLEM_STATUS_P);
+	SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+	SubLSystemTrampolineFile.checkType(status, PROBLEM_STATUS_P);
 	_csetf_prob_status(problem, status);
 	return problem;
     }
@@ -7035,7 +7035,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile {
 	if (NIL == type_spec) {
 	    return T;
 	} else {
-	    SubLTrampolineFile.checkType(type_spec, GENERALIZED_TACTIC_TYPE_P);
+	    SubLSystemTrampolineFile.checkType(type_spec, GENERALIZED_TACTIC_TYPE_P);
 	    {
 		SubLObject pcase_var = type_spec;
 		if (pcase_var.eql($NON_TRANSFORMATION)) {

@@ -9,15 +9,15 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Strings extends SubLTrampolineFile {
+public class Strings extends SubLSystemTrampolineFile {
 	private static SubLObject compare(SubLObject string1, SubLObject string2, LarKCCharacter.CharCompareDesc compareDesc,
 			SubLObject start1, SubLObject end1, SubLObject start2, SubLObject end2) {
-		int start1Typed = SubLTrampolineFile.extractStart(start1);
-		int start2Typed = SubLTrampolineFile.extractStart(start2);
-		int end1Typed = SubLTrampolineFile.extractEnd(end1);
-		int end2Typed = SubLTrampolineFile.extractEnd(end2);
+		int start1Typed = SubLSystemTrampolineFile.extractStart(start1);
+		int start2Typed = SubLSystemTrampolineFile.extractStart(start2);
+		int end1Typed = SubLSystemTrampolineFile.extractEnd(end1);
+		int end2Typed = SubLSystemTrampolineFile.extractEnd(end2);
 		int result = string1.toStr().compare(string2.toStr(), compareDesc, start1Typed, start2Typed, end1Typed,
 				end2Typed);
 		if (result < 0)
@@ -33,24 +33,24 @@ public class Strings extends SubLTrampolineFile {
 
 	public static SubLObject nstring_capitalize(SubLObject string, SubLObject start, SubLObject end) {
 		SubLString stringTyped = string.toStr();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLString result = stringTyped.capitalize(true, startTyped, endTyped);
 		return result;
 	}
 
 	public static SubLObject nstring_downcase(SubLObject string, SubLObject start, SubLObject end) {
 		SubLString stringTyped = string.toStr();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLString result = stringTyped.toLowerCase(true, startTyped, endTyped);
 		return result;
 	}
 
 	public static SubLObject nstring_upcase(SubLObject string, SubLObject start, SubLObject end) {
 		SubLString stringTyped = string.toStr();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLString result = stringTyped.toUpperCase(true, startTyped, endTyped);
 		return result;
 	}
@@ -72,16 +72,16 @@ public class Strings extends SubLTrampolineFile {
 
 	public static SubLObject string_capitalize(SubLObject string, SubLObject start, SubLObject end) {
 		SubLString stringTyped = string.toStr();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLString result = stringTyped.capitalize(false, startTyped, endTyped);
 		return result;
 	}
 
 	public static SubLObject string_downcase(SubLObject string, SubLObject start, SubLObject end) {
 		SubLString stringTyped = string.toStr();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLString result = stringTyped.toLowerCase(false, startTyped, endTyped);
 		return result;
 	}
@@ -162,8 +162,8 @@ public class Strings extends SubLTrampolineFile {
 
 	public static SubLObject string_upcase(SubLObject string, SubLObject start, SubLObject end) {
 		SubLString stringTyped = string.toStr();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEnd(end);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEnd(end);
 		SubLString result = stringTyped.toUpperCase(false, startTyped, endTyped);
 		return result;
 	}

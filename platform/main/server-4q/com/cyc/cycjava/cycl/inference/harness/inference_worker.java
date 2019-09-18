@@ -102,7 +102,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class inference_worker extends SubLTranslatedFile {
@@ -9455,7 +9455,7 @@ public final class inference_worker extends SubLTranslatedFile {
 		defparameter("*BUBBLE-UP-PROOFS-THROUGH-CLOSED-SPLIT-LINKS?*", T);
 		defparameter("*RECONSIDERING-SET-ASIDES?*", NIL);
 		defparameter("*ALWAYS-CONSIDER-DEEP?*", NIL);
-		deflexical("*PROBLEM-STORE-PRUNE-REPORTS*", SubLTrampolineFile.maybeDefault($problem_store_prune_reports$, $problem_store_prune_reports$, NIL));
+		deflexical("*PROBLEM-STORE-PRUNE-REPORTS*", SubLSystemTrampolineFile.maybeDefault($problem_store_prune_reports$, $problem_store_prune_reports$, NIL));
 		defparameter("*POSSIBLY-PROPAGATE-PROBLEM-INDESTRUCTIBLE-STACK*", $UNINITIALIZED);
 		defparameter("*PROCESSED-PROOFS-RETAIN-ONE-PROOF?*", T);
 		return NIL;

@@ -97,7 +97,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class cb_precision_suggestor extends SubLTranslatedFile {
     public static final SubLFile me = new cb_precision_suggestor();
@@ -2062,8 +2062,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_cb_precision_suggestor_file() {
         defconstant("*DTP-CB-PRECISION-SUGGESTOR-STATE*", CB_PRECISION_SUGGESTOR_STATE);
-        deflexical("*CB-CURRENT-PRECISION-SUGGESTION-IMPLEMENTATION*", SubLTrampolineFile.maybeDefault($cb_current_precision_suggestion_implementation$, $cb_current_precision_suggestion_implementation$, $CB_RKF_PRECISION_SUGGESTION_IMPLEMENTATION));
-        deflexical("*CB-PRECISION-SUGGESTION-IMPLEMENTATIONS*", SubLTrampolineFile.maybeDefault($cb_precision_suggestion_implementations$, $cb_precision_suggestion_implementations$, NIL));
+        deflexical("*CB-CURRENT-PRECISION-SUGGESTION-IMPLEMENTATION*", SubLSystemTrampolineFile.maybeDefault($cb_current_precision_suggestion_implementation$, $cb_current_precision_suggestion_implementation$, $CB_RKF_PRECISION_SUGGESTION_IMPLEMENTATION));
+        deflexical("*CB-PRECISION-SUGGESTION-IMPLEMENTATIONS*", SubLSystemTrampolineFile.maybeDefault($cb_precision_suggestion_implementations$, $cb_precision_suggestion_implementations$, NIL));
         defconstant("*DTP-CB-PRECISION-SUGGESTOR-RKF-STATE*", CB_PRECISION_SUGGESTOR_RKF_STATE);
         return NIL;
     }

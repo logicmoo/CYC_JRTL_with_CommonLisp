@@ -83,7 +83,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -427,7 +427,7 @@ public final class relation_lexifier extends SubLTranslatedFile {
             SubLObject speech_part = NIL;
             speech_part = cdolist_list_var.first();
             while (NIL != cdolist_list_var) {
-                if (((NIL != speech_part) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == lexicon_accessors.speech_partP(speech_part, UNPROVIDED))) {
+                if (((NIL != speech_part) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == lexicon_accessors.speech_partP(speech_part, UNPROVIDED))) {
                     throw new AssertionError(speech_part);
                 }
                 cdolist_list_var = cdolist_list_var.rest();
@@ -442,7 +442,7 @@ public final class relation_lexifier extends SubLTranslatedFile {
             SubLObject speech_part_pred = NIL;
             speech_part_pred = cdolist_list_var.first();
             while (NIL != cdolist_list_var) {
-                if (((NIL != speech_part_pred) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(speech_part_pred))) {
+                if (((NIL != speech_part_pred) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(speech_part_pred))) {
                     throw new AssertionError(speech_part_pred);
                 }
                 cdolist_list_var = cdolist_list_var.rest();
@@ -457,7 +457,7 @@ public final class relation_lexifier extends SubLTranslatedFile {
             SubLObject determiner = NIL;
             determiner = cdolist_list_var.first();
             while (NIL != cdolist_list_var) {
-                if (((NIL != determiner) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == keywordp(determiner))) {
+                if (((NIL != determiner) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == keywordp(determiner))) {
                     throw new AssertionError(determiner);
                 }
                 cdolist_list_var = cdolist_list_var.rest();
@@ -1595,7 +1595,7 @@ public final class relation_lexifier extends SubLTranslatedFile {
     }
 
     public static SubLObject init_relation_lexifier_file() {
-        deflexical("*POS-TEMPLATE-MAPPINGS*", SubLTrampolineFile.maybeDefault($pos_template_mappings$, $pos_template_mappings$, NIL));
+        deflexical("*POS-TEMPLATE-MAPPINGS*", SubLSystemTrampolineFile.maybeDefault($pos_template_mappings$, $pos_template_mappings$, NIL));
         deflexical("*GENERALIZE-SPEECH-PART-PRED-CACHING-STATE*", NIL);
         defparameter("*QSL-KEYWORDS-USED*", NIL);
         return NIL;

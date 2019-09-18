@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.aduna.commons</groupId>
+		<artifactId>aduna-commons</artifactId>
+		<version>6</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>aduna-commons-iteration</artifactId>
+	<version>2.3</version>
+	<packaging>jar</packaging>
+
+	<name>Aduna Commons: Iteration</name>
+	<description>Iterations and iterators for various purposes.</description>
+	<url>https://wiki.aduna-software.org/confluence/display/COM/Iteration</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>info.aduna.commons</groupId>
+			<artifactId>aduna-commons-concurrent</artifactId>
+			<version>2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
+	<issueManagement>
+		<system>jira</system>
+		<url>https://issues.aduna-software.org/jira/browse/COMITER</url>
+	</issueManagement>
+
+	<scm>
+		<connection>scm:svn:http://repo.aduna-software.org/svn/info.aduna/commons/iteration/tags/2.3</connection>
+		<developerConnection>scm:svn:https://repo.aduna-software.org/svn/info.aduna/commons/iteration/tags/2.3</developerConnection>
+		<url>http://repo.aduna-software.org/viewvc/info.aduna/commons/iteration/tags/2.3</url>
+	</scm>
+
+</project>

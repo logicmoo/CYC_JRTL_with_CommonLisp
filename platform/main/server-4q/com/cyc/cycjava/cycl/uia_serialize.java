@@ -44,7 +44,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -69,8 +69,8 @@ public final class uia_serialize extends SubLTranslatedFile implements V02 {
     public static final SubLObject uia_act_serialize_agenda(SubLObject v_agenda, SubLObject filename) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-            SubLTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
             {
                 SubLObject stream = NIL;
                 try {
@@ -114,8 +114,8 @@ public final class uia_serialize extends SubLTranslatedFile implements V02 {
     public static final SubLObject uia_act_instantiate_agenda(SubLObject v_agenda, SubLObject filename) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-            SubLTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
             {
                 SubLObject stream = NIL;
                 try {
@@ -162,7 +162,7 @@ public final class uia_serialize extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
             {
                 SubLObject stream = NIL;
                 try {
@@ -734,7 +734,7 @@ public final class uia_serialize extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject uia_serialize_determine_partition(SubLObject v_agenda) {
-        SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+        SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
         {
             SubLObject interaction_mts = user_interaction_agenda.uia_all_interaction_mts(v_agenda, NIL);
             SubLObject partition_spec = NIL;

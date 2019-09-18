@@ -97,7 +97,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -617,7 +617,7 @@ public final class isa extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         SubLObject result = sbhl_search_methods.sbhl_min_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$isa), v_term, mt, tv);
         if (NIL != forts.non_fort_p(v_term)) {
             result = genls.min_cols(nconc(sbhl_link_methods.non_fort_isas(v_term, mt, tv), result), mt, tv);
@@ -685,7 +685,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         return genls.max_cols(sbhl_search_implied_relations.sbhl_all_implied_forward_false_nodes(sbhl_module_vars.get_sbhl_module($$isa), v_term, mt, tv), mt, tv);
     }
 
@@ -720,7 +720,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = $$True_JustificationTruth;
         }
-        SubLTrampolineFile.enforceType(col, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(col, EL_FORT_P);
         return sbhl_link_methods.sbhl_backward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$isa), col, mt, tv, UNPROVIDED);
     }
 
@@ -731,7 +731,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(col, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(col, EL_FORT_P);
         return sbhl_search_methods.sbhl_max_backward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$isa), col, mt, tv);
     }
 
@@ -773,7 +773,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(col, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(col, EL_FORT_P);
         return sbhl_search_methods.sbhl_min_backward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$isa), col, mt, tv);
     }
 
@@ -784,7 +784,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         return sbhl_link_methods.sbhl_siblings_forward(sbhl_module_vars.get_sbhl_module($$isa), v_term, mt, tv);
     }
 
@@ -795,7 +795,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_term, EL_FORT_P);
         return sbhl_link_methods.sbhl_siblings_backward(sbhl_module_vars.get_sbhl_module($$isa), v_term, mt, tv);
     }
 
@@ -1261,8 +1261,8 @@ public final class isa extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
-        SubLTrampolineFile.enforceType(v_term, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(v_term, EL_FORT_P);
         final SubLObject module = sbhl_module_vars.get_sbhl_module($$isa);
         final SubLObject _prev_bind_0 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
         final SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
@@ -1554,7 +1554,7 @@ public final class isa extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         SubLObject result = sbhl_search_methods.sbhl_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$isa), v_term, mt, tv);
         if (NIL != forts.non_fort_p(v_term)) {
             result = list_utilities.fast_delete_duplicates(nconc(sbhl_link_methods.non_fort_all_isa(v_term, mt, tv), result), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -1639,13 +1639,13 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(col, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(col, EL_FORT_P);
         return sbhl_search_methods.sbhl_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module($$isa), col, mt, tv);
     }
 
     public static SubLObject all_instances_in_all_mts(final SubLObject collection) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         SubLObject result = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1704,8 +1704,8 @@ public final class isa extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, EL_FORT_P);
-        SubLTrampolineFile.enforceType(v_isa, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_term, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_isa, EL_FORT_P);
         SubLObject result = NIL;
         final SubLObject _prev_bind_0 = $all_isas_wrt$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $all_isas_wrt_isa$.currentBinding(thread);
@@ -1737,7 +1737,7 @@ public final class isa extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(terms, LISTP);
+        SubLSystemTrampolineFile.enforceType(terms, LISTP);
         if (NIL == terms) {
             return NIL;
         }
@@ -1771,7 +1771,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(cols, LISTP);
+        SubLSystemTrampolineFile.enforceType(cols, LISTP);
         if (NIL == cols) {
             return NIL;
         }
@@ -1788,8 +1788,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collections, LISTP);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collections, LISTP);
         if (NIL == collections) {
             return NIL;
         }
@@ -1823,8 +1823,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(col, HL_TERM_P);
-        SubLTrampolineFile.enforceType(terms, LISTP);
+        SubLSystemTrampolineFile.enforceType(col, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(terms, LISTP);
         if (NIL == terms) {
             return NIL;
         }
@@ -1915,7 +1915,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         return sbhl_search_implied_relations.sbhl_all_implied_forward_false_nodes(sbhl_module_vars.get_sbhl_module($$isa), v_term, mt, tv);
     }
 
@@ -1926,7 +1926,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(col, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(col, EL_FORT_P);
         return sbhl_search_methods.sbhl_all_backward_false_nodes(sbhl_module_vars.get_sbhl_module($$isa), col, mt, tv);
     }
 
@@ -1937,8 +1937,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collections, LISTP);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collections, LISTP);
         SubLObject result = NIL;
         SubLObject cdolist_list_var = collections;
         SubLObject col = NIL;
@@ -1964,8 +1964,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         sbhl_search_methods.sbhl_map_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$isa), v_term, fn, mt, tv);
         return NIL;
     }
@@ -1977,8 +1977,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
-        SubLTrampolineFile.enforceType(col, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(col, EL_FORT_P);
         sbhl_search_methods.sbhl_map_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module($$isa), col, fn, mt, tv);
         return NIL;
     }
@@ -2000,8 +2000,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(function, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         return any_all_isa(function, v_term, mt, tv);
     }
 
@@ -2124,7 +2124,7 @@ public final class isa extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         SubLObject count = ZERO_INTEGER;
         final SubLObject _prev_bind_0 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
         final SubLObject _prev_bind_2 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
@@ -4785,7 +4785,7 @@ public final class isa extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         SubLObject count = ZERO_INTEGER;
         final SubLObject _prev_bind_0 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
         final SubLObject _prev_bind_2 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
@@ -7445,7 +7445,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         if (NIL != sbhl_search_methods.sbhl_non_justifying_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$isa), v_term, collection, mt, tv)) {
             return T;
         }
@@ -7474,7 +7474,7 @@ public final class isa extends SubLTranslatedFile {
 
     public static SubLObject isa_in_mtsP(final SubLObject v_term, final SubLObject collection, final SubLObject mts) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         SubLObject isaP = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
@@ -7579,8 +7579,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collections, LISTP);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collections, LISTP);
         if (NIL == collections) {
             return NIL;
         }
@@ -7597,8 +7597,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collections, LISTP);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collections, LISTP);
         return any_isaP(v_term, collections, mt, tv);
     }
 
@@ -7675,8 +7675,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(terms, LISTP);
-        SubLTrampolineFile.enforceType(collections, LISTP);
+        SubLSystemTrampolineFile.enforceType(terms, LISTP);
+        SubLSystemTrampolineFile.enforceType(collections, LISTP);
         if (NIL == terms) {
             return NIL;
         }
@@ -7696,8 +7696,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         return makeBoolean((((NIL == within_assertP()) || (NIL == czer_utilities.equals_elP(make_binary_formula($$isa, v_term, collection), wff_vars.wff_original_formula(), UNPROVIDED, UNPROVIDED, UNPROVIDED))) && (NIL != not_isa_by_extent_knownP(v_term, collection, mt, tv))) || (NIL != not_isa_by_sbhlP(v_term, collection, mt, tv)));
     }
 
@@ -7797,8 +7797,8 @@ public final class isa extends SubLTranslatedFile {
         if (behavior == UNPROVIDED) {
             behavior = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         if (NIL != term.first_order_nautP(v_term)) {
             return any_just_of_nat_isa(v_term, collection, mt);
         }
@@ -7923,8 +7923,8 @@ public final class isa extends SubLTranslatedFile {
         if (behavior == UNPROVIDED) {
             behavior = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         if (NIL != term.first_order_nautP(v_term)) {
             return any_just_of_nat_not_isa(v_term, collection, mt);
         }
@@ -7976,7 +7976,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         return instancesP_int(collection, mt, tv);
     }
 
@@ -8468,8 +8468,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         SubLObject max_floor_mts = NIL;
         max_floor_mts = genl_mts.max_floor_mts_from_mt_sets(min_mts_of_isa_paths(v_term, collection, tv));
         return max_floor_mts;
@@ -8479,8 +8479,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         SubLObject max_floor_mts = NIL;
         max_floor_mts = genl_mts.max_floor_mts_from_mt_sets(min_mts_of_quoted_isa_paths(v_term, collection, tv));
         return max_floor_mts;
@@ -9155,7 +9155,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         return makeBoolean((NIL != sbhl_search_methods.sbhl_non_justifying_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$quotedIsa), v_term, collection, mt, tv)) || (NIL != (NIL != sbhl_link_methods.quoted_isa_stored_naut_arg2_p(v_term) ? genls.any_specP(collection, sbhl_link_methods.quoted_isas_from_naut_arg2(v_term, mt, tv), mt, tv) : NIL)));
     }
 
@@ -9182,8 +9182,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collections, LISTP);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collections, LISTP);
         if (NIL == collections) {
             return NIL;
         }
@@ -9200,8 +9200,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collections, LISTP);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collections, LISTP);
         return any_quoted_isaP(v_term, collections, mt, tv);
     }
 
@@ -9212,8 +9212,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collections, LISTP);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collections, LISTP);
         if (NIL == collections) {
             return T;
         }
@@ -9230,8 +9230,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collection, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collection, EL_FORT_P);
         return makeBoolean((NIL != not_quoted_isa_by_extent_knownP(v_term, collection, mt, tv)) || (NIL != not_quoted_isa_by_sbhlP(v_term, collection, mt, tv)));
     }
 
@@ -9265,7 +9265,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = $$True_JustificationTruth;
         }
-        SubLTrampolineFile.enforceType(col, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(col, EL_FORT_P);
         return sbhl_link_methods.sbhl_backward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$quotedIsa), col, mt, tv, UNPROVIDED);
     }
 
@@ -9276,7 +9276,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(cols, LISTP);
+        SubLSystemTrampolineFile.enforceType(cols, LISTP);
         if (NIL == cols) {
             return NIL;
         }
@@ -9293,8 +9293,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         sbhl_search_methods.sbhl_map_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$quotedIsa), v_term, fn, mt, tv);
         return NIL;
     }
@@ -9702,7 +9702,7 @@ public final class isa extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
         SubLObject result = sbhl_search_methods.sbhl_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($$quotedIsa), v_term, mt, tv);
         if (NIL != sbhl_link_methods.quoted_isa_stored_naut_arg2_p(v_term)) {
             result = list_utilities.fast_delete_duplicates(nconc(genls.union_all_genls(sbhl_link_methods.quoted_isas_from_naut_arg2(v_term, mt, tv), mt, tv), result), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -9775,8 +9775,8 @@ public final class isa extends SubLTranslatedFile {
             tv = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_term, EL_FORT_P);
-        SubLTrampolineFile.enforceType(v_isa, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_term, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_isa, EL_FORT_P);
         SubLObject result = NIL;
         final SubLObject _prev_bind_0 = $all_isas_wrt$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $all_isas_wrt_isa$.currentBinding(thread);
@@ -9799,7 +9799,7 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(col, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(col, EL_FORT_P);
         return sbhl_search_methods.sbhl_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module($$quotedIsa), col, mt, tv);
     }
 
@@ -9826,8 +9826,8 @@ public final class isa extends SubLTranslatedFile {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
-        SubLTrampolineFile.enforceType(v_term, HL_TERM_P);
-        SubLTrampolineFile.enforceType(collections, LISTP);
+        SubLSystemTrampolineFile.enforceType(v_term, HL_TERM_P);
+        SubLSystemTrampolineFile.enforceType(collections, LISTP);
         if (NIL == collections) {
             return NIL;
         }

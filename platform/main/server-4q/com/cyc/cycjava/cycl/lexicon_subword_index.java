@@ -79,7 +79,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1536,8 +1536,8 @@ public final class lexicon_subword_index extends SubLTranslatedFile {
         deflexical("*NL-TRIE-SUBWORD-FHT-LOCK*", make_lock($str0$nl_trie_subword_fht_lock));
         deflexical("*NL-TRIE-SUBWORD-FHT-NAME*", NIL);
         deflexical("*NL-TRIE-SUBWORD-CACHE*", NIL);
-        deflexical("*NL-TRIE-SUBWORD-INDEX*", SubLTrampolineFile.maybeDefault($nl_trie_subword_index$, $nl_trie_subword_index$, NIL));
-        deflexical("*NL-TRIE-SUBWORD-CACHE-INITIALIZATION-LOCK*", SubLTrampolineFile.maybeDefault($nl_trie_subword_cache_initialization_lock$, $nl_trie_subword_cache_initialization_lock$, () -> make_lock($str4$_nl_trie_subword_cache_initializa)));
+        deflexical("*NL-TRIE-SUBWORD-INDEX*", SubLSystemTrampolineFile.maybeDefault($nl_trie_subword_index$, $nl_trie_subword_index$, NIL));
+        deflexical("*NL-TRIE-SUBWORD-CACHE-INITIALIZATION-LOCK*", SubLSystemTrampolineFile.maybeDefault($nl_trie_subword_cache_initialization_lock$, $nl_trie_subword_cache_initialization_lock$, () -> make_lock($str4$_nl_trie_subword_cache_initializa)));
         deflexical("*PIVOT-LOCATION-BREAK-CHARS*", $UNINITIALIZED);
         return NIL;
     }

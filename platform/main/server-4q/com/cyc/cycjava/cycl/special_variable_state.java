@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class special_variable_state extends SubLTranslatedFile {
     public static final SubLFile me = new special_variable_state();
@@ -327,7 +327,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject with_special_variable_state_variables(final SubLObject svs) {
         if (NIL != svs) {
-            SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+            SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
             return svs_variables(svs);
         }
         return NIL;
@@ -335,7 +335,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject with_special_variable_state_values(final SubLObject svs) {
         if (NIL != svs) {
-            SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+            SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
             return svs_values(svs);
         }
         return NIL;
@@ -391,12 +391,12 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         final ArrayList old_values = extract_dynamic_values(cprogv_var);
         try {
             bind_dynamic_vars(cprogv_var, with_special_variable_state_values(mutate_svs));
-            SubLTrampolineFile.enforceType(mutate_svs, SPECIAL_VARIABLE_STATE_P);
+            SubLSystemTrampolineFile.enforceType(mutate_svs, SPECIAL_VARIABLE_STATE_P);
             final SubLObject cprogv_var_$1 = with_special_variable_state_variables(override_svs);
             final ArrayList old_values_$2 = extract_dynamic_values(cprogv_var_$1);
             try {
                 bind_dynamic_vars(cprogv_var_$1, with_special_variable_state_values(override_svs));
-                SubLTrampolineFile.enforceType(override_svs, SPECIAL_VARIABLE_STATE_P);
+                SubLSystemTrampolineFile.enforceType(override_svs, SPECIAL_VARIABLE_STATE_P);
                 update_special_variable_state(mutate_svs);
             } finally {
                 rebind_dynamic_vars(cprogv_var_$1, old_values_$2);

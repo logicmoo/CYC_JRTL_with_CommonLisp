@@ -17,14 +17,14 @@ public final class AbclInit {
 	static void init() {
 		if (initialized)
 			return;
-			
+
 		synchronized (lock) {
 			if (initialized)
 				return;
-				
+
 			Interpreter.initializeLisp();
 			Load.load("fasls/first-servlet.abcl");
-			
+
 			initialized = true;
 		}
 	}

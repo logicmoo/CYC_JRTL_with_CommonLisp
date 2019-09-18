@@ -92,7 +92,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1607,20 +1607,20 @@ public final class rtp_constituent_weeders extends SubLTranslatedFile {
         deflexical("*TAG3-COND-CAT-TAG12-FILE*", $str6$tag3_cond_cat_tag12);
         deflexical("*TAG-COND-TAG-FILE*", $str7$tag_cond_tag);
         deflexical("*CAT-COND-LAST-TAG-FILE*", $str8$cat_cond_last_tag);
-        deflexical("*CAT-PRIOR*", SubLTrampolineFile.maybeDefault($cat_prior$, $cat_prior$, NIL));
-        deflexical("*TAG1-COND-CAT*", SubLTrampolineFile.maybeDefault($sym10$_TAG1_COND_CAT_, $tag1_cond_cat$, NIL));
-        deflexical("*TAG2-COND-CAT-TAG1*", SubLTrampolineFile.maybeDefault($sym11$_TAG2_COND_CAT_TAG1_, $tag2_cond_cat_tag1$, NIL));
-        deflexical("*TAG3-COND-CAT-TAG12*", SubLTrampolineFile.maybeDefault($sym12$_TAG3_COND_CAT_TAG12_, $tag3_cond_cat_tag12$, NIL));
-        deflexical("*TAG-COND-TAG*", SubLTrampolineFile.maybeDefault($tag_cond_tag$, $tag_cond_tag$, NIL));
-        deflexical("*CAT-COND-LAST-TAG*", SubLTrampolineFile.maybeDefault($cat_cond_last_tag$, $cat_cond_last_tag$, NIL));
-        deflexical("*TAGGER*", SubLTrampolineFile.maybeDefault($tagger$, $tagger$, NIL));
+        deflexical("*CAT-PRIOR*", SubLSystemTrampolineFile.maybeDefault($cat_prior$, $cat_prior$, NIL));
+        deflexical("*TAG1-COND-CAT*", SubLSystemTrampolineFile.maybeDefault($sym10$_TAG1_COND_CAT_, $tag1_cond_cat$, NIL));
+        deflexical("*TAG2-COND-CAT-TAG1*", SubLSystemTrampolineFile.maybeDefault($sym11$_TAG2_COND_CAT_TAG1_, $tag2_cond_cat_tag1$, NIL));
+        deflexical("*TAG3-COND-CAT-TAG12*", SubLSystemTrampolineFile.maybeDefault($sym12$_TAG3_COND_CAT_TAG12_, $tag3_cond_cat_tag12$, NIL));
+        deflexical("*TAG-COND-TAG*", SubLSystemTrampolineFile.maybeDefault($tag_cond_tag$, $tag_cond_tag$, NIL));
+        deflexical("*CAT-COND-LAST-TAG*", SubLSystemTrampolineFile.maybeDefault($cat_cond_last_tag$, $cat_cond_last_tag$, NIL));
+        deflexical("*TAGGER*", SubLSystemTrampolineFile.maybeDefault($tagger$, $tagger$, NIL));
         defconstant("*DTP-ITP-SEMANTICS*", ITP_SEMANTICS);
         deflexical("*RTP-VBAR-TEMPLATES-CACHED-CACHING-STATE*", NIL);
         defparameter("*USE-NEW-TP-POSSIBLE-CONSTIT?*", T);
         defparameter("*RTP-CONTRACTION-ELEMENTS*", NIL);
         deflexical("*CONFUSING-NP-START-STRINGS*", $list80);
         deflexical("*CONFUSING-NBAR-START-STRINGS*", NIL);
-        deflexical("*QUANTITY-STRINGS*", SubLTrampolineFile.maybeDefault($quantity_strings$, $quantity_strings$, NIL));
+        deflexical("*QUANTITY-STRINGS*", SubLSystemTrampolineFile.maybeDefault($quantity_strings$, $quantity_strings$, NIL));
         deflexical("*PREPOSITIONAL-CATEGORY-TEMPLATES*", $list89);
         defparameter("*TEMPLATE-TO-OM-CATEGORY-MAPPINGS*", $list91);
         return NIL;

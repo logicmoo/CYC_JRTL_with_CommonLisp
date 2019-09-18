@@ -35,7 +35,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1138,7 +1138,7 @@ public final class morphological_word_parser extends SubLTranslatedFile {
     public static SubLObject init_morphological_word_parser_file() {
         deflexical("*COMPLEX-WORD-STRING-IS-SPEECH-PART?-CACHING-STATE*", NIL);
         deflexical("*PARSE-COMPLEX-WORD-STRING-CACHING-STATE*", NIL);
-        deflexical("*MWP-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym39$_MWP_INITIALIZED__, $mwp_initializedP$, NIL));
+        deflexical("*MWP-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($sym39$_MWP_INITIALIZED__, $mwp_initializedP$, NIL));
         return NIL;
     }
 

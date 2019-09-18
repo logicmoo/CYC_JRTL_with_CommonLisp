@@ -25,7 +25,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -190,7 +190,7 @@ public final class inference_balanced_tactician_execution extends SubLTranslated
     }
 
     public static final SubLObject balanced_strategy_quiesce(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         balanced_strategy_quiesce_wrt_removal(strategy);
         balanced_strategy_quiesce_new_root(strategy);
         balanced_strategy_quiesce_wrt_transformation(strategy);
@@ -302,10 +302,10 @@ public final class inference_balanced_tactician_execution extends SubLTranslated
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-            SubLTrampolineFile.checkType(strategem, STRATEGEM_P);
+            SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+            SubLSystemTrampolineFile.checkType(strategem, STRATEGEM_P);
             if (NIL != motivation) {
-                SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+                SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
             }
             {
                 SubLObject result = $UNINTERESTING;
@@ -323,7 +323,7 @@ public final class inference_balanced_tactician_execution extends SubLTranslated
                     if (NIL != inference_worker.logical_tactic_p(strategem)) {
                         {
                             SubLObject tactic = strategem;
-                            SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+                            SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
                             if (!(((NIL != $balanced_strategy_does_not_activate_disallowed_tactics_wrt_removalP$.getDynamicValue(thread)) && (motivation == $REMOVAL)) && (NIL != inference_tactician_strategic_uninterestingness.tactic_disallowedP(strategem, strategy)))) {
                                 inference_balanced_tactician_motivation.balanced_strategy_possibly_propagate_motivation_to_link_head(strategy, motivation, tactic);
                                 {

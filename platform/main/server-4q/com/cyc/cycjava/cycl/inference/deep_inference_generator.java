@@ -115,7 +115,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1028,7 +1028,7 @@ public final class deep_inference_generator extends SubLTranslatedFile {
     }
 
     public static SubLObject init_deep_inference_generator_file() {
-        deflexical("*DEEP-INFERENCE-GAF-TABLE*", SubLTrampolineFile.maybeDefault($deep_inference_gaf_table$, $deep_inference_gaf_table$, () -> make_hash_table($int$212, UNPROVIDED, UNPROVIDED)));
+        deflexical("*DEEP-INFERENCE-GAF-TABLE*", SubLSystemTrampolineFile.maybeDefault($deep_inference_gaf_table$, $deep_inference_gaf_table$, () -> make_hash_table($int$212, UNPROVIDED, UNPROVIDED)));
         defparameter("*DEEP-INFERENCE-RECURSION-STACK*", $UNINITIALIZED);
         deflexical("*TOTALLY-UNINTERESTING-HAYSTACK-MTS*", $list6);
         deflexical("*SOMEWHAT-UNINTERESTING-HAYSTACK-MTS*", $list7);

@@ -89,7 +89,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class generic_testing extends SubLTranslatedFile {
     public static final SubLFile me = new generic_testing();
@@ -473,10 +473,10 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         assert NIL != test_case_name_p(name) : "generic_testing.test_case_name_p(name) " + "CommonSymbols.NIL != generic_testing.test_case_name_p(name) " + name;
         assert NIL != listp(tuples) : "Types.listp(tuples) " + "CommonSymbols.NIL != Types.listp(tuples) " + tuples;
         assert NIL != function_spec_p(test) : "Types.function_spec_p(test) " + "CommonSymbols.NIL != Types.function_spec_p(test) " + test;
-        if (((NIL != owner) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(owner))) {
+        if (((NIL != owner) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(owner))) {
             throw new AssertionError(owner);
         }
-        if (((NIL != v_classes) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(v_classes))) {
+        if (((NIL != v_classes) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(v_classes))) {
             throw new AssertionError(v_classes);
         }
         assert NIL != cyc_testing.cyc_test_kb_p(kb) : "cyc_testing.cyc_test_kb_p(kb) " + "CommonSymbols.NIL != cyc_testing.cyc_test_kb_p(kb) " + kb;
@@ -1163,8 +1163,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_generic_testing_file() {
-        deflexical("*TEST-CASE-TABLE-INDEX*", SubLTrampolineFile.maybeDefault($test_case_table_index$, $test_case_table_index$, () -> make_hash_table($int$212, symbol_function(EQL), UNPROVIDED)));
-        deflexical("*ORDERED-TEST-CASES*", SubLTrampolineFile.maybeDefault($ordered_test_cases$, $ordered_test_cases$, NIL));
+        deflexical("*TEST-CASE-TABLE-INDEX*", SubLSystemTrampolineFile.maybeDefault($test_case_table_index$, $test_case_table_index$, () -> make_hash_table($int$212, symbol_function(EQL), UNPROVIDED)));
+        deflexical("*ORDERED-TEST-CASES*", SubLSystemTrampolineFile.maybeDefault($ordered_test_cases$, $ordered_test_cases$, NIL));
         deflexical("*TEST-CASE-TABLES-BY-CLASS*", make_hash_table($int$64, EQL, UNPROVIDED));
         deflexical("*GENERIC-TEST-RESULTS*", $list4);
         deflexical("*GENERIC-TEST-VERBOSITY-LEVELS*", $list5);

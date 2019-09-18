@@ -27,6 +27,7 @@ public interface CommonSymbols extends CommonSymbols_KW {
 			// temporary workarround apps not initialziing cyc like Junit
 			Startup.needRunningSystem(CommonSymbols.class);
 			if (!SubLMain.commonSymbolsOK) {
+				java.lang.Thread.dumpStack();
 				if (true) {
 					throw new Error("!commonSymbolsOK!");
 				}
@@ -123,7 +124,8 @@ public interface CommonSymbols extends CommonSymbols_KW {
 	// @TODO defvarCheckCL
 	SubLSymbol $print_length$ = makeSublispSymbol("*PRINT-LENGTH*");
 
-	SubLSymbol $cyc_tests$ = makeSymbol("*CYC-TESTS*");
+	SubLSymbol $cyc_tests_cyc$ = makeCycSymbol("*CYC-TESTS*");
+	SubLSymbol $cyc_tests$ = makeSublispSymbol("*CYC-TESTS*");
 
 	SubLSymbol IDENTITY = makeSublispSymbol("IDENTITY");
 	SubLSymbol MEMBER = makeSublispSymbol("MEMBER");

@@ -117,7 +117,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class utilities_macros extends SubLTranslatedFile {
@@ -5929,7 +5929,7 @@ public final class utilities_macros extends SubLTranslatedFile {
 		declareFunction(me, "expand_destructuring_predication_generator", "EXPAND-DESTRUCTURING-PREDICATION-GENERATOR", 2, 0, false);
 		declareMacro(me, "funcall_shortcut", "FUNCALL-SHORTCUT");
 		declareMacro(me, "destructuring_predication_generator", "DESTRUCTURING-PREDICATION-GENERATOR");
-		declareFunction(me, "symbol_in_tree_p", "SYMBOL-IN-TREE-P", 2, 0, false);
+		// declareFunction(me, "symbol_in_tree_p", "SYMBOL-IN-TREE-P", 2, 0, false);
 		// declareFunction(me, "unquoted_symbol_in_tree_p", "UNQUOTED-SYMBOL-IN-TREE-P", 2, 0, false);
 		declareFunction(me, "generate_instance_variable_bindings_for_structure_slots", "GENERATE-INSTANCE-VARIABLE-BINDINGS-FOR-STRUCTURE-SLOTS", 5, 1, false);
 		declareMacro(me, "cdolist_collecting", "CDOLIST-COLLECTING");
@@ -6020,26 +6020,26 @@ public final class utilities_macros extends SubLTranslatedFile {
 	}
 
 	public static SubLObject init_utilities_macros_file() {
-		deflexical("*API-SPECIAL-TABLE*", SubLTrampolineFile.maybeDefault($api_special_table$, $api_special_table$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
-		deflexical("*API-PREDEFINED-FUNCTION-TABLE*", SubLTrampolineFile.maybeDefault($api_predefined_function_table$, $api_predefined_function_table$, () -> make_hash_table($int$1000, symbol_function(EQ), UNPROVIDED)));
-		deflexical("*API-PREDEFINED-HOST-FUNCTION-TABLE*", SubLTrampolineFile.maybeDefault($api_predefined_host_function_table$, $api_predefined_host_function_table$, () -> make_hash_table($int$100, symbol_function(EQ), UNPROVIDED)));
-		deflexical("*API-PREDEFINED-MACRO-TABLE*", SubLTrampolineFile.maybeDefault($api_predefined_macro_table$, $api_predefined_macro_table$, () -> make_hash_table($int$100, symbol_function(EQ), UNPROVIDED)));
-		deflexical("*API-PREDEFINED-HOST-MACRO-TABLE*", SubLTrampolineFile.maybeDefault($api_predefined_host_macro_table$, $api_predefined_host_macro_table$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
-		deflexical("*API-SYMBOLS*", SubLTrampolineFile.maybeDefault($api_symbols$, $api_symbols$, NIL));
-		deflexical("*API-TYPES*", SubLTrampolineFile.maybeDefault($api_types$, $api_types$, NIL));
-		deflexical("*KB-FUNCTION-TABLE*", SubLTrampolineFile.maybeDefault($kb_function_table$, $kb_function_table$, () -> make_hash_table($int$400, symbol_function(EQ), UNPROVIDED)));
-		deflexical("*FUNCALL-HELPER-PROPERTY*", SubLTrampolineFile.maybeDefault($funcall_helper_property$, $funcall_helper_property$, $FUNCALL_HELPER));
-		deflexical("*UNPROVIDED*", SubLTrampolineFile.maybeDefault($unprovided$, $unprovided$, () -> make_symbol($$$UNPROVIDED)));
+		deflexical("*API-SPECIAL-TABLE*", SubLSystemTrampolineFile.maybeDefault($api_special_table$, $api_special_table$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
+		deflexical("*API-PREDEFINED-FUNCTION-TABLE*", SubLSystemTrampolineFile.maybeDefault($api_predefined_function_table$, $api_predefined_function_table$, () -> make_hash_table($int$1000, symbol_function(EQ), UNPROVIDED)));
+		deflexical("*API-PREDEFINED-HOST-FUNCTION-TABLE*", SubLSystemTrampolineFile.maybeDefault($api_predefined_host_function_table$, $api_predefined_host_function_table$, () -> make_hash_table($int$100, symbol_function(EQ), UNPROVIDED)));
+		deflexical("*API-PREDEFINED-MACRO-TABLE*", SubLSystemTrampolineFile.maybeDefault($api_predefined_macro_table$, $api_predefined_macro_table$, () -> make_hash_table($int$100, symbol_function(EQ), UNPROVIDED)));
+		deflexical("*API-PREDEFINED-HOST-MACRO-TABLE*", SubLSystemTrampolineFile.maybeDefault($api_predefined_host_macro_table$, $api_predefined_host_macro_table$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
+		deflexical("*API-SYMBOLS*", SubLSystemTrampolineFile.maybeDefault($api_symbols$, $api_symbols$, NIL));
+		deflexical("*API-TYPES*", SubLSystemTrampolineFile.maybeDefault($api_types$, $api_types$, NIL));
+		deflexical("*KB-FUNCTION-TABLE*", SubLSystemTrampolineFile.maybeDefault($kb_function_table$, $kb_function_table$, () -> make_hash_table($int$400, symbol_function(EQ), UNPROVIDED)));
+		deflexical("*FUNCALL-HELPER-PROPERTY*", SubLSystemTrampolineFile.maybeDefault($funcall_helper_property$, $funcall_helper_property$, $FUNCALL_HELPER));
+		deflexical("*UNPROVIDED*", SubLSystemTrampolineFile.maybeDefault($unprovided$, $unprovided$, () -> make_symbol($$$UNPROVIDED)));
 		defparameter("*CFASL-STREAM*", NIL);
-		deflexical("*GLOBAL-LOCKS*", SubLTrampolineFile.maybeDefault($global_locks$, $global_locks$, NIL));
-		deflexical("*FI-STATE-VARIABLES*", SubLTrampolineFile.maybeDefault($fi_state_variables$, $fi_state_variables$, NIL));
-		deflexical("*HTML-STATE-VARIABLES*", SubLTrampolineFile.maybeDefault($html_state_variables$, $html_state_variables$, NIL));
-		deflexical("*HTML-INTERFACE-VARIABLES*", SubLTrampolineFile.maybeDefault($html_interface_variables$, $html_interface_variables$, NIL));
-		deflexical("*GT-STATE-VARIABLES*", SubLTrampolineFile.maybeDefault($gt_state_variables$, $gt_state_variables$, NIL));
-		deflexical("*AT-STATE-VARIABLES*", SubLTrampolineFile.maybeDefault($at_state_variables$, $at_state_variables$, NIL));
-		deflexical("*DEFN-STATE-VARIABLES*", SubLTrampolineFile.maybeDefault($defn_state_variables$, $defn_state_variables$, NIL));
-		deflexical("*KBP-STATE-VARIABLES*", SubLTrampolineFile.maybeDefault($kbp_state_variables$, $kbp_state_variables$, NIL));
-		deflexical("*KBI-STATE-VARIABLES*", SubLTrampolineFile.maybeDefault($kbi_state_variables$, $kbi_state_variables$, NIL));
+		deflexical("*GLOBAL-LOCKS*", SubLSystemTrampolineFile.maybeDefault($global_locks$, $global_locks$, NIL));
+		deflexical("*FI-STATE-VARIABLES*", SubLSystemTrampolineFile.maybeDefault($fi_state_variables$, $fi_state_variables$, NIL));
+		deflexical("*HTML-STATE-VARIABLES*", SubLSystemTrampolineFile.maybeDefault($html_state_variables$, $html_state_variables$, NIL));
+		deflexical("*HTML-INTERFACE-VARIABLES*", SubLSystemTrampolineFile.maybeDefault($html_interface_variables$, $html_interface_variables$, NIL));
+		deflexical("*GT-STATE-VARIABLES*", SubLSystemTrampolineFile.maybeDefault($gt_state_variables$, $gt_state_variables$, NIL));
+		deflexical("*AT-STATE-VARIABLES*", SubLSystemTrampolineFile.maybeDefault($at_state_variables$, $at_state_variables$, NIL));
+		deflexical("*DEFN-STATE-VARIABLES*", SubLSystemTrampolineFile.maybeDefault($defn_state_variables$, $defn_state_variables$, NIL));
+		deflexical("*KBP-STATE-VARIABLES*", SubLSystemTrampolineFile.maybeDefault($kbp_state_variables$, $kbp_state_variables$, NIL));
+		deflexical("*KBI-STATE-VARIABLES*", SubLSystemTrampolineFile.maybeDefault($kbi_state_variables$, $kbi_state_variables$, NIL));
 		defparameter("*CURRENT-FORWARD-PROBLEM-STORE*", NIL);
 		defparameter("*TRACING-LEVEL*", NIL);
 		deflexical("*STRUCTURE-RESOURCING-ENABLED*", NIL);
@@ -6070,7 +6070,7 @@ public final class utilities_macros extends SubLTranslatedFile {
 		defparameter("*UTIL-FUNC-ERROR-FORMAT-STRING*", $str332$_S___function__S_is_not_a_symbol_);
 		defparameter("*UTIL-SEARCH-TYPE-ERROR-FORMAT-STRING*", $str333$_S___search_type__S_is_not_one_of);
 		deflexical("*PROCESS-RESOURCE-TRACKING-100S-OF-NANOSECONDS-PROPERTIES*", $list461);
-		deflexical("*KB-VAR-INITIALIZATIONS*", SubLTrampolineFile.maybeDefault($kb_var_initializations$, $kb_var_initializations$, NIL));
+		deflexical("*KB-VAR-INITIALIZATIONS*", SubLSystemTrampolineFile.maybeDefault($kb_var_initializations$, $kb_var_initializations$, NIL));
 		defparameter("*PARTIAL-RESULTS-ACCUMULATOR*", NIL);
 		defparameter("*PARTIAL-RESULTS-SIZE*", NIL);
 		defparameter("*PARTIAL-RESULTS-THRESHOLD*", $int$40);
@@ -6161,7 +6161,7 @@ public final class utilities_macros extends SubLTranslatedFile {
 		setup_utilities_macros_file();
 	}
 
-	
+
 }
 
 /**

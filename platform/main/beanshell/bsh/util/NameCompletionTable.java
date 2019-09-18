@@ -26,6 +26,7 @@
 package bsh.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import bsh.NameSource;
@@ -36,113 +37,141 @@ import bsh.StringUtil;
     a collection of names, NameSources, and other NameCompletionTables.
     This implementation uses a trivial linear search and comparison...
 */
-public class NameCompletionTable extends ArrayList
-    implements NameCompletion
-{
-    /** Unimplemented - need a collection here */
-    NameCompletionTable table;
-    List sources;
+public class NameCompletionTable extends ArrayList implements NameCompletion {
 
-    /** Unimplemented - need a collection of sources here*/
+	private static final String[] StringArrayZero = new String[0];
+	/** Unimplemented - need a collection here */
+	NameCompletionTable table;
+	List sources;
 
-    /**
-    */
-    public NameCompletionTable() { }
+	/** Unimplemented - need a collection of sources here*/
 
-    /**
-        Add a NameCompletionTable, which is more optimized than the more
-        general NameSource
-    */
-    public void add( NameCompletionTable table ) {
-        /** Unimplemented - need a collection here */
-        if ( this.table != null )
-            throw new RuntimeException("Unimplemented usage error");
+	/**
+	*/
+	public NameCompletionTable() {
+	}
 
-        this.table = table;
-    }
+	/**
+	    Add a NameCompletionTable, which is more optimized than the more
+	    general NameSource
+	*/
+	public void add(NameCompletionTable table) {
+		/** Unimplemented - need a collection here */
+		if (this.table != null)
+			throw new RuntimeException("Unimplemented usage error");
 
-    /**
-        Add a NameSource which is monitored for names.
-        Unimplemented - behavior is broken... no updates
-    */
-    public void add( NameSource source ) {
-        /*
-            Unimplemented -
-            Need to add an inner class util here that holds the source and
-            monitors it by registering a listener
-        */
-        if ( sources == null )
-            sources = new ArrayList();
+		this.table = table;
+	}
 
-        sources.add( source );
-    }
+	/**
+	    Add a NameSource which is monitored for names.
+	    Unimplemented - behavior is broken... no updates
+	*/
+	public void add(NameSource source) {
+		/*
+		    Unimplemented -
+		    Need to add an inner class util here that holds the source and
+		    monitors it by registering a listener
+		*/
+		if (sources == null)
+			sources = new ArrayList();
 
-    /**
-        Add any matching names to list (including any from other tables)
-    */
-    protected void getMatchingNames( String part, List found )
-    {
-        // check our table
-        for( int i=0; i< size(); i++ ) {
-            String name = (String)get(i);
-            if ( name.startsWith( part ) )
-                found.add( name );
-        }
+		sources.add(source);
+	}
 
-        // Check other tables.
-        /** Unimplemented - need a collection here */
-        if ( table != null )
-            table.getMatchingNames( part, found );
+	/**
+	    Add any matching names to list (including any from other tables)
+	 * @param deadLine TODO
+	*/
+	protected void getMatchingNames(String part, List found, long deadLine) {
+		// check our table
+		for (int i = 0; i < size(); i++) {
+			String name = (String) get(i);
+			if (name.startsWith(part))
+				found.add(name);
+		}
 
-        // Check other sources
-        // note should add caching in source adapters
-        if ( sources != null )
-            for( int i=0; i< sources.size(); i++ )
-            {
-                NameSource src = (NameSource)sources.get(i);
-                String [] names = src.getAllNames();
-                for( int j=0; j< names.length; j++ )
-                    if ( names[j].startsWith( part ) )
-                        found.add( names[j] );
+		// Check other tables.
+		/** Unimplemented - need a collection here */
+		if (table != null)
+			table.getMatchingNames(part, found, deadLine);
 
-            }
-    }
+		// Check other sources
+		// note should add caching in source adapters
+		if (sources != null)
+			for (int i = 0; i < sources.size(); i++) {
+				NameSource src = (NameSource) sources.get(i);
+				fromOtherSources(part, found, src, deadLine);
+			}
+	}
 
-    public String [] completeName( String part )
-    {
-        List found = new ArrayList();
-        getMatchingNames( part, found );
+	/**
+	 * @param part
+	 * @param found
+	 * @param i
+	 * @return
+	 */
+	public Thread fromOtherSources(String part, List found, NameSource src, long miliseconds) {
+		Thread t = new Thread(() -> {
+			String[] names = src.getAllNames(miliseconds);
+			for (int j = 0; j < names.length; j++)
+				if (names[j].startsWith(part))
+					found.add(names[j]);
+		});
+		t.setName("search Src:" + src + " for: " + part);
+		t.setDaemon(true);
+		t.start();
+		return t;
 
-        if ( found.size() == 0 )
-            return new String [0];
+	}
 
-        // Find the max common prefix
-        String maxCommon = (String)found.get(0);
-        for(int i=1; i<found.size() && maxCommon.length() > 0; i++) {
-            maxCommon = StringUtil.maxCommonPrefix(
-                maxCommon, (String)found.get(i) );
+	public String[] completeName(String part, List resultz, long miliseconds) {
+		List found = new ArrayList();
+		getMatchingNames(part, found, miliseconds);
 
-            // if maxCommon gets as small as part, stop trying
-            if ( maxCommon.equals( part ) )
-                break;
-        }
+		if (found.size() == 0)
+			return StringArrayZero;
 
-        // Return max common or all ambiguous
-        if ( maxCommon.length() > part.length() )
-            return new String [] { maxCommon };
-        else
-            return (String[])(found.toArray(new String[0]));
-    }
+		// Find the max common prefix
+		String maxCommon = (String) found.get(0);
+		for (int i = 1; i < found.size() && maxCommon.length() > 0; i++) {
+			maxCommon = StringUtil.maxCommonPrefix(maxCommon, (String) found.get(i));
 
-    /**
-    class SourceCache implements NameSource.Listener
-    {
-        NameSource src;
-        SourceMonitor( NameSource src ) {
-            this.src = src;
-        }
-        public void nameSourceChanged( NameSource src ) {
-        }
-    }
-    */
+			// if maxCommon gets as small as part, stop trying
+			if (maxCommon.equals(part))
+				break;
+		}
+
+		// Return max common or all ambiguous
+		if (maxCommon.length() > part.length())
+			return new String[] { maxCommon };
+		else
+			return (String[]) (found.toArray(StringArrayZero));
+	}
+
+	static HashMap<String, List> allCompletions = new HashMap<String, List>();
+
+	public static List getCompletionList(String part) {
+		List found = null;
+		synchronized (allCompletions) {
+			found = allCompletions.get(part);
+			if (found == null) {
+				found = new ArrayList();
+				allCompletions.put(part, found);
+			}
+		}
+		return found;
+	}
+
+	/**
+	class SourceCache implements NameSource.Listener
+	{
+	    NameSource src;
+	    SourceMonitor( NameSource src ) {
+	        this.src = src;
+	    }
+	    public void nameSourceChanged( NameSource src ) {
+	    }
+	}
+	*/
 }

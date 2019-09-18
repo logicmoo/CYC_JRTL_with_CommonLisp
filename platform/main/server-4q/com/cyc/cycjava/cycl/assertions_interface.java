@@ -24,7 +24,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -260,14 +260,14 @@ public final class assertions_interface extends SubLTranslatedFile {
     static final boolean assertionsDisabled = true;
 
     public static SubLObject kb_create_assertion(final SubLObject cnf, final SubLObject mt, final SubLObject variable_names, final SubLObject direction, final SubLObject truth, final SubLObject strength, final SubLObject asserted_argument) {
-        SubLTrampolineFile.enforceType(cnf, CNF_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
-        SubLTrampolineFile.enforceType(variable_names, LISTP);
-        SubLTrampolineFile.enforceType(direction, DIRECTION_P);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
-        SubLTrampolineFile.enforceType(strength, EL_STRENGTH_P);
+        SubLSystemTrampolineFile.enforceType(cnf, CNF_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(variable_names, LISTP);
+        SubLSystemTrampolineFile.enforceType(direction, DIRECTION_P);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(strength, EL_STRENGTH_P);
         if (NIL != asserted_argument) {
-            SubLTrampolineFile.enforceType(asserted_argument, ASSERTED_ARGUMENT_P);
+            SubLSystemTrampolineFile.enforceType(asserted_argument, ASSERTED_ARGUMENT_P);
         }
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_CREATE_ASSERTION, cnf, mt, variable_names, direction, truth, strength, asserted_argument);
@@ -312,7 +312,7 @@ public final class assertions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_remove_assertion(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_REMOVE_ASSERTION, assertion, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -340,7 +340,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_cnf(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_CNF, list(QUOTE, assertion)));
         }
@@ -348,7 +348,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_possibly_assertion_cnf(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_POSSIBLY_ASSERTION_CNF, list(QUOTE, assertion)));
         }
@@ -356,7 +356,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_mt(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_MT, list(QUOTE, assertion)));
         }
@@ -364,8 +364,8 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_lookup_assertion(final SubLObject cnf, final SubLObject mt) {
-        SubLTrampolineFile.enforceType(cnf, CNF_P);
-        SubLTrampolineFile.enforceType(mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.enforceType(cnf, CNF_P);
+        SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_HLMT_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_LOOKUP_ASSERTION, list(QUOTE, cnf), list(QUOTE, mt)));
         }
@@ -373,7 +373,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_gaf_assertionP(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list($sym36$KB_GAF_ASSERTION_, list(QUOTE, assertion)));
         }
@@ -381,7 +381,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_rule_assertionP(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list($sym39$KB_RULE_ASSERTION_, list(QUOTE, assertion)));
         }
@@ -389,7 +389,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_gaf_hl_formula(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_GAF_HL_FORMULA, list(QUOTE, assertion)));
         }
@@ -397,7 +397,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_cons(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_CONS, list(QUOTE, assertion)));
         }
@@ -405,7 +405,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_direction(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_DIRECTION, list(QUOTE, assertion)));
         }
@@ -413,7 +413,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_truth(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_TRUTH, list(QUOTE, assertion)));
         }
@@ -421,7 +421,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_strength(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_STRENGTH, list(QUOTE, assertion)));
         }
@@ -429,7 +429,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_variable_names(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_VARIABLE_NAMES, list(QUOTE, assertion)));
         }
@@ -437,7 +437,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_asserted_by(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_ASSERTED_BY, list(QUOTE, assertion)));
         }
@@ -445,7 +445,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_asserted_when(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_ASSERTED_WHEN, list(QUOTE, assertion)));
         }
@@ -453,7 +453,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_asserted_why(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_ASSERTED_WHY, list(QUOTE, assertion)));
         }
@@ -461,7 +461,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_asserted_second(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_ASSERTED_SECOND, list(QUOTE, assertion)));
         }
@@ -470,8 +470,8 @@ public final class assertions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_set_assertion_direction(final SubLObject assertion, final SubLObject new_direction) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(new_direction, DIRECTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(new_direction, DIRECTION_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_SET_ASSERTION_DIRECTION, assertion, new_direction, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -503,8 +503,8 @@ public final class assertions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_set_assertion_truth(final SubLObject assertion, final SubLObject new_truth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(new_truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(new_truth, TRUTH_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_SET_ASSERTION_TRUTH, assertion, new_truth, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -536,8 +536,8 @@ public final class assertions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_set_assertion_strength(final SubLObject assertion, final SubLObject new_strength) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(new_strength, EL_STRENGTH_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(new_strength, EL_STRENGTH_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_SET_ASSERTION_STRENGTH, assertion, new_strength, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -569,8 +569,8 @@ public final class assertions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_set_assertion_variable_names(final SubLObject assertion, final SubLObject new_variable_names) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(new_variable_names, LISTP);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(new_variable_names, LISTP);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_SET_ASSERTION_VARIABLE_NAMES, assertion, new_variable_names, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -619,11 +619,11 @@ public final class assertions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_timestamp_asserted_assertion(final SubLObject assertion, final SubLObject who, final SubLObject when, final SubLObject why, final SubLObject second) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(who, ASSERTION_WHO_P);
-        SubLTrampolineFile.enforceType(when, ASSERTION_WHEN_P);
-        SubLTrampolineFile.enforceType(why, ASSERTION_WHY_P);
-        SubLTrampolineFile.enforceType(second, ASSERTION_SECOND_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(who, ASSERTION_WHO_P);
+        SubLSystemTrampolineFile.enforceType(when, ASSERTION_WHEN_P);
+        SubLSystemTrampolineFile.enforceType(why, ASSERTION_WHY_P);
+        SubLSystemTrampolineFile.enforceType(second, ASSERTION_SECOND_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_TIMESTAMP_ASSERTED_ASSERTION, assertion, who, when, why, second, UNPROVIDED, UNPROVIDED);
@@ -694,7 +694,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_arguments(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_ARGUMENTS, list(QUOTE, assertion)));
         }
@@ -702,9 +702,9 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_lookup_asserted_argument(final SubLObject assertion, final SubLObject truth, final SubLObject strength) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
-        SubLTrampolineFile.enforceType(strength, EL_STRENGTH_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(strength, EL_STRENGTH_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_LOOKUP_ASSERTED_ARGUMENT, list(QUOTE, assertion), list(QUOTE, truth), list(QUOTE, strength)));
         }
@@ -763,9 +763,9 @@ public final class assertions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_create_asserted_argument(final SubLObject assertion, final SubLObject truth, final SubLObject strength) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
-        SubLTrampolineFile.enforceType(strength, EL_STRENGTH_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(strength, EL_STRENGTH_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_CREATE_ASSERTED_ARGUMENT, assertion, truth, strength, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -798,8 +798,8 @@ public final class assertions_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_remove_asserted_argument(final SubLObject assertion, final SubLObject asserted_argument) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
-        SubLTrampolineFile.enforceType(asserted_argument, ASSERTED_ARGUMENT_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(asserted_argument, ASSERTED_ARGUMENT_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_REMOVE_ASSERTED_ARGUMENT, assertion, asserted_argument, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -834,7 +834,7 @@ public final class assertions_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_assertion_dependents(final SubLObject assertion) {
-        SubLTrampolineFile.enforceType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.enforceType(assertion, ASSERTION_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_ASSERTION_DEPENDENTS, list(QUOTE, assertion)));
         }

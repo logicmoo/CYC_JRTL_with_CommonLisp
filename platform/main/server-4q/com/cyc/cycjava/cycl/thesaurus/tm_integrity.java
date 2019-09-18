@@ -128,7 +128,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -401,112 +401,112 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tmi_fix_id(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField2();
     }
 
     public static final SubLObject tmi_fix_module(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField3();
     }
 
     public static final SubLObject tmi_fix_op(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField4();
     }
 
     public static final SubLObject tmi_fix_data(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField5();
     }
 
     public static final SubLObject tmi_fix_violator(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField6();
     }
 
     public static final SubLObject tmi_fix_v_data(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField7();
     }
 
     public static final SubLObject tmi_fix_mt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField8();
     }
 
     public static final SubLObject tmi_fix_superior(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField9();
     }
 
     public static final SubLObject tmi_fix_inferior(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField10();
     }
 
     public static final SubLObject tmi_fix_alternates(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField11();
     }
 
     public static final SubLObject tmi_fix_alist(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.getField12();
     }
 
     public static final SubLObject _csetf_tmi_fix_id(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_module(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_op(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_data(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_violator(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_v_data(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_mt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_superior(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_inferior(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField10(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_alternates(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField11(value);
     }
 
     public static final SubLObject _csetf_tmi_fix_alist(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         return v_object.setField12(value);
     }
 
@@ -643,7 +643,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
      * Place a TMI-FIX onto the free list
      */
     public static final SubLObject free_tmi_fix(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(v_object, TMI_FIX_P);
         if (NIL == free_tmi_fix_p(v_object)) {
             v_object = init_tmi_fix(v_object);
             _csetf_tmi_fix_module(v_object, $FREE);
@@ -737,7 +737,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject find_tmi_fix_by_id(SubLObject id) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(id, FIXNUMP);
+            SubLSystemTrampolineFile.checkType(id, FIXNUMP);
             return gethash(id, $tmi_fix_from_id$.getDynamicValue(thread), NIL);
         }
     }
@@ -749,8 +749,8 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
         if (alist == UNPROVIDED) {
             alist = NIL;
         }
-        SubLTrampolineFile.checkType(module, $sym51$TMI_MODULE_);
-        SubLTrampolineFile.checkType(op, $sym52$TMI_FIX_OP_);
+        SubLSystemTrampolineFile.checkType(module, $sym51$TMI_MODULE_);
+        SubLSystemTrampolineFile.checkType(op, $sym52$TMI_FIX_OP_);
         {
             SubLObject tmi_fix = make_tmi_fix_shell(UNPROVIDED);
             _csetf_tmi_fix_module(tmi_fix, module);
@@ -840,7 +840,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
             if (NIL != id) {
-                SubLTrampolineFile.checkType(id, FIXNUMP);
+                SubLSystemTrampolineFile.checkType(id, FIXNUMP);
             } else {
                 id = make_tmi_fix_id();
             }
@@ -1091,7 +1091,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_integrity_check_predicate_doneP(SubLObject predicate) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(predicate, FORT_P);
+            SubLSystemTrampolineFile.checkType(predicate, FORT_P);
             return gethash(predicate, $tm_integrity_predicate_table$.getDynamicValue(thread), UNPROVIDED);
         }
     }
@@ -1178,7 +1178,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(violation, TM_VIOLATION_P);
+            SubLSystemTrampolineFile.checkType(violation, TM_VIOLATION_P);
             {
                 SubLObject module = tm_violation_module(violation);
                 SubLObject data = tm_violation_data(violation);
@@ -1225,7 +1225,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_fix_still_relevantP(SubLObject fix) {
-        SubLTrampolineFile.checkType(fix, TMI_FIX_P);
+        SubLSystemTrampolineFile.checkType(fix, TMI_FIX_P);
         {
             SubLObject module = tmi_fix_module(fix);
             SubLObject violator = tmi_fix_violator(fix);
@@ -1342,7 +1342,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
             mt = NIL;
         }
         if (NIL != mt) {
-            SubLTrampolineFile.checkType(mt, $sym76$MT_);
+            SubLSystemTrampolineFile.checkType(mt, $sym76$MT_);
         }
         if (NIL == tm_internals.thesaurusP(mt)) {
             return tm_all_integrity_modules();
@@ -1457,7 +1457,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_unassert_assertion(SubLObject assertion) {
-        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
         return tm_integrity_unassert(assertions_high.assertion_formula(assertion), assertions_high.assertion_mt(assertion));
     }
 
@@ -1550,7 +1550,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
      * predicate is topInThesaurus, then it's the arg2.
      */
     public static final SubLObject tm_relevant_thesaurus_of_assertion(SubLObject assertion) {
-        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
         if (assertions_high.gaf_arg0(assertion) == $$topInThesaurus) {
             return assertions_high.gaf_arg2(assertion);
         } else {
@@ -1582,7 +1582,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_remove_integrity_fix(SubLObject fix) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fix, TMI_FIX_P);
+            SubLSystemTrampolineFile.checkType(fix, TMI_FIX_P);
             {
                 SubLObject id = tmi_fix_id(fix);
                 remhash(id, $tm_integrity_user_fixes_table$.getDynamicValue(thread));
@@ -1663,7 +1663,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_restricted_relation_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -1676,7 +1676,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_restricted_relation_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject thesaurus = assertions_high.assertion_mt(data);
             SubLObject formula = assertions_high.gaf_formula(data);
@@ -1706,7 +1706,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_bt_cycle_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -1721,7 +1721,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_bt_cycle_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject thesaurus = assertions_high.assertion_mt(data);
             SubLObject concept = assertions_high.gaf_arg1(data);
@@ -1763,7 +1763,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_nt_redundant_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -1778,7 +1778,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_nt_redundant_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject string = html_tm_editing.tm_format_thesaurus_assertion(data);
             tm_integrity_unassert_assertion(data);
@@ -1787,7 +1787,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_nt_redundant_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject thesaurus = assertions_high.assertion_mt(data);
             return list(tm_record_integrity_fix($TM_NT_REDUNDANT, $REMOVE, list(list($MT, thesaurus), list($DATA, data), list($VIOLATOR, data), list($V_DATA, data))));
@@ -1813,7 +1813,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_irreflexive_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -1827,7 +1827,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_irreflexive_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject string = html_tm_editing.tm_format_thesaurus_assertion(data);
             tm_integrity_unassert_assertion(data);
@@ -1901,7 +1901,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_integrity_disjoint_pt_uf_message(SubLObject data) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(data, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
             if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
                 {
                     SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -1936,7 +1936,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_disjoint_pt_uf_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject thesaurus = assertions_high.assertion_mt(data);
             SubLObject string = assertions_high.gaf_arg2(data);
@@ -1977,7 +1977,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_unique_pt_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -1990,7 +1990,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_unique_pt_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject thesaurus = assertions_high.assertion_mt(data);
             SubLObject string = assertions_high.gaf_arg2(data);
@@ -2035,7 +2035,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_unique_uf_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -2050,7 +2050,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_integrity_unique_uf_user_fixer(SubLObject data) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(data, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
                 SubLObject string = assertions_high.gaf_arg2(data);
@@ -2140,7 +2140,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
         if (NIL == mt) {
             return T;
         }
-        SubLTrampolineFile.checkType(mt, $sym76$MT_);
+        SubLSystemTrampolineFile.checkType(mt, $sym76$MT_);
         return tm_internals.tm_use_integrity_module_for_thesaurus_p(mt, $TM_UNIQUE_UF);
     }
 
@@ -2178,7 +2178,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_top_not_bt_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -2191,7 +2191,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_top_not_bt_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject thesaurus = assertions_high.assertion_mt(data);
             SubLObject v_term = assertions_high.gaf_arg1(data);
@@ -2217,7 +2217,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_uf_or_pt_stoplist_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -2230,7 +2230,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_uf_or_pt_stoplist_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject thesaurus = assertions_high.assertion_mt(data);
             SubLObject v_term = assertions_high.gaf_arg1(data);
@@ -2271,7 +2271,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_no_pt_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, CONSP);
+        SubLSystemTrampolineFile.checkType(data, CONSP);
         {
             SubLObject datum = data;
             SubLObject current = datum;
@@ -2284,8 +2284,8 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
             concept = current.first();
             current = current.rest();
             if (NIL == current) {
-                SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-                SubLTrampolineFile.checkType(concept, FORT_P);
+                SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
+                SubLSystemTrampolineFile.checkType(concept, FORT_P);
                 if ((NIL != assertions_high.valid_assertion(assertion, UNPROVIDED)) && (NIL != forts.valid_fortP(concept))) {
                     {
                         SubLObject predicate = assertions_high.gaf_arg0(assertion);
@@ -2312,7 +2312,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_integrity_no_pt_user_fixer(SubLObject data) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(data, CONSP);
+            SubLSystemTrampolineFile.checkType(data, CONSP);
             {
                 SubLObject datum = data;
                 SubLObject current = datum;
@@ -2325,8 +2325,8 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
                 concept = current.first();
                 current = current.rest();
                 if (NIL == current) {
-                    SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-                    SubLTrampolineFile.checkType(concept, FORT_P);
+                    SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
+                    SubLSystemTrampolineFile.checkType(concept, FORT_P);
                     {
                         SubLObject predicate = assertions_high.gaf_arg0(assertion);
                         SubLObject thesaurus = NIL;
@@ -2408,9 +2408,9 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_single_entry_format_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, LISTP);
-        SubLTrampolineFile.checkType(data.first(), INTEGERP);
-        SubLTrampolineFile.checkType(second(data), ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, LISTP);
+        SubLSystemTrampolineFile.checkType(data.first(), INTEGERP);
+        SubLSystemTrampolineFile.checkType(second(data), ASSERTION_P);
         {
             SubLObject datum = data;
             SubLObject current = datum;
@@ -2461,9 +2461,9 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_single_entry_format_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, LISTP);
-        SubLTrampolineFile.checkType(data.first(), INTEGERP);
-        SubLTrampolineFile.checkType(second(data), ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, LISTP);
+        SubLSystemTrampolineFile.checkType(data.first(), INTEGERP);
+        SubLSystemTrampolineFile.checkType(second(data), ASSERTION_P);
         {
             SubLObject datum = data;
             SubLObject current = datum;
@@ -2522,9 +2522,9 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_single_entry_lexpred_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, LISTP);
-        SubLTrampolineFile.checkType(data.first(), INTEGERP);
-        SubLTrampolineFile.checkType(second(data), ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, LISTP);
+        SubLSystemTrampolineFile.checkType(data.first(), INTEGERP);
+        SubLSystemTrampolineFile.checkType(second(data), ASSERTION_P);
         {
             SubLObject datum = data;
             SubLObject current = datum;
@@ -2576,9 +2576,9 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_single_entry_lexpred_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, LISTP);
-        SubLTrampolineFile.checkType(data.first(), INTEGERP);
-        SubLTrampolineFile.checkType(second(data), ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, LISTP);
+        SubLSystemTrampolineFile.checkType(data.first(), INTEGERP);
+        SubLSystemTrampolineFile.checkType(second(data), ASSERTION_P);
         {
             SubLObject datum = data;
             SubLObject current = datum;
@@ -2628,7 +2628,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_multiple_pt_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = assertions_high.assertion_mt(data);
@@ -2652,7 +2652,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_multiple_pt_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         {
             SubLObject thesaurus = assertions_high.assertion_mt(data);
             SubLObject mal_asserts = arg_type.why_not_literal_single_entry_okP(assertions_high.gaf_formula(data), TWO_INTEGER, thesaurus, data);
@@ -2709,7 +2709,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_bt_not_rt_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, ASSERTION_P);
+        SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject formula = assertions_high.gaf_formula(data);
@@ -2728,7 +2728,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_integrity_bt_not_rt_user_fixer(SubLObject data) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(data, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(data, ASSERTION_P);
             {
                 SubLObject fix_1 = NIL;
                 SubLObject fix_2 = NIL;
@@ -2871,7 +2871,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_bt_not_rt_indirect_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, LISTP);
+        SubLSystemTrampolineFile.checkType(data, LISTP);
         {
             SubLObject datum = data;
             SubLObject current = datum;
@@ -2917,7 +2917,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_bt_not_rt_indirect_user_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, LISTP);
+        SubLSystemTrampolineFile.checkType(data, LISTP);
         {
             SubLObject datum = data;
             SubLObject current = datum;
@@ -2981,7 +2981,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_pt_and_uf_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, SIGNP);
+        SubLSystemTrampolineFile.checkType(data, SIGNP);
         if (NIL != assertions_high.valid_assertion(data, UNPROVIDED)) {
             {
                 SubLObject thesaurus = tm_internals.thesaurus_name(tm_datastructures.sign_thesaurus(data));
@@ -2994,7 +2994,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_pt_and_uf_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, SIGNP);
+        SubLSystemTrampolineFile.checkType(data, SIGNP);
         {
             SubLObject thesaurus = tm_datastructures.sign_thesaurus(data);
             SubLObject string = tm_datastructures.sign_term(data);
@@ -3030,9 +3030,9 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_not_bt_not_top_message(SubLObject data) {
-        SubLTrampolineFile.checkType(data, LISTP);
-        SubLTrampolineFile.checkType(data.first(), FORT_P);
-        SubLTrampolineFile.checkType(second(data), FORT_P);
+        SubLSystemTrampolineFile.checkType(data, LISTP);
+        SubLSystemTrampolineFile.checkType(data.first(), FORT_P);
+        SubLSystemTrampolineFile.checkType(second(data), FORT_P);
         {
             SubLObject datum = data;
             SubLObject current = datum;
@@ -3058,9 +3058,9 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_integrity_not_bt_not_top_fixer(SubLObject data) {
-        SubLTrampolineFile.checkType(data, LISTP);
-        SubLTrampolineFile.checkType(data.first(), FORT_P);
-        SubLTrampolineFile.checkType(second(data), FORT_P);
+        SubLSystemTrampolineFile.checkType(data, LISTP);
+        SubLSystemTrampolineFile.checkType(data.first(), FORT_P);
+        SubLSystemTrampolineFile.checkType(second(data), FORT_P);
         {
             SubLObject datum = data;
             SubLObject current = datum;
@@ -3399,7 +3399,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
                     Errors.error($str_alt205$_a_is_not_authorized_to_perform_t);
                     return NIL;
                 }
-                SubLTrampolineFile.checkType(relation_constant, FORT_P);
+                SubLSystemTrampolineFile.checkType(relation_constant, FORT_P);
                 tm_datastructures.change_tm_value(user, $THESAURI, thesauri, UNPROVIDED);
                 {
                     SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -3425,7 +3425,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_diagnose_one_assertion(SubLObject assertion) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
             control_vars.$mapping_answer$.setDynamicValue(nconc(tm_integrity_check_assertion(assertion), tm_integrity_check_predicate(assertion), control_vars.$mapping_answer$.getDynamicValue(thread)), thread);
             return NIL;
         }
@@ -3434,7 +3434,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_diagnose_one_sign(SubLObject sign) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(sign, SIGNP);
+            SubLSystemTrampolineFile.checkType(sign, SIGNP);
             control_vars.$mapping_answer$.setDynamicValue(nconc(tm_integrity_check_concept(tm_datastructures.sign_concept(sign), tm_datastructures.sign_thesaurus(sign)), control_vars.$mapping_answer$.getDynamicValue(thread)), thread);
             return NIL;
         }
@@ -3513,7 +3513,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject result = NIL;
-                SubLTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
+                SubLSystemTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
                 {
                     SubLObject lock = $tm_relation_integrity_searches_lock$.getDynamicValue(thread);
                     SubLObject release = NIL;
@@ -3536,7 +3536,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject result = NIL;
-                SubLTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
+                SubLSystemTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
                 {
                     SubLObject lock = $tm_relation_integrity_searches_lock$.getDynamicValue(thread);
                     SubLObject release = NIL;
@@ -3599,7 +3599,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
      * (<predicate> . (<search> <status> <user>))
      */
     public static final SubLObject integrity_check_in_progress_according_to_stateP(SubLObject relation_state) {
-        SubLTrampolineFile.checkType(relation_state, LISTP);
+        SubLSystemTrampolineFile.checkType(relation_state, LISTP);
         return eql(third(relation_state), $IN_PROGRESS);
     }
 
@@ -3608,20 +3608,20 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
      * (<predicate> . (<search> <status> <user>))
      */
     public static final SubLObject integrity_check_needed_according_to_stateP(SubLObject relation_state) {
-        SubLTrampolineFile.checkType(relation_state, LISTP);
+        SubLSystemTrampolineFile.checkType(relation_state, LISTP);
         return eql(third(relation_state), $NEEDED);
     }
 
     public static final SubLObject state_list_for_relation_integrity_check(SubLObject relation_constant) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
+            SubLSystemTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
             return assoc(relation_constant, $tm_relation_integrity_searches$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED).rest();
         }
     }
 
     public static final SubLObject value_on_relation_integrity_state_list(SubLObject relation_state, SubLObject field) {
-        SubLTrampolineFile.checkType(relation_state, LISTP);
+        SubLSystemTrampolineFile.checkType(relation_state, LISTP);
         if (NIL == relation_state) {
             return NIL;
         } else
@@ -3650,7 +3650,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject result = NIL;
-                SubLTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
+                SubLSystemTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
                 {
                     SubLObject lock = $tm_relation_integrity_searches_lock$.getDynamicValue(thread);
                     SubLObject release = NIL;
@@ -3676,7 +3676,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject result = NIL;
-                SubLTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
+                SubLSystemTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
                 {
                     SubLObject lock = $tm_relation_integrity_searches_lock$.getDynamicValue(thread);
                     SubLObject release = NIL;
@@ -3701,7 +3701,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_clear_relation_integrity_search_needed(SubLObject relation) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(relation, $sym211$THESAURUS_PREDICATE_);
+            SubLSystemTrampolineFile.checkType(relation, $sym211$THESAURUS_PREDICATE_);
             {
                 SubLObject lock = $tm_relation_integrity_searches_lock$.getDynamicValue(thread);
                 SubLObject release = NIL;
@@ -3727,7 +3727,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_clear_relation_integrity_search(SubLObject relation) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(relation, $sym211$THESAURUS_PREDICATE_);
+            SubLSystemTrampolineFile.checkType(relation, $sym211$THESAURUS_PREDICATE_);
             {
                 SubLObject lock = $tm_relation_integrity_searches_lock$.getDynamicValue(thread);
                 SubLObject release = NIL;
@@ -3779,7 +3779,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(relation, $sym211$THESAURUS_PREDICATE_);
+            SubLSystemTrampolineFile.checkType(relation, $sym211$THESAURUS_PREDICATE_);
             {
                 SubLObject user_value = (NIL == user) ? ((SubLObject) ($$$Unknown)) : user;
                 SubLObject lock = $tm_relation_integrity_searches_lock$.getDynamicValue(thread);
@@ -3819,7 +3819,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(relation, $sym211$THESAURUS_PREDICATE_);
+            SubLSystemTrampolineFile.checkType(relation, $sym211$THESAURUS_PREDICATE_);
             {
                 SubLObject lock = $tm_relation_integrity_searches_lock$.getDynamicValue(thread);
                 SubLObject release = NIL;
@@ -3916,7 +3916,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
      * Clear the integrity violation search for THESAURUS-or-RELATION, if any
      */
     public static final SubLObject tm_clear_integrity_search(SubLObject thesaurus_or_relation) {
-        SubLTrampolineFile.checkType(thesaurus_or_relation, FORT_P);
+        SubLSystemTrampolineFile.checkType(thesaurus_or_relation, FORT_P);
         if (NIL != tm_internals.thesaurus_predicateP(thesaurus_or_relation)) {
             return tm_clear_relation_integrity_search(thesaurus_or_relation);
         } else
@@ -3935,7 +3935,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_clear_thesaurus_integrity_search(SubLObject thesaurus) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus, $sym224$THESAURUS_);
+            SubLSystemTrampolineFile.checkType(thesaurus, $sym224$THESAURUS_);
             {
                 SubLObject lock = $tm_integrity_searches_lock$.getDynamicValue(thread);
                 SubLObject release = NIL;
@@ -4000,7 +4000,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
             {
                 SubLObject result = NIL;
                 SubLObject lock = $tm_integrity_searches_lock$.getDynamicValue(thread);
@@ -4038,11 +4038,11 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
                 SubLObject assertion_table = NIL;
                 SubLObject v_search = NIL;
                 SubLObject thesauri = NIL;
-                SubLTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
+                SubLSystemTrampolineFile.checkType(relation_constant, $sym211$THESAURUS_PREDICATE_);
                 if (thesaurus.eql($ALL)) {
                     thesauri = tm_internals.all_thesauri();
                 } else {
-                    SubLTrampolineFile.checkType(thesaurus, $sym224$THESAURUS_);
+                    SubLSystemTrampolineFile.checkType(thesaurus, $sym224$THESAURUS_);
                     thesauri = list(thesaurus);
                 }
                 tm_clear_unique_violations_of_object(relation_constant);
@@ -4097,7 +4097,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_search, SEARCH_STRUC_P);
+            SubLSystemTrampolineFile.checkType(v_search, SEARCH_STRUC_P);
             {
                 SubLObject reason = NIL;
                 SubLObject v_answer = NIL;
@@ -4443,7 +4443,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
     public static final SubLObject do_integrity_initialization_search(SubLObject v_search) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_search, SEARCH_STRUC_P);
+            SubLSystemTrampolineFile.checkType(v_search, SEARCH_STRUC_P);
             {
                 SubLObject reason = NIL;
                 SubLObject result = NIL;
@@ -4501,7 +4501,7 @@ public final class tm_integrity extends SubLTranslatedFile implements V02 {
      * START-CONCEPT is a concept at which to start the search.
      */
     public static final SubLObject tm_new_integrity_initialization_search(SubLObject thesaurus, SubLObject start_concept) {
-        SubLTrampolineFile.checkType(thesaurus, FORT_P);
+        SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
         {
             SubLObject v_search = tm_new_integrity_initialization_search_int(thesaurus, start_concept);
             return v_search;

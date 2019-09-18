@@ -126,7 +126,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class cb_partitions extends SubLTranslatedFile {
     public static final SubLFile me = new cb_partitions();
@@ -727,7 +727,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject cb_set_partition_save_personal_directory(final SubLObject part_save, final SubLObject directory) {
         assert NIL != cb_partition_save_p(part_save) : "cb_partitions.cb_partition_save_p(part_save) " + "CommonSymbols.NIL != cb_partitions.cb_partition_save_p(part_save) " + part_save;
-        if (((NIL != directory) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(directory))) {
+        if (((NIL != directory) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(directory))) {
             throw new AssertionError(directory);
         }
         _csetf_cb_part_save_personal_directory(part_save, directory);
@@ -736,7 +736,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject cb_set_partition_save_public_directory(final SubLObject part_save, final SubLObject directory) {
         assert NIL != cb_partition_save_p(part_save) : "cb_partitions.cb_partition_save_p(part_save) " + "CommonSymbols.NIL != cb_partitions.cb_partition_save_p(part_save) " + part_save;
-        if (((NIL != directory) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(directory))) {
+        if (((NIL != directory) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(directory))) {
             throw new AssertionError(directory);
         }
         _csetf_cb_part_save_public_directory(part_save, directory);

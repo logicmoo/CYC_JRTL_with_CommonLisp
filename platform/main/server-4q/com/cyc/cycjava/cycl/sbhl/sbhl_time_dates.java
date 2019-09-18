@@ -53,7 +53,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1401,11 +1401,11 @@ public final class sbhl_time_dates extends SubLTranslatedFile {
     }
 
     public static SubLObject init_sbhl_time_dates_file() {
-        deflexical("*SBHL-TIME-DATE-GRAPH*", SubLTrampolineFile.maybeDefault($sbhl_time_date_graph$, $sbhl_time_date_graph$, () -> binary_tree.new_avl_tree($sym1$SBHL_DATE_)));
-        deflexical("*SBHL-TIME-DATE-OBJECT-PREDICATE-LINKS*", SubLTrampolineFile.maybeDefault($sbhl_time_date_object_predicate_links$, $sbhl_time_date_object_predicate_links$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$1000)));
-        deflexical("*SBHL-TIME-DATE-OBJECT-INVERSE-LINKS*", SubLTrampolineFile.maybeDefault($sbhl_time_date_object_inverse_links$, $sbhl_time_date_object_inverse_links$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$1000)));
-        deflexical("*SBHL-TIME-OBJECT-DATE-PREDICATE-LINKS*", SubLTrampolineFile.maybeDefault($sbhl_time_object_date_predicate_links$, $sbhl_time_object_date_predicate_links$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$1000)));
-        deflexical("*SBHL-TIME-OBJECT-DATE-INVERSE-LINKS*", SubLTrampolineFile.maybeDefault($sbhl_time_object_date_inverse_links$, $sbhl_time_object_date_inverse_links$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$1000)));
+        deflexical("*SBHL-TIME-DATE-GRAPH*", SubLSystemTrampolineFile.maybeDefault($sbhl_time_date_graph$, $sbhl_time_date_graph$, () -> binary_tree.new_avl_tree($sym1$SBHL_DATE_)));
+        deflexical("*SBHL-TIME-DATE-OBJECT-PREDICATE-LINKS*", SubLSystemTrampolineFile.maybeDefault($sbhl_time_date_object_predicate_links$, $sbhl_time_date_object_predicate_links$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$1000)));
+        deflexical("*SBHL-TIME-DATE-OBJECT-INVERSE-LINKS*", SubLSystemTrampolineFile.maybeDefault($sbhl_time_date_object_inverse_links$, $sbhl_time_date_object_inverse_links$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$1000)));
+        deflexical("*SBHL-TIME-OBJECT-DATE-PREDICATE-LINKS*", SubLSystemTrampolineFile.maybeDefault($sbhl_time_object_date_predicate_links$, $sbhl_time_object_date_predicate_links$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$1000)));
+        deflexical("*SBHL-TIME-OBJECT-DATE-INVERSE-LINKS*", SubLSystemTrampolineFile.maybeDefault($sbhl_time_object_date_inverse_links$, $sbhl_time_object_date_inverse_links$, () -> dictionary.new_dictionary(symbol_function(EQL), $int$1000)));
         return NIL;
     }
 

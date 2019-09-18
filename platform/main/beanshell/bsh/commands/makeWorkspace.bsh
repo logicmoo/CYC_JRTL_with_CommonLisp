@@ -15,6 +15,10 @@ import bsh.ClassPathException;
 import bsh.util.JConsole;
 import bsh.util.NameCompletionTable;
 
+makeWorkspace()
+{
+	makeWorkspace( "makeWorkspace"+java.time.LocalDate.now());
+}
 makeWorkspace( String name )
 {
     if ( bsh.system.desktop == void ) {
@@ -123,18 +127,25 @@ makeWorkspace( String name )
     this.sysErr = System.err;
 
     captureSysIO() {
-        super.haveSysIO = true; // old scoping rules
+    	if(super.haveSysIO) return;
+		this.sysIn = System.in;
+		this.sysOut = System.out;
+		this.sysErr = System.err;
+    	super.haveSysIO = true; // old scoping rules
         System.setIn( console.getInputStream() );
         System.setOut( console.getOut() );
         System.setErr( console.getErr() );
     }
 
     returnSysIO() {
+    	if(!super.haveSysIO) return;
         super.haveSysIO = false; // old scoping rules
         System.setIn( sysIn );
         System.setOut( sysOut );
         System.setErr( sysErr );
     }
+
+    BeanShellCntrl.addConsole(this, this.console);
 
     return this;
 }

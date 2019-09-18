@@ -46,7 +46,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -280,10 +280,10 @@ public final class rdf_literal extends SubLTranslatedFile {
 
     public static SubLObject new_rdf_literal(final SubLObject utf8_lexical_form, final SubLObject language_tag, final SubLObject datatype) {
         assert NIL != stringp(utf8_lexical_form) : "Types.stringp(utf8_lexical_form) " + "CommonSymbols.NIL != Types.stringp(utf8_lexical_form) " + utf8_lexical_form;
-        if (((NIL != language_tag) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(language_tag))) {
+        if (((NIL != language_tag) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(language_tag))) {
             throw new AssertionError(language_tag);
         }
-        if (((NIL != datatype) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_literal_datatype_p(datatype))) {
+        if (((NIL != datatype) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_literal_datatype_p(datatype))) {
             throw new AssertionError(datatype);
         }
         final SubLObject literal = make_rdf_literal(UNPROVIDED);

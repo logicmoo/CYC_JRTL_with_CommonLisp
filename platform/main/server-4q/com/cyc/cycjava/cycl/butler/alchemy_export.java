@@ -168,7 +168,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1168,7 +1168,7 @@ public final class alchemy_export extends SubLTranslatedFile {
             max_number = NIL;
         }
         check_assertion_selection_criterion(criterion);
-        if (((NIL != max_number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(max_number))) {
+        if (((NIL != max_number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(max_number))) {
             throw new AssertionError(max_number);
         }
         return find_assertions_by_criterion_no_checks(criterion, max_number);
@@ -2455,10 +2455,10 @@ public final class alchemy_export extends SubLTranslatedFile {
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
-        if (((NIL != rules_max_number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(rules_max_number))) {
+        if (((NIL != rules_max_number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(rules_max_number))) {
             throw new AssertionError(rules_max_number);
         }
-        if (((NIL != training_max_number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(training_max_number))) {
+        if (((NIL != training_max_number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(training_max_number))) {
             throw new AssertionError(training_max_number);
         }
         final SubLObject list_var = evidence_max_numbers;
@@ -2538,11 +2538,11 @@ public final class alchemy_export extends SubLTranslatedFile {
 
     public static SubLObject alchemy_export_gather_training_rules_and_gafs(final SubLObject training_criterion, final SubLObject training_max_number, final SubLObject rules_criterion, final SubLObject rules_max_number) {
         assert NIL != consp(training_criterion) : "Types.consp(training_criterion) " + "CommonSymbols.NIL != Types.consp(training_criterion) " + training_criterion;
-        if (((NIL != training_max_number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(training_max_number))) {
+        if (((NIL != training_max_number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(training_max_number))) {
             throw new AssertionError(training_max_number);
         }
         assert NIL != consp(rules_criterion) : "Types.consp(rules_criterion) " + "CommonSymbols.NIL != Types.consp(rules_criterion) " + rules_criterion;
-        if (((NIL != rules_max_number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(rules_max_number))) {
+        if (((NIL != rules_max_number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(rules_max_number))) {
             throw new AssertionError(rules_max_number);
         }
         SubLObject training_gafs = NIL;

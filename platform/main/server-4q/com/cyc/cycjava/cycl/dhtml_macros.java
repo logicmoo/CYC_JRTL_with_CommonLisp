@@ -61,7 +61,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -1217,8 +1217,8 @@ public final class dhtml_macros extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Return the DHTML encoding of the VISIBILITY / FLOW-TYPE combination.")
 	public static final SubLObject dhtml_encode_visibility_alt(SubLObject visibility, SubLObject flow_type) {
-		SubLTrampolineFile.checkType(visibility, VISIBILITY_P);
-		SubLTrampolineFile.checkType(flow_type, FLOW_TYPE_P);
+		SubLSystemTrampolineFile.checkType(visibility, VISIBILITY_P);
+		SubLSystemTrampolineFile.checkType(flow_type, FLOW_TYPE_P);
 		if ($INVISIBLE == visibility) {
 			return $$$none;
 		} else {
@@ -1386,7 +1386,7 @@ public final class dhtml_macros extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Returns the ID for showing the object with OBJECT-ID")
 	public static final SubLObject dhtml_visibility_generate_show_object_id_alt(SubLObject object_id) {
-		SubLTrampolineFile.checkType(object_id, STRINGP);
+		SubLSystemTrampolineFile.checkType(object_id, STRINGP);
 		return cconcatenate(object_id, $str_alt83$_show_button);
 	}
 
@@ -1404,7 +1404,7 @@ public final class dhtml_macros extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "Returns the ID for hiding the object with OBJECT-ID")
 	public static final SubLObject dhtml_visibility_generate_hide_object_id_alt(SubLObject object_id) {
-		SubLTrampolineFile.checkType(object_id, STRINGP);
+		SubLSystemTrampolineFile.checkType(object_id, STRINGP);
 		return cconcatenate(object_id, $str_alt84$_hide_button);
 	}
 
@@ -1981,7 +1981,7 @@ public final class dhtml_macros extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject dhtml_visibility_generate_js_for_toggle_alt(SubLObject object_id) {
-		SubLTrampolineFile.checkType(object_id, STRING);
+		SubLSystemTrampolineFile.checkType(object_id, STRING);
 		return cconcatenate($str_alt120$toggleVisibility__, new SubLObject[] { object_id, $str_alt81$___ });
 	}
 

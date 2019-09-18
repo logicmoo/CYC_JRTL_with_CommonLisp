@@ -42,7 +42,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1133,13 +1133,13 @@ public final class lexicon_vars extends SubLTranslatedFile {
         defparameter("*USE-LEXICAL-ABBREVIATIONS?*", T);
         defparameter("*INITIALIZE-NL-TRIE-CONTROL-VARS?*", T);
         defparameter("*WN-POS-CYC-POS-MAP*", $list7);
-        deflexical("*SEMTRANS-PREDS*", SubLTrampolineFile.maybeDefault($semtrans_preds$, $semtrans_preds$, () -> new_lex_pred_set()));
+        deflexical("*SEMTRANS-PREDS*", SubLSystemTrampolineFile.maybeDefault($semtrans_preds$, $semtrans_preds$, () -> new_lex_pred_set()));
         deflexical("*MULTI-WORD-PREDS*", new_lex_pred_set());
         defparameter("*SEMANTIC-PREDICATES-EXCLUDED-FROM-LEXICAL-LOOKUP*", set_utilities.construct_set_from_list($list16, UNPROVIDED, UNPROVIDED));
-        deflexical("*ABBREVIATION-PREDICATES*", SubLTrampolineFile.maybeDefault($abbreviation_predicates$, $abbreviation_predicates$, () -> new_lex_pred_set()));
-        deflexical("*ACRONYM-PREDICATES*", SubLTrampolineFile.maybeDefault($acronym_predicates$, $acronym_predicates$, () -> new_lex_pred_set()));
-        deflexical("*PROPER-NAME-PREDICATES-FROM-KB*", SubLTrampolineFile.maybeDefault($proper_name_predicates_from_kb$, $proper_name_predicates_from_kb$, () -> new_lex_pred_set()));
-        deflexical("*TERM-STRINGS-PREDS*", SubLTrampolineFile.maybeDefault($term_strings_preds$, $term_strings_preds$, () -> new_lex_pred_set()));
+        deflexical("*ABBREVIATION-PREDICATES*", SubLSystemTrampolineFile.maybeDefault($abbreviation_predicates$, $abbreviation_predicates$, () -> new_lex_pred_set()));
+        deflexical("*ACRONYM-PREDICATES*", SubLSystemTrampolineFile.maybeDefault($acronym_predicates$, $acronym_predicates$, () -> new_lex_pred_set()));
+        deflexical("*PROPER-NAME-PREDICATES-FROM-KB*", SubLSystemTrampolineFile.maybeDefault($proper_name_predicates_from_kb$, $proper_name_predicates_from_kb$, () -> new_lex_pred_set()));
+        deflexical("*TERM-STRINGS-PREDS*", SubLSystemTrampolineFile.maybeDefault($term_strings_preds$, $term_strings_preds$, () -> new_lex_pred_set()));
         deflexical("*HEAD-POSITION-PRED-CACHED?-CACHING-STATE*", NIL);
         deflexical("*VERB-FRAMES-CACHING-STATE*", NIL);
         defparameter("*NOUN-PREDICATES*", $list36);
@@ -1155,10 +1155,10 @@ public final class lexicon_vars extends SubLTranslatedFile {
         deflexical("*ALL-LEXICON-PREDICATES*", NIL);
         defconstant("*TOP-LEVEL-NL-PRED*", $$wordStrings);
         deflexical("*ROOT-FORM-SPEECH-PARTS*", $list50);
-        deflexical("*LEXICON-CACHE-CODE-REVISION*", SubLTrampolineFile.maybeDefault($lexicon_cache_code_revision$, $lexicon_cache_code_revision$, NIL));
-        deflexical("*MORPHOLOGY-CODE-REVISION*", SubLTrampolineFile.maybeDefault($morphology_code_revision$, $morphology_code_revision$, NIL));
-        deflexical("*NL-TRIE-CODE-REVISION*", SubLTrampolineFile.maybeDefault($nl_trie_code_revision$, $nl_trie_code_revision$, NIL));
-        deflexical("*NOOP-UPDATES-FOR-LEXICON-GLOBALS*", SubLTrampolineFile.maybeDefault($noop_updates_for_lexicon_globals$, $noop_updates_for_lexicon_globals$, NIL));
+        deflexical("*LEXICON-CACHE-CODE-REVISION*", SubLSystemTrampolineFile.maybeDefault($lexicon_cache_code_revision$, $lexicon_cache_code_revision$, NIL));
+        deflexical("*MORPHOLOGY-CODE-REVISION*", SubLSystemTrampolineFile.maybeDefault($morphology_code_revision$, $morphology_code_revision$, NIL));
+        deflexical("*NL-TRIE-CODE-REVISION*", SubLSystemTrampolineFile.maybeDefault($nl_trie_code_revision$, $nl_trie_code_revision$, NIL));
+        deflexical("*NOOP-UPDATES-FOR-LEXICON-GLOBALS*", SubLSystemTrampolineFile.maybeDefault($noop_updates_for_lexicon_globals$, $noop_updates_for_lexicon_globals$, NIL));
         defparameter("*LEXICON-GLOBAL-NOOP-DONE-VALUES*", NIL);
         defparameter("*MWP-REFORMULATE-RESULTS?*", NIL);
         defparameter("*MWP-TRIEFY-RESULTS?*", NIL);

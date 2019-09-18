@@ -65,7 +65,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class tcp_server_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new tcp_server_utilities();
@@ -723,8 +723,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         Tcp.$remote_address$ = defparameter("*REMOTE-ADDRESS*", NIL);
         Tcp.$remote_hostname$ = defparameter("*REMOTE-HOSTNAME*", NIL);
         defconstant("*DTP-TCP-SERVER*", TCP_SERVER);
-        deflexical("*ALL-TCP-SERVERS*", SubLTrampolineFile.maybeDefault($all_tcp_servers$, $all_tcp_servers$, NIL));
-        deflexical("*TCP-SERVER-TYPE-TABLE*", SubLTrampolineFile.maybeDefault($tcp_server_type_table$, $tcp_server_type_table$, NIL));
+        deflexical("*ALL-TCP-SERVERS*", SubLSystemTrampolineFile.maybeDefault($all_tcp_servers$, $all_tcp_servers$, NIL));
+        deflexical("*TCP-SERVER-TYPE-TABLE*", SubLSystemTrampolineFile.maybeDefault($tcp_server_type_table$, $tcp_server_type_table$, NIL));
         return NIL;
     }
 

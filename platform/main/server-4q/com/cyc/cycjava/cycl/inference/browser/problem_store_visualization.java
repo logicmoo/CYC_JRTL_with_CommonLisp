@@ -118,7 +118,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2226,7 +2226,7 @@ public final class problem_store_visualization extends SubLTranslatedFile {
 
     public static SubLObject init_problem_store_visualization_file() {
         defconstant("*DTP-PROBLEM-LAYOUT*", PROBLEM_LAYOUT);
-        deflexical("*OCTANT-LOCATIONS*", SubLTrampolineFile.maybeDefault($octant_locations$, $octant_locations$, NIL));
+        deflexical("*OCTANT-LOCATIONS*", SubLSystemTrampolineFile.maybeDefault($octant_locations$, $octant_locations$, NIL));
         defparameter("*HTML-PROBLEM-LAYOUT-VISUALIZATION-SCRIPT-TEMPLATE*", $str78$_script_type__text_javascript____);
         deflexical("*HTML-PROBLEM-LAYOUT-VISUALIZATION-TABLE-STYLE-CACHING-STATE*", NIL);
         defparameter("*CB-PROBLEM-STORE-DEFAULT-ZOOM-LEVELS*", $list130);
@@ -2239,7 +2239,7 @@ public final class problem_store_visualization extends SubLTranslatedFile {
         deflexical("*INFERENCE-MONITOR-MAX-CELL-SIZE*", FIFTEEN_INTEGER);
         deflexical("*COMPUTE-GRID-SIZE-FOR-INFERENCE-MONITOR-CACHING-STATE*", NIL);
         deflexical("*HTML-PROBLEM-LAYOUT-VISUALIZATION-FOR-MONITOR-TABLE-STYLE-CACHING-STATE*", NIL);
-        deflexical("*CB-PROBLEM-STORE-LAYOUT-TABLE*", SubLTrampolineFile.maybeDefault($cb_problem_store_layout_table$, $cb_problem_store_layout_table$, () -> cache.new_cache(TEN_INTEGER, symbol_function(EQ))));
+        deflexical("*CB-PROBLEM-STORE-LAYOUT-TABLE*", SubLSystemTrampolineFile.maybeDefault($cb_problem_store_layout_table$, $cb_problem_store_layout_table$, () -> cache.new_cache(TEN_INTEGER, symbol_function(EQ))));
         return NIL;
     }
 

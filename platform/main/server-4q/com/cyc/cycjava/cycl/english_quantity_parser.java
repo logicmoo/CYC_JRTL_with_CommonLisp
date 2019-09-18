@@ -66,7 +66,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1029,7 +1029,7 @@ public final class english_quantity_parser extends SubLTranslatedFile {
     }
 
     public static SubLObject init_english_quantity_parser_file() {
-        deflexical("*ENGLISH-UNITS-OF-MEASURE*", SubLTrampolineFile.maybeDefault($english_units_of_measure$, $english_units_of_measure$, $UNINITIALIZED));
+        deflexical("*ENGLISH-UNITS-OF-MEASURE*", SubLSystemTrampolineFile.maybeDefault($english_units_of_measure$, $english_units_of_measure$, $UNINITIALIZED));
         defparameter("*UNIT-OF-MEASURE*", finite_state_transducer.new_finite_state_transducer(ZERO_INTEGER, $list30, list(listS(ZERO_INTEGER, symbol_function($sym31$UNIT_OF_MEASURE_LITERAL_), $list32)), symbol_function(BUILD_UNIT_OF_MEASURE)));
         defparameter("*DOLLAR-SIGN-PLUS-NUMBER*", finite_state_transducer.new_finite_state_transducer(ZERO_INTEGER, $list40, list(listS(ZERO_INTEGER, symbol_function($sym41$DOLLAR_SIGN_LITERAL_), $list32), listS(ONE_INTEGER, symbol_function($sym42$NUMBER_SIGN_), $list43)), symbol_function(BUILD_DOLLAR_SIGN_PLUS_NUMBER)));
         defparameter("*UNARY-QUANTITY*", finite_state_transducer.new_finite_state_transducer(ZERO_INTEGER, $list40, list(listS(ZERO_INTEGER, symbol_function($sym45$INTERVAL_SIGN_), $list32), listS(ZERO_INTEGER, symbol_function($sym42$NUMBER_SIGN_), $list32), listS(ONE_INTEGER, symbol_function($sym46$UNIT_OF_MEASURE_SIGN_), $list43)), symbol_function(BUILD_UNARY_QUANTITY_PHRASE)));

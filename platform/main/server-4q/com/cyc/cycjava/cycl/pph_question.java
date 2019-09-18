@@ -112,7 +112,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2722,7 +2722,7 @@ public final class pph_question extends SubLTranslatedFile {
                 cdolist_list_var = cdolist_list_var.rest();
                 var2 = cdolist_list_var.first();
             } 
-            SubLTrampolineFile.enforceType(map, ALIST_P);
+            SubLSystemTrampolineFile.enforceType(map, ALIST_P);
             final SubLObject _prev_bind_0 = pph_vars.$pph_term_paraphrase_map$.currentBinding(thread);
             try {
                 pph_vars.$pph_term_paraphrase_map$.bind(map, thread);

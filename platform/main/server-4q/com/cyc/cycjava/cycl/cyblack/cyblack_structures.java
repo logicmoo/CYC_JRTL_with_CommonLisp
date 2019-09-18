@@ -38,7 +38,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -198,112 +198,112 @@ public final class cyblack_structures extends SubLTranslatedFile implements V02 
     }
 
     public static final SubLObject eks_lock(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField2();
     }
 
     public static final SubLObject eks_internals(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField3();
     }
 
     public static final SubLObject eks_knowledge_source(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField4();
     }
 
     public static final SubLObject eks_external_module(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField5();
     }
 
     public static final SubLObject eks_cyblack_application(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField6();
     }
 
     public static final SubLObject eks_precondition_pattern(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField7();
     }
 
     public static final SubLObject eks_uncompiled_precondition_pattern(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField8();
     }
 
     public static final SubLObject eks_precondition_datatypes(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField9();
     }
 
     public static final SubLObject eks_stimulation_function(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField10();
     }
 
     public static final SubLObject eks_post_proposal_function(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField11();
     }
 
     public static final SubLObject eks_generate_ksi_function(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.getField12();
     }
 
     public static final SubLObject _csetf_eks_lock(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_eks_internals(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_eks_knowledge_source(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_eks_external_module(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_eks_cyblack_application(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_eks_precondition_pattern(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_eks_uncompiled_precondition_pattern(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_eks_precondition_datatypes(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_eks_stimulation_function(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField10(value);
     }
 
     public static final SubLObject _csetf_eks_post_proposal_function(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField11(value);
     }
 
     public static final SubLObject _csetf_eks_generate_ksi_function(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_P);
         return v_object.setField12(value);
     }
 

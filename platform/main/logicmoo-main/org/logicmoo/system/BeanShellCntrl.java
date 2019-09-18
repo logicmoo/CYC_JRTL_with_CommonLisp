@@ -11,11 +11,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Reader;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -23,7 +23,6 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-
 
 import org.armedbear.j.Log;
 import org.armedbear.j.ReaderThread;
@@ -43,13 +42,16 @@ import org.logicmoo.bb.BeansContextListener;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.util.IsolatedClassLoader;
+import com.cyc.tool.subl.util.SafeRunnable;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 
 import bsh.BshClassManager;
 import bsh.CallStack;
+import bsh.ConsoleInterface;
 import bsh.EvalError;
+import bsh.Interpreter.Console;
 import bsh.NameSpace;
 import bsh.Primitive;
 import bsh.SimpleNode;
@@ -57,6 +59,7 @@ import bsh.This;
 import bsh.UtilEvalError;
 import bsh.util.JConsole;
 import bsh.util.NameCompletion;
+import net.wimpi.telnetd.net.Connection;
 
 //import org.appdapter.gui.browse.Utility;
 //import static org.slf4j.spi.LocationAwareLogger.log;
@@ -68,31 +71,60 @@ public class BeanShellCntrl extends Startup {
 
 	public static void main(String[] args0) throws Throwable {
 		try {
+
 			String[] args1 = extractOptions(BeanShellCntrl.class, args0);
-			main0(args1);
+			//main0(args1);
+			Thread.currentThread().wait();
 		} catch (Throwable e) {
-			e.printStackTrace();
+			printStackTrace(e);
 			throw e;
 			// TODO: handle exception
 		}
+		return;
 	}
 
-	public static void addConsole(bsh.This thiz, final JConsole console) throws UtilEvalError, EvalError, InterruptedException {
-		Object o = thiz.getNameSpace().getVariable("interpreter", false);
+	static {
+		SystemCurrent.setupIO();
+	}
+
+	public static void addConsole(bsh.This thiz, final JConsole console) throws UtilEvalError, EvalError, InterruptedException, IOException {
+		final NameSpace nameSpace = thiz.getNameSpace();
 		String myName = null;
-		o = thiz.getNameSpace().getVariable("name", false);
+		Object o = nameSpace.getVariable("name", false);
 		if (o instanceof String) {
 			myName = (String) o;
 			addObject(myName, thiz);
 			String myNameL = myName.toLowerCase();
-			System.err.print("");
 			console.setName(myName);
 			if (myNameL.startsWith("system io")) {
-				final PrintStream out0 = console.getOut();
-				SystemCurrent.cantSetOut = true;
-				System.setOut(out0);
-				System.setIn(console.getInputStream());
-				System.setErr(console.getErr());
+				// SystemCurrent.takeOwnerShip();
+				//				final PrintStream out0 = console.getOut();
+				//				//	SystemCurrent.originalSystemOut = out0;
+				//				SystemCurrent.cantSetOut = true;
+				//				//	SystemCurrent.originalSystemIn = console.getInputStream();
+				//				SystemCurrent.addErrorTee(console.getErr());
+				SystemCurrent.registerAsInteractive(myName, console.getInputStream(), console.getOut(), console.getErr());
+				maybeCapture(thiz);
+			} else if (myNameL.startsWith("bsh workspace")) {
+				standardConsoleImports(nameSpace);
+				o = nameSpace.getVariable("interpreter", false);
+				if (o instanceof bsh.Interpreter) {
+					final NameSpace nameSpace2 = ((bsh.Interpreter) o).getNameSpace();
+					if (nameSpace2 != nameSpace) {
+						standardConsoleImports(nameSpace2);
+					}
+				}
+
+				//				SystemCurrent.attachConsole(false);
+				//				SystemCurrent.takeOwnerShip();
+				//				final PrintStream out0 = console.getOut();
+				//				SystemCurrent.originalSystemOut = out0;
+				//				SystemCurrent.cantSetOut = true;
+				//				SystemCurrent.originalSystemIn = console.getInputStream();
+				//				SystemCurrent.originalSystemErr = console.getErr();
+				//				maybeCapture(thiz);
+				SystemCurrent.registerAsInteractive(myName, console.getInputStream(), console.getOut(), console.getErr());
+				maybeCapture(thiz);
 			} else if (myNameL.contains("prolog")) {
 				/// console.setNameCompletion(new LispNameCompletion());
 				connectProlog(myName, console);
@@ -102,6 +134,8 @@ public class BeanShellCntrl extends Startup {
 				//maybeCapture(thiz);
 				connectLisp(myName, console);
 				return;
+			} else {
+
 			}
 		}
 		// Interpreter interpreter = null;
@@ -121,14 +155,18 @@ public class BeanShellCntrl extends Startup {
 	public static void maybeCapture(bsh.This thiz) {
 		try {
 			if (needIOConsole) {
-				needIOConsole = false;
-				thiz.invokeMethod("captureSysIO", new Object[0]);
+				// needIOConsole = false;
+				//	thiz.invokeMethod("captureSysIO", new Object[0]);
 			}
-		} catch (EvalError e) {
+		} catch (Throwable e) {
 			MsgBox.error(e);
 			throw new RuntimeException(e);
 		}
-		System.out.println("Hi");
+		System.out.println("Hi System.out");
+		System.err.println("Hi System.err");
+		SystemCurrent.printErr("Hi printErr");
+		SystemCurrent.printErr("\n");
+		SystemCurrent.err.println("Hi SystemCurrent.err");
 	}
 
 	public static JConsole connectProlog(String name, final JConsole console0) {
@@ -154,7 +192,7 @@ public class BeanShellCntrl extends Startup {
 			ReaderThread stdoutThread = new ReaderThread(p.getInputStream()) {
 				@Override
 				public void update(String s) {
-					console.print(s);
+					console.println(s);
 				}
 			};
 			ReaderThread stdinThread = new ReaderThread(console.getInputStream()) {
@@ -164,7 +202,7 @@ public class BeanShellCntrl extends Startup {
 						stdin.write(s);
 						stdin.flush();
 					} catch (IOException e) {
-						e.printStackTrace();
+						printStackTrace(e);
 						throw doThrow(e);
 					}
 				}
@@ -218,41 +256,64 @@ public class BeanShellCntrl extends Startup {
 			return true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			printStackTrace(e);
 		}
 		return false;
 	}
 
 	@LispMethod
-	public static void bsh_desktop() {
-		if (noBSHGUI || noGUI)
+	public static synchronized void bsh_desktop() {
+		if (began_bsh_desktop)
 			return;
+		began_bsh_desktop = true;
+		PrintStream out = getNoticeStream();
+		bsh.Interpreter ensureBSH = ensureBSH();
 		try {
-			if (calledStartDmiles)
+			if (ensureBSH == null) {
+				out.println("bsh_desktop: null" + desktopStatement);
+				began_bsh_desktop = false;
 				return;
-			calledStartDmiles = true;
-			bsh.Interpreter ensureBSH = ensureBSH();
+			}
 			//ensureBSH.eval("startDmiles()");
 			// BeanShellCntrl.setSingleton(interpreter);
 			ensureBSH.setShowResults(true);
-			// BeanShellCntrl.describeStreams();
-			// new Thread(interpreter).start();
-			// interpreter.get(name)
-			SwingUtilities.invokeLater(new Runnable() {
+			if (noGUI) {
+				out.println("bsh_desktop: noGUI " + desktopStatement);
+				began_bsh_desktop = false;
+				return;
+			}
+			out.println("Queued:" + desktopStatement);
+
+			Thread t = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
-						ensureBSH.eval("sdesktop()");
-					} catch (EvalError e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						out.println("Begin:" + desktopStatement);
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									ensureBSH.eval(desktopStatement);
+									out.println("Started: " + desktopStatement);
+								} catch (Throwable e) {
+									began_bsh_desktop = false;
+									printStackTrace(e);
+									out.println("Error:" + desktopStatement + e);
+								}
+							}
+						});
+					} catch (Throwable e) {
+						began_bsh_desktop = false;
+						printStackTrace(e);
 					}
 				}
 			});
+			t.start();
+			//t.join();
 		} catch (Throwable e) {
-			calledStartDmiles = false;
-			MsgBox.error(e);
+			began_bsh_desktop = false;
+			printStackTrace(e);
 		}
+		return;
 	}
 
 	@LispMethod
@@ -324,7 +385,7 @@ public class BeanShellCntrl extends Startup {
 		try {
 			interp.run();
 		} catch (Exception e) {
-			e.printStackTrace();
+			printStackTrace(e);
 			// TODO: handle exception
 		}
 		return true;
@@ -332,8 +393,8 @@ public class BeanShellCntrl extends Startup {
 
 	public static Object findDesktopPane(Object thiz) {
 		synchronized (StartupLock) {
-			if (desktop != null)
-				return desktop;
+			if (desktop_pain_object_instance != null)
+				return desktop_pain_object_instance;
 		}
 		NameSpace ns = ((This) thiz).getNameSpace();
 		Object pane;
@@ -344,7 +405,7 @@ public class BeanShellCntrl extends Startup {
 				if (container != null) {
 					return container;
 				}
-				pane = desktop = new JDesktopPane();
+				pane = desktop_pain_object_instance = new JDesktopPane();
 				ns.setVariable("pane", pane, false);
 			}
 			return pane;
@@ -358,9 +419,12 @@ public class BeanShellCntrl extends Startup {
 		synchronized (StartupLock) {
 			if (bshInterpreter == null) {
 				try {
-					bshInterpreter = new bsh.Interpreter();
-					bshMasterNamespace = bshInterpreter.getNameSpace();
 
+					bshInterpreter = new bsh.Interpreter(new Console(threadLocalConsole), false, null, null, "bshInterpreter");
+					bshMasterNamespace = bshInterpreter.getNameSpace();
+					standardConsoleImports(bshMasterNamespace);
+					bshInterpreter.set("conns", shells);
+					SystemCurrent.recheckStdIO();
 				} catch (Throwable e) {
 					Debug.trace(e);
 				}
@@ -369,9 +433,21 @@ public class BeanShellCntrl extends Startup {
 		}
 	}
 
+	private static void standardConsoleImports(NameSpace nameSpace) {
+
+		nameSpace.loadDefaultImports();
+		nameSpace.importStatic(Symbol.class);
+		nameSpace.importPackage(BeanShellCntrl.class.getPackage().getName());
+		nameSpace.importStatic(SubLObjectFactory.class);
+		nameSpace.importStatic(BeanShellCntrl.class);
+		nameSpace.importStatic(Startup.class);
+	}
+
 	public static bsh.Interpreter new_bsh_interpeter() throws EvalError {
 		bshInterpreter = ensureBSH();
-		return (bsh.Interpreter) bshInterpreter.eval("new bsh.Interpreter()");
+		final bsh.Interpreter interp = (bsh.Interpreter) bshInterpreter.eval("new bsh.Interpreter()");
+		standardConsoleImports(interp.getNameSpace());
+		return (bsh.Interpreter) interp;
 	}
 
 	public static bsh.NameSpace masterNamespace() {
@@ -404,8 +480,8 @@ public class BeanShellCntrl extends Startup {
 		if (found == null)
 			throw new JPLException("No method " + key);
 		LispObject op = found.getSymbolFunction();
-		if (op instanceof SpecialMethod) {
-			SpecialMethod mf = (SpecialMethod) op;
+		if (op instanceof JMultiMethod) {
+			JMultiMethod mf = (JMultiMethod) op;
 			final Object invokeFromProlog = mf.invokeFromProlog(list, result);
 			try {
 				return object_to_term(invokeFromProlog);
@@ -434,7 +510,7 @@ public class BeanShellCntrl extends Startup {
 			if (!wasNoDebug) {
 				setNoDebug(false);
 			}
-			t.printStackTrace();
+			printStackTrace(t);
 			System.err.println("" + t.getMessage());
 			if (t instanceof JPLException) {
 				throw (JPLException) t;
@@ -484,14 +560,14 @@ public class BeanShellCntrl extends Startup {
 		try {
 			invoke(demoBrowserClass(), "showObject", o);
 		} catch (EvalError e) {
-			e.printStackTrace();
+			printStackTrace(e);
 			throw new RuntimeException(e);
 		}
 	}
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @return
 	 * @throws EvalError
 	 */
@@ -504,20 +580,20 @@ public class BeanShellCntrl extends Startup {
 	@LispMethod
 	public static void ui_inspector() {
 		try {
-			if (calledStartAppdatper) {
+			if (began_ui_inspector) {
 				invokeDemoBrowser("show()");
 				return;
 			}
-			calledStartAppdatper = true;
+			began_ui_inspector = true;
 			if (true) {
 				invoke("com.netbreeze.bbowl.gui.BeanBowlGUI", "startBeanBowl", bowl);
 			}
 			// TODO
 			/*
-			 * 
+			 *
 			 * import org.appdapter.gui.api.BoxPanelSwitchableView; import
 			 * org.appdapter.gui.browse.Utility; import org.appdapter.gui.demo.DemoBrowser;
-			 * 
+			 *
 			 */
 			try {
 				invokeDemoBrowser("testLoggingSetup();");
@@ -534,11 +610,11 @@ public class BeanShellCntrl extends Startup {
 			appFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 			// some more test code
 			invokeDemoBrowser("addMoreExamples();");
-			dbrowser = invokeDemoBrowser("mainControl");
+			ui_inspector_object_instance = invokeDemoBrowser("mainControl");
 			// TODO
-			bowl.addListener((BeansContextListener) dbrowser);
+			bowl.addListener((BeansContextListener) ui_inspector_object_instance);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			printStackTrace(e);
 			// TODO Auto-generated catch block
 			// MsgBox.error(e);
 		}
@@ -546,7 +622,7 @@ public class BeanShellCntrl extends Startup {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param string
 	 * @return
 	 */
@@ -556,7 +632,7 @@ public class BeanShellCntrl extends Startup {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param string
 	 * @param string2
 	 */
@@ -566,7 +642,7 @@ public class BeanShellCntrl extends Startup {
 			return ensureBSH().eval(string);
 		} catch (EvalError e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			printStackTrace(e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -579,7 +655,7 @@ public class BeanShellCntrl extends Startup {
 				try {
 					o = Class.forName((String) o);
 				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
+					printStackTrace(e);
 					throw new RuntimeException(e);
 				}
 			}
@@ -587,22 +663,22 @@ public class BeanShellCntrl extends Startup {
 
 				final Method method = bshReflect.getMethod("invokeStaticMethod", BshClassManager.class, Class.class, String.class, Object[].class);
 				return method //
-						.invoke(null, ensureBSH.getClassManager(), (Class) o, string, objects, null);
+						.invoke(null, ensureBSH.getClassManager(), (Class) o, string, objects, (Object) null);
 			} else {
 				Class<SimpleNode> simpleNodeClass = (Class<SimpleNode>) Class.forName("bsh.SimpleNode");
 				final Method method = bshReflect.getMethod("invokeObjectMethod", Object.class, String.class, Object[].class, bsh.Interpreter.class, CallStack.class, simpleNodeClass);
 				return method //
-						.invoke(null, o, string, objects, ensureBSH, null, null);
+						.invoke(null, o, (Object)string, (Object)objects, (Object)ensureBSH, (Object)null, (Object)null);
 			}
 		} catch (InvocationTargetException e) {
 			throw new RuntimeException(e.getCause());
 		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			printStackTrace(e);
 			throw new RuntimeException(e);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			printStackTrace(e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -612,40 +688,71 @@ public class BeanShellCntrl extends Startup {
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
-	public static JConsole connectLisp(String myName, final JConsole console0) throws InterruptedException {
+	public static JConsole connectLisp(String myName, final JConsole console0) throws InterruptedException, IOException {
 		final JConsole console;
 		if (console0 == null) {
 			console = new JConsole();
 			console.setName(myName);
 		} else
 			console = console0;
-		if (lispInstances == 0) {
-			//passedArgs = new String[] {}; // "--load", "cyc"
-			Runnable r = Main.mainUnjoined(passedArgs);
-			final String name = Main.class.getName();
-			Thread t = new Thread(null, r, name, 1 << 30L);//.asJavaTread();
-
-			final UncaughtExceptionHandler uncaughtExceptionHandlerOrignal = t.getUncaughtExceptionHandler();
-			if (uncaughtExceptionHandlerOrignal == null)
-				t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
-			t.start();
-			//Main.runThread(t);
-			return console;
+		console.setNameCompletion(new LispNameCompletion());
+		String canonicalPath = "/.";
+		try {
+			canonicalPath = new File(canonicalPath).getCanonicalPath();
+		} catch (IOException e) {
+			canonicalPath = new File(canonicalPath).getAbsolutePath();
 		}
+		final boolean firstInstance = (lispInstances.get() == 0);
+		final String fcanonicalPath = canonicalPath;
+		//passedArgs = new String[] {}; // "--load", "cyc"
+		//final String[] args = passedArgs;
+		SafeRunnable r = new SafeRunnable() {
 
-		SubLThreadPool.getDefaultPool().execute(new SubLProcess(myName) {
 			@Override
 			public void safeRun() {
+				final InputStream inputStream = console.getInputStream();
+				org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter. //
+				createNewLispInstance(inputStream, console.getOut(), //
+						fcanonicalPath, Version.getVersion(), jlisp_requested, passedArgs, firstInstance);
+
+				if (firstInstance || noticeStream == null) {
+					noticeStream = console.getErr();
+					//					interp.addPreInit(0, () -> {
+					//						noticeStream = console.getErr();
+					//					});
+				}
+				interp.run();
+			}
+		};
+
+		if (firstInstance) {
+			final String name = "main for " + myName;
+
+			// Run the interpreter in a secondary thread so we can control the stack size.
+			Thread t = new Thread(null, () -> {
 				try {
-					org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter.createNewLispInstance(console.getInputStream(), console.getOut(), new File("./").getCanonicalPath(), Version.getVersion(), false);
-					console.setNameCompletion(new LispNameCompletion());
-					interp.run();
-				} catch (IOException e) {
+					r.run();
+				} catch (Throwable e) {
 					MsgBox.error(e);
 					throw doThrow(e);
 				}
-			}
-		});
+			}, name, 1 << 30L);//.asJavaTread();
+			t.start();
+
+			//Main.runThread(t);
+		} else {
+			SubLThreadPool.getDefaultPool().execute(new SubLProcess(myName) {
+				@Override
+				public void safeRun() {
+					try {
+						r.run();
+					} catch (Throwable e) {
+						MsgBox.error(e);
+						throw doThrow(e);
+					}
+				}
+			});
+		}
 		return console;
 	}
 
@@ -664,68 +771,38 @@ public class BeanShellCntrl extends Startup {
 	}
 
 	public static bsh.Interpreter bshInterpreter;
-	final public static Method multiMethod;
+	public static ThreadLocalConsole threadLocalConsole = new ThreadLocalConsole();
+	public static HashMap<String, Object> shells = new HashMap<String, Object>();
 
-	static public class LispNameCompletion implements NameCompletion {
-
-		String[] NO_RESULTS = new String[0];
-
+	private static final class ThreadLocalConsole implements ConsoleInterface {
 		@Override
-		public java.lang.String[] completeName(java.lang.String part) {
-
-			if (part.length() < 3)
-				return NO_RESULTS;
-			part = part.toUpperCase();
-			ArrayList results = null;
-			org.armedbear.lisp.Package currentPackage;
-			int idx = part.indexOf(":");
-			if (idx == 0) {
-				currentPackage = Lisp.PACKAGE_KEYWORD;
-				part = part.substring(1);
-			} else if (idx == -1) {
-				currentPackage = Lisp.getCurrentPackage();
-				part = part.substring(1);
-			} else {
-				String pn = part.substring(0, idx);
-				part = part.substring(0, idx + 1);
-				currentPackage = (Package) Package.findPackageNamed(pn);
-				if (currentPackage == null)
-					currentPackage = Lisp.getCurrentPackage();
-			}
-
-			if (part.length() <= 1)
-				return NO_RESULTS;
-
-			for (Symbol sym : currentPackage.getAccessibleSymbols()) {
-				String n = sym.getName();
-				if (n.startsWith(part)) {
-					if (results == null) {
-						results = new ArrayList();
-					}
-					results.add(n);
-				}
-			}
-
-			if (results != null)
-				return (String[]) results.toArray(new String[results.size()]);
-
-			return NO_RESULTS;
-
+		public void println(Object o) {
+			getOut().println(o);
 		}
 
-	}
+		@Override
+		public void print(Object o) {
+			getOut().print(o);
+		}
 
-	static {
-		try {
-			// DemoBrowser.testLoggingSetup();
-			multiMethod = IsolatedClassLoader.getDeclaredMethod(BeanShellCntrl.class, "bp");
-			// BeanBowlGUI.startBeanBowl();
-			// Debuggable.setIsTesting(true);
-			// Debuggable.setDebugging(false);
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
+		@Override
+		public PrintStream getOut() {
+			return SystemCurrent.out;
+		}
+
+		@Override
+		public Reader getIn() {
+			return new InputStreamReader(SystemCurrent.in);
+		}
+
+		@Override
+		public PrintStream getErr() {
+			return SystemCurrent.err;
+		}
+
+		@Override
+		public void error(Object o) {
+			getErr().println(o);
 		}
 	}
 }

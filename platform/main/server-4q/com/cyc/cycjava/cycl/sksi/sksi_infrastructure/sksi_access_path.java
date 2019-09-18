@@ -53,7 +53,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1219,7 +1219,7 @@ public final class sksi_access_path extends SubLTranslatedFile {
     }
 
     public static SubLObject init_sksi_access_path_file() {
-        deflexical("*EXTERNAL-SOURCE-ACCESS-PATH-CACHE*", SubLTrampolineFile.maybeDefault($external_source_access_path_cache$, $external_source_access_path_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*EXTERNAL-SOURCE-ACCESS-PATH-CACHE*", SubLSystemTrampolineFile.maybeDefault($external_source_access_path_cache$, $external_source_access_path_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         defparameter("*IGNORE-ACCESS-PATH-ERRORS?*", NIL);
         deflexical("*RED-CANDIDATE-ACCESS-PATH-PREDICATES*", $list54);
         deflexical("*SKSI-RED-PREFIX*", $str55$application_sksi);

@@ -63,7 +63,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -720,10 +720,10 @@ public final class sksi_query_datastructures extends SubLTranslatedFile {
             alias_index = ZERO_INTEGER;
         }
         assert NIL != table_aliasing_context_p(tac) : "sksi_query_datastructures.table_aliasing_context_p(tac) " + "CommonSymbols.NIL != sksi_query_datastructures.table_aliasing_context_p(tac) " + tac;
-        if (((NIL != namespace) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(namespace))) {
+        if (((NIL != namespace) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(namespace))) {
             throw new AssertionError(namespace);
         }
-        if (((NIL != alias_index) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(alias_index))) {
+        if (((NIL != alias_index) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(alias_index))) {
             throw new AssertionError(alias_index);
         }
         SubLObject alias = tac_lit_table_alias(tac, lit, alias_index, table_name);

@@ -116,7 +116,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2058,15 +2058,15 @@ public final class unrepresented_terms extends SubLTranslatedFile {
     }
 
     public static SubLObject init_unrepresented_terms_file() {
-        deflexical("*UNREPRESENTED-TERM-TO-SUID*", SubLTrampolineFile.maybeDefault($unrepresented_term_to_suid$, $unrepresented_term_to_suid$, NIL));
-        deflexical("*UNREPRESENTED-TERM-FROM-SUID*", SubLTrampolineFile.maybeDefault($unrepresented_term_from_suid$, $unrepresented_term_from_suid$, NIL));
-        deflexical("*USE-FHT-APPROACH-TO-UNREPRESENTED-TERMS?*", SubLTrampolineFile.maybeDefault($sym62$_USE_FHT_APPROACH_TO_UNREPRESENTED_TERMS__, $use_fht_approach_to_unrepresented_termsP$, NIL));
-        deflexical("*UNREPRESENTED-TERM-FHT*", SubLTrampolineFile.maybeDefault($unrepresented_term_fht$, $unrepresented_term_fht$, NIL));
-        deflexical("*UNREPRESENTED-TERM-ISG*", SubLTrampolineFile.maybeDefault($unrepresented_term_isg$, $unrepresented_term_isg$, NIL));
-        deflexical("*UNREPRESENTED-TERM-CHANGE-SET*", SubLTrampolineFile.maybeDefault($unrepresented_term_change_set$, $unrepresented_term_change_set$, NIL));
-        deflexical("*UNREPRESENTED-TERM-FHT-LOCK*", SubLTrampolineFile.maybeDefault($unrepresented_term_fht_lock$, $unrepresented_term_fht_lock$, () -> make_lock($$$Unrepresented_Terms_FHT_Lock)));
+        deflexical("*UNREPRESENTED-TERM-TO-SUID*", SubLSystemTrampolineFile.maybeDefault($unrepresented_term_to_suid$, $unrepresented_term_to_suid$, NIL));
+        deflexical("*UNREPRESENTED-TERM-FROM-SUID*", SubLSystemTrampolineFile.maybeDefault($unrepresented_term_from_suid$, $unrepresented_term_from_suid$, NIL));
+        deflexical("*USE-FHT-APPROACH-TO-UNREPRESENTED-TERMS?*", SubLSystemTrampolineFile.maybeDefault($sym62$_USE_FHT_APPROACH_TO_UNREPRESENTED_TERMS__, $use_fht_approach_to_unrepresented_termsP$, NIL));
+        deflexical("*UNREPRESENTED-TERM-FHT*", SubLSystemTrampolineFile.maybeDefault($unrepresented_term_fht$, $unrepresented_term_fht$, NIL));
+        deflexical("*UNREPRESENTED-TERM-ISG*", SubLSystemTrampolineFile.maybeDefault($unrepresented_term_isg$, $unrepresented_term_isg$, NIL));
+        deflexical("*UNREPRESENTED-TERM-CHANGE-SET*", SubLSystemTrampolineFile.maybeDefault($unrepresented_term_change_set$, $unrepresented_term_change_set$, NIL));
+        deflexical("*UNREPRESENTED-TERM-FHT-LOCK*", SubLSystemTrampolineFile.maybeDefault($unrepresented_term_fht_lock$, $unrepresented_term_fht_lock$, () -> make_lock($$$Unrepresented_Terms_FHT_Lock)));
         deflexical("*UNREPRESENTED-TERMS-TOMBSTONE*", $DELETED);
-        deflexical("*NEW-UNREPRESENTED-TERM-ID-THRESHOLD*", SubLTrampolineFile.maybeDefault($new_unrepresented_term_id_threshold$, $new_unrepresented_term_id_threshold$, NIL));
+        deflexical("*NEW-UNREPRESENTED-TERM-ID-THRESHOLD*", SubLSystemTrampolineFile.maybeDefault($new_unrepresented_term_id_threshold$, $new_unrepresented_term_id_threshold$, NIL));
         defparameter("*UNREPRESENTED-TERM-DUMP-ID-TABLE*", NIL);
         return NIL;
     }

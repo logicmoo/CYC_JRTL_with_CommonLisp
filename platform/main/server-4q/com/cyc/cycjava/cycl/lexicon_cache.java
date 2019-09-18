@@ -91,7 +91,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -510,8 +510,8 @@ public final class lexicon_cache extends SubLTranslatedFile {
         if (parse_morphologically == UNPROVIDED) {
             parse_morphologically = lexicon_vars.$parse_morphologically$.getDynamicValue();
         }
-        SubLTrampolineFile.enforceType(string, STRINGP);
-        SubLTrampolineFile.enforceType(parse_morphologically, PARSE_MORPHOLOGICALLY_OPTION_P);
+        SubLSystemTrampolineFile.enforceType(string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(parse_morphologically, PARSE_MORPHOLOGICALLY_OPTION_P);
         SubLObject words = nl_trie_accessors.nl_trie_words_of_string(string, misspellingsP, lookup_mt, UNPROVIDED);
         if (NIL != lexicon_accessors.proceed_with_morphological_parsingP(words, parse_morphologically)) {
             words = czer_utilities.delete_el_duplicates(append(words, morphological_word_parser.words_of_complex_word_string(string)));
@@ -3756,7 +3756,7 @@ public final class lexicon_cache extends SubLTranslatedFile {
         defparameter("*GRSOS-REPEATED-ARGS?*", NIL);
         deflexical("*LEXICON-CORE-CONSTANTS*", $list132);
         defparameter("*ALLOW-NL-TRIE-ROTATION-INITIALIZATION?*", NIL);
-        deflexical("*MUST-USE-STATIC-MEMORY-FOR-NL-TRIE?*", SubLTrampolineFile.maybeDefault($sym150$_MUST_USE_STATIC_MEMORY_FOR_NL_TRIE__, $must_use_static_memory_for_nl_trieP$, NIL));
+        deflexical("*MUST-USE-STATIC-MEMORY-FOR-NL-TRIE?*", SubLSystemTrampolineFile.maybeDefault($sym150$_MUST_USE_STATIC_MEMORY_FOR_NL_TRIE__, $must_use_static_memory_for_nl_trieP$, NIL));
         return NIL;
     }
 

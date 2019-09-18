@@ -48,7 +48,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -365,7 +365,7 @@ public final class removal_modules_integer_between extends SubLTranslatedFile {
 
     public static SubLObject init_removal_modules_integer_between_file() {
         defparameter("*DEFAULT-INTEGER-BETWEEN-CHECK-COST*", $hl_module_check_cost$.getDynamicValue());
-        deflexical("*INTEGER-BETWEEN-DEFINING-MT*", SubLTrampolineFile.maybeDefault($integer_between_defining_mt$, $integer_between_defining_mt$, $$BaseKB));
+        deflexical("*INTEGER-BETWEEN-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($integer_between_defining_mt$, $integer_between_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-NOT-INTEGER-BETWEEN-CHECK-COST*", $hl_module_check_cost$.getDynamicValue());
         return NIL;
     }

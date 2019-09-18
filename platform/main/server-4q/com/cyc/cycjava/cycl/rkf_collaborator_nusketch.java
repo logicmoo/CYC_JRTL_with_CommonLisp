@@ -95,7 +95,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -219,62 +219,62 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
     }
 
     public static final SubLObject nusketch_session_machine(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.getField2();
     }
 
     public static final SubLObject nusketch_session_port(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.getField3();
     }
 
     public static final SubLObject nusketch_session_open_sketches(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.getField4();
     }
 
     public static final SubLObject nusketch_session_active_sketch(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.getField5();
     }
 
     public static final SubLObject nusketch_session_active_bundle(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.getField6();
     }
 
     public static final SubLObject nusketch_session_active_layer(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.getField7();
     }
 
     public static final SubLObject _csetf_nusketch_session_machine(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_nusketch_session_port(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_nusketch_session_open_sketches(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_nusketch_session_active_sketch(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_nusketch_session_active_bundle(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_nusketch_session_active_layer(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SESSION_P);
 	return v_object.setField7(value);
     }
 
@@ -465,52 +465,52 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
     }
 
     public static final SubLObject nusketch_sketch_id(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.getField2();
     }
 
     public static final SubLObject nusketch_sketch_name(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.getField3();
     }
 
     public static final SubLObject nusketch_sketch_bundles(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.getField4();
     }
 
     public static final SubLObject nusketch_sketch_meta_layer(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.getField5();
     }
 
     public static final SubLObject nusketch_sketch_guid(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.getField6();
     }
 
     public static final SubLObject _csetf_nusketch_sketch_id(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_nusketch_sketch_name(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_nusketch_sketch_bundles(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_nusketch_sketch_meta_layer(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_nusketch_sketch_guid(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_SKETCH_P);
 	return v_object.setField6(value);
     }
 
@@ -648,42 +648,42 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
     }
 
     public static final SubLObject nusketch_bundle_id(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
 	return v_object.getField2();
     }
 
     public static final SubLObject nusketch_bundle_name(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
 	return v_object.getField3();
     }
 
     public static final SubLObject nusketch_bundle_object_name(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
 	return v_object.getField4();
     }
 
     public static final SubLObject nusketch_bundle_layers(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
 	return v_object.getField5();
     }
 
     public static final SubLObject _csetf_nusketch_bundle_id(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
 	return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_nusketch_bundle_name(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
 	return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_nusketch_bundle_object_name(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
 	return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_nusketch_bundle_layers(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_BUNDLE_P);
 	return v_object.setField5(value);
     }
 
@@ -849,32 +849,32 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
     }
 
     public static final SubLObject nusketch_layer_id(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
 	return v_object.getField2();
     }
 
     public static final SubLObject nusketch_layer_name(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
 	return v_object.getField3();
     }
 
     public static final SubLObject nusketch_layer_object_name(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
 	return v_object.getField4();
     }
 
     public static final SubLObject _csetf_nusketch_layer_id(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
 	return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_nusketch_layer_name(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
 	return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_nusketch_layer_object_name(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_LAYER_P);
 	return v_object.setField4(value);
     }
 
@@ -1031,32 +1031,32 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
     }
 
     public static final SubLObject nusketch_glyph_id(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
 	return v_object.getField2();
     }
 
     public static final SubLObject nusketch_glyph_name(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
 	return v_object.getField3();
     }
 
     public static final SubLObject nusketch_glyph_object_name(SubLObject v_object) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
 	return v_object.getField4();
     }
 
     public static final SubLObject _csetf_nusketch_glyph_id(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
 	return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_nusketch_glyph_name(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
 	return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_nusketch_glyph_object_name(SubLObject v_object, SubLObject value) {
-	SubLTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
+	SubLSystemTrampolineFile.checkType(v_object, NUSKETCH_GLYPH_P);
 	return v_object.setField4(value);
     }
 
@@ -1272,8 +1272,8 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
      * Given a session and entity, highlight the entity
      */
     public static final SubLObject rkfcoll_nusketch_highlight_entity(SubLObject nsession, SubLObject entity) {
-	SubLTrampolineFile.checkType(nsession, NUSKETCH_SESSION_P);
-	SubLTrampolineFile.checkType(entity, FORT_P);
+	SubLSystemTrampolineFile.checkType(nsession, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(entity, FORT_P);
 	{
 	    SubLObject sketch_id = nusketch_session_active_sketch(nsession);
 	    SubLObject object_id = kb_mapping_utilities.fpred_value_in_any_mt(entity, $$coaObjectId, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -1286,8 +1286,8 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
      * Given a session and entity, unhighlight the entity
      */
     public static final SubLObject rkfcoll_nusketch_unhighlight_entity(SubLObject nsession, SubLObject entity) {
-	SubLTrampolineFile.checkType(nsession, NUSKETCH_SESSION_P);
-	SubLTrampolineFile.checkType(entity, FORT_P);
+	SubLSystemTrampolineFile.checkType(nsession, NUSKETCH_SESSION_P);
+	SubLSystemTrampolineFile.checkType(entity, FORT_P);
 	{
 	    SubLObject sketch_id = nusketch_session_active_sketch(nsession);
 	    SubLObject object_id = kb_mapping_utilities.fpred_value_in_any_mt(entity, $$coaObjectId, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -1302,7 +1302,7 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
     public static final SubLObject rkfcoll_nusketch_send_message(SubLObject nsession, SubLObject message) {
 	{
 	    final SubLThread thread = SubLProcess.currentSubLThread();
-	    SubLTrampolineFile.checkType(nsession, NUSKETCH_SESSION_P);
+	    SubLSystemTrampolineFile.checkType(nsession, NUSKETCH_SESSION_P);
 	    {
 		SubLObject machine = nusketch_session_machine(nsession);
 		SubLObject port = nusketch_session_port(nsession);
@@ -1578,7 +1578,7 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
      * Start the nuSketch polling thread
      */
     public static final SubLObject rkfcoll_nusketch_polling_start(SubLObject uima) {
-	SubLTrampolineFile.checkType(uima, USER_INTERACTION_META_AGENDA_P);
+	SubLSystemTrampolineFile.checkType(uima, USER_INTERACTION_META_AGENDA_P);
 	{
 	    SubLObject v_answer = NIL;
 	    SubLObject lock = user_interaction_agenda.uima_state_lookup(uima, $POLLING_LOCK, UNPROVIDED);
@@ -1609,7 +1609,7 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
      * Stop the nuSketch polling thread
      */
     public static final SubLObject rkfcoll_nusketch_polling_stop(SubLObject uima) {
-	SubLTrampolineFile.checkType(uima, USER_INTERACTION_META_AGENDA_P);
+	SubLSystemTrampolineFile.checkType(uima, USER_INTERACTION_META_AGENDA_P);
 	{
 	    SubLObject v_answer = NIL;
 	    SubLObject lock = user_interaction_agenda.uima_state_lookup(uima, $POLLING_LOCK, UNPROVIDED);

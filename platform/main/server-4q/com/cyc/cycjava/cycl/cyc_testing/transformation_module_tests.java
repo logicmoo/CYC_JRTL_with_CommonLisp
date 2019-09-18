@@ -77,7 +77,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class transformation_module_tests extends SubLTranslatedFile {
     public static final SubLFile me = new transformation_module_tests();
@@ -609,18 +609,18 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject define_transformation_module_test_int(final SubLObject name, final SubLObject id, final SubLObject sentence, final SubLObject mt, final SubLObject v_properties, final SubLObject kb, final SubLObject owner, final SubLObject comment, final SubLObject bug_number, final SubLObject creation_date, final SubLObject creator, final SubLObject workingP) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         assert NIL != cyc_testing.cyc_test_kb_p(kb) : "cyc_testing.cyc_test_kb_p(kb) " + "CommonSymbols.NIL != cyc_testing.cyc_test_kb_p(kb) " + kb;
         assert NIL != inference_testing.inference_test_owner_p(owner) : "inference_testing.inference_test_owner_p(owner) " + "CommonSymbols.NIL != inference_testing.inference_test_owner_p(owner) " + owner;
-        if (((NIL != bug_number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(bug_number))) {
+        if (((NIL != bug_number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(bug_number))) {
             throw new AssertionError(bug_number);
         }
-        if (((NIL != creation_date) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numeric_date_utilities.universal_date_p(creation_date))) {
+        if (((NIL != creation_date) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numeric_date_utilities.universal_date_p(creation_date))) {
             throw new AssertionError(creation_date);
         }
-        if (((NIL != creator) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(creator))) {
+        if (((NIL != creator) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(creator))) {
             throw new AssertionError(creator);
         }
         assert NIL != booleanp(workingP) : "Types.booleanp(workingP) " + "CommonSymbols.NIL != Types.booleanp(workingP) " + workingP;
@@ -1006,7 +1006,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_transformation_module_tests_file() {
         defconstant("*DTP-TRANSFORMATION-MODULE-TEST*", TRANSFORMATION_MODULE_TEST);
-        deflexical("*TRANSFORMATION-MODULE-TESTS*", SubLTrampolineFile.maybeDefault($transformation_module_tests$, $transformation_module_tests$, () -> make_hash_table($int$100, UNPROVIDED, UNPROVIDED)));
+        deflexical("*TRANSFORMATION-MODULE-TESTS*", SubLSystemTrampolineFile.maybeDefault($transformation_module_tests$, $transformation_module_tests$, () -> make_hash_table($int$100, UNPROVIDED, UNPROVIDED)));
         return NIL;
     }
 

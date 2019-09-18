@@ -9,9 +9,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Threads extends SubLTrampolineFile {
+public class Threads extends SubLSystemTrampolineFile {
 	public static SubLObject all_processes() {
 		SubLProcess[] processes = SubLProcess.currentProcesses();
 		return SubLObjectFactory.makeList(processes);
@@ -165,7 +165,7 @@ public class Threads extends SubLTrampolineFile {
 		return process_valid_p(process);
 	}
 
-	public static SubLTrampolineFile me;
+	public static SubLSystemTrampolineFile me;
 	public static SubLSymbol $process_background_priority$;
 	public static SubLSymbol $process_critical_priority$;
 	public static SubLSymbol $process_max_priority$;

@@ -112,7 +112,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -681,7 +681,7 @@ public final class web_game extends SubLTranslatedFile {
 
     public static SubLObject package_sentence_for_question_to_be_asked_of_user(final SubLObject v_question, final SubLObject question_type, final SubLObject domain_mt) {
         if ($const13$KnowledgeAcquisitionGoal_Verifyin.eql(question_type)) {
-            SubLTrampolineFile.enforceType(v_question, EL_IMPLICATION_P);
+            SubLSystemTrampolineFile.enforceType(v_question, EL_IMPLICATION_P);
             final SubLObject examples = example_finder.example_consequents_for_rule(v_question, domain_mt, UNPROVIDED, UNPROVIDED);
             return cons(v_question, examples);
         }

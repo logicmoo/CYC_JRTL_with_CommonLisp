@@ -136,6 +136,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -147,7 +148,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
 
 public final class web_utilities extends xml_parsing_utilities {
@@ -325,7 +326,8 @@ public final class web_utilities extends xml_parsing_utilities {
     // Internal Constants
     public static final SubLList $list0 = list(makeString("text/plain"), makeString("text/html"));
 
-    public static final SubLList $list1 = list(list(new SubLObject[]{ makeSymbol("CHANNEL"), makeSymbol("MACHINE"), makeSymbol("URL"), makeSymbol("&KEY"), makeSymbol("QUERY"), list(makeSymbol("METHOD"), makeKeyword("GET")), list(makeSymbol("PORT"), makeKeyword("DEFAULT")), list(makeSymbol("KEEP-ALIVE?"), T), list(makeSymbol("WIDE-NEWLINES?"), NIL), makeSymbol("TIMEOUT"), list(makeSymbol("ACCEPT-TYPES"), makeKeyword("DEFAULT")), list(makeSymbol("CONTENT-TYPE"), makeKeyword("DEFAULT")), makeSymbol("SOAP-ACTION-URI") }), makeSymbol("&BODY"), makeSymbol("BODY"));
+	public static final SubLList $list1 = list(list(new SubLObject[] { makeSymbol("CHANNEL"), makeSymbol("MACHINE"), makeSymbol("URL"), makeSymbol("&KEY"), makeSymbol("QUERY"), list(makeSymbol("METHOD"), makeKeyword("GET")), list(makeSymbol("PORT"), makeKeyword("DEFAULT")), list(makeSymbol("KEEP-ALIVE?"), T), list(makeSymbol("WIDE-NEWLINES?"), NIL), makeSymbol("TIMEOUT"),
+			list(makeSymbol("ACCEPT-TYPES"), makeKeyword("DEFAULT")), list(makeSymbol("CONTENT-TYPE"), makeKeyword("DEFAULT")), makeSymbol("SOAP-ACTION-URI") }), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     public static final SubLList $list2 = list(new SubLObject[]{ makeKeyword("QUERY"), makeKeyword("METHOD"), makeKeyword("PORT"), makeKeyword("KEEP-ALIVE?"), makeKeyword("WIDE-NEWLINES?"), makeKeyword("TIMEOUT"), makeKeyword("ACCEPT-TYPES"), makeKeyword("CONTENT-TYPE"), makeKeyword("SOAP-ACTION-URI") });
 
@@ -389,15 +391,19 @@ public final class web_utilities extends xml_parsing_utilities {
 
     private static final SubLString $str32$Remote_Host = makeString("Remote-Host");
 
-    private static final SubLString $str33$var_KEA_port_from_cyc_base_port__ = makeString("var KEA_port_from_cyc_base_port = function () {\n  var DEFAULT_PORT_STR = \"80\";\n  var portStr = (window.document.location.port.length > 0) ? window.document.location.port : DEFAULT_PORT_STR;\n  var offset = parseInt(portStr.substring(portStr.length - 1));\n  var port = parseInt(portStr);\n\n  if (offset == 2) return (port + 1);\n  return port;\n}\nif (window==window.top) {\n  var url = \"http://\" + window.document.location.hostname + \":\" + KEA_port_from_cyc_base_port() + \"/?toolURL=\" + encodeURIComponent(window.location.href) + \"&sessionId=~A\";\n  window.location.href=url;\n}");
+	private static final SubLString $str33$var_KEA_port_from_cyc_base_port__ = makeString(
+			"var KEA_port_from_cyc_base_port = function () {\n  var DEFAULT_PORT_STR = \"80\";\n  var portStr = (window.document.location.port.length > 0) ? window.document.location.port : DEFAULT_PORT_STR;\n  var offset = parseInt(portStr.substring(portStr.length - 1));\n  var port = parseInt(portStr);\n\n  if (offset == 2) return (port + 1);\n  return port;\n}\nif (window==window.top) {\n  var url = \"http://\" + window.document.location.hostname + \":\" + KEA_port_from_cyc_base_port() + \"/?toolURL=\" + encodeURIComponent(window.location.href) + \"&sessionId=~A\";\n  window.location.href=url;\n}");
 
     public static final SubLList $list34 = list(cons(makeInteger(100), makeString("Continue")), cons(makeInteger(101), makeString("Switching Protocols")));
 
     private static final SubLList $list35 = list(cons(makeInteger(200), makeString("OK")), cons(makeInteger(201), makeString("Created")), cons(makeInteger(202), makeString("Accepted")), cons(makeInteger(203), makeString("Non-Authoritative Information")), cons(makeInteger(204), makeString("No Content")), cons(makeInteger(205), makeString("Reset Content")), cons(makeInteger(206), makeString("Partial Content")));
 
-    public static final SubLList $list36 = list(cons(makeInteger(300), makeString("Multiple Choices")), cons(makeInteger(301), makeString("Moved Permanently")), cons(makeInteger(302), makeString("Found")), cons(makeInteger(303), makeString("See Other")), cons(makeInteger(304), makeString("Not Modified")), cons(makeInteger(305), makeString("Use Proxy")), cons(makeInteger(306), makeString("(Unused)")), cons(makeInteger(307), makeString("Temporary Redirect")));
+	public static final SubLList $list36 = list(cons(makeInteger(300), makeString("Multiple Choices")), cons(makeInteger(301), makeString("Moved Permanently")), cons(makeInteger(302), makeString("Found")), cons(makeInteger(303), makeString("See Other")), cons(makeInteger(304), makeString("Not Modified")), cons(makeInteger(305), makeString("Use Proxy")), cons(makeInteger(306), makeString("(Unused)")),
+			cons(makeInteger(307), makeString("Temporary Redirect")));
 
-    public static final SubLList $list37 = list(new SubLObject[]{ cons(makeInteger(400), makeString("Bad Request")), cons(makeInteger(401), makeString("Unauthorized")), cons(makeInteger(403), makeString("Forbidden")), cons(makeInteger(404), makeString("Not Found")), cons(makeInteger(405), makeString("Method Not Allowed")), cons(makeInteger(406), makeString("Not Acceptable")), cons(makeInteger(407), makeString("Proxy Authentication Required")), cons(makeInteger(408), makeString("Request Timeout")), cons(makeInteger(409), makeString("Conflict")), cons(makeInteger(410), makeString("Gone")), cons(makeInteger(411), makeString("Length Required")), cons(makeInteger(412), makeString("Precondition Failed")), cons(makeInteger(413), makeString("Request Entity Too Large")), cons(makeInteger(414), makeString("Request-URI Too Long")), cons(makeInteger(415), makeString("Unsupported Media Type")), cons(makeInteger(416), makeString("Requested Range Not Satisfiable")), cons(makeInteger(417), makeString("Expectation Failed")) });
+	public static final SubLList $list37 = list(new SubLObject[] { cons(makeInteger(400), makeString("Bad Request")), cons(makeInteger(401), makeString("Unauthorized")), cons(makeInteger(403), makeString("Forbidden")), cons(makeInteger(404), makeString("Not Found")), cons(makeInteger(405), makeString("Method Not Allowed")), cons(makeInteger(406), makeString("Not Acceptable")),
+			cons(makeInteger(407), makeString("Proxy Authentication Required")), cons(makeInteger(408), makeString("Request Timeout")), cons(makeInteger(409), makeString("Conflict")), cons(makeInteger(410), makeString("Gone")), cons(makeInteger(411), makeString("Length Required")), cons(makeInteger(412), makeString("Precondition Failed")), cons(makeInteger(413), makeString("Request Entity Too Large")),
+			cons(makeInteger(414), makeString("Request-URI Too Long")), cons(makeInteger(415), makeString("Unsupported Media Type")), cons(makeInteger(416), makeString("Requested Range Not Satisfiable")), cons(makeInteger(417), makeString("Expectation Failed")) });
 
     private static final SubLList $list38 = list(cons(makeInteger(500), makeString("Internal Server Error")), cons(makeInteger(501), makeString("Not Implemented")), cons(makeInteger(502), makeString("Bad Gateway")), cons(makeInteger(503), makeString("Service Unavailable")), cons(makeInteger(504), makeString("Gateway Timeout")), cons(makeInteger(505), makeString("HTTP Version not supported")));
 
@@ -411,15 +417,17 @@ public final class web_utilities extends xml_parsing_utilities {
 
     private static final SubLString $str43$application_x_www_form_urlencoded = makeString("application/x-www-form-urlencoded");
 
-    public static final SubLList $list44 = list(new SubLObject[]{ list(makeKeyword("VERSION"), makeString("POST ~A HTTP/1.0")), list(makeKeyword("CONNECTION"), makeString("Connection: ~A")), list(makeKeyword("USER-AGENT"), makeString("User-Agent: Cyc/~A/~A")), list(makeKeyword("HOST"), makeString("Host: ~A~A")), list(makeKeyword("ACCEPT"), makeString("Accept: ")), list(makeKeyword("COOKIES"), makeString("Cookie: ~A")), list(makeKeyword("CONTENT-TYPE"), makeString("Content-type: ~A")), list(makeKeyword("SOAP-ACTION"), makeString("SOAPAction: ~A")), list(makeKeyword("CONTENT-LENGTH"), makeString("Content-length: ~A")), list(makeKeyword("BLANK-LINE"), NIL), list(makeKeyword("QUERY"), makeString("~A")) });
+	public static final SubLList $list44 = list(new SubLObject[] { list(makeKeyword("VERSION"), makeString("POST ~A HTTP/1.0")), list(makeKeyword("CONNECTION"), makeString("Connection: ~A")), list(makeKeyword("USER-AGENT"), makeString("User-Agent: Cyc/~A/~A")), list(makeKeyword("HOST"), makeString("Host: ~A~A")), list(makeKeyword("ACCEPT"), makeString("Accept: ")),
+			list(makeKeyword("COOKIES"), makeString("Cookie: ~A")), list(makeKeyword("CONTENT-TYPE"), makeString("Content-type: ~A")), list(makeKeyword("SOAP-ACTION"), makeString("SOAPAction: ~A")), list(makeKeyword("CONTENT-LENGTH"), makeString("Content-length: ~A")), list(makeKeyword("BLANK-LINE"), NIL), list(makeKeyword("QUERY"), makeString("~A")) });
 
-    private static final SubLList $list45 = list(new SubLObject[]{ list(makeKeyword("VERSION"), makeString("PUT ~A HTTP/1.0")), list(makeKeyword("CONNECTION"), makeString("Connection: ~A")), list(makeKeyword("USER-AGENT"), makeString("User-Agent: Cyc/~A/~A")), list(makeKeyword("HOST"), makeString("Host: ~A~A")), list(makeKeyword("ACCEPT"), makeString("Accept: ")), list(makeKeyword("COOKIES"), makeString("Cookie: ~A")), list(makeKeyword("CONTENT-TYPE"), makeString("Content-type: ~A")), list(makeKeyword("SOAP-ACTION"), makeString("SOAPAction: ~A")), list(makeKeyword("CONTENT-LENGTH"), makeString("Content-length: ~A")), list(makeKeyword("BLANK-LINE"), NIL), list(makeKeyword("QUERY"), makeString("~A")) });
+	private static final SubLList $list45 = list(new SubLObject[] { list(makeKeyword("VERSION"), makeString("PUT ~A HTTP/1.0")), list(makeKeyword("CONNECTION"), makeString("Connection: ~A")), list(makeKeyword("USER-AGENT"), makeString("User-Agent: Cyc/~A/~A")), list(makeKeyword("HOST"), makeString("Host: ~A~A")), list(makeKeyword("ACCEPT"), makeString("Accept: ")),
+			list(makeKeyword("COOKIES"), makeString("Cookie: ~A")), list(makeKeyword("CONTENT-TYPE"), makeString("Content-type: ~A")), list(makeKeyword("SOAP-ACTION"), makeString("SOAPAction: ~A")), list(makeKeyword("CONTENT-LENGTH"), makeString("Content-length: ~A")), list(makeKeyword("BLANK-LINE"), NIL), list(makeKeyword("QUERY"), makeString("~A")) });
 
-    public static final SubLList $list46 = list(new SubLObject[]{ list(makeKeyword("VERSION"), makeString("DELETE ~A HTTP/1.0")), list(makeKeyword("CONNECTION"), makeString("Connection: ~A")), list(makeKeyword("USER-AGENT"), makeString("User-Agent: Cyc/~A/~A")), list(makeKeyword("HOST"), makeString("Host: ~A~A")), list(makeKeyword("ACCEPT"), makeString("Accept: ")), list(makeKeyword("COOKIES"), makeString("Cookie: ~A")), list(makeKeyword("CONTENT-TYPE"), makeString("Content-type: ~A")), list(makeKeyword("SOAP-ACTION"), makeString("SOAPAction: ~A")), list(makeKeyword("CONTENT-LENGTH"), makeString("Content-length: ~A")), list(makeKeyword("BLANK-LINE"), NIL), list(makeKeyword("QUERY"), makeString("~A")) });
+	public static final SubLList $list46 = list(new SubLObject[] { list(makeKeyword("VERSION"), makeString("DELETE ~A HTTP/1.0")), list(makeKeyword("CONNECTION"), makeString("Connection: ~A")), list(makeKeyword("USER-AGENT"), makeString("User-Agent: Cyc/~A/~A")), list(makeKeyword("HOST"), makeString("Host: ~A~A")), list(makeKeyword("ACCEPT"), makeString("Accept: ")),
+			list(makeKeyword("COOKIES"), makeString("Cookie: ~A")), list(makeKeyword("CONTENT-TYPE"), makeString("Content-type: ~A")), list(makeKeyword("SOAP-ACTION"), makeString("SOAPAction: ~A")), list(makeKeyword("CONTENT-LENGTH"), makeString("Content-length: ~A")), list(makeKeyword("BLANK-LINE"), NIL), list(makeKeyword("QUERY"), makeString("~A")) });
 
-
-
-    private static final SubLList $list48 = list(new SubLObject[]{ makeSymbol("&KEY"), makeSymbol("MACHINE"), list(makeSymbol("PORT"), makeInteger(80)), list(makeSymbol("METHOD"), makeKeyword("GET")), makeSymbol("URL"), makeSymbol("QUERY"), list(makeSymbol("KEEP-ALIVE?"), T), list(makeSymbol("WIDE-NEWLINES?"), NIL), list(makeSymbol("ACCEPT-TYPES"), makeKeyword("DEFAULT")), list(makeSymbol("CONTENT-TYPE"), makeKeyword("DEFAULT")), list(makeSymbol("SOAP-ACTION-URI"), NIL) });
+	private static final SubLList $list48 = list(new SubLObject[] { makeSymbol("&KEY"), makeSymbol("MACHINE"), list(makeSymbol("PORT"), makeInteger(80)), list(makeSymbol("METHOD"), makeKeyword("GET")), makeSymbol("URL"), makeSymbol("QUERY"), list(makeSymbol("KEEP-ALIVE?"), T), list(makeSymbol("WIDE-NEWLINES?"), NIL), list(makeSymbol("ACCEPT-TYPES"), makeKeyword("DEFAULT")),
+			list(makeSymbol("CONTENT-TYPE"), makeKeyword("DEFAULT")), list(makeSymbol("SOAP-ACTION-URI"), NIL) });
 
     private static final SubLList $list49 = list(new SubLObject[]{ makeKeyword("MACHINE"), makeKeyword("PORT"), makeKeyword("METHOD"), makeKeyword("URL"), makeKeyword("QUERY"), makeKeyword("KEEP-ALIVE?"), makeKeyword("WIDE-NEWLINES?"), makeKeyword("ACCEPT-TYPES"), makeKeyword("CONTENT-TYPE"), makeKeyword("SOAP-ACTION-URI") });
 
@@ -519,9 +527,11 @@ public final class web_utilities extends xml_parsing_utilities {
 
     private static final SubLSymbol NON_EMPTY_STRING_P = makeSymbol("NON-EMPTY-STRING-P");
 
-    public static final SubLList $list98 = list(new SubLObject[]{ makeString("aaa:"), makeString("aaas:"), makeString("acap:"), makeString("cap:"), makeString("cid:"), makeString("crid:"), makeString("data:"), makeString("dav:"), makeString("dict:"), makeString("dns:"), makeString("fax:"), makeString("file:"), makeString("ftp:"), makeString("go:"), makeString("gopher:"), makeString("h323:"), makeString("http:"), makeString("https:"), makeString("im"), makeString("imap:"), makeString("ldap:"), makeString("mailto:"), makeString("mid:"), makeString("news:"), makeString("nfs:"), makeString("nntp:"), makeString("pop:"), makeString("pres:"), makeString("sip:"), makeString("sips:"), makeString("snmp:"), makeString("tel:"), makeString("telnet:"), makeString("urn:"), makeString("wais:"), makeString("xmpp:") });
+	public static final SubLList $list98 = list(new SubLObject[] { makeString("aaa:"), makeString("aaas:"), makeString("acap:"), makeString("cap:"), makeString("cid:"), makeString("crid:"), makeString("data:"), makeString("dav:"), makeString("dict:"), makeString("dns:"), makeString("fax:"), makeString("file:"), makeString("ftp:"), makeString("go:"), makeString("gopher:"), makeString("h323:"), makeString("http:"),
+			makeString("https:"), makeString("im"), makeString("imap:"), makeString("ldap:"), makeString("mailto:"), makeString("mid:"), makeString("news:"), makeString("nfs:"), makeString("nntp:"), makeString("pop:"), makeString("pres:"), makeString("sip:"), makeString("sips:"), makeString("snmp:"), makeString("tel:"), makeString("telnet:"), makeString("urn:"), makeString("wais:"), makeString("xmpp:") });
 
-    private static final SubLList $list99 = list(new SubLObject[]{ makeString("about:"), makeString("aim:"), makeString("callto:"), makeString("cvs:"), makeString("ed2k:"), makeString("feed:"), makeString("fish:"), makeString("gizmoproject:"), makeString("iax2:"), makeString("irc:"), makeString("ircs:"), makeString("lastfm:"), makeString("ldaps:"), makeString("magnet:"), makeString("mms:"), makeString("msnim:"), makeString("nsfw:"), makeString("psyc:"), makeString("rsync:"), makeString("secondlife:"), makeString("skype:"), makeString("ssh:"), makeString("sftp:"), makeString("smb:"), makeString("sms:"), makeString("soldat:"), makeString("steam:"), makeString("tag:"), makeString("unreal:"), makeString("ut2004:"), makeString("webcal:"), makeString("xfire:"), makeString("ymsgr:") });
+	private static final SubLList $list99 = list(new SubLObject[] { makeString("about:"), makeString("aim:"), makeString("callto:"), makeString("cvs:"), makeString("ed2k:"), makeString("feed:"), makeString("fish:"), makeString("gizmoproject:"), makeString("iax2:"), makeString("irc:"), makeString("ircs:"), makeString("lastfm:"), makeString("ldaps:"), makeString("magnet:"), makeString("mms:"), makeString("msnim:"),
+			makeString("nsfw:"), makeString("psyc:"), makeString("rsync:"), makeString("secondlife:"), makeString("skype:"), makeString("ssh:"), makeString("sftp:"), makeString("smb:"), makeString("sms:"), makeString("soldat:"), makeString("steam:"), makeString("tag:"), makeString("unreal:"), makeString("ut2004:"), makeString("webcal:"), makeString("xfire:"), makeString("ymsgr:") });
 
     private static final SubLList $list100 = list(makeString("http://"), makeString("https://"), makeString("ftp://"), makeString("gopher://"), makeString("file:"), makeString("news:"), makeString("mailto:"), makeString("anon:"));
 
@@ -537,19 +547,15 @@ public final class web_utilities extends xml_parsing_utilities {
 
     private static final SubLSymbol RESOLVE_RELATIVE_URI = makeSymbol("RESOLVE-RELATIVE-URI");
 
-
-
-
-
-
-
-
-
-
-
-
-
-    private static final SubLList $list113 = list(new SubLObject[]{ list(list(makeString("http://example.org"), makeString("relfile")), makeString("http://example.org/relfile")), list(list(makeString("http://example.org#"), makeString("prop")), makeString("http://example.org#prop")), list(list(makeString("http://example.org/"), makeString("named")), makeString("http://example.org/named")), list(list(makeString("http://example.org/#"), makeString("owes")), makeString("http://example.org/#owes")), list(list(makeString("http://example.org/dir/file"), makeString("relfile")), makeString("http://example.org/dir/relfile")), list(list(makeString("http://example.org/dir/file"), makeString("../relfile")), makeString("http://example.org/relfile")), list(list(makeString("http://example.org/dir/file"), makeString("/absfile")), makeString("http://example.org/absfile")), list(list(makeString("http://example.org/dir/file"), makeString("//another.example.org/absfile")), makeString("http://another.example.org/absfile")), list(list(makeString("http://example.org/dir/file"), makeString("#foo")), makeString("http://example.org/dir/file#foo")), list(list(makeString("http://example.org/dir/file"), makeString("")), makeString("http://example.org/dir/file")), list(list(makeString("http://foo/"), makeString("Bar")), makeString("http://foo/Bar")), list(list(makeString("http://my.example.org/"), makeString("Name")), makeString("http://my.example.org/Name")), list(list(makeString("http://purl.org/metadata/dublin_core#"), makeString("Creator")), makeString("http://purl.org/metadata/dublin_core#Creator")), list(list(makeString("http://purl.org/metadata/dublin_core#"), makeString("Title")), makeString("http://purl.org/metadata/dublin_core#Title")), list(list(makeString("http://random.ioctl.org/#"), makeString("prop2")), makeString("http://random.ioctl.org/#prop2")), list(list(makeString("http://random.ioctl.org/#"), makeString("someProperty")), makeString("http://random.ioctl.org/#someProperty")), list(list(makeString("http://www.w3.org/1999/02/22-rdf-syntax-ns#"), makeString("_2")), makeString("http://www.w3.org/1999/02/22-rdf-syntax-ns#_2")), list(list(makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/"), makeString("Manifest.rdf")), makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/Manifest.rdf")), list(list(makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/nonconclusions005.rdf"), makeString("premises005.rdf#B")), makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/premises005.rdf#B")), list(list(makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test014.rdf"), makeString("#frag")), makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test014.rdf#frag")) });
+	private static final SubLList $list113 = list(new SubLObject[] { list(list(makeString("http://example.org"), makeString("relfile")), makeString("http://example.org/relfile")), list(list(makeString("http://example.org#"), makeString("prop")), makeString("http://example.org#prop")), list(list(makeString("http://example.org/"), makeString("named")), makeString("http://example.org/named")),
+			list(list(makeString("http://example.org/#"), makeString("owes")), makeString("http://example.org/#owes")), list(list(makeString("http://example.org/dir/file"), makeString("relfile")), makeString("http://example.org/dir/relfile")), list(list(makeString("http://example.org/dir/file"), makeString("../relfile")), makeString("http://example.org/relfile")),
+			list(list(makeString("http://example.org/dir/file"), makeString("/absfile")), makeString("http://example.org/absfile")), list(list(makeString("http://example.org/dir/file"), makeString("//another.example.org/absfile")), makeString("http://another.example.org/absfile")), list(list(makeString("http://example.org/dir/file"), makeString("#foo")), makeString("http://example.org/dir/file#foo")),
+			list(list(makeString("http://example.org/dir/file"), makeString("")), makeString("http://example.org/dir/file")), list(list(makeString("http://foo/"), makeString("Bar")), makeString("http://foo/Bar")), list(list(makeString("http://my.example.org/"), makeString("Name")), makeString("http://my.example.org/Name")),
+			list(list(makeString("http://purl.org/metadata/dublin_core#"), makeString("Creator")), makeString("http://purl.org/metadata/dublin_core#Creator")), list(list(makeString("http://purl.org/metadata/dublin_core#"), makeString("Title")), makeString("http://purl.org/metadata/dublin_core#Title")),
+			list(list(makeString("http://random.ioctl.org/#"), makeString("prop2")), makeString("http://random.ioctl.org/#prop2")), list(list(makeString("http://random.ioctl.org/#"), makeString("someProperty")), makeString("http://random.ioctl.org/#someProperty")), list(list(makeString("http://www.w3.org/1999/02/22-rdf-syntax-ns#"), makeString("_2")), makeString("http://www.w3.org/1999/02/22-rdf-syntax-ns#_2")),
+			list(list(makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/"), makeString("Manifest.rdf")), makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/Manifest.rdf")),
+			list(list(makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/nonconclusions005.rdf"), makeString("premises005.rdf#B")), makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/premises005.rdf#B")),
+			list(list(makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test014.rdf"), makeString("#frag")), makeString("http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test014.rdf#frag")) });
 
     private static final SubLString $str114$http___schemas_xmlsoap_org_soap_e = makeString("http://schemas.xmlsoap.org/soap/envelope/");
 
@@ -800,7 +806,8 @@ public final class web_utilities extends xml_parsing_utilities {
         final SubLObject body;
         current = body = temp;
         final SubLObject real_port = $sym15$REAL_PORT;
-        return list(CLET, list(list(real_port, list(FIF, listS(EQL, port, $list18), $int$80, port))), listS(WITH_TCP_CONNECTION, list(channel, machine, real_port, $ACCESS_MODE, $PRIVATE, $TIMEOUT, timeout), list(SEND_HTTP_REQUEST, channel, list(new SubLObject[]{ LIST, $MACHINE, machine, $PORT, port, $METHOD, method, $URL, url, $QUERY, query, $kw9$KEEP_ALIVE_, keep_aliveP, $kw10$WIDE_NEWLINES_, wide_newlinesP, $ACCEPT_TYPES, accept_types, $CONTENT_TYPE, content_type, $SOAP_ACTION_URI, soap_action_uri })), append(body, NIL)));
+		return list(CLET, list(list(real_port, list(FIF, listS(EQL, port, $list18), $int$80, port))), listS(WITH_TCP_CONNECTION, list(channel, machine, real_port, $ACCESS_MODE, $PRIVATE, $TIMEOUT, timeout),
+				list(SEND_HTTP_REQUEST, channel, list(new SubLObject[] { LIST, $MACHINE, machine, $PORT, port, $METHOD, method, $URL, url, $QUERY, query, $kw9$KEEP_ALIVE_, keep_aliveP, $kw10$WIDE_NEWLINES_, wide_newlinesP, $ACCEPT_TYPES, accept_types, $CONTENT_TYPE, content_type, $SOAP_ACTION_URI, soap_action_uri })), append(body, NIL)));
     }
 
     public static SubLObject http_read_request(final SubLObject instream, SubLObject parse_header) {
@@ -834,8 +841,7 @@ public final class web_utilities extends xml_parsing_utilities {
                 line = string_utilities.network_read_line(instream, NIL, string_utilities.$empty_string$.getGlobalValue(), UNPROVIDED);
                 if (line.equal(string_utilities.$empty_string$.getGlobalValue())) {
                     done = T;
-                } else
-                    if (Strings.sublisp_char(line, ZERO_INTEGER).eql(CHAR_space) || Strings.sublisp_char(line, ZERO_INTEGER).eql(CHAR_tab)) {
+				} else if (Strings.sublisp_char(line, ZERO_INTEGER).eql(CHAR_space) || Strings.sublisp_char(line, ZERO_INTEGER).eql(CHAR_tab)) {
                         if (NIL == request_header) {
                             continue;
                         }
@@ -897,7 +903,12 @@ public final class web_utilities extends xml_parsing_utilities {
                 request_header = list_utilities.alist_enter(request_header, $str32$Remote_Host, session_string, symbol_function(EQUAL));
                 uri_parts = uri_parts.rest();
             }
-            new_uri = cconcatenate(http_kernel.$http_cgi_bin_directory$.getGlobalValue(), new SubLObject[]{ $str29$_, string_utilities.bunge(uri_parts, CHAR_slash) });
+			SubLObject globalValue = http_kernel.$http_cgi_bin_directory$.getGlobalValue();
+			//			if (SubLMain.BOOTY_HACKZ && globalValue != NIL && uri_parts.first().getStringValue().equals("cgi-bin")) {
+			//				uri_parts = uri_parts.rest();
+			//			}
+			final SubLObject bunge2 = string_utilities.bunge(uri_parts, CHAR_slash);
+			new_uri = cconcatenate(globalValue, new SubLObject[] { $str29$_, bunge2 });
             return values(method, new_uri, version, request_header);
         }
         return values(method, uri, version, request_header);
@@ -1006,7 +1017,7 @@ public final class web_utilities extends xml_parsing_utilities {
         }
         assert NIL != keywordp(method) : "Types.keywordp(method) " + "CommonSymbols.NIL != Types.keywordp(method) " + method;
         assert NIL != stringp(machine) : "Types.stringp(machine) " + "CommonSymbols.NIL != Types.stringp(machine) " + machine;
-        if (((!port.eql($DEFAULT)) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(port))) {
+        if (((!port.eql($DEFAULT)) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(port))) {
             throw new AssertionError(port);
         }
         assert NIL != stringp(url) : "Types.stringp(url) " + "CommonSymbols.NIL != Types.stringp(url) " + url;
@@ -1025,22 +1036,19 @@ public final class web_utilities extends xml_parsing_utilities {
         } 
         if (method.eql($GET)) {
             http_send_get_request(out_stream, machine, port, url, query, keep_aliveP, wide_newlinesP, accept_types);
-        } else
-            if (method.eql($POST)) {
+		} else if (method.eql($POST)) {
                 assert NIL != stringp(query) : "Types.stringp(query) " + "CommonSymbols.NIL != Types.stringp(query) " + query;
                 if (content_type.eql($DEFAULT)) {
                     content_type = $http_post_default_content_type$.getGlobalValue();
                 }
                 http_send_post_request(out_stream, machine, port, url, query, keep_aliveP, wide_newlinesP, accept_types, content_type, soap_action_uri);
-            } else
-                if (method.eql($PUT)) {
+		} else if (method.eql($PUT)) {
                     assert NIL != stringp(query) : "Types.stringp(query) " + "CommonSymbols.NIL != Types.stringp(query) " + query;
                     if (content_type.eql($DEFAULT)) {
                         content_type = $http_put_default_content_type$.getGlobalValue();
                     }
                     http_send_put_request(out_stream, machine, port, url, query, keep_aliveP, wide_newlinesP, accept_types, content_type, soap_action_uri);
-                } else
-                    if (method.eql($DELETE)) {
+		} else if (method.eql($DELETE)) {
                         assert NIL != stringp(query) : "Types.stringp(query) " + "CommonSymbols.NIL != Types.stringp(query) " + query;
                         if (content_type.eql($DEFAULT)) {
                             content_type = $http_delete_default_content_type$.getGlobalValue();
@@ -1172,11 +1180,9 @@ public final class web_utilities extends xml_parsing_utilities {
                 final SubLObject pcase_var = action;
                 if (pcase_var.eql($VERSION)) {
                     format(out_stream, format_string, url);
-                } else
-                    if (pcase_var.eql($ACCEPT)) {
+				} else if (pcase_var.eql($ACCEPT)) {
                         http_output_accept_types(out_stream, format_string, accept_types);
-                    } else
-                        if (pcase_var.eql($CONNECTION)) {
+				} else if (pcase_var.eql($CONNECTION)) {
                             if (keep_aliveP.isInteger()) {
                                 format(out_stream, $str66$Keep_Alive___S, keep_aliveP);
                                 if (NIL != wide_newlinesP) {
@@ -1186,14 +1192,11 @@ public final class web_utilities extends xml_parsing_utilities {
                                 }
                             }
                             format(out_stream, format_string, NIL != keep_aliveP ? $str67$keep_alive : $$$close);
-                        } else
-                            if (pcase_var.eql($USER_AGENT)) {
+				} else if (pcase_var.eql($USER_AGENT)) {
                                 format(out_stream, format_string, system_info.cyc_revision_string(), system_parameters.$base_tcp_port$.getDynamicValue(thread));
-                            } else
-                                if (pcase_var.eql($HOST)) {
+				} else if (pcase_var.eql($HOST)) {
                                     format(out_stream, format_string, machine, port.eql($DEFAULT) ? string_utilities.$empty_string$.getGlobalValue() : cconcatenate($str71$_, format_nil.format_nil_a_no_copy(port)));
-                                } else
-                                    if (!pcase_var.eql($BLANK_LINE)) {
+				} else if (!pcase_var.eql($BLANK_LINE)) {
                                         if (pcase_var.eql($COOKIES)) {
                                             if (NIL == get_current_cookies_for_request()) {
                                                 skippedP = T;
@@ -1207,24 +1210,19 @@ public final class web_utilities extends xml_parsing_utilities {
                                                     cookie_string = cdolist_list_var_$4.first();
                                                 } 
                                             }
-                                        } else
-                                            if (pcase_var.eql($CONTENT_TYPE)) {
+					} else if (pcase_var.eql($CONTENT_TYPE)) {
                                                 format(out_stream, format_string, content_type);
-                                            } else
-                                                if (pcase_var.eql($CONTENT_LENGTH)) {
+					} else if (pcase_var.eql($CONTENT_LENGTH)) {
                                                     format(out_stream, format_string, length);
-                                                } else
-                                                    if (pcase_var.eql($SOAP_ACTION)) {
+					} else if (pcase_var.eql($SOAP_ACTION)) {
                                                         if (NIL != soap_action_uri) {
                                                             format(out_stream, format_string, soap_action_uri);
                                                         } else {
                                                             skippedP = T;
                                                         }
-                                                    } else
-                                                        if (pcase_var.eql($QUERY)) {
+					} else if (pcase_var.eql($QUERY)) {
                                                             format(out_stream, format_string, query);
-                                                        } else
-                                                            if (format_string.isString()) {
+					} else if (format_string.isString()) {
                                                                 write_string(format_string, out_stream, UNPROVIDED, UNPROVIDED);
                                                             }
 
@@ -1350,11 +1348,9 @@ public final class web_utilities extends xml_parsing_utilities {
                 final SubLObject pcase_var = action;
                 if (pcase_var.eql($VERSION)) {
                     format(out_stream, format_string, full_url);
-                } else
-                    if (pcase_var.eql($ACCEPT)) {
+				} else if (pcase_var.eql($ACCEPT)) {
                         http_output_accept_types(out_stream, format_string, accept_types);
-                    } else
-                        if (pcase_var.eql($CONNECTION)) {
+				} else if (pcase_var.eql($CONNECTION)) {
                             if (keep_aliveP.isInteger()) {
                                 format(out_stream, $str66$Keep_Alive___S, keep_aliveP);
                                 if (NIL != wide_newlinesP) {
@@ -1364,11 +1360,9 @@ public final class web_utilities extends xml_parsing_utilities {
                                 }
                             }
                             format(out_stream, format_string, NIL != keep_aliveP ? $str67$keep_alive : $$$close);
-                        } else
-                            if (pcase_var.eql($USER_AGENT)) {
+				} else if (pcase_var.eql($USER_AGENT)) {
                                 format(out_stream, format_string, system_info.cyc_revision_string(), system_parameters.$base_tcp_port$.getDynamicValue(thread));
-                            } else
-                                if (pcase_var.eql($COOKIES)) {
+				} else if (pcase_var.eql($COOKIES)) {
                                     if (NIL == get_current_cookies_for_request()) {
                                         skippedP = T;
                                     } else {
@@ -1381,11 +1375,9 @@ public final class web_utilities extends xml_parsing_utilities {
                                             cookie_string = cdolist_list_var_$5.first();
                                         } 
                                     }
-                                } else
-                                    if (pcase_var.eql($HOST)) {
+				} else if (pcase_var.eql($HOST)) {
                                         format(out_stream, format_string, machine, port.eql($DEFAULT) ? string_utilities.$empty_string$.getGlobalValue() : cconcatenate($str71$_, format_nil.format_nil_a_no_copy(port)));
-                                    } else
-                                        if (!pcase_var.eql($BLANK_LINE)) {
+				} else if (!pcase_var.eql($BLANK_LINE)) {
                                             if (format_string.isString()) {
                                                 write_string(format_string, out_stream, UNPROVIDED, UNPROVIDED);
                                             }
@@ -1562,8 +1554,7 @@ public final class web_utilities extends xml_parsing_utilities {
                 if (decoded_char.isChar()) {
                     Strings.set_char(new_string, new_index, decoded_char);
                     new_index = add(new_index, ONE_INTEGER);
-                } else
-                    if (decoded_char.isString()) {
+				} else if (decoded_char.isString()) {
                         new_string = cconcatenate(string_utilities.substring(new_string, ZERO_INTEGER, new_index), new SubLObject[]{ decoded_char, string_utilities.substring(new_string, add(new_index, ONE_INTEGER), UNPROVIDED) });
                         new_index = add(new_index, length(decoded_char));
                     }
@@ -1819,18 +1810,15 @@ public final class web_utilities extends xml_parsing_utilities {
             if (NIL != colon_pos) {
                 base = string_utilities.substring(base, ZERO_INTEGER, number_utilities.f_1X(colon_pos));
             }
-        } else
-            if (((((NIL != string_utilities.non_empty_string_p(base)) && (NIL != uri_lacks_path_componentP(base))) && (!CHAR_hash.eql(string_utilities.last_char(base)))) && (NIL != string_utilities.non_empty_string_p(local_name))) && (!CHAR_hash.eql(string_utilities.first_char(local_name)))) {
+		} else if (((((NIL != string_utilities.non_empty_string_p(base)) && (NIL != uri_lacks_path_componentP(base))) && (!CHAR_hash.eql(string_utilities.last_char(base)))) && (NIL != string_utilities.non_empty_string_p(local_name))) && (!CHAR_hash.eql(string_utilities.first_char(local_name)))) {
                 base = cconcatenate(base, $str29$_);
-            } else
-                if (NIL != string_utilities.starts_with(local_name, $str29$_)) {
+		} else if (NIL != string_utilities.starts_with(local_name, $str29$_)) {
                     final SubLObject colon_pos = position(CHAR_colon, base, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
                     if (NIL != colon_pos) {
                         final SubLObject domain_name_end = position(CHAR_slash, base, symbol_function(EQL), symbol_function(IDENTITY), add(THREE_INTEGER, colon_pos), UNPROVIDED);
                         base = string_utilities.substring(base, ZERO_INTEGER, domain_name_end);
                     }
-                } else
-                    if (((NIL == string_utilities.empty_string_p(local_name)) && (!string_utilities.first_char(local_name).eql(CHAR_hash))) && (!string_utilities.last_char(base).eql(CHAR_hash))) {
+		} else if (((NIL == string_utilities.empty_string_p(local_name)) && (!string_utilities.first_char(local_name).eql(CHAR_hash))) && (!string_utilities.last_char(base).eql(CHAR_hash))) {
                         final SubLObject slash_pos = list_utilities.position_from_end(CHAR_slash, base, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
                         if (NIL != list_utilities.lengthG(base, number_utilities.f_1X(slash_pos), UNPROVIDED)) {
                             base = string_utilities.substring(base, ZERO_INTEGER, number_utilities.f_1X(slash_pos));
@@ -2957,8 +2945,7 @@ public final class web_utilities extends xml_parsing_utilities {
                 path = $str29$_;
             }
             source = http_retrieve(query, path, machine, port, $GET, max_chars, accept_types, follow_redirectsP, timeout);
-        } else
-            if (NIL != string_utilities.starts_with(Strings.string_downcase(url, UNPROVIDED, UNPROVIDED), $str192$file___)) {
+		} else if (NIL != string_utilities.starts_with(Strings.string_downcase(url, UNPROVIDED, UNPROVIDED), $str192$file___)) {
                 final SubLObject path2 = string_utilities.pre_remove(url, $str192$file___, symbol_function(EQUALP));
                 assert NIL != file_utilities.file_existsP(path2) : "file_utilities.file_existsP(path2) " + "CommonSymbols.NIL != file_utilities.file_existsP(path2) " + path2;
                 source = string_utilities.read_string_from_file(path2, UNPROVIDED, UNPROVIDED);
@@ -3310,7 +3297,7 @@ public final class web_utilities extends xml_parsing_utilities {
         deflexical("*DECODE-URLS-DURING-HTTP-READ-REQUEST*", NIL);
         deflexical("*HTTP-ALTERNATE-URI-FORMAT-A-PREFIX*", $str27$_a_);
         deflexical("*HTML-ALTERNATE-URI-FORMAT-SESSION-ID-LENGTH*", FIVE_INTEGER);
-        deflexical("*HTML-CYC-LOGIN-SESSION-STRING-TO-REMOTE-HOST*", SubLTrampolineFile.maybeDefault($html_cyc_login_session_string_to_remote_host$, $html_cyc_login_session_string_to_remote_host$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*HTML-CYC-LOGIN-SESSION-STRING-TO-REMOTE-HOST*", SubLSystemTrampolineFile.maybeDefault($html_cyc_login_session_string_to_remote_host$, $html_cyc_login_session_string_to_remote_host$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
         deflexical("*HTML-POSSIBLY-REDIRECT-TO-PORTAL-SCRIPT*", $str33$var_KEA_port_from_cyc_base_port__);
         deflexical("*HTTP-INFORMATIONAL-CODES*", $list34);
         deflexical("*HTTP-SUCCESS-CODES*", $list35);
@@ -3387,8 +3374,6 @@ public final class web_utilities extends xml_parsing_utilities {
     public void runTopLevelForms() {
         setup_web_utilities_file();
     }
-
-    
 
     public static final class $html_url_expand_char$UnaryFunction extends UnaryFunction {
         public $html_url_expand_char$UnaryFunction() {

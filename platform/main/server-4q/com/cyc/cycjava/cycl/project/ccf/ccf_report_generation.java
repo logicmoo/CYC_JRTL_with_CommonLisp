@@ -77,7 +77,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -523,42 +523,42 @@ public final class ccf_report_generation extends SubLTranslatedFile implements V
     }
 
     public static final SubLObject exc_state_phys_fields(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
         return v_object.getField2();
     }
 
     public static final SubLObject exc_state_exc_value(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
         return v_object.getField3();
     }
 
     public static final SubLObject exc_state_default_value(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
         return v_object.getField4();
     }
 
     public static final SubLObject exc_state_satisfied_yetP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
         return v_object.getField5();
     }
 
     public static final SubLObject _csetf_exc_state_phys_fields(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_exc_state_exc_value(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_exc_state_default_value(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_exc_state_satisfied_yetP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
+        SubLSystemTrampolineFile.checkType(v_object, REPORTGEN_EXCLUSIVITY_STATE_P);
         return v_object.setField5(value);
     }
 

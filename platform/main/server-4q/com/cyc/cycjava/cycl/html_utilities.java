@@ -145,7 +145,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class html_utilities extends SubLTranslatedFile {
@@ -5810,7 +5810,7 @@ public final class html_utilities extends SubLTranslatedFile {
 		defparameter("*HTML-ALIGN-MAP*", $list49);
 		defparameter("*CYCORP-HOMEPAGE-URL*", $str50$http___www_cyc_com);
 		defparameter("*CYCORP-HOMEPAGE-TEXT*", $$$Cycorp);
-		deflexical("*PROPRIETARITY-MESSAGE*", SubLTrampolineFile.maybeDefault($proprietarity_message$, $proprietarity_message$, $str47$));
+		deflexical("*PROPRIETARITY-MESSAGE*", SubLSystemTrampolineFile.maybeDefault($proprietarity_message$, $proprietarity_message$, $str47$));
 		defparameter("*HTML-EXTRACT-FIELD-NAME*", NIL);
 		deflexical("*URL-TO-TEXT-REPLACEMENTS*", $list689);
 		deflexical("*HTML-FILENAME-INPUT-PREFIX*", $str696$_file_input_);

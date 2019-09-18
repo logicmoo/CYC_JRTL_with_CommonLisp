@@ -37,7 +37,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -69,12 +69,12 @@ public final class mysentient_user_experience_manager_widgets extends SubLTransl
      * Create the QA module output that was received by the UEM, and return selected QA outputs to show to the user.
      */
     public static final SubLObject mysentient_uem_note_one_qa_module_output_for_user(SubLObject user, SubLObject session, SubLObject session_mt, SubLObject java_package_name, SubLObject output_confidence, SubLObject xml_confidence_tuples) {
-        SubLTrampolineFile.checkType(user, FORT_P);
-        SubLTrampolineFile.checkType(session, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
-        SubLTrampolineFile.checkType(java_package_name, STRINGP);
-        SubLTrampolineFile.checkType(output_confidence, NUMBERP);
-        SubLTrampolineFile.checkType(xml_confidence_tuples, LISTP);
+        SubLSystemTrampolineFile.checkType(user, FORT_P);
+        SubLSystemTrampolineFile.checkType(session, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(java_package_name, STRINGP);
+        SubLSystemTrampolineFile.checkType(output_confidence, NUMBERP);
+        SubLSystemTrampolineFile.checkType(xml_confidence_tuples, LISTP);
         mysentient_utilities.myselog_fine(cconcatenate($str_alt7$Noting_output_of_QA_module_, new SubLObject[]{ format_nil.format_nil_a_no_copy(java_package_name), $str_alt8$_and_selecting_outputs_to_show_us }));
         {
             SubLObject iteration_event = mysentient_preprocess_widgets.mysentient_pp_most_recent_session_iteration(session, session_mt);
@@ -110,8 +110,8 @@ public final class mysentient_user_experience_manager_widgets extends SubLTransl
      * and session mt.
      */
     public static final SubLObject mysentient_uem_get_module_outputs_to_show_user(SubLObject session, SubLObject session_mt) {
-        SubLTrampolineFile.checkType(session, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(session, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
         {
             SubLObject info_transfer = info_transfer_of_most_recent_utterance(session_mt);
             SubLObject output_ibts = myse_select_qa_outputs_to_show_user(info_transfer, session, session_mt);
@@ -129,12 +129,12 @@ public final class mysentient_user_experience_manager_widgets extends SubLTransl
      * Record how the user triaged what was recommended and return what's the next thing to do.
      */
     public static final SubLObject mysentient_uem_note_user_response_to_answer_reporter(SubLObject user, SubLObject presented_ibts, SubLObject rejected_ibts, SubLObject accepted_ibts, SubLObject session, SubLObject session_mt) {
-        SubLTrampolineFile.checkType(user, FORT_P);
-        SubLTrampolineFile.checkType(presented_ibts, LISTP);
-        SubLTrampolineFile.checkType(rejected_ibts, LISTP);
-        SubLTrampolineFile.checkType(accepted_ibts, LISTP);
-        SubLTrampolineFile.checkType(session, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(user, FORT_P);
+        SubLSystemTrampolineFile.checkType(presented_ibts, LISTP);
+        SubLSystemTrampolineFile.checkType(rejected_ibts, LISTP);
+        SubLSystemTrampolineFile.checkType(accepted_ibts, LISTP);
+        SubLSystemTrampolineFile.checkType(session, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
         mysentient_utilities.myselog_fine($str_alt13$Recording_which_IBTs_were_present);
         {
             SubLObject info_transfer = info_transfer_of_most_recent_utterance(session_mt);
@@ -155,8 +155,8 @@ public final class mysentient_user_experience_manager_widgets extends SubLTransl
      * Figure out what to do next.
      */
     public static final SubLObject mysentient_uem_select_next_action(SubLObject iteration_id, SubLObject session, SubLObject session_mt) {
-        SubLTrampolineFile.checkType(session, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.checkType(session, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, POSSIBLY_HLMT_P);
         {
             SubLObject iteration_event = mysentient_preprocess_widgets.mysentient_pp_most_recent_session_iteration(session, session_mt);
             if (NIL == iteration_event) {
@@ -444,7 +444,7 @@ public final class mysentient_user_experience_manager_widgets extends SubLTransl
      * 		hlmt-p; the microtheory in which session-information is stored
      */
     public static final SubLObject mysentient_uem_user_happiness_level(SubLObject user, SubLObject session_mt) {
-        SubLTrampolineFile.checkType(session_mt, HLMT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, HLMT_P);
         perform_genlmt_workaround_hack();
         {
             SubLObject session = mysentient_user_profile_manager_widgets.mys_session_from_session_mt(session_mt);
@@ -470,9 +470,9 @@ public final class mysentient_user_experience_manager_widgets extends SubLTransl
      * @return see myse-uem-user-happiness-level
      */
     public static final SubLObject mysentient_uem_note_user_happiness(SubLObject user, SubLObject session_mt, SubLObject happiness_level) {
-        SubLTrampolineFile.checkType(user, FORT_P);
-        SubLTrampolineFile.checkType(session_mt, HLMT_P);
-        SubLTrampolineFile.checkType(happiness_level, POSSIBLY_NAT_P);
+        SubLSystemTrampolineFile.checkType(user, FORT_P);
+        SubLSystemTrampolineFile.checkType(session_mt, HLMT_P);
+        SubLSystemTrampolineFile.checkType(happiness_level, POSSIBLY_NAT_P);
         {
             SubLObject session = mysentient_user_profile_manager_widgets.mys_session_from_session_mt(session_mt);
             SubLObject next_interaction_number = myse_uem_get_next_interaction_number(user, session, session_mt);

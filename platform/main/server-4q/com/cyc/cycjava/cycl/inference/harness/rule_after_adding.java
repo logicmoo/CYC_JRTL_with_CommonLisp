@@ -69,7 +69,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -890,8 +890,8 @@ public final class rule_after_adding extends SubLTranslatedFile {
 
     public static SubLObject init_rule_after_adding_file() {
         deflexical("*RULE-AFTER-ADDING-PREDICATES*", NIL);
-        deflexical("*RULE-AFTER-ADDINGS-HASH*", SubLTrampolineFile.maybeDefault($rule_after_addings_hash$, $rule_after_addings_hash$, NIL));
-        deflexical("*RULE-AFTER-REMOVINGS-HASH*", SubLTrampolineFile.maybeDefault($rule_after_removings_hash$, $rule_after_removings_hash$, NIL));
+        deflexical("*RULE-AFTER-ADDINGS-HASH*", SubLSystemTrampolineFile.maybeDefault($rule_after_addings_hash$, $rule_after_addings_hash$, NIL));
+        deflexical("*RULE-AFTER-REMOVINGS-HASH*", SubLSystemTrampolineFile.maybeDefault($rule_after_removings_hash$, $rule_after_removings_hash$, NIL));
         return NIL;
     }
 

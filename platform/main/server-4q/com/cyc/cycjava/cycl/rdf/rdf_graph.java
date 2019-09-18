@@ -126,7 +126,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -721,7 +721,7 @@ public final class rdf_graph extends SubLTranslatedFile {
         }
         assert NIL != rdf_graph_p(v_graph) : "rdf_graph.rdf_graph_p(v_graph) " + "CommonSymbols.NIL != rdf_graph.rdf_graph_p(v_graph) " + v_graph;
         assert NIL != valid_rdf_subject_p(subject) : "rdf_graph.valid_rdf_subject_p(subject) " + "CommonSymbols.NIL != rdf_graph.valid_rdf_subject_p(subject) " + subject;
-        if (((NIL != predicate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
+        if (((NIL != predicate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
             throw new AssertionError(predicate);
         }
         SubLObject triples = NIL;
@@ -746,7 +746,7 @@ public final class rdf_graph extends SubLTranslatedFile {
         }
         assert NIL != rdf_graph_p(v_graph) : "rdf_graph.rdf_graph_p(v_graph) " + "CommonSymbols.NIL != rdf_graph.rdf_graph_p(v_graph) " + v_graph;
         assert NIL != valid_rdf_subject_p(subject) : "rdf_graph.valid_rdf_subject_p(subject) " + "CommonSymbols.NIL != rdf_graph.valid_rdf_subject_p(subject) " + subject;
-        if (((NIL != predicate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
+        if (((NIL != predicate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
             throw new AssertionError(predicate);
         }
         SubLObject triples = NIL;
@@ -780,7 +780,7 @@ public final class rdf_graph extends SubLTranslatedFile {
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != rdf_graph_p(v_graph) : "rdf_graph.rdf_graph_p(v_graph) " + "CommonSymbols.NIL != rdf_graph.rdf_graph_p(v_graph) " + v_graph;
         assert NIL != valid_rdf_subject_p(subject) : "rdf_graph.valid_rdf_subject_p(subject) " + "CommonSymbols.NIL != rdf_graph.valid_rdf_subject_p(subject) " + subject;
-        if (((NIL != predicate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
+        if (((NIL != predicate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
             throw new AssertionError(predicate);
         }
         final SubLObject predicate_uri = (NIL != predicate) ? NIL != rdf_uri.rdf_uri_p(predicate) ? predicate : rdf_graph_get_uri(v_graph, predicate, UNPROVIDED, UNPROVIDED) : NIL;
@@ -814,7 +814,7 @@ public final class rdf_graph extends SubLTranslatedFile {
         }
         assert NIL != rdf_graph_p(v_graph) : "rdf_graph.rdf_graph_p(v_graph) " + "CommonSymbols.NIL != rdf_graph.rdf_graph_p(v_graph) " + v_graph;
         assert NIL != valid_rdf_subject_p(subject) : "rdf_graph.valid_rdf_subject_p(subject) " + "CommonSymbols.NIL != rdf_graph.valid_rdf_subject_p(subject) " + subject;
-        if (((NIL != predicate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
+        if (((NIL != predicate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
             throw new AssertionError(predicate);
         }
         final SubLObject all_subject_triples = rdf_graph_find_triples(v_graph, subject, $SUBJECT);
@@ -868,7 +868,7 @@ public final class rdf_graph extends SubLTranslatedFile {
         }
         assert NIL != rdf_graph_p(v_graph) : "rdf_graph.rdf_graph_p(v_graph) " + "CommonSymbols.NIL != rdf_graph.rdf_graph_p(v_graph) " + v_graph;
         assert NIL != valid_rdf_object_p(v_object) : "rdf_graph.valid_rdf_object_p error :" + v_object;
-        if (((NIL != predicate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
+        if (((NIL != predicate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
             throw new AssertionError(predicate);
         }
         SubLObject triples = NIL;
@@ -893,7 +893,7 @@ public final class rdf_graph extends SubLTranslatedFile {
         }
         assert NIL != rdf_graph_p(v_graph) : "rdf_graph.rdf_graph_p(v_graph) " + "CommonSymbols.NIL != rdf_graph.rdf_graph_p(v_graph) " + v_graph;
         assert NIL != valid_rdf_object_p(v_object) : "rdf_graph.valid_rdf_object_p error :" + v_object;
-        if (((NIL != predicate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
+        if (((NIL != predicate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
             throw new AssertionError(predicate);
         }
         SubLObject triples = NIL;
@@ -927,7 +927,7 @@ public final class rdf_graph extends SubLTranslatedFile {
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != rdf_graph_p(v_graph) : "rdf_graph.rdf_graph_p(v_graph) " + "CommonSymbols.NIL != rdf_graph.rdf_graph_p(v_graph) " + v_graph;
         assert NIL != valid_rdf_object_p(v_object) : "rdf_graph.valid_rdf_object_p error :" + v_object;
-        if (((NIL != predicate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
+        if (((NIL != predicate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
             throw new AssertionError(predicate);
         }
         SubLObject triples = NIL;
@@ -959,7 +959,7 @@ public final class rdf_graph extends SubLTranslatedFile {
         }
         assert NIL != rdf_graph_p(v_graph) : "rdf_graph.rdf_graph_p(v_graph) " + "CommonSymbols.NIL != rdf_graph.rdf_graph_p(v_graph) " + v_graph;
         assert NIL != valid_rdf_object_p(v_object) : "rdf_graph.valid_rdf_object_p error :" + v_object;
-        if (((NIL != predicate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
+        if (((NIL != predicate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_rdf_predicate_p(predicate))) {
             throw new AssertionError(predicate);
         }
         final SubLObject all_object_triples = rdf_graph_find_triples(v_graph, v_object, $OBJECT);
@@ -1046,10 +1046,10 @@ public final class rdf_graph extends SubLTranslatedFile {
             datatype = NIL;
         }
         assert NIL != stringp(utf8_lexical_form) : "Types.stringp(utf8_lexical_form) " + "CommonSymbols.NIL != Types.stringp(utf8_lexical_form) " + utf8_lexical_form;
-        if (((NIL != language_tag) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(language_tag))) {
+        if (((NIL != language_tag) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(language_tag))) {
             throw new AssertionError(language_tag);
         }
-        if (((NIL != datatype) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == rdf_literal.valid_rdf_literal_datatype_p(datatype))) {
+        if (((NIL != datatype) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == rdf_literal.valid_rdf_literal_datatype_p(datatype))) {
             throw new AssertionError(datatype);
         }
         SubLObject node = NIL;
@@ -2439,7 +2439,7 @@ public final class rdf_graph extends SubLTranslatedFile {
     }
 
     public static SubLObject rdf_graph_qname_for_uri(final SubLObject v_graph, final SubLObject uri) {
-        if (((NIL == rdf_uri.rdf_uri_p(uri)) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == web_utilities.uri_p(uri, UNPROVIDED))) {
+        if (((NIL == rdf_uri.rdf_uri_p(uri)) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == web_utilities.uri_p(uri, UNPROVIDED))) {
             throw new AssertionError(uri);
         }
         final SubLObject utf8 = (NIL != rdf_uri.rdf_uri_p(uri)) ? rdf_uri.rdf_uri_utf8_string(uri) : uri;
@@ -3757,7 +3757,7 @@ public final class rdf_graph extends SubLTranslatedFile {
         defparameter("*RDF-GRAPH-LITERAL-INDEXING-ENABLED?*", NIL);
         defparameter("*RDF-GRAPH-CONVERTED-TRIPLES*", NIL);
         deflexical("*TARGET-MAX-LOADED-RDF-TRIPLE-COUNT*", $int$10000);
-        deflexical("*RDF-BLANK-NODE-ISG*", SubLTrampolineFile.maybeDefault($rdf_blank_node_isg$, $rdf_blank_node_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*RDF-BLANK-NODE-ISG*", SubLSystemTrampolineFile.maybeDefault($rdf_blank_node_isg$, $rdf_blank_node_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
         deflexical("*RDF-GRAPH-GET-BLANK-NODE-CACHED-CACHING-STATE*", NIL);
         deflexical("*RDF-GRAPH-GET-LITERAL-CACHED-CACHING-STATE*", NIL);
         defconstant("*DTP-RDF-GRAPH*", RDF_GRAPH);

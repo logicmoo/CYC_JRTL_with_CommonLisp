@@ -194,7 +194,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3823,7 +3823,7 @@ public final class inference_utilities extends SubLTranslatedFile {
         }
         assert NIL != inference_datastructures_inference.inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
         assert NIL != inference_datastructures_proof.proof_p(proof) : "inference_datastructures_proof.proof_p(proof) " + "CommonSymbols.NIL != inference_datastructures_proof.proof_p(proof) " + proof;
-        if (((NIL != literal_to_proofs_map) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hash_table_p(literal_to_proofs_map))) {
+        if (((NIL != literal_to_proofs_map) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hash_table_p(literal_to_proofs_map))) {
             throw new AssertionError(literal_to_proofs_map);
         }
         if (!literal_to_proofs_map.isHashtable()) {
@@ -4316,7 +4316,7 @@ public final class inference_utilities extends SubLTranslatedFile {
         }
         assert NIL != inference_datastructures_problem_store.problem_store_p(store) : "inference_datastructures_problem_store.problem_store_p(store) " + "CommonSymbols.NIL != inference_datastructures_problem_store.problem_store_p(store) " + store;
         assert NIL != subl_promotions.non_negative_integer_p(starting_id) : "subl_promotions.non_negative_integer_p(starting_id) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(starting_id) " + starting_id;
-        if (((NIL != ending_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(ending_id))) {
+        if (((NIL != ending_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(ending_id))) {
             throw new AssertionError(ending_id);
         }
         final SubLObject link_limit = (NIL != ending_id) ? ending_id : inference_datastructures_problem_store.problem_store_historical_link_count(store);

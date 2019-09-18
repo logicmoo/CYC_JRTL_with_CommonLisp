@@ -49,7 +49,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class integer_sequence_generator extends SubLTranslatedFile {
     public static final SubLFile me = new integer_sequence_generator();
@@ -304,7 +304,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && delta.isZero()) {
             Errors.error($$$DELTA_must_not_be_zero);
         }
-        if (((NIL != limit) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(limit))) {
+        if (((NIL != limit) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(limit))) {
             throw new AssertionError(limit);
         }
         final SubLObject isg = make_integer_sequence_generator(UNPROVIDED);

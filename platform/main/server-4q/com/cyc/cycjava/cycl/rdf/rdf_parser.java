@@ -95,7 +95,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -338,7 +338,7 @@ public final class rdf_parser extends SubLTranslatedFile {
             base_uri = cconcatenate($str0$file__, filename);
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(filename, $sym1$FILE_EXISTS_);
+        SubLSystemTrampolineFile.enforceType(filename, $sym1$FILE_EXISTS_);
         SubLObject v_graph = NIL;
         SubLObject stream = NIL;
         try {
@@ -404,7 +404,7 @@ public final class rdf_parser extends SubLTranslatedFile {
             base_uri = cconcatenate($str0$file__, input_filename);
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(input_filename, $sym1$FILE_EXISTS_);
+        SubLSystemTrampolineFile.enforceType(input_filename, $sym1$FILE_EXISTS_);
         SubLObject nt_file = NIL;
         SubLObject stream = NIL;
         try {
@@ -605,7 +605,7 @@ public final class rdf_parser extends SubLTranslatedFile {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject local_lang = list_utilities.alist_lookup(local_attributes, owl_to_cycl.xml_name($$$lang), symbol_function(EQUAL), UNPROVIDED);
         final SubLObject uri = resolve_rdfXxml_uri(sexpr_type, attribute_lists, UNPROVIDED);
-        SubLTrampolineFile.enforceType(uri, VALID_NODE_ELEMENT_RDF_URI_P);
+        SubLSystemTrampolineFile.enforceType(uri, VALID_NODE_ELEMENT_RDF_URI_P);
         if (NIL != list_utilities.alist_lookup(local_attributes, rdf_utilities.rdf_name($$$li), symbol_function(EQUAL), UNPROVIDED)) {
             Errors.error($str17$rdf_li_is_not_allowed_as_as_an_at);
         }
@@ -1092,7 +1092,7 @@ public final class rdf_parser extends SubLTranslatedFile {
                 if (NIL != resource) {
                     Errors.error($str62$Cannot_have_rdf_nodeID_and_rdf_re);
                 }
-                SubLTrampolineFile.enforceType(node_id, VALID_XML_NAMESPACES_NAME_P);
+                SubLSystemTrampolineFile.enforceType(node_id, VALID_XML_NAMESPACES_NAME_P);
                 subject = rdf_parser_get_blank_node(graph_or_stream, node_id);
             } else
                 if (NIL != xml_parsing_utilities.xml_sexpr_attribute_value(sexpr, rdf_utilities.rdf_name($$$about))) {
@@ -1134,7 +1134,7 @@ public final class rdf_parser extends SubLTranslatedFile {
                 if (NIL != resource) {
                     Errors.error($str62$Cannot_have_rdf_nodeID_and_rdf_re);
                 }
-                SubLTrampolineFile.enforceType(node_id, VALID_XML_NAMESPACES_NAME_P);
+                SubLSystemTrampolineFile.enforceType(node_id, VALID_XML_NAMESPACES_NAME_P);
                 subject = rdf_parser_get_blank_node(v_graph, node_id);
             } else {
                 subject = rdf_parser_get_new_blank_node(v_graph);
@@ -1148,7 +1148,7 @@ public final class rdf_parser extends SubLTranslatedFile {
     }
 
     public static SubLObject resolve_rdf_id(final SubLObject local_name, final SubLObject attribute_lists) {
-        SubLTrampolineFile.enforceType(local_name, VALID_XML_NAME_P);
+        SubLSystemTrampolineFile.enforceType(local_name, VALID_XML_NAME_P);
         final SubLObject hash_prefixed = cconcatenate($str66$_, local_name);
         final SubLObject resolved = resolve_rdfXxml_uri(hash_prefixed, attribute_lists, T);
         if (hash_prefixed.equal(resolved)) {

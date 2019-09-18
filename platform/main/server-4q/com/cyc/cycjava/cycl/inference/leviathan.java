@@ -186,7 +186,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -7437,10 +7437,10 @@ public final class leviathan extends SubLTranslatedFile {
         deflexical("*CACHED-LOAD-ALL-INSTANTIATED-HAYSTACKS-CACHING-STATE*", NIL);
         deflexical("*CACHED-LOAD-ALL-CRIPPLED-HAYSTACKS-CACHING-STATE*", NIL);
         deflexical("*SORTED-RULE-ANALYSES*", $list126);
-        deflexical("*RULE-BINDINGS-WFF-TABLE*", SubLTrampolineFile.maybeDefault($rule_bindings_wff_table$, $rule_bindings_wff_table$, NIL));
+        deflexical("*RULE-BINDINGS-WFF-TABLE*", SubLSystemTrampolineFile.maybeDefault($rule_bindings_wff_table$, $rule_bindings_wff_table$, NIL));
         defparameter("*RULE-BINDINGS-TO-CLOSED-WFF-PRUNING-ENABLED?*", NIL);
         defparameter("*MAINTAIN-PROBLEM-CREATION-TIMES?*", NIL);
-        deflexical("*PROBLEM-CREATION-TIMES*", SubLTrampolineFile.maybeDefault($problem_creation_times$, $problem_creation_times$, NIL));
+        deflexical("*PROBLEM-CREATION-TIMES*", SubLSystemTrampolineFile.maybeDefault($problem_creation_times$, $problem_creation_times$, NIL));
         deflexical("*LEVIATHAN-CRTL-INTERNAL-TIME-UNITS-PER-SECOND*", $int$1000000);
         defparameter("*DOPPELGANGER-TIME-THRESHOLD*", THREE_INTEGER);
         return NIL;

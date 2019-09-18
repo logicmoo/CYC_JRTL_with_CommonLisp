@@ -32,7 +32,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -271,14 +271,14 @@ public final class removal_modules_formula_arg_n extends SubLTranslatedFile {
     }
 
     public static SubLObject init_removal_modules_formula_arg_n_file() {
-        deflexical("*OPERATOR-FORMULAS-DEFINING-MT*", SubLTrampolineFile.maybeDefault($operator_formulas_defining_mt$, $operator_formulas_defining_mt$, $$BaseKB));
+        deflexical("*OPERATOR-FORMULAS-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($operator_formulas_defining_mt$, $operator_formulas_defining_mt$, $$BaseKB));
         deflexical("*OPERATOR-FORMULAS-CODE-RULE*", $list7);
         deflexical("*DEFAULT-OPERATOR-FORMULAS-CHECK-COST*", $hl_module_check_cost$.getDynamicValue());
-        deflexical("*ARGN-DEFINING-MT*", SubLTrampolineFile.maybeDefault($argn_defining_mt$, $argn_defining_mt$, $$BaseKB));
+        deflexical("*ARGN-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($argn_defining_mt$, $argn_defining_mt$, $$BaseKB));
         deflexical("*DEFAULT-ARG-N-CHECK-COST*", $hl_module_check_cost$.getDynamicValue());
-        deflexical("*FORMULA-ARITY-DEFINING-MT*", SubLTrampolineFile.maybeDefault($formula_arity_defining_mt$, $formula_arity_defining_mt$, $$BaseKB));
+        deflexical("*FORMULA-ARITY-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($formula_arity_defining_mt$, $formula_arity_defining_mt$, $$BaseKB));
         deflexical("*DEFAULT-FORMULA-ARITY-CHECK-COST*", $hl_module_check_cost$.getDynamicValue());
-        deflexical("*CYCL-FOR-SUBL-DEFINING-MT*", SubLTrampolineFile.maybeDefault($cycl_for_subl_defining_mt$, $cycl_for_subl_defining_mt$, $$BaseKB));
+        deflexical("*CYCL-FOR-SUBL-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($cycl_for_subl_defining_mt$, $cycl_for_subl_defining_mt$, $$BaseKB));
         deflexical("*DEFAULT-CYCL-FOR-SUBL-CHECK-COST*", $hl_module_check_cost$.getDynamicValue());
         return NIL;
     }

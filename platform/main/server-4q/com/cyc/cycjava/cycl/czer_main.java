@@ -146,7 +146,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -447,7 +447,7 @@ public final class czer_main extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(formula, EL_FORMULA_P);
+        SubLSystemTrampolineFile.enforceType(formula, EL_FORMULA_P);
         return canonicalize_cycl(formula, mt);
     }
 
@@ -455,7 +455,7 @@ public final class czer_main extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(formula, EL_FORMULA_P);
+        SubLSystemTrampolineFile.enforceType(formula, EL_FORMULA_P);
         return canonicalize_query(formula, mt, NIL, T);
     }
 

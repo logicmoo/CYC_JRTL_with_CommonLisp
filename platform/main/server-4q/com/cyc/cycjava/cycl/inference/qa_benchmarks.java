@@ -120,7 +120,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -381,8 +381,8 @@ public final class qa_benchmarks extends SubLTranslatedFile implements V02 {
     public static final SubLObject qa_benchmark_files_within_date_range(SubLObject directory, SubLObject start_date, SubLObject end_date) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(start_date, UNIVERSAL_DATE_P);
-            SubLTrampolineFile.checkType(end_date, UNIVERSAL_DATE_P);
+            SubLSystemTrampolineFile.checkType(start_date, UNIVERSAL_DATE_P);
+            SubLSystemTrampolineFile.checkType(end_date, UNIVERSAL_DATE_P);
             if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                 if (!end_date.numGE(start_date)) {
                     Errors.error($str_alt20$Start_date__S_must_not_be_after_e, start_date, end_date);
@@ -436,8 +436,8 @@ public final class qa_benchmarks extends SubLTranslatedFile implements V02 {
     public static final SubLObject qa_kct_files_within_date_range(SubLObject directory, SubLObject start_date, SubLObject end_date) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(start_date, UNIVERSAL_DATE_P);
-            SubLTrampolineFile.checkType(end_date, UNIVERSAL_DATE_P);
+            SubLSystemTrampolineFile.checkType(start_date, UNIVERSAL_DATE_P);
+            SubLSystemTrampolineFile.checkType(end_date, UNIVERSAL_DATE_P);
             if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                 if (!end_date.numGE(start_date)) {
                     Errors.error($str_alt20$Start_date__S_must_not_be_after_e, start_date, end_date);
@@ -677,7 +677,7 @@ public final class qa_benchmarks extends SubLTranslatedFile implements V02 {
         }
         {
             SubLObject kct_files = qa_kct_files_within_date_range(directory, date, date);
-            SubLTrampolineFile.checkType(kct_files, $sym37$SINGLETON_);
+            SubLSystemTrampolineFile.checkType(kct_files, $sym37$SINGLETON_);
             {
                 SubLObject kct_file = kct_files.first();
                 return qa_load_kct_result(kct_file, directory);
@@ -923,7 +923,7 @@ public final class qa_benchmarks extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(threshold, NON_NEGATIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(threshold, NON_NEGATIVE_INTEGER_P);
             if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                 if (!threshold.numL($int$100000)) {
                     Errors.error($str_alt53$Hmm__looks_like_you_accidentally_, threshold);
@@ -1116,7 +1116,7 @@ public final class qa_benchmarks extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(threshold, NON_NEGATIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(threshold, NON_NEGATIVE_INTEGER_P);
             if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                 if (!threshold.numL($int$100000)) {
                     Errors.error($str_alt53$Hmm__looks_like_you_accidentally_, threshold);
@@ -2172,10 +2172,10 @@ public final class qa_benchmarks extends SubLTranslatedFile implements V02 {
             directory = $qa_kct_results_load_directory$.getGlobalValue();
         }
         if (NIL != email_if_no_failuresP) {
-            SubLTrampolineFile.checkType(email_if_no_failuresP, BOOLEANP);
+            SubLSystemTrampolineFile.checkType(email_if_no_failuresP, BOOLEANP);
         }
         if (NIL != overriding_to_address) {
-            SubLTrampolineFile.checkType(overriding_to_address, STRINGP);
+            SubLSystemTrampolineFile.checkType(overriding_to_address, STRINGP);
         }
         kct_cyc_testing.load_all_kb_content_tests();
         {
@@ -2195,10 +2195,10 @@ public final class qa_benchmarks extends SubLTranslatedFile implements V02 {
             directory = $qa_kct_results_load_directory$.getGlobalValue();
         }
         if (NIL != email_if_no_failuresP) {
-            SubLTrampolineFile.checkType(email_if_no_failuresP, BOOLEANP);
+            SubLSystemTrampolineFile.checkType(email_if_no_failuresP, BOOLEANP);
         }
         if (NIL != overriding_to_address) {
-            SubLTrampolineFile.checkType(overriding_to_address, STRINGP);
+            SubLSystemTrampolineFile.checkType(overriding_to_address, STRINGP);
         }
         kct_cyc_testing.load_all_kb_content_tests();
         {
@@ -2221,10 +2221,10 @@ public final class qa_benchmarks extends SubLTranslatedFile implements V02 {
             overriding_to_address = NIL;
         }
         if (NIL != email_if_no_failuresP) {
-            SubLTrampolineFile.checkType(email_if_no_failuresP, BOOLEANP);
+            SubLSystemTrampolineFile.checkType(email_if_no_failuresP, BOOLEANP);
         }
         if (NIL != overriding_to_address) {
-            SubLTrampolineFile.checkType(overriding_to_address, STRINGP);
+            SubLSystemTrampolineFile.checkType(overriding_to_address, STRINGP);
         }
         {
             SubLObject test_set_run = qa_kct_result_test_set_run(kct_result);

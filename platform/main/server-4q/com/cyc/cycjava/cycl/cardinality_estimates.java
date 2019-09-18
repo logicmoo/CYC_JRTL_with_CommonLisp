@@ -105,7 +105,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3373,14 +3373,14 @@ public final class cardinality_estimates extends SubLTranslatedFile {
     }
 
     public static SubLObject init_cardinality_estimates_file() {
-        deflexical("*LOCAL-INSTANCE-CARDINALITY*", SubLTrampolineFile.maybeDefault($local_instance_cardinality$, $local_instance_cardinality$, NIL));
-        deflexical("*LOCAL-QUOTED-INSTANCE-CARDINALITY*", SubLTrampolineFile.maybeDefault($local_quoted_instance_cardinality$, $local_quoted_instance_cardinality$, NIL));
-        deflexical("*LOCAL-SPEC-CARDINALITY*", SubLTrampolineFile.maybeDefault($local_spec_cardinality$, $local_spec_cardinality$, NIL));
-        deflexical("*TOTAL-INSTANCE-CARDINALITY*", SubLTrampolineFile.maybeDefault($total_instance_cardinality$, $total_instance_cardinality$, NIL));
-        deflexical("*TOTAL-QUOTED-INSTANCE-CARDINALITY*", SubLTrampolineFile.maybeDefault($total_quoted_instance_cardinality$, $total_quoted_instance_cardinality$, NIL));
-        deflexical("*TOTAL-SPEC-CARDINALITY*", SubLTrampolineFile.maybeDefault($total_spec_cardinality$, $total_spec_cardinality$, NIL));
-        deflexical("*TOTAL-GENL-CARDINALITY*", SubLTrampolineFile.maybeDefault($total_genl_cardinality$, $total_genl_cardinality$, NIL));
-        deflexical("*GENERALITY-ESTIMATE-TABLE*", SubLTrampolineFile.maybeDefault($generality_estimate_table$, $generality_estimate_table$, NIL));
+        deflexical("*LOCAL-INSTANCE-CARDINALITY*", SubLSystemTrampolineFile.maybeDefault($local_instance_cardinality$, $local_instance_cardinality$, NIL));
+        deflexical("*LOCAL-QUOTED-INSTANCE-CARDINALITY*", SubLSystemTrampolineFile.maybeDefault($local_quoted_instance_cardinality$, $local_quoted_instance_cardinality$, NIL));
+        deflexical("*LOCAL-SPEC-CARDINALITY*", SubLSystemTrampolineFile.maybeDefault($local_spec_cardinality$, $local_spec_cardinality$, NIL));
+        deflexical("*TOTAL-INSTANCE-CARDINALITY*", SubLSystemTrampolineFile.maybeDefault($total_instance_cardinality$, $total_instance_cardinality$, NIL));
+        deflexical("*TOTAL-QUOTED-INSTANCE-CARDINALITY*", SubLSystemTrampolineFile.maybeDefault($total_quoted_instance_cardinality$, $total_quoted_instance_cardinality$, NIL));
+        deflexical("*TOTAL-SPEC-CARDINALITY*", SubLSystemTrampolineFile.maybeDefault($total_spec_cardinality$, $total_spec_cardinality$, NIL));
+        deflexical("*TOTAL-GENL-CARDINALITY*", SubLSystemTrampolineFile.maybeDefault($total_genl_cardinality$, $total_genl_cardinality$, NIL));
+        deflexical("*GENERALITY-ESTIMATE-TABLE*", SubLSystemTrampolineFile.maybeDefault($generality_estimate_table$, $generality_estimate_table$, NIL));
         defparameter("*GENERALITY-ESTIMATE-SCALE-FACTOR*", $int$100);
         return NIL;
     }

@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.aduna.commons</groupId>
+		<artifactId>aduna-commons</artifactId>
+		<version>6</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>aduna-commons-text</artifactId>
+	<version>2.2</version>
+	<packaging>jar</packaging>
+
+	<name>Aduna Commons: Text</name>
+	<description>Manipulate/transform/parse text in various ways.</description>
+	<url>https://wiki.aduna-software.org/confluence/display/COM/Text</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
+	<issueManagement>
+		<system>jira</system>
+		<url>https://issues.aduna-software.org/jira/browse/COMTEXT</url>
+	</issueManagement>
+
+	<scm>
+		<connection>scm:svn:http://repo.aduna-software.org/svn/info.aduna/commons/text/tags/2.2</connection>
+		<developerConnection>scm:svn:https://repo.aduna-software.org/svn/info.aduna/commons/text/tags/2.2</developerConnection>
+		<url>http://repo.aduna-software.org/viewvc/info.aduna/commons/text/tags/2.2</url>
+	</scm>
+
+</project>

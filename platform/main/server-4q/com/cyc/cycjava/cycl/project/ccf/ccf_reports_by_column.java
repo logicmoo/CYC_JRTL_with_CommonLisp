@@ -114,7 +114,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -902,12 +902,12 @@ public final class ccf_reports_by_column extends SubLTranslatedFile implements V
         }
         {
             SubLObject list_var = spec;
-            SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+            SubLSystemTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
             {
                 SubLObject cdolist_list_var = list_var;
                 SubLObject elem = NIL;
                 for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
-                    SubLTrampolineFile.checkType(elem, RANGE_SPECIFIER_ITEM_P);
+                    SubLSystemTrampolineFile.checkType(elem, RANGE_SPECIFIER_ITEM_P);
                 }
             }
         }
@@ -936,7 +936,7 @@ public final class ccf_reports_by_column extends SubLTranslatedFile implements V
      * (expand-range-specifier-item '(4 7)) => (4 5 6 7)
      */
     public static final SubLObject expand_range_specifier_item(SubLObject item) {
-        SubLTrampolineFile.checkType(item, RANGE_SPECIFIER_ITEM_P);
+        SubLSystemTrampolineFile.checkType(item, RANGE_SPECIFIER_ITEM_P);
         if (item.isAtom()) {
             return list(item);
         } else {

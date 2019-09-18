@@ -63,7 +63,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -844,7 +844,7 @@ public final class sksi_sks_gaf_arg_indexing extends SubLTranslatedFile {
 
     public static SubLObject init_sksi_sks_gaf_arg_indexing_file() {
         defconstant("*DTP-SKSI-SUPPORTED-GAF-ARGUMENT-CACHE-ENTRY*", SKSI_SUPPORTED_GAF_ARGUMENT_CACHE_ENTRY);
-        deflexical("*SKSI-SUPPORTED-GAF-ARGUMENT-CACHE*", SubLTrampolineFile.maybeDefault($sksi_supported_gaf_argument_cache$, $sksi_supported_gaf_argument_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKSI-SUPPORTED-GAF-ARGUMENT-CACHE*", SubLSystemTrampolineFile.maybeDefault($sksi_supported_gaf_argument_cache$, $sksi_supported_gaf_argument_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         deflexical("*SKSI-DEFAULT-COUNT-FOR-TERM-ARGNUM-PRED*", SEVENTEEN_INTEGER);
         return NIL;
     }

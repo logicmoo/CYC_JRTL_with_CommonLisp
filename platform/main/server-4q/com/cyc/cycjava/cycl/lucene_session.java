@@ -61,7 +61,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class lucene_session extends SubLTranslatedFile {
     public static final SubLFile me = new lucene_session();
@@ -466,7 +466,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         assert NIL != stringp(url) : "Types.stringp(url) " + "CommonSymbols.NIL != Types.stringp(url) " + url;
         assert NIL != stringp(title) : "Types.stringp(title) " + "CommonSymbols.NIL != Types.stringp(title) " + title;
         assert NIL != number_utilities.positive_number_p(confirmed_terms_boost) : "number_utilities.positive_number_p(confirmed_terms_boost) " + "CommonSymbols.NIL != number_utilities.positive_number_p(confirmed_terms_boost) " + confirmed_terms_boost;
-        if (((NIL != user_param) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(user_param))) {
+        if (((NIL != user_param) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(user_param))) {
             throw new AssertionError(user_param);
         }
         SubLObject result = NIL;

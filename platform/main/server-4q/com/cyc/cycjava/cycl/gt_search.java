@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -495,7 +495,7 @@ public final class gt_search extends SubLTranslatedFile {
                         gt_vars.$gt_gather_arg$.rebind(_prev_bind_2, thread);
                         gt_vars.$gt_index_arg$.rebind(_prev_bind_0_$10, thread);
                     }
-                    if (((NIL != (NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread) ? GT_MAP_LINKS : NIL)) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread) ? GT_MAP_LINKS : NIL))) {
+                    if (((NIL != (NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread) ? GT_MAP_LINKS : NIL)) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread) ? GT_MAP_LINKS : NIL))) {
                         throw new AssertionError(NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread) ? GT_MAP_LINKS : NIL);
                     }
                     final SubLObject _prev_bind_0_$11 = gt_vars.$gt_step_fn$.currentBinding(thread);
@@ -1171,7 +1171,7 @@ public final class gt_search extends SubLTranslatedFile {
         final SubLObject _prev_bind_0 = gt_vars.$gt_result$.currentBinding(thread);
         try {
             gt_vars.$gt_result$.bind(NIL, thread);
-            if (((NIL != ((NIL == gt_vars.$tt_pred$.getDynamicValue(thread)) || (NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread)) ? GT_MAP_LINKS : NIL)) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p((NIL == gt_vars.$tt_pred$.getDynamicValue(thread)) || (NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread)) ? GT_MAP_LINKS : NIL))) {
+            if (((NIL != ((NIL == gt_vars.$tt_pred$.getDynamicValue(thread)) || (NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread)) ? GT_MAP_LINKS : NIL)) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p((NIL == gt_vars.$tt_pred$.getDynamicValue(thread)) || (NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread)) ? GT_MAP_LINKS : NIL))) {
                 throw new AssertionError((NIL == gt_vars.$tt_pred$.getDynamicValue(thread)) || (NIL != gt_vars.$tt_transitive_conduitP$.getDynamicValue(thread)) ? GT_MAP_LINKS : NIL);
             }
             final SubLObject _prev_bind_0_$49 = gt_vars.$gt_step_fn$.currentBinding(thread);

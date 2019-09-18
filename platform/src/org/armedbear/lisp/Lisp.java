@@ -59,6 +59,7 @@ import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -66,7 +67,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 import com.cyc.tool.subl.util.IsolatedClassLoader;
@@ -85,7 +88,7 @@ abstract public class Lisp extends ABCLStatic {
 
 	public static boolean blazing = false;
 
-	public static boolean initialized;
+	public final static boolean forcedCLRead = true;
 
 	public static boolean LISP_NOT_JAVA = !System.getProperty("lisp.junicode", "false").equals("true");
 	public static int insideToString = 0;
@@ -132,9 +135,6 @@ abstract public class Lisp extends ABCLStatic {
 		T.initializeConstant(T);
 	}
 
-	static {
-		Main.globalContext.set(true);
-	}
 	// We need NIL before we can call usePackage().
 	static {
 		PACKAGE_SUBLISP.addNickname("SL");
@@ -568,11 +568,12 @@ abstract public class Lisp extends ABCLStatic {
 	public static final int CALL_REGISTERS_MAX = 8;
 
 	// Also used in JProxy.java.
-	public static final LispObject evalCall(LispObject function, LispObject args, Environment env, LispThread thread) {
-		return subl_preserve_pkg(false, false, () -> evalCall0(function, args, env, thread));
+	public static final LispObject evalCallCL(LispObject function, LispObject args, Environment env, LispThread thread) {
+		return subl_preserve_pkg(false, false, () -> evalCall(function, args, env, thread));
 	}
 
-	public static final LispObject evalCall0(LispObject function, LispObject args, Environment env, LispThread thread) {
+	// Also used in JProxy.java.
+	public static final LispObject evalCall(LispObject function, LispObject args, Environment env, LispThread thread) {
 		if (args == NIL)
 			return thread.execute(function);
 		LispObject first = eval(args.car(), env, thread);
@@ -1194,7 +1195,7 @@ abstract public class Lisp extends ABCLStatic {
 
 			// No need to bind the default read table, because the default fasl
 			// read table is used below
-			return new Stream(Symbol.SYSTEM_STREAM, r).read(true, NIL, false, LispThread.currentThread(), Stream.faslReadtable);
+			return Stream.createStream(Symbol.SYSTEM_STREAM, r).read(true, NIL, false, LispThread.currentThread(), Stream.faslReadtable);
 		} finally {
 			thread.resetSpecialBindings(mark);
 		}
@@ -2034,6 +2035,40 @@ abstract public class Lisp extends ABCLStatic {
 		return (Package) Symbol._PACKAGE_.symbolValueNoThrow();
 	}
 
+	public static final void setCurrentPackage(LispObject obj) {
+		if (obj == null)
+			return;
+		if (obj != NIL && !(obj instanceof Package)) {
+			String packageName = obj.isString() ? obj.getStringValue() : obj.toSymbol().getName();
+			setCurrentPackage(packageName);
+			return;
+		}
+		Symbol._PACKAGE_.setValueCL(obj);
+	}
+
+	public static Package setGetCurrentPackage(String packageName) {
+		setCurrentPackage(packageName);
+		return getCurrentPackage();
+	}
+
+	public static final void setCurrentPackage(String packageName) {
+		setCurrentPackage(org.armedbear.lisp.Packages.findPackage(packageName));
+	}
+
+	public static Package setCurrentPackageSL(Package thePackage) {
+		final Package was = getCurrentPackage();
+		if (thePackage == null)
+			return was;
+		if (thePackage == was)
+			return was;
+		if (Symbol._PACKAGE_ != null) {
+			Symbol._PACKAGE_.setValue(thePackage);
+		}
+		//if (Packages.$package$ != null && Lisp$package$ != Symbol._PACKAGE_)
+		//			Packages.$package$.setValue(thePackage.toPackage());
+		return thePackage;
+	}
+
 	public static final void resetIO(Stream in, Stream out) {
 		Stream stdin = in;
 		Stream stdout = out;
@@ -2073,12 +2108,14 @@ abstract public class Lisp extends ABCLStatic {
 
 	// Used in org/armedbear/j/JLisp.java.
 	public static final void resetIO() {
-		resetIO(Stream.createStream(Symbol.SYSTEM_STREAM, SystemCurrent.in, Symbol.CHARACTER, true), Stream.createStream(Symbol.SYSTEM_STREAM, SystemCurrent.out, Symbol.CHARACTER, true));
+		setIO(SystemCurrent.in, SystemCurrent.out);
 	}
 
 	// Used in org/armedbear/j/JLisp.java.
 	public static final void setIO(final InputStream ins, final OutputStream outs) {
-		resetIO(Stream.createStream(Symbol.SYSTEM_STREAM, ins, Symbol.CHARACTER, true), Stream.createStream(Symbol.SYSTEM_STREAM, outs, Symbol.CHARACTER, true));
+		final Stream inLS = Stream.createStream(Symbol.SYSTEM_STREAM, ins, Symbol.CHARACTER, true);
+		final Stream outLS = Stream.createStream(Symbol.SYSTEM_STREAM, outs, Symbol.CHARACTER, true);
+		resetIO(inLS, outLS);
 	}
 
 	public static final TwoWayStream getTerminalIO() {
@@ -2531,7 +2568,7 @@ abstract public class Lisp extends ABCLStatic {
 		//          Symbol CLA = PACKAGE_EXT.findAccessibleSymbol( "*"+cla+"-LIST*" );
 		//          if(CLA!=null) {
 		//          PACKAGE_SYS.export( cla + "S", CLA );
-		//         
+		//
 		//          }
 		//          CLA = PACKAGE_SYS.findAccessibleSymbol( cla + "S" );
 
@@ -2618,7 +2655,7 @@ abstract public class Lisp extends ABCLStatic {
 		if (obj == null)
 			return "null";
 		//if(obj instanceof AbstractString)
-		//   return ((SubLString) obj).getStringValue();        
+		//   return ((SubLString) obj).getStringValue();
 		if (obj instanceof LispObject) {
 			final LispObject lispObject = (LispObject) obj;
 			Symbol sym = standardSymbolValue(lispObject);
@@ -2845,7 +2882,7 @@ abstract public class Lisp extends ABCLStatic {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param cname
 	 * @return
 	 */
@@ -2871,7 +2908,7 @@ abstract public class Lisp extends ABCLStatic {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * @return 
+	 * @return
 	 */
 	public static SubLThread pushRebinds() {
 		return SubLProcess.currentSubLThread();
@@ -2957,7 +2994,7 @@ abstract public class Lisp extends ABCLStatic {
 	 * TODO Describe the purpose of this method.
 	 */
 	public static void raiseUnreadable(LispObject o) {
-		if (insideToString != 0 || !Lisp.initialized || Lisp.printingObject != null)
+		if (insideToString != 0 || !Interpreter.isInitialized() || Lisp.printingObject != null)
 			return;
 		if (Main.isSubLisp())
 			return;
@@ -2971,7 +3008,7 @@ abstract public class Lisp extends ABCLStatic {
 	 */
 	public static LispObject addUrl(ClassLoader o, URL url) {
 		try {
-			IsolatedClassLoader.addURL(o, url);
+			IsolatedClassLoader.addURLToClassloader("Lisp", o, url);
 			return T;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -2989,8 +3026,11 @@ abstract public class Lisp extends ABCLStatic {
 		ClassLoader extClassLoader;
 		try {
 			extClassLoader = IsolatedClassLoader.asURLClassLoader(o, true);
+			if (o != extClassLoader) {
+				System.err.println("Faking a URLClassLoader: " + extClassLoader);
+			}
 			if (extClassLoader instanceof URLClassLoader) {
-				return getURLs(extClassLoader);
+				return ((URLClassLoader) extClassLoader).getURLs();
 			}
 			System.err.println("asURLClassLoader is not a URLClassLoader: " + extClassLoader);
 		} catch (Throwable e) {
@@ -3004,7 +3044,7 @@ abstract public class Lisp extends ABCLStatic {
 	 * @return
 	 */
 	public static boolean isTooSoon() {
-		return Lisp.cold || !Lisp.initialized || !org.armedbear.lisp.Interpreter.topLevelInitialized;
+		return Lisp.cold || !Interpreter.isInitialized() || !org.armedbear.lisp.Interpreter.topLevelInitialized;
 	}
 
 	/**
@@ -3013,4 +3053,9 @@ abstract public class Lisp extends ABCLStatic {
 	public static void addFeature(String fstring) {
 		Symbol.FEATURES.setSymbolValue(new Cons(internKeyword(fstring), Symbol.FEATURES.getSymbolValue()));
 	}
+
+	public static boolean isLispInitialized() {
+		return org.armedbear.lisp.Interpreter.isInitialized();
+	}
+
 }

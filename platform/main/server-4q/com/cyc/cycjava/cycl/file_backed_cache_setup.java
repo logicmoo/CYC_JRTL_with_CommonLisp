@@ -59,7 +59,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class file_backed_cache_setup extends SubLTranslatedFile {
     public static final SubLFile me = new file_backed_cache_setup();
@@ -733,7 +733,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_file_backed_cache_setup_file() {
-        deflexical("*REGISTERED-FILE-BACKED-CACHES*", SubLTrampolineFile.maybeDefault($registered_file_backed_caches$, $registered_file_backed_caches$, NIL));
+        deflexical("*REGISTERED-FILE-BACKED-CACHES*", SubLSystemTrampolineFile.maybeDefault($registered_file_backed_caches$, $registered_file_backed_caches$, NIL));
         defparameter("*FILE-BACKED-CACHE-DEFAULT-TEMP-DIR*", $str1$tmp_);
         deflexical("*FBC-REGISTRATION-LOCK*", make_lock($str2$fbc_registration_lock));
         defconstant("*DTP-FILE-BACKED-CACHE-REGISTRATION*", FILE_BACKED_CACHE_REGISTRATION);

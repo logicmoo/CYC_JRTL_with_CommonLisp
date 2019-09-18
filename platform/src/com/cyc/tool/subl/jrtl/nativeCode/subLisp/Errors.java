@@ -28,9 +28,9 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.SubLErrorHistory;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Errors extends SubLTrampolineFile {
+public class Errors extends SubLSystemTrampolineFile {
 
 	final static SubLNil NIL = SubLNil.NIL;
 	final static public PrintStream trout = SystemCurrent.out;
@@ -244,8 +244,9 @@ public class Errors extends SubLTrampolineFile {
 	}
 
 	public static SubLObject error(String errorString, Throwable e) {
-		if (e instanceof ControlTransfer)
+		if (e instanceof ControlTransfer) {
 			throw (ControlTransfer) e;
+		}
 		if (e instanceof java.lang.reflect.InvocationTargetException) {
 			Throwable e2 = ((java.lang.reflect.InvocationTargetException) e).getTargetException();
 			if (e2 != null) {

@@ -115,7 +115,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class concept_tagger extends SubLTranslatedFile {
     public static final SubLFile me = new concept_tagger();
@@ -806,8 +806,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (optional_arg_plist == UNPROVIDED) {
             optional_arg_plist = NIL;
         }
-        SubLTrampolineFile.enforceType(v_document, DOCUMENT_P);
-        SubLTrampolineFile.enforceType(optional_arg_plist, TAG_CONCEPTS_OPTIONAL_ARGS_P);
+        SubLSystemTrampolineFile.enforceType(v_document, DOCUMENT_P);
+        SubLSystemTrampolineFile.enforceType(optional_arg_plist, TAG_CONCEPTS_OPTIONAL_ARGS_P);
         final SubLObject augmented_plist = augment_tag_concepts_optional_arg_plist_with_defaults(optional_arg_plist);
         SubLObject sentences = NIL;
         final SubLObject vector_var = document.document_paragraphs(v_document);
@@ -854,12 +854,12 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject get_next_sentence_annotation(final SubLObject iterator) {
-        SubLTrampolineFile.enforceType(iterator, ITERATOR_P);
+        SubLSystemTrampolineFile.enforceType(iterator, ITERATOR_P);
         return iteration.iteration_next(iterator);
     }
 
     public static SubLObject annotation_completeP(final SubLObject iterator) {
-        SubLTrampolineFile.enforceType(iterator, ITERATOR_P);
+        SubLSystemTrampolineFile.enforceType(iterator, ITERATOR_P);
         return iteration.iteration_done(iterator);
     }
 
@@ -895,8 +895,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             optional_arg_plist = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(v_document, DOCUMENT_P);
-        SubLTrampolineFile.enforceType(optional_arg_plist, TAG_CONCEPTS_OPTIONAL_ARGS_P);
+        SubLSystemTrampolineFile.enforceType(v_document, DOCUMENT_P);
+        SubLSystemTrampolineFile.enforceType(optional_arg_plist, TAG_CONCEPTS_OPTIONAL_ARGS_P);
         SubLObject result = NIL;
         final SubLObject iter = tag_concepts(v_document, optional_arg_plist);
         final SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);

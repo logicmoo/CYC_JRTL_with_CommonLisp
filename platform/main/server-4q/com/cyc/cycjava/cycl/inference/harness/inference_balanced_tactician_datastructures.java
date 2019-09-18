@@ -48,7 +48,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -333,192 +333,192 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject bal_strat_data_problems_motivated_wrt_new_root_table(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField2();
     }
 
     public static final SubLObject bal_strat_data_problems_motivated_wrt_removal(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField3();
     }
 
     public static final SubLObject bal_strat_data_problems_motivated_wrt_transformation(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField4();
     }
 
     public static final SubLObject bal_strat_data_link_heads_motivated_wrt_removal(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField5();
     }
 
     public static final SubLObject bal_strat_data_link_heads_motivated_wrt_transformation(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField6();
     }
 
     public static final SubLObject bal_strat_data_problems_pending_wrt_new_root(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField7();
     }
 
     public static final SubLObject bal_strat_data_problems_pending_wrt_removal(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField8();
     }
 
     public static final SubLObject bal_strat_data_problems_pending_wrt_transformation(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField9();
     }
 
     public static final SubLObject bal_strat_data_new_root_index(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField10();
     }
 
     public static final SubLObject bal_strat_data_new_root_problems(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField11();
     }
 
     public static final SubLObject bal_strat_data_removal_strategem_index(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField12();
     }
 
     public static final SubLObject bal_strat_data_problem_total_strategems_active_wrt_removal(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField13();
     }
 
     public static final SubLObject bal_strat_data_current_new_root_wrt_removal(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField14();
     }
 
     public static final SubLObject bal_strat_data_transformation_strategem_index(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField15();
     }
 
     public static final SubLObject bal_strat_data_problem_total_strategems_active_wrt_transformation(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField16();
     }
 
     public static final SubLObject bal_strat_data_problem_strategems_set_aside_wrt_removal(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField17();
     }
 
     public static final SubLObject bal_strat_data_problem_strategems_set_aside_wrt_transformation(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField18();
     }
 
     public static final SubLObject bal_strat_data_problem_strategems_thrown_away_wrt_removal(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField19();
     }
 
     public static final SubLObject bal_strat_data_problem_strategems_thrown_away_wrt_transformation(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.getField20();
     }
 
     public static final SubLObject _csetf_bal_strat_data_problems_motivated_wrt_new_root_table(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problems_motivated_wrt_removal(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problems_motivated_wrt_transformation(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_link_heads_motivated_wrt_removal(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_link_heads_motivated_wrt_transformation(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problems_pending_wrt_new_root(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problems_pending_wrt_removal(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problems_pending_wrt_transformation(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_new_root_index(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField10(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_new_root_problems(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField11(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_removal_strategem_index(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField12(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problem_total_strategems_active_wrt_removal(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField13(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_current_new_root_wrt_removal(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField14(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_transformation_strategem_index(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField15(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problem_total_strategems_active_wrt_transformation(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField16(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problem_strategems_set_aside_wrt_removal(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField17(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problem_strategems_set_aside_wrt_transformation(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField18(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problem_strategems_thrown_away_wrt_removal(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField19(value);
     }
 
     public static final SubLObject _csetf_bal_strat_data_problem_strategems_thrown_away_wrt_transformation(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, BALANCED_STRATEGY_DATA_P);
         return v_object.setField20(value);
     }
 
@@ -653,7 +653,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return set-p of problem-p
      */
     public static final SubLObject balanced_strategy_problems_motivated_wrt_new_root_table(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problems_motivated_wrt_new_root_table(data);
@@ -666,7 +666,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return set-p of problem-p
      */
     public static final SubLObject balanced_strategy_problems_motivated_wrt_removal(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problems_motivated_wrt_removal(data);
@@ -679,7 +679,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return set-p of problem-p
      */
     public static final SubLObject balanced_strategy_problems_motivated_wrt_transformation(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problems_motivated_wrt_transformation(data);
@@ -692,7 +692,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return set-p of motivation-strategem-p
      */
     public static final SubLObject balanced_strategy_link_heads_motivated_wrt_removal(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_link_heads_motivated_wrt_removal(data);
@@ -705,7 +705,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return set-p of motivation-strategem-p
      */
     public static final SubLObject balanced_strategy_link_heads_motivated_wrt_transformation(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_link_heads_motivated_wrt_transformation(data);
@@ -718,7 +718,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return set-p of problem-p
      */
     public static final SubLObject balanced_strategy_problems_pending_wrt_new_root(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problems_pending_wrt_new_root(data);
@@ -731,7 +731,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return set-p of problem-p
      */
     public static final SubLObject balanced_strategy_problems_pending_wrt_removal(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problems_pending_wrt_removal(data);
@@ -744,7 +744,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return set-p of problem-p
      */
     public static final SubLObject balanced_strategy_problems_pending_wrt_transformation(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problems_pending_wrt_transformation(data);
@@ -752,7 +752,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_new_root_index(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_new_root_index(data);
@@ -765,7 +765,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return #'EQ set of problem-p
      */
     public static final SubLObject balanced_strategy_new_root_problems(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_new_root_problems(data);
@@ -773,7 +773,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_removal_strategem_index(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_removal_strategem_index(data);
@@ -786,7 +786,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return #'EQ dictionary of problem-p -> non-negative-integer-p
      */
     public static final SubLObject balanced_strategy_problem_total_strategems_active_wrt_removal(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problem_total_strategems_active_wrt_removal(data);
@@ -799,7 +799,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return nil or problem-p; the current new root problem leading to R box activity.
      */
     public static final SubLObject balanced_strategy_current_new_root_wrt_removal(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_current_new_root_wrt_removal(data);
@@ -807,7 +807,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_transformation_strategem_index(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_transformation_strategem_index(data);
@@ -820,7 +820,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return #'EQ dictionary of problem-p -> non-negative-integer-p
      */
     public static final SubLObject balanced_strategy_problem_total_strategems_active_wrt_transformation(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problem_total_strategems_active_wrt_transformation(data);
@@ -833,7 +833,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return #'EQ dictionary of problem-p -> #'EQ set of strategem-p
      */
     public static final SubLObject balanced_strategy_problem_strategems_set_aside_wrt_removal(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problem_strategems_set_aside_wrt_removal(data);
@@ -846,7 +846,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return #'EQ dictionary of problem-p -> #'EQ set of strategem-p
      */
     public static final SubLObject balanced_strategy_problem_strategems_set_aside_wrt_transformation(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problem_strategems_set_aside_wrt_transformation(data);
@@ -859,7 +859,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return #'EQ dictionary of problem-p -> #'EQ set of strategem-p
      */
     public static final SubLObject balanced_strategy_problem_strategems_thrown_away_wrt_removal(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problem_strategems_thrown_away_wrt_removal(data);
@@ -872,7 +872,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return #'EQ dictionary of problem-p -> #'EQ set of strategem-p
      */
     public static final SubLObject balanced_strategy_problem_strategems_thrown_away_wrt_transformation(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
             return bal_strat_data_problem_strategems_thrown_away_wrt_transformation(data);
@@ -887,7 +887,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * Return T iff PROBLEM is motivated to be a new root by STRATEGY
      */
     public static final SubLObject balanced_strategy_problem_motivated_wrt_new_rootP(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return list_utilities.sublisp_boolean(dictionary.dictionary_lookup_without_values(balanced_strategy_problems_motivated_wrt_new_root_table(strategy), problem, UNPROVIDED));
     }
 
@@ -916,7 +916,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_historical_new_root_time(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         {
             SubLObject start_time = dictionary.dictionary_lookup_without_values(balanced_strategy_problems_motivated_wrt_new_root_table(strategy), problem, UNPROVIDED);
             if ($UNACTIVATED != start_time) {
@@ -951,7 +951,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_current_new_root_wrt_removal_elapsed_time(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         {
             SubLObject new_root = balanced_strategy_current_new_root_wrt_removal(strategy);
             if (NIL != new_root) {
@@ -981,7 +981,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * Return T iff removal is motivated on PROBLEM in STRATEGY
      */
     public static final SubLObject balanced_strategy_problem_motivated_wrt_removalP(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_memberP(problem, balanced_strategy_problems_motivated_wrt_removal(strategy));
     }
 
@@ -993,7 +993,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * Return T iff transformation is motivated on PROBLEM in STRATEGY
      */
     public static final SubLObject balanced_strategy_problem_motivated_wrt_transformationP(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_memberP(problem, balanced_strategy_problems_motivated_wrt_transformation(strategy));
     }
 
@@ -1001,7 +1001,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * Return T iff removal motivation should propagate through LINK-HEAD in STRATEGY
      */
     public static final SubLObject balanced_strategy_link_head_motivated_wrt_removalP(SubLObject strategy, SubLObject link_head) {
-        SubLTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
         return set.set_memberP(link_head, balanced_strategy_link_heads_motivated_wrt_removal(strategy));
     }
 
@@ -1009,7 +1009,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * Return T iff transformation motivation should propagate through LINK-HEAD in STRATEGY
      */
     public static final SubLObject balanced_strategy_link_head_motivated_wrt_transformationP(SubLObject strategy, SubLObject link_head) {
-        SubLTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
         return set.set_memberP(link_head, balanced_strategy_link_heads_motivated_wrt_transformation(strategy));
     }
 
@@ -1029,8 +1029,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_connected_conjunction_link_motivated_wrt_removalP(SubLObject strategy, SubLObject connected_conjunction_link) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(connected_conjunction_link, CONNECTED_CONJUNCTION_LINK_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(connected_conjunction_link, CONNECTED_CONJUNCTION_LINK_P);
         {
             SubLObject link_head = inference_worker.connected_conjunction_link_tactic(connected_conjunction_link);
             return balanced_strategy_link_head_motivated_wrt_removalP(strategy, link_head);
@@ -1041,7 +1041,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * Return T iff PROBLEM is pending in STRATEGY wrt MOTIVATION
      */
     public static final SubLObject balanced_strategy_problem_pendingP(SubLObject strategy, SubLObject problem, SubLObject motivation) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         {
             SubLObject pcase_var = motivation;
             if (pcase_var.eql($NEW_ROOT)) {
@@ -1094,7 +1094,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return booleanp; whether PROBLEM is actively being considered a new root by STRATEGY.
      */
     public static final SubLObject balanced_strategy_problem_active_wrt_new_rootP(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_memberP(problem, balanced_strategy_new_root_problems(strategy));
     }
 
@@ -1104,7 +1104,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return booleanp; whether PROBLEM is actively being considered for removal by STRATEGY.
      */
     public static final SubLObject balanced_strategy_problem_active_wrt_removalP(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         {
             SubLObject index = balanced_strategy_problem_total_strategems_active_wrt_removal(strategy);
             return plusp(dictionary.dictionary_lookup_without_values(index, problem, ZERO_INTEGER));
@@ -1117,7 +1117,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return booleanp; whether PROBLEM is actively being considered for transformation by STRATEGY.
      */
     public static final SubLObject balanced_strategy_problem_active_wrt_transformationP(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         {
             SubLObject index = balanced_strategy_problem_total_strategems_active_wrt_transformation(strategy);
             return plusp(dictionary.dictionary_lookup_without_values(index, problem, ZERO_INTEGER));
@@ -1125,7 +1125,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_problem_set_asideP(SubLObject strategy, SubLObject problem, SubLObject motivation) {
-        SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+        SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
         {
             SubLObject pcase_var = motivation;
             if (pcase_var.eql($NEW_ROOT)) {
@@ -1149,7 +1149,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return booleanp; whether PROBLEM has been set aside for later removal consideration by STRATEGY.
      */
     public static final SubLObject balanced_strategy_problem_set_aside_wrt_removalP(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         if (NIL == balanced_strategy_problem_active_wrt_removalP(strategy, problem)) {
             {
                 SubLObject index = balanced_strategy_problem_strategems_set_aside_wrt_removal(strategy);
@@ -1168,7 +1168,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return booleanp; whether PROBLEM has been set aside for later transformation consideration by STRATEGY.
      */
     public static final SubLObject balanced_strategy_problem_set_aside_wrt_transformationP(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         if (NIL == balanced_strategy_problem_active_wrt_transformationP(strategy, problem)) {
             {
                 SubLObject index = balanced_strategy_problem_strategems_set_aside_wrt_transformation(strategy);
@@ -1182,7 +1182,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_strategem_set_asideP(SubLObject strategy, SubLObject strategem, SubLObject motivation) {
-        SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+        SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
         {
             SubLObject pcase_var = motivation;
             if (pcase_var.eql($REMOVAL)) {
@@ -1202,7 +1202,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return booleanp; whether STRATEGEM has been set aside for later removal consideration by STRATEGY.
      */
     public static final SubLObject balanced_strategy_strategem_set_aside_wrt_removalP(SubLObject strategy, SubLObject strategem) {
-        SubLTrampolineFile.checkType(strategem, STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategem, STRATEGEM_P);
         {
             SubLObject problem = inference_tactician.strategem_problem(strategem);
             SubLObject index = balanced_strategy_problem_strategems_set_aside_wrt_removal(strategy);
@@ -1217,7 +1217,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return booleanp; whether STRATEGEM has been set aside for later transformation consideration by STRATEGY.
      */
     public static final SubLObject balanced_strategy_strategem_set_aside_wrt_transformationP(SubLObject strategy, SubLObject strategem) {
-        SubLTrampolineFile.checkType(strategem, STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategem, STRATEGEM_P);
         {
             SubLObject problem = inference_tactician.strategem_problem(strategem);
             SubLObject index = balanced_strategy_problem_strategems_set_aside_wrt_transformation(strategy);
@@ -1227,7 +1227,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_strategem_thrown_awayP(SubLObject strategy, SubLObject strategem, SubLObject motivation) {
-        SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+        SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
         {
             SubLObject pcase_var = motivation;
             if (pcase_var.eql($REMOVAL)) {
@@ -1247,7 +1247,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return booleanp; whether STRATEGEM has been thrown away by STRATEGY.
      */
     public static final SubLObject balanced_strategy_strategem_thrown_away_wrt_removalP(SubLObject strategy, SubLObject strategem) {
-        SubLTrampolineFile.checkType(strategem, STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategem, STRATEGEM_P);
         {
             SubLObject problem = inference_tactician.strategem_problem(strategem);
             SubLObject index = balanced_strategy_problem_strategems_thrown_away_wrt_removal(strategy);
@@ -1262,7 +1262,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * @return booleanp; whether STRATEGEM has been thrown away by STRATEGY.
      */
     public static final SubLObject balanced_strategy_strategem_thrown_away_wrt_transformationP(SubLObject strategy, SubLObject strategem) {
-        SubLTrampolineFile.checkType(strategem, STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategem, STRATEGEM_P);
         {
             SubLObject problem = inference_tactician.strategem_problem(strategem);
             SubLObject index = balanced_strategy_problem_strategems_thrown_away_wrt_transformation(strategy);
@@ -1311,14 +1311,14 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * note N
      */
     public static final SubLObject balanced_strategy_note_problem_motivated_wrt_new_root(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return dictionary.dictionary_enter(balanced_strategy_problems_motivated_wrt_new_root_table(strategy), problem, $UNACTIVATED);
     }
 
     public static final SubLObject balanced_strategy_note_new_root_activated_wrt_removal(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         probably_approximately_done.pad_note_new_root();
         {
             SubLObject elapsed = inference_datastructures_inference.inference_elapsed_internal_real_time_since_start(inference_datastructures_strategy.strategy_inference(strategy));
@@ -1332,8 +1332,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * note R
      */
     public static final SubLObject balanced_strategy_note_problem_motivated_wrt_removal(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_add(problem, balanced_strategy_problems_motivated_wrt_removal(strategy));
     }
 
@@ -1341,8 +1341,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * note T
      */
     public static final SubLObject balanced_strategy_note_problem_motivated_wrt_transformation(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_add(problem, balanced_strategy_problems_motivated_wrt_transformation(strategy));
     }
 
@@ -1350,8 +1350,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * note R
      */
     public static final SubLObject balanced_strategy_note_link_head_motivated_wrt_removal(SubLObject strategy, SubLObject link_head) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
         return set.set_add(link_head, balanced_strategy_link_heads_motivated_wrt_removal(strategy));
     }
 
@@ -1359,8 +1359,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * note T
      */
     public static final SubLObject balanced_strategy_note_link_head_motivated_wrt_transformation(SubLObject strategy, SubLObject link_head) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
         return set.set_add(link_head, balanced_strategy_link_heads_motivated_wrt_transformation(strategy));
     }
 
@@ -1380,25 +1380,25 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_note_problem_pending_wrt_new_root(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_add(problem, balanced_strategy_problems_pending_wrt_new_root(strategy));
     }
 
     public static final SubLObject balanced_strategy_note_problem_pending_wrt_removal(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_add(problem, balanced_strategy_problems_pending_wrt_removal(strategy));
     }
 
     public static final SubLObject balanced_strategy_note_problem_pending_wrt_transformation(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_add(problem, balanced_strategy_problems_pending_wrt_transformation(strategy));
     }
 
     public static final SubLObject balanced_strategy_note_problem_pending(SubLObject strategy, SubLObject problem, SubLObject motivation) {
-        SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+        SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
         {
             SubLObject pcase_var = motivation;
             if (pcase_var.eql($NEW_ROOT)) {
@@ -1417,19 +1417,19 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_note_problem_unpending_wrt_removal(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_remove(problem, balanced_strategy_problems_pending_wrt_removal(strategy));
     }
 
     public static final SubLObject balanced_strategy_note_problem_unpending_wrt_transformation(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return set.set_remove(problem, balanced_strategy_problems_pending_wrt_transformation(strategy));
     }
 
     public static final SubLObject balanced_strategy_note_problem_unpending(SubLObject strategy, SubLObject problem, SubLObject motivation) {
-        SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+        SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
         {
             SubLObject pcase_var = motivation;
             if (pcase_var.eql($REMOVAL)) {
@@ -1475,7 +1475,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
             new_root = NIL;
         }
         if (NIL != new_root) {
-            SubLTrampolineFile.checkType(new_root, PROBLEM_P);
+            SubLSystemTrampolineFile.checkType(new_root, PROBLEM_P);
         }
         {
             SubLObject data = inference_datastructures_strategy.strategy_data(strategy);
@@ -1488,8 +1488,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * note that REMOVAL-STRATEGEM is in STRATEGY's R-box
      */
     public static final SubLObject balanced_strategy_activate_strategem_wrt_removal(SubLObject strategy, SubLObject removal_strategem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(removal_strategem, REMOVAL_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(removal_strategem, REMOVAL_STRATEGEM_P);
         {
             SubLObject result = NIL;
             result = inference_datastructures_strategy.strategy_dispatch(strategy, $ACTIVATE_REMOVAL_STRATEGEM, removal_strategem, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -1518,8 +1518,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
      * note that TRANSFORMATION-STRATEGEM is in STRATEGY's T-box
      */
     public static final SubLObject balanced_strategy_activate_strategem_wrt_transformation(SubLObject strategy, SubLObject transformation_strategem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(transformation_strategem, TRANSFORMATION_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(transformation_strategem, TRANSFORMATION_STRATEGEM_P);
         if ((NIL != inference_worker_transformation.transformation_tactic_p(transformation_strategem)) && (NIL != inference_datastructures_tactic.tactic_executedP(transformation_strategem))) {
             return inference_balanced_tactician_motivation.balanced_strategy_activate_transformation_argument_links_wrt_transformation(strategy, inference_datastructures_tactic.tactic_problem(transformation_strategem));
         }
@@ -1563,8 +1563,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_note_strategem_set_aside_wrt_removal(SubLObject strategy, SubLObject removal_strategem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(removal_strategem, REMOVAL_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(removal_strategem, REMOVAL_STRATEGEM_P);
         {
             SubLObject index = balanced_strategy_problem_strategems_set_aside_wrt_removal(strategy);
             SubLObject problem = inference_tactician.strategem_problem(removal_strategem);
@@ -1580,7 +1580,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     public static final SubLObject balanced_strategy_clear_strategems_set_aside_wrt_removal(SubLObject strategy) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+            SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
             {
                 SubLObject index = balanced_strategy_problem_strategems_set_aside_wrt_removal(strategy);
                 SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(index));
@@ -1602,8 +1602,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_note_strategem_set_aside_wrt_transformation(SubLObject strategy, SubLObject transformation_strategem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(transformation_strategem, TRANSFORMATION_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(transformation_strategem, TRANSFORMATION_STRATEGEM_P);
         {
             SubLObject index = balanced_strategy_problem_strategems_set_aside_wrt_transformation(strategy);
             SubLObject problem = inference_tactician.strategem_problem(transformation_strategem);
@@ -1619,7 +1619,7 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     public static final SubLObject balanced_strategy_clear_strategems_set_aside_wrt_transformation(SubLObject strategy) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+            SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
             {
                 SubLObject index = balanced_strategy_problem_strategems_set_aside_wrt_transformation(strategy);
                 SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(index));
@@ -1656,8 +1656,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_note_strategem_thrown_away_wrt_removal(SubLObject strategy, SubLObject removal_strategem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(removal_strategem, REMOVAL_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(removal_strategem, REMOVAL_STRATEGEM_P);
         {
             SubLObject index = balanced_strategy_problem_strategems_thrown_away_wrt_removal(strategy);
             SubLObject problem = inference_tactician.strategem_problem(removal_strategem);
@@ -1671,8 +1671,8 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_note_strategem_thrown_away_wrt_transformation(SubLObject strategy, SubLObject transformation_strategem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(transformation_strategem, TRANSFORMATION_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(transformation_strategem, TRANSFORMATION_STRATEGEM_P);
         {
             SubLObject index = balanced_strategy_problem_strategems_thrown_away_wrt_transformation(strategy);
             SubLObject problem = inference_tactician.strategem_problem(transformation_strategem);
@@ -1701,17 +1701,17 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
     }
 
     public static final SubLObject balanced_strategy_no_new_rootsP(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         return inference_datastructures_strategy.strategy_dispatch(strategy, $NO_NEW_ROOTS, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
     public static final SubLObject balanced_strategy_no_strategems_active_wrt_removalP(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         return inference_datastructures_strategy.strategy_dispatch(strategy, $NO_ACTIVE_REMOVAL_STRATEGEMS, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
     public static final SubLObject balanced_strategy_no_strategems_active_wrt_transformationP(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
         return inference_datastructures_strategy.strategy_dispatch(strategy, $NO_ACTIVE_TRANSFORMATION_STRATEGEMS, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 

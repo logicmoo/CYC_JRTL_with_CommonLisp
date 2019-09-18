@@ -24,7 +24,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -537,26 +537,26 @@ public final class kb_control_vars extends SubLTranslatedFile {
     }
 
     public static SubLObject init_kb_control_vars_file() {
-        deflexical("*BACKCHAIN-FORBIDDEN-UNLESS-ARG-CHOSEN*", SubLTrampolineFile.maybeDefault($backchain_forbidden_unless_arg_chosen$, $backchain_forbidden_unless_arg_chosen$, $const1$backchainForbiddenWhenUnboundInAr));
+        deflexical("*BACKCHAIN-FORBIDDEN-UNLESS-ARG-CHOSEN*", SubLSystemTrampolineFile.maybeDefault($backchain_forbidden_unless_arg_chosen$, $backchain_forbidden_unless_arg_chosen$, $const1$backchainForbiddenWhenUnboundInAr));
         deflexical("*KB-FEATURES*", NIL);
-        deflexical("*REFORMULATOR-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym3$_REFORMULATOR_KB_LOADED__, $reformulator_kb_loadedP$, NIL));
-        deflexical("*SKSI-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym4$_SKSI_KB_LOADED__, $sksi_kb_loadedP$, NIL));
-        deflexical("*PARAPHRASE-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym5$_PARAPHRASE_KB_LOADED__, $paraphrase_kb_loadedP$, NIL));
-        deflexical("*NL-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym6$_NL_KB_LOADED__, $nl_kb_loadedP$, NIL));
-        deflexical("*LEXICON-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym7$_LEXICON_KB_LOADED__, $lexicon_kb_loadedP$, NIL));
-        deflexical("*RTP-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym8$_RTP_KB_LOADED__, $rtp_kb_loadedP$, NIL));
-        deflexical("*RKF-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym9$_RKF_KB_LOADED__, $rkf_kb_loadedP$, NIL));
-        deflexical("*THESAURUS-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym10$_THESAURUS_KB_LOADED__, $thesaurus_kb_loadedP$, NIL));
-        deflexical("*QUANT-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym11$_QUANT_KB_LOADED__, $quant_kb_loadedP$, NIL));
-        deflexical("*TIME-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym12$_TIME_KB_LOADED__, $time_kb_loadedP$, NIL));
-        deflexical("*DATE-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym13$_DATE_KB_LOADED__, $date_kb_loadedP$, NIL));
-        deflexical("*FRACTION-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym14$_FRACTION_KB_LOADED__, $fraction_kb_loadedP$, NIL));
-        deflexical("*CYC-TASK-SCHEDULER-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym15$_CYC_TASK_SCHEDULER_KB_LOADED__, $cyc_task_scheduler_kb_loadedP$, NIL));
-        deflexical("*WORDNET-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym16$_WORDNET_KB_LOADED__, $wordnet_kb_loadedP$, NIL));
-        deflexical("*WORDNET-IMPORT-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym17$_WORDNET_IMPORT_KB_LOADED__, $wordnet_import_kb_loadedP$, NIL));
-        deflexical("*CYC-SECURE-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym18$_CYC_SECURE_KB_LOADED__, $cyc_secure_kb_loadedP$, NIL));
-        deflexical("*PLANNER-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym19$_PLANNER_KB_LOADED__, $planner_kb_loadedP$, NIL));
-        deflexical("*KCT-KB-LOADED?*", SubLTrampolineFile.maybeDefault($sym20$_KCT_KB_LOADED__, $kct_kb_loadedP$, NIL));
+        deflexical("*REFORMULATOR-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym3$_REFORMULATOR_KB_LOADED__, $reformulator_kb_loadedP$, NIL));
+        deflexical("*SKSI-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym4$_SKSI_KB_LOADED__, $sksi_kb_loadedP$, NIL));
+        deflexical("*PARAPHRASE-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym5$_PARAPHRASE_KB_LOADED__, $paraphrase_kb_loadedP$, NIL));
+        deflexical("*NL-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym6$_NL_KB_LOADED__, $nl_kb_loadedP$, NIL));
+        deflexical("*LEXICON-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym7$_LEXICON_KB_LOADED__, $lexicon_kb_loadedP$, NIL));
+        deflexical("*RTP-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym8$_RTP_KB_LOADED__, $rtp_kb_loadedP$, NIL));
+        deflexical("*RKF-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym9$_RKF_KB_LOADED__, $rkf_kb_loadedP$, NIL));
+        deflexical("*THESAURUS-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym10$_THESAURUS_KB_LOADED__, $thesaurus_kb_loadedP$, NIL));
+        deflexical("*QUANT-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym11$_QUANT_KB_LOADED__, $quant_kb_loadedP$, NIL));
+        deflexical("*TIME-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym12$_TIME_KB_LOADED__, $time_kb_loadedP$, NIL));
+        deflexical("*DATE-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym13$_DATE_KB_LOADED__, $date_kb_loadedP$, NIL));
+        deflexical("*FRACTION-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym14$_FRACTION_KB_LOADED__, $fraction_kb_loadedP$, NIL));
+        deflexical("*CYC-TASK-SCHEDULER-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym15$_CYC_TASK_SCHEDULER_KB_LOADED__, $cyc_task_scheduler_kb_loadedP$, NIL));
+        deflexical("*WORDNET-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym16$_WORDNET_KB_LOADED__, $wordnet_kb_loadedP$, NIL));
+        deflexical("*WORDNET-IMPORT-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym17$_WORDNET_IMPORT_KB_LOADED__, $wordnet_import_kb_loadedP$, NIL));
+        deflexical("*CYC-SECURE-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym18$_CYC_SECURE_KB_LOADED__, $cyc_secure_kb_loadedP$, NIL));
+        deflexical("*PLANNER-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym19$_PLANNER_KB_LOADED__, $planner_kb_loadedP$, NIL));
+        deflexical("*KCT-KB-LOADED?*", SubLSystemTrampolineFile.maybeDefault($sym20$_KCT_KB_LOADED__, $kct_kb_loadedP$, NIL));
         defparameter("*FORWARD-INFERENCE-ENABLED?*", T);
         defparameter("*FORWARD-PROPAGATE-FROM-NEGATIONS*", T);
         defparameter("*FORWARD-PROPAGATE-TO-NEGATIONS*", NIL);

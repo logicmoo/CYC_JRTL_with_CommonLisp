@@ -44,7 +44,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -376,11 +376,11 @@ public final class cfasl_kernel extends SubLTranslatedFile {
             uuid_string = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(request, CONSP);
-        SubLTrampolineFile.enforceType(id, INTEGERP);
-        SubLTrampolineFile.enforceType(priority, INTEGERP);
-        SubLTrampolineFile.enforceType(requestor, STRINGP);
-        SubLTrampolineFile.enforceType(client_bindings, LISTP);
+        SubLSystemTrampolineFile.enforceType(request, CONSP);
+        SubLSystemTrampolineFile.enforceType(id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(priority, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(requestor, STRINGP);
+        SubLSystemTrampolineFile.enforceType(client_bindings, LISTP);
         final SubLObject server_bindings = listS($list23, list($the_cyclist$, operation_communication.the_cyclist()), list($ke_purpose$, api_control_vars.$default_ke_purpose$.getDynamicValue(thread)), $list26);
         task_processor.api_task_processor_request(request, id, priority, requestor, append(server_bindings, client_bindings), uuid_string);
         return NIL;

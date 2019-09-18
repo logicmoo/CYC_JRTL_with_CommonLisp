@@ -602,7 +602,7 @@ public class Package extends SubLPackage implements java.io.Serializable {
 
 	private LispObject packageError(String err) {
 		LispObject ret = new PackageError(err);
-		if (!Lisp.cold && Lisp.initialized) {
+		if (!Lisp.cold && Interpreter.isInitialized()) {
 			error(ret);
 		} else {
 			System.err.println(err);
@@ -1224,7 +1224,7 @@ public class Package extends SubLPackage implements java.io.Serializable {
 
 	@Override
 	public String printObjectImpl() {
-		boolean printReadable = Lisp.initialized && (_PRINT_FASL_.symbolValue() != NIL || Lisp.isPrintReadable(null)) && name != null;
+		boolean printReadable = org.armedbear.lisp.Interpreter.isInitialized() && (_PRINT_FASL_.symbolValue() != NIL || Lisp.isPrintReadable(null)) && name != null;
 		if (printReadable) {
 			StringBuilder sb = new StringBuilder("#.(CL:FIND-PACKAGE \"");
 			sb.append(name);

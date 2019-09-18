@@ -9,7 +9,7 @@ import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -49,7 +49,7 @@ public final class cyc_testing_initialization extends SubLTranslatedFile {
     }
 
     public static SubLObject init_cyc_testing_initialization_file() {
-        deflexical("*CYC-TESTS-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym0$_CYC_TESTS_INITIALIZED__, $cyc_tests_initializedP$, NIL));
+        deflexical("*CYC-TESTS-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($sym0$_CYC_TESTS_INITIALIZED__, $cyc_tests_initializedP$, NIL));
         return NIL;
     }
 

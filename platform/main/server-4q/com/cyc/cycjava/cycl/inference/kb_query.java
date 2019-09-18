@@ -119,7 +119,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -414,7 +414,7 @@ public final class kb_query extends SubLTranslatedFile {
 
     public static SubLObject kbq_assert_query_spec_definition(final SubLObject query_spec, final SubLObject sentence, final SubLObject mt, final SubLObject v_inference_parameters, final SubLObject defining_mt, final SubLObject non_explanatory_sentence, final SubLObject multiple_choice_option_specs) {
         assert NIL != cycl_grammar.cycl_sentence_p(sentence) : "cycl_grammar.cycl_sentence_p(sentence) " + "CommonSymbols.NIL != cycl_grammar.cycl_sentence_p(sentence) " + sentence;
-        if (((NIL != non_explanatory_sentence) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_sentence_p(non_explanatory_sentence))) {
+        if (((NIL != non_explanatory_sentence) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_sentence_p(non_explanatory_sentence))) {
             throw new AssertionError(non_explanatory_sentence);
         }
         assert NIL != hlmt.possibly_mt_p(mt) : "hlmt.possibly_mt_p(mt) " + "CommonSymbols.NIL != hlmt.possibly_mt_p(mt) " + mt;
@@ -497,7 +497,7 @@ public final class kb_query extends SubLTranslatedFile {
 
     public static SubLObject kbq_ensure_query_spec_definition(final SubLObject query_spec, final SubLObject sentence, final SubLObject mt, final SubLObject v_inference_parameters, final SubLObject defining_mt, final SubLObject non_explanatory_sentence, final SubLObject multiple_choice_option_specs) {
         assert NIL != cycl_grammar.cycl_sentence_p(sentence) : "cycl_grammar.cycl_sentence_p(sentence) " + "CommonSymbols.NIL != cycl_grammar.cycl_sentence_p(sentence) " + sentence;
-        if (((NIL != non_explanatory_sentence) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_sentence_p(non_explanatory_sentence))) {
+        if (((NIL != non_explanatory_sentence) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_sentence_p(non_explanatory_sentence))) {
             throw new AssertionError(non_explanatory_sentence);
         }
         assert NIL != hlmt.possibly_mt_p(mt) : "hlmt.possibly_mt_p(mt) " + "CommonSymbols.NIL != hlmt.possibly_mt_p(mt) " + mt;

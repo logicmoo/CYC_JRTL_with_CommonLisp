@@ -81,7 +81,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -107,7 +107,7 @@ public final class probably_approximately_done extends SubLTranslatedFile implem
     public static final SubLObject extract_queries_for_pad_corpus(SubLObject input_file, SubLObject output_file) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(output_file, FILE_VALID_FOR_WRITING_P);
+            SubLSystemTrampolineFile.checkType(output_file, FILE_VALID_FOR_WRITING_P);
             format_nil.force_format(T, $str_alt1$Extracting_queries_from__a__, input_file, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
             {
                 SubLObject count = ZERO_INTEGER;
@@ -731,242 +731,242 @@ public final class probably_approximately_done extends SubLTranslatedFile implem
     }
 
     public static final SubLObject pmd_any_more_answers_comingP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField2();
     }
 
     public static final SubLObject pmd_answer_count_so_far(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField3();
     }
 
     public static final SubLObject pmd_time_elapsed(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField4();
     }
 
     public static final SubLObject pmd_time_left(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField5();
     }
 
     public static final SubLObject pmd_max_transformation_depth_reached(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField6();
     }
 
     public static final SubLObject pmd_lowest_rule_utility_executed(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField7();
     }
 
     public static final SubLObject pmd_lowest_rule_utility_executed_at_the_max_transformation_depth_reached(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField8();
     }
 
     public static final SubLObject pmd_problem_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField9();
     }
 
     public static final SubLObject pmd_link_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField10();
     }
 
     public static final SubLObject pmd_proof_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField11();
     }
 
     public static final SubLObject pmd_good_problem_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField12();
     }
 
     public static final SubLObject pmd_neutral_problem_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField13();
     }
 
     public static final SubLObject pmd_no_good_problem_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField14();
     }
 
     public static final SubLObject pmd_finished_problem_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField15();
     }
 
     public static final SubLObject pmd_unexamined_good_problem_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField16();
     }
 
     public static final SubLObject pmd_no_good_join_problem_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField17();
     }
 
     public static final SubLObject pmd_discarded_tactic_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField18();
     }
 
     public static final SubLObject pmd_new_root_count(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField19();
     }
 
     public static final SubLObject pmd_new_root_start_internal_real_time(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.getField20();
     }
 
     public static final SubLObject pmd_new_root_time_elapsed(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$new_root_time_elapsed;
     }
 
     public static final SubLObject pmd_answer_count_so_far_for_this_new_root(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$answer_count_so_far_for_this_new_root;
     }
 
     public static final SubLObject pmd_direction(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$direction;
     }
 
     public static final SubLObject pmd_max_transformation_depth(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$max_transformation_depth;
     }
 
     public static final SubLObject pmd_answer_count_at_previous_transformation_depth(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$answer_count_at_previous_transformation_depth;
     }
 
     public static final SubLObject _csetf_pmd_any_more_answers_comingP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_pmd_answer_count_so_far(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_pmd_time_elapsed(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_pmd_time_left(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_pmd_max_transformation_depth_reached(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_pmd_lowest_rule_utility_executed(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_pmd_lowest_rule_utility_executed_at_the_max_transformation_depth_reached(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_pmd_problem_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_pmd_link_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField10(value);
     }
 
     public static final SubLObject _csetf_pmd_proof_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField11(value);
     }
 
     public static final SubLObject _csetf_pmd_good_problem_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField12(value);
     }
 
     public static final SubLObject _csetf_pmd_neutral_problem_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField13(value);
     }
 
     public static final SubLObject _csetf_pmd_no_good_problem_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField14(value);
     }
 
     public static final SubLObject _csetf_pmd_finished_problem_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField15(value);
     }
 
     public static final SubLObject _csetf_pmd_unexamined_good_problem_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField16(value);
     }
 
     public static final SubLObject _csetf_pmd_no_good_join_problem_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField17(value);
     }
 
     public static final SubLObject _csetf_pmd_discarded_tactic_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField18(value);
     }
 
     public static final SubLObject _csetf_pmd_new_root_count(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField19(value);
     }
 
     public static final SubLObject _csetf_pmd_new_root_start_internal_real_time(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return v_object.setField20(value);
     }
 
     public static final SubLObject _csetf_pmd_new_root_time_elapsed(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$new_root_time_elapsed = value;
     }
 
     public static final SubLObject _csetf_pmd_answer_count_so_far_for_this_new_root(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$answer_count_so_far_for_this_new_root = value;
     }
 
     public static final SubLObject _csetf_pmd_direction(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$direction = value;
     }
 
     public static final SubLObject _csetf_pmd_max_transformation_depth(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$max_transformation_depth = value;
     }
 
     public static final SubLObject _csetf_pmd_answer_count_at_previous_transformation_depth(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
+        SubLSystemTrampolineFile.checkType(v_object, PAD_METRICS_DATA_P);
         return ((probably_approximately_done.$pad_metrics_data_native) (v_object)).$answer_count_at_previous_transformation_depth = value;
     }
 

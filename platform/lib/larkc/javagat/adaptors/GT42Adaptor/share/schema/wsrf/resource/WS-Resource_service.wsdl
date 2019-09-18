@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="WS-Resource" targetNamespace="http://docs.oasis-open.org/wsrf/rw-2/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://docs.oasis-open.org/wsrf/rw-2/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://docs.oasis-open.org/wsrf/rw-2/bindings" location="WS-Resource_bindings.wsdl"/>
-  <wsdl:service name="WS-ResourceService">
-  </wsdl:service>
-</wsdl:definitions>

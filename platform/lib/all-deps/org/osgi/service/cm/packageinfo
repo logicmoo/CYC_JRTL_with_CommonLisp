@@ -1,0 +1,1 @@
+include class Configuration.class ConfigurationAdmin.class ConfigurationException.class ConfigurationPlugin.class ManagedService.class ManagedServiceFactory.class version 1.1

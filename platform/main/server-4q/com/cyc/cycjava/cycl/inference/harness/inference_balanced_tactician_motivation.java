@@ -49,7 +49,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -113,7 +113,7 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
      * @return booleanp
      */
     public static final SubLObject balanced_strategy_possibly_propagate_motivation_to_link_head(SubLObject strategy, SubLObject motivation, SubLObject link_head) {
-        SubLTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
         {
             SubLObject already_motivatedP = inference_balanced_tactician_datastructures.balanced_strategy_link_head_motivatedP(strategy, motivation, link_head);
             if (NIL == already_motivatedP) {
@@ -146,8 +146,8 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
     public static final SubLObject balanced_strategy_propagate_motivation_to_link_head(SubLObject strategy, SubLObject motivation, SubLObject link_head) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-            SubLTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
+            SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+            SubLSystemTrampolineFile.checkType(link_head, MOTIVATION_STRATEGEM_P);
             inference_balanced_tactician_datastructures.balanced_strategy_note_link_head_motivated(strategy, motivation, link_head);
             if (NIL != inference_worker_transformation.transformation_link_p(link_head)) {
             } else
@@ -1239,14 +1239,14 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
     }
 
     public static final SubLObject balanced_strategy_activate_problem_wrt_new_root(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return plusp(balanced_strategy_possibly_activate_strategems_wrt_new_root(strategy, problem));
     }
 
     public static final SubLObject balanced_strategy_activate_problem_wrt_removal(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return plusp(balanced_strategy_possibly_activate_strategems_wrt_removal(strategy, problem));
     }
 
@@ -1256,8 +1256,8 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
      * @return booleanp; T unless STRATEGY chooses to throw away PROBLEM.
      */
     public static final SubLObject balanced_strategy_activate_problem_wrt_transformation(SubLObject strategy, SubLObject problem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(problem, PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
         return plusp(balanced_strategy_possibly_activate_strategems_wrt_transformation(strategy, problem));
     }
 
@@ -1557,7 +1557,7 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
     Strategems are ordered in intended order of activation.
      */
     public static final SubLObject balanced_strategy_categorize_strategems(SubLObject strategy, SubLObject problem, SubLObject motivation) {
-        SubLTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
+        SubLSystemTrampolineFile.checkType(motivation, BALANCED_STRATEGY_MOTIVATION_P);
         {
             SubLObject pcase_var = motivation;
             if (pcase_var.eql($NEW_ROOT)) {
@@ -2226,8 +2226,8 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
     }
 
     public static final SubLObject balanced_strategy_reactivate_executable_strategem(SubLObject strategy, SubLObject strategem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(strategem, EXECUTABLE_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategem, EXECUTABLE_STRATEGEM_P);
         if (NIL != inference_worker_removal.generalized_removal_tactic_p(strategem)) {
             return inference_balanced_tactician_datastructures.balanced_strategy_activate_strategem_wrt_removal(strategy, strategem);
         } else
@@ -2276,8 +2276,8 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
     }
 
     public static final SubLObject balanced_strategy_deactivate_strategem_wrt_removal(SubLObject strategy, SubLObject removal_strategem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(removal_strategem, REMOVAL_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(removal_strategem, REMOVAL_STRATEGEM_P);
         {
             SubLObject problem = inference_tactician.strategem_problem(removal_strategem);
             SubLObject index = inference_balanced_tactician_datastructures.balanced_strategy_problem_total_strategems_active_wrt_removal(strategy);
@@ -2294,8 +2294,8 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
     }
 
     public static final SubLObject balanced_strategy_deactivate_strategem_wrt_transformation(SubLObject strategy, SubLObject transformation_strategem) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(transformation_strategem, TRANSFORMATION_STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(transformation_strategem, TRANSFORMATION_STRATEGEM_P);
         {
             SubLObject problem = inference_tactician.strategem_problem(transformation_strategem);
             SubLObject index = inference_balanced_tactician_datastructures.balanced_strategy_problem_total_strategems_active_wrt_transformation(strategy);
@@ -2349,8 +2349,8 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
      * you're join-ordered, you have R, your supported problem has N, your lookahead problem is complete, you're cheap, and you're open.
      */
     public static final SubLObject balanced_strategy_early_removal_linkP(SubLObject strategy, SubLObject link) {
-        SubLTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(link, PROBLEM_LINK_P);
+        SubLSystemTrampolineFile.checkType(strategy, BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(link, PROBLEM_LINK_P);
         return makeBoolean((((((NIL != inference_worker_join_ordered.join_ordered_link_p(link)) && (NIL != inference_datastructures_problem_link.problem_link_openP(link))) && (NIL != inference_balanced_tactician_datastructures.balanced_strategy_connected_conjunction_link_motivated_wrt_removalP(strategy, link))) && (NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_motivated_wrt_new_rootP(strategy, inference_datastructures_problem_link.problem_link_supported_problem(link)))) && ($COMPLETE == inference_worker.problem_generalized_removal_completeness(inference_worker_join_ordered.join_ordered_tactic_lookahead_problem(inference_worker_join_ordered.join_ordered_link_tactic(link)), strategy))) && (NIL != inference_tactician.join_ordered_link_early_removal_cheapP(link, strategy)));
     }
 

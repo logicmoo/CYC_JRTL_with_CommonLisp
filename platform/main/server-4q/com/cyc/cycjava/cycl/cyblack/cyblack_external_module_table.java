@@ -38,7 +38,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -108,22 +108,22 @@ public final class cyblack_external_module_table extends SubLTranslatedFile impl
     }
 
     public static final SubLObject ema_id(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_MODULE_ASSOCIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_MODULE_ASSOCIATION_P);
         return v_object.getField2();
     }
 
     public static final SubLObject ema_name(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_MODULE_ASSOCIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_MODULE_ASSOCIATION_P);
         return v_object.getField3();
     }
 
     public static final SubLObject _csetf_ema_id(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_MODULE_ASSOCIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_MODULE_ASSOCIATION_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_ema_name(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_MODULE_ASSOCIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_MODULE_ASSOCIATION_P);
         return v_object.setField3(value);
     }
 
@@ -205,22 +205,22 @@ public final class cyblack_external_module_table extends SubLTranslatedFile impl
     }
 
     public static final SubLObject emt_application(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_MODULE_TABLE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_MODULE_TABLE_P);
         return v_object.getField2();
     }
 
     public static final SubLObject emt_list(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_MODULE_TABLE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_MODULE_TABLE_P);
         return v_object.getField3();
     }
 
     public static final SubLObject _csetf_emt_application(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_MODULE_TABLE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_MODULE_TABLE_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_emt_list(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_MODULE_TABLE_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_MODULE_TABLE_P);
         return v_object.setField3(value);
     }
 

@@ -128,7 +128,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -4312,28 +4312,28 @@ public final class sksi_removal_module_generation extends SubLTranslatedFile {
     }
 
     public static SubLObject init_sksi_removal_module_generation_file() {
-        deflexical("*SKSI-MODULES*", SubLTrampolineFile.maybeDefault($sksi_modules$, $sksi_modules$, () -> set.new_set(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SKSI-MODULES*", SubLSystemTrampolineFile.maybeDefault($sksi_modules$, $sksi_modules$, () -> set.new_set(UNPROVIDED, UNPROVIDED)));
         defparameter("*SKSI-BROWSING-ENABLED*", T);
-        deflexical("*SKSI-MODULE-SUPPORTS*", SubLTrampolineFile.maybeDefault($sksi_module_supports$, $sksi_module_supports$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*SKSI-MODULE-SIMPLE-REQUIRED-PATTERN*", SubLTrampolineFile.maybeDefault($sksi_module_simple_required_pattern$, $sksi_module_simple_required_pattern$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*SKS-MULTIPLY-INDEXED-CONDITIONAL-MEANING-SENTENCE-CACHE*", SubLTrampolineFile.maybeDefault($sks_multiply_indexed_conditional_meaning_sentence_cache$, $sks_multiply_indexed_conditional_meaning_sentence_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
-        deflexical("*SKSI-MODULE-MULTIPLY-INDEXED-CONDITIONAL-MEANING-SENTENCE-CACHE*", SubLTrampolineFile.maybeDefault($sksi_module_multiply_indexed_conditional_meaning_sentence_cache$, $sksi_module_multiply_indexed_conditional_meaning_sentence_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
-        deflexical("*SKSI-MODULES-BY-SKS*", SubLTrampolineFile.maybeDefault($sksi_modules_by_sks$, $sksi_modules_by_sks$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
-        deflexical("*SKSI-CODE-MAPPING-SKS-CACHE*", SubLTrampolineFile.maybeDefault($sksi_code_mapping_sks_cache$, $sksi_code_mapping_sks_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
-        deflexical("*ISA-SKS-TERM-TO-CYCL-TERM-MTS*", SubLTrampolineFile.maybeDefault($isa_sks_term_to_cycl_term_mts$, $isa_sks_term_to_cycl_term_mts$, NIL));
-        deflexical("*ISA-SKS-TERM-TO-CYCL-TERM-STORE*", SubLTrampolineFile.maybeDefault($isa_sks_term_to_cycl_term_store$, $isa_sks_term_to_cycl_term_store$, NIL));
+        deflexical("*SKSI-MODULE-SUPPORTS*", SubLSystemTrampolineFile.maybeDefault($sksi_module_supports$, $sksi_module_supports$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SKSI-MODULE-SIMPLE-REQUIRED-PATTERN*", SubLSystemTrampolineFile.maybeDefault($sksi_module_simple_required_pattern$, $sksi_module_simple_required_pattern$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SKS-MULTIPLY-INDEXED-CONDITIONAL-MEANING-SENTENCE-CACHE*", SubLSystemTrampolineFile.maybeDefault($sks_multiply_indexed_conditional_meaning_sentence_cache$, $sks_multiply_indexed_conditional_meaning_sentence_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKSI-MODULE-MULTIPLY-INDEXED-CONDITIONAL-MEANING-SENTENCE-CACHE*", SubLSystemTrampolineFile.maybeDefault($sksi_module_multiply_indexed_conditional_meaning_sentence_cache$, $sksi_module_multiply_indexed_conditional_meaning_sentence_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKSI-MODULES-BY-SKS*", SubLSystemTrampolineFile.maybeDefault($sksi_modules_by_sks$, $sksi_modules_by_sks$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKSI-CODE-MAPPING-SKS-CACHE*", SubLSystemTrampolineFile.maybeDefault($sksi_code_mapping_sks_cache$, $sksi_code_mapping_sks_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*ISA-SKS-TERM-TO-CYCL-TERM-MTS*", SubLSystemTrampolineFile.maybeDefault($isa_sks_term_to_cycl_term_mts$, $isa_sks_term_to_cycl_term_mts$, NIL));
+        deflexical("*ISA-SKS-TERM-TO-CYCL-TERM-STORE*", SubLSystemTrampolineFile.maybeDefault($isa_sks_term_to_cycl_term_store$, $isa_sks_term_to_cycl_term_store$, NIL));
         deflexical("*FILTERED-SKSI-PREDS*", $list34);
-        deflexical("*MEANING-SENTENCE-MTS*", SubLTrampolineFile.maybeDefault($meaning_sentence_mts$, $meaning_sentence_mts$, NIL));
-        deflexical("*MEANING-SENTENCE-PRED-STORE*", SubLTrampolineFile.maybeDefault($meaning_sentence_pred_store$, $meaning_sentence_pred_store$, NIL));
+        deflexical("*MEANING-SENTENCE-MTS*", SubLSystemTrampolineFile.maybeDefault($meaning_sentence_mts$, $meaning_sentence_mts$, NIL));
+        deflexical("*MEANING-SENTENCE-PRED-STORE*", SubLSystemTrampolineFile.maybeDefault($meaning_sentence_pred_store$, $meaning_sentence_pred_store$, NIL));
         defparameter("*SKS-PREFERENCE-MODULES-COUNT*", NIL);
         defparameter("*SKS-PRUNE-MODULES-COUNT*", NIL);
         deflexical("*SKSI-SPECIFIC-MODULE-PROPERTIES*", $list46);
         deflexical("*GENERATE-SKSI-SLRM-REQUIRED-FUNCTION-CACHING-STATE*", NIL);
         deflexical("*SKSI-DEFAULT-CHECK-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
-        deflexical("*VIRTUAL-ASSERTION-COUNT*", SubLTrampolineFile.maybeDefault($virtual_assertion_count$, $virtual_assertion_count$, ZERO_INTEGER));
-        deflexical("*MT-VIRTUAL-ASSERTION-COUNT-TABLE*", SubLTrampolineFile.maybeDefault($mt_virtual_assertion_count_table$, $mt_virtual_assertion_count_table$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
-        deflexical("*SKSI-MODULE-CODE-MAPPING-TERMS-CACHE*", SubLTrampolineFile.maybeDefault($sksi_module_code_mapping_terms_cache$, $sksi_module_code_mapping_terms_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
-        deflexical("*SKSI-MODULE-LOGICAL-SCHEMAS-CACHE*", SubLTrampolineFile.maybeDefault($sksi_module_logical_schemas_cache$, $sksi_module_logical_schemas_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*VIRTUAL-ASSERTION-COUNT*", SubLSystemTrampolineFile.maybeDefault($virtual_assertion_count$, $virtual_assertion_count$, ZERO_INTEGER));
+        deflexical("*MT-VIRTUAL-ASSERTION-COUNT-TABLE*", SubLSystemTrampolineFile.maybeDefault($mt_virtual_assertion_count_table$, $mt_virtual_assertion_count_table$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+        deflexical("*SKSI-MODULE-CODE-MAPPING-TERMS-CACHE*", SubLSystemTrampolineFile.maybeDefault($sksi_module_code_mapping_terms_cache$, $sksi_module_code_mapping_terms_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKSI-MODULE-LOGICAL-SCHEMAS-CACHE*", SubLSystemTrampolineFile.maybeDefault($sksi_module_logical_schemas_cache$, $sksi_module_logical_schemas_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         defparameter("*SKSI-SUPPORTED-GAF-ARGUMENT-BROWSING-MAX-TERM-CUTOFF*", $int$5000);
         defparameter("*SHOW-SKSI-SUPPORTED-GAF-ARGUMENT-BROWSING-SKIPS?*", NIL);
         return NIL;

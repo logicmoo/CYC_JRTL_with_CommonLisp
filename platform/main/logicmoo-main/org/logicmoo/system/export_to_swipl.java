@@ -16,8 +16,6 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.make
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
 import static org.logicmoo.system.Startup.bp;
 
 import java.util.HashMap;

@@ -87,7 +87,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class evaluatable_relation_tests extends SubLTranslatedFile {
     public static final SubLFile me = new evaluatable_relation_tests();
@@ -1186,7 +1186,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_evaluatable_relation_tests_file() {
         defconstant("*DTP-EVALUATABLE-RELATION-TEST*", EVALUATABLE_RELATION_TEST);
-        deflexical("*EVALUATABLE-RELATION-TESTS*", SubLTrampolineFile.maybeDefault($evaluatable_relation_tests$, $evaluatable_relation_tests$, () -> make_hash_table($int$100, UNPROVIDED, UNPROVIDED)));
+        deflexical("*EVALUATABLE-RELATION-TESTS*", SubLSystemTrampolineFile.maybeDefault($evaluatable_relation_tests$, $evaluatable_relation_tests$, () -> make_hash_table($int$100, UNPROVIDED, UNPROVIDED)));
         return NIL;
     }
 

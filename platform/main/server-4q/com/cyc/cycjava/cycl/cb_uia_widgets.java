@@ -47,7 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -70,23 +70,23 @@ public final class cb_uia_widgets extends SubLTranslatedFile implements V02 {
     private static final SubLSymbol $cb_uia_widgets$ = makeSymbol("*CB-UIA-WIDGETS*");
 
     public static final SubLObject declare_cb_uia_widget(SubLObject operator, SubLObject plist) {
-        SubLTrampolineFile.checkType(operator, UI_OPERATOR_P);
-        SubLTrampolineFile.checkType(plist, PROPERTY_LIST_P);
+        SubLSystemTrampolineFile.checkType(operator, UI_OPERATOR_P);
+        SubLSystemTrampolineFile.checkType(plist, PROPERTY_LIST_P);
         {
             SubLObject name = getf(plist, $NAME, UNPROVIDED);
-            SubLTrampolineFile.checkType(name, STRINGP);
+            SubLSystemTrampolineFile.checkType(name, STRINGP);
         }
         {
             SubLObject render_request_method = getf(plist, $RENDER_REQUEST_METHOD, UNPROVIDED);
-            SubLTrampolineFile.checkType(render_request_method, SYMBOLP);
+            SubLSystemTrampolineFile.checkType(render_request_method, SYMBOLP);
         }
         {
             SubLObject html_handler_method = getf(plist, $HTML_HANDLER_METHOD, UNPROVIDED);
-            SubLTrampolineFile.checkType(html_handler_method, SYMBOLP);
+            SubLSystemTrampolineFile.checkType(html_handler_method, SYMBOLP);
         }
         {
             SubLObject handle_reply_method = getf(plist, $HANDLE_REPLY_METHOD, UNPROVIDED);
-            SubLTrampolineFile.checkType(handle_reply_method, SYMBOLP);
+            SubLSystemTrampolineFile.checkType(handle_reply_method, SYMBOLP);
         }
         return dictionary.dictionary_enter($cb_uia_widgets$.getGlobalValue(), operator, plist);
     }
@@ -323,7 +323,7 @@ public final class cb_uia_widgets extends SubLTranslatedFile implements V02 {
                 html_widget_hidden_input(interaction, $str_alt25$argpos_list, cb_user_interaction_agenda.cb_uia_html_encode(v_agenda, editable_arg_positions));
                 {
                     SubLObject output_list = uia_trampolines.uia_phrase_output_list(v_agenda, original_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLTrampolineFile.checkType(output_list, PPH_PHRASE_OUTPUT_LIST_P);
+                    SubLSystemTrampolineFile.checkType(output_list, PPH_PHRASE_OUTPUT_LIST_P);
                     {
                         SubLObject start_char_index = ZERO_INTEGER;
                         SubLObject end_char_index = ZERO_INTEGER;

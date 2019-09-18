@@ -108,7 +108,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rkf_scenario_manipulator extends SubLTranslatedFile {
     public static final SubLFile me = new rkf_scenario_manipulator();
@@ -2238,7 +2238,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (sentence == UNPROVIDED) {
             sentence = NIL;
         }
-        if (((NIL != sentence) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == el_formula_p(sentence))) {
+        if (((NIL != sentence) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == el_formula_p(sentence))) {
             throw new AssertionError(sentence);
         }
         final SubLObject constraint_record = make_sm_constraint_record(UNPROVIDED);
@@ -4024,7 +4024,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject cycl_sentence = sm_constraint_record_sentence(constraint_record);
         SubLObject nl_sentence = NIL;
-        SubLTrampolineFile.enforceType(indexical_table, ALIST_P);
+        SubLSystemTrampolineFile.enforceType(indexical_table, ALIST_P);
         final SubLObject _prev_bind_0 = pph_vars.$pph_term_paraphrase_map$.currentBinding(thread);
         try {
             pph_vars.$pph_term_paraphrase_map$.bind(indexical_table, thread);
@@ -5431,8 +5431,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_rkf_scenario_manipulator_file() {
         deflexical("*SM-LOCK*", make_lock($$$Scenario_Manipulator_Lock));
-        deflexical("*SM-ISG*", SubLTrampolineFile.maybeDefault($sm_isg$, $sm_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-        deflexical("*SM-INDEX*", SubLTrampolineFile.maybeDefault($sm_index$, $sm_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SM-ISG*", SubLSystemTrampolineFile.maybeDefault($sm_isg$, $sm_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*SM-INDEX*", SubLSystemTrampolineFile.maybeDefault($sm_index$, $sm_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-SM-SCENARIO*", SM_SCENARIO);
         defconstant("*DTP-SM-TEMPLATE*", SM_TEMPLATE);
         defconstant("*DTP-SM-INDEXICAL-RECORD*", SM_INDEXICAL_RECORD);

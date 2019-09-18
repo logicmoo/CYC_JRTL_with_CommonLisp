@@ -50,7 +50,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -127,7 +127,7 @@ public final class inference_iterators extends SubLTranslatedFile {
         }
         assert NIL != inference_datastructures_inference.inference_p(inference) : "inference_datastructures_inference.inference_p(inference) " + "CommonSymbols.NIL != inference_datastructures_inference.inference_p(inference) " + inference;
         assert NIL != inference_datastructures_enumerated_types.query_dynamic_properties_p(query_dynamic_properties) : "inference_datastructures_enumerated_types.query_dynamic_properties_p(query_dynamic_properties) " + "CommonSymbols.NIL != inference_datastructures_enumerated_types.query_dynamic_properties_p(query_dynamic_properties) " + query_dynamic_properties;
-        if (((NIL != inference_finalizer) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(inference_finalizer))) {
+        if (((NIL != inference_finalizer) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == function_spec_p(inference_finalizer))) {
             throw new AssertionError(inference_finalizer);
         }
         return iteration.new_iterator(make_inference_iterator_state(inference, query_dynamic_properties, inference_finalizer), INFERENCE_ITERATOR_DONE, INFERENCE_ITERATOR_NEXT, INFERENCE_ITERATOR_FINALIZE);
@@ -222,7 +222,7 @@ public final class inference_iterators extends SubLTranslatedFile {
             query_properties = NIL;
         }
         assert NIL != possibly_inference_sentence_p(sentence) : "el_utilities.possibly_inference_sentence_p(sentence) " + "CommonSymbols.NIL != el_utilities.possibly_inference_sentence_p(sentence) " + sentence;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
             throw new AssertionError(mt);
         }
         final SubLObject plist_var = query_properties;
@@ -322,7 +322,7 @@ public final class inference_iterators extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != possibly_inference_sentence_p(sentence) : "el_utilities.possibly_inference_sentence_p(sentence) " + "CommonSymbols.NIL != el_utilities.possibly_inference_sentence_p(sentence) " + sentence;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == hlmt.possibly_mt_p(mt))) {
             throw new AssertionError(mt);
         }
         final SubLObject plist_var = query_properties;

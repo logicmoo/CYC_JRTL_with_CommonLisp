@@ -87,7 +87,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -802,7 +802,7 @@ public final class tm_utilities extends SubLTranslatedFile implements V02 {
     public static final SubLObject vacuous_tm_gensymP(SubLObject fort) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fort, FORT_P);
+            SubLSystemTrampolineFile.checkType(fort, FORT_P);
             {
                 SubLObject result = NIL;
                 if (NIL != isa.isaP(fort, $$ThesaurusGeneratedTerm, $$ThesaurusManagementMt, UNPROVIDED)) {

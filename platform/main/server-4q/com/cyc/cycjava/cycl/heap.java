@@ -86,7 +86,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class heap extends SubLTranslatedFile {
     public static final SubLFile me = new heap();
@@ -1435,7 +1435,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_heap_file() {
         defconstant("*DTP-HEAP-IMPL*", HEAP_IMPL);
-        deflexical("*EMPTY-HEAP-ELEMENT*", SubLTrampolineFile.maybeDefault($empty_heap_element$, $empty_heap_element$, () -> make_symbol($$$Empty_Heap_Element)));
+        deflexical("*EMPTY-HEAP-ELEMENT*", SubLSystemTrampolineFile.maybeDefault($empty_heap_element$, $empty_heap_element$, () -> make_symbol($$$Empty_Heap_Element)));
         deflexical("*HEAP-ROOT-INDEX*", ONE_INTEGER);
         defconstant("*DTP-HEAP-TEST-EXAMPLE*", HEAP_TEST_EXAMPLE);
         return NIL;

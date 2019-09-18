@@ -88,7 +88,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -370,9 +370,9 @@ public final class constants_high extends SubLTranslatedFile {
         if (external_id == UNPROVIDED) {
             external_id = NIL;
         }
-        SubLTrampolineFile.enforceType(name, CONSTANT_NAME_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(name, CONSTANT_NAME_SPEC_P);
         if (NIL != external_id) {
-            SubLTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
+            SubLSystemTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
         }
         if (NIL == external_id) {
             external_id = make_constant_external_id();
@@ -386,7 +386,7 @@ public final class constants_high extends SubLTranslatedFile {
         if (external_id == UNPROVIDED) {
             external_id = NIL;
         }
-        SubLTrampolineFile.enforceType(name, STRINGP);
+        SubLSystemTrampolineFile.enforceType(name, STRINGP);
         final SubLObject constant = find_constant(name);
         if (NIL != installed_constant_p(constant)) {
             return constant;
@@ -398,7 +398,7 @@ public final class constants_high extends SubLTranslatedFile {
         if (prefix == UNPROVIDED) {
             prefix = $$$TMP;
         }
-        SubLTrampolineFile.enforceType(start_name, STRINGP);
+        SubLSystemTrampolineFile.enforceType(start_name, STRINGP);
         final SubLObject name = constant_completion_high.uniquify_constant_name(format(NIL, $str25$_A__A, prefix, start_name), UNPROVIDED);
         final SubLObject constant = create_constant(name, UNPROVIDED);
         return constant;
@@ -474,7 +474,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject remove_constant(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         remove_everything_about_constant(constant);
         if (NIL != tms.tms_please_kill_this_term_for_me(constant)) {
             return constant;
@@ -506,7 +506,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject find_constant(final SubLObject name) {
-        SubLTrampolineFile.enforceType(name, STRINGP);
+        SubLSystemTrampolineFile.enforceType(name, STRINGP);
         final SubLObject constant = constants_interface.kb_lookup_constant_by_name(name);
         if ($find_renamed$ && (constant == NIL)) {
         }
@@ -514,7 +514,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject constant_name(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         return constants_interface.kb_constant_name(constant);
     }
 
@@ -539,13 +539,13 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject rename_constant(final SubLObject constant, final SubLObject new_name) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
-        SubLTrampolineFile.enforceType(new_name, STRINGP);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(new_name, STRINGP);
         return constants_interface.kb_rename_constant(constant, new_name);
     }
 
     public static SubLObject constant_internal_id(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         return constant_suid(constant);
     }
 
@@ -555,7 +555,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject find_constant_by_internal_id(final SubLObject id) {
-        SubLTrampolineFile.enforceType(id, CONSTANT_INTERNAL_ID_P);
+        SubLSystemTrampolineFile.enforceType(id, CONSTANT_INTERNAL_ID_P);
         return find_constant_by_suid(id);
     }
 
@@ -607,7 +607,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject constant_external_id(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         return constant_guid(constant);
     }
 
@@ -617,7 +617,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject find_constant_by_external_id(SubLObject external_id) {
-        SubLTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
+        SubLSystemTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
         external_id = prefered_constant_external_id_wrt_equivalence(external_id);
         return find_constant_by_guid(external_id);
     }
@@ -646,7 +646,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject constant_info_from_guid_strings(final SubLObject guid_string_list) {
-        SubLTrampolineFile.enforceType(guid_string_list, LISTP);
+        SubLSystemTrampolineFile.enforceType(guid_string_list, LISTP);
         SubLObject constant_info_list = NIL;
         SubLObject constant = NIL;
         SubLObject cdolist_list_var = guid_string_list;
@@ -666,7 +666,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject constant_info_from_name_strings(final SubLObject name_string_list) {
-        SubLTrampolineFile.enforceType(name_string_list, LISTP);
+        SubLSystemTrampolineFile.enforceType(name_string_list, LISTP);
         SubLObject constant_info_list = NIL;
         SubLObject constant = NIL;
         SubLObject cdolist_list_var = name_string_list;
@@ -772,7 +772,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject constant_namespace(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         final SubLObject delim = string_utilities.char_position(CHAR_colon, constant_name(constant), UNPROVIDED);
         if (NIL != delim) {
             return subseq(constant_name(constant), ZERO_INTEGER, delim);
@@ -781,7 +781,7 @@ public final class constants_high extends SubLTranslatedFile {
     }
 
     public static SubLObject constant_name_within_namespace(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         final SubLObject delim = string_utilities.char_position(CHAR_colon, constant_name(constant), UNPROVIDED);
         if (NIL != delim) {
             return subseq(constant_name(constant), add(delim, ONE_INTEGER), UNPROVIDED);

@@ -23,7 +23,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -118,8 +118,8 @@ public final class constants_interface extends SubLTranslatedFile {
     public static final SubLList $list40 = list(makeSymbol("KB-NEW-CONSTANT-INFO-ITERATOR-INTERNAL"));
 
     public static SubLObject kb_create_constant(final SubLObject name, final SubLObject external_id) {
-        SubLTrampolineFile.enforceType(name, CONSTANT_NAME_SPEC_P);
-        SubLTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
+        SubLSystemTrampolineFile.enforceType(name, CONSTANT_NAME_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(external_id, CONSTANT_EXTERNAL_ID_P);
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_CREATE_CONSTANT, name, external_id, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         if (NIL != hl_interface_infrastructure.hl_modify_anywhereP()) {
@@ -164,7 +164,7 @@ public final class constants_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_remove_constant(final SubLObject constant) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_REMOVE_CONSTANT, constant, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -194,7 +194,7 @@ public final class constants_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_lookup_constant_by_name(final SubLObject name) {
-        SubLTrampolineFile.enforceType(name, STRINGP);
+        SubLSystemTrampolineFile.enforceType(name, STRINGP);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_LOOKUP_CONSTANT_BY_NAME, list(QUOTE, name)));
         }
@@ -202,7 +202,7 @@ public final class constants_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_constant_name(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_CONSTANT_NAME, list(QUOTE, constant)));
         }
@@ -210,7 +210,7 @@ public final class constants_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_lookup_constant_by_guid(final SubLObject guid) {
-        SubLTrampolineFile.enforceType(guid, GUID_P);
+        SubLSystemTrampolineFile.enforceType(guid, GUID_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_LOOKUP_CONSTANT_BY_GUID, list(QUOTE, guid)));
         }
@@ -218,7 +218,7 @@ public final class constants_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_constant_guid(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_CONSTANT_GUID, list(QUOTE, constant)));
         }
@@ -226,7 +226,7 @@ public final class constants_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_constant_merged_guid(final SubLObject constant) {
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_CONSTANT_MERGED_GUID, list(QUOTE, constant)));
         }
@@ -235,8 +235,8 @@ public final class constants_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_rename_constant(final SubLObject constant, final SubLObject new_name) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(constant, CONSTANT_P);
-        SubLTrampolineFile.enforceType(new_name, VALID_CONSTANT_NAME_P);
+        SubLSystemTrampolineFile.enforceType(constant, CONSTANT_P);
+        SubLSystemTrampolineFile.enforceType(new_name, VALID_CONSTANT_NAME_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_RENAME_CONSTANT, constant, new_name, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);

@@ -70,7 +70,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1059,11 +1059,11 @@ public final class ontology_layers extends SubLTranslatedFile {
 
     public static SubLObject init_ontology_layers_file() {
         deflexical("*ONTOLOGY-LAYERS*", $list0);
-        deflexical("*UPPER-ONTOLOGY-CORE-TERMS*", SubLTrampolineFile.maybeDefault($upper_ontology_core_terms$, $upper_ontology_core_terms$, NIL));
-        deflexical("*UPPER-ONTOLOGY-COLLECTIONS*", SubLTrampolineFile.maybeDefault($upper_ontology_collections$, $upper_ontology_collections$, NIL));
-        deflexical("*MIDDLE-ONTOLOGY-COLLECTIONS*", SubLTrampolineFile.maybeDefault($middle_ontology_collections$, $middle_ontology_collections$, NIL));
-        deflexical("*UPPER-ONTOLOGY-RELATIONS*", SubLTrampolineFile.maybeDefault($upper_ontology_relations$, $upper_ontology_relations$, NIL));
-        deflexical("*MIDDLE-ONTOLOGY-RELATIONS*", SubLTrampolineFile.maybeDefault($middle_ontology_relations$, $middle_ontology_relations$, NIL));
+        deflexical("*UPPER-ONTOLOGY-CORE-TERMS*", SubLSystemTrampolineFile.maybeDefault($upper_ontology_core_terms$, $upper_ontology_core_terms$, NIL));
+        deflexical("*UPPER-ONTOLOGY-COLLECTIONS*", SubLSystemTrampolineFile.maybeDefault($upper_ontology_collections$, $upper_ontology_collections$, NIL));
+        deflexical("*MIDDLE-ONTOLOGY-COLLECTIONS*", SubLSystemTrampolineFile.maybeDefault($middle_ontology_collections$, $middle_ontology_collections$, NIL));
+        deflexical("*UPPER-ONTOLOGY-RELATIONS*", SubLSystemTrampolineFile.maybeDefault($upper_ontology_relations$, $upper_ontology_relations$, NIL));
+        deflexical("*MIDDLE-ONTOLOGY-RELATIONS*", SubLSystemTrampolineFile.maybeDefault($middle_ontology_relations$, $middle_ontology_relations$, NIL));
         return NIL;
     }
 

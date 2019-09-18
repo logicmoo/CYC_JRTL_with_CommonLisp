@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -84,7 +84,7 @@ public final class cr_search_tool extends SubLTranslatedFile implements V02 {
 
     // // Definitions
     public static final SubLObject new_cr_search(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
+        SubLSystemTrampolineFile.checkType(fort, FORT_P);
         {
             SubLObject state = new_cr_search_state(fort);
             SubLObject v_search = search.new_search(CR_NO_LEAVES_P, CR_NEXT_NODE, CR_GOAL_P, CR_ADD_GOAL, CR_OPTIONS, CR_EXPAND, CR_ADD_NODE, CR_TOO_DEEP_P, state, UNPROVIDED);
@@ -103,7 +103,7 @@ public final class cr_search_tool extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_search, SEARCH_STRUC_P);
+            SubLSystemTrampolineFile.checkType(v_search, SEARCH_STRUC_P);
             {
                 SubLObject reason = NIL;
                 {
@@ -286,7 +286,7 @@ public final class cr_search_tool extends SubLTranslatedFile implements V02 {
         if (suggestions == UNPROVIDED) {
             suggestions = NIL;
         }
-        SubLTrampolineFile.checkType(fort, FORT_P);
+        SubLSystemTrampolineFile.checkType(fort, FORT_P);
         return list(fort, suggestions);
     }
 
@@ -2015,7 +2015,7 @@ public final class cr_search_tool extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fort, FORT_P);
+            SubLSystemTrampolineFile.checkType(fort, FORT_P);
             if (NIL == linktext) {
                 html_utilities.html_princ($str_alt89$_Justify_);
             }

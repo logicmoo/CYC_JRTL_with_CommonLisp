@@ -111,7 +111,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -436,7 +436,7 @@ public final class textual_entailments extends SubLTranslatedFile implements V02
         if (remove_el_duplicatesP == UNPROVIDED) {
             remove_el_duplicatesP = T;
         }
-        SubLTrampolineFile.checkType(sentence, STRING_OR_UNICODE_NAUT_P);
+        SubLSystemTrampolineFile.checkType(sentence, STRING_OR_UNICODE_NAUT_P);
         {
             SubLObject parsing_timeout_time_remaining = parsing_macros.parsing_timeout_time_remaining();
             SubLObject seconds_remaining = (NIL != parsing_timeout_time_remaining) ? ((SubLObject) (floor(parsing_timeout_time_remaining, UNPROVIDED))) : NIL;
@@ -2001,10 +2001,10 @@ public final class textual_entailments extends SubLTranslatedFile implements V02
         if (max_time == UNPROVIDED) {
             max_time = $int$30;
         }
-        SubLTrampolineFile.checkType(sentence, STRING_OR_UNICODE_NAUT_P);
-        SubLTrampolineFile.checkType(domain_mt, $sym99$HLMT_);
+        SubLSystemTrampolineFile.checkType(sentence, STRING_OR_UNICODE_NAUT_P);
+        SubLSystemTrampolineFile.checkType(domain_mt, $sym99$HLMT_);
         if (NIL != max_parses) {
-            SubLTrampolineFile.checkType(max_parses, POSITIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(max_parses, POSITIVE_INTEGER_P);
         }
         {
             SubLObject subl_sentence = (NIL != unicode_nauts.unicode_naut_p(sentence)) ? ((SubLObject) (unicode_strings.display_to_subl_string(cycl_utilities.nat_arg1(sentence, UNPROVIDED), UNPROVIDED, UNPROVIDED))) : sentence;
@@ -2479,112 +2479,112 @@ public final class textual_entailments extends SubLTranslatedFile implements V02
     }
 
     public static final SubLObject tip_cycl(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField2();
     }
 
     public static final SubLObject tip_cycl_source(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField3();
     }
 
     public static final SubLObject tip_run_method(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField4();
     }
 
     public static final SubLObject tip_background_text(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField5();
     }
 
     public static final SubLObject tip_background_target(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField6();
     }
 
     public static final SubLObject tip_query_text(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField7();
     }
 
     public static final SubLObject tip_query_target(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField8();
     }
 
     public static final SubLObject tip_response_texts(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField9();
     }
 
     public static final SubLObject tip_polarities(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField10();
     }
 
     public static final SubLObject tip_inference_properties(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField11();
     }
 
     public static final SubLObject tip_metrics(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.getField12();
     }
 
     public static final SubLObject _csetf_tip_cycl(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_tip_cycl_source(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_tip_run_method(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_tip_background_text(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_tip_background_target(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_tip_query_text(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_tip_query_target(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_tip_response_texts(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_tip_polarities(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField10(value);
     }
 
     public static final SubLObject _csetf_tip_inference_properties(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField11(value);
     }
 
     public static final SubLObject _csetf_tip_metrics(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
+        SubLSystemTrampolineFile.checkType(v_object, TEXTUAL_INFERENCE_PROBLEM_P);
         return v_object.setField12(value);
     }
 

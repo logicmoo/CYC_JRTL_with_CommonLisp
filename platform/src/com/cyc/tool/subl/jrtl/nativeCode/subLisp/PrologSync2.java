@@ -24,9 +24,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-public class PrologSync2 extends SubLTrampolineFile
+public class PrologSync2 extends SubLSystemTrampolineFile
 {
 
 	volatile public static Map bowls = new HashMap();

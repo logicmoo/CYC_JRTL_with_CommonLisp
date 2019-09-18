@@ -71,7 +71,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2051,8 +2051,8 @@ public final class sbhl_time_assertion_processing extends SubLTranslatedFile {
     }
 
     public static SubLObject init_sbhl_time_assertion_processing_file() {
-        deflexical("*SBHL-TIME-DEFAULT-LINK-MT*", SubLTrampolineFile.maybeDefault($sbhl_time_default_link_mt$, $sbhl_time_default_link_mt$, $$BaseKB));
-        deflexical("*HL-START-END-FN-DEFINING-MT*", SubLTrampolineFile.maybeDefault($hl_start_end_fn_defining_mt$, $hl_start_end_fn_defining_mt$, $$BaseKB));
+        deflexical("*SBHL-TIME-DEFAULT-LINK-MT*", SubLSystemTrampolineFile.maybeDefault($sbhl_time_default_link_mt$, $sbhl_time_default_link_mt$, $$BaseKB));
+        deflexical("*HL-START-END-FN-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($hl_start_end_fn_defining_mt$, $hl_start_end_fn_defining_mt$, $$BaseKB));
         return NIL;
     }
 

@@ -57,7 +57,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class hl_interface_infrastructure extends SubLTranslatedFile {
@@ -948,15 +948,15 @@ public final class hl_interface_infrastructure extends SubLTranslatedFile {
 	public static SubLObject init_hl_interface_infrastructure_file() {
 		defvar("*HL-STORE-MODIFICATION-AND-ACCESS*", $LOCAL_LOCAL);
 		defvar("*OVERRIDE-HL-STORE-REMOTE-ACCESS?*", NIL);
-		deflexical("*REMOTE-HL-STORE-IMAGE*", SubLTrampolineFile.maybeDefault($remote_hl_store_image$, $remote_hl_store_image$, NIL));
-		deflexical("*REMOTE-HL-STORE-CONNECTION-POOL*", SubLTrampolineFile.maybeDefault($remote_hl_store_connection_pool$, $remote_hl_store_connection_pool$, () -> queues.create_queue(UNPROVIDED)));
+		deflexical("*REMOTE-HL-STORE-IMAGE*", SubLSystemTrampolineFile.maybeDefault($remote_hl_store_image$, $remote_hl_store_image$, NIL));
+		deflexical("*REMOTE-HL-STORE-CONNECTION-POOL*", SubLSystemTrampolineFile.maybeDefault($remote_hl_store_connection_pool$, $remote_hl_store_connection_pool$, () -> queues.create_queue(UNPROVIDED)));
 		deflexical("*REMOTE-HL-STORE-CONNECTION-POOL-LOCK*", make_lock($str10$Remote_HL_Store_Connection_Pool_L));
 		deflexical("*REMOTE-HL-STORE-CONNECTION-POOL-MAX-SIZE*", NINE_INTEGER);
 		defparameter("*HL-STORE-ERROR-HANDLING-MODE*", NIL);
-		deflexical("*HL-STORE-ITERATORS*", SubLTrampolineFile.maybeDefault($hl_store_iterators$, $hl_store_iterators$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
-		deflexical("*NEXT-HL-STORE-ITERATOR-ID*", SubLTrampolineFile.maybeDefault($next_hl_store_iterator_id$, $next_hl_store_iterator_id$, ZERO_INTEGER));
+		deflexical("*HL-STORE-ITERATORS*", SubLSystemTrampolineFile.maybeDefault($hl_store_iterators$, $hl_store_iterators$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
+		deflexical("*NEXT-HL-STORE-ITERATOR-ID*", SubLSystemTrampolineFile.maybeDefault($next_hl_store_iterator_id$, $next_hl_store_iterator_id$, ZERO_INTEGER));
 		deflexical("*HL-STORE-ITERATOR-LOCK*", make_lock($$$HL_Store_Iterator_Lock));
-		deflexical("*HL-TRANSCRIPT-STREAM*", SubLTrampolineFile.maybeDefault($hl_transcript_stream$, $hl_transcript_stream$, NIL));
+		deflexical("*HL-TRANSCRIPT-STREAM*", SubLSystemTrampolineFile.maybeDefault($hl_transcript_stream$, $hl_transcript_stream$, NIL));
 		return NIL;
 	}
 

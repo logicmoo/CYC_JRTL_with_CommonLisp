@@ -129,7 +129,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -6229,9 +6229,9 @@ public final class rkf_salient_descriptor extends SubLTranslatedFile {
         defparameter("*RKF-SD-RULE-POS-LIT-MAX*", ONE_INTEGER);
         defparameter("*RKF-SD-RULE-NEG-LIT-MIN*", TWO_INTEGER);
         defparameter("*RKF-SD-RULE-POS-LIT-MIN*", ONE_INTEGER);
-        deflexical("*RKF-SALIENT-DESCRIPTOR-CACHE*", SubLTrampolineFile.maybeDefault($rkf_salient_descriptor_cache$, $rkf_salient_descriptor_cache$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*RKF-SALIENT-DESCRIPTOR-CACHE*", SubLSystemTrampolineFile.maybeDefault($rkf_salient_descriptor_cache$, $rkf_salient_descriptor_cache$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQUAL), UNPROVIDED)));
         deflexical("*RKF-SALIENT-DESCRIPTOR-CACHE-LOCK*", make_lock($$$RKF_Salient_Descriptor_Cache_Lock));
-        deflexical("*RKF-SALIENT-DESCRIPTOR-IGNORE-CACHE*", SubLTrampolineFile.maybeDefault($rkf_salient_descriptor_ignore_cache$, $rkf_salient_descriptor_ignore_cache$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*RKF-SALIENT-DESCRIPTOR-IGNORE-CACHE*", SubLSystemTrampolineFile.maybeDefault($rkf_salient_descriptor_ignore_cache$, $rkf_salient_descriptor_ignore_cache$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQUAL), UNPROVIDED)));
         deflexical("*RKF-SALIENT-DESCRIPTOR-IGNORE-CACHE-LOCK*", make_lock($$$RKF_Salient_Descriptor_Cache_Lock));
         defparameter("*RKF-CHOICE-COUNT-CUTOFF*", TEN_INTEGER);
         defparameter("*RKF-EXAMPLES-TO-SHOW*", FIVE_INTEGER);

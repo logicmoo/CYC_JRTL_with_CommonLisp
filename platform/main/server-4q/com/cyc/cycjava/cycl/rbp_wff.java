@@ -77,7 +77,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3766,12 +3766,12 @@ public final class rbp_wff extends SubLTranslatedFile {
         defparameter("*RBP-WFF-CHECKS-TOTAL*", ZERO_INTEGER);
         defparameter("*RBP-WFF-CHECKS-FAILED*", ZERO_INTEGER);
         defparameter("*RBP-SHOW-NON-WFF?*", NIL);
-        deflexical("*RBP-WFF-VALIDATION-COUNT*", SubLTrampolineFile.maybeDefault($rbp_wff_validation_count$, $rbp_wff_validation_count$, ZERO_INTEGER));
-        deflexical("*RBP-WFF-VALIDATION-FALSE-POS*", SubLTrampolineFile.maybeDefault($rbp_wff_validation_false_pos$, $rbp_wff_validation_false_pos$, NIL));
-        deflexical("*RBP-WFF-VALIDATION-FALSE-NEG*", SubLTrampolineFile.maybeDefault($rbp_wff_validation_false_neg$, $rbp_wff_validation_false_neg$, NIL));
-        deflexical("*RBP-WFF-VALIDATE-SETTING*", SubLTrampolineFile.maybeDefault($rbp_wff_validate_setting$, $rbp_wff_validate_setting$, NIL));
-        deflexical("*RBP-VOCABULARY-MTS*", SubLTrampolineFile.maybeDefault($rbp_vocabulary_mts$, $rbp_vocabulary_mts$, $UNINITIALIZED));
-        deflexical("*RBP-WFF-QUATERNARY-RMPS*", SubLTrampolineFile.maybeDefault($rbp_wff_quaternary_rmps$, $rbp_wff_quaternary_rmps$, $UNINITIALIZED));
+        deflexical("*RBP-WFF-VALIDATION-COUNT*", SubLSystemTrampolineFile.maybeDefault($rbp_wff_validation_count$, $rbp_wff_validation_count$, ZERO_INTEGER));
+        deflexical("*RBP-WFF-VALIDATION-FALSE-POS*", SubLSystemTrampolineFile.maybeDefault($rbp_wff_validation_false_pos$, $rbp_wff_validation_false_pos$, NIL));
+        deflexical("*RBP-WFF-VALIDATION-FALSE-NEG*", SubLSystemTrampolineFile.maybeDefault($rbp_wff_validation_false_neg$, $rbp_wff_validation_false_neg$, NIL));
+        deflexical("*RBP-WFF-VALIDATE-SETTING*", SubLSystemTrampolineFile.maybeDefault($rbp_wff_validate_setting$, $rbp_wff_validate_setting$, NIL));
+        deflexical("*RBP-VOCABULARY-MTS*", SubLSystemTrampolineFile.maybeDefault($rbp_vocabulary_mts$, $rbp_vocabulary_mts$, $UNINITIALIZED));
+        deflexical("*RBP-WFF-QUATERNARY-RMPS*", SubLSystemTrampolineFile.maybeDefault($rbp_wff_quaternary_rmps$, $rbp_wff_quaternary_rmps$, $UNINITIALIZED));
         deflexical("*RBP-WF-NAT-EXTERNAL?-CACHING-STATE*", NIL);
         deflexical("*RBP-WF-TEMPLATE-ARGS?-CACHING-STATE*", NIL);
         defparameter("*RBP-WFF-CHECK-VISIBILITY?*", NIL);
@@ -3781,8 +3781,8 @@ public final class rbp_wff extends SubLTranslatedFile {
         deflexical("*RBP-WFF-TEST-FAILS-INT?-CACHING-STATE*", NIL);
         deflexical("*RBP-WFF-CONSTRAINTS-PRIM-INT-CACHED-CACHING-STATE*", NIL);
         defparameter("*RBP-KNOWN-FALSE-EQUALS-NON-WFF?*", NIL);
-        deflexical("*INTER-ARG-ISA-PREDICATE-MT*", SubLTrampolineFile.maybeDefault($inter_arg_isa_predicate_mt$, $inter_arg_isa_predicate_mt$, $$BaseKB));
-        deflexical("*ARG-NOT-ISA-PREDICATE-MT*", SubLTrampolineFile.maybeDefault($arg_not_isa_predicate_mt$, $arg_not_isa_predicate_mt$, $$BaseKB));
+        deflexical("*INTER-ARG-ISA-PREDICATE-MT*", SubLSystemTrampolineFile.maybeDefault($inter_arg_isa_predicate_mt$, $inter_arg_isa_predicate_mt$, $$BaseKB));
+        deflexical("*ARG-NOT-ISA-PREDICATE-MT*", SubLSystemTrampolineFile.maybeDefault($arg_not_isa_predicate_mt$, $arg_not_isa_predicate_mt$, $$BaseKB));
         deflexical("*RBP-GET-IAI-PRED-CACHING-STATE*", NIL);
         deflexical("*RBP-GET-ANI-PRED-CACHING-STATE*", NIL);
         defparameter("*RBP-VALIDATE-IANI-PAIRS?*", NIL);

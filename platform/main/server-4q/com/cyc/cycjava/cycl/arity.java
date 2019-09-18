@@ -74,7 +74,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1152,9 +1152,9 @@ public final class arity extends SubLTranslatedFile {
 
     public static SubLObject init_arity_file() {
         deflexical("*KB-ARITY-TABLE-EQUALITY-TEST*", symbol_function(EQL));
-        deflexical("*KB-ARITY-TABLE*", SubLTrampolineFile.maybeDefault($kb_arity_table$, $kb_arity_table$, NIL));
-        deflexical("*KB-ARITY-MIN-TABLE*", SubLTrampolineFile.maybeDefault($kb_arity_min_table$, $kb_arity_min_table$, NIL));
-        deflexical("*KB-ARITY-MAX-TABLE*", SubLTrampolineFile.maybeDefault($kb_arity_max_table$, $kb_arity_max_table$, NIL));
+        deflexical("*KB-ARITY-TABLE*", SubLSystemTrampolineFile.maybeDefault($kb_arity_table$, $kb_arity_table$, NIL));
+        deflexical("*KB-ARITY-MIN-TABLE*", SubLSystemTrampolineFile.maybeDefault($kb_arity_min_table$, $kb_arity_min_table$, NIL));
+        deflexical("*KB-ARITY-MAX-TABLE*", SubLSystemTrampolineFile.maybeDefault($kb_arity_max_table$, $kb_arity_max_table$, NIL));
         return NIL;
     }
 

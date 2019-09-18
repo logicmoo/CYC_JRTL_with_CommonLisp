@@ -53,7 +53,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -394,8 +394,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $SUPERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -453,8 +453,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $MIN_SUPERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -469,8 +469,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $INFERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -528,8 +528,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $MAX_INFERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -544,8 +544,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $CO_SUPERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -606,8 +606,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $CO_INFERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -668,8 +668,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $REDUNDANT_SUPERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -721,8 +721,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $REDUNDANT_INFERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -774,8 +774,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $ALL_SUPERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -833,8 +833,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $ALL_INFERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -946,8 +946,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $ALL_ACCESSIBLE, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -1005,8 +1005,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $ROOTS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -1064,8 +1064,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $LEAVES, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -1126,9 +1126,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
         return transitivity.gtm(predicate, $COMPOSE_FN_SUPERIORS, fort, fn, combine_fn, mt, UNPROVIDED);
     }
 
@@ -1192,9 +1192,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
-        SubLTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(fn, FUNCTION_SPEC_P);
         return transitivity.gtm(predicate, $COMPOSE_FN_INFERIORS, fort, fn, combine_fn, mt, UNPROVIDED);
     }
 
@@ -1261,9 +1261,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
-        SubLTrampolineFile.enforceType(compose_pred, $sym66$PREDICATE_IN_ANY_MT_);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(compose_pred, $sym66$PREDICATE_IN_ANY_MT_);
         return transitivity.gtm(predicate, $COMPOSE_PRED_SUPERIORS, fort, compose_pred, compose_index_arg, compose_gather_arg, mt);
     }
 
@@ -1347,9 +1347,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
-        SubLTrampolineFile.enforceType(compose_pred, $sym66$PREDICATE_IN_ANY_MT_);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(compose_pred, $sym66$PREDICATE_IN_ANY_MT_);
         return transitivity.gtm(predicate, $COMPOSE_PRED_INFERIORS, fort, compose_pred, compose_index_arg, compose_gather_arg, mt);
     }
 
@@ -1427,8 +1427,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $ALL_DEPENDENT_INFERIORS, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -1626,9 +1626,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(superior, GT_TERM_P);
-        SubLTrampolineFile.enforceType(inferior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(superior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(inferior, GT_TERM_P);
         return transitivity.gtm(predicate, $kw81$WHY_SUPERIOR_, superior, inferior, mt, UNPROVIDED, UNPROVIDED);
     }
 
@@ -1750,9 +1750,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(inferior, GT_TERM_P);
-        SubLTrampolineFile.enforceType(superior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(inferior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(superior, GT_TERM_P);
         return transitivity.gtm(predicate, $kw92$HAS_SUPERIOR_, inferior, superior, mt, UNPROVIDED, UNPROVIDED);
     }
 
@@ -1767,9 +1767,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(superior, GT_TERM_P);
-        SubLTrampolineFile.enforceType(inferior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(superior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(inferior, GT_TERM_P);
         return transitivity.gtm(predicate, $kw92$HAS_SUPERIOR_, inferior, superior, mt, UNPROVIDED, UNPROVIDED);
     }
 
@@ -1900,8 +1900,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort, GT_TERM_P);
         return transitivity.gtm(predicate, $CYCLES_, fort, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -1967,9 +1967,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort1, GT_TERM_P);
-        SubLTrampolineFile.enforceType(fort2, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort1, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(fort2, GT_TERM_P);
         return transitivity.gtm(predicate, $kw105$COMPLETES_CYCLE_, fort1, fort2, mt, UNPROVIDED, UNPROVIDED);
     }
 
@@ -2032,9 +2032,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(fort1, GT_TERM_P);
-        SubLTrampolineFile.enforceType(fort2, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort1, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(fort2, GT_TERM_P);
         return transitivity.gtm(predicate, $kw110$WHY_COMPLETES_CYCLE_, fort1, fort2, mt, UNPROVIDED, UNPROVIDED);
     }
 
@@ -2146,8 +2146,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(v_forts, LISTP);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_forts, LISTP);
         return transitivity.gtm(predicate, $MIN_NODES, v_forts, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
@@ -2198,8 +2198,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (direction == UNPROVIDED) {
             direction = gt_vars.$gt_max_nodes_direction$.getDynamicValue();
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(v_forts, LISTP);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_forts, LISTP);
         return transitivity.gtm(predicate, $MAX_NODES, v_forts, mt, direction, UNPROVIDED, UNPROVIDED);
     }
 
@@ -2360,8 +2360,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(v_forts, LISTP);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_forts, LISTP);
         return transitivity.gtm(predicate, $MIN_CEILINGS, v_forts, candidates, mt, UNPROVIDED, UNPROVIDED);
     }
 
@@ -2447,8 +2447,8 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(v_forts, LISTP);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(v_forts, LISTP);
         return transitivity.gtm(predicate, $MAX_FLOORS, v_forts, candidates, mt, UNPROVIDED, UNPROVIDED);
     }
 
@@ -2533,9 +2533,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(inferior, GT_TERM_P);
-        SubLTrampolineFile.enforceType(superior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(inferior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(superior, GT_TERM_P);
         return transitivity.gtm(predicate, $MIN_SUPERIORS_EXCLUDING, inferior, superior, mt, UNPROVIDED, UNPROVIDED);
     }
 
@@ -2557,9 +2557,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(inferior, GT_TERM_P);
-        SubLTrampolineFile.enforceType(superior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(inferior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(superior, GT_TERM_P);
         return transitivity.gtm(predicate, $MAX_INFERIORS_EXCLUDING, inferior, superior, mt, UNPROVIDED, UNPROVIDED);
     }
 
@@ -3009,9 +3009,9 @@ public final class gt_methods extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(predicate, FORT_P);
-        SubLTrampolineFile.enforceType(inferior, GT_TERM_P);
-        SubLTrampolineFile.enforceType(superior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(predicate, FORT_P);
+        SubLSystemTrampolineFile.enforceType(inferior, GT_TERM_P);
+        SubLSystemTrampolineFile.enforceType(superior, GT_TERM_P);
         return transitivity.gtm(predicate, $ANY_SUPERIOR_PATH, inferior, superior, mt, UNPROVIDED, UNPROVIDED);
     }
 

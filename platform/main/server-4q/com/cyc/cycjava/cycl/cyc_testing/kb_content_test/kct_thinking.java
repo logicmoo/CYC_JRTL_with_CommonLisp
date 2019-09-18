@@ -34,7 +34,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -301,7 +301,7 @@ public final class kct_thinking extends SubLTranslatedFile {
         final ArrayList old_values = extract_dynamic_values(cprogv_var);
         try {
             bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-            SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+            SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
             result = kbq_query_run.kct_run_test(test_spec, required_metrics, kbq_query_run.$kbq_outlier_timeout$.getDynamicValue(thread), overriding_query_properties, T, T);
         } finally {
             rebind_dynamic_vars(cprogv_var, old_values);
@@ -328,7 +328,7 @@ public final class kct_thinking extends SubLTranslatedFile {
         final ArrayList old_values = extract_dynamic_values(cprogv_var);
         try {
             bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs));
-            SubLTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
+            SubLSystemTrampolineFile.enforceType(svs, SPECIAL_VARIABLE_STATE_P);
             result = kbq_query_run.kct_run_test_set(test_set, required_metrics, kbq_query_run.$kbq_default_outlier_timeout$.getGlobalValue(), overriding_query_properties, T, NIL, NIL, T, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         } finally {
             rebind_dynamic_vars(cprogv_var, old_values);

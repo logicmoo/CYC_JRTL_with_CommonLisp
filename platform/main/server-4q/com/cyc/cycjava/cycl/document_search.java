@@ -58,7 +58,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1209,9 +1209,9 @@ public final class document_search extends SubLTranslatedFile {
         deflexical("*SEARCH-ENGINES*", $list0);
         deflexical("*SEARCH-ENGINE-SPECS*", $list1);
         defparameter("*DEFAULT-SEARCH-ENGINE*", NIL);
-        deflexical("*CLUSTER-ID-ISG*", SubLTrampolineFile.maybeDefault($cluster_id_isg$, $cluster_id_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-        deflexical("*CLUSTER-MAP*", SubLTrampolineFile.maybeDefault($cluster_map$, $cluster_map$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-        deflexical("*CLUSTER-LOCK*", SubLTrampolineFile.maybeDefault($cluster_lock$, $cluster_lock$, () -> make_lock($$$Ontological_Cluster_Map_Lock)));
+        deflexical("*CLUSTER-ID-ISG*", SubLSystemTrampolineFile.maybeDefault($cluster_id_isg$, $cluster_id_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*CLUSTER-MAP*", SubLSystemTrampolineFile.maybeDefault($cluster_map$, $cluster_map$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*CLUSTER-LOCK*", SubLSystemTrampolineFile.maybeDefault($cluster_lock$, $cluster_lock$, () -> make_lock($$$Ontological_Cluster_Map_Lock)));
         return NIL;
     }
 

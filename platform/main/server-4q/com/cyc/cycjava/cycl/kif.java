@@ -107,7 +107,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class kif extends SubLTranslatedFile {
     public static final SubLFile me = new kif();
@@ -1804,7 +1804,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defparameter("*KB-TO-KIF-FILE-PREAMBLE*", $str44$_____KIF_assertion_specs_for_enti);
         defparameter("*MT-TO-KIF-FILE-PREAMBLE*", $str45$_____KIF_assertion_specs_for_micr);
         defconstant("*DTP-KIF-TERM*", KIF_TERM);
-        deflexical("*KIF-TERM-TABLE*", SubLTrampolineFile.maybeDefault($kif_term_table$, $kif_term_table$, NIL));
+        deflexical("*KIF-TERM-TABLE*", SubLSystemTrampolineFile.maybeDefault($kif_term_table$, $kif_term_table$, NIL));
         defparameter("*CYCL-TO-KIF-METHOD-TABLE*", NIL);
         return NIL;
     }

@@ -59,7 +59,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -690,7 +690,7 @@ public final class sg_browser extends SubLTranslatedFile implements V02 {
     public static final SubLObject sg_cb_display_gaf(SubLObject gaf) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(gaf, $sym51$GAF_ASSERTION_);
+            SubLSystemTrampolineFile.checkType(gaf, $sym51$GAF_ASSERTION_);
             {
                 SubLObject args = assertions_high.gaf_args(gaf);
                 {

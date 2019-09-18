@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -316,10 +316,10 @@ public final class sparql_utilities extends SubLTranslatedFile {
         assert NIL != stringp(machine) : "Types.stringp(machine) " + "CommonSymbols.NIL != Types.stringp(machine) " + machine;
         assert NIL != stringp(relative_path) : "Types.stringp(relative_path) " + "CommonSymbols.NIL != Types.stringp(relative_path) " + relative_path;
         assert NIL != tcp_server_utilities.tcp_port_p(port) : "tcp_server_utilities.tcp_port_p(port) " + "CommonSymbols.NIL != tcp_server_utilities.tcp_port_p(port) " + port;
-        if (((NIL != subprotocol) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(subprotocol))) {
+        if (((NIL != subprotocol) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(subprotocol))) {
             throw new AssertionError(subprotocol);
         }
-        if (((NIL != params) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == list_utilities.alist_p(params))) {
+        if (((NIL != params) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == list_utilities.alist_p(params))) {
             throw new AssertionError(params);
         }
         final SubLObject access_path = dictionary_utilities.new_dictionary_from_alist(list(bq_cons($$serverOfSKS, machine), bq_cons($$portNumberForSKS, port), bq_cons($$relativePathForAPIAccessToSKS, relative_path), bq_cons($$nameSpacePrefixForSKS, prefix_map), bq_cons($$subProtocolForSKS, subprotocol)), UNPROVIDED);

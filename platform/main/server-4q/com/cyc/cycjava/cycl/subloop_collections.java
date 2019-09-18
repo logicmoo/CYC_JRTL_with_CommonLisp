@@ -78,7 +78,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class subloop_collections extends SubLTranslatedFile {
     public static final SubLFile me = new subloop_collections();
@@ -6102,7 +6102,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_subloop_collections_file() {
         defconstant("*VALID-SEQUENTIAL-DIRECTIONS*", $list0);
         defconstant("*DTP-DOUBLE-LINK-CELL*", DOUBLE_LINK_CELL);
-        deflexical("*TEST-LIST-ELEMENTS*", SubLTrampolineFile.maybeDefault($test_list_elements$, $test_list_elements$, NIL));
+        deflexical("*TEST-LIST-ELEMENTS*", SubLSystemTrampolineFile.maybeDefault($test_list_elements$, $test_list_elements$, NIL));
         return NIL;
     }
 

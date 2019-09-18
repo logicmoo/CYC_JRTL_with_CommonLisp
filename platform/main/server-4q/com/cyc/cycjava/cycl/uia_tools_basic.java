@@ -89,7 +89,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -832,7 +832,7 @@ public final class uia_tools_basic extends SubLTranslatedFile implements V02 {
      * If successful, return the thread, else NIL.
      */
     public static final SubLObject uiat_thinking_start(SubLObject interaction) {
-        SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+        SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
         if (($THINKING == user_interaction_agenda.ui_operator(interaction)) && ($PENDING == user_interaction_agenda.ui_status(interaction))) {
             {
                 SubLObject thinking = user_interaction_agenda.ui_state_lookup(interaction, $THINKING_TASK, UNPROVIDED);
@@ -850,7 +850,7 @@ public final class uia_tools_basic extends SubLTranslatedFile implements V02 {
      * Return T iff the thread was stopped.
      */
     public static final SubLObject uiat_thinking_stop(SubLObject interaction) {
-        SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+        SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
         if ($THINKING == user_interaction_agenda.ui_operator(interaction)) {
             {
                 SubLObject thinking = user_interaction_agenda.ui_state_lookup(interaction, $THINKING_TASK, UNPROVIDED);
@@ -895,7 +895,7 @@ public final class uia_tools_basic extends SubLTranslatedFile implements V02 {
         if (interaction == UNPROVIDED) {
             interaction = uiat_thinking_interaction();
         }
-        SubLTrampolineFile.checkType(progress_message, STRINGP);
+        SubLSystemTrampolineFile.checkType(progress_message, STRINGP);
         if (NIL != interaction) {
             {
                 SubLObject thinking = user_interaction_agenda.ui_state_lookup(interaction, $THINKING_TASK, UNPROVIDED);
@@ -912,7 +912,7 @@ public final class uia_tools_basic extends SubLTranslatedFile implements V02 {
         if (interaction == UNPROVIDED) {
             interaction = uiat_thinking_interaction();
         }
-        SubLTrampolineFile.checkType(sofar, INTEGERP);
+        SubLSystemTrampolineFile.checkType(sofar, INTEGERP);
         if (NIL != interaction) {
             {
                 SubLObject thinking = user_interaction_agenda.ui_state_lookup(interaction, $THINKING_TASK, UNPROVIDED);
@@ -929,8 +929,8 @@ public final class uia_tools_basic extends SubLTranslatedFile implements V02 {
         if (interaction == UNPROVIDED) {
             interaction = uiat_thinking_interaction();
         }
-        SubLTrampolineFile.checkType(sofar, INTEGERP);
-        SubLTrampolineFile.checkType(total, INTEGERP);
+        SubLSystemTrampolineFile.checkType(sofar, INTEGERP);
+        SubLSystemTrampolineFile.checkType(total, INTEGERP);
         if (NIL != interaction) {
             {
                 SubLObject thinking = user_interaction_agenda.ui_state_lookup(interaction, $THINKING_TASK, UNPROVIDED);
@@ -3103,7 +3103,7 @@ public final class uia_tools_basic extends SubLTranslatedFile implements V02 {
      * Adds CONCEPT-FINDER-INTERACTION to AGENDA's state.
      */
     public static final SubLObject uia_concept_finder_push(SubLObject v_agenda, SubLObject concept_finder_interaction) {
-        SubLTrampolineFile.checkType(concept_finder_interaction, USER_INTERACTION_P);
+        SubLSystemTrampolineFile.checkType(concept_finder_interaction, USER_INTERACTION_P);
         return user_interaction_agenda.uia_state_update(v_agenda, $LAST_CONCEPT_FINDER, concept_finder_interaction);
     }
 
@@ -3374,7 +3374,7 @@ public final class uia_tools_basic extends SubLTranslatedFile implements V02 {
      * Adds SENTENCE-FINDER-INTERACTION to AGENDA's state.
      */
     public static final SubLObject uia_sentence_finder_push(SubLObject v_agenda, SubLObject sentence_finder_interaction) {
-        SubLTrampolineFile.checkType(sentence_finder_interaction, USER_INTERACTION_P);
+        SubLSystemTrampolineFile.checkType(sentence_finder_interaction, USER_INTERACTION_P);
         return user_interaction_agenda.uia_state_update(v_agenda, $LAST_SENTENCE_FINDER, sentence_finder_interaction);
     }
 
@@ -3547,62 +3547,62 @@ public final class uia_tools_basic extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject file_browser_directory(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.getField2();
     }
 
     public static final SubLObject file_browser_filterfn(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.getField3();
     }
 
     public static final SubLObject file_browser_type(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.getField4();
     }
 
     public static final SubLObject file_browser_result(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.getField5();
     }
 
     public static final SubLObject file_browser_path(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.getField6();
     }
 
     public static final SubLObject file_browser_params(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.getField7();
     }
 
     public static final SubLObject _csetf_file_browser_directory(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_file_browser_filterfn(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_file_browser_type(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_file_browser_result(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_file_browser_path(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_file_browser_params(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, FILE_BROWSER_P);
+        SubLSystemTrampolineFile.checkType(v_object, FILE_BROWSER_P);
         return v_object.setField7(value);
     }
 

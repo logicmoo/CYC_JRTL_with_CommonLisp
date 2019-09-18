@@ -24,7 +24,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -280,9 +280,9 @@ public final class nl_trie_staleness_test extends SubLTranslatedFile {
     }
 
     public static SubLObject init_nl_trie_staleness_test_file() {
-        deflexical("*NL-TRIE-REVISIONS*", SubLTrampolineFile.maybeDefault($nl_trie_revisions$, $nl_trie_revisions$, NIL));
-        deflexical("*NL-TRIE-STALENESS-ACCEPTABLE?*", SubLTrampolineFile.maybeDefault($sym1$_NL_TRIE_STALENESS_ACCEPTABLE__, $nl_trie_staleness_acceptableP$, T));
-        deflexical("*NL-TRIE-KNOWN-STALE?*", SubLTrampolineFile.maybeDefault($sym2$_NL_TRIE_KNOWN_STALE__, $nl_trie_known_staleP$, NIL));
+        deflexical("*NL-TRIE-REVISIONS*", SubLSystemTrampolineFile.maybeDefault($nl_trie_revisions$, $nl_trie_revisions$, NIL));
+        deflexical("*NL-TRIE-STALENESS-ACCEPTABLE?*", SubLSystemTrampolineFile.maybeDefault($sym1$_NL_TRIE_STALENESS_ACCEPTABLE__, $nl_trie_staleness_acceptableP$, T));
+        deflexical("*NL-TRIE-KNOWN-STALE?*", SubLSystemTrampolineFile.maybeDefault($sym2$_NL_TRIE_KNOWN_STALE__, $nl_trie_known_staleP$, NIL));
         deflexical("*NL-TRIE-REVISION-GLOBALS*", $list3);
         return NIL;
     }

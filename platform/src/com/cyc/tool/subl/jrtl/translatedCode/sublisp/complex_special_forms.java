@@ -71,9 +71,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class complex_special_forms extends SubLTrampolineFile {
+public class complex_special_forms extends SubLSystemTrampolineFile {
 	public static SubLObject _defstruct_construct(SubLObject macroform, SubLObject environment) {
 		SubLObject current;
 		SubLObject datum = current = macroform.rest();

@@ -17,7 +17,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -76,7 +76,7 @@ public final class narts_interface extends SubLTranslatedFile {
     public static final SubLList $list22 = list(list(makeSymbol("NIL-OR"), makeSymbol("NART-P")));
 
     public static SubLObject kb_create_nart(final SubLObject nart_hl_formula) {
-        SubLTrampolineFile.enforceType(nart_hl_formula, NAT_FORMULA_P);
+        SubLSystemTrampolineFile.enforceType(nart_hl_formula, NAT_FORMULA_P);
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_CREATE_NART, nart_hl_formula, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         if (NIL != hl_interface_infrastructure.hl_modify_anywhereP()) {
@@ -121,7 +121,7 @@ public final class narts_interface extends SubLTranslatedFile {
 
     public static SubLObject kb_remove_nart(final SubLObject nart) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(nart, NART_P);
+        SubLSystemTrampolineFile.enforceType(nart, NART_P);
         SubLObject result = NIL;
         hl_interface_infrastructure.define_hl_modifier_preamble();
         hl_interface_infrastructure.note_hl_modifier_invocation(KB_REMOVE_NART, nart, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -151,7 +151,7 @@ public final class narts_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_nart_hl_formula(final SubLObject nart) {
-        SubLTrampolineFile.enforceType(nart, NART_P);
+        SubLSystemTrampolineFile.enforceType(nart, NART_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_NART_HL_FORMULA, list(QUOTE, nart)));
         }
@@ -159,7 +159,7 @@ public final class narts_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_lookup_nart(final SubLObject nart_hl_formula) {
-        SubLTrampolineFile.enforceType(nart_hl_formula, POSSIBLY_NAUT_P);
+        SubLSystemTrampolineFile.enforceType(nart_hl_formula, POSSIBLY_NAUT_P);
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_LOOKUP_NART, list(QUOTE, nart_hl_formula)));
         }

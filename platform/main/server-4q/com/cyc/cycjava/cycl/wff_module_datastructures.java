@@ -55,7 +55,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class wff_module_datastructures extends SubLTranslatedFile {
     public static final SubLFile me = new wff_module_datastructures();
@@ -437,7 +437,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_wff_module_datastructures_file() {
         defconstant("*DTP-WFF-MODULE*", WFF_MODULE);
-        deflexical("*WFF-MODULE-STORE*", SubLTrampolineFile.maybeDefault($wff_module_store$, $wff_module_store$, () -> make_hash_table($int$212, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*WFF-MODULE-STORE*", SubLSystemTrampolineFile.maybeDefault($wff_module_store$, $wff_module_store$, () -> make_hash_table($int$212, symbol_function(EQUAL), UNPROVIDED)));
         deflexical("*WFF-MODULE-PROPERTIES*", $list37);
         return NIL;
     }

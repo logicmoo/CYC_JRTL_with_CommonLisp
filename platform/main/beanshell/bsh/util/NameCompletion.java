@@ -25,23 +25,26 @@
  *****************************************************************************/
 package bsh.util;
 
+import java.util.List;
+
 /**
     The interface for name completion.
 */
-public interface NameCompletion
-{
-    /**
-        Return an array containing a string element of the maximum
-        unambiguous namespace completion or, if there is no common prefix,
-        return the list of ambiguous names.
-        e.g.
-            input: "java.l"
-            output: [ "java.lang." ]
-            input: "java.lang."
-            output: [ "java.lang.Thread", "java.lang.Integer", ... ]
+public interface NameCompletion {
+	/**
+	    Return an array containing a string element of the maximum
+	    unambiguous namespace completion or, if there is no common prefix,
+	    return the list of ambiguous names.
+	    e.g.
+	        input: "java.l"
+	        output: [ "java.lang." ]
+	        input: "java.lang."
+	        output: [ "java.lang.Thread", "java.lang.Integer", ... ]
 
-        Note: Alternatively, make a NameCompletionResult object someday...
-    */
-    String [] completeName( String part );
+	    Note: Alternatively, make a NameCompletionResult object someday...
+	 * @param resultz TODO
+	 * @param milisecs TODO
+	*/
+	String[] completeName(String part, List resultz, long deadlineMilisecs);
 
 }

@@ -20,7 +20,6 @@ import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -320,25 +319,7 @@ abstract public class SubLPackage extends SLispObject implements SubLObject {
 		SubLPackage.SUBLISP_PACKAGE.toPackage().setLocked();
 	}
 
-	public static SubLPackage setCurrentPackage(String packageName) {
-		return setCurrentPackage(SubLObjectFactory.makeString(packageName));
-	}
-
-	public static SubLPackage setCurrentPackage(SubLPackage thePackage) {
-		final SubLPackage was = getCurrentPackage();
-		if (thePackage == null)
-			return was;
-		if (thePackage == was)
-			return was;
-		if (Symbol._PACKAGE_ != null) {
-			Symbol._PACKAGE_.setValue(thePackage);
-		}
-		if (Packages.$package$ != null && Packages.$package$ != Symbol._PACKAGE_)
-			Packages.$package$.setValue(thePackage.toPackage());
-		return thePackage;
-	}
-
-	public static SubLPackage setCurrentPackage(SubLString packageName) {
+	public static SubLPackage setCurrentPackageSL(SubLString packageName) {
 		SubLPackage thePackage = findPackageNamed(packageName);
 		if (thePackage == null)
 			Errors.error("Unabled to switch to package: " + packageName + ".");

@@ -119,7 +119,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -4372,9 +4372,9 @@ public final class sksi_infrastructure_utilities extends SubLTranslatedFile {
 
     public static SubLObject init_sksi_infrastructure_utilities_file() {
         deflexical("*SKSI-CORE-CONSTANTS*", $list0);
-        deflexical("*SKSI-NON-THELOGICALFIELDVALUEFN-LFI-FORT-CACHE*", SubLTrampolineFile.maybeDefault($sksi_non_thelogicalfieldvaluefn_lfi_fort_cache$, $sksi_non_thelogicalfieldvaluefn_lfi_fort_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKSI-NON-THELOGICALFIELDVALUEFN-LFI-FORT-CACHE*", SubLSystemTrampolineFile.maybeDefault($sksi_non_thelogicalfieldvaluefn_lfi_fort_cache$, $sksi_non_thelogicalfieldvaluefn_lfi_fort_cache$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         defparameter("*SORT-KNOWLEDGE-SOURCES-BY-DATE?*", NIL);
-        deflexical("*EXTERNAL-SOURCES-ACTIVATED-IN-IMAGE*", SubLTrampolineFile.maybeDefault($external_sources_activated_in_image$, $external_sources_activated_in_image$, () -> set.new_set(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*EXTERNAL-SOURCES-ACTIVATED-IN-IMAGE*", SubLSystemTrampolineFile.maybeDefault($external_sources_activated_in_image$, $external_sources_activated_in_image$, () -> set.new_set(symbol_function(EQ), UNPROVIDED)));
         return NIL;
     }
 

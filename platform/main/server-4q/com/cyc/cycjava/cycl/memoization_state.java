@@ -106,7 +106,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class memoization_state extends SubLTranslatedFile {
@@ -1157,15 +1157,15 @@ public final class memoization_state extends SubLTranslatedFile {
 			initial_size = ZERO_INTEGER;
 		}
 		final SubLObject cs = make_caching_state(UNPROVIDED);
-		SubLTrampolineFile.enforceType(initial_size, NON_NEGATIVE_INTEGER_P);
+		SubLSystemTrampolineFile.enforceType(initial_size, NON_NEGATIVE_INTEGER_P);
 		if (NIL != capacity) {
-			SubLTrampolineFile.enforceType(capacity, POSITIVE_INTEGER_P);
+			SubLSystemTrampolineFile.enforceType(capacity, POSITIVE_INTEGER_P);
 		}
-		SubLTrampolineFile.enforceType(func_symbol, SYMBOLP);
+		SubLSystemTrampolineFile.enforceType(func_symbol, SYMBOLP);
 		if (test.isSymbol()) {
 			test = symbol_function(test);
 		}
-		SubLTrampolineFile.enforceType(test, FUNCTION_SPEC_P);
+		SubLSystemTrampolineFile.enforceType(test, FUNCTION_SPEC_P);
 		if (NIL != capacity) {
 			_csetf_caching_state_store(cs, cache.new_cache(capacity, func_args_length.eql(ONE_INTEGER) ? test : symbol_function(EQL)));
 		} else {
@@ -1187,7 +1187,7 @@ public final class memoization_state extends SubLTranslatedFile {
 	}
 
 	public static SubLObject print_caching_state(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
-		SubLTrampolineFile.enforceType(v_object, CACHING_STATE_P);
+		SubLSystemTrampolineFile.enforceType(v_object, CACHING_STATE_P);
 		if (NIL != caching_state_lock(v_object)) {
 			SubLObject result = NIL;
 			final SubLObject rw_lock_var = caching_state_lock(v_object);
@@ -1329,7 +1329,7 @@ public final class memoization_state extends SubLTranslatedFile {
 		if (NIL == caching_state) {
 			return NIL;
 		}
-		SubLTrampolineFile.enforceType(caching_state, CACHING_STATE_P);
+		SubLSystemTrampolineFile.enforceType(caching_state, CACHING_STATE_P);
 		if (NIL != caching_state_lock(caching_state)) {
 			SubLObject result = NIL;
 			final SubLObject rw_lock_var = caching_state_lock(caching_state);
@@ -1548,7 +1548,7 @@ public final class memoization_state extends SubLTranslatedFile {
 	}
 
 	public static SubLObject caching_state_clone_internal(final SubLObject caching_state) {
-		SubLTrampolineFile.enforceType(caching_state, CACHING_STATE_P);
+		SubLSystemTrampolineFile.enforceType(caching_state, CACHING_STATE_P);
 		final SubLObject cloned_state = create_caching_state(caching_state_lock(caching_state), caching_state_func_symbol(caching_state), caching_state_args_length(caching_state), caching_state_get_test(caching_state), caching_state_capacity(caching_state), caching_state_size_internal(caching_state));
 		if (NIL != caching_state_capacity(caching_state)) {
 			_csetf_caching_state_store(cloned_state, cache.cache_copy(caching_state_store(caching_state)));
@@ -1570,7 +1570,7 @@ public final class memoization_state extends SubLTranslatedFile {
 	}
 
 	public static SubLObject caching_state_store_as_dictionary(final SubLObject caching_state) {
-		SubLTrampolineFile.enforceType(caching_state, CACHING_STATE_P);
+		SubLSystemTrampolineFile.enforceType(caching_state, CACHING_STATE_P);
 		if (NIL != caching_state_lock(caching_state)) {
 			SubLObject result = NIL;
 			final SubLObject rw_lock_var = caching_state_lock(caching_state);
@@ -1822,15 +1822,15 @@ public final class memoization_state extends SubLTranslatedFile {
 		}
 		final SubLObject ms = make_memoization_state(UNPROVIDED);
 		if (NIL != name) {
-			SubLTrampolineFile.enforceType(name, STRINGP);
+			SubLSystemTrampolineFile.enforceType(name, STRINGP);
 		}
 		if (NIL != lock) {
-			SubLTrampolineFile.enforceType(lock, READER_WRITER_LOCK_P);
+			SubLSystemTrampolineFile.enforceType(lock, READER_WRITER_LOCK_P);
 		}
 		if (test.isSymbol()) {
 			test = symbol_function(test);
 		}
-		SubLTrampolineFile.enforceType(test, FUNCTIONP);
+		SubLSystemTrampolineFile.enforceType(test, FUNCTIONP);
 		if ((NIL != should_clone) && (NIL == lock)) {
 			lock = ReadWriteLocks.new_rw_lock($str108$memoization_state_clone_lock);
 		}
@@ -2080,7 +2080,7 @@ public final class memoization_state extends SubLTranslatedFile {
 	}
 
 	public static SubLObject memoization_state_clone(final SubLObject v_memoization_state) {
-		SubLTrampolineFile.enforceType(v_memoization_state, MEMOIZATION_STATE_P);
+		SubLSystemTrampolineFile.enforceType(v_memoization_state, MEMOIZATION_STATE_P);
 		SubLObject cloned_state = NIL;
 		final SubLObject rw_lock_var = memoization_state_lock(v_memoization_state);
 		SubLObject needs_to_releaseP = NIL;
@@ -2109,8 +2109,8 @@ public final class memoization_state extends SubLTranslatedFile {
 
 	public static SubLObject memoization_state_merge_cloned_state(final SubLObject cloned_state, final SubLObject orig_state) {
 		final SubLThread thread = SubLProcess.currentSubLThread();
-		SubLTrampolineFile.enforceType(cloned_state, MEMOIZATION_STATE_P);
-		SubLTrampolineFile.enforceType(orig_state, MEMOIZATION_STATE_P);
+		SubLSystemTrampolineFile.enforceType(cloned_state, MEMOIZATION_STATE_P);
+		SubLSystemTrampolineFile.enforceType(orig_state, MEMOIZATION_STATE_P);
 		final SubLObject rw_lock_var = memoization_state_lock(orig_state);
 		SubLObject needs_to_releaseP = NIL;
 		try {
@@ -2184,7 +2184,7 @@ public final class memoization_state extends SubLTranslatedFile {
 	}
 
 	public static SubLObject gather_memoization_state_statistics(final SubLObject v_memoization_state) {
-		SubLTrampolineFile.enforceType(v_memoization_state, MEMOIZATION_STATE_P);
+		SubLSystemTrampolineFile.enforceType(v_memoization_state, MEMOIZATION_STATE_P);
 		final SubLObject lock = memoization_state_lock(v_memoization_state);
 		if (NIL != lock) {
 			SubLObject result = NIL;
@@ -2666,7 +2666,7 @@ public final class memoization_state extends SubLTranslatedFile {
 			SubLObject arg_pos = NIL;
 			arg_pos = cdolist_list_var.first();
 			while (NIL != cdolist_list_var) {
-				SubLTrampolineFile.enforceType(arg_pos, NON_NEGATIVE_INTEGER_P);
+				SubLSystemTrampolineFile.enforceType(arg_pos, NON_NEGATIVE_INTEGER_P);
 				if (arg_pos.eql(ZERO_INTEGER)) {
 					func = cons(list(MAKE_SYMBOL, symbol_name(name)), func);
 				} else {
@@ -3661,10 +3661,10 @@ public final class memoization_state extends SubLTranslatedFile {
 
 	public static SubLObject init_memoization_state_file() {
 		deflexical("*GLOBAL-CACHING-LOCK*", ReadWriteLocks.new_rw_lock($str0$global_caching_lock));
-		deflexical("*CACHING-MODE-SHOULD-MONITOR*", SubLTrampolineFile.maybeDefault($caching_mode_should_monitor$, $caching_mode_should_monitor$, NIL));
-		deflexical("*CACHE-MONITOR-HASH*", SubLTrampolineFile.maybeDefault($cache_monitor_hash$, $cache_monitor_hash$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
-		deflexical("*CACHE-MONITOR-FAILURE-HASH*", SubLTrampolineFile.maybeDefault($cache_monitor_failure_hash$, $cache_monitor_failure_hash$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
-		deflexical("*ALLOW-FUNCTION-CACHING-TO-BE-DISABLED*", SubLTrampolineFile.maybeDefault($allow_function_caching_to_be_disabled$, $allow_function_caching_to_be_disabled$, NIL));
+		deflexical("*CACHING-MODE-SHOULD-MONITOR*", SubLSystemTrampolineFile.maybeDefault($caching_mode_should_monitor$, $caching_mode_should_monitor$, NIL));
+		deflexical("*CACHE-MONITOR-HASH*", SubLSystemTrampolineFile.maybeDefault($cache_monitor_hash$, $cache_monitor_hash$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+		deflexical("*CACHE-MONITOR-FAILURE-HASH*", SubLSystemTrampolineFile.maybeDefault($cache_monitor_failure_hash$, $cache_monitor_failure_hash$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+		deflexical("*ALLOW-FUNCTION-CACHING-TO-BE-DISABLED*", SubLSystemTrampolineFile.maybeDefault($allow_function_caching_to_be_disabled$, $allow_function_caching_to_be_disabled$, NIL));
 		defvar("*CACHING-MODE-ENABLED*", $ALL);
 		defvar("*CACHING-MODE-DISABLED*", NIL);
 		defparameter("*FUNCTION-CACHING-ENABLED?*", T);
@@ -3672,17 +3672,17 @@ public final class memoization_state extends SubLTranslatedFile {
 		defconstant("*DTP-CACHING-STATE*", CACHING_STATE);
 		defconstant("*DTP-MEMOIZATION-STATE*", MEMOIZATION_STATE);
 		defparameter("*MEMOIZATION-STATE*", NIL);
-		deflexical("*MEMOIZED-FUNCTIONS*", SubLTrampolineFile.maybeDefault($memoized_functions$, $memoized_functions$, NIL));
-		deflexical("*GLOBALLY-CACHED-FUNCTIONS*", SubLTrampolineFile.maybeDefault($globally_cached_functions$, $globally_cached_functions$, NIL));
+		deflexical("*MEMOIZED-FUNCTIONS*", SubLSystemTrampolineFile.maybeDefault($memoized_functions$, $memoized_functions$, NIL));
+		deflexical("*GLOBALLY-CACHED-FUNCTIONS*", SubLSystemTrampolineFile.maybeDefault($globally_cached_functions$, $globally_cached_functions$, NIL));
 		deflexical("*CACHE-CLEAR-TRIGGERS*", $list215);
-		deflexical("*HL-STORE-CACHE-CLEAR-CALLBACKS*", SubLTrampolineFile.maybeDefault($hl_store_cache_clear_callbacks$, $hl_store_cache_clear_callbacks$, NIL));
-		deflexical("*MT-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLTrampolineFile.maybeDefault($mt_dependent_cache_clear_callbacks$, $mt_dependent_cache_clear_callbacks$, NIL));
+		deflexical("*HL-STORE-CACHE-CLEAR-CALLBACKS*", SubLSystemTrampolineFile.maybeDefault($hl_store_cache_clear_callbacks$, $hl_store_cache_clear_callbacks$, NIL));
+		deflexical("*MT-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLSystemTrampolineFile.maybeDefault($mt_dependent_cache_clear_callbacks$, $mt_dependent_cache_clear_callbacks$, NIL));
 		defparameter("*SUSPEND-CLEARING-MT-DEPENDENT-CACHES?*", NIL);
-		deflexical("*GENL-PREDS-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLTrampolineFile.maybeDefault($genl_preds_dependent_cache_clear_callbacks$, $genl_preds_dependent_cache_clear_callbacks$, NIL));
-		deflexical("*GENLS-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLTrampolineFile.maybeDefault($genls_dependent_cache_clear_callbacks$, $genls_dependent_cache_clear_callbacks$, NIL));
-		deflexical("*WFF-CONSTRAINT-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLTrampolineFile.maybeDefault($wff_constraint_dependent_cache_clear_callbacks$, $wff_constraint_dependent_cache_clear_callbacks$, NIL));
-		deflexical("*ISA-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLTrampolineFile.maybeDefault($isa_dependent_cache_clear_callbacks$, $isa_dependent_cache_clear_callbacks$, NIL));
-		deflexical("*QUOTED-ISA-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLTrampolineFile.maybeDefault($quoted_isa_dependent_cache_clear_callbacks$, $quoted_isa_dependent_cache_clear_callbacks$, NIL));
+		deflexical("*GENL-PREDS-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLSystemTrampolineFile.maybeDefault($genl_preds_dependent_cache_clear_callbacks$, $genl_preds_dependent_cache_clear_callbacks$, NIL));
+		deflexical("*GENLS-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLSystemTrampolineFile.maybeDefault($genls_dependent_cache_clear_callbacks$, $genls_dependent_cache_clear_callbacks$, NIL));
+		deflexical("*WFF-CONSTRAINT-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLSystemTrampolineFile.maybeDefault($wff_constraint_dependent_cache_clear_callbacks$, $wff_constraint_dependent_cache_clear_callbacks$, NIL));
+		deflexical("*ISA-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLSystemTrampolineFile.maybeDefault($isa_dependent_cache_clear_callbacks$, $isa_dependent_cache_clear_callbacks$, NIL));
+		deflexical("*QUOTED-ISA-DEPENDENT-CACHE-CLEAR-CALLBACKS*", SubLSystemTrampolineFile.maybeDefault($quoted_isa_dependent_cache_clear_callbacks$, $quoted_isa_dependent_cache_clear_callbacks$, NIL));
 		defconstant("*CACHING-N-SXHASH-COMPOSITE-VALUE*", $int$167);
 		return NIL;
 	}

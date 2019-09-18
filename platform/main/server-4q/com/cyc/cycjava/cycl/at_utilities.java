@@ -149,7 +149,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -5043,9 +5043,9 @@ public final class at_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject init_at_utilities_file() {
-        deflexical("*GENERIC-ARG-STORE*", SubLTrampolineFile.maybeDefault($generic_arg_store$, $generic_arg_store$, NIL));
-        deflexical("*SOME-INTER-ARG-ISA-ASSERTION-SOMEWHERE-CACHE*", SubLTrampolineFile.maybeDefault($some_inter_arg_isa_assertion_somewhere_cache$, $some_inter_arg_isa_assertion_somewhere_cache$, NIL));
-        deflexical("*SOME-INTER-ARG-FORMAT-ASSERTION-SOMEWHERE-CACHE*", SubLTrampolineFile.maybeDefault($some_inter_arg_format_assertion_somewhere_cache$, $some_inter_arg_format_assertion_somewhere_cache$, NIL));
+        deflexical("*GENERIC-ARG-STORE*", SubLSystemTrampolineFile.maybeDefault($generic_arg_store$, $generic_arg_store$, NIL));
+        deflexical("*SOME-INTER-ARG-ISA-ASSERTION-SOMEWHERE-CACHE*", SubLSystemTrampolineFile.maybeDefault($some_inter_arg_isa_assertion_somewhere_cache$, $some_inter_arg_isa_assertion_somewhere_cache$, NIL));
+        deflexical("*SOME-INTER-ARG-FORMAT-ASSERTION-SOMEWHERE-CACHE*", SubLSystemTrampolineFile.maybeDefault($some_inter_arg_format_assertion_somewhere_cache$, $some_inter_arg_format_assertion_somewhere_cache$, NIL));
         defparameter("*MTS-CUTOFF-FOR-MTS-ACCOMMODATING-FORMULA-WRT-TYPES*", $int$40);
         defparameter("*MAX-FLOOR-MTS-OF-NAT-EXCEPTIONS*", NIL);
         deflexical("*CACHED-MAX-FLOOR-MTS-OF-NAT-CACHING-STATE*", NIL);

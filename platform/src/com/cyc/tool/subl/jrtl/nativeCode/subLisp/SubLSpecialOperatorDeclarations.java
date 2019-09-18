@@ -35,9 +35,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
+public class SubLSpecialOperatorDeclarations extends SubLSystemTrampolineFile {
 	private static void csetf_internal(SubLObject place, SubLObject value, SubLEnvironment env) {
 		if (place.isSymbol())
 			env.setBinding(place.toSymbol(), value);
@@ -543,8 +543,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile {
 		SubLList placeList = place.eval(env).toList();
 		SubLObject test = forms.fourth().eval(env);
 		SubLObject key = forms.fifth().eval(env);
-		BinaryFunction testFunc = SubLTrampolineFile.extractBinaryFunc(test);
-		UnaryFunction keyFunc = SubLTrampolineFile.extractUnaryFunc(key);
+		BinaryFunction testFunc = SubLSystemTrampolineFile.extractBinaryFunc(test);
+		UnaryFunction keyFunc = SubLSystemTrampolineFile.extractUnaryFunc(key);
 		SubLCons value = placeList.pushNew(item, testFunc, keyFunc);
 		if (value != placeList)
 			csetf_internal(place, value, env);

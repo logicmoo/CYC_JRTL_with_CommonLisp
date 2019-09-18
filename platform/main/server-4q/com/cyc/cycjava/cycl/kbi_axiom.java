@@ -44,7 +44,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -297,7 +297,7 @@ public final class kbi_axiom extends SubLTranslatedFile implements V02 {
                             SubLObject idx = clause_strucs.clause_struc_table();
                             SubLObject total = id_index.id_index_count(idx);
                             SubLObject sofar = ZERO_INTEGER;
-                            SubLTrampolineFile.checkType($$$mapping_Cyc_clause_structs, STRINGP);
+                            SubLSystemTrampolineFile.checkType($$$mapping_Cyc_clause_structs, STRINGP);
                             {
                                 SubLObject _prev_bind_0_6 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
                                 SubLObject _prev_bind_1_7 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);

@@ -51,25 +51,25 @@ public class JavaClassLoader extends URLClassLoader {
 
     private static JavaClassLoader persistentInstance;
 
-    public static boolean checkPreCompiledClassLoader = true;
-    
+    public static boolean checkPreCompiledClassLoader = false;
+
     @Override
 	public Class<?> loadClass(String name) throws ClassNotFoundException {
-        if (checkPreCompiledClassLoader) {
+        if (checkPreCompiledClassLoader && !Main.leanABCL) {
             Class<?> c = findPrecompiledClassOrNull(name);
             if (c != null) {
-                return c;                       
+                return c;
             }
         }
         return loadClass(name, false);
     }
-    
+
     /**
      * Returns a class loaded by the system or bootstrap class loader;
      * or return null if not found.
-     * 
+     *
      * On AOT systems like GCJ and IKVM this means a class implemented in ASM or CLR
-     * 
+     *
      * like findLoadedClass it does not throw an exception if a class is not found
      */
     public Class<?> findPrecompiledClassOrNull(String name) {
@@ -87,10 +87,10 @@ public class JavaClassLoader extends URLClassLoader {
             return null;
         }
     }
-    
+
     public byte[] getFunctionClassBytes(String name) {
-        Pathname pathname 
-            = new Pathname(name.substring("org/armedbear/lisp/".length()) 
+        Pathname pathname
+            = new Pathname(name.substring("org/armedbear/lisp/".length())
                            + "." + Lisp._COMPILE_FILE_CLASS_EXTENSION_.symbolValue().getStringValue());
         return readFunctionBytes(pathname);
     }
@@ -127,7 +127,7 @@ public class JavaClassLoader extends URLClassLoader {
     public JavaClassLoader(ClassLoader parent) {
         super(new URL[] {}, parent);
     }
-    
+
     public JavaClassLoader(JavaClassLoader parent) {
         super(new URL[] {}, parent);
     }
@@ -165,7 +165,7 @@ public class JavaClassLoader extends URLClassLoader {
                                                 byte[] classbytes)
     {
         try {
-            long length = classbytes.length; 
+            long length = classbytes.length;
             if (length < Integer.MAX_VALUE) {
                 Class<?> c =
                     defineLispClass(className, classbytes, 0, (int) length);
@@ -185,11 +185,11 @@ public class JavaClassLoader extends URLClassLoader {
     }
 
     protected final Class<?> defineLispClass(String name, byte[] b, int off, int len)
-                throws ClassFormatError {        
+                throws ClassFormatError {
         ///if (checkPreCompiledClassLoader) Debug.trace("DEFINE JAVA CLASS " + name + " " + len);
         return defineClass(name, b, off, len);
     }
-    
+
     public Class<?> loadClassFromByteArray(String className, byte[] bytes,
                                                 int offset, int length)
     {
@@ -222,7 +222,7 @@ public class JavaClassLoader extends URLClassLoader {
 
     private static final Primitive GET_DEFAULT_CLASSLOADER = new pf_get_default_classloader();
     private static final class pf_get_default_classloader extends Primitive {
-        
+
         private final LispObject defaultClassLoader = new JavaObject(new JavaClassLoader());
 
         pf_get_default_classloader() {
@@ -237,9 +237,9 @@ public class JavaClassLoader extends URLClassLoader {
 
     // ### make-classloader &optional parent => java-class-loader
     private static final Primitive MAKE_CLASSLOADER = new pf_make_classloader();
-    private static final class pf_make_classloader extends Primitive 
+    private static final class pf_make_classloader extends Primitive
     {
-        pf_make_classloader() 
+        pf_make_classloader()
         {
             super("make-classloader", PACKAGE_JAVA, true, "&optional parent");
         }
@@ -257,9 +257,9 @@ public class JavaClassLoader extends URLClassLoader {
 
     // ### dump-classpath &optional classloader => list-of-pathname-lists
     private static final Primitive DUMP_CLASSPATH = new pf_dump_classpath();
-    private static final class pf_dump_classpath extends Primitive 
+    private static final class pf_dump_classpath extends Primitive
     {
-        pf_dump_classpath() 
+        pf_dump_classpath()
         {
             super("dump-classpath", PACKAGE_JAVA, true, "&optional classloader");
         }
@@ -288,19 +288,19 @@ public class JavaClassLoader extends URLClassLoader {
         pf_get_current_classloader() {
             super("get-current-classloader", PACKAGE_JAVA, true);
         }
-        @Override 
+        @Override
         public LispObject execute() {
             return new JavaObject(getCurrentClassLoader());
         }
     };
-        
+
     // ### %add-to-classpath jar-or-jars &optional (classloader (get-current-classloader))
     private static final Primitive ADD_TO_CLASSPATH = new pf_add_to_classpath();
-    private static final class pf_add_to_classpath extends Primitive 
+    private static final class pf_add_to_classpath extends Primitive
     {
-        pf_add_to_classpath() 
+        pf_add_to_classpath()
         {
-            super("%add-to-classpath", PACKAGE_JAVA, false, 
+            super("%add-to-classpath", PACKAGE_JAVA, false,
                   "jar-or-jars &optional (classloader (get-current-classloader))");
         }
 

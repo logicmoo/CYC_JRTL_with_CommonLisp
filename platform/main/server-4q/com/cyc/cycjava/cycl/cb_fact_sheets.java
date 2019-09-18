@@ -44,7 +44,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -940,7 +940,7 @@ public final class cb_fact_sheets extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject cb_process_fact_sheet_update_queue() {
-        SubLTrampolineFile.checkType($cb_fact_sheet_update_queue$.getGlobalValue(), IPC_QUEUE_P);
+        SubLSystemTrampolineFile.checkType($cb_fact_sheet_update_queue$.getGlobalValue(), IPC_QUEUE_P);
         while (true) {
             {
                 SubLObject task = cb_fact_sheet_dequeue_update_task();

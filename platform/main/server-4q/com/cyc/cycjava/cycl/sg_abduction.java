@@ -59,7 +59,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -636,7 +636,7 @@ public final class sg_abduction extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject sg_ab_create_abduction_node(SubLObject node, SubLObject mt, SubLObject formula, SubLObject supports) {
-        SubLTrampolineFile.checkType(formula, POSSIBLY_SENTENCE_P);
+        SubLSystemTrampolineFile.checkType(formula, POSSIBLY_SENTENCE_P);
         {
             SubLObject new_node = sg_ab_create_node(node, mt);
             SubLObject state = search.snode_state(new_node);
@@ -723,7 +723,7 @@ public final class sg_abduction extends SubLTranslatedFile implements V02 {
             SubLObject new_mt = sg_utilities.sg_util_new_scenario_context(mts, collector_mt);
             SubLObject error = NIL;
             SubLObject new_nodes = NIL;
-            SubLTrampolineFile.checkType(hyp_formula, POSSIBLY_SENTENCE_P);
+            SubLSystemTrampolineFile.checkType(hyp_formula, POSSIBLY_SENTENCE_P);
             try {
                 if (NIL != free_varsP) {
                     {

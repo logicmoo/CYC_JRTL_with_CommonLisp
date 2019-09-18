@@ -66,7 +66,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1451,18 +1451,18 @@ public final class cfasl_kb_methods extends SubLTranslatedFile {
         defparameter("*CFASL-EXTERNALIZED-CONSTANT-EXCEPTIONS*", NIL);
         defconstant("*CFASL-OPCODE-CONSTANT*", $int$30);
         defconstant("*CFASL-OPCODE-COMPLETE-CONSTANT*", $int$32);
-        deflexical("*SAMPLE-INVALID-CONSTANT*", SubLTrampolineFile.maybeDefault($sample_invalid_constant$, $sample_invalid_constant$, () -> create_sample_invalid_constant()));
+        deflexical("*SAMPLE-INVALID-CONSTANT*", SubLSystemTrampolineFile.maybeDefault($sample_invalid_constant$, $sample_invalid_constant$, () -> create_sample_invalid_constant()));
         defconstant("*CFASL-OPCODE-NART*", $int$31);
-        deflexical("*SAMPLE-INVALID-NART*", SubLTrampolineFile.maybeDefault($sample_invalid_nart$, $sample_invalid_nart$, () -> nart_handles.create_sample_invalid_nart()));
+        deflexical("*SAMPLE-INVALID-NART*", SubLSystemTrampolineFile.maybeDefault($sample_invalid_nart$, $sample_invalid_nart$, () -> nart_handles.create_sample_invalid_nart()));
         defconstant("*CFASL-OPCODE-ASSERTION*", $int$33);
         defparameter("*CFASL-ERROR-ON-INVALID-ASSERTION-INPUT?*", NIL);
-        deflexical("*SAMPLE-INVALID-ASSERTION*", SubLTrampolineFile.maybeDefault($sample_invalid_assertion$, $sample_invalid_assertion$, () -> assertion_handles.create_sample_invalid_assertion()));
+        deflexical("*SAMPLE-INVALID-ASSERTION*", SubLSystemTrampolineFile.maybeDefault($sample_invalid_assertion$, $sample_invalid_assertion$, () -> assertion_handles.create_sample_invalid_assertion()));
         defconstant("*CFASL-OPCODE-DEDUCTION*", $int$36);
-        deflexical("*SAMPLE-INVALID-DEDUCTION*", SubLTrampolineFile.maybeDefault($sample_invalid_deduction$, $sample_invalid_deduction$, () -> deduction_handles.create_sample_invalid_deduction()));
+        deflexical("*SAMPLE-INVALID-DEDUCTION*", SubLSystemTrampolineFile.maybeDefault($sample_invalid_deduction$, $sample_invalid_deduction$, () -> deduction_handles.create_sample_invalid_deduction()));
         defconstant("*CFASL-OPCODE-KB-HL-SUPPORT*", $int$37);
-        deflexical("*SAMPLE-INVALID-KB-HL-SUPPORT*", SubLTrampolineFile.maybeDefault($sample_invalid_kb_hl_support$, $sample_invalid_kb_hl_support$, () -> kb_hl_support_handles.create_sample_invalid_kb_hl_support()));
+        deflexical("*SAMPLE-INVALID-KB-HL-SUPPORT*", SubLSystemTrampolineFile.maybeDefault($sample_invalid_kb_hl_support$, $sample_invalid_kb_hl_support$, () -> kb_hl_support_handles.create_sample_invalid_kb_hl_support()));
         defconstant("*CFASL-OPCODE-CLAUSE-STRUC*", $int$38);
-        deflexical("*SAMPLE-INVALID-CLAUSE-STRUC*", SubLTrampolineFile.maybeDefault($sample_invalid_clause_struc$, $sample_invalid_clause_struc$, () -> clause_strucs.create_sample_invalid_clause_struc()));
+        deflexical("*SAMPLE-INVALID-CLAUSE-STRUC*", SubLSystemTrampolineFile.maybeDefault($sample_invalid_clause_struc$, $sample_invalid_clause_struc$, () -> clause_strucs.create_sample_invalid_clause_struc()));
         defconstant("*CFASL-OPCODE-VARIABLE*", $int$40);
         defconstant("*CFASL-OPCODE-COMPLETE-VARIABLE*", $int$42);
         defconstant("*CFASL-OPCODE-SBHL-DIRECTED-LINK*", $int$90);

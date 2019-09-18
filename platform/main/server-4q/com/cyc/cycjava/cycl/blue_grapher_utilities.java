@@ -117,7 +117,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class blue_grapher_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new blue_grapher_utilities();
@@ -3228,15 +3228,15 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_blue_grapher_utilities_file() {
-        deflexical("*BLUE-FILTER-FNS*", SubLTrampolineFile.maybeDefault($blue_filter_fns$, $blue_filter_fns$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
-        deflexical("*DEFAULT-BLUE-FILTER-FN-COST*", SubLTrampolineFile.maybeDefault($default_blue_filter_fn_cost$, $default_blue_filter_fn_cost$, ZERO_INTEGER));
-        deflexical("*DEFAULT-BLUE-FILTER-FN-STRENGTH*", SubLTrampolineFile.maybeDefault($default_blue_filter_fn_strength$, $default_blue_filter_fn_strength$, ZERO_INTEGER));
-        deflexical("*DEFAULT-BLUE-FILTER-FN-TYPE*", SubLTrampolineFile.maybeDefault($default_blue_filter_fn_type$, $default_blue_filter_fn_type$, NIL));
-        deflexical("*BLUE-BUILDER-FNS*", SubLTrampolineFile.maybeDefault($blue_builder_fns$, $blue_builder_fns$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
-        deflexical("*BLUE-BUILDER-FN-TO-DEFLIST-HASH*", SubLTrampolineFile.maybeDefault($blue_builder_fn_to_deflist_hash$, $blue_builder_fn_to_deflist_hash$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+        deflexical("*BLUE-FILTER-FNS*", SubLSystemTrampolineFile.maybeDefault($blue_filter_fns$, $blue_filter_fns$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+        deflexical("*DEFAULT-BLUE-FILTER-FN-COST*", SubLSystemTrampolineFile.maybeDefault($default_blue_filter_fn_cost$, $default_blue_filter_fn_cost$, ZERO_INTEGER));
+        deflexical("*DEFAULT-BLUE-FILTER-FN-STRENGTH*", SubLSystemTrampolineFile.maybeDefault($default_blue_filter_fn_strength$, $default_blue_filter_fn_strength$, ZERO_INTEGER));
+        deflexical("*DEFAULT-BLUE-FILTER-FN-TYPE*", SubLSystemTrampolineFile.maybeDefault($default_blue_filter_fn_type$, $default_blue_filter_fn_type$, NIL));
+        deflexical("*BLUE-BUILDER-FNS*", SubLSystemTrampolineFile.maybeDefault($blue_builder_fns$, $blue_builder_fns$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+        deflexical("*BLUE-BUILDER-FN-TO-DEFLIST-HASH*", SubLSystemTrampolineFile.maybeDefault($blue_builder_fn_to_deflist_hash$, $blue_builder_fn_to_deflist_hash$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
         deflexical("*INFERENCE-ANSWERS-DEFAULT-UNDETERMINED-RELATION*", $$conceptuallyRelated);
         deflexical("*BLUE-EVENT-DISPATCHER-LOCK*", make_lock($str121$BLUE_EVENT_DISPATCHER_Lock));
-        deflexical("*BLUE-EVENT-DISPATCHER-LISTENERS*", SubLTrampolineFile.maybeDefault($blue_event_dispatcher_listeners$, $blue_event_dispatcher_listeners$, NIL));
+        deflexical("*BLUE-EVENT-DISPATCHER-LISTENERS*", SubLSystemTrampolineFile.maybeDefault($blue_event_dispatcher_listeners$, $blue_event_dispatcher_listeners$, NIL));
         defparameter("*BLUE-MESSAGE-MAILBOX-SUITE*", message_mailboxes.new_message_mailbox_suite());
         deflexical("*BLUE-EVENT-TO-BLUE-EVENT-LISTENER*", event_broker.describe_funcall_listener($BLUE_EVENT, BLUE_MAP_EVENT_TO_BLUE_EVENT, UNPROVIDED, UNPROVIDED));
         defconstant("*DTP-BLUE-GRAPH*", BLUE_GRAPH);

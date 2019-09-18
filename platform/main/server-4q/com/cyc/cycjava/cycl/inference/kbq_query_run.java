@@ -256,7 +256,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class kbq_query_run extends SubLTranslatedFile {
@@ -2131,7 +2131,7 @@ public final class kbq_query_run extends SubLTranslatedFile {
 	    cdolist_list_var = cdolist_list_var.rest();
 	    elem = cdolist_list_var.first();
 	}
-	if (((NIL != outlier_timeout) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(outlier_timeout))) {
+	if (((NIL != outlier_timeout) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(outlier_timeout))) {
 	    throw new AssertionError(outlier_timeout);
 	}
 	final SubLObject plist_var = overriding_query_properties;
@@ -2572,7 +2572,7 @@ public final class kbq_query_run extends SubLTranslatedFile {
 	    cdolist_list_var = cdolist_list_var.rest();
 	    elem = cdolist_list_var.first();
 	}
-	if (((NIL != outlier_timeout) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(outlier_timeout))) {
+	if (((NIL != outlier_timeout) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(outlier_timeout))) {
 	    throw new AssertionError(outlier_timeout);
 	}
 	final SubLObject plist_var = overriding_query_properties;
@@ -2979,7 +2979,7 @@ public final class kbq_query_run extends SubLTranslatedFile {
 	    keepalive_filename = NIL;
 	}
 	final SubLThread thread = SubLProcess.currentSubLThread();
-	if (((NIL != keepalive_filename) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == file_utilities.file_valid_for_writing_p(keepalive_filename))) {
+	if (((NIL != keepalive_filename) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == file_utilities.file_valid_for_writing_p(keepalive_filename))) {
 	    throw new AssertionError(keepalive_filename);
 	}
 	final SubLObject query_specs = kbq_query_spec_set_elements(query_spec_set, randomize, tail_queries);
@@ -4582,7 +4582,7 @@ public final class kbq_query_run extends SubLTranslatedFile {
 
     public static SubLObject new_kbq_runstate(final SubLObject query_spec, final SubLObject test_runstate) {
 	assert NIL != kb_query.kbq_query_spec_p(query_spec) : "kb_query.kbq_query_spec_p(query_spec) " + "CommonSymbols.NIL != kb_query.kbq_query_spec_p(query_spec) " + query_spec;
-	if (((NIL != test_runstate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == kct_runstate_p(test_runstate))) {
+	if (((NIL != test_runstate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == kct_runstate_p(test_runstate))) {
 	    throw new AssertionError(test_runstate);
 	}
 	final SubLObject kbqr = make_kbq_runstate(UNPROVIDED);
@@ -4851,7 +4851,7 @@ public final class kbq_query_run extends SubLTranslatedFile {
 	    test_set_runstate = NIL;
 	}
 	assert NIL != kct_utils.kct_test_spec_p(test_spec, UNPROVIDED) : "kct_utils.kct_test_spec_p(test_spec, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != kct_utils.kct_test_spec_p(test_spec, CommonSymbols.UNPROVIDED) " + test_spec;
-	if (((NIL != test_set_runstate) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == kct_set_runstate_p(test_set_runstate))) {
+	if (((NIL != test_set_runstate) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == kct_set_runstate_p(test_set_runstate))) {
 	    throw new AssertionError(test_set_runstate);
 	}
 	final SubLObject kctr = make_kct_runstate(UNPROVIDED);
@@ -7623,7 +7623,7 @@ public final class kbq_query_run extends SubLTranslatedFile {
 	assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
 	assert NIL != stringp(title) : "Types.stringp(title) " + "CommonSymbols.NIL != Types.stringp(title) " + title;
 	assert NIL != forts.fort_p(test_col) : "forts.fort_p(test_col) " + "CommonSymbols.NIL != forts.fort_p(test_col) " + test_col;
-	if (((NIL != overriding_query_properties) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(overriding_query_properties))) {
+	if (((NIL != overriding_query_properties) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == listp(overriding_query_properties))) {
 	    throw new AssertionError(overriding_query_properties);
 	}
 	SubLObject comment = NIL;
@@ -9149,10 +9149,10 @@ public final class kbq_query_run extends SubLTranslatedFile {
 	deflexical("*KCT-TEST-METRIC-TABLE*", $list150);
 	deflexical("*KBQ-DEFAULT-OUTLIER-TIMEOUT*", $int$600);
 	deflexical("*KBQ-TEST-COLLECTION-TO-QUERY-SET-QUERY*", $list183);
-	deflexical("*LAST-QUERY-SET-RUN*", SubLTrampolineFile.maybeDefault($last_query_set_run$, $last_query_set_run$, NIL));
-	deflexical("*LAST-TEST-SET-RUN*", SubLTrampolineFile.maybeDefault($last_test_set_run$, $last_test_set_run$, NIL));
-	deflexical("*RUNSTATE-ISG*", SubLTrampolineFile.maybeDefault($runstate_isg$, $runstate_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-	deflexical("*RUNSTATE-INDEX*", SubLTrampolineFile.maybeDefault($runstate_index$, $runstate_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+	deflexical("*LAST-QUERY-SET-RUN*", SubLSystemTrampolineFile.maybeDefault($last_query_set_run$, $last_query_set_run$, NIL));
+	deflexical("*LAST-TEST-SET-RUN*", SubLSystemTrampolineFile.maybeDefault($last_test_set_run$, $last_test_set_run$, NIL));
+	deflexical("*RUNSTATE-ISG*", SubLSystemTrampolineFile.maybeDefault($runstate_isg$, $runstate_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+	deflexical("*RUNSTATE-INDEX*", SubLSystemTrampolineFile.maybeDefault($runstate_index$, $runstate_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
 	defconstant("*DTP-KBQ-RUNSTATE*", KBQ_RUNSTATE);
 	defconstant("*DTP-KCT-RUNSTATE*", KCT_RUNSTATE);
 	defconstant("*DTP-KCT-SET-RUNSTATE*", KCT_SET_RUNSTATE);

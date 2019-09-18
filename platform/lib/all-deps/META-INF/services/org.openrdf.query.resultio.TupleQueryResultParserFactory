@@ -1,0 +1,4 @@
+org.openrdf.query.resultio.binary.BinaryQueryResultParserFactory
+
+org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLParserFactory
+

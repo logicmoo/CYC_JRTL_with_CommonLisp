@@ -38,7 +38,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -206,7 +206,7 @@ public final class removal_modules_extent_cardinality extends SubLTranslatedFile
 
     public static SubLObject init_removal_modules_extent_cardinality_file() {
         deflexical("*DEFAULT-REMOVAL-EXTENT-CARDINALITY-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
-        deflexical("*LENGTH-OF-LIST-DEFINING-MT*", SubLTrampolineFile.maybeDefault($length_of_list_defining_mt$, $length_of_list_defining_mt$, $$BaseKB));
+        deflexical("*LENGTH-OF-LIST-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($length_of_list_defining_mt$, $length_of_list_defining_mt$, $$BaseKB));
         return NIL;
     }
 

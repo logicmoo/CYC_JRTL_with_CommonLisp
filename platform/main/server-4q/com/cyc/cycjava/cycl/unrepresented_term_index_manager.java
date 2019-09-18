@@ -22,7 +22,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -274,7 +274,7 @@ public final class unrepresented_term_index_manager extends SubLTranslatedFile {
     }
 
     public static SubLObject init_unrepresented_term_index_manager_file() {
-        deflexical("*UNREPRESENTED-TERM-INDEX-MANAGER*", SubLTrampolineFile.maybeDefault($unrepresented_term_index_manager$, $unrepresented_term_index_manager$, $UNINITIALIZED));
+        deflexical("*UNREPRESENTED-TERM-INDEX-MANAGER*", SubLSystemTrampolineFile.maybeDefault($unrepresented_term_index_manager$, $unrepresented_term_index_manager$, $UNINITIALIZED));
         deflexical("*UNREPRESENTED-TERM-INDEX-LRU-SIZE-PERCENTAGE*", TEN_INTEGER);
         deflexical("*UNREPRESENTED-TERM-INDEX-LRU-SIZE-MAX*", $int$40000);
         return NIL;

@@ -120,7 +120,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2843,7 +2843,7 @@ public final class nl_generation_fort_cache extends SubLTranslatedFile {
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         assert NIL != cycl_string.cycl_string_p(string) : "cycl_string.cycl_string_p(string) " + "CommonSymbols.NIL != cycl_string.cycl_string_p(string) " + string;
-        if (((NIL != nl_pred) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == forts.fort_p(nl_pred))) {
+        if (((NIL != nl_pred) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == forts.fort_p(nl_pred))) {
             throw new AssertionError(nl_pred);
         }
         if (NIL == $english_generation_fort_cache$.getGlobalValue()) {
@@ -3223,7 +3223,7 @@ public final class nl_generation_fort_cache extends SubLTranslatedFile {
     }
 
     public static SubLObject init_nl_generation_fort_cache_file() {
-        deflexical("*ENGLISH-GENERATION-FORT-CACHE*", SubLTrampolineFile.maybeDefault($english_generation_fort_cache$, $english_generation_fort_cache$, NIL));
+        deflexical("*ENGLISH-GENERATION-FORT-CACHE*", SubLSystemTrampolineFile.maybeDefault($english_generation_fort_cache$, $english_generation_fort_cache$, NIL));
         defparameter("*ENGLISH-GENERATION-FHT-NAME*", NIL);
         defparameter("*USE-GENERIC-SINGULAR-NL-GENERATION-FORT-CACHE?*", T);
         deflexical("*ENGLISH-GENERATION-BASE-FILE-NAME*", red_infrastructure_macros.red_def_helper($list1.isSymbol() ? symbol_value($list1) : $list1, $english_generation_base_file_name$, $str3$generic_singular_nl_generation_fo.isSymbol() ? symbol_value($str3$generic_singular_nl_generation_fo) : $str3$generic_singular_nl_generation_fo, $LEXICAL, UNPROVIDED));
@@ -3254,7 +3254,7 @@ public final class nl_generation_fort_cache extends SubLTranslatedFile {
         defparameter("*NL-GENERATION-FORT-CACHE-RETRY-FAILED-TASKS?*", NIL);
         defconstant("*NANOSECONDS-PER-SECOND*", $int$1000000000);
         defparameter("*NART-MAX-SISTER-TO-GAF-RATIO*", number_utilities.positive_infinity());
-        deflexical("*NL-GENERATION-CACHE-EXCEPTIONS*", SubLTrampolineFile.maybeDefault($nl_generation_cache_exceptions$, $nl_generation_cache_exceptions$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
+        deflexical("*NL-GENERATION-CACHE-EXCEPTIONS*", SubLSystemTrampolineFile.maybeDefault($nl_generation_cache_exceptions$, $nl_generation_cache_exceptions$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
         return NIL;
     }
 

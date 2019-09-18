@@ -97,7 +97,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2233,7 +2233,7 @@ public final class inference_testing extends SubLTranslatedFile {
     }
 
     public static SubLObject note_inference_test_comment(final SubLObject test_name, final SubLObject comment) {
-        if (((NIL != comment) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
+        if (((NIL != comment) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(comment))) {
             throw new AssertionError(comment);
         }
         if (NIL != comment) {
@@ -2247,7 +2247,7 @@ public final class inference_testing extends SubLTranslatedFile {
     }
 
     public static SubLObject note_inference_test_bug_number(final SubLObject test_name, final SubLObject bug_number) {
-        if (((NIL != bug_number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(bug_number))) {
+        if (((NIL != bug_number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(bug_number))) {
             throw new AssertionError(bug_number);
         }
         if (NIL != bug_number) {
@@ -2261,7 +2261,7 @@ public final class inference_testing extends SubLTranslatedFile {
     }
 
     public static SubLObject note_inference_test_creation_date(final SubLObject test_name, final SubLObject creation_date) {
-        if (((NIL != creation_date) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numeric_date_utilities.universal_date_p(creation_date))) {
+        if (((NIL != creation_date) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numeric_date_utilities.universal_date_p(creation_date))) {
             throw new AssertionError(creation_date);
         }
         if (NIL != creation_date) {
@@ -2275,7 +2275,7 @@ public final class inference_testing extends SubLTranslatedFile {
     }
 
     public static SubLObject note_inference_test_creator(final SubLObject test_name, final SubLObject creator) {
-        if (((NIL != creator) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(creator))) {
+        if (((NIL != creator) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(creator))) {
             throw new AssertionError(creator);
         }
         if (NIL != creator) {

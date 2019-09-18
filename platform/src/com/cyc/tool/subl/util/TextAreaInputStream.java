@@ -47,7 +47,7 @@ public class TextAreaInputStream extends InputStream implements KeyListener {
 		if (e.getKeyChar() == '\n') {
 			if (command != null)
 				Errors.error("Got bad key event: " + e);
-			Runnable runnable = new SafeRunnable() {
+			Runnable runnable = new SafeRunnable(true,null) {
 				@Override
 				public void safeRun() {
 					String tempStr = textArea.getText();

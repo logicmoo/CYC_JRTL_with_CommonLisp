@@ -4,11 +4,16 @@ package com.cyc.cycjava.cycl;
 
 import static com.cyc.tool.subl.util.SubLFiles.INEXACT;
 
+import org.logicmoo.system.Startup;
+import org.logicmoo.system.export_to_swipl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Loader;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.InitializingSubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
+
+import eu.cyc.sparql.server.Sparql;
 
 public class rcycl extends InitializingSubLFile {
 	public static final rcycl me = new rcycl();
@@ -34,18 +39,19 @@ public class rcycl extends InitializingSubLFile {
 	static public SubLObject setup_rcycl_file() {
 		try {
 			// if(!SubLMain.TINY_KB) //
-			SubLFiles.initialize(Sparql.class.getName());
+			SubLFiles.initialize("eu.cyc.sparql.server.Sparql");
 			// ;
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
-		try {
-			SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
-		} catch (Throwable ex) {
-			ex.printStackTrace();
-		}
+		//		try {
+		//			SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
+		//		} catch (Throwable ex) {
+		//			ex.printStackTrace();
+		//		}
 		SubLFiles.currentClassName = null;
 		rcycl me2 = me;
+		export_to_swipl.class.toString();
 		me2.preparePercentProgress(1255);
 
 		INEXACT = false;

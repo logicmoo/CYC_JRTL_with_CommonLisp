@@ -77,7 +77,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rkf_solution_finder extends SubLTranslatedFile {
     public static final SubLFile me = new rkf_solution_finder();
@@ -854,7 +854,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject sf_set_state_number(final SubLObject state, final SubLObject number) {
         assert NIL != sf_state_p(state) : "rkf_solution_finder.sf_state_p(state) " + "CommonSymbols.NIL != rkf_solution_finder.sf_state_p(state) " + state;
-        if (((NIL != number) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(number))) {
+        if (((NIL != number) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(number))) {
             throw new AssertionError(number);
         }
         SubLObject v_properties = sf_state_inference_params(state);
@@ -873,7 +873,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject sf_set_state_time(final SubLObject state, final SubLObject time) {
         assert NIL != sf_state_p(state) : "rkf_solution_finder.sf_state_p(state) " + "CommonSymbols.NIL != rkf_solution_finder.sf_state_p(state) " + state;
-        if (((NIL != time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(time))) {
+        if (((NIL != time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(time))) {
             throw new AssertionError(time);
         }
         SubLObject v_properties = sf_state_inference_params(state);
@@ -892,7 +892,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject sf_set_state_depth(final SubLObject state, final SubLObject depth) {
         assert NIL != sf_state_p(state) : "rkf_solution_finder.sf_state_p(state) " + "CommonSymbols.NIL != rkf_solution_finder.sf_state_p(state) " + state;
-        if (((NIL != depth) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(depth))) {
+        if (((NIL != depth) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(depth))) {
             throw new AssertionError(depth);
         }
         SubLObject v_properties = sf_state_inference_params(state);
@@ -1588,8 +1588,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defconstant("*SF-NUMBER-DEFAULT*", TEN_INTEGER);
         defconstant("*SF-TIME-DEFAULT*", $int$30);
         deflexical("*SF-LOCK*", make_lock($$$Solution_Finder_Lock));
-        deflexical("*SF-ISG*", SubLTrampolineFile.maybeDefault($sf_isg$, $sf_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-        deflexical("*SF-INDEX*", SubLTrampolineFile.maybeDefault($sf_index$, $sf_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SF-ISG*", SubLSystemTrampolineFile.maybeDefault($sf_isg$, $sf_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*SF-INDEX*", SubLSystemTrampolineFile.maybeDefault($sf_index$, $sf_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-SF-SOLUTION-SET*", SF_SOLUTION_SET);
         defconstant("*DTP-SF-STATE*", SF_STATE);
         defparameter("*SF-TYPICAL-BACKCHAIN-DEFAULT*", $sf_backchain_default$.getGlobalValue());

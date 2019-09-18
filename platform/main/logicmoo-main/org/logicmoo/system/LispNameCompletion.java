@@ -1,6 +1,7 @@
 package org.logicmoo.system;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Package;
@@ -13,7 +14,7 @@ public class LispNameCompletion implements NameCompletion {
 	String[] NO_RESULTS = new String[0];
 
 	@Override
-	public java.lang.String[] completeName(java.lang.String part) {
+	public java.lang.String[] completeName(java.lang.String part, List resultz, long milisecs) {
 
 		if (part.length() < 3)
 			return NO_RESULTS;

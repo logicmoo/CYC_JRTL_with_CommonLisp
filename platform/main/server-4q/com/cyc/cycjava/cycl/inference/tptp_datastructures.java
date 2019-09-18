@@ -41,7 +41,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -86,7 +86,7 @@ public final class tptp_datastructures extends SubLTranslatedFile implements V02
     }
 
     public static final SubLObject validate_tptp_problem(SubLObject tptp_problem) {
-        SubLTrampolineFile.checkType(tptp_problem, PROPERTY_LIST_P);
+        SubLSystemTrampolineFile.checkType(tptp_problem, PROPERTY_LIST_P);
         {
             SubLObject remainder = NIL;
             for (remainder = tptp_problem; NIL != remainder; remainder = cddr(remainder)) {
@@ -95,22 +95,22 @@ public final class tptp_datastructures extends SubLTranslatedFile implements V02
                     SubLObject value = cadr(remainder);
                     SubLObject pcase_var = property;
                     if (pcase_var.eql($OPENNESS)) {
-                        SubLTrampolineFile.checkType(value, OPENNESS_P);
+                        SubLSystemTrampolineFile.checkType(value, OPENNESS_P);
                     } else
                         if (pcase_var.eql($ANSWERABILITY)) {
-                            SubLTrampolineFile.checkType(value, ANSWERABILITY_P);
+                            SubLSystemTrampolineFile.checkType(value, ANSWERABILITY_P);
                         } else
                             if (pcase_var.eql($NUM)) {
-                                SubLTrampolineFile.checkType(value, NON_NEGATIVE_INTEGER_P);
+                                SubLSystemTrampolineFile.checkType(value, NON_NEGATIVE_INTEGER_P);
                             } else
                                 if (pcase_var.eql($PAIR_NUM)) {
-                                    SubLTrampolineFile.checkType(value, NON_NEGATIVE_INTEGER_P);
+                                    SubLSystemTrampolineFile.checkType(value, NON_NEGATIVE_INTEGER_P);
                                 } else
                                     if (pcase_var.eql($MODULE)) {
-                                        SubLTrampolineFile.checkType(value, TPTP_QUERY_GENERATION_MODULE_NAME_P);
+                                        SubLSystemTrampolineFile.checkType(value, TPTP_QUERY_GENERATION_MODULE_NAME_P);
                                     } else
                                         if (pcase_var.eql($CYCL_QUERY)) {
-                                            SubLTrampolineFile.checkType(value, CYCL_SENTENCE_P);
+                                            SubLSystemTrampolineFile.checkType(value, CYCL_SENTENCE_P);
                                         } else
                                             if (pcase_var.eql($JUSTIFICATION)) {
                                                 {
@@ -119,35 +119,35 @@ public final class tptp_datastructures extends SubLTranslatedFile implements V02
                                                     for (support = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support = cdolist_list_var.first()) {
                                                         if (NIL == assertion_handles.assertion_p(support)) {
                                                             Errors.warn($str_alt15$Expected_an_assertion__got_an_HL_, support);
-                                                            SubLTrampolineFile.checkType(support, HL_SUPPORT_P);
+                                                            SubLSystemTrampolineFile.checkType(support, HL_SUPPORT_P);
                                                         }
                                                     }
                                                 }
                                             } else
                                                 if (pcase_var.eql($LINCHPIN)) {
-                                                    SubLTrampolineFile.checkType(value, INDEXED_TERM_P);
+                                                    SubLSystemTrampolineFile.checkType(value, INDEXED_TERM_P);
                                                 } else
                                                     if (pcase_var.eql($INCLUDE_LIST_IDS)) {
                                                         {
                                                             SubLObject list_var = value;
-                                                            SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+                                                            SubLSystemTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
                                                             {
                                                                 SubLObject cdolist_list_var = list_var;
                                                                 SubLObject elem = NIL;
                                                                 for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
-                                                                    SubLTrampolineFile.checkType(elem, NON_NEGATIVE_INTEGER_P);
+                                                                    SubLSystemTrampolineFile.checkType(elem, NON_NEGATIVE_INTEGER_P);
                                                                 }
                                                             }
                                                         }
                                                     } else
                                                         if (pcase_var.eql($COUNTERPART_NUM)) {
-                                                            SubLTrampolineFile.checkType(value, NON_NEGATIVE_INTEGER_P);
+                                                            SubLSystemTrampolineFile.checkType(value, NON_NEGATIVE_INTEGER_P);
                                                         } else
                                                             if (pcase_var.eql($HEADER)) {
-                                                                SubLTrampolineFile.checkType(value, STRINGP);
+                                                                SubLSystemTrampolineFile.checkType(value, STRINGP);
                                                             } else
                                                                 if (pcase_var.eql($OUTPUT_FILENAME)) {
-                                                                    SubLTrampolineFile.checkType(value, FILE_VALID_FOR_WRITING_P);
+                                                                    SubLSystemTrampolineFile.checkType(value, FILE_VALID_FOR_WRITING_P);
                                                                 } else {
                                                                     Errors.error($str_alt26$_s_was_not_a_valid_TPTP_PROBLEM_P, property);
                                                                 }
@@ -249,17 +249,17 @@ public final class tptp_datastructures extends SubLTranslatedFile implements V02
     }
 
     public static final SubLObject tptp_problem_nset_property(SubLObject tptp_problem, SubLObject property, SubLObject value) {
-        SubLTrampolineFile.checkType(property, TPTP_PROBLEM_PROPERTY_P);
+        SubLSystemTrampolineFile.checkType(property, TPTP_PROBLEM_PROPERTY_P);
         return putf(tptp_problem, property, value);
     }
 
     public static final SubLObject tptp_problem_delete_property(SubLObject tptp_problem, SubLObject property) {
-        SubLTrampolineFile.checkType(property, TPTP_PROBLEM_PROPERTY_P);
+        SubLSystemTrampolineFile.checkType(property, TPTP_PROBLEM_PROPERTY_P);
         return remf(tptp_problem, property);
     }
 
     public static final SubLObject tptp_problem_remove_property(SubLObject tptp_problem, SubLObject property) {
-        SubLTrampolineFile.checkType(property, TPTP_PROBLEM_PROPERTY_P);
+        SubLSystemTrampolineFile.checkType(property, TPTP_PROBLEM_PROPERTY_P);
         return remf(copy_list(tptp_problem), property);
     }
 
@@ -305,7 +305,7 @@ public final class tptp_datastructures extends SubLTranslatedFile implements V02
     }
 
     public static final SubLObject new_tptp_problem_set(SubLObject kb_spec, SubLObject typed_include_lists, SubLObject tptp_problems, SubLObject proof_checker_modeP) {
-        SubLTrampolineFile.checkType(kb_spec, TPTP_KB_SPEC_P);
+        SubLSystemTrampolineFile.checkType(kb_spec, TPTP_KB_SPEC_P);
         return list(kb_spec, typed_include_lists, tptp_problems, proof_checker_modeP);
     }
 
@@ -354,12 +354,12 @@ public final class tptp_datastructures extends SubLTranslatedFile implements V02
     public static final SubLObject new_tptp_kb_spec(SubLObject kb_content, SubLObject static_assertions) {
         {
             SubLObject list_var = static_assertions;
-            SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+            SubLSystemTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
             {
                 SubLObject cdolist_list_var = list_var;
                 SubLObject elem = NIL;
                 for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
-                    SubLTrampolineFile.checkType(elem, ASSERTION_P);
+                    SubLSystemTrampolineFile.checkType(elem, ASSERTION_P);
                 }
             }
         }
@@ -381,12 +381,12 @@ public final class tptp_datastructures extends SubLTranslatedFile implements V02
     public static final SubLObject set_tptp_kb_spec_static_assertions(SubLObject kb_spec, SubLObject static_assertions) {
         {
             SubLObject list_var = static_assertions;
-            SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+            SubLSystemTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
             {
                 SubLObject cdolist_list_var = list_var;
                 SubLObject elem = NIL;
                 for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
-                    SubLTrampolineFile.checkType(elem, ASSERTION_P);
+                    SubLSystemTrampolineFile.checkType(elem, ASSERTION_P);
                 }
             }
         }

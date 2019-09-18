@@ -116,7 +116,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class deduction_handles extends SubLTranslatedFile {
     public static final SubLFile me = new deduction_handles();
@@ -960,7 +960,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject deduction_id(final SubLObject deduction) {
-        SubLTrampolineFile.enforceType(deduction, DEDUCTION_P);
+        SubLSystemTrampolineFile.enforceType(deduction, DEDUCTION_P);
         return d_id(deduction);
     }
 
@@ -974,7 +974,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject find_deduction_by_id(final SubLObject id) {
-        SubLTrampolineFile.enforceType(id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(id, INTEGERP);
         return lookup_deduction(id);
     }
 
@@ -1040,8 +1040,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_deduction_handles_file() {
-        deflexical("*DEDUCTION-FROM-ID*", SubLTrampolineFile.maybeDefault($deduction_from_id$, $deduction_from_id$, NIL));
-        deflexical("*NEW-DEDUCTION-ID-THRESHOLD*", SubLTrampolineFile.maybeDefault($new_deduction_id_threshold$, $new_deduction_id_threshold$, NIL));
+        deflexical("*DEDUCTION-FROM-ID*", SubLSystemTrampolineFile.maybeDefault($deduction_from_id$, $deduction_from_id$, NIL));
+        deflexical("*NEW-DEDUCTION-ID-THRESHOLD*", SubLSystemTrampolineFile.maybeDefault($new_deduction_id_threshold$, $new_deduction_id_threshold$, NIL));
         defconstant("*DTP-DEDUCTION*", DEDUCTION);
         return NIL;
     }

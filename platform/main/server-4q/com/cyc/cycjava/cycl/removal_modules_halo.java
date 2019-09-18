@@ -30,7 +30,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -53,7 +53,7 @@ public final class removal_modules_halo extends SubLTranslatedFile implements V0
     private static final SubLSymbol $good_choice_among_sentences_backchains$ = makeSymbol("*GOOD-CHOICE-AMONG-SENTENCES-BACKCHAINS*");
 
     public static final SubLObject set_good_choice_among_sentences_backchains(SubLObject num) {
-        SubLTrampolineFile.checkType(num, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(num, NON_NEGATIVE_INTEGER_P);
         $good_choice_among_sentences_backchains$.setDynamicValue(num);
         return num;
     }
@@ -193,7 +193,7 @@ public final class removal_modules_halo extends SubLTranslatedFile implements V0
     public static final SubLObject inference_bad_choice_among_sentence_supports(SubLObject support_sentence, SubLObject support_mt) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(support_sentence, EL_NEGATION_P);
+            SubLSystemTrampolineFile.checkType(support_sentence, EL_NEGATION_P);
             {
                 SubLObject pos_sentence = cycl_utilities.sentence_arg1(support_sentence, UNPROVIDED);
                 thread.resetMultipleValues();

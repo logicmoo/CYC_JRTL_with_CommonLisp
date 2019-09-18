@@ -26,11 +26,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SafeRunnable;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Tcp extends SubLTrampolineFile {
+public class Tcp extends SubLSystemTrampolineFile {
 	private static class ServerSocketHandlerProcess extends SafeRunnable {
 		ServerSocketHandlerProcess(SubLFunction func, Socket connectionSocket) {
+			super(true, null);
 			InetAddress inetAddress = connectionSocket.getInetAddress();
 			this.func = func;
 			this.connectionSocket = connectionSocket;
@@ -97,6 +98,7 @@ public class Tcp extends SubLTrampolineFile {
 
 	private static class ServerSocketProcess extends SafeRunnable {
 		ServerSocketProcess(int port, SubLObject funcSpec) {
+			super(true, null);
 			this.funcSpec = funcSpec;
 			this.port = port;
 			try {
@@ -126,7 +128,6 @@ public class Tcp extends SubLTrampolineFile {
 
 		@Override
 		public void safeRun() {
-			SystemCurrent.attachConsole();
 			Socket socket = null;
 			try {
 				while (true) {

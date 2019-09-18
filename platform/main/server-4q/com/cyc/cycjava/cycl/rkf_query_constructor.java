@@ -71,7 +71,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rkf_query_constructor extends SubLTranslatedFile {
     public static final SubLFile me = new rkf_query_constructor();
@@ -1682,8 +1682,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject init_rkf_query_constructor_file() {
         deflexical("*QC-LOCK*", make_lock($$$Query_Constructor_Lock));
-        deflexical("*QC-ISG*", SubLTrampolineFile.maybeDefault($qc_isg$, $qc_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-        deflexical("*QC-INDEX*", SubLTrampolineFile.maybeDefault($qc_index$, $qc_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        deflexical("*QC-ISG*", SubLSystemTrampolineFile.maybeDefault($qc_isg$, $qc_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*QC-INDEX*", SubLSystemTrampolineFile.maybeDefault($qc_index$, $qc_index$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-QC-QUERY*", QC_QUERY);
         defconstant("*DTP-QC-STATE*", QC_STATE);
         deflexical("*RKF-ADD-OBJECT-VAR-MAP-ENTRY-METHOD-TABLE*", make_vector($int$256, NIL));

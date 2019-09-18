@@ -1,5 +1,5 @@
 /*
-   This file is part of the LarKC platform 
+   This file is part of the LarKC platform
    http://www.larkc.eu/
 
    Copyright 2010 LarKC project consortium
@@ -27,7 +27,6 @@ import static org.armedbear.lisp.Lisp.PACKAGE_SUBLISP;
 import static org.armedbear.lisp.Lisp.UNPROVIDED;
 import static org.logicmoo.system.BeanShellCntrl.bsh_desktop;
 import static org.logicmoo.system.BeanShellCntrl.bsh_eval;
-import static org.logicmoo.system.BeanShellCntrl.multiMethod;
 import static org.logicmoo.system.BeanShellCntrl.showObject;
 
 import java.awt.Container;
@@ -36,7 +35,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
@@ -46,18 +47,31 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.lang.management.ClassLoadingMXBean;
+import java.lang.management.CompilationMXBean;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryManagerMXBean;
+import java.lang.management.MemoryPoolMXBean;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.management.PlatformManagedObject;
+import java.lang.management.RuntimeMXBean;
+import java.lang.management.ThreadMXBean;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.URL;
-import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -66,6 +80,7 @@ import javax.swing.JOptionPane;
 
 import org.armedbear.j.Editor;
 import org.armedbear.j.JLisp;
+import org.armedbear.j.LispClient;
 import org.armedbear.lisp.ABCLStatic;
 import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Cons;
@@ -73,9 +88,9 @@ import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.Environment;
 import org.armedbear.lisp.Function;
+import org.armedbear.lisp.IdentitySetWithIndex;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.Interpreter.UnhandledCondition;
-import org.armedbear.lisp.Java;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispClass;
@@ -86,6 +101,7 @@ import org.armedbear.lisp.Main;
 import org.armedbear.lisp.Operator;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Packages;
+import org.armedbear.lisp.ProcessingTerminated;
 import org.armedbear.lisp.SimpleString;
 import org.armedbear.lisp.SlotDefinition;
 import org.armedbear.lisp.SpecialBindingsMark;
@@ -102,14 +118,12 @@ import org.jpl7.Compound;
 import org.jpl7.JPL;
 import org.jpl7.JPLException;
 import org.jpl7.JRef;
-import org.jpl7.PrologException;
 import org.jpl7.Query;
 import org.jpl7.Term;
 import org.jpl7.Variable;
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
 import org.logicmoo.bb.BeanBowl;
-//import org.webswing.server.common.util.CommonUtil;
 
 import com.cyc.cycjava.cycl.constant_completion_high;
 import com.cyc.cycjava.cycl.constant_completion_low;
@@ -146,165 +160,239 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.ui.SubLReaderPanel;
 import com.cyc.tool.subl.util.IsolatedClassLoader;
+import com.cyc.tool.subl.util.SafeRunnable;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 import bsh.EvalError;
+import bsh.NameSpace;
+import bsh.util.Sessiond;
 import eu.larkc.core.orchestrator.servers.LarKCHttpServer;
+import net.wimpi.telnetd.TelnetD;
 import sun.misc.Unsafe;
 
 /**
- * TODO Describe this type briefly. 
+ * TODO Describe this type briefly.
  * If necessary include a longer description and/or an example.
- * 
+ *
  * @author Administrator
  *
  */
 //import org.opencyc.cycobject.CycConstant;
 public class Startup extends ABCLStatic {
 
-	/**
-	 * @author Administrator
-	 *
-	 */
+	public static final String[] StringArrayZero = new String[0];
+	static WorkQueue initServerQueue = null;
+	private static Thread cycInitThread;
 
-	public static final long startTimeMillis = System.currentTimeMillis();
-
-	public static PrintStream noticeStream;
-
-	public static PrintStream getNoticeStream() {
-		PrintStream err = noticeStream;
-		if (err == null)
-			err = SystemCurrent.originalSystemOut;
-		if (err == null)
-			err = SystemCurrent.originalSystemErr;
-		if (err == null)
-			err = System.err;
-		if (err == null)
-			err = System.out;
-		return err;
-	}
-
-	public static void reportUncaughts() {
-		PrintStream err = getNoticeStream();
-		if (unexpectedThrowables != null) {
-
-			for (Iterator<Throwable> iterator = unexpectedThrowables.iterator(); iterator.hasNext();) {
-				Throwable throwable = iterator.next();
+	// Background CYC Inits
+	static public void callInCycInitThread(Runnable r) {
+		if (initServerQueue == null) {
+			initServerQueue = WorkQueue.getWorkerQueue("CycInit");
+			callInCycInitThread(() -> {
+				final Thread currentThread = Thread.currentThread();
+				currentThread.setName("cycInitThread");
+				cycInitThread = currentThread;
+			});
+		} else {
+			final Thread currentThread = Thread.currentThread();
+			if (currentThread == cycInitThread) {
 				try {
-					err.print("unexpectedThrowable: " + throwable);
-					throwable.printStackTrace(err);
-					err.flush();
+					r.run();
 				} catch (Throwable e) {
-					// TODO: handle exception
+					addUncaught(e);
 				}
+				return;
 			}
-
 		}
+		initServerQueue.execute(r);
 	}
 
-	public static final class ABCLMainUncaughtExceptionHandler implements UncaughtExceptionHandler {
-		@Override
-		public void uncaughtException(Thread arg0, Throwable e) {
-			addUncaught(e);
-		}
-	}
-
-	public static final UncaughtExceptionHandler uncaughtExceptionHandler = new ABCLMainUncaughtExceptionHandler();
-
-	public static final List<Throwable> unexpectedThrowables = new ArrayList<Throwable>(0);
-
-	public static void addUncaught(Throwable e) {
-		if (unexpectedThrowables != null && e != null)
-			unexpectedThrowables.add(e);
-	}
-
-	public static int exitCode = 0;
-
-	private static UncaughtExceptionHandler initialUncaughtExceptionHandler;
 	static {
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+		// Capture original System streams and replace with thread aware streams
+		SystemCurrent.setupIO();
+	}
 
-			@Override
-			public void run() {
-				reportUncaughts();
-				getNoticeStream().println("Shutdown Hook");
+	// Use Tomcat instead of Jetty
+	public static boolean USE_TOMCAT = false;
+	// DEBUG to skip slow diagnostics
+	public static boolean maybeTooSlow = false;
+	// for UPTIME
+	public static final long systemStartTimeMillis = System.currentTimeMillis();
 
-			}
-		}));
-		initialUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
-		if (initialUncaughtExceptionHandler == null) {
-			Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
-		}
+	enum FeatureStatus {
+		Unset, Requested, Begun, Running, Complete, Terminated, Disabled, Denied, TerminatedError,
 	}
 
 	// There should only be one globalInterpreter.
 	public static Interpreter globalInterpreter;
-
-	public static boolean jlisp;
-	public static boolean noinit = false;
-	public static boolean nosystem = false;
-	public static boolean noinform = false;
-	public static boolean postProcess = true;
-	public static boolean help = false;
-
-	public static Class firstMain = null;
-
-	// A java main is starting this.. not a junittest
+	// A java main is starting this.. not a junit test
+	// (therefore dont wait for all inits to finish)
 	public static boolean MainThreaded = false;
-	public static boolean OPENCYC = false;
-	public static boolean TINY_KB = false;
-	public static boolean Never_REDEFINE = false;
-	public static boolean Always_REDEFINE = false;
-	public static boolean BOOTY_HACKZ = true;
-	protected static boolean hasCycCmdlineInits = false;
-
-	public static boolean commonSymbolsOK = false;
-	protected static boolean noInitLisp = false;
-	public static boolean noInitCyc = false;
-
-	public static boolean noExit = false;
-	public static String[] passedArgs;
-	public static String[] cycCmdArgs = new String[0];
-	public static String[] defaultCycCmdArgs = new String[] { "-f", "(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))" };
-	static boolean cycPart2Early = false;
-	static boolean noCycPart2 = false;
-	public static boolean isSublispDefault = true;
-	protected static boolean useMainThread = true;
-	public static boolean noProlog = true;
-	public static boolean noPrologJNI = false;
-
-	public static boolean trackStructs = true;
-	public static boolean disablePrologSync = true;
-	public static boolean disableLispSync = true;
-
-	public static boolean noGUI = false;
-	public static boolean noBSH = false;
-	public static boolean noBSHGUI = true;
-
+	// Do not fork to a larger thread
+	public static boolean useMainThread = false;
+	// Do not allow code that calls System.exit(.) to exit
+	public static boolean noExit = true;
+	// DEBUG Don't exit after running program
+	public static boolean waitForTermination;
+	// DEBUG struggle passed load errors
+	public static boolean keepGoing = false;
+	// Need a home for STDIO still
 	public static boolean needIOConsole = true;
 
-	public static boolean needABCL = true;
+	// Assume (load "boot.lisp") has happened
+	public static boolean began_load_boot_lisp;
+	// ABCL is bootstrapped enough to compile/run lisp code
+	public static boolean finishedBoot_lisp;
+	// FEATURE :J is needed/reqested
+	public static boolean jlisp_requested = false;
+	// Assume (load "j.lisp") has happened
+	public static boolean began_load_J_lisp;
+	// Quiet / No Banners / Diagnostic Info
+	public static boolean noinform = false;
+	// --help will turn on switch descriptions
+	public static boolean help = false;
+	// Skip compiled classes (Needed to be able to compile the system)
+	public static boolean nosystem = false;
+	// Skip the .abclrc (Needed to be able to compile the system)
+	public static boolean noinit = false;
+	// Assume (load "system.lisp") has happened
+	public static boolean began_load_system_lisp;
+	// Avoid any "early" SubL Support Features  (Needed to be able to compile the system)
+	public static boolean leanABCL = false;
+	// CYC needs ABCLs Argument Processor to run
+	public static boolean abclProcessArgs = true;
+	// ABCL has imported limited CYC functions
+	public static boolean began_cl_sees_cyc;
+	// Use CYC Error Handlers/Threading by default (This becomes true as CYC loads)
+	public static boolean isSublispDefault = false;
+	// Initialize SubL (This becomes true)
 	public static boolean needSubLMAIN = false;
-	public static boolean abclProcessArgs = false;
+	// Assume (init-subl) has happened
+	public static boolean began_init_subl;
+	// Wait for .initrc to (init-cyc) has happened
+	public static boolean noInitCyc = false;
+	// Avoid mistaken too early classloading
+	public static boolean commonSymbolsOK = false;
+	// Assume (init-cyc) has happened
+	public static boolean began_load_cyc_classes;
+	// Assume CYC has imported the CL
+	public static boolean began_cyc_sees_cl;
+	// System is ready to load KB
+	public static boolean finished_load_cyc_classes;
+	// World files mentioned on cmdline
+	public static boolean hasCycCmdlineInits = false;
+	// Assume (init-kb) has happened
+	public static boolean began_load_kb;
+	// Assume (init-cyc-server) has happened
+	public static boolean began_init_cyc_server;
+	// Load all Tactics before the KB
+	public static boolean cycPart2Early = false;
+	// Skip loading possibly broken/experiental tactics
+	public static boolean noCycPart2 = false;
 
-	public static boolean isSubLispBindingMode = false;
+	public static boolean OPENCYC = false;
+	public static boolean TINY_KB = false;
 
-	public static boolean guiRequested = false;
+	// Disallow all symbol redefinitions at runtime
+	public static boolean Never_REDEFINE = false;
+	// Allow all symbol redefinitions at runtime
+	public static boolean Always_REDEFINE = false;
+	// Allow workarounds until bugs are fixed
+	public static boolean BOOTY_HACKZ = true;
 
-	public static boolean isAjaxSwing = false;
+	// ABCL cmdline arguments
+	public static String[] passedArgs;
+	// CYC cmdline arguments
+	public static String[] cycCmdArgs = StringArrayZero;
+	public static String[] defaultCycCmdArgs = new String[] { "-f", "(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))" };
 
-	public static boolean keepGoing = false;
-
-	public static boolean useBeanDeskGUI = false;
-
+	// Disable Prolog Features
+	public static boolean noProlog = true;
+	// Disable JNI Prolog Features
+	public static boolean noPrologJNI = false;
+	// Track low level system operations in the KB or Prolog
+	public static boolean trackStructs = true;
+	// Disable Prolog tracking
+	public static boolean noPrologSync = true;
+	// Disable KB edits/tracking of system state
+	public static boolean noLispSync = true;
+	// Disable X11
+	public static boolean noGUI = false;
+	// Disable Runtime Scripting of CYC call-by-name
+	public static boolean noBSH = false;
+	// Use X11 JDesktop Pane
+	public static FeatureStatus useBeanDeskGUI = FeatureStatus.Unset;
+	// Desktop Init-script name
+	public static String desktopStatement = "sdesktop()";
+	// User requested X11
+	public static boolean guiRequested_Any = false;
+	// Enable WebSwing UIs
+	public static boolean usewebswing = false;
+	// Is _using_ WebSwing UI
+	public static boolean isWebSwing = false;
+	// Desktop Pain Manager
 	public static Class guiClass;
-
+	// --j Deskop/File manager requested
+	public static boolean guiJRequested = false;
+	// Used to decide how we got classloaded
+	public static Class firstMain = null;
+	// Which main we meant to use
 	public static String mainClass;
+	// Simulate WebSwing UI
+	public static boolean fakewebswing;
+	// General Debug Stream
+	public static PrintStream noticeStream = System.err;
 
-	public static boolean fakeajaxswing;
+	// Recording of random unhandled exceptions
+	public static final List<UncaughtException> unexpectedThrowables = new ArrayList<UncaughtException>(10);
+	public static final UncaughtExceptionHandler uncaughtExceptionHandler = new ABCLMainUncaughtExceptionHandler();
+
+	// Assumed Exit code
+	public static int exitCode = 0;
+	public static final Thread shutdownhook;
+	static {
+		shutdownhook = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					final PrintStream noticeStream = getNoticeStream();
+					if (shutdownRequested != null) {
+						noticeStream.println("Shutdown Hook Began from " + shutdownRequested);
+						showST(shutdownRequested.getStackTrace(), noticeStream);
+					} else {
+						shutdownRequested = shutdownhook;
+						noticeStream.println("Unknown caller");
+					}
+					reportUncaughts();
+					noticeStream.println("Shutdown Hook Completed");
+				} catch (Throwable e) {
+					noticeStream.println("Shutdown Hook Error");
+					showST(e, noticeStream);
+				}
+				waitForTermination = false;
+			}
+
+			@Override
+			public String toString() {
+				return "shutdownhook";
+			}
+		});
+		Runtime.getRuntime().addShutdownHook(shutdownhook);
+
+	}
+
+	private static UncaughtExceptionHandler initialUncaughtExceptionHandler;
+	static {
+		initialUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+		if (initialUncaughtExceptionHandler == null) {
+			Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
+		}
+
+	}
 
 	public static String[] extractOptions(Class c, String[] args) {
 		if (firstMain == null || Editor.class == c) {
@@ -315,28 +403,79 @@ public class Startup extends ABCLStatic {
 		return extractOptions(args);
 	}
 
-	public static String[] extractOptions(String[] args) {
-		final PrintStream to = getNoticeStream();
-
+	public static String[] extractMissedDsAndAllegro(String... args) {
+		ArrayList<String> av = new ArrayList<String>();
 		for (int i = 0; i < args.length; i++) {
 			String thisArg = args[i];
-			thisArg = thisArg.toLowerCase();
-			if (thisArg.startsWith("--no-")) {
-				args[i] = "--no" + thisArg.substring(5);
-			} else {
-				int equals = thisArg.indexOf("=");
-				if (thisArg.endsWith("=false") || thisArg.endsWith("=0")) {
-					args[i] = "--no" + thisArg.substring(0, equals - 1);
+			if (thisArg == null)
+				continue;
+
+			int equals = thisArg.indexOf("=");
+			if (thisArg.startsWith("-D") && equals > 0) {
+				equals -= 2;
+				thisArg = thisArg.substring(2);
+				String name = unquote(thisArg.substring(0, equals));
+				String value = unquote(thisArg.substring(equals + 1));
+				System.setProperty(name, value);
+				continue;
+			} else if (thisArg.startsWith("--main")) {
+				if (equals > 0) {
+					mainClass = unquote(thisArg.substring(equals + 1));
+				} else {
+					mainClass = unquote(args[++i]);
 				}
+				continue;
+			} else if (thisArg.startsWith("-cp")) {
+				if (equals > 0) {
+					IsolatedClassLoader.addCommonClassPath(unquote(thisArg.substring(equals + 1)));
+				} else {
+					IsolatedClassLoader.addCommonClassPath(unquote(args[++i]));
+				}
+				continue;
 			}
+
+			// AllegroCL args
+			if (thisArg.equals("-L")) {
+				thisArg = "--load";
+			} else if (thisArg.equals("-E")) {
+				thisArg = "--eval";
+			}
+
+			if (thisArg.startsWith("--no-")) {
+				thisArg = "--no" + thisArg.substring(5);
+			} else if (thisArg.startsWith("--disable-")) {
+				thisArg = "--no" + thisArg.substring(9);
+			} else if (thisArg.startsWith("--enable-")) {
+				thisArg = "--" + thisArg.substring(8);
+			}
+			if (thisArg.endsWith("=false") || thisArg.endsWith("=0")) {
+				thisArg = "--no" + thisArg.substring(0, equals - 1);
+			}
+
+			equals = thisArg.indexOf("=");
+			if (equals > 0) {
+				String name = unquote(thisArg.substring(0, equals));
+				av.add(name);
+				String value = unquote(thisArg.substring(equals + 1));
+				av.add(value);
+				continue;
+			}
+
+			thisArg = unquote(thisArg);
+
+			av.add(thisArg);
 		}
+
+		return av.toArray(StringArrayZero);
+	}
+
+	private static String[] extractCycArgs(String[] args) {
 		SubLMain me = SubLMain.me;
-		ArrayList<String> argsList = new ArrayList<String>();
+		ArrayList<String> av = new ArrayList<String>();
 		ArrayList<String> cycArgsList = new ArrayList<String>();
 		for (int i = 0, size = args.length; i < size; ++i) {
 			String arg = args[i];
 			if (SubLMain.noArgCommandLineArgs.contains(arg)) {
-				cycArgsList.add(arg);
 				me.argNameToArgValueMap.put(arg, Boolean.TRUE);
 			} else if (SubLMain.argRequiredCommandLineArgs.contains(args[i])) {
 				if (i == size)
@@ -347,267 +486,313 @@ public class Startup extends ABCLStatic {
 				cycArgsList.add(value);
 				me.argNameToArgValueMap.put(arg, value);
 			} else {
-				argsList.add(args[i]);
+				av.add(args[i]);
 				//Errors.error("Got invalid command line argument: " + args[i]);
 			}
 		}
+
 		if (cycArgsList.size() == 0) {
-			me.processCommandLineArgs(cycCmdArgs);
+			me.processCommandLineArgs(defaultCycCmdArgs);
 		} else {
-			final String[] array = cycArgsList.toArray(new String[cycArgsList.size()]);
-			cycCmdArgs = array;
+			cycCmdArgs = cycArgsList.toArray(StringArrayZero);
+		}
+		return av.toArray(StringArrayZero);
+	}
+
+	public static String[] extractOptions(String... args) {
+		final PrintStream to = getNoticeStream();
+
+		final List<String> orginalArgs = Arrays.asList(args);
+
+		args = extractCycArgs(args);
+
+		args = extractMissedDsAndAllegro(args);
+
+		if (!orginalArgs.contains("-cp")) {
+			IsolatedClassLoader.addDefaultJarsToClassPath(getPlatformDir());
 		}
 
-		if (argsList.contains("--fakeajaxswing")) {
-			argsList.add(0, "--ajaxswing");
-		}
+		List<String> av = new ArrayList(Arrays.asList(args));
 
-		if (argsList.remove("--ajaxswing")) {
-			if (to != null) {
-				to.println("PWD:" + (new File(".").getAbsolutePath()));
-			}
-			isAjaxSwing = true;
-			noExit = true;
-			argsList.add(0, "--gui");
-			argsList.add(0, "--noj");
-			argsList.add(0, "--rcyc");
-			enableAjaxSwing();
-		}
+		Label_argList: do {
 
-		if (argsList.remove("--gui")) {
-			keepGoing = true;
-			guiRequested = true;
-			useBeanDeskGUI = true;
-			argsList.add(0, "--j");
-			enableAllCWD();
-			if (to != null) {
-				to.println("PWD1:" + (new File(".").getAbsolutePath()));
+			if (av.remove("--headless") || av.remove("--nogui")) {
+				noGUI = true;
 			}
 
-		}
-		if (argsList.remove("--j")) {
-			Interpreter.jlisp = true;
-		}
-		if (argsList.remove("--noj")) {
-			Interpreter.jlisp = false;
-		}
-
-		if (argsList.remove("--abcl")) {
-			argsList.add(0, "--lisp");
-		}
-		if (argsList.remove("--lisp") || argsList.contains("--ansi")) {
-			isSublispDefault = false;
-			abclProcessArgs = true;
-			noProlog = true;
-			noinit = false;
-			nosystem = false;
-			//noPrologJNI = false;
-			noBSH = true;
-			Main.setSubLisp(false);
-			argsList.add(0, "--nocyc");
-			argsList.add(0, "--nocyc2");
-			argsList.add(0, "--noprolog");
-		}
-
-		if (argsList.remove("--fakeajaxswing")) {
-			fakeajaxswing = true;
-		}
-
-		if (argsList.remove("--main-thread")) {
-			Main.useMainThread = true;
-		}
-		if (argsList.remove("--norc")) {
-			Interpreter.noinit = true;
-		}
-		if (argsList.remove("--noinit")) {
-			Interpreter.noinit = true;
-			argsList.add(0, "--noprolog");
-		}
-		if (argsList.remove("--noinform")) {
-			Interpreter.noinform = true;
-		}
-		if (argsList.remove("--nosystem")) {
-			Interpreter.nosystem = true;
-		}
-		if (argsList.remove("--noprolog") || argsList.remove("--noswi")) {
-			noPrologJNI = true;
-		}
-		if (argsList.remove("--nocyc2")) {
-			noCycPart2 = true;
-		}
-		if (argsList.remove("--opencyc")) {
-			SubLMain.OPENCYC = true;
-			isSublispDefault = true;
-			try {
-				UpdateZip.updateUnits("5022");
-			} catch (Throwable e) {
-				e.printStackTrace(to);
-				if (!keepGoing)
-					throw new RuntimeException(" UpdateZip.updateUnits throw " + e, e);
+			if (av.remove("--guij")) {
+				guiJRequested = true;
 			}
-		}
-		if (argsList.remove("--rcyc2")) {
-			argsList.add("--rcyc");
-			argsList.add("--cyc2");
-		}
 
-		if (argsList.remove("--rcyc")) {
-			SubLMain.OPENCYC = false;
-			needSubLMAIN = true;
-			isSublispDefault = true;
-			argsList.add("--cyc");
-			try {
-				UpdateZip.updateUnits("7166");
-			} catch (Throwable e) {
-				e.printStackTrace();
-				if (!keepGoing)
-					throw new RuntimeException(" UpdateZip.updateUnits throw " + e, e);
+			if (av.remove("--all")) {
+				pushNew(av, "--rcyc");
+				pushNew(av, "--cyc");
+				pushNew(av, "--j");
+				pushNew(av, "--lispsync");
+				pushNew(av, "--prologsync");
+				pushNew(av, "--beandesk");
+				pushNew(av, "--prolog");
+				pushNew(av, "--telnetd");
+				pushNew(av, "--web");
+				keepGoing = true;
+				leanABCL = false;
+				//noinit = false;
 			}
-		}
-		if (argsList.remove("--cyc2")) {
-			cycPart2Early = true;
-			argsList.add("--cyc");
-		}
-		if (argsList.remove("--cyc")) {
-			Main.noBSHGUI = false;
-			needSubLMAIN = true;
-			Main.needABCL = false;
-			isSublispDefault = true;
-			SubLMain.noInitCyc = false;
-		}
-		if (argsList.remove("--nocyc")) {
-			needSubLMAIN = false;
-			noInitCyc = true;
-			isSublispDefault = false;
 
-		}
-		if (argsList.remove("--fromprolog")) {
-			//disablePrologSync = false;
-			started_from_prolog = true;
-			noPrologJNI = false;
-			noProlog = false;
-		}
-		if (argsList.remove("--prologsync")) {
-			disablePrologSync = false;
-			trackStructs = true;
-			noPrologJNI = false;
-			//			JPL.init();
-			//			Query.oneSolution("ensure_loaded(library(jpl))");
-			//			Query.oneSolution("interactor");
-			/// Query.oneSolution("jcall('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',mainFromProlog,[])");
-
-		}
-		if (argsList.remove("--noprologsync")) {
-			disablePrologSync = true;
-		}
-
-		if (argsList.remove("--lispsync")) {
-			disableLispSync = false;
-			trackStructs = true;
-		}
-		if (argsList.remove("--nolispsync")) {
-			disableLispSync = true;
-		}
-
-		if (argsList.remove("--headless") || argsList.remove("--nogui")) {
-			noGUI = true;
-			noBSHGUI = true;
-		}
-		if (argsList.remove("--prolog")) {
-			noProlog = false;
-			noPrologJNI = false;
-		}
-		if (argsList.remove("--beandesk")) {
-			noBSHGUI = false;
-			useBeanDeskGUI = true;
-		}
-
-		if (!argsList.contains("-cp")) {
-			IsolatedClassLoader.addDefaultJarsToClassPath(System.getProperty("user.dir", "."));
-		}
-		if (!noInitCyc || needSubLMAIN) {
-			try {
-				IsolatedClassLoader.configChecks();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (av.remove("--telnetd")) {
+				TelnetD.main(StringArrayZero);
 			}
-		}
-		String[] argsNew = jiggleEvalArgs(argsList.toArray(new String[argsList.size()]));
 
-		for (int i = 0; i < argsNew.length; i++) {
-			if (argsNew[i].equals("-L")) {
-				argsNew[i] = "--load";
+			if (av.contains("--fakewebswing")) {
+				pushNew(av, "--webswing");
+				fakewebswing = true;
+			}
+
+			if (av.remove("--web")) {
+				USE_TOMCAT = true;
+			}
+
+			if (av.remove("--noweb")) {
+				USE_TOMCAT = false;
+			}
+
+			if (av.remove("--webswing")) {
+				if (to != null) {
+					to.println("PWD:" + (new File(".").getAbsolutePath()));
+				}
+				isWebSwing = true;
+				noExit = true;
+				pushNew(av, "--gui");
+				pushNew(av, "--noj");
+				pushNew(av, "--rcyc");
+				noExit = true;
+				enablewebswing();
+			}
+
+			if (av.remove("--gui")) {
+				keepGoing = true;
+				guiRequested_Any = true;
+				useBeanDeskGUI = FeatureStatus.Requested;
+				//pushNew(av, "--j");
+				enableAllCWD();
+				if (to != null) {
+					to.println("PWD1:" + (new File(".").getAbsolutePath()));
+				}
+
+			}
+
+			if (av.remove("--noj")) {
+				Interpreter.jlisp_requested = false;
+			}
+
+			if (av.contains("--compile-system")) {
+				pushNew(av, "--lisp");
+			}
+
+			if (av.remove("--abcl")) {
+				pushNew(av, "--lisp");
+			}
+
+			if (av.remove("--lisp")) {
+				isSublispDefault = false;
+				abclProcessArgs = true;
+				noProlog = true;
+				leanABCL = true;
+				//noinit = false;
+				//nosystem = false;
+				//noPrologJNI = false;
+				// noBSH = true;
+				Main.setSubLisp(false);
+				//pushNew(av, "--nocyc");
+				//pushNew(av, "--nocyc2");
+				//pushNew(av, "--noprolog");
+				//continue Label_argList;
+			}
+
+			if (av.remove("--fakewebswing")) {
+				fakewebswing = true;
+			}
+
+			if (av.remove("--main-thread")) {
+				Main.useMainThread = true;
+			}
+			if (av.remove("--nomain-thread")) {
+				Main.useMainThread = false;
+			}
+
+			if (av.contains("--nosystem")) {
+				pushNew(av, "--noprolog");
+				nosystem = true;
+				leanABCL = true;
+			}
+
+			// CYC STUFFF
+			if (av.remove("--nocyc2")) {
+				noCycPart2 = true;
+			}
+
+			if (av.remove("--opencyc")) {
+				SubLMain.OPENCYC = true;
+				isSublispDefault = true;
+				try {
+					UpdateZip.updateUnits("5022");
+				} catch (Throwable e) {
+					printStackTrace(e);
+					if (!keepGoing)
+						throw new RuntimeException(" UpdateZip.updateUnits throw " + e, e);
+				}
+			}
+
+			if (av.remove("--rcyc2")) {
+				pushNew(av, "--rcyc");
+				pushNew(av, "--cyc2");
+				continue Label_argList;
+			}
+
+			if (av.remove("--rcyc")) {
+				SubLMain.OPENCYC = false;
+				needSubLMAIN = true;
+				isSublispDefault = true;
+				noExit = true;
+				pushNew(av, "--cyc");
+				try {
+					UpdateZip.updateUnits("7166");
+				} catch (Throwable e) {
+					printStackTrace(e);
+					if (!keepGoing)
+						throw new RuntimeException(" UpdateZip.updateUnits throw " + e, e);
+				}
+			}
+
+			if (av.remove("--cyc2")) {
+				cycPart2Early = true;
+				pushNew(av, "--cyc");
+			}
+
+			if (av.remove("--cyc")) {
+				needSubLMAIN = true;
+				isSublispDefault = true;
+				SubLMain.noInitCyc = false;
+			}
+			if (av.remove("--nocyc")) {
+				needSubLMAIN = false;
+				noInitCyc = true;
+				isSublispDefault = false;
+			}
+
+			// PROLOG STUFFF
+
+			if (av.remove("--noprolog") || av.remove("--noswi")) {
 				noPrologJNI = true;
-			} else if (argsNew[i].equals("-E"))
-				argsNew[i] = "--eval";
-		}
+			}
+
+			if (av.remove("--fromprolog")) {
+				//disablePrologSync = false;
+				app_started_from_prolog = true;
+				noPrologJNI = false;
+				noProlog = false;
+			}
+
+			if (av.remove("--prologsync")) {
+				noPrologSync = false;
+				trackStructs = true;
+				noPrologJNI = false;
+				//			JPL.init();
+				//			Query.oneSolution("ensure_loaded(library(jpl))");
+				//			Query.oneSolution("interactor");
+				/// Query.oneSolution("jcall('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',mainFromProlog,[])");
+
+			}
+
+			if (av.remove("--noprologsync")) {
+				noPrologSync = true;
+			}
+
+			if (av.remove("--lispsync")) {
+				noLispSync = false;
+				trackStructs = true;
+			}
+
+			if (av.remove("--nolispsync")) {
+				noLispSync = true;
+			}
+
+			if (av.remove("--prolog")) {
+				noProlog = false;
+				noPrologJNI = false;
+			}
+
+			if (!leanABCL) {
+				if (!av.contains("-cp")) {
+					final String baseFrom = System.getProperty("user.dir", ".");
+					to.println("addDefaultJarsToClassPath from " + baseFrom);
+					IsolatedClassLoader.getCommonClassLoader().addDefaultJarsToClassPath(baseFrom);
+				}
+			}
+			if (av.remove("--beanshell")) {
+				extractOptions("--lisp");
+				waitForTermination = true;
+				desktopStatement = "desktop();";
+				useBeanDeskGUI = FeatureStatus.Requested;
+				break;
+			}
+			if (av.remove("--beandesk")) {
+				waitForTermination = true;
+				desktopStatement = "sdesktop();";
+				useBeanDeskGUI = FeatureStatus.Requested;
+				break;
+			}
+
+			if (leanABCL || ((av.contains("--nosystem") || av.contains("--noinit") || noinform) && !needSubLMAIN)) {
+				leanABCL = true;
+				noExit = false;
+			}
+
+			if (!leanABCL) {
+				try {
+					IsolatedClassLoader.configChecks();
+				} catch (Throwable e) {
+					printStackTrace(e);
+				}
+			}
+
+			break;
+		} while (true);
+
+		String[] argsNew = jiggleEvalArgs(av.toArray(StringArrayZero));
+
 		if (argsNew.length > 0) {
 			final java.io.File file = new java.io.File(argsNew[0]);
 			if (file.exists() && file.isFile() && file.canRead()) {
-				argsList = new ArrayList<String>(Arrays.asList(argsNew));
-				argsList.add(0, "--load");
-				argsNew = argsList.toArray(new String[argsList.size()]);
+				av = new ArrayList<String>(Arrays.asList(argsNew));
+				pushNew(av, "--load");
+				argsNew = av.toArray(StringArrayZero);
 			}
-		}
-
-		argsList = new ArrayList<String>();
-		boolean gotSomeDs = false;
-		for (int i = 0; i < argsNew.length; i++) {
-			String thisArg = args[i];
-			if (thisArg != null) {
-				int equals = thisArg.indexOf("=");
-				if (thisArg.startsWith("-D") && equals > 0) {
-					gotSomeDs = true;
-					equals = -2;
-					thisArg = thisArg.substring(2);
-					String name = unquote(thisArg.substring(0, equals - 1));
-					String value = unquote(thisArg.substring(equals + 1));
-					System.setProperty(name, value);
-				} else if (thisArg.startsWith("--main")) {
-					gotSomeDs = true;
-					if (equals > 0) {
-						mainClass = unquote(thisArg.substring(equals + 1));
-					} else {
-						mainClass = unquote(args[++i]);
-					}
-				} else if (thisArg.startsWith("-cp")) {
-					gotSomeDs = true;
-					if (equals > 0) {
-						IsolatedClassLoader.addToClassPath(unquote(thisArg.substring(equals + 1)));
-					} else {
-						IsolatedClassLoader.addToClassPath(unquote(args[++i]));
-					}
-				} else if (thisArg.startsWith("--bsh")) {
-					gotSomeDs = true;
-					try {
-						if (equals > 0) {
-							bsh_eval(unquote(thisArg.substring(equals + 1)));
-						} else {
-							bsh_eval(unquote(args[++i]));
-						}
-					} catch (EvalError e) {
-						e.printStackTrace();
-						addUncaught(e);
-					}
-				} else {
-					argsList.add(thisArg);
-				}
-			}
-		}
-		if (gotSomeDs) {
-			argsNew = argsList.toArray(new String[argsList.size()]);
 		}
 
 		passedArgs = argsNew;
 
-		if (useBeanDeskGUI) {
+		try {
+			if (!leanABCL) {
+				startServers(0);
+			}
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			printStackTrace(e);
+		}
+
+		if (useBeanDeskGUI == FeatureStatus.Requested) {
 			bsh_desktop();
+			useBeanDeskGUI = FeatureStatus.Begun;
 			needIOConsole = false;
+
 		} else if (needIOConsole) {
-			SystemCurrent.setupIO();
-			SystemCurrent.attachConsole();
-			SystemCurrent.takeOwnerShip();
+
+			if (!leanABCL) {
+				//SystemCurrent.setupIO();
+				SystemCurrent.attachConsole(true);
+				//SystemCurrent.takeOwnerShip();
+			}
 		}
 
 		if (mainClass != null) {
@@ -620,13 +805,44 @@ public class Startup extends ABCLStatic {
 				method.invoke(null, parameters);
 
 			} catch (Throwable e) {
-				e.printStackTrace();
+				printStackTrace(e);
 				addUncaught(e);
 			}
 		}
-		if (mainClass != null)
+
+		if (leanABCL && !waitForTermination) {
+
+			Runtime.getRuntime().removeShutdownHook(shutdownhook);
+		}
+
+		while (waitForTermination) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				printStackTrace(e);
+				break;
+			}
+		}
+
+		if (mainClass != null) {
+			// assume already ran
 			exit(exitCode);
+		}
+
 		return argsNew;
+	}
+
+	private static void startServers(int portOffset) throws IOException {
+		final bsh.Interpreter ensureBSH = BeanShellCntrl.ensureBSH();
+		final NameSpace nameSpace = ensureBSH.getNameSpace();
+		final Sessiond sessiond = new Sessiond(nameSpace, portOffset + 4123);
+		sessiond.start();
+		SystemCurrent.recheckStdIO();
+		LispClient.startServer(portOffset + 3223);
+		if (USE_TOMCAT) {
+			start_servlet(portOffset + 3603);
+		}
+		SystemCurrent.recheckStdIO();
 	}
 
 	/**
@@ -666,14 +882,7 @@ public class Startup extends ABCLStatic {
 		Main.isNoDebug.set(isNoDebug);
 	}
 
-	public static int lispInstances = 0;
-	// public static boolean commonSymbolsOK;
-	public static ThreadLocal<Boolean> globalContext = new ThreadLocal<Boolean>() {
-		@Override
-		protected Boolean initialValue() {
-			return false;
-		};
-	};
+	public static AtomicInteger lispInstances = new AtomicInteger(0);
 
 	public static InheritableThreadLocal<Boolean> isSubLisp = new InheritableThreadLocal<Boolean>() {
 		@Override
@@ -688,14 +897,59 @@ public class Startup extends ABCLStatic {
 		}
 	};
 
-	static JLisp jLispHeadless;
+	static JLisp headless_j_object_instance;
 
 	@LispMethod
 	public static int init_jlisp() {
-		if (jLispHeadless == null) {
-			jLispHeadless = JLisp.jlispHeadless();
+		if (headless_j_object_instance == null) {
+			headless_j_object_instance = JLisp.jlispHeadless();
 		}
-		return jLispHeadless.port;
+		return headless_j_object_instance.port;
+	}
+
+	@LispMethod
+	public static Interpreter init_lisp() {
+		synchronized (Interpreter.globalLock) {
+			synchronized (StartupLock) {
+				boolean wasleanABCL = leanABCL;
+				boolean wasNeedSubLMAIN = needSubLMAIN;
+				if (Interpreter.globalInterpreter == null) {
+					try {
+						needSubLMAIN = false;
+						MainThreaded = true;
+						noExit = true;
+						leanABCL = true;
+						final Class c = Class.forName("org.armedbear.lisp.Main");
+						//c.getMethod("main", String[].class).invoke(null, new Object[] { new String[] { "--noinit", "--lisp" } });
+						String canonicalPath = "./";
+						try {
+							canonicalPath = new File(canonicalPath).getCanonicalPath();
+						} catch (IOException e) {
+							canonicalPath = new File(canonicalPath).getAbsolutePath();
+						}
+						final boolean firstInstance = (lispInstances.get() == 0);
+						final String fcanonicalPath = canonicalPath;
+						//passedArgs = new String[] {}; // "--load", "cyc"
+						//final String[] args = passedArgs;
+						final InputStream inputStream = SystemCurrent.mustIn();
+						final OutputStream outputStream = SystemCurrent.mustOut();
+						Interpreter interp = Interpreter. //
+								createNewLispInstance(inputStream, outputStream, //
+										fcanonicalPath, Version.getVersion(), jlisp_requested, //
+										passedArgs, firstInstance);
+						globalInterpreter = interp;
+
+						//t.run();// Main.runThread(t);
+					} catch (Exception e) {
+						printStackTrace(e);
+					} finally {
+						leanABCL = wasleanABCL;
+						needSubLMAIN = wasNeedSubLMAIN;
+					}
+				}
+				return Interpreter.globalInterpreter;
+			}
+		}
 	}
 
 	@LispMethod
@@ -713,34 +967,94 @@ public class Startup extends ABCLStatic {
 	}
 
 	public static String[] copyParams(String[] args) {
-		List<String> argsList = new ArrayList<String>(Arrays.asList(args));
-		String[] argsNew = argsList.toArray(new String[argsList.size()]);
+		List<String> av = new ArrayList<String>(Arrays.asList(args));
+		String[] argsNew = av.toArray(StringArrayZero);
 		return argsNew;
 	}
 
-	public static void enableAjaxSwing() {
+	public static void enablewebswing() {
+		getPlatformDir();
+		usewebswing = true;
+		ClassLoader.getSystemClassLoader();
+		final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+		if (contextClassLoader != null) {
+			if ((contextClassLoader.getClass().getName().contains("Swing"))) {
+				isWebSwing = true;
+			}
+		}
 		enableAllCWD();
 	}
 
-	public static void enableAllCWD() {
+	public static String getPlatformDir() {
 
-		configWebSwing();
+		if (platformDir == null) {
+			String pwd = System.getProperty("larkc.home", ".");
+			File f = new File(pwd);
+			try {
+				f = new File(f.getCanonicalPath());
+				if (f.getName().equals("bin")) {
+					f = f.getParentFile();
+				}
+			} catch (Throwable e) {
+				f = new File(f.getAbsolutePath());
+				if (f.getName().equals("bin")) {
+					f = f.getParentFile();
+				}
+			}
+			pwd = f.getAbsolutePath();
+			System.setProperty("larkc.home", pwd);
+			platformDir = pwd;
 
-		String pwd = System.getProperty("ajaxswing.home", System.getProperty("catalina.home", "."));
-		try {
-			pwd = new File(pwd).getCanonicalPath();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			pwd = new File(pwd).getAbsolutePath();
 		}
-		System.setProperty("ajaxswing.home", System.getProperty("ajaxswing.home", pwd));
-		//info("ajaxswing.home=" + System.getProperty("ajaxswing.home"));
-		System.setProperty("catalina.home", System.getProperty("catalina.home", pwd));
+		return platformDir;
+	}
 
-		System.setProperty("user.dir", pwd);
+	private static String platformDir;
+
+	public static void enableAllCWD() {
+		String pwd = platformDir = getPlatformDir();
+
+		configwebswing();
+		String wshome = System.getProperty("webswing.home", null);
+		String hcatalina = System.getProperty("webswing.home", null);
+		new File(pwd).listFiles(new FileFilter() {
+
+			@Override
+			public boolean accept(File pathname) {
+				if (!pathname.isDirectory())
+					return false;
+				if (wshome == null) {
+					if (pathname.getName().toLowerCase().startsWith("webswing")) {
+						String setstr = pathname.getAbsolutePath();
+						System.setProperty("webswing.home", setstr);
+						return true;
+					}
+				}
+				if (hcatalina == null) {
+					if (pathname.getName().toLowerCase().startsWith("tomcat")) {
+						String setstr = pathname.getAbsolutePath();
+						System.setProperty("catalina.home", setstr);
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		System.setProperty("catalina.home", System.getProperty("catalina.home", pwd));
+		System.setProperty("webswing.home", System.getProperty("webswing.home", pwd));
+
+		if (!leanABCL)
+			System.setProperty("user.dir", pwd);
+
 		System.setProperty("user.home", pwd);
 		System.setProperty("larkc.home", pwd);
 
+		String s = System.getProperty("java.library.path");
+		s = s.replaceAll("\\" + File.pathSeparator + "\\" + File.pathSeparator, File.pathSeparator);
+		System.setProperty("java.library.path", new File("bin").getAbsolutePath() + //
+				File.pathSeparator + s);
+		//s = System.getProperty("java.library.path");
 		//info("catalina.home=" + System.getProperty("catalina.home"));
 	}
 
@@ -750,7 +1064,7 @@ public class Startup extends ABCLStatic {
 	 */
 	public static boolean isUnderAjax() {
 		// TODO Auto-generated method stub
-		return isAjaxSwing;
+		return isWebSwing;
 	}
 
 	public static void instrumentClassPath() {
@@ -764,6 +1078,7 @@ public class Startup extends ABCLStatic {
 	public static void showClassLoaderInfo(Object term) {
 		Class termClass = term.getClass();
 		ClassLoader cl = termClass.getClassLoader();
+		bp();
 	}
 
 	/**
@@ -783,33 +1098,34 @@ public class Startup extends ABCLStatic {
 			}
 			lastArg = args[i];
 		}
-		List<String> argsList = new ArrayList<String>();
+		List<String> av = new ArrayList<String>();
 		for (int i = 0; i < args.length; i++) {
 			String thisArg = args[i];
 			if (thisArg != null) {
-				argsList.add(thisArg);
+				av.add(thisArg);
 			}
 		}
-		String[] argsNew = argsList.toArray(new String[argsList.size()]);
+		String[] argsNew = av.toArray(StringArrayZero);
 		return argsNew;
 	}
 
 	public static String[] prependArgs(String first, String[] args) {
-		List<String> argsList = new ArrayList<String>();
-		argsList.add(first);
+		List<String> av = new ArrayList<String>();
+		pushNew(av, first);
 		for (int i = 0; i < args.length; i++) {
 			String thisArg = args[i];
 			if (thisArg != null) {
-				argsList.add(thisArg);
+				av.add(thisArg);
 			}
 		}
-		String[] argsNew = argsList.toArray(new String[argsList.size()]);
+		String[] argsNew = av.toArray(StringArrayZero);
 		return argsNew;
 	}
 
+	// Breakpoint to set in IDE
 	public static void bp() {
-		if (false)
-			;
+		if (false) {
+		}
 		// BeanBowlGUI.startBeanBowl();
 	}
 
@@ -828,21 +1144,18 @@ public class Startup extends ABCLStatic {
 
 	public static BeanBowl bowl = new BeanBowl();
 
-	public static boolean calledStartAppdatper = false;
-	public static boolean calledStartDmiles = false;
-	public static boolean called_init_swipl = false;
-	public static Boolean started_from_prolog = null;
-	public static Object dbrowser;
-	static Container desktop;
-	static Editor editor = null;
-	public static boolean began_init_subl;
-	public static boolean inited_cyc;
-	public static boolean inited_kb;
-	public static boolean inited_cyc_sees_cl;
-	public static boolean inited_cl_sees_cyc;
-	public static boolean inited_cyc_server;
-	public static boolean inited_cyc_complete;
-	public static boolean inited_swipl_server;
+	public static boolean began_ui_inspector = false;
+	public static Object ui_inspector_object_instance = null;
+
+	public static boolean began_bsh_desktop = false;
+	public static Container desktop_pain_object_instance = null;
+
+	public static Editor j_desktop_object_instance = null;
+
+	public static boolean began_init_swipl = false;
+	public static boolean began_init_swipl_server = false;
+	public static Boolean app_started_from_prolog = null;
+
 	// final public static BeanBowlGUI gui = BeanBowlGUI.getDefaultFrame();
 	private static Thread Owner;
 	final public static Map<String, Symbol> prologMethods = new HashMap();
@@ -869,7 +1182,7 @@ public class Startup extends ABCLStatic {
 				synchronized (StartupLock) {
 					Term.Enabled = true;
 					SubLMain.commonSymbolsOK = true;
-					init_cyc_classes();
+					load_cyc();
 				}
 				cdl.countDown();
 			});
@@ -881,7 +1194,7 @@ public class Startup extends ABCLStatic {
 		try {
 			cdl.await();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			printStackTrace(e);
 		}
 	}
 
@@ -900,9 +1213,9 @@ public class Startup extends ABCLStatic {
 		if (SubLMain.Never_REDEFINE)
 			return;
 		synchronized (StartupLock) {
-			if (inited_cl_sees_cyc)
+			if (began_cl_sees_cyc)
 				return;
-			inited_cl_sees_cyc = true;
+			began_cl_sees_cyc = true;
 			// if(true) return ;
 			// SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
 			Lisp.PACKAGE_SYS.ALLOW_INHERIT_CONFLICTS = true;
@@ -934,9 +1247,9 @@ public class Startup extends ABCLStatic {
 		if (SubLMain.Never_REDEFINE)
 			return;
 		synchronized (StartupLock) {
-			if (inited_cyc_sees_cl)
+			if (began_cyc_sees_cl)
 				return;
-			inited_cyc_sees_cl = true;
+			began_cyc_sees_cl = true;
 			// PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
 			// PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, false);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_JAVA, true);
@@ -946,24 +1259,76 @@ public class Startup extends ABCLStatic {
 		}
 	}
 
-	static public String addObject(String named, Object value) {
+	public static String addObject(String named, Object value) {
 		return addObject(named, value, false);
 	}
 
-	static public String addObject(String named, Object value, boolean showNow) {
+	public static String addObject(String named, Object value, boolean showNow) {
 		bowl.addBean(named, value);
 		if (showNow)
 			showObject(value);
 		return bowl.getWrapper(value).getName();
 	}
 
-	static public void addSingleton(Object self) {
+	public static void addSingleton(Object self) {
 		if (self == null) {
 			Errors.warn("null singleton");
 			return;
 		}
 		Class isc = self.getClass();
 		setSingleton(isc, self);
+	}
+
+	public static void printStackTrace(Throwable t) {
+		final PrintStream stStream = getNoticeStream();
+		String info = getStackTraceString(t);
+		bp();
+		printStackTrace(t, stStream);
+
+	}
+
+	/**
+	 * @param t
+	 * @param stStream
+	 */
+	public static void printStackTrace(Throwable t, final PrintStream ps) {
+		Set<Throwable> dejaVu = Collections.newSetFromMap(new IdentityHashMap<Throwable, Boolean>());
+
+		while (t != null) {
+			{
+				if (!dejaVu.contains(t)) {
+					dejaVu.add(t);
+					showST(t, ps);
+				}
+			}
+			for (Throwable s : t.getSuppressed()) {
+				if (!dejaVu.contains(s)) {
+					dejaVu.add(s);
+					showST(s, ps);
+
+				}
+			}
+			Throwable t2 = t.getCause();
+			if (t2 == t) {
+				t2 = null;
+			}
+			t = t2;
+		}
+	}
+
+	/*s*
+	 * @param t
+	 * @param ps
+	 */
+	public static void showST(Throwable t, final PrintStream ps) {
+		SystemCurrent.mustShow = true;
+		ps.println("showST: " + t);
+		showST(t.getStackTrace(), ps);
+	}
+
+	public static void showST(StackTraceElement[] trace, final PrintStream ps) {
+		for (StackTraceElement traceElement : trace)
+			ps.println("\tat " + traceElement);
 	}
 
 	/**
@@ -985,7 +1350,7 @@ public class Startup extends ABCLStatic {
 
 			/*
 			 * (non-Javadoc)
-			 * 
+			 *
 			 * @see java.lang.Object#finalize()
 			 */
 			@Override
@@ -993,12 +1358,12 @@ public class Startup extends ABCLStatic {
 				super.finalize();
 			}
 		};
-		string.append("" + t.getClass() + ": " + t);
+		string.append("Begin: " + t.getClass() + ": " + t);
 		PrintStream ps = new PrintStream(outputStream);
-		t.printStackTrace(ps);
+		printStackTrace(t, ps);
 		ps.flush();
 		ps.close();
-		string.append("" + t.getClass() + ": " + t.getMessage() + " " + t);
+		string.append("End: " + t.getClass() + ": " + t.getMessage() + " " + t);
 		return string.toString();
 	}
 
@@ -1167,23 +1532,35 @@ public class Startup extends ABCLStatic {
 		}).call();
 	}
 
+	static final CountDownLatch cyc_cdl = new CountDownLatch(1);
+
+	protected static void wait_for_cyc() {
+		try {
+			cyc_cdl.await();
+		} catch (InterruptedException e) {
+			throwException(e);
+		}
+	}
+
 	@LispMethod
 	public static LispObject cyc_repl_no_suspend() {
 		boolean wasSubLisp = Main.isSubLisp();
 		LispObject io = Symbol.TERMINAL_IO.symbolValue();
 		LispObject out = Symbol.STANDARD_OUTPUT.symbolValue();
 		LispObject in = Symbol.STANDARD_INPUT.symbolValue();
-		init_cyc_classes();
+		load_cyc();
+
+		Main.noExit = true;
 		SubLReader SLR = ensureMainReader();
 		boolean wasQuitOnExit = SLR.quitOnExit;
 		boolean was_shouldReadloopExit = SLR.shouldReadloopExit;
 		boolean was_noExit = Main.noExit;
-		SLR.quitOnExit = false;
-		SLR.shouldReadloopExit = false;
-		Main.noExit = true;
 		SubLPackage prevPackage = Lisp.getCurrentPackage();
 		try {
+			wait_for_cyc();
 			try {
+				SLR.quitOnExit = false;
+				SLR.shouldReadloopExit = false;
 				if (false && SubLMain.shouldRunReadloopInGUI()) {
 					SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
 				}
@@ -1249,47 +1626,17 @@ public class Startup extends ABCLStatic {
 		return SLR;
 	}
 
-	public static void importEverywhere(Operator oper, boolean reexport) {
+	public static void importEverywhere(Operator oper) {
 		final Symbol lispObject = oper.getLambdaName().toSymbol().toLispObject();
-		importEverywhere(lispObject, reexport);
+		importEverywhere(lispObject);
 	}
 
-	public static void importEverywhere(Symbol symbol, boolean reexport) {
+	public static void importEverywhere(Symbol symbol) {
 		Lisp.PACKAGE_CYC.importSymbol(symbol);
-		if (reexport)
-			Lisp.PACKAGE_CYC.export(symbol);
 		Lisp.PACKAGE_SUBLISP.importSymbol(symbol);
 		Lisp.PACKAGE_EXT.importSymbol(symbol);
-		if (reexport)
-			Lisp.PACKAGE_EXT.export(symbol);
+		Lisp.PACKAGE_EXT.export(symbol);
 		Lisp.PACKAGE_CL_USER.importSymbol(symbol);
-	}
-
-	public static Method findMethod(Method[] staticMethods, Object[] javaArgs) {
-		int argCount = javaArgs.length;
-		Method result = null;
-		Method macro = null;
-		for (int i = staticMethods.length; i-- > 0;) {
-			Method method = staticMethods[i];
-			if (method == null || method == multiMethod) {
-				continue;
-			}
-			final Class<?>[] parameterTypes = method.getParameterTypes();
-			final int parameterTypeslength = parameterTypes.length;
-			if (parameterTypeslength != argCount) {
-				continue;
-			}
-			Class<?>[] methodTypes = parameterTypes;
-			if (!Java.isApplicableMethod(methodTypes, javaArgs)) {
-				continue;
-			}
-			if (result == null || Java.isMoreSpecialized(methodTypes, result.getParameterTypes())) {
-				result = method;
-			}
-		}
-		if (result == null)
-			return macro;
-		return result;
 	}
 
 	/**
@@ -1300,7 +1647,8 @@ public class Startup extends ABCLStatic {
 		Package pkg = null;
 		String suggest = null;
 		String suggestPackage = null;
-		boolean exported = true;
+		boolean exportFromPackage = lm.exported();
+		boolean importEverywhere = !lm.exported();
 		if (lm != null) {
 			suggestPackage = lm.packageName();
 			if (suggestPackage != null && suggestPackage.length() == 0)
@@ -1322,6 +1670,10 @@ public class Startup extends ABCLStatic {
 					js = js.substring(2);
 					pkg = Lisp.PACKAGE_CL;
 				}
+				if (js.startsWith("sl_")) {
+					js = js.substring(2);
+					pkg = Lisp.PACKAGE_SUBLISP;
+				}
 				if (js.startsWith("user_")) {
 					js = js.substring(4);
 					pkg = Lisp.PACKAGE_CL_USER;
@@ -1338,18 +1690,23 @@ public class Startup extends ABCLStatic {
 				js = "+" + js.substring(1, js.length() - 2) + "+";
 			}
 		}
+
 		js = js.toUpperCase();
-		if (suggestPackage != null)
+		if (suggestPackage != null) {
 			pkg = Packages.findPackage(suggestPackage).toPackage().toLispObject();
-		if (pkg == null)
+		}
+		if (pkg == null) {
 			pkg = Lisp.getCurrentPackage();
+		}
 		Symbol sym = null;
-		if (!exported) {
+		if (!exportFromPackage) {
 			sym = pkg.intern(js);
 		} else {
 			sym = pkg.internAndExport(js);
 		}
-		importEverywhere(sym, exported);
+		if (importEverywhere) {
+			importEverywhere(sym);
+		}
 		return sym;
 	}
 
@@ -1369,13 +1726,16 @@ public class Startup extends ABCLStatic {
 	}
 
 	@LispMethod
-	public static void init_cyc_classes() {
+	static void load_cyc() {
 		synchronized (StartupLock) {
-			if (inited_cyc)
+			if (began_load_cyc_classes)
 				return;
-			inited_cyc = true;
+			began_load_cyc_classes = true;
 		}
+		if (leanABCL)
+			return;
 		synchronized (StartupInitLock) {
+			enableAllCWD();
 			boolean wasSubLisp = Main.isSubLisp();
 			try {
 				Main.setSubLisp(true);
@@ -1385,22 +1745,18 @@ public class Startup extends ABCLStatic {
 					SubLPackage.setCurrentPackage("CYC");
 					SubLMain.initializeTranslatedSystems();
 					try {
-						SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
+						IsolatedClassLoader.suspendAdding = true;
+						start_servlet(3603);
 					} catch (Throwable ex) {
-						ex.printStackTrace();
-					}
-					try {
-						start_servlet();
-					} catch (Throwable ex) {
-						ex.printStackTrace();
+						printStackTrace(ex);
 					}
 					if (hasCycCmdlineInits)
 						SubLMain.handleInits();
 					SubLMain.handlePatches();
-					inited_cyc = true;
-					inited_cyc_complete = true;
+					began_load_cyc_classes = true;
+					finished_load_cyc_classes = true;
 				} catch (Throwable e) {
-					inited_cyc_complete = false;
+					began_load_cyc_classes = false;
 					throw doThrow(e);
 				} finally {
 					SubLPackage.setCurrentPackage(prevPackage);
@@ -1412,51 +1768,43 @@ public class Startup extends ABCLStatic {
 	}
 
 	@LispMethod
-	public static void start_servlet() {
+	public static void start_servlet(int port) {
+		if (leanABCL)
+			return;
 		try {
 			synchronized (StartupInitLock) {
-				init_cyc_classes();
+				load_cyc();
 				SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
-				web_utilities.start_servlet_container(SubLObjectFactory.makeInteger(3603));
+				//new Thread(() -> web_utilities.start_servlet_container(SubLObjectFactory.makeInteger(3603))).start();
+				web_utilities.start_servlet_container(SubLObjectFactory.makeInteger(port));
 			}
 		} catch (Throwable ex) {
-			ex.printStackTrace();
+			printStackTrace(ex);
 		}
 	}
 
 	@LispMethod
-	public static void init_cyc_server() throws IOException {
+	public static void init_cyc() throws IOException {
 		synchronized (StartupInitLock) {
-			init_cyc_kb();
+			load_kb();
 			init_server();
 		}
 	}
 
 	@LispMethod
-	public static void init_kb() {
-		UpdateZip.updateUnits("7166");
-		init_cyc();
-	}
-
-	@LispMethod
-	public static void init_cyc_kb() {
-		UpdateZip.updateUnits("7166");
-		init_cyc();
-	}
-
-	@LispMethod
-	public static void init_cyc() {
+	public static void load_kb() {
 		synchronized (StartupLock) {
-			if (inited_kb)
+			if (began_load_kb)
 				return;
 		}
 		synchronized (StartupInitLock) {
+			began_load_kb = true;
+			UpdateZip.updateUnits("7166");
 			subl_preserve_pkg(true, true, () -> {
-				init_cyc_classes();
+				load_cyc();
 				if (!hasCycCmdlineInits) {
 					SubLPackage.setCurrentPackage("CYC");
 					Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
-					inited_kb = true;
 				}
 				return null;
 			});
@@ -1465,6 +1813,8 @@ public class Startup extends ABCLStatic {
 
 	@LispMethod
 	public static void init_cyc_classes_part2() {
+		if (leanABCL)
+			return;
 		synchronized (StartupInitLock) {
 			if (noCycPart2)
 				return;
@@ -1477,16 +1827,20 @@ public class Startup extends ABCLStatic {
 
 	@LispMethod
 	public static void init_server() {
+		callInCycInitThread(Startup::init_server0);
+	}
+
+	public static void init_server0() {
 		synchronized (StartupLock) {
-			if (inited_cyc_server)
+			if (began_init_cyc_server)
 				return;
+			began_init_cyc_server = true;
 		}
 		synchronized (StartupInitLock) {
 			subl_preserve_pkg(true, true, () -> {
 				Throwable te = null;
 				try {
-					init_cyc_classes();
-					SubLPackage.setCurrentPackage("CYC");
+					load_kb();
 					SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");
 					SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
 					if (!hasCycCmdlineInits) {
@@ -1500,14 +1854,14 @@ public class Startup extends ABCLStatic {
 						//eu.larkc.core.orchestrator.LarkcInit.initializeLarkc();
 					}
 					LarKCHttpServer.start_sparql_server();
-					inited_cyc_server = true;
 				} catch (Throwable e) {
-					e.printStackTrace();
+					printStackTrace(e);
 					te = e;
 				}
 				if (!cycPart2Early)
 					init_cyc_classes_part2();
 				try {
+					cyc_cdl.countDown();
 					PrologSync.setPrologReady(true);
 					LispSync.setLispReady(true);
 				} catch (Throwable e) {
@@ -1529,10 +1883,13 @@ public class Startup extends ABCLStatic {
 			if (began_init_subl)
 				return;
 			began_init_subl = true;
+			MainThreaded = true;
 		}
 		synchronized (StartupInitLock) {
-			init_swipl();
 			SubLMain.commonSymbolsOK = true;
+			IsolatedClassLoader.addDefaultJarsToClassPath(getPlatformDir());
+			init_lisp();
+			init_swipl();
 			boolean b = SubLMain.isInitialized();
 			if (b) {
 				return;
@@ -1544,7 +1901,7 @@ public class Startup extends ABCLStatic {
 			SubLPackage.initPackages();
 			try {
 				SubLMain.shouldRunInBackground = true;
-				SubLMain.initializeSubL(new String[0]);
+				SubLMain.initializeSubL(StringArrayZero);
 				// ensureMainReader();
 			} finally {
 				SubLPackage.setCurrentPackage(prevPackage);
@@ -1579,7 +1936,7 @@ public class Startup extends ABCLStatic {
 				if (tt != null)
 					return Lisp.error(tt);
 			}
-			t.printStackTrace();
+			printStackTrace(t);
 			String msg = t.getMessage();
 			if (msg == null || msg.length() == 0) {
 				msg = createStackTraceString(t);
@@ -1599,24 +1956,24 @@ public class Startup extends ABCLStatic {
 	@LispMethod
 	public static LispObject j_desktop() {
 		synchronized (StartupInitLock) {
-			if (editor == null)
-				editor = Editor.currentEditor();
+			if (j_desktop_object_instance == null)
+				j_desktop_object_instance = Editor.currentEditor();
 			if (noGUI)
-				return org.armedbear.lisp.JavaObject.getInstance(editor);
+				return org.armedbear.lisp.JavaObject.getInstance(j_desktop_object_instance);
 			// if (true && false) return
 			// org.armedbear.lisp.JavaObject.getInstance(editor);
-			if (editor == null)
+			if (j_desktop_object_instance == null)
 				Editor.startJ(new String[] { "--no-session", "--debug", "--force-new-instance" }, false, false);
-			if (editor == null)
-				editor = Editor.currentEditor();
-			if (editor == null)
+			if (j_desktop_object_instance == null)
+				j_desktop_object_instance = Editor.currentEditor();
+			if (j_desktop_object_instance == null)
 				Errors.unimplementedMethod("j_desktop");
-			addSingleton(editor);
-			return org.armedbear.lisp.JavaObject.getInstance(editor);
+			addSingleton(j_desktop_object_instance);
+			return org.armedbear.lisp.JavaObject.getInstance(j_desktop_object_instance);
 		}
 	}
 
-	@LispMethod
+	@LispMethod(evalArgs = false)
 	public static LispObject lisp_eval(LispObject args) {
 		Environment env = Environment.currentLispEnvironment();
 		return lisp_progn(args, env);
@@ -1714,8 +2071,8 @@ public class Startup extends ABCLStatic {
 			LispThread thread = LispThread.currentThread();
 			final SpecialBindingsMark mark = thread.markSpecialBindings();
 			try {
-				final Stream in = new Stream(Symbol.SYSTEM_STREAM, new BufferedReader(reader));
-				final Stream out = new Stream(Symbol.SYSTEM_STREAM, writer);
+				final Stream in = Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedReader(reader));
+				final Stream out = Stream.createStream(Symbol.SYSTEM_STREAM, writer);
 				final TwoWayStream ioStream = TwoWayStream.createTwoWayStream(in, out, true);
 				thread.bindSpecial(Symbol.DEBUGGER_HOOK, debuggerHook);
 				thread.bindSpecial(Symbol.STANDARD_INPUT, in);
@@ -1735,34 +2092,34 @@ public class Startup extends ABCLStatic {
 		}
 	}
 
-	/**
-	 * TODO Describe this type briefly. If necessary include a longer description
-	 * and/or an example.
-	 * 
-	 * @author Administrator
-	 *
-	 */
-	public static final class JPLExceptionFromJava extends PrologException {
-		/**
-		 * TODO Describe this constructor.
-		 * 
-		 * @param term
-		 */
-		public JPLExceptionFromJava(Term term, Throwable cause) {
-			super(term);
-			initCause(cause);
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Throwable#toString()
-		 */
-		@Override
-		public String toString() {
-			return super.toString();
-		}
-	}
+	//	/**
+	//	 * TODO Describe this type briefly. If necessary include a longer description
+	//	 * and/or an example.
+	//	 *
+	//	 * @author Administrator
+	//	 *
+	//	 */
+	//	public static final class JPLExceptionFromJava extends PrologException {
+	//		/**
+	//		 * TODO Describe this constructor.
+	//		 *
+	//		 * @param term
+	//		 */
+	//		public JPLExceptionFromJava(Term term, Throwable cause) {
+	//			super(term);
+	//			initCause(cause);
+	//		}
+	//
+	//		/*
+	//		 * (non-Javadoc)
+	//		 *
+	//		 * @see java.lang.Throwable#toString()
+	//		 */
+	//		@Override
+	//		public String toString() {
+	//			return super.toString();
+	//		}
+	//	}
 
 	static {
 		// SystemCurrent.setupIO();
@@ -1800,24 +2157,34 @@ public class Startup extends ABCLStatic {
 	public static LispObject lisp_repl() {
 		boolean wasSubLisp = Main.isSubLisp();
 		Main.setSubLisp(false);
-		if (wasSubLisp) {
-			cl_imports_cyc();
-			cyc_imports_cl();
-		}
 		boolean was_noExit = Main.noExit;
 		try {
 			try {
 				Main.noExit = true;
-				final Interpreter lispInstance = org.armedbear.lisp.Interpreter.createNewLispInstance(System.in, System.out, //
-						new File(".").getAbsolutePath(), Version.getVersion(), false);
+				SystemCurrent.setupIO();
+				final boolean firstInstance = (lispInstances.get() == 0);
+				final Interpreter lispInstance;
+				if (firstInstance) {
+					lispInstance = init_lisp();
+				} else {
+					lispInstance = Interpreter. //
+							createNewLispInstance( //
+									SystemCurrent.mustIn(), SystemCurrent.mustOut(), //
+									new File(".").getAbsolutePath() + "/", Version.getVersion(), //
+									false, null, false);
+				}
+				if (wasSubLisp) {
+					cl_imports_cyc();
+					cyc_imports_cl();
+				}
 				lispInstance.run();
 			} catch (org.armedbear.lisp.ProcessingTerminated e) {
-				// e.printStackTrace();
+				// printStackTrace(e);
 				// TODO: handle exception
 			} catch (ConditionThrowable e) {
 				throw e;
 			} catch (Throwable e) {
-				e.printStackTrace();
+				printStackTrace(e);
 				// TODO: handle exception
 			}
 			return Symbol.STAR.symbolValue();
@@ -1851,7 +2218,7 @@ public class Startup extends ABCLStatic {
 		return (new org.jpl7.Query("call", arg)).oneSolution();
 	}
 
-	@LispMethod
+	@LispMethod(evalArgs = false)
 	public static LispObject prolog_unify(LispObject arg) throws Exception, InterruptedException {
 		final LispObject prolog_eval_lobject = prolog_eval_lobject(arg);
 		return Lisp.list(prolog_eval_lobject);
@@ -1863,7 +2230,7 @@ public class Startup extends ABCLStatic {
 		return prolog_eval_term(new Compound("called_from_cyc", term));
 	}
 
-	@LispMethod
+	@LispMethod(evalArgs = false)
 	public static LispObject prolog_eval_term(Term term) throws Exception {
 		Query q = new Query(term);
 		LispObject answers = Lisp.NIL;
@@ -1913,14 +2280,19 @@ public class Startup extends ABCLStatic {
 		if (js.startsWith("sf_")) {
 			evalArgsFirst = false;
 			js = js.substring(3);
+		} else if (js.startsWith("pf_")) {
+			evalArgsFirst = true;
+			js = js.substring(3);
 		}
 		LispMethod lm = m.getAnnotation(LispMethod.class);
+		if (!lm.evalArgs()) {
+			evalArgsFirst = false;
+		}
 		Symbol sym = findOrCreateSymbol(js, lm);
 		String prologName = symbolToPrologName(sym, lm);
 		registerPrologMethod(prologName, sym, m);
-		SpecialMethod cf = setSpecialMethod(sym);
+		JMultiMethod cf = setSpecialMethod(sym, evalArgsFirst);
 		// if (cf == null) return;
-		cf.setEvalArgsFirst(evalArgsFirst);
 		cf.addMethod(m);
 	}
 
@@ -1976,9 +2348,19 @@ public class Startup extends ABCLStatic {
 		oneSolution("assert((" + string + "))");
 	}
 
+	// TODO decide if we should care about CloassLoader context
+	static HashSet scannedforExport = new HashSet();
+
 	public static void scanForExports(Class clz) {
 		if (clz == Object.class || clz == null)
 			return;
+		synchronized (scannedforExport) {
+			if (scannedforExport.contains(clz)) {
+				return;
+			}
+			scannedforExport.add(clz);
+		}
+
 		for (java.lang.reflect.Method m : clz.getDeclaredMethods()) {
 			if (Modifier.isStatic(m.getModifiers())) {
 				if (m.isAnnotationPresent(LispMethod.class)) {
@@ -1987,27 +2369,34 @@ public class Startup extends ABCLStatic {
 				}
 			}
 		}
+
+		for (java.lang.reflect.Field m : clz.getDeclaredFields()) {
+			if (Modifier.isStatic(m.getModifiers())) {
+				if (m.isAnnotationPresent(LispMethod.class)) {
+					//registerMethod(m);
+					//continue;
+					bp();
+				}
+
+			}
+		}
+
 		scanForExports(clz.getSuperclass());
-		// for (java.lang.reflect.Field m : clz.getDeclaredFields()) {
-		// if (Reflect.isStatic(m)) {
-		// if (m.isAnnotationPresent(LispMethod.class)) {
-		// //registerMethod(m);
-		// //continue;
-		// }
-		//
-		// }
-		// }
 	}
 
-	static SpecialMethod setSpecialMethod(Symbol sym) {
+	static JMultiMethod setSpecialMethod(Symbol sym, boolean evalArgsFirst) {
 		LispObject sf = sym.getSymbolFunctionOrNull();
 		if (sf == null) {
-			sf = new SpecialMethod(sym);
+			if (evalArgsFirst) {
+				sf = new JMultiPrimitive(sym);
+			} else {
+				sf = new JMultiSpecialOperator(sym);
+			}
 			sym.setFunction((SubLOperator) sf);
 			sym.setBuiltInFunction(true);
-			return (SpecialMethod) sf;
-		} else if (sf instanceof SpecialMethod) {
-			return (SpecialMethod) sf;
+			return (JMultiMethod) sf;
+		} else if (sf instanceof JMultiMethod) {
+			return (JMultiMethod) sf;
 		} else {
 			Lisp.program_error("Trying to overwrite a non special method");
 			String complaint = "Trying to overwrite a non method function "; // + sf;
@@ -2028,7 +2417,7 @@ public class Startup extends ABCLStatic {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param isc
 	 * @param self
 	 * @param named
@@ -2039,8 +2428,8 @@ public class Startup extends ABCLStatic {
 		CreationInfo wasnt = new CreationInfo(self);
 		if (was != null) {
 			if (was.value != self) {
-				if (!named.equals(isc.getName())) {
-					setNamed(isc, self, isc.getName());
+				if (!named.equals(nameId(isc))) {
+					setNamed(isc, self, nameId(isc));
 					return;
 				}
 				if (!SubLMain.TINY_KB) {
@@ -2061,9 +2450,9 @@ public class Startup extends ABCLStatic {
 	@LispMethod
 	public static void start_from_prolog() throws InterruptedException {
 		synchronized (StartupLock) {
-			if (started_from_prolog)
+			if (app_started_from_prolog)
 				return;
-			started_from_prolog = true;
+			app_started_from_prolog = true;
 		}
 		Main.needIOConsole = true;
 		start_lisp_from_prolog();
@@ -2072,9 +2461,9 @@ public class Startup extends ABCLStatic {
 	@LispMethod
 	public static void start_from_prolog_ikvm() throws InterruptedException {
 		synchronized (StartupLock) {
-			if (started_from_prolog)
+			if (app_started_from_prolog)
 				return;
-			started_from_prolog = true;
+			app_started_from_prolog = true;
 		}
 		Main.needIOConsole = true;
 		start_lisp_from_prolog();
@@ -2083,12 +2472,12 @@ public class Startup extends ABCLStatic {
 	@LispMethod
 	public static void start_lisp_from_prolog() {
 		if (!noProlog) {
-			noPrologJNI = disablePrologSync = false;
+			noPrologJNI = noPrologSync = false;
 		}
 		// Main.trackStructs = !disablePrologSync;
 		bsh_desktop();
 		scanForExports(BeanShellCntrl.class); // again
-		PrologSync.setPrologReady(!disablePrologSync);
+		PrologSync.setPrologReady(!noPrologSync);
 	}
 
 	public static void startEmbedded() {
@@ -2102,9 +2491,9 @@ public class Startup extends ABCLStatic {
 				return;
 			if (noProlog)
 				return;
-			if (called_init_swipl)
+			if (began_init_swipl)
 				return;
-			called_init_swipl = true;
+			began_init_swipl = true;
 			synchronized (StartupInitLock) {
 				try {
 
@@ -2117,7 +2506,7 @@ public class Startup extends ABCLStatic {
 				} catch (UnsatisfiedLinkError e) {
 					noPrologJNI = true;
 					noProlog = true;
-					disablePrologSync = true;
+					noPrologSync = true;
 					System.err.println("" + e);
 				}
 			}
@@ -2178,10 +2567,10 @@ public class Startup extends ABCLStatic {
 		JPL.loadNativeLibrary();
 		Object[] r = Prolog.get_actual_init_args();
 		if (r == null) {
-			if (started_from_prolog == null) {
-				started_from_prolog = !JPL.init();
+			if (app_started_from_prolog == null) {
+				app_started_from_prolog = !JPL.init();
 
-			} else if (!started_from_prolog) {
+			} else if (!app_started_from_prolog) {
 				JPL.init();
 			}
 			r = Prolog.get_actual_init_args();
@@ -2194,21 +2583,21 @@ public class Startup extends ABCLStatic {
 		synchronized (StartupLock) {
 			if (noPrologJNI)
 				return;
-			if (inited_swipl_server)
+			if (began_init_swipl_server)
 				return;
 
 			synchronized (StartupInitLock) {
 				try {
 					String LARKC_HOME = getSetProp("LARKC_HOME", "larkc.home");
 					init_swipl();
-					inited_swipl_server = oneSolution("ensure_loaded('" + LARKC_HOME.replace("\\", "/") + "/from_swipl')");
-					inited_swipl_server = oneSolution("(current_thread(prolog_server,X),X=running)");
-					if (inited_swipl_server)
+					began_init_swipl_server = oneSolution("ensure_loaded('" + LARKC_HOME.replace("\\", "/") + "/from_swipl')");
+					began_init_swipl_server = oneSolution("(current_thread(prolog_server,X),X=running)");
+					if (began_init_swipl_server)
 						return;
 					oneSolution("use_module(library('prolog_server'))");
-					inited_swipl_server = true;
+					began_init_swipl_server = true;
 				} catch (Throwable t) {
-					inited_swipl_server = false;
+					began_init_swipl_server = false;
 					MsgBox.error(t);
 				}
 			}
@@ -2224,7 +2613,7 @@ public class Startup extends ABCLStatic {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param jvmprop
 	 * @param envprop
 	 * @return
@@ -2293,7 +2682,7 @@ public class Startup extends ABCLStatic {
 			}
 		} catch (Error e) {
 			showClassLoaderInfo(term);
-			e.printStackTrace();
+			printStackTrace(e);
 		}
 		if (term instanceof Atom) {
 			return atom_to_object((Atom) term);
@@ -2333,8 +2722,8 @@ public class Startup extends ABCLStatic {
 		SubLObject found;
 		// String s = a.name();
 		if (s.startsWith("#$")) {
-			if (!inited_cyc_complete) {
-				Debug.assertTrue(inited_cyc_complete);
+			if (!finished_load_cyc_classes) {
+				Debug.assertTrue(finished_load_cyc_classes);
 			}
 			found = read_sublisp(s);
 			if (found != null) {
@@ -2349,8 +2738,8 @@ public class Startup extends ABCLStatic {
 		}
 		boolean readAsSubLisp = s.startsWith("?") || s.contains("#$") || (isSubLisp() && s.contains(":"));
 		if (readAsSubLisp) {
-			if (!inited_cyc_complete) {
-				Debug.assertTrue(inited_cyc_complete);
+			if (!finished_load_cyc_classes) {
+				Debug.assertTrue(finished_load_cyc_classes);
 			}
 			found = read_sublisp(s);
 			if (found instanceof LispObject)
@@ -2361,7 +2750,7 @@ public class Startup extends ABCLStatic {
 			found = null;
 			// return found.toLispObject();
 		}
-		if (inited_cyc_complete) {
+		if (finished_load_cyc_classes) {
 			SimpleString ss = new SimpleString(s);
 			found = find_constant_by_name(ss);
 			if (found instanceof SubLStruct)
@@ -2439,7 +2828,9 @@ public class Startup extends ABCLStatic {
 			swipl_writer.println(createStackTraceString);
 			final Atom stackTrace = new Atom(createStackTraceString);
 			Query.oneSolution(new Compound("write", stackTrace));
-			throw new JPLExceptionFromJava(stackTrace, throwable);
+			JPLException jplException = new JPLException(createStackTraceString);
+			jplException.initCause(throwable);
+			throw jplException;
 		}
 		if (catcher != null && catcher != defaultCatcher) {
 			return catcher.doThrow(throwable);
@@ -2483,7 +2874,7 @@ public class Startup extends ABCLStatic {
 		final SubLThread thread = SubLProcess.currentSubLThread();
 		final SubLNil localNil = SubLNil.NIL;
 		SubLObject constant = localNil;
-		if (!inited_cyc_complete)
+		if (!finished_load_cyc_classes)
 			return constant;
 		if (SubLMain.OPENCYC) {
 			if (installedCR == null) {
@@ -2491,14 +2882,14 @@ public class Startup extends ABCLStatic {
 					installedCR = Class.forName("com.cyc.cycjava.cycl.constants_high_oc").getDeclaredMethod("f10737", SubLObject.class);
 				} catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					printStackTrace(e);
 				}
 			}
 			try {
 				return (SubLObject) installedCR.invoke(constant);
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				printStackTrace(e);
 			}
 		}
 		if (constant_completion_low.$require_valid_constants$ == null)
@@ -2531,7 +2922,7 @@ public class Startup extends ABCLStatic {
 	 * TODO Describe the purpose of this method.
 	 * @param makeString
 	 * @param unprovided
-	 * @return 
+	 * @return
 	 */
 	public static SubLObject ke_create_now(SubLString makeString, SubLSymbol unprovided) {
 		return ke.ke_create_now(makeString, unprovided);
@@ -2603,7 +2994,7 @@ public class Startup extends ABCLStatic {
 				cons.setTermRef(term);
 			} catch (Error e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				printStackTrace(e);
 			}
 			cons.setCar(term_to_lobject(arg1));
 			cons.setCdr(term_to_lobject(term.arg(2)));
@@ -2674,27 +3065,27 @@ public class Startup extends ABCLStatic {
 	}
 
 	@LispMethod
-	public static Object test_int(int obj) {
+	public static Object test_int_conversion(int obj) {
+		return obj;
+	}
+
+	@LispMethod(packageName = "CYC")
+	public static Object test_object_conversion(Object obj) {
 		return obj;
 	}
 
 	@LispMethod
-	public static Object test_object(Object obj) {
+	public static Object test_string_conversion(String obj) {
 		return obj;
 	}
 
 	@LispMethod
-	public static Object test_string(String obj) {
+	public static Object test_term_conversion(Term obj) {
 		return obj;
 	}
 
 	@LispMethod
-	public static Object test_term(Term obj) {
-		return obj;
-	}
-
-	@LispMethod
-	public static Object test_term_t(term_t obj) {
+	public static Object test_term_t_conversion(term_t obj) {
 		return obj;
 	}
 
@@ -2719,6 +3110,10 @@ public class Startup extends ABCLStatic {
 
 	private static Unsafe theUnsafe;
 
+	protected static Thread shutdownRequested = null;
+
+	public static boolean optimizeForSpeed = true;
+
 	@SuppressWarnings("unchecked")
 	public static <T extends Throwable> Error throwException1(final Throwable exception, Object dummy) throws T {
 		throw (T) exception;
@@ -2740,27 +3135,18 @@ public class Startup extends ABCLStatic {
 
 	public static void start_prolog_from_lisp() {
 		init_swipl_server();
-		scanForExports(BeanShellCntrl.class);
+		registerForiegnMethods();
 	}
 
-	public static void main0(String[] args0) {
-		String[] argsNew = Main.extractOptions(args0);
-		start_lisp_from_prolog();
-		Runnable runnable;
-		if (needSubLMAIN) {
-			runnable = null;
-		} else {
-			runnable = Main.mainRunnable(argsNew, null);
-		}
-
-		scanForExports(Startup.class);
-		if (runnable != null) {
-			runnable.run();
-
-			scanForExports(BeanShellCntrl.class);
-		}
-
-	}
+	//	public static void main0(String[] args0) {
+	//		String[] argsNew = Main.extractOptions(args0);
+	//		start_lisp_from_prolog();
+	//		Runnable runnable;
+	//		if (needSubLMAIN) {
+	//		} else {
+	//			//Main.main2(argsNew);
+	//		}
+	//	}
 
 	static class CreationInfo {
 		String made;
@@ -2799,7 +3185,7 @@ public class Startup extends ABCLStatic {
 		}
 
 		public static void error(Throwable e) {
-			e.printStackTrace();
+			printStackTrace(e);
 			error(createStackTraceString(e));
 		}
 
@@ -2833,13 +3219,13 @@ public class Startup extends ABCLStatic {
 			return ste[3].getMethodName();
 		}
 	}
-
-	public static class PrimitiveEverywhere extends org.armedbear.lisp.Primitive {
-		public PrimitiveEverywhere(String string) {
-			super(string, Lisp.PACKAGE_CYC, true);
-			importEverywhere(this, true);
-		}
-	}
+	//
+	//	public static class PrimitiveEverywhere extends org.armedbear.lisp.Primitive {
+	//		public PrimitiveEverywhere(String string) {
+	//			super(string, Lisp.PACKAGE_CYC, true);
+	//			importEverywhere(this);
+	//		}
+	//	}
 
 	public static class StartupError extends ConditionThrowable {
 		public StartupError(String string) {
@@ -2848,11 +3234,13 @@ public class Startup extends ABCLStatic {
 	}
 
 	public static void exit(int status) {
+		exitCode = status;
 		// Debug.assertTrue(false);
 		if (noExit) {
 			// Lisp.exit(status);
 			return;
 		}
+		shutdownRequested = Thread.currentThread();
 		System.exit(status);
 		// TODO Auto-generated method stub
 	}
@@ -2864,42 +3252,67 @@ public class Startup extends ABCLStatic {
 	/**
 	 *
 	 */
+	public static void registerForiegnMethods() {
+		scanForExports(BeanShellCntrl.class);
+
+	}
 
 	public static void startCycInit() {
+
+		registerForiegnMethods();
+		if (needSubLMAIN) {
+			callInCycInitThread(Startup::startCycInit0);
+		}
+	}
+
+	public static void startCycInit0() {
+
 		if (!noProlog)
 			start_prolog_from_lisp();
-		scanForExports(BeanShellCntrl.class);
+
 		if (needSubLMAIN) {
-			init_cyc_classes();
-			//SubLMain.doInitialEmbeddedMain(cycCmdArgs);
+			load_cyc();
 			cl_imports_cyc();
 		}
 	}
 
 	public static void completeCycInit() {
+		callInCycInitThread(Startup::completeCycInit0);
+	}
+
+	public static void completeCycInit0() {
 		if (!needSubLMAIN)
 			return;
+
+		if (leanABCL)
+			return;
+
+		startCycInit0();
+
 		try {
 			if (cycPart2Early)
 				init_cyc_classes_part2();
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			addUncaught(e);
 		}
-		try {
-			init_cyc_server();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		startCycInit();
-		cyc_imports_cl();
 
-		if (!noinform) {
-			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
-			final PrintStream out = getNoticeStream();
-			out.println("CYC initialization complete at " + uptime + " total seconds.\n");
+		try {
+			init_cyc();
+		} catch (Throwable e) {
+			addUncaught(e);
 		}
+
+		try {
+			cyc_imports_cl();
+		} catch (Throwable e) {
+			addUncaught(e);
+		}
+		//
+		//		if (!noinform) {
+		//			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
+		//			final PrintStream out = getNoticeStream();
+		//			out.println("CYC initialization complete at " + uptime + " total seconds.\n");
+		//		}
 
 	}
 
@@ -2916,7 +3329,7 @@ public class Startup extends ABCLStatic {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param structureObject
 	 * @param slotNum
 	 * @param pingAt
@@ -2932,7 +3345,7 @@ public class Startup extends ABCLStatic {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param file
 	 */
 	public static void addSubLFile(SubLFile file) {
@@ -2945,7 +3358,7 @@ public class Startup extends ABCLStatic {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param struct
 	 */
 	public static void addThis(AbstractSubLStruct struct) {
@@ -2959,7 +3372,7 @@ public class Startup extends ABCLStatic {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param assertion
 	 */
 	public static void removeThis(AbstractSubLStruct struct) {
@@ -2968,9 +3381,9 @@ public class Startup extends ABCLStatic {
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	public static void configWebSwing() {
+	public static void configwebswing() {
 		//		org.webswing.Constants Constants;
 		//		String warFile = System.getProperty(Constants.WAR_FILE_LOCATION);
 		//		if (warFile == null) {
@@ -3010,6 +3423,314 @@ public class Startup extends ABCLStatic {
 		//			}
 		//		}
 		//		getNoticeStream().println(Constants.WAR_FILE_LOCATION + "=" + warFile);
+
+	}
+
+	/**
+	 * @author Administrator
+	 *
+	 */
+
+	public static interface TCallable {
+		void call() throws Throwable;
+	}
+
+	public static interface SCallable<R> {
+		R call();
+	}
+
+	public static void ignoreExceptions(TCallable c) {
+		try {
+			c.call();
+		} catch (Throwable e) {
+			printStackTrace(e);
+			doThrow(e);
+		}
+	}
+
+	public static boolean pushNew(List c, Object o) {
+		if (c.contains(o))
+			return false;
+		c.add(0, o);
+		return true;
+	}
+
+	synchronized public static PrintStream getNoticeStream() {
+		PrintStream err = noticeStream;
+		if (err == null) {
+			if (err == null) {
+				err = System.out;
+				if (err == null) {
+					err = SystemCurrent.originalSystemErr;
+					if (err == null) {
+						err = SystemCurrent.originalSystemOut;
+						if (err == null)
+							err = System.err;
+					}
+				}
+			}
+		}
+		noticeStream = err;
+		return err;
+	}
+
+	public static void reportUncaughts() {
+		if (unexpectedThrowables != null) {
+			List<UncaughtException> list;
+			synchronized (unexpectedThrowables) {
+				list = new ArrayList(unexpectedThrowables);
+			}
+			PrintStream err = getNoticeStream();
+			for (UncaughtException throwable : list) {
+				try {
+					err.print("unexpectedThrowable: " + throwable);
+					showST(throwable.e, err);
+					err.flush();
+				} catch (Throwable e) {
+					// TODO: handle exception
+				}
+			}
+
+		}
+	}
+
+	public static final class ABCLMainUncaughtExceptionHandler implements UncaughtExceptionHandler {
+		@Override
+		public void uncaughtException(Thread arg0, Throwable e) {
+			addUncaught(arg0, e);
+		}
+	}
+
+	public static void addUncaught(Throwable e) {
+		addUncaught(Thread.currentThread(), e);
+	}
+
+	public static void addUncaught(Thread t, Throwable e) {
+		if (e == null)
+			return;
+		if (t == null)
+			t = Thread.currentThread();
+		if (e instanceof ProcessingTerminated) {
+			final int status = ((ProcessingTerminated) e).getStatus();
+			exit(status);
+			return;
+		}
+		final PrintStream noticeStream = getNoticeStream();
+
+		showST(e, noticeStream);
+		Debug.forkInterpreter();
+		UncaughtException te = new UncaughtException(t, e);
+		if (unexpectedThrowables != null)
+			unexpectedThrowables.add(te);
+	}
+
+	public static boolean needNewThread() {
+		RuntimeMXBean rbean = ManagementFactory.getRuntimeMXBean();
+		for (String o : rbean.getInputArguments()) {
+			if (o.startsWith("-Xss=") || o.startsWith("-XX:ThreadStackSize="))
+				return false;
+		}
+		if (true)
+			return true;
+
+		final PrintStream err = getNoticeStream();
+
+		for (Class<? extends PlatformManagedObject> pmo : ManagementFactory.getPlatformManagementInterfaces()) {
+			List<? extends PlatformManagedObject> list = ManagementFactory.getPlatformMXBeans(pmo);
+			if (list.size() == 0) {
+				err.println("NOPMO : " + pmo);
+			}
+			for (PlatformManagedObject o : list) {
+				err.println("--------------------------------------------------");
+				err.println(pmo + " : " + o);
+				err.println("--------------------------------------------------");
+				Method ms[] = o.getClass().getMethods();
+				for (Method m : ms) {
+					if (m.getParameterCount() == 0) {
+						if (Modifier.isStatic(m.getModifiers()))
+							continue;
+						String name = m.getName();
+						if (name.startsWith("get")) {
+							name = name.substring(3);
+						} else if (name.startsWith("is")) {
+							name = name.substring(2);
+						} else {
+							continue;
+						}
+						try {
+							m.setAccessible(true);
+							final Object invoke = anyTsoString(m.invoke(o));
+							err.println(name + " -> " + anyTsoString(invoke));
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							Throwable why = e.getCause();
+							if (why instanceof UnsupportedOperationException)
+								continue;
+							e.printStackTrace();
+						}
+					}
+				}
+				err.println("--------------------------------------------------");
+			}
+
+		}
+		err.println("--------------------------------------------------");
+		//		for (ManagementInterfaces mi : ManagementInterfaces.values()) {
+		//			if (!interfaces.contains(mi.getManagementInterface())) {
+		//				throw new RuntimeException(mi.getManagementInterface() + " not in ManagementInterfaces set");
+		//			}
+		//		}
+		return false;
+	}
+
+	private static String anyTsoString(Object invoke) {
+		return anyTsoString(invoke, null);
+	}
+
+	private static String anyTsoString(Object obj, IdentitySetWithIndex dejavu) {
+		if (obj == null)
+			return "<null>";
+
+		Class c = obj.getClass();
+		if (c.isArray()) {
+			Class ct = c.getComponentType();
+			if (ct.isPrimitive()) {
+				if (c == byte[].class)
+					return (Arrays.toString((byte[]) obj));
+				else if (c == short[].class)
+					return (Arrays.toString((short[]) obj));
+				else if (c == int[].class)
+					return (Arrays.toString((int[]) obj));
+				else if (c == long[].class)
+					return Arrays.toString((long[]) obj);
+				else if (c == char[].class)
+					return (Arrays.toString((char[]) obj));
+				else if (c == float[].class)
+					return (Arrays.toString((float[]) obj));
+				else if (c == double[].class)
+					return (Arrays.toString((double[]) obj));
+				else if (c == boolean[].class)
+					return (Arrays.toString((boolean[]) obj));
+			} else {
+				return Arrays.deepToString((Object[]) obj);
+			}
+		}
+		if (obj instanceof Collection) {
+			return nameId(obj) + "(" + Arrays.deepToString((((Collection) obj).toArray())) + ")";
+		}
+		try {
+			if (c.getDeclaredMethod("toString") != null) {
+				return "" + obj;
+			}
+		} catch (NoSuchMethodException | SecurityException e1) {
+		}
+		if (!(obj instanceof Comparable)) {
+			if (dejavu == null) {
+				dejavu = new IdentitySetWithIndex();
+			} else {
+				int index = dejavu.indexOf(obj, true);
+				if (index >= 0) {
+					return "#" + index + "#";
+				}
+			}
+			dejavu.add(obj);
+			Field[] fs = c.getFields();
+			int printed = 0;
+			StringBuffer sb = new StringBuffer();
+			boolean needComma = false;
+			for (Field f : fs) {
+				if (Modifier.isStatic(f.getModifiers()))
+					continue;
+				if (needComma)
+					sb.append(", ");
+				try {
+					f.setAccessible(true);
+					sb.append(f.getName() + " = " + anyTsoString(f.get(obj), dejavu));
+					needComma = true;
+					printed++;
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					needComma = false;
+				}
+			}
+			if (printed == 0) {
+				Method[] ms = c.getMethods();
+				for (Method m : ms) {
+					if (m.getParameterCount() == 0) {
+						if (Modifier.isStatic(m.getModifiers()))
+							continue;
+						String name = m.getName();
+						if (name.startsWith("get")) {
+							name = name.substring(3);
+						} else if (name.startsWith("is")) {
+							name = name.substring(2);
+						} else {
+							continue;
+						}
+						try {
+							m.setAccessible(true);
+							final Object invoke2 = m.invoke(obj);
+							if (needComma)
+								sb.append(",");
+							sb.append(name + " = " + anyTsoString(invoke2, dejavu));
+							needComma = true;
+							printed++;
+
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							Throwable why = e.getCause();
+							if (why instanceof UnsupportedOperationException)
+								continue;
+						}
+					}
+
+				}
+			}
+			if (printed > 0) {
+				int index = dejavu.indexOf(obj, false);
+				if (index >= 0) {
+					return "#" + index + "=" + nameId(obj) + "(" + sb.toString() + ")";
+				}
+				return nameId(obj) + "(" + sb.toString() + ")";
+			}
+		}
+		return "" + obj;
+	}
+
+	/**
+	 * @param c
+	 * @return
+	 */
+	public static String nameId(Object o) {
+		return o.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(o));
+	}
+
+	private static enum ManagementInterfaces {
+		CLASS_LOADING_MXBEAN(ClassLoadingMXBean.class), COMPILATION_MXBEAN(CompilationMXBean.class), //
+		MEMORY_MXBEAN(MemoryMXBean.class), OPERATING_SYSTEM_MXBEAN(OperatingSystemMXBean.class), //
+		RUNTIME_MXBEAN(RuntimeMXBean.class), THREAD_MXBEAN(ThreadMXBean.class), //
+		GARBAGE_COLLECTOR_MXBEAN(GarbageCollectorMXBean.class), MEMORY_MANAGER_MXBEAN(MemoryManagerMXBean.class), //
+		MEMORY_POOL_MXBEAN(MemoryPoolMXBean.class);
+
+		private final Class<? extends PlatformManagedObject> managementInterface;
+
+		private ManagementInterfaces(Class<? extends PlatformManagedObject> minterface) {
+			managementInterface = minterface;
+		}
+
+		public Class<? extends PlatformManagedObject> getManagementInterface() {
+			return managementInterface;
+		}
+	}
+
+	static public class UncaughtException {
+		Thread t;
+		Throwable e;
+
+		public UncaughtException(Thread t, Throwable e) {
+			super();
+			this.t = t;
+			this.e = e;
+		}
 
 	}
 

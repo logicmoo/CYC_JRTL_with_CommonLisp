@@ -1,7 +1,9 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
-public interface SubLOutputStream extends SubLStream {
+import java.io.Flushable;
+
+public interface SubLOutputStream extends SubLStream /*, maybe? Appendable, Flushable */ {
 	void flush();
 
 	String getStringOutput();

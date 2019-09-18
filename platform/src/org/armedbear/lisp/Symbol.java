@@ -34,6 +34,8 @@ package org.armedbear.lisp;
 
 import java.util.Arrays;
 
+import org.logicmoo.system.Startup;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -75,7 +77,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.armedbear.lisp.LispObject#javaInstance(java.lang.Class)
 	 */
 	@Override
@@ -120,7 +122,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	static String why = "set Global Value";
 	public static boolean USE_THREAD_LOCALS = true;
 	private static int idCounter = 0;
-	//final 
+	//final
 	public AbstractString name;
 	// SubLPackage thePackage;
 	// boolean clValueMode = !Main.isSubLispBindingMode;
@@ -189,6 +191,11 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	@Override
 	public void setGlobalUnmergedForcedValue(SubLObject newValue, boolean asGlobal, boolean noMerge, boolean forced) {
 		if (this == Symbol.PRINT_READABLY || isTraced < 0) {
+			setTLValue(newValue);
+			value = newValue;
+			return;
+		}
+		if (Main.maybeTooSlow) {
 			setTLValue(newValue);
 			value = newValue;
 			return;
@@ -288,8 +295,10 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	}
 
 	public void notifyChange(String prefix, Object newValue, Object oldValue) {
-		if (this == Symbol.PRINT_READABLY || this == Symbol.PRINT_LEVEL || newValue == Symbol.PRINT_READABLY
-				|| oldValue == Symbol.PRINT_READABLY)
+		if (Main.maybeTooSlow) {
+			return;
+		}
+		if (this == Symbol.PRINT_READABLY || this == Symbol.PRINT_LEVEL || newValue == Symbol.PRINT_READABLY || oldValue == Symbol.PRINT_READABLY)
 			return;
 		if (oldValue == null && isTraced < 1)
 			return;
@@ -489,7 +498,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 				final SubLMacro other = (SubLMacro) function;
 				final SubLFunction compiled = other.getMacroExpander();
 				if (compiled == func) {
-					// same 
+					// same
 					// function = (LispObject) func;
 					return;
 				}
@@ -1156,8 +1165,10 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 		boolean myFirstBlock = isSpecialVariable();
 		if (!myFirstBlock) {
 			Environment env = envI != null ? envI : Environment.currentLispEnvironment();
-			if (env == null)
+			if (env == null) {
+				Startup.bp();
 				env = Environment.newEnvironment();
+			}
 			// final Environment env = envI != null ? envI :
 			// Environment.currentLispEnvironment();
 			//// Environment.currentLispEnvironment();
@@ -1359,11 +1370,12 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 					}
 				}
 			}
-			env = Environment.newEnvironment();
-			if (env.isDeclaredSpecial(symbol))
+			env = Environment.currentLispEnvironment();
+			if (env.isDeclaredSpecial(symbol)) {
 				result = thread.lookupSpecial(symbol);
-			else
+			} else {
 				result = env.lookup(symbol);
+			}
 		}
 		if (result == null) {
 			result = symbol.getSymbolMacro();
@@ -1676,9 +1688,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 		// "Package prefixes are printed if necessary." (22.1.3.3.1)
 		// Here we also use a package-local nickname if appropriate.
 		final LispObject currentPackageLispObject = _PACKAGE_.symbolValue(thread);
-		final Package currentPackage = (currentPackageLispObject instanceof Package)
-				? (Package) currentPackageLispObject
-				: Lisp.PACKAGE_KEYWORD;
+		final Package currentPackage = (currentPackageLispObject instanceof Package) ? (Package) currentPackageLispObject : Lisp.PACKAGE_KEYWORD;
 		if (pkg == currentPackage) {
 			return symbolName;
 		}
@@ -1726,8 +1736,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 			}
 		}
 		final StringBuilder sb = new StringBuilder(packageName);
-		if (((Package) pkg).findExternalSymbol(name) != null
-				&& DOUBLE_COLON_PACKAGE_SEPARATORS.symbolValue(thread) == NIL)
+		if (((Package) pkg).findExternalSymbol(name) != null && DOUBLE_COLON_PACKAGE_SEPARATORS.symbolValue(thread) == NIL)
 			sb.append(':');
 		else
 			sb.append("::");
@@ -1932,8 +1941,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	}
 
 	@Override
-	final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
-			LispObject fifth) {
+	final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth) {
 		final LispObject fun = getSymbolFunction();
 		if (fun == null)
 			return undefinedFunction(list(first, second, third, fourth, fifth));
@@ -1941,8 +1949,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	}
 
 	@Override
-	final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
-			LispObject fifth, LispObject sixth) {
+	final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth) {
 		final LispObject fun = getSymbolFunction();
 		if (fun == null)
 			return undefinedFunction(list(first, second, third, fourth, fifth, sixth));
@@ -1950,8 +1957,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	}
 
 	@Override
-	final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
-			LispObject fifth, LispObject sixth, LispObject seventh) {
+	final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh) {
 		final LispObject fun = getSymbolFunction();
 		if (fun == null)
 			return undefinedFunction(list(first, second, third, fourth, fifth, sixth, seventh));
@@ -1959,8 +1965,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	}
 
 	@Override
-	final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
-			LispObject fifth, LispObject sixth, LispObject seventh, LispObject eighth) {
+	final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh, LispObject eighth) {
 		final LispObject fun = getSymbolFunction();
 		if (fun == null)
 			return undefinedFunction(list(first, second, third, fourth, fifth, sixth, seventh, eighth));
@@ -2358,8 +2363,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol COMPUTE_RESTARTS = PACKAGE_CL.addExternalSymbol("COMPUTE-RESTARTS");
 	public static final Symbol CONCATENATE = PACKAGE_CL.addExternalSymbol("CONCATENATE");
 	public static final Symbol CONCATENATED_STREAM = PACKAGE_CL.addExternalSymbol("CONCATENATED-STREAM");
-	public static final Symbol CONCATENATED_STREAM_STREAMS = PACKAGE_CL
-			.addExternalSymbol("CONCATENATED-STREAM-STREAMS");
+	public static final Symbol CONCATENATED_STREAM_STREAMS = PACKAGE_CL.addExternalSymbol("CONCATENATED-STREAM-STREAMS");
 	public static final Symbol COND = PACKAGE_CL.addExternalSymbol("COND");
 	public static final Symbol CONDITION = PACKAGE_CL.addExternalSymbol("CONDITION");
 	public static final Symbol CONJUGATE = PACKAGE_CL.addExternalSymbol("CONJUGATE");
@@ -2435,8 +2439,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol DOTIMES = PACKAGE_CL.addExternalSymbol("DOTIMES");
 	public static final Symbol DOUBLE_FLOAT = PACKAGE_CL.addExternalSymbol("DOUBLE-FLOAT");
 	public static final Symbol DOUBLE_FLOAT_EPSILON = PACKAGE_CL.addExternalSymbol("DOUBLE-FLOAT-EPSILON");
-	public static final Symbol DOUBLE_FLOAT_NEGATIVE_EPSILON = PACKAGE_CL
-			.addExternalSymbol("DOUBLE-FLOAT-NEGATIVE-EPSILON");
+	public static final Symbol DOUBLE_FLOAT_NEGATIVE_EPSILON = PACKAGE_CL.addExternalSymbol("DOUBLE-FLOAT-NEGATIVE-EPSILON");
 	public static final Symbol DPB = PACKAGE_CL.addExternalSymbol("DPB");
 	public static final Symbol DRIBBLE = PACKAGE_CL.addExternalSymbol("DRIBBLE");
 	public static final Symbol DYNAMIC_EXTENT = PACKAGE_CL.addExternalSymbol("DYNAMIC-EXTENT");
@@ -2502,8 +2505,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol FLOAT_RADIX = PACKAGE_CL.addExternalSymbol("FLOAT-RADIX");
 	public static final Symbol FLOAT_SIGN = PACKAGE_CL.addExternalSymbol("FLOAT-SIGN");
 	public static final Symbol FLOATING_POINT_INEXACT = PACKAGE_CL.addExternalSymbol("FLOATING-POINT-INEXACT");
-	public static final Symbol FLOATING_POINT_INVALID_OPERATION = PACKAGE_CL
-			.addExternalSymbol("FLOATING-POINT-INVALID-OPERATION");
+	public static final Symbol FLOATING_POINT_INVALID_OPERATION = PACKAGE_CL.addExternalSymbol("FLOATING-POINT-INVALID-OPERATION");
 	public static final Symbol FLOATING_POINT_OVERFLOW = PACKAGE_CL.addExternalSymbol("FLOATING-POINT-OVERFLOW");
 	public static final Symbol FLOATING_POINT_UNDERFLOW = PACKAGE_CL.addExternalSymbol("FLOATING-POINT-UNDERFLOW");
 	public static final Symbol FLOATP = PACKAGE_CL.addExternalSymbol("FLOATP");
@@ -2528,8 +2530,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol GENTEMP = PACKAGE_CL.addExternalSymbol("GENTEMP");
 	public static final Symbol GET = PACKAGE_CL.addExternalSymbol("GET");
 	public static final Symbol GET_DECODED_TIME = PACKAGE_CL.addExternalSymbol("GET-DECODED-TIME");
-	public static final Symbol GET_DISPATCH_MACRO_CHARACTER = PACKAGE_CL
-			.addExternalSymbol("GET-DISPATCH-MACRO-CHARACTER");
+	public static final Symbol GET_DISPATCH_MACRO_CHARACTER = PACKAGE_CL.addExternalSymbol("GET-DISPATCH-MACRO-CHARACTER");
 	public static final Symbol GET_INTERNAL_REAL_TIME = PACKAGE_CL.addExternalSymbol("GET-INTERNAL-REAL-TIME");
 	public static final Symbol GET_INTERNAL_RUN_TIME = PACKAGE_CL.addExternalSymbol("GET-INTERNAL-RUN-TIME");
 	public static final Symbol GET_MACRO_CHARACTER = PACKAGE_CL.addExternalSymbol("GET-MACRO-CHARACTER");
@@ -2547,8 +2548,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol HASH_TABLE_COUNT = PACKAGE_CL.addExternalSymbol("HASH-TABLE-COUNT");
 	public static final Symbol HASH_TABLE_P = PACKAGE_CL.addExternalSymbol("HASH-TABLE-P");
 	public static final Symbol HASH_TABLE_REHASH_SIZE = PACKAGE_CL.addExternalSymbol("HASH-TABLE-REHASH-SIZE");
-	public static final Symbol HASH_TABLE_REHASH_THRESHOLD = PACKAGE_CL
-			.addExternalSymbol("HASH-TABLE-REHASH-THRESHOLD");
+	public static final Symbol HASH_TABLE_REHASH_THRESHOLD = PACKAGE_CL.addExternalSymbol("HASH-TABLE-REHASH-THRESHOLD");
 	public static final Symbol HASH_TABLE_SIZE = PACKAGE_CL.addExternalSymbol("HASH-TABLE-SIZE");
 	public static final Symbol HASH_TABLE_TEST = PACKAGE_CL.addExternalSymbol("HASH-TABLE-TEST");
 	public static final Symbol HOST_NAMESTRING = PACKAGE_CL.addExternalSymbol("HOST-NAMESTRING");
@@ -2571,14 +2571,12 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol INTEGERP = PACKAGE_CL.addExternalSymbol("INTEGERP");
 	public static final Symbol INTERACTIVE_STREAM_P = PACKAGE_CL.addExternalSymbol("INTERACTIVE-STREAM-P");
 	public static final Symbol INTERN = PACKAGE_CL.addExternalSymbol("INTERN");
-	public static final Symbol INTERNAL_TIME_UNITS_PER_SECOND = PACKAGE_CL
-			.addExternalSymbol("INTERNAL-TIME-UNITS-PER-SECOND");
+	public static final Symbol INTERNAL_TIME_UNITS_PER_SECOND = PACKAGE_CL.addExternalSymbol("INTERNAL-TIME-UNITS-PER-SECOND");
 	public static final Symbol INTERSECTION = PACKAGE_CL.addExternalSymbol("INTERSECTION");
 	public static final Symbol INVALID_METHOD_ERROR = PACKAGE_CL.addExternalSymbol("INVALID-METHOD-ERROR");
 	public static final Symbol INVOKE_DEBUGGER = PACKAGE_CL.addExternalSymbol("INVOKE-DEBUGGER");
 	public static final Symbol INVOKE_RESTART = PACKAGE_CL.addExternalSymbol("INVOKE-RESTART");
-	public static final Symbol INVOKE_RESTART_INTERACTIVELY = PACKAGE_CL
-			.addExternalSymbol("INVOKE-RESTART-INTERACTIVELY");
+	public static final Symbol INVOKE_RESTART_INTERACTIVELY = PACKAGE_CL.addExternalSymbol("INVOKE-RESTART-INTERACTIVELY");
 	public static final Symbol ISQRT = PACKAGE_CL.addExternalSymbol("ISQRT");
 	public static final Symbol KEYWORD = PACKAGE_CL.addExternalSymbol("KEYWORD");
 	public static final Symbol KEYWORDP = PACKAGE_CL.addExternalSymbol("KEYWORDP");
@@ -2591,40 +2589,27 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol LDB = PACKAGE_CL.addExternalSymbol("LDB");
 	public static final Symbol LDB_TEST = PACKAGE_CL.addExternalSymbol("LDB-TEST");
 	public static final Symbol LDIFF = PACKAGE_CL.addExternalSymbol("LDIFF");
-	public static final Symbol LEAST_NEGATIVE_DOUBLE_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-NEGATIVE-DOUBLE-FLOAT");
+	public static final Symbol LEAST_NEGATIVE_DOUBLE_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-NEGATIVE-DOUBLE-FLOAT");
 	public static final Symbol LEAST_NEGATIVE_LONG_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-NEGATIVE-LONG-FLOAT");
-	public static final Symbol LEAST_NEGATIVE_NORMALIZED_DOUBLE_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-NEGATIVE-NORMALIZED-DOUBLE-FLOAT");
-	public static final Symbol LEAST_NEGATIVE_NORMALIZED_LONG_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-NEGATIVE-NORMALIZED-LONG-FLOAT");
-	public static final Symbol LEAST_NEGATIVE_NORMALIZED_SHORT_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-NEGATIVE-NORMALIZED-SHORT-FLOAT");
-	public static final Symbol LEAST_NEGATIVE_NORMALIZED_SINGLE_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-NEGATIVE-NORMALIZED-SINGLE-FLOAT");
+	public static final Symbol LEAST_NEGATIVE_NORMALIZED_DOUBLE_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-NEGATIVE-NORMALIZED-DOUBLE-FLOAT");
+	public static final Symbol LEAST_NEGATIVE_NORMALIZED_LONG_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-NEGATIVE-NORMALIZED-LONG-FLOAT");
+	public static final Symbol LEAST_NEGATIVE_NORMALIZED_SHORT_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-NEGATIVE-NORMALIZED-SHORT-FLOAT");
+	public static final Symbol LEAST_NEGATIVE_NORMALIZED_SINGLE_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-NEGATIVE-NORMALIZED-SINGLE-FLOAT");
 	public static final Symbol LEAST_NEGATIVE_SHORT_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-NEGATIVE-SHORT-FLOAT");
-	public static final Symbol LEAST_NEGATIVE_SINGLE_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-NEGATIVE-SINGLE-FLOAT");
-	public static final Symbol LEAST_POSITIVE_DOUBLE_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-POSITIVE-DOUBLE-FLOAT");
+	public static final Symbol LEAST_NEGATIVE_SINGLE_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-NEGATIVE-SINGLE-FLOAT");
+	public static final Symbol LEAST_POSITIVE_DOUBLE_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-POSITIVE-DOUBLE-FLOAT");
 	public static final Symbol LEAST_POSITIVE_LONG_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-POSITIVE-LONG-FLOAT");
-	public static final Symbol LEAST_POSITIVE_NORMALIZED_DOUBLE_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-POSITIVE-NORMALIZED-DOUBLE-FLOAT");
-	public static final Symbol LEAST_POSITIVE_NORMALIZED_LONG_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-POSITIVE-NORMALIZED-LONG-FLOAT");
-	public static final Symbol LEAST_POSITIVE_NORMALIZED_SHORT_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-POSITIVE-NORMALIZED-SHORT-FLOAT");
-	public static final Symbol LEAST_POSITIVE_NORMALIZED_SINGLE_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-POSITIVE-NORMALIZED-SINGLE-FLOAT");
+	public static final Symbol LEAST_POSITIVE_NORMALIZED_DOUBLE_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-POSITIVE-NORMALIZED-DOUBLE-FLOAT");
+	public static final Symbol LEAST_POSITIVE_NORMALIZED_LONG_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-POSITIVE-NORMALIZED-LONG-FLOAT");
+	public static final Symbol LEAST_POSITIVE_NORMALIZED_SHORT_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-POSITIVE-NORMALIZED-SHORT-FLOAT");
+	public static final Symbol LEAST_POSITIVE_NORMALIZED_SINGLE_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-POSITIVE-NORMALIZED-SINGLE-FLOAT");
 	public static final Symbol LEAST_POSITIVE_SHORT_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-POSITIVE-SHORT-FLOAT");
-	public static final Symbol LEAST_POSITIVE_SINGLE_FLOAT = PACKAGE_CL
-			.addExternalSymbol("LEAST-POSITIVE-SINGLE-FLOAT");
+	public static final Symbol LEAST_POSITIVE_SINGLE_FLOAT = PACKAGE_CL.addExternalSymbol("LEAST-POSITIVE-SINGLE-FLOAT");
 	public static final Symbol LENGTH = PACKAGE_CL.addExternalSymbol("LENGTH");
 	public static final Symbol LET = PACKAGE_CL.addExternalSymbol("LET");
 	public static final Symbol LET_STAR = PACKAGE_CL.addExternalSymbol("LET*");
 	public static final Symbol LISP_IMPLEMENTATION_TYPE = PACKAGE_CL.addExternalSymbol("LISP-IMPLEMENTATION-TYPE");
-	public static final Symbol LISP_IMPLEMENTATION_VERSION = PACKAGE_CL
-			.addExternalSymbol("LISP-IMPLEMENTATION-VERSION");
+	public static final Symbol LISP_IMPLEMENTATION_VERSION = PACKAGE_CL.addExternalSymbol("LISP-IMPLEMENTATION-VERSION");
 	public static final Symbol LIST = PACKAGE_CL.addExternalSymbol("LIST");
 	public static final Symbol LIST_STAR = PACKAGE_CL.addExternalSymbol("LIST*");
 	public static final Symbol LIST_ALL_PACKAGES = PACKAGE_CL.addExternalSymbol("LIST-ALL-PACKAGES");
@@ -2632,8 +2617,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol LISTEN = PACKAGE_CL.addExternalSymbol("LISTEN");
 	public static final Symbol LISTP = PACKAGE_CL.addExternalSymbol("LISTP");
 	public static final Symbol LOAD = PACKAGE_CL.addExternalSymbol("LOAD");
-	public static final Symbol LOAD_LOGICAL_PATHNAME_TRANSLATIONS = PACKAGE_CL
-			.addExternalSymbol("LOAD-LOGICAL-PATHNAME-TRANSLATIONS");
+	public static final Symbol LOAD_LOGICAL_PATHNAME_TRANSLATIONS = PACKAGE_CL.addExternalSymbol("LOAD-LOGICAL-PATHNAME-TRANSLATIONS");
 	public static final Symbol LOAD_TIME_VALUE = PACKAGE_CL.addExternalSymbol("LOAD-TIME-VALUE");
 	public static final Symbol LOCALLY = PACKAGE_CL.addExternalSymbol("LOCALLY");
 	public static final Symbol LOG = PACKAGE_CL.addExternalSymbol("LOG");
@@ -2644,8 +2628,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol LOGCOUNT = PACKAGE_CL.addExternalSymbol("LOGCOUNT");
 	public static final Symbol LOGEQV = PACKAGE_CL.addExternalSymbol("LOGEQV");
 	public static final Symbol LOGICAL_PATHNAME = PACKAGE_CL.addExternalSymbol("LOGICAL-PATHNAME");
-	public static final Symbol LOGICAL_PATHNAME_TRANSLATIONS = PACKAGE_CL
-			.addExternalSymbol("LOGICAL-PATHNAME-TRANSLATIONS");
+	public static final Symbol LOGICAL_PATHNAME_TRANSLATIONS = PACKAGE_CL.addExternalSymbol("LOGICAL-PATHNAME-TRANSLATIONS");
 	public static final Symbol LOGIOR = PACKAGE_CL.addExternalSymbol("LOGIOR");
 	public static final Symbol LOGNAND = PACKAGE_CL.addExternalSymbol("LOGNAND");
 	public static final Symbol LOGNOR = PACKAGE_CL.addExternalSymbol("LOGNOR");
@@ -2656,8 +2639,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol LOGXOR = PACKAGE_CL.addExternalSymbol("LOGXOR");
 	public static final Symbol LONG_FLOAT = PACKAGE_CL.addExternalSymbol("LONG-FLOAT");
 	public static final Symbol LONG_FLOAT_EPSILON = PACKAGE_CL.addExternalSymbol("LONG-FLOAT-EPSILON");
-	public static final Symbol LONG_FLOAT_NEGATIVE_EPSILON = PACKAGE_CL
-			.addExternalSymbol("LONG-FLOAT-NEGATIVE-EPSILON");
+	public static final Symbol LONG_FLOAT_NEGATIVE_EPSILON = PACKAGE_CL.addExternalSymbol("LONG-FLOAT-NEGATIVE-EPSILON");
 	public static final Symbol LONG_SITE_NAME = PACKAGE_CL.addExternalSymbol("LONG-SITE-NAME");
 	public static final Symbol LOOP = PACKAGE_CL.addExternalSymbol("LOOP");
 	public static final Symbol LOOP_FINISH = PACKAGE_CL.addExternalSymbol("LOOP-FINISH");
@@ -2673,16 +2655,14 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol MAKE_BROADCAST_STREAM = PACKAGE_CL.addExternalSymbol("MAKE-BROADCAST-STREAM");
 	public static final Symbol MAKE_CONCATENATED_STREAM = PACKAGE_CL.addExternalSymbol("MAKE-CONCATENATED-STREAM");
 	public static final Symbol MAKE_CONDITION = PACKAGE_CL.addExternalSymbol("MAKE-CONDITION");
-	public static final Symbol MAKE_DISPATCH_MACRO_CHARACTER = PACKAGE_CL
-			.addExternalSymbol("MAKE-DISPATCH-MACRO-CHARACTER");
+	public static final Symbol MAKE_DISPATCH_MACRO_CHARACTER = PACKAGE_CL.addExternalSymbol("MAKE-DISPATCH-MACRO-CHARACTER");
 	public static final Symbol MAKE_ECHO_STREAM = PACKAGE_CL.addExternalSymbol("MAKE-ECHO-STREAM");
 	public static final Symbol MAKE_HASH_TABLE = PACKAGE_CL.addExternalSymbol("MAKE-HASH-TABLE");
 	public static final Symbol MAKE_INSTANCE = PACKAGE_CL.addExternalSymbol("MAKE-INSTANCE");
 	public static final Symbol MAKE_INSTANCES_OBSOLETE = PACKAGE_CL.addExternalSymbol("MAKE-INSTANCES-OBSOLETE");
 	public static final Symbol MAKE_LIST = PACKAGE_CL.addExternalSymbol("MAKE-LIST");
 	public static final Symbol MAKE_LOAD_FORM = PACKAGE_CL.addExternalSymbol("MAKE-LOAD-FORM");
-	public static final Symbol MAKE_LOAD_FORM_SAVING_SLOTS = PACKAGE_CL
-			.addExternalSymbol("MAKE-LOAD-FORM-SAVING-SLOTS");
+	public static final Symbol MAKE_LOAD_FORM_SAVING_SLOTS = PACKAGE_CL.addExternalSymbol("MAKE-LOAD-FORM-SAVING-SLOTS");
 	public static final Symbol MAKE_METHOD = PACKAGE_CL.addExternalSymbol("MAKE-METHOD");
 	public static final Symbol MAKE_PACKAGE = PACKAGE_CL.addExternalSymbol("MAKE-PACKAGE");
 	public static final Symbol MAKE_PATHNAME = PACKAGE_CL.addExternalSymbol("MAKE-PATHNAME");
@@ -2813,8 +2793,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol POSITION_IF_NOT = PACKAGE_CL.addExternalSymbol("POSITION-IF-NOT");
 	public static final Symbol PPRINT = PACKAGE_CL.addExternalSymbol("PPRINT");
 	public static final Symbol PPRINT_DISPATCH = PACKAGE_CL.addExternalSymbol("PPRINT-DISPATCH");
-	public static final Symbol PPRINT_EXIT_IF_LIST_EXHAUSTED = PACKAGE_CL
-			.addExternalSymbol("PPRINT-EXIT-IF-LIST-EXHAUSTED");
+	public static final Symbol PPRINT_EXIT_IF_LIST_EXHAUSTED = PACKAGE_CL.addExternalSymbol("PPRINT-EXIT-IF-LIST-EXHAUSTED");
 	public static final Symbol PPRINT_FILL = PACKAGE_CL.addExternalSymbol("PPRINT-FILL");
 	public static final Symbol PPRINT_INDENT = PACKAGE_CL.addExternalSymbol("PPRINT-INDENT");
 	public static final Symbol PPRINT_LINEAR = PACKAGE_CL.addExternalSymbol("PPRINT-LINEAR");
@@ -2914,8 +2893,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol SERIOUS_CONDITION = PACKAGE_CL.addExternalSymbol("SERIOUS-CONDITION");
 	public static final Symbol SET = PACKAGE_CL.addExternalSymbol("SET");
 	public static final Symbol SET_DIFFERENCE = PACKAGE_CL.addExternalSymbol("SET-DIFFERENCE");
-	public static final Symbol SET_DISPATCH_MACRO_CHARACTER = PACKAGE_CL
-			.addExternalSymbol("SET-DISPATCH-MACRO-CHARACTER");
+	public static final Symbol SET_DISPATCH_MACRO_CHARACTER = PACKAGE_CL.addExternalSymbol("SET-DISPATCH-MACRO-CHARACTER");
 	public static final Symbol SET_EXCLUSIVE_OR = PACKAGE_CL.addExternalSymbol("SET-EXCLUSIVE-OR");
 	public static final Symbol SET_MACRO_CHARACTER = PACKAGE_CL.addExternalSymbol("SET-MACRO-CHARACTER");
 	public static final Symbol SET_PPRINT_DISPATCH = PACKAGE_CL.addExternalSymbol("SET-PPRINT-DISPATCH");
@@ -2929,8 +2907,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol SHIFTF = PACKAGE_CL.addExternalSymbol("SHIFTF");
 	public static final Symbol SHORT_FLOAT = PACKAGE_CL.addExternalSymbol("SHORT-FLOAT");
 	public static final Symbol SHORT_FLOAT_EPSILON = PACKAGE_CL.addExternalSymbol("SHORT-FLOAT-EPSILON");
-	public static final Symbol SHORT_FLOAT_NEGATIVE_EPSILON = PACKAGE_CL
-			.addExternalSymbol("SHORT-FLOAT-NEGATIVE-EPSILON");
+	public static final Symbol SHORT_FLOAT_NEGATIVE_EPSILON = PACKAGE_CL.addExternalSymbol("SHORT-FLOAT-NEGATIVE-EPSILON");
 	public static final Symbol SHORT_SITE_NAME = PACKAGE_CL.addExternalSymbol("SHORT-SITE-NAME");
 	public static final Symbol SIGNAL = PACKAGE_CL.addExternalSymbol("SIGNAL");
 	public static final Symbol SIGNED_BYTE = PACKAGE_CL.addExternalSymbol("SIGNED-BYTE");
@@ -2940,10 +2917,8 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol SIMPLE_BIT_VECTOR = PACKAGE_CL.addExternalSymbol("SIMPLE-BIT-VECTOR");
 	public static final Symbol SIMPLE_BIT_VECTOR_P = PACKAGE_CL.addExternalSymbol("SIMPLE-BIT-VECTOR-P");
 	public static final Symbol SIMPLE_CONDITION = PACKAGE_CL.addExternalSymbol("SIMPLE-CONDITION");
-	public static final Symbol SIMPLE_CONDITION_FORMAT_ARGUMENTS = PACKAGE_CL
-			.addExternalSymbol("SIMPLE-CONDITION-FORMAT-ARGUMENTS");
-	public static final Symbol SIMPLE_CONDITION_FORMAT_CONTROL = PACKAGE_CL
-			.addExternalSymbol("SIMPLE-CONDITION-FORMAT-CONTROL");
+	public static final Symbol SIMPLE_CONDITION_FORMAT_ARGUMENTS = PACKAGE_CL.addExternalSymbol("SIMPLE-CONDITION-FORMAT-ARGUMENTS");
+	public static final Symbol SIMPLE_CONDITION_FORMAT_CONTROL = PACKAGE_CL.addExternalSymbol("SIMPLE-CONDITION-FORMAT-CONTROL");
 	public static final Symbol SIMPLE_ERROR = PACKAGE_CL.addExternalSymbol("SIMPLE-ERROR");
 	public static final Symbol SIMPLE_STRING = PACKAGE_CL.addExternalSymbol("SIMPLE-STRING");
 	public static final Symbol SIMPLE_STRING_P = PACKAGE_CL.addExternalSymbol("SIMPLE-STRING-P");
@@ -2954,8 +2929,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol SIN = PACKAGE_CL.addExternalSymbol("SIN");
 	public static final Symbol SINGLE_FLOAT = PACKAGE_CL.addExternalSymbol("SINGLE-FLOAT");
 	public static final Symbol SINGLE_FLOAT_EPSILON = PACKAGE_CL.addExternalSymbol("SINGLE-FLOAT-EPSILON");
-	public static final Symbol SINGLE_FLOAT_NEGATIVE_EPSILON = PACKAGE_CL
-			.addExternalSymbol("SINGLE-FLOAT-NEGATIVE-EPSILON");
+	public static final Symbol SINGLE_FLOAT_NEGATIVE_EPSILON = PACKAGE_CL.addExternalSymbol("SINGLE-FLOAT-NEGATIVE-EPSILON");
 	public static final Symbol SINH = PACKAGE_CL.addExternalSymbol("SINH");
 	public static final Symbol SIXTH = PACKAGE_CL.addExternalSymbol("SIXTH");
 	public static final Symbol SLEEP = PACKAGE_CL.addExternalSymbol("SLEEP");
@@ -3057,10 +3031,8 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol TRUENAME = PACKAGE_CL.addExternalSymbol("TRUENAME");
 	public static final Symbol TRUNCATE = PACKAGE_CL.addExternalSymbol("TRUNCATE");
 	public static final Symbol TWO_WAY_STREAM = PACKAGE_CL.addExternalSymbol("TWO-WAY-STREAM");
-	public static final Symbol TWO_WAY_STREAM_INPUT_STREAM = PACKAGE_CL
-			.addExternalSymbol("TWO-WAY-STREAM-INPUT-STREAM");
-	public static final Symbol TWO_WAY_STREAM_OUTPUT_STREAM = PACKAGE_CL
-			.addExternalSymbol("TWO-WAY-STREAM-OUTPUT-STREAM");
+	public static final Symbol TWO_WAY_STREAM_INPUT_STREAM = PACKAGE_CL.addExternalSymbol("TWO-WAY-STREAM-INPUT-STREAM");
+	public static final Symbol TWO_WAY_STREAM_OUTPUT_STREAM = PACKAGE_CL.addExternalSymbol("TWO-WAY-STREAM-OUTPUT-STREAM");
 	public static final Symbol TYPE = PACKAGE_CL.addExternalSymbol("TYPE");
 	public static final Symbol TYPE_ERROR = PACKAGE_CL.addExternalSymbol("TYPE-ERROR");
 	public static final Symbol TYPE_ERROR_DATUM = PACKAGE_CL.addExternalSymbol("TYPE-ERROR-DATUM");
@@ -3081,12 +3053,9 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol UNTRACE = PACKAGE_CL.addExternalSymbol("UNTRACE");
 	public static final Symbol UNUSE_PACKAGE = PACKAGE_CL.addExternalSymbol("UNUSE-PACKAGE");
 	public static final Symbol UNWIND_PROTECT = PACKAGE_CL.addExternalSymbol("UNWIND-PROTECT");
-	public static final Symbol UPDATE_INSTANCE_FOR_DIFFERENT_CLASS = PACKAGE_CL
-			.addExternalSymbol("UPDATE-INSTANCE-FOR-DIFFERENT-CLASS");
-	public static final Symbol UPDATE_INSTANCE_FOR_REDEFINED_CLASS = PACKAGE_CL
-			.addExternalSymbol("UPDATE-INSTANCE-FOR-REDEFINED-CLASS");
-	public static final Symbol UPGRADED_ARRAY_ELEMENT_TYPE = PACKAGE_CL
-			.addExternalSymbol("UPGRADED-ARRAY-ELEMENT-TYPE");
+	public static final Symbol UPDATE_INSTANCE_FOR_DIFFERENT_CLASS = PACKAGE_CL.addExternalSymbol("UPDATE-INSTANCE-FOR-DIFFERENT-CLASS");
+	public static final Symbol UPDATE_INSTANCE_FOR_REDEFINED_CLASS = PACKAGE_CL.addExternalSymbol("UPDATE-INSTANCE-FOR-REDEFINED-CLASS");
+	public static final Symbol UPGRADED_ARRAY_ELEMENT_TYPE = PACKAGE_CL.addExternalSymbol("UPGRADED-ARRAY-ELEMENT-TYPE");
 	public static final Symbol UPGRADED_COMPLEX_PART_TYPE = PACKAGE_CL.addExternalSymbol("UPGRADED-COMPLEX-PART-TYPE");
 	public static final Symbol UPPER_CASE_P = PACKAGE_CL.addExternalSymbol("UPPER-CASE-P");
 	public static final Symbol USE_PACKAGE = PACKAGE_CL.addExternalSymbol("USE-PACKAGE");
@@ -3130,22 +3099,17 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	// Extensions.
 	public static final Symbol MOST_POSITIVE_JAVA_LONG = PACKAGE_EXT.addExternalSymbol("MOST-POSITIVE-JAVA-LONG");
 	public static final Symbol MOST_NEGATIVE_JAVA_LONG = PACKAGE_EXT.addExternalSymbol("MOST-NEGATIVE-JAVA-LONG");
-	public static final Symbol SINGLE_FLOAT_POSITIVE_INFINITY = PACKAGE_EXT
-			.addExternalSymbol("SINGLE-FLOAT-POSITIVE-INFINITY");
-	public static final Symbol SINGLE_FLOAT_NEGATIVE_INFINITY = PACKAGE_EXT
-			.addExternalSymbol("SINGLE-FLOAT-NEGATIVE-INFINITY");
-	public static final Symbol DOUBLE_FLOAT_POSITIVE_INFINITY = PACKAGE_EXT
-			.addExternalSymbol("DOUBLE-FLOAT-POSITIVE-INFINITY");
-	public static final Symbol DOUBLE_FLOAT_NEGATIVE_INFINITY = PACKAGE_EXT
-			.addExternalSymbol("DOUBLE-FLOAT-NEGATIVE-INFINITY");
+	public static final Symbol SINGLE_FLOAT_POSITIVE_INFINITY = PACKAGE_EXT.addExternalSymbol("SINGLE-FLOAT-POSITIVE-INFINITY");
+	public static final Symbol SINGLE_FLOAT_NEGATIVE_INFINITY = PACKAGE_EXT.addExternalSymbol("SINGLE-FLOAT-NEGATIVE-INFINITY");
+	public static final Symbol DOUBLE_FLOAT_POSITIVE_INFINITY = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-POSITIVE-INFINITY");
+	public static final Symbol DOUBLE_FLOAT_NEGATIVE_INFINITY = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-NEGATIVE-INFINITY");
 	public static final Symbol STYLE_WARN = PACKAGE_EXT.addExternalSymbol("STYLE-WARN");
 	public static final Symbol MEMQ = PACKAGE_EXT.addExternalSymbol("MEMQ");
 	public static final Symbol MEMQL = PACKAGE_EXT.addExternalSymbol("MEMQL");
 	public static final Symbol NIL_VECTOR = PACKAGE_EXT.addExternalSymbol("NIL-VECTOR");
 	public static final Symbol MAILBOX = PACKAGE_EXT.addExternalSymbol("MAILBOX");
 	public static final Symbol MUTEX = PACKAGE_EXT.addExternalSymbol("MUTEX");
-	public static final Symbol SUPPRESS_COMPILER_WARNINGS = PACKAGE_EXT
-			.addExternalSymbol("*SUPPRESS-COMPILER-WARNINGS*");
+	public static final Symbol SUPPRESS_COMPILER_WARNINGS = PACKAGE_EXT.addExternalSymbol("*SUPPRESS-COMPILER-WARNINGS*");
 	public static final Symbol NEQ = PACKAGE_EXT.addExternalSymbol("NEQ");
 	public static final Symbol ADJOIN_EQL = PACKAGE_EXT.addExternalSymbol("ADJOIN-EQL");
 	public static final Symbol CHARACTER_DESIGNATOR = PACKAGE_EXT.addExternalSymbol("CHARACTER-DESIGNATOR");
@@ -3163,8 +3127,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol CLASS_LAYOUT = PACKAGE_MOP.addInternalSymbol("CLASS-LAYOUT");
 	public static final Symbol CLASS_DEFAULT_INITARGS = PACKAGE_MOP.addExternalSymbol("CLASS-DEFAULT_INITARGS");
 	public static final Symbol CLASS_DIRECT_METHODS = PACKAGE_MOP.addExternalSymbol("CLASS-DIRECT-METHODS");
-	public static final Symbol CLASS_DIRECT_DEFAULT_INITARGS = PACKAGE_MOP
-			.addExternalSymbol("CLASS-DIRECT-DEFAULT_INITARGS");
+	public static final Symbol CLASS_DIRECT_DEFAULT_INITARGS = PACKAGE_MOP.addExternalSymbol("CLASS-DIRECT-DEFAULT_INITARGS");
 	public static final Symbol CLASS_DIRECT_SLOTS = PACKAGE_MOP.addExternalSymbol("CLASS-DIRECT-SLOTS");
 	public static final Symbol CLASS_DIRECT_SUBCLASSES = PACKAGE_MOP.addExternalSymbol("CLASS-DIRECT-SUBCLASSES");
 	public static final Symbol CLASS_DIRECT_SUPERCLASSES = PACKAGE_MOP.addExternalSymbol("CLASS-DIRECT-SUPERCLASSES");
@@ -3174,8 +3137,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol CLASS_SLOTS = PACKAGE_MOP.addExternalSymbol("CLASS-SLOTS");
 	public static final Symbol EQL_SPECIALIZER = PACKAGE_MOP.addExternalSymbol("EQL-SPECIALIZER");
 	public static final Symbol EQL_SPECIALIZER_OBJECT = PACKAGE_MOP.addExternalSymbol("EQL-SPECIALIZER-OBJECT");
-	public static final Symbol FUNCALLABLE_STANDARD_OBJECT = PACKAGE_MOP
-			.addExternalSymbol("FUNCALLABLE-STANDARD-OBJECT");
+	public static final Symbol FUNCALLABLE_STANDARD_OBJECT = PACKAGE_MOP.addExternalSymbol("FUNCALLABLE-STANDARD-OBJECT");
 	public static final Symbol FUNCALLABLE_STANDARD_CLASS = PACKAGE_MOP.addExternalSymbol("FUNCALLABLE-STANDARD-CLASS");
 	public static final Symbol GENERIC_FUNCTION_METHODS = PACKAGE_MOP.addExternalSymbol("GENERIC-FUNCTION-METHODS");
 	public static final Symbol GENERIC_FUNCTION_NAME = PACKAGE_MOP.addExternalSymbol("GENERIC-FUNCTION-NAME");
@@ -3188,14 +3150,11 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol DIRECT_SLOT_DEFINITION = PACKAGE_MOP.addExternalSymbol("DIRECT-SLOT-DEFINITION");
 	public static final Symbol EFFECTIVE_SLOT_DEFINITION = PACKAGE_MOP.addExternalSymbol("EFFECTIVE-SLOT-DEFINITION");
 	public static final Symbol STANDARD_SLOT_DEFINITION = PACKAGE_MOP.addExternalSymbol("STANDARD-SLOT-DEFINITION");
-	public static final Symbol STANDARD_DIRECT_SLOT_DEFINITION = PACKAGE_MOP
-			.addExternalSymbol("STANDARD-DIRECT-SLOT-DEFINITION");
-	public static final Symbol STANDARD_EFFECTIVE_SLOT_DEFINITION = PACKAGE_MOP
-			.addExternalSymbol("STANDARD-EFFECTIVE-SLOT-DEFINITION");
+	public static final Symbol STANDARD_DIRECT_SLOT_DEFINITION = PACKAGE_MOP.addExternalSymbol("STANDARD-DIRECT-SLOT-DEFINITION");
+	public static final Symbol STANDARD_EFFECTIVE_SLOT_DEFINITION = PACKAGE_MOP.addExternalSymbol("STANDARD-EFFECTIVE-SLOT-DEFINITION");
 	// MOP method combination readers.
 	public static final Symbol METHOD_COMBINATION_NAME = PACKAGE_MOP.addInternalSymbol("METHOD-COMBINATION-NAME");
-	public static final Symbol METHOD_COMBINATION_DOCUMENTATION = PACKAGE_MOP
-			.addInternalSymbol("METHOD-COMBINATION-DOCUMENTATION");
+	public static final Symbol METHOD_COMBINATION_DOCUMENTATION = PACKAGE_MOP.addInternalSymbol("METHOD-COMBINATION-DOCUMENTATION");
 	// Java interface.
 	public static final Symbol JAVA_EXCEPTION = PACKAGE_JAVA.addExternalSymbol("JAVA-EXCEPTION");
 	public static final Symbol JAVA_EXCEPTION_CAUSE = PACKAGE_JAVA.addExternalSymbol("JAVA-EXCEPTION-CAUSE");
@@ -3237,8 +3196,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol OUTPUT_OBJECT = PACKAGE_SYS.addExternalSymbol("OUTPUT-OBJECT");
 	public static final Symbol PRECEDENCE_LIST = PACKAGE_SYS.addExternalSymbol("PRECEDENCE-LIST");
 	public static final Symbol PUTHASH = PACKAGE_SYS.addExternalSymbol("PUTHASH");
-	public static final Symbol RECORD_SOURCE_INFORMATION_FOR_TYPE = PACKAGE_SYS
-			.addExternalSymbol("RECORD-SOURCE-INFORMATION-FOR-TYPE");
+	public static final Symbol RECORD_SOURCE_INFORMATION_FOR_TYPE = PACKAGE_SYS.addExternalSymbol("RECORD-SOURCE-INFORMATION-FOR-TYPE");
 	public static final Symbol SET_CHAR = PACKAGE_SYS.addExternalSymbol("SET-CHAR");
 	public static final Symbol _SET_CLASS_SLOTS = PACKAGE_SYS.addExternalSymbol("%SET-CLASS-SLOTS");
 	public static final Symbol SET_SCHAR = PACKAGE_SYS.addExternalSymbol("SET-SCHAR");
@@ -3284,8 +3242,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	public static final Symbol LISP_STACK_FRAME = PACKAGE_SYS.addInternalSymbol("LISP-STACK-FRAME");
 	public static final Symbol LOCATION = PACKAGE_SYS.addInternalSymbol("LOCATION");
 	public static final Symbol MACROEXPAND_MACRO = PACKAGE_SYS.addInternalSymbol("MACROEXPAND-MACRO");
-	public static final Symbol MAKE_FUNCTION_PRELOADING_CONTEXT = PACKAGE_SYS
-			.addInternalSymbol("MAKE-FUNCTION-PRELOADING-CONTEXT");
+	public static final Symbol MAKE_FUNCTION_PRELOADING_CONTEXT = PACKAGE_SYS.addInternalSymbol("MAKE-FUNCTION-PRELOADING-CONTEXT");
 	public static final Symbol METHOD_CLASS = PACKAGE_SYS.addInternalSymbol("METHOD-CLASS");
 	public static final Symbol _METHOD_COMBINATION = PACKAGE_SYS.addInternalSymbol("%METHOD-COMBINATION");
 	public static final Symbol METHODS = PACKAGE_SYS.addInternalSymbol("METHODS");
@@ -3318,7 +3275,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 
 	static {
 		syms = Arrays.asList(new Symbol[] { Symbol.TERMINAL_IO, Symbol.QUERY_IO, Symbol.DEBUG_IO, //
-				Symbol.STANDARD_OUTPUT, Symbol.STANDARD_INPUT, Symbol.ERROR_OUTPUT, Symbol.TRACE_OUTPUT //		
+				Symbol.STANDARD_OUTPUT, Symbol.STANDARD_INPUT, Symbol.ERROR_OUTPUT, Symbol.TRACE_OUTPUT //
 		});
 	}
 

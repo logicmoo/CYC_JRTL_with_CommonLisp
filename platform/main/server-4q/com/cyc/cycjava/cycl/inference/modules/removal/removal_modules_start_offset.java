@@ -19,7 +19,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -75,8 +75,8 @@ public final class removal_modules_start_offset extends SubLTranslatedFile {
     }
 
     public static SubLObject init_removal_modules_start_offset_file() {
-        deflexical("*START-OFFSET-CHECK-COST*", SubLTrampolineFile.maybeDefault($start_offset_check_cost$, $start_offset_check_cost$, ONE_INTEGER));
-        deflexical("*START-OFFSET-UNIFY-COST*", SubLTrampolineFile.maybeDefault($start_offset_unify_cost$, $start_offset_unify_cost$, ONE_INTEGER));
+        deflexical("*START-OFFSET-CHECK-COST*", SubLSystemTrampolineFile.maybeDefault($start_offset_check_cost$, $start_offset_check_cost$, ONE_INTEGER));
+        deflexical("*START-OFFSET-UNIFY-COST*", SubLSystemTrampolineFile.maybeDefault($start_offset_unify_cost$, $start_offset_unify_cost$, ONE_INTEGER));
         return NIL;
     }
 

@@ -53,7 +53,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -314,7 +314,7 @@ public final class workflow_queue extends SubLTranslatedFile implements V02 {
             SubLObject watermark_high = get_workflow_queue_watermark_high(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(filename, STRINGP);
+                    SubLSystemTrampolineFile.checkType(filename, STRINGP);
                     {
                         SubLObject go = T;
                         SubLObject stream = NIL;
@@ -504,7 +504,7 @@ public final class workflow_queue extends SubLTranslatedFile implements V02 {
             SubLObject verbose = get_bnc_frequency_queue_verbose(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(line, STRINGP);
+                    SubLSystemTrampolineFile.checkType(line, STRINGP);
                     if (NIL != verbose) {
                         format(T, $str_alt75$___S, line);
                     }
@@ -770,7 +770,7 @@ public final class workflow_queue extends SubLTranslatedFile implements V02 {
                 SubLObject processed_items = get_typical_size_queue_processed_items(self);
                 try {
                     try {
-                        SubLTrampolineFile.checkType(line, STRINGP);
+                        SubLSystemTrampolineFile.checkType(line, STRINGP);
                         format(T, $str_alt75$___S, line);
                         {
                             SubLObject tokens = string_utilities.string_tokenize(line, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -900,7 +900,7 @@ public final class workflow_queue extends SubLTranslatedFile implements V02 {
     private static final SubLSymbol $typical_size_harvest_scheduler_form$ = makeSymbol("*TYPICAL-SIZE-HARVEST-SCHEDULER-FORM*");
 
     public static final SubLObject mail_size_harvesting_request(SubLObject worker_name, SubLObject address) {
-        SubLTrampolineFile.checkType(address, STRINGP);
+        SubLSystemTrampolineFile.checkType(address, STRINGP);
         {
             SubLObject item = methods.funcall_instance_method_with_0_args(get_typical_size_queue_object(), DEQUEUE);
             if (NIL != typical_size_harvestable_item_p(item)) {
@@ -1574,7 +1574,7 @@ public final class workflow_queue extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject new_typical_size_harvestable_item(SubLObject item) {
-        SubLTrampolineFile.checkType(item, FORT_P);
+        SubLSystemTrampolineFile.checkType(item, FORT_P);
         {
             SubLObject v_new = object.new_class_instance(TYPICAL_SIZE_HARVESTABLE_ITEM);
             instances.set_slot(v_new, CYC_FORT, item);
@@ -1658,8 +1658,8 @@ public final class workflow_queue extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject mail_silly_size_question_bug(SubLObject fort, SubLObject predicate, SubLObject user) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        SubLTrampolineFile.checkType(predicate, FORT_P);
+        SubLSystemTrampolineFile.checkType(fort, FORT_P);
+        SubLSystemTrampolineFile.checkType(predicate, FORT_P);
         {
             SubLObject bug = object.new_class_instance(SILLY_SIZE_QUESTION_BUG);
             SubLObject v_question = listS($$relationAllInstance, predicate, fort, $list_alt256);

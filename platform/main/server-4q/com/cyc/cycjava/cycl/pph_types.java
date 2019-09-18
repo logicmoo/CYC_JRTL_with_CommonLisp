@@ -90,7 +90,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1849,7 +1849,7 @@ public final class pph_types extends SubLTranslatedFile {
     public static SubLObject init_pph_types_file() {
         deflexical("*PPH-TYPE-TREE*", $list0);
         deflexical("*PARAPHRASE-TESTS*", $list1);
-        deflexical("*PPH-TYPE-METHOD-HASH*", SubLTrampolineFile.maybeDefault($pph_type_method_hash$, $pph_type_method_hash$, () -> make_hash_table($int$256, symbol_function(EQ), UNPROVIDED)));
+        deflexical("*PPH-TYPE-METHOD-HASH*", SubLSystemTrampolineFile.maybeDefault($pph_type_method_hash$, $pph_type_method_hash$, () -> make_hash_table($int$256, symbol_function(EQ), UNPROVIDED)));
         deflexical("*PPH-VALID-METHOD-QUALITIES*", $list4);
         deflexical("*PPH-DATE-DENOTING-FUNCTIONS*", $list38);
         defparameter("*PPH-SUBCOL-FNS*", set.new_set(symbol_function(EQUAL), UNPROVIDED));

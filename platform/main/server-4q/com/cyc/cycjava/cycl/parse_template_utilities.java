@@ -38,7 +38,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -520,8 +520,8 @@ public final class parse_template_utilities extends SubLTranslatedFile {
         deflexical("*APPLY-NEW-TEMPLATE-TRANSFORMS*", T);
         deflexical("*QUESTION-MARK-EXPRESSION*", $list0);
         deflexical("*WHO-WHAT-EXPRESSION*", $list1);
-        deflexical("*BE-WORDFORMS*", SubLTrampolineFile.maybeDefault($be_wordforms$, $be_wordforms$, $list3));
-        deflexical("*DO-WORDFORMS*", SubLTrampolineFile.maybeDefault($do_wordforms$, $do_wordforms$, $list5));
+        deflexical("*BE-WORDFORMS*", SubLSystemTrampolineFile.maybeDefault($be_wordforms$, $be_wordforms$, $list3));
+        deflexical("*DO-WORDFORMS*", SubLSystemTrampolineFile.maybeDefault($do_wordforms$, $do_wordforms$, $list5));
         return NIL;
     }
 

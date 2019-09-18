@@ -79,7 +79,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -257,7 +257,7 @@ public final class narts_high extends SubLTranslatedFile {
     }
 
     public static SubLObject nart_hl_formula(final SubLObject nart) {
-        SubLTrampolineFile.enforceType(nart, NART_P);
+        SubLSystemTrampolineFile.enforceType(nart, NART_P);
         return NIL != nart_handles.nart_handle_validP(nart) ? narts_interface.kb_nart_hl_formula(nart) : NIL;
     }
 
@@ -292,7 +292,7 @@ public final class narts_high extends SubLTranslatedFile {
     }
 
     public static SubLObject nart_el_formula(final SubLObject nart) {
-        SubLTrampolineFile.enforceType(nart, NART_P);
+        SubLSystemTrampolineFile.enforceType(nart, NART_P);
         return transform_list_utilities.transform(nart, symbol_function(NART_P), symbol_function(NART_HL_FORMULA), UNPROVIDED);
     }
 
@@ -389,7 +389,7 @@ public final class narts_high extends SubLTranslatedFile {
 
     public static SubLObject remove_nart(final SubLObject nart) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(nart, NART_P);
+        SubLSystemTrampolineFile.enforceType(nart, NART_P);
         final SubLObject _prev_bind_0 = hl_macros.$forts_being_removed$.currentBinding(thread);
         try {
             hl_macros.$forts_being_removed$.bind(cons(nart, hl_macros.$forts_being_removed$.getDynamicValue(thread)), thread);

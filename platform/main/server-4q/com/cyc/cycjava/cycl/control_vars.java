@@ -60,7 +60,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -1429,7 +1429,7 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject set_auto_increment_kb_alt(SubLObject v_boolean) {
-		SubLTrampolineFile.checkType(v_boolean, BOOLEANP);
+		SubLSystemTrampolineFile.checkType(v_boolean, BOOLEANP);
 		$auto_increment_kb$.setGlobalValue(v_boolean);
 		return $auto_increment_kb$.getGlobalValue();
 	}
@@ -1465,7 +1465,7 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject set_load_submitted_transcripts_alt(SubLObject v_boolean) {
-		SubLTrampolineFile.checkType(v_boolean, BOOLEANP);
+		SubLSystemTrampolineFile.checkType(v_boolean, BOOLEANP);
 		$load_submitted_transcriptsP$.setGlobalValue(v_boolean);
 		return $load_submitted_transcriptsP$.getGlobalValue();
 	}
@@ -1501,7 +1501,7 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject set_send_submitted_transcript_loading_notices_alt(SubLObject v_boolean) {
-		SubLTrampolineFile.checkType(v_boolean, BOOLEANP);
+		SubLSystemTrampolineFile.checkType(v_boolean, BOOLEANP);
 		$send_submitted_transcript_loading_noticesP$.setGlobalValue(v_boolean);
 		return $send_submitted_transcript_loading_noticesP$.getGlobalValue();
 	}
@@ -1595,7 +1595,7 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 
 	public static final SubLObject set_build_kb_loaded_alt(SubLObject kb) {
 		if (NIL != kb) {
-			SubLTrampolineFile.checkType(kb, INTEGERP);
+			SubLSystemTrampolineFile.checkType(kb, INTEGERP);
 		}
 		$build_kb_loaded$.setGlobalValue(kb);
 		return set_kb_loaded(kb);
@@ -1631,7 +1631,7 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 
 	public static final SubLObject set_kb_loaded_alt(SubLObject kb) {
 		if (NIL != kb) {
-			SubLTrampolineFile.checkType(kb, INTEGERP);
+			SubLSystemTrampolineFile.checkType(kb, INTEGERP);
 		}
 		$kb_loaded$.setGlobalValue(kb);
 		return kb;
@@ -2062,8 +2062,8 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 	public static SubLObject init_control_vars_file() {
 		if (SubLFiles.USE_V1) {
 			defparameter("*READ-REQUIRE-CONSTANT-EXISTS*", T);
-			deflexical("*TABLE-AREA*", SubLTrampolineFile.maybeDefault($table_area$, $table_area$, NIL));
-			deflexical("*HL-LOCK*", SubLTrampolineFile.maybeDefault($hl_lock$, $hl_lock$, () -> make_lock($$$HL_Store_Lock)));
+			deflexical("*TABLE-AREA*", SubLSystemTrampolineFile.maybeDefault($table_area$, $table_area$, NIL));
+			deflexical("*HL-LOCK*", SubLSystemTrampolineFile.maybeDefault($hl_lock$, $hl_lock$, () -> make_lock($$$HL_Store_Lock)));
 			defparameter("*BOOTSTRAPPING-KB?*", NIL);
 			deflexical("*KEYWORD-PACKAGE*", find_package($$$KEYWORD));
 			deflexical("*SUBLISP-PACKAGE*", find_package($$$SUBLISP));
@@ -2173,21 +2173,21 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 			deflexical("*LAST-AGENDA-ERROR-EXPLANATORY-SUPPORTS*", NIL);
 			defparameter("*AGENDA-DISPLAY-FI-WARNINGS*", NIL);
 			defparameter("*IGNORE-REMOTE-ERRORS*", T);
-			deflexical("*AUTO-INCREMENT-KB*", SubLTrampolineFile.maybeDefault($auto_increment_kb$, $auto_increment_kb$, NIL));
+			deflexical("*AUTO-INCREMENT-KB*", SubLSystemTrampolineFile.maybeDefault($auto_increment_kb$, $auto_increment_kb$, NIL));
 			deflexical("*LOAD-SUBMITTED-TRANSCRIPTS?*", NIL);
 			deflexical("*SEND-SUBMITTED-TRANSCRIPT-LOADING-NOTICES?*", NIL);
 			defvar("*CYC-IMAGE-ID*", NIL);
 			deflexical("*USE-TCP-PORT-IN-IMAGE-ID*", T);
-			deflexical("*BUILD-KB-LOADED*", SubLTrampolineFile.maybeDefault($build_kb_loaded$, $build_kb_loaded$, NIL));
-			deflexical("*KB-LOADED*", SubLTrampolineFile.maybeDefault($kb_loaded$, $kb_loaded$, NIL));
-			deflexical("*KB-PEDIGREE*", SubLTrampolineFile.maybeDefault($kb_pedigree$, $kb_pedigree$, $UNKNOWN));
+			deflexical("*BUILD-KB-LOADED*", SubLSystemTrampolineFile.maybeDefault($build_kb_loaded$, $build_kb_loaded$, NIL));
+			deflexical("*KB-LOADED*", SubLSystemTrampolineFile.maybeDefault($kb_loaded$, $kb_loaded$, NIL));
+			deflexical("*KB-PEDIGREE*", SubLSystemTrampolineFile.maybeDefault($kb_pedigree$, $kb_pedigree$, $UNKNOWN));
 			defparameter("*USE-TRANSCRIPT?*", T);
-			deflexical("*RUN-OWN-OPERATIONS?*", SubLTrampolineFile.maybeDefault($run_own_operationsP$, $run_own_operationsP$, T));
-			deflexical("*CAUGHT-UP-ON-MASTER-TRANSCRIPT*", SubLTrampolineFile.maybeDefault($caught_up_on_master_transcript$, $caught_up_on_master_transcript$, NIL));
-			deflexical("*COMMUNICATION-MODE*", SubLTrampolineFile.maybeDefault($communication_mode$, $communication_mode$, $UNKNOWN));
+			deflexical("*RUN-OWN-OPERATIONS?*", SubLSystemTrampolineFile.maybeDefault($run_own_operationsP$, $run_own_operationsP$, T));
+			deflexical("*CAUGHT-UP-ON-MASTER-TRANSCRIPT*", SubLSystemTrampolineFile.maybeDefault($caught_up_on_master_transcript$, $caught_up_on_master_transcript$, NIL));
+			deflexical("*COMMUNICATION-MODE*", SubLSystemTrampolineFile.maybeDefault($communication_mode$, $communication_mode$, $UNKNOWN));
 			defparameter("*UNENCAPSULATING-WITHIN-AGENDA*", NIL);
 			defvar("*SAVE-ASKED-QUERIES?*", NIL);
-			deflexical("*INIT-FILE-LOADED?*", SubLTrampolineFile.maybeDefault($init_file_loadedP$, $init_file_loadedP$, NIL));
+			deflexical("*INIT-FILE-LOADED?*", SubLSystemTrampolineFile.maybeDefault($init_file_loadedP$, $init_file_loadedP$, NIL));
 			defparameter("*WITHIN-ASSERT*", NIL);
 			defparameter("*WITHIN-UNASSERT*", NIL);
 			defparameter("*WITHIN-ASK*", NIL);
@@ -2195,7 +2195,7 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 			defparameter("*COMPUTE-INFERENCE-RESULTS*", T);
 			defparameter("*CACHE-INFERENCE-RESULTS*", NIL);
 			defparameter("*TRANSFORMATION-DEPTH-CUTOFF*", NIL);
-			deflexical("*LEXICON-INITIALIZED?*", SubLTrampolineFile.maybeDefault($lexicon_initializedP$, $lexicon_initializedP$, NIL));
+			deflexical("*LEXICON-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($lexicon_initializedP$, $lexicon_initializedP$, NIL));
 			defparameter("*PARTIAL-SEMANTICS?*", NIL);
 			defparameter("*ENFORCE-MASS-VS-COUNT?*", T);
 			defparameter("*PARTIAL-SYNTAX?*", NIL);
@@ -2221,10 +2221,10 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 			defparameter("*DBM-INIT-FILE-LOADED?*", NIL);
 			defparameter("*DBM-CACHE-LOADING-STARTED?*", NIL);
 			defparameter("*DBM-CACHE-LOADING-FINISHED?*", NIL);
-			deflexical("*WORDNET-INITIALIZED?*", SubLTrampolineFile.maybeDefault($wordnet_initializedP$, $wordnet_initializedP$, NIL));
-			deflexical("*USE-WN-LINKS?*", SubLTrampolineFile.maybeDefault($use_wn_linksP$, $use_wn_linksP$, NIL));
-			deflexical("*ACIP-SUBKERNEL-EXTRACTION*", SubLTrampolineFile.maybeDefault($acip_subkernel_extraction$, $acip_subkernel_extraction$, NIL));
-			deflexical("*ACIP-SUBKERNEL-OUTPUT-STREAM*", SubLTrampolineFile.maybeDefault($acip_subkernel_output_stream$, $acip_subkernel_output_stream$, NIL));
+			deflexical("*WORDNET-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($wordnet_initializedP$, $wordnet_initializedP$, NIL));
+			deflexical("*USE-WN-LINKS?*", SubLSystemTrampolineFile.maybeDefault($use_wn_linksP$, $use_wn_linksP$, NIL));
+			deflexical("*ACIP-SUBKERNEL-EXTRACTION*", SubLSystemTrampolineFile.maybeDefault($acip_subkernel_extraction$, $acip_subkernel_extraction$, NIL));
+			deflexical("*ACIP-SUBKERNEL-OUTPUT-STREAM*", SubLSystemTrampolineFile.maybeDefault($acip_subkernel_output_stream$, $acip_subkernel_output_stream$, NIL));
 			defparameter("*JANUS-TAG*", NIL);
 			defparameter("*JANUS-NEW-CONSTANTS*", NIL);
 			defparameter("*JANUS-TEST-CASE-LOGGING?*", NIL);
@@ -2267,8 +2267,8 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 
 	public static SubLObject init_control_vars_file_Previous() {
 		defparameter("*READ-REQUIRE-CONSTANT-EXISTS*", T);
-		deflexical("*TABLE-AREA*", SubLTrampolineFile.maybeDefault($table_area$, $table_area$, NIL));
-		deflexical("*HL-LOCK*", SubLTrampolineFile.maybeDefault($hl_lock$, $hl_lock$, () -> make_lock($$$HL_Store_Lock)));
+		deflexical("*TABLE-AREA*", SubLSystemTrampolineFile.maybeDefault($table_area$, $table_area$, NIL));
+		deflexical("*HL-LOCK*", SubLSystemTrampolineFile.maybeDefault($hl_lock$, $hl_lock$, () -> make_lock($$$HL_Store_Lock)));
 		defparameter("*BOOTSTRAPPING-KB?*", NIL);
 		deflexical("*KEYWORD-PACKAGE*", find_package($$$KEYWORD));
 		deflexical("*SUBLISP-PACKAGE*", find_package($$$SUBLISP));
@@ -2378,21 +2378,21 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 		deflexical("*LAST-AGENDA-ERROR-EXPLANATORY-SUPPORTS*", NIL);
 		defparameter("*AGENDA-DISPLAY-FI-WARNINGS*", NIL);
 		defparameter("*IGNORE-REMOTE-ERRORS*", T);
-		deflexical("*AUTO-INCREMENT-KB*", SubLTrampolineFile.maybeDefault($auto_increment_kb$, $auto_increment_kb$, NIL));
+		deflexical("*AUTO-INCREMENT-KB*", SubLSystemTrampolineFile.maybeDefault($auto_increment_kb$, $auto_increment_kb$, NIL));
 		deflexical("*LOAD-SUBMITTED-TRANSCRIPTS?*", NIL);
 		deflexical("*SEND-SUBMITTED-TRANSCRIPT-LOADING-NOTICES?*", NIL);
 		defvar("*CYC-IMAGE-ID*", NIL);
 		deflexical("*USE-TCP-PORT-IN-IMAGE-ID*", T);
-		deflexical("*BUILD-KB-LOADED*", SubLTrampolineFile.maybeDefault($build_kb_loaded$, $build_kb_loaded$, NIL));
-		deflexical("*KB-LOADED*", SubLTrampolineFile.maybeDefault($kb_loaded$, $kb_loaded$, NIL));
-		deflexical("*KB-PEDIGREE*", SubLTrampolineFile.maybeDefault($kb_pedigree$, $kb_pedigree$, $UNKNOWN));
+		deflexical("*BUILD-KB-LOADED*", SubLSystemTrampolineFile.maybeDefault($build_kb_loaded$, $build_kb_loaded$, NIL));
+		deflexical("*KB-LOADED*", SubLSystemTrampolineFile.maybeDefault($kb_loaded$, $kb_loaded$, NIL));
+		deflexical("*KB-PEDIGREE*", SubLSystemTrampolineFile.maybeDefault($kb_pedigree$, $kb_pedigree$, $UNKNOWN));
 		defparameter("*USE-TRANSCRIPT?*", T);
-		deflexical("*RUN-OWN-OPERATIONS?*", SubLTrampolineFile.maybeDefault($run_own_operationsP$, $run_own_operationsP$, T));
-		deflexical("*CAUGHT-UP-ON-MASTER-TRANSCRIPT*", SubLTrampolineFile.maybeDefault($caught_up_on_master_transcript$, $caught_up_on_master_transcript$, NIL));
-		deflexical("*COMMUNICATION-MODE*", SubLTrampolineFile.maybeDefault($communication_mode$, $communication_mode$, $UNKNOWN));
+		deflexical("*RUN-OWN-OPERATIONS?*", SubLSystemTrampolineFile.maybeDefault($run_own_operationsP$, $run_own_operationsP$, T));
+		deflexical("*CAUGHT-UP-ON-MASTER-TRANSCRIPT*", SubLSystemTrampolineFile.maybeDefault($caught_up_on_master_transcript$, $caught_up_on_master_transcript$, NIL));
+		deflexical("*COMMUNICATION-MODE*", SubLSystemTrampolineFile.maybeDefault($communication_mode$, $communication_mode$, $UNKNOWN));
 		defparameter("*UNENCAPSULATING-WITHIN-AGENDA*", NIL);
 		defvar("*SAVE-ASKED-QUERIES?*", NIL);
-		deflexical("*INIT-FILE-LOADED?*", SubLTrampolineFile.maybeDefault($init_file_loadedP$, $init_file_loadedP$, NIL));
+		deflexical("*INIT-FILE-LOADED?*", SubLSystemTrampolineFile.maybeDefault($init_file_loadedP$, $init_file_loadedP$, NIL));
 		defparameter("*WITHIN-ASSERT*", NIL);
 		defparameter("*WITHIN-UNASSERT*", NIL);
 		defparameter("*WITHIN-ASK*", NIL);
@@ -2400,7 +2400,7 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 		defparameter("*COMPUTE-INFERENCE-RESULTS*", T);
 		defparameter("*CACHE-INFERENCE-RESULTS*", NIL);
 		defparameter("*TRANSFORMATION-DEPTH-CUTOFF*", NIL);
-		deflexical("*LEXICON-INITIALIZED?*", SubLTrampolineFile.maybeDefault($lexicon_initializedP$, $lexicon_initializedP$, NIL));
+		deflexical("*LEXICON-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($lexicon_initializedP$, $lexicon_initializedP$, NIL));
 		defparameter("*PARTIAL-SEMANTICS?*", NIL);
 		defparameter("*ENFORCE-MASS-VS-COUNT?*", T);
 		defparameter("*PARTIAL-SYNTAX?*", NIL);
@@ -2426,10 +2426,10 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 		defparameter("*DBM-INIT-FILE-LOADED?*", NIL);
 		defparameter("*DBM-CACHE-LOADING-STARTED?*", NIL);
 		defparameter("*DBM-CACHE-LOADING-FINISHED?*", NIL);
-		deflexical("*WORDNET-INITIALIZED?*", SubLTrampolineFile.maybeDefault($wordnet_initializedP$, $wordnet_initializedP$, NIL));
-		deflexical("*USE-WN-LINKS?*", SubLTrampolineFile.maybeDefault($use_wn_linksP$, $use_wn_linksP$, NIL));
-		deflexical("*ACIP-SUBKERNEL-EXTRACTION*", SubLTrampolineFile.maybeDefault($acip_subkernel_extraction$, $acip_subkernel_extraction$, NIL));
-		deflexical("*ACIP-SUBKERNEL-OUTPUT-STREAM*", SubLTrampolineFile.maybeDefault($acip_subkernel_output_stream$, $acip_subkernel_output_stream$, NIL));
+		deflexical("*WORDNET-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($wordnet_initializedP$, $wordnet_initializedP$, NIL));
+		deflexical("*USE-WN-LINKS?*", SubLSystemTrampolineFile.maybeDefault($use_wn_linksP$, $use_wn_linksP$, NIL));
+		deflexical("*ACIP-SUBKERNEL-EXTRACTION*", SubLSystemTrampolineFile.maybeDefault($acip_subkernel_extraction$, $acip_subkernel_extraction$, NIL));
+		deflexical("*ACIP-SUBKERNEL-OUTPUT-STREAM*", SubLSystemTrampolineFile.maybeDefault($acip_subkernel_output_stream$, $acip_subkernel_output_stream$, NIL));
 		defparameter("*JANUS-TAG*", NIL);
 		defparameter("*JANUS-NEW-CONSTANTS*", NIL);
 		defparameter("*JANUS-TEST-CASE-LOGGING?*", NIL);

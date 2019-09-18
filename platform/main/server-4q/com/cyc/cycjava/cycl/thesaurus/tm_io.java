@@ -177,7 +177,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1263,8 +1263,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_load_thesaurus_from_file(SubLObject filename, SubLObject thesaurus, SubLObject format) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(filename, STRINGP);
-            SubLTrampolineFile.checkType(thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
             {
                 SubLObject result = NIL;
                 SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
@@ -1825,8 +1825,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_merge_load_thesaurus_from_file(SubLObject filename, SubLObject thesaurus, SubLObject format) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(filename, STRINGP);
-            SubLTrampolineFile.checkType(thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
             {
                 SubLObject read_method = tm_load_read_method(format);
                 if (!(((NIL != read_method) && read_method.isSymbol()) && (NIL != fboundp(read_method)))) {
@@ -2242,8 +2242,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_thesaurus_difference_from_file(SubLObject filename, SubLObject thesaurus, SubLObject format) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(filename, STRINGP);
-            SubLTrampolineFile.checkType(thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
             {
                 SubLObject read_method = tm_load_read_method(format);
                 if (!(((NIL != read_method) && read_method.isSymbol()) && (NIL != fboundp(read_method)))) {
@@ -2593,7 +2593,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_update_load_state_for_thesaurus(SubLObject thesaurus) {
-        SubLTrampolineFile.checkType(thesaurus, $sym80$THESAURUS_);
+        SubLSystemTrampolineFile.checkType(thesaurus, $sym80$THESAURUS_);
         return assoc(thesaurus, tm_update_load_state(), UNPROVIDED, UNPROVIDED);
     }
 
@@ -2792,8 +2792,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_frob_case_of_input_hash_for_thesaurus(SubLObject input_hash, SubLObject thesaurus) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(input_hash, HASH_TABLE_P);
-            SubLTrampolineFile.checkType(thesaurus, $sym80$THESAURUS_);
+            SubLSystemTrampolineFile.checkType(input_hash, HASH_TABLE_P);
+            SubLSystemTrampolineFile.checkType(thesaurus, $sym80$THESAURUS_);
             {
                 SubLObject string_case_style = tm_internals.tm_case_style_to_use_for_thesaurus(thesaurus);
                 if (string_case_style.eql(tm_internals.$tm_default_case_as_is$.getGlobalValue()) || (NIL == string_case_style)) {
@@ -2883,9 +2883,9 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(input_hash, HASH_TABLE_P);
-            SubLTrampolineFile.checkType(result_hash, HASH_TABLE_P);
-            SubLTrampolineFile.checkType(thesaurus, $sym80$THESAURUS_);
+            SubLSystemTrampolineFile.checkType(input_hash, HASH_TABLE_P);
+            SubLSystemTrampolineFile.checkType(result_hash, HASH_TABLE_P);
+            SubLSystemTrampolineFile.checkType(thesaurus, $sym80$THESAURUS_);
             {
                 SubLObject table_var = input_hash;
                 utilities_macros.$progress_note$.setDynamicValue($str_alt86$Checking_Case_of_Preferred_Terms_, thread);
@@ -2987,19 +2987,19 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(source_thesaurus_name, STRINGP);
-            SubLTrampolineFile.checkType(target_thesaurus_name, STRINGP);
+            SubLSystemTrampolineFile.checkType(source_thesaurus_name, STRINGP);
+            SubLSystemTrampolineFile.checkType(target_thesaurus_name, STRINGP);
             if (NIL != target_term_name) {
-                SubLTrampolineFile.checkType(target_term_name, STRINGP);
+                SubLSystemTrampolineFile.checkType(target_term_name, STRINGP);
             }
             if (NIL != start_term_names) {
-                SubLTrampolineFile.checkType(start_term_names, LISTP);
+                SubLSystemTrampolineFile.checkType(start_term_names, LISTP);
             }
             if (NIL != cutoff_term_names) {
-                SubLTrampolineFile.checkType(cutoff_term_names, LISTP);
+                SubLSystemTrampolineFile.checkType(cutoff_term_names, LISTP);
             }
             if (NIL != cutoff_level) {
-                SubLTrampolineFile.checkType(cutoff_level, INTEGERP);
+                SubLSystemTrampolineFile.checkType(cutoff_level, INTEGERP);
             }
             {
                 SubLObject source_thesaurus = NIL;
@@ -3195,18 +3195,18 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus, FORT_P);
-            SubLTrampolineFile.checkType(target_thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(target_thesaurus, FORT_P);
             if (NIL != target_term) {
-                SubLTrampolineFile.checkType(target_term, FORT_P);
+                SubLSystemTrampolineFile.checkType(target_term, FORT_P);
             }
-            SubLTrampolineFile.checkType(start_terms, LISTP);
-            SubLTrampolineFile.checkType(cutoff_terms, LISTP);
+            SubLSystemTrampolineFile.checkType(start_terms, LISTP);
+            SubLSystemTrampolineFile.checkType(cutoff_terms, LISTP);
             if (NIL != skipped_facts_log) {
-                SubLTrampolineFile.checkType(skipped_facts_log, STRINGP);
+                SubLSystemTrampolineFile.checkType(skipped_facts_log, STRINGP);
             }
             if (NIL != cutoff_level) {
-                SubLTrampolineFile.checkType(cutoff_level, FIXNUMP);
+                SubLSystemTrampolineFile.checkType(cutoff_level, FIXNUMP);
             }
             {
                 SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
@@ -3537,8 +3537,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_copy_assertion_to_thesaurus(SubLObject assertion, SubLObject target_thesaurus) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            SubLTrampolineFile.checkType(target_thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(target_thesaurus, FORT_P);
             if (NIL == gethash(assertion_handles.assertion_id(assertion), $tm_copy_assertions_seen$.getDynamicValue(thread), UNPROVIDED)) {
                 sethash(assertion_handles.assertion_id(assertion), $tm_copy_assertions_seen$.getDynamicValue(thread), T);
                 {
@@ -3617,8 +3617,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_dump_thesaurus_to_file(SubLObject thesaurus, SubLObject filename, SubLObject format) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus, FORT_P);
-            SubLTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
             {
                 SubLObject dump_method_info = assoc(format, $tm_dump_write_methods$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
                 if (NIL == dump_method_info) {
@@ -3873,12 +3873,12 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_dump_thesaurus_subset_to_file(SubLObject thesaurus, SubLObject filename, SubLObject format, SubLObject start_terms, SubLObject cutoff_terms, SubLObject cutoff_level) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus, FORT_P);
-            SubLTrampolineFile.checkType(filename, STRINGP);
-            SubLTrampolineFile.checkType(start_terms, LISTP);
-            SubLTrampolineFile.checkType(cutoff_terms, LISTP);
+            SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(start_terms, LISTP);
+            SubLSystemTrampolineFile.checkType(cutoff_terms, LISTP);
             if (NIL != cutoff_level) {
-                SubLTrampolineFile.checkType(cutoff_level, FIXNUMP);
+                SubLSystemTrampolineFile.checkType(cutoff_level, FIXNUMP);
             }
             {
                 SubLObject dump_method_info = assoc(format, $tm_dump_write_methods$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
@@ -4161,23 +4161,23 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus_name, STRINGP);
-            SubLTrampolineFile.checkType(filename, STRINGP);
-            SubLTrampolineFile.checkType(format, KEYWORDP);
+            SubLSystemTrampolineFile.checkType(thesaurus_name, STRINGP);
+            SubLSystemTrampolineFile.checkType(filename, STRINGP);
+            SubLSystemTrampolineFile.checkType(format, KEYWORDP);
             if (NIL != v_case) {
-                SubLTrampolineFile.checkType(v_case, KEYWORDP);
+                SubLSystemTrampolineFile.checkType(v_case, KEYWORDP);
             }
             if (NIL != filter_name) {
-                SubLTrampolineFile.checkType(filter_name, STRINGP);
+                SubLSystemTrampolineFile.checkType(filter_name, STRINGP);
             }
             if (NIL != start_terms) {
-                SubLTrampolineFile.checkType(start_terms, LISTP);
+                SubLSystemTrampolineFile.checkType(start_terms, LISTP);
             }
             if (NIL != cutoff_terms) {
-                SubLTrampolineFile.checkType(cutoff_terms, LISTP);
+                SubLSystemTrampolineFile.checkType(cutoff_terms, LISTP);
             }
             if (NIL != cutoff_level) {
-                SubLTrampolineFile.checkType(cutoff_level, INTEGERP);
+                SubLSystemTrampolineFile.checkType(cutoff_level, INTEGERP);
             }
             {
                 SubLObject thesaurus = tm_internals.thesaurus_constant_from_name(thesaurus_name);
@@ -4649,8 +4649,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_dump_convert_case(SubLObject predicate, SubLObject string, SubLObject v_case) {
-        SubLTrampolineFile.checkType(string, STRINGP);
-        SubLTrampolineFile.checkType(predicate, FORT_P);
+        SubLSystemTrampolineFile.checkType(string, STRINGP);
+        SubLSystemTrampolineFile.checkType(predicate, FORT_P);
         if ((v_case == $MIXED) || (predicate == $$scopeNote)) {
             return string;
         } else {
@@ -4689,9 +4689,9 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(pathname, STRINGP);
-            SubLTrampolineFile.checkType(thesauri_names, CONSP);
-            SubLTrampolineFile.checkType(omit_cyc_correlatesP, BOOLEANP);
+            SubLSystemTrampolineFile.checkType(pathname, STRINGP);
+            SubLSystemTrampolineFile.checkType(thesauri_names, CONSP);
+            SubLSystemTrampolineFile.checkType(omit_cyc_correlatesP, BOOLEANP);
             {
                 SubLObject thesauri = NIL;
                 SubLObject warnings = $str_alt138$;
@@ -5424,7 +5424,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_create(SubLObject constant_name) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(constant_name, STRINGP);
+            SubLSystemTrampolineFile.checkType(constant_name, STRINGP);
             if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                 if (NIL != constants_high.find_constant(constant_name)) {
                     Errors.error($str_alt223$Error__Constant_name__A_is_alread, constant_name);
@@ -5458,7 +5458,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_generate_concept(SubLObject string) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(string, STRINGP);
+            SubLSystemTrampolineFile.checkType(string, STRINGP);
             {
                 SubLObject new_concept = NIL;
                 {
@@ -5691,7 +5691,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_timestamp_assertion_with_purpose(SubLObject purpose) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(purpose, FORT_P);
+            SubLSystemTrampolineFile.checkType(purpose, FORT_P);
             {
                 SubLObject ans = NIL;
                 {
@@ -5840,8 +5840,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
      * Used internally by tm-create-concept
      */
     public static final SubLObject tm_suggested_concept_name(SubLObject concept, SubLObject string) {
-        SubLTrampolineFile.checkType(concept, FORT_P);
-        SubLTrampolineFile.checkType(string, STRINGP);
+        SubLSystemTrampolineFile.checkType(concept, FORT_P);
+        SubLSystemTrampolineFile.checkType(string, STRINGP);
         {
             SubLObject id = constants_high.constant_internal_id(concept);
             SubLObject suggested_name = format(NIL, $str_alt235$TM__A__A, string, id);
@@ -6027,7 +6027,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(concept, FORT_P);
+            SubLSystemTrampolineFile.checkType(concept, FORT_P);
             if (NIL == thesauri) {
                 thesauri = tm_internals.all_thesauri();
             }
@@ -6123,8 +6123,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
      * whichever is most appropriate to keep. The concept which is kept is returned.
      */
     public static final SubLObject tm_merge_concepts(SubLObject concept1, SubLObject concept2) {
-        SubLTrampolineFile.checkType(concept1, FORT_P);
-        SubLTrampolineFile.checkType(concept2, FORT_P);
+        SubLSystemTrampolineFile.checkType(concept1, FORT_P);
+        SubLSystemTrampolineFile.checkType(concept2, FORT_P);
         if (NIL != tm_internals.thesaurus_gensymP(concept1)) {
             if (NIL != tm_internals.thesaurus_gensymP(concept2)) {
                 if (kb_indexing.num_index(concept1).numG(kb_indexing.num_index(concept2))) {
@@ -6154,7 +6154,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
         if (thesauri == UNPROVIDED) {
             thesauri = NIL;
         }
-        SubLTrampolineFile.checkType(concept, FORT_P);
+        SubLSystemTrampolineFile.checkType(concept, FORT_P);
         {
             SubLObject concept_thesauri = tm_internals.thesauri_of_concept(concept);
             SubLObject foreign_thesauri = NIL;
@@ -6309,9 +6309,9 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_uncorrelate_substitute(SubLObject new_concept, SubLObject old_concept, SubLObject source_assertion) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(new_concept, FORT_P);
-            SubLTrampolineFile.checkType(old_concept, FORT_P);
-            SubLTrampolineFile.checkType(source_assertion, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(new_concept, FORT_P);
+            SubLSystemTrampolineFile.checkType(old_concept, FORT_P);
+            SubLSystemTrampolineFile.checkType(source_assertion, ASSERTION_P);
             if (NIL != assertions_high.asserted_assertionP(source_assertion)) {
                 {
                     SubLObject old_formula = assertions_high.assertion_formula(source_assertion);
@@ -6487,7 +6487,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_clear_correlation_search(SubLObject thesaurus) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
             {
                 SubLObject lock = $tm_corr_searches_lock$.getDynamicValue(thread);
                 SubLObject release = NIL;
@@ -6552,7 +6552,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus, FORT_P);
+            SubLSystemTrampolineFile.checkType(thesaurus, FORT_P);
             {
                 SubLObject v_search = NIL;
                 SubLObject lock = $tm_corr_searches_lock$.getDynamicValue(thread);
@@ -6587,7 +6587,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_search, SEARCH_STRUC_P);
+            SubLSystemTrampolineFile.checkType(v_search, SEARCH_STRUC_P);
             {
                 SubLObject reason = NIL;
                 {
@@ -7217,8 +7217,8 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
                 SubLObject name = (pathname.isString()) ? ((SubLObject) (pathname)) : tm_new_partition_pathname(thesauri);
                 SubLObject partition_spec = (NIL == intersection(thesauri, tm_internals.all_thesauri(), UNPROVIDED, UNPROVIDED)) ? ((SubLObject) ($tm_partition_spec$.getDynamicValue(thread))) : tm_partition_spec_for_thesauri(thesauri);
                 SubLObject result = NIL;
-                SubLTrampolineFile.checkType(partition_spec, CONSP);
-                SubLTrampolineFile.checkType(name, STRINGP);
+                SubLSystemTrampolineFile.checkType(partition_spec, CONSP);
+                SubLSystemTrampolineFile.checkType(name, STRINGP);
                 result = partitions.save_partition(name, partition_spec);
                 return result;
             }
@@ -7231,7 +7231,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_load_partition(SubLObject pathname) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(pathname, STRINGP);
+            SubLSystemTrampolineFile.checkType(pathname, STRINGP);
             if (NIL == Filesys.probe_file(pathname)) {
                 Errors.error($str_alt289$File__S_cannot_be_accessed, pathname);
             } else {
@@ -7257,7 +7257,7 @@ public final class tm_io extends SubLTranslatedFile implements V02 {
      * Tests whether the directory DIRECTORY-PATH exists and is accessible
      */
     public static final SubLObject tm_directory_accessible(SubLObject directory_path) {
-        SubLTrampolineFile.checkType(directory_path, STRINGP);
+        SubLSystemTrampolineFile.checkType(directory_path, STRINGP);
         {
             SubLObject test_filename = file_utilities.relative_filename(directory_path, $str_alt290$access_test, UNPROVIDED);
             SubLObject success = NIL;

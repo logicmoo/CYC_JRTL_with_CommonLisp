@@ -47,7 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1490,7 +1490,7 @@ public final class cb_disjointness extends SubLTranslatedFile implements V02 {
      * Return a list of N different collections chosen at random.
      */
     public static final SubLObject random_n_collections(SubLObject n) {
-        SubLTrampolineFile.checkType(n, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(n, NON_NEGATIVE_INTEGER_P);
         if (n.isZero()) {
             return NIL;
         }

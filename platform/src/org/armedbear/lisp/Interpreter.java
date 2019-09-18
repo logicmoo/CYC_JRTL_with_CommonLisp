@@ -50,87 +50,156 @@ import static org.armedbear.lisp.Lisp.error;
 import static org.armedbear.lisp.Lisp.flushOutputStreams;
 import static org.armedbear.lisp.Lisp.getStandardInput;
 import static org.armedbear.lisp.Lisp.getStandardOutput;
-import static org.armedbear.lisp.Lisp.initialized;
+import static org.armedbear.lisp.Lisp.*;
 import static org.armedbear.lisp.Lisp.intern;
-import static org.armedbear.lisp.Main.startTimeMillis;
-import static org.logicmoo.system.Startup.isSubLisp;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
+import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
 public final class Interpreter extends Startup implements Runnable {
 
-	public static boolean doubledash = false;
+	public int doubledash = -1;
+	//	public boolean noinit = false;
+	public boolean postProcess = false;
+	//public boolean noinit = false;
+
+	final int instanceID;
+	private boolean _isRunning;
 
 	public static String RC_FILE = ".abclrc";
 
-	private final InputStream inputStream;
-	private final OutputStream outputStream;
+	public final static Object globalLock = new Object() {
+		@Override
+		public String toString() {
+			return "Interpreter.globalLock";
+		}
+	};
+
+	private InputStream inputStream;
+	private OutputStream outputStream;
+	private String[] initArgs;
+	private boolean began_init_instance = false;
+	private boolean began_post_inits = false;
+	final long startTimeMillis = System.currentTimeMillis();
 
 	public static Interpreter getInstance() {
-		synchronized (Interpreter.class) {
+		synchronized (globalLock) {
 			return globalInterpreter;
 		}
 	}
 
 	// Interface.
 	public static Interpreter createInstance() {
-		return createDefaultInstance(passedArgs);
+		synchronized (globalLock) {
+			if (globalInterpreter != null) {
+				return globalInterpreter;
+			}
+			return createDefaultInstance(passedArgs);
+		}
 	}
 
 	// Interface.
 	public static Interpreter createBasicInstance() {
 		try {
-			synchronized (Interpreter.class) {
+			synchronized (globalLock) {
 				if (globalInterpreter != null)
 					return globalInterpreter;
-				globalInterpreter = new Interpreter();
-				_NOINFORM_.setSymbolValue(T);
-				initializeLisp();
-				return globalInterpreter; 
+				globalInterpreter = createDefaultInstance(passedArgs);
+				//_NOINFORM_.setSymbolValue(T);
+				globalInterpreter.ensureInitialized();
+				return globalInterpreter;
 			}
 		} finally {
-			// postProcessCommandLine(Main.passedArgs);
+			// postProcessCommandLine(Main.initArgs);
 		}
 	}
 
+	// Interface.
 	public static Interpreter createDefaultInstance(String[] args) {
-		boolean postrgs = false;
-		try {
-			synchronized (Interpreter.class) {
-				if (globalInterpreter != null) {
-					return null;
-				}
-				globalInterpreter = new Interpreter();
-				postrgs = true;
-				return initInstance(globalInterpreter, args, false);
+
+		synchronized (globalLock) {
+			if (globalInterpreter != null) {
+				// Silly but lots of old external code likes this behavour
+				return null;
 			}
-		} finally {
-			if (postrgs)
-				postProcessCommandLine(args);
+			passedArgs = args;
+			InputStream inputStream = System.in;
+			OutputStream outputStream = System.out;
+			globalInterpreter = createNewLispInstanceNoInit(inputStream, outputStream, "./", null, noinform, args, true);
+			globalInterpreter.init();
+			return globalInterpreter;
 		}
 	}
 
-	public static synchronized Interpreter initInstance(Interpreter interp, String[] args, boolean jLisp) {
-		return subl_preserve_pkg(false, false, () -> initInstance0(interp, args, jLisp));
+	public static Interpreter createJLispInstance(InputStream in, OutputStream out, String initialDirectory, String version) {
+		jlisp_requested = true;
+		return createNewLispInstance(in, out, initialDirectory, version, noinform, passedArgs, Main.lispInstances.get() == 0);
 	}
 
-	public static Interpreter initInstance0(Interpreter interp, String[] args, boolean jLisp) {
+	public static Interpreter createNewLispInstance(InputStream in, OutputStream out, String initialDirectory, String version, boolean procArgs) {
+		return createNewLispInstance(in, out, initialDirectory, version, noinform, passedArgs, procArgs);
+	}
+
+	public static Interpreter createNewLispInstance(InputStream in, OutputStream out, String initialDirectory, String version, //
+			boolean noinform, String[] todo, boolean reprocEvals) {
+
+		synchronized (globalLock) {
+			if (todo == null) {
+				todo = Main.passedArgs;
+				//Main.initArgs = null;
+			}
+			Interpreter interp = createNewLispInstanceNoInit(in, out, initialDirectory, null, noinform, todo, reprocEvals);
+			interp.ensureInitialized();
+			return interp;
+		}
+
+	}
+
+	public static Interpreter createNewLispInstanceNoInit(InputStream in, OutputStream out, //
+			String initialDirectory, String version, //
+			boolean noinform, String[] todo, boolean reprocEvals) {
+		synchronized (globalLock) {
+			//			if (version == null) {
+			//				version = Version.getVersion();
+			//			}
+			Interpreter interp = new Interpreter(in, out, initialDirectory, noinform, todo, reprocEvals);
+			if (globalInterpreter == null) {
+				globalInterpreter = interp;
+			}
+			return interp;
+		}
+	}
+
+	public Interpreter initInstance(String[] args, boolean noinform) {
+		synchronized (globalLock) {
+			return subl_preserve_pkg(false, false, () -> initInstance0(args, noinform));
+		}
+	}
+
+	private Interpreter initInstance0(String[] args, boolean noinform) {
 		//Interpreter.globalInterpreter = interp;
+		if (began_init_instance)
+			return this;
+
+		this.began_init_instance = true;
 
 		if (args != null)
 			preprocessCommandLineArguments(args);
+
+		initArgs = args;
 
 		if (!noinform) {
 			final Stream out = getStandardOutput();
@@ -148,24 +217,27 @@ public final class Interpreter extends Startup implements Runnable {
 		if (noinform)
 			_NOINFORM_.setSymbolValue(T);
 		else {
-			double uptime = (System.currentTimeMillis() - Startup.startTimeMillis) / 1000.0;
+			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
 			final Stream out = getStandardOutput();
 			out._writeString("Low-level initialization used " + uptime + " seconds.\n");
 		}
 
-		initializeLisp(jLisp || jlisp);
+		load_boot_lisp();
+		if (jlisp_requested)
+			load_boot_jlisp();
 
 		initializeTopLevel();
 
-		if (!nosystem)
+		if (!Startup.nosystem)
 
 		{
+			Startup.nosystem = true;
 			initializeSystem();
-			nosystem = true;
 		}
 
-		startCycInit();
+		doPreInits();
 
+		Startup.registerForiegnMethods();
 		//
 		//		if (!Main.noSubLisp) {
 		//			/*
@@ -176,108 +248,134 @@ public final class Interpreter extends Startup implements Runnable {
 		//			SubLMain.embeddedMain(new String[0], SubLMain.NOTHING_TO_DO);
 		//		}
 		if (!noinform) {
-			double uptime = (System.currentTimeMillis() - Startup.startTimeMillis) / 1000.0;
+			double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
 			final Stream out = getStandardOutput();
 			out._writeString("Low-level initialization completed in " + uptime + " seconds.\n");
 		}
 
 		if (!noinit) {
 			processInitializationFile();
-			noinit = true;
 		}
 
-		completeCycInit();
-
 		if (!Main.isSublispDefault)
-			SubLPackage.setCurrentPackage("CL-USER");
+			Lisp.setCurrentPackage("CL-USER");
 
 		//Startup.i
 
 		//globalInterpreter.eval("(cl:funcall #'top-level::top-level-loop)");
 		///StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
-		return interp;
-	}
-
-	/**
-	 * @param jLisp
-	 */
-	public static void postProcessCommandLine(String[] passedArgs) {
-
-		synchronized (Interpreter.class) {
-			if (Main.passedArgs == passedArgs)
-				Main.passedArgs = null;
-		}
-
-		if (passedArgs != null) {
-			if (postProcess) {
-				postProcess = false;
-				//if (Main.subLisp) SubLPackage.setCurrentPackage("CL-USER");
-				doubledash = false;
-
-				Interpreter.postprocessCommandLineArguments(passedArgs);
-			}
-		} else {
-			//SubLPackage.setCurrentPackage("CL-USER");
-			//globalInterpreter.eval("(cl:load \"d.lisp\")");
-		}
-	}
-
-	public static Interpreter createJLispInstance(InputStream in, OutputStream out, String initialDirectory, String version) {
-		return createNewLispInstance(in, out, initialDirectory, version, true, passedArgs, Main.lispInstances == 0);
-	}
-
-	public static Interpreter createNewLispInstance(InputStream in, OutputStream out, String initialDirectory, String version, boolean procArgs) {
-		return createNewLispInstance(in, out, initialDirectory, version, false, passedArgs, procArgs);
-	}
-
-	public static Interpreter createNewLispInstance(InputStream in, OutputStream out, String initialDirectory, String version, //
-			boolean jlisp0, String[] todo, boolean redoTodo) {
-
-		try {
-			synchronized (Interpreter.class) {
-				if (todo == null) {
-					todo = Main.passedArgs;
-					//Main.passedArgs = null;
-				}
-				Interpreter interp = new Interpreter(in, out, initialDirectory);
-				if (globalInterpreter == null) {
-					globalInterpreter = interp;
-					redoTodo = true;
-				}
-				return initInstance(interp, todo, jlisp0);
-			}
-		} finally {
-			if (todo != null && redoTodo) {
-				postProcessCommandLine(todo);
-			}
-		}
+		return this;
 	}
 
 	public static boolean initialized() {
-		synchronized (Interpreter.class) {
-			return initialized;
+		synchronized (globalLock) {
+			return Interpreter.isInitialized();
 		}
 	}
 
-	public Interpreter() {
-		Main.lispInstances++;
-		//jlisp = false;
-		inputStream = null;
-		outputStream = null;
+	//	private Interpreter() {
+	//		instanceID = Main.lispInstances.getAndAdd(1);
+	//		//jlisp = false;
+	//		final InputStream in = SystemCurrent.mustIn();
+	//		inputStream = in;
+	//		final PrintStream out = SystemCurrent.mustOut();
+	//
+	//		outputStream = out;
+	//		sharedConstruct(null, noinform);
+	//		//if(!Main.noBSH)BeanShellCntrl.setSingleton(this);
+	//
+	//	}
+	//
+	//	private Interpreter(InputStream inputStream, OutputStream outputStream, String initialDirectory) {
+	//		instanceID = Main.lispInstances.getAndAdd(1);
+	//		//if(!Main.noBSH)BeanShellCntrl.setSingleton(this);
+	//		//jlisp = true;
+	//		this.inputStream = inputStream;
+	//		this.outputStream = outputStream;
+	//		Lisp.setIO(inputStream, outputStream);
+	//		if (!initialDirectory.endsWith(File.separator))
+	//			initialDirectory = initialDirectory.concat(File.separator);
+	//		Symbol.DEFAULT_PATHNAME_DEFAULTS.setSymbolValue(new Pathname(initialDirectory));
+	//	}
+
+	private Interpreter(InputStream inputStream, OutputStream outputStream, String initialDirectory, //
+			boolean noinform, String[] args, boolean redoPostProcess) {
+		instanceID = Main.lispInstances.getAndAdd(1);
 		//if(!Main.noBSH)BeanShellCntrl.setSingleton(this);
+		//jlisp = true;
+		this.postProcess = redoPostProcess;
+		this.inputStream = inputStream;
+		this.outputStream = outputStream;
+
+		if (!initialDirectory.endsWith(File.separator))
+			initialDirectory = initialDirectory.concat(File.separator);
+		final String finitialDirectory = initialDirectory;
+		sharedConstruct(finitialDirectory, noinform);
+	}
+
+	void sharedConstruct(String finitialDirectory, boolean noinform) {
+		if (instanceID == 0)
+			Lisp.setIO(inputStream, outputStream);
+		if (finitialDirectory != null)
+			Symbol.DEFAULT_PATHNAME_DEFAULTS.setSymbolValue(new Pathname(finitialDirectory));
+		addPreInit(-1, () -> {
+			synchronized (globalLock) {
+				if (finitialDirectory != null)
+					Symbol.DEFAULT_PATHNAME_DEFAULTS.setSymbolValue(new Pathname(finitialDirectory));
+				initInstance(initArgs, noinform);
+			}
+		});
+		addPostInit(-1, () -> {
+			synchronized (globalLock) {
+				if (postProcess)
+					postProcessCommandLine();
+			}
+		});
 
 	}
 
-	private Interpreter(InputStream inputStream, OutputStream outputStream, String initialDirectory) {
-		Main.lispInstances++;
-		//if(!Main.noBSH)BeanShellCntrl.setSingleton(this);
-		//jlisp = true;
-		this.inputStream = inputStream;
-		this.outputStream = outputStream;
-		Lisp.setIO(inputStream, outputStream);
-		if (!initialDirectory.endsWith(File.separator))
-			initialDirectory = initialDirectory.concat(File.separator);
-		Symbol.DEFAULT_PATHNAME_DEFAULTS.setSymbolValue(new Pathname(initialDirectory));
+	static ArrayList<Runnable> runnablePreInits = new ArrayList<>();
+
+	public void addPreInit(int pos, Runnable obj) {
+		if (pos < 0) {
+			runnablePreInits.add(obj);
+		} else {
+			runnablePreInits.add(pos, obj);
+		}
+	}
+
+	static public void doPreInits() {
+		while (runnablePreInits.size() > 0) {
+			Runnable r = runnablePreInits.remove(0);
+			try {
+				r.run();
+			} catch (Throwable e) {
+				Startup.addUncaught(e);
+			}
+		}
+	}
+
+	ArrayList<Runnable> runnablePostInits = new ArrayList<>();
+	private Symbol TOP_LEVEL_LOOP;
+	private LispObject tplFun;
+
+	public void addPostInit(int pos, Runnable obj) {
+		if (pos < 0) {
+			runnablePostInits.add(obj);
+		} else {
+			runnablePostInits.add(pos, obj);
+		}
+	}
+
+	public void doPostInits() {
+		while (runnablePostInits.size() > 0) {
+			Runnable r = runnablePostInits.remove(0);
+			try {
+				r.run();
+			} catch (Throwable e) {
+				Startup.addUncaught(e);
+			}
+		}
 	}
 
 	// Interface.
@@ -288,53 +386,68 @@ public final class Interpreter extends Startup implements Runnable {
 	/**
 	 * TODO Describe the purpose of this method.
 	 */
-	public static void ensureInitialized() {
-		synchronized (Interpreter.class) {
-			if (!initialized)
-				initializeLisp(jlisp);
+	public void ensureInitialized() {
+		synchronized (globalLock) {
+
+			if (!began_init_instance)
+				initInstance(initArgs, jlisp_requested);
+			doPreInits();
 		}
 	}
 
 	public static void initializeJLisp() {
-		initializeLisp(true);
+		createInstance().load_boot_jlisp();
 	}
 
 	public static void initializeLisp() {
-		initializeLisp(false);
+		createInstance().load_boot_lisp();
 	}
 
-	public static void initializeLisp(boolean jlisp) {
-		synchronized (Interpreter.class) {
-			if (!initialized) {
-				initialized = true;
-				if (jlisp)
-					addFeature("J");
-
+	public void load_boot_lisp() {
+		synchronized (globalLock) {
+			if (!began_load_boot_lisp) {
+				began_load_boot_lisp = true;
 				Load.loadSystemFile("boot.lisp", false, false, false);
+				finishedBoot_lisp = true;
+			}
+		}
+	}
+
+	public void load_boot_jlisp() {
+		synchronized (globalLock) {
+			load_boot_lisp();
+			if (!began_load_J_lisp) {
+				began_load_J_lisp = true;
+				addFeature("J");
+
 				try {
 					try {
-						if (jlisp)
-							Class.forName("org.armedbear.j.LispAPI");
+
+						Class.forName("org.armedbear.j.LispAPI");
 					} catch (ClassNotFoundException e) {
+						Startup.addUncaught(e);
 					} // FIXME: what to do?
+
 					try {
-						if (jlisp)
-							Load.loadSystemFile("j.lisp", false); // not being autoloaded
+
+						Load.loadSystemFile("j.lisp", false); // not being autoloaded
 					} catch (Throwable e) {
-						e.printStackTrace();
+						Startup.addUncaught(e);
 					} // FIXME: what to do?
+
 					try {
-						if (jlisp && false)
+						if (jlisp_requested && false)
 							Load.loadSystemFile("emacs.lisp", true); // not being autoloaded
 
 					} catch (Throwable e) {
-						e.printStackTrace();
+						Startup.addUncaught(e);
 					}
-					initialized = true;
+
+					began_load_J_lisp = true;
 
 				} catch (Throwable e) {
-					initialized = false;
-					e.printStackTrace();
+					began_load_J_lisp = false;
+					Startup.addUncaught(e);
 				} // FIXME: what to do?
 			}
 		}
@@ -342,27 +455,29 @@ public final class Interpreter extends Startup implements Runnable {
 
 	public static boolean topLevelInitialized;
 
-	private static void initializeTopLevel() {
-		synchronized (Interpreter.class) {
-			if (!topLevelInitialized) {
-				// Resolve top-level-loop autoload.
-				Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
-				LispObject tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
+	private void initializeTopLevel() {
+		synchronized (globalLock) {
+			// Resolve top-level-loop autoload.
+			if (tplFun == null) {
+				if (TOP_LEVEL_LOOP == null) {
+					TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
+				}
+				tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
 				if (tplFun instanceof Autoload) {
 					Autoload autoload = (Autoload) tplFun;
 					autoload.load();
 				}
-
-				topLevelInitialized = true;
+				tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
 			}
+			topLevelInitialized = true;
 		}
 	}
 
-	public static void processInitializationFile() {
-		synchronized (Interpreter.class) {
+	public void processInitializationFile() {
+		synchronized (globalLock) {
 			boolean wasNoInit = noinit;
 			try {
-				Interpreter.noinit = true;
+				noinit = true;
 				// checks local directory firsts
 				File file = new File(RC_FILE);
 				if (!file.isFile() && file.canRead()) {
@@ -380,40 +495,47 @@ public final class Interpreter extends Startup implements Runnable {
 					return;
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
-				Interpreter.noinit = wasNoInit;
+				Startup.addUncaught(e);
+				noinit = wasNoInit;
 			}
 		}
 	}
 
 	public static void initializeSystem() {
-		synchronized (Interpreter.class) {
-			Load.loadSystemFile("system", false); // not being autoloaded
+		synchronized (globalLock) {
+			if (!began_load_system_lisp) {
+				began_load_system_lisp = true;
+				Load.loadSystemFile("system", false); // not being autoloaded
+			}
 		}
 	}
 
 	// Check for --noinit; verify that arguments are supplied for --load and
 	// --eval options.  Copy all unrecognized arguments into
 	// ext:*command-line-argument-list*
-	public static void preprocessCommandLineArguments(String[] args) {
-		synchronized (Interpreter.class) {
+	public void preprocessCommandLineArguments(String[] args) {
+		synchronized (globalLock) {
 			LispObject arglist = NIL;
 
 			if (args != null) {
 				for (int i = 0; i < args.length; ++i) {
-					String arg = args[i];
-					if (doubledash) {
-						arglist = new Cons(args[i], arglist);
+					String arg = unquote(args[i]);
+					if (i > doubledash) {
+						arglist = new Cons(arg, arglist);
 					} else if (arg.equals("--")) {
-						doubledash = true;
+						doubledash = i;
 					} else if (arg.equals("--noinit")) {
 						noinit = true;
+					} else if (arg.equals("--init")) {
+						noinit = false;
 					} else if (arg.equals("--j")) {
-						jlisp = true;
+						jlisp_requested = true;
 					} else if (arg.equals("--noj")) {
-						jlisp = false;
+						jlisp_requested = false;
 					} else if (arg.equals("--nosystem")) {
 						nosystem = true;
+					} else if (arg.equals("--system")) {
+						nosystem = false;
 					} else if (arg.equals("--noinform")) {
 						noinform = true;
 					} else if (arg.equals("--help")) {
@@ -422,14 +544,17 @@ public final class Interpreter extends Startup implements Runnable {
 						_BATCH_MODE_.setSymbolValue(T);
 					} else if (arg.equals("--compile-system")) {
 						isSublispDefault = false;
+						needSubLMAIN = false;
 						abclProcessArgs = true;
 						noProlog = true;
 						noPrologJNI = true;
 						noInitCyc = true;
 						noBSH = true;
+						leanABCL = true;
 						Main.setSubLisp(false);
 						nosystem = true;
 						noinform = true;
+						noinit = true;
 					} else if (arg.equals("--eval")) {
 						if (i + 1 < args.length) {
 							++i;
@@ -455,131 +580,210 @@ public final class Interpreter extends Startup implements Runnable {
 		}
 	}
 
-	// Do the --load and --eval actions.
-	public static void postprocessCommandLineArguments(String[] args)
+	/**
+	 * @param jLisp
+	 */
+	public void postProcessCommandLine() {
 
-	{
-		if (args != null) {
-			for (int i = 0; i < args.length; ++i) {
-				String arg = args[i];
-				if (doubledash) {
-					continue;
-				} else if (arg.equals("--")) {
-					doubledash = true;
-				} else if (arg.equals("--eval")) {
-					if (i + 1 < args.length) {
-						try {
-							evaluate(args[i + 1]);
-						} catch (UnhandledCondition c) {
-							addUncaught(c);
-							final String separator = System.getProperty("line.separator");
-							StringBuilder sb = new StringBuilder();
-							sb.append(separator);
-							sb.append("Caught ");
-							final LispObject condition = c.getCondition();
-							sb.append(condition.typeOf().princToString());
-							sb.append(" while processing --eval option \"" + args[i + 1] + "\":");
-							sb.append(separator);
-							sb.append("  ");
-							final LispThread thread = LispThread.currentThread();
-							thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
-							sb.append(condition.princToString());
-							sb.append(separator);
-							System.err.print(sb.toString());
-							exit(2); // FIXME
-						}
-						++i;
-					} else {
-						// Shouldn't happen.
-						System.err.println("No argument supplied to --eval");
-						exit(1); // FIXME
-					}
-				} else if (arg.equals("--compile-system")) {
-					{
-						try {
-							evaluate("(setf *load-verbose* t)");
-							evaluate("(setf trace-lisp 10)");
-							//String eval = "(handler-case (compile-system :zip nil :quit t :output-path \"${abcl.lisp.output}/\") (t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))";
-							evaluate("(handler-case (compile-system :zip nil :quit t :output-path \"build/classes/\") " + "(t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))");
-						} catch (UnhandledCondition c) {
-							addUncaught(c);
-							final String separator = System.getProperty("line.separator");
-							StringBuilder sb = new StringBuilder();
-							sb.append(separator);
-							sb.append("Caught ");
-							sb.append(c.getCondition().typeOf().printObject());
-							sb.append(" while processing --compile-system");
-							sb.append(separator);
-							sb.append("  ");
-							final LispThread thread = LispThread.currentThread();
-							thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
-							sb.append(c.getCondition().princToString());
-							sb.append(separator);
-							System.err.print(sb.toString());
-							exit(2); // FIXME
-						}
-						++i;
-					}
-				} else if (arg.equals("--nodebug"))
-					debug = false;
-				else if (arg.equals("--debug"))
-					debug = true;
-				else if (arg.equals("--nocheck"))
-					checkCallers = false;
-				else if (arg.equals("--check"))
-					checkCallers = true;
-				else if (arg.equals("--notrace"))
-					evaluate("(trace-lisp nil)");
-				else if (arg.equals("--trace"))
-					evaluate("(trace-lisp t)");
-				else if (arg.equals("--junicode"))
-					LISP_NOT_JAVA = false;
-				else if (arg.equals("--load") || arg.equals("--load-system-file")) {
-					if (i + 1 < args.length) {
-						if (arg.equals("--load"))
-							Load.load(Pathname.mergePathnames(new Pathname(args[i + 1]), checkPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.getSymbolValue())), false, false, true);
+		init();
 
-						else
-							Load.loadSystemFile(args[i + 1], false); // not being autoloaded
-						++i;
-					} else {
-						// Shouldn't happen.
-						System.err.println("No argument supplied to --load");
-						exit(1); // FIXME
-					}
-				}
+		if (this.began_post_inits)
+			return;
+
+		synchronized (globalLock) {
+			this.began_post_inits = true;
+			if (null == initArgs)
+				initArgs = passedArgs;
+		}
+
+		if (initArgs != null) {
+			if (postProcess) {
+				postProcess = false;
+				//if (Main.subLisp) SubLPackage.setCurrentPackage("CL-USER");
+				doubledash = -1;
+				postprocessCommandLineArguments(initArgs);
 			}
+		} else {
+			//SubLPackage.setCurrentPackage("CL-USER");
+			//globalInterpreter.eval("(cl:load \"d.lisp\")");
 		}
 		if (_BATCH_MODE_.getSymbolValue() == T) {
 			exit(0); // FIXME
 		}
+
+	}
+
+	// Do the --load and --eval actions.
+	private void postprocessCommandLineArguments(String[] args) {
+		if (args != null) {
+			for (int i = 0; i < args.length; ++i) {
+				String arg = args[i];
+				if (arg.equals("--"))
+					return;
+				if (i > doubledash && doubledash >= 0)
+					return;
+				i = doOneArg(i, args);
+			}
+		}
+	}
+
+	public int doOneArg(int i, String... args) throws ConditionThrowable {
+		String arg = unquote(args[i]);
+
+		if (arg.equals("--")) {
+			return args.length;
+		}
+
+		else if (arg.equals("--nodebug"))
+			debug = false;
+		else if (arg.equals("--debug"))
+			debug = true;
+		else if (arg.equals("--nocheck"))
+			checkCallers = false;
+		else if (arg.equals("--check"))
+			checkCallers = true;
+		else if (arg.equals("--notrace"))
+			evaluate("(trace-lisp nil)");
+		else if (arg.equals("--trace"))
+			evaluate("(trace-lisp t)");
+		else if (arg.equals("--junicode"))
+			LISP_NOT_JAVA = false;
+		else if (arg.equals("--nojunicode"))
+			LISP_NOT_JAVA = true;
+
+		else if (arg.equals("--eval")) {
+			if (i + 1 < args.length) {
+				argEval(unquote(args[i + 1]));
+				++i;
+			} else {
+				// Shouldn't happen.
+				System.err.println("No argument supplied to --eval");
+				exit(1); // FIXME
+			}
+		} else if (arg.equals("--compile-system")) {
+			postProcess = false;
+			compile_the_system();
+		}
+
+		else if (arg.equals("--load") || arg.equals("--load-system-file")) {
+			if (i + 1 < args.length) {
+				if (arg.equals("--load"))
+					Load.load(Pathname.mergePathnames(new Pathname(args[i + 1]), checkPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.getSymbolValue())), false, false, true);
+
+				else
+					Load.loadSystemFile(args[i + 1], false); // not being autoloaded
+				++i;
+			} else {
+				// Shouldn't happen.
+				System.err.println("No argument supplied to --load");
+				exit(1); // FIXME
+			}
+		}
+		return i;
+	}
+
+	/**
+	 * @param args
+	 * @param i
+	 * @throws ConditionThrowable
+	 */
+	public void argEval(String argi1) throws ConditionThrowable {
+		try {
+			evaluate(argi1);
+		} catch (UnhandledCondition c) {
+			addUncaught(c);
+			final String separator = System.getProperty("line.separator");
+			StringBuilder sb = new StringBuilder();
+			sb.append(separator);
+			sb.append("Caught ");
+			final LispObject condition = c.getCondition();
+			sb.append(condition.typeOf().princToString());
+			sb.append(" while processing --eval option \"" + argi1 + "\":");
+			sb.append(separator);
+			sb.append("  ");
+			final LispThread thread = LispThread.currentThread();
+			thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
+			sb.append(condition.princToString());
+			sb.append(separator);
+			System.err.print(sb.toString());
+			exit(2); // FIXME
+		}
+	}
+
+	/**
+	 * @throws ConditionThrowable
+	 */
+	public static void compile_the_system() throws ConditionThrowable {
+		try {
+			evaluate("(setf *load-verbose* t)");
+			evaluate("(setf trace-lisp 10)");
+			//String eval = "(handler-case (compile-system :zip nil :quit t :output-path \"${abcl.lisp.output}/\") (t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))";
+			evaluate("(handler-case (compile-system :zip nil :quit t :output-path \".\") " + "(t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))");
+		} catch (UnhandledCondition c) {
+			addUncaught(c);
+			final String separator = System.getProperty("line.separator");
+			StringBuilder sb = new StringBuilder();
+			sb.append(separator);
+			sb.append("Caught ");
+			sb.append(c.getCondition().typeOf().printObject());
+			sb.append(" while processing --compile-system");
+			sb.append(separator);
+			sb.append("  ");
+			final LispThread thread = LispThread.currentThread();
+			thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
+			sb.append(c.getCondition().princToString());
+			sb.append(separator);
+			System.err.print(sb.toString());
+			exit(2); // FIXME
+		}
 	}
 
 	@Override
-	@SuppressWarnings("CallToThreadDumpStack")
+	//@SuppressWarnings("CallToThreadDumpStack")
 	public void run() {
-		final LispThread thread = LispThread.currentThread();
-		try {
-			initializeTopLevel();
-			Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
-			LispObject tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
-			if (tplFun instanceof Function) {
-				thread.execute(tplFun);
-				return;
+		if (_isRunning) {
+			return;
+		}
+		init();
+		_isRunning = true;
+		if (tplFun instanceof Function) {
+			try {
+				if (tplFun instanceof Function) {
+					final LispThread thread = LispThread.currentThread();
+					thread.execute(tplFun);
+					return;
+				}
+			} catch (ProcessingTerminated e) {
+				if (noExit && e.getStatus() != 0) {
+					run2(true);
+				}
+				throw e;
+			} catch (IntegrityError e) {
+				addUncaught(e);
+				if (!noExit)
+					return;
+			} catch (Throwable t) {
+				addUncaught(t);
+				printStackTrace(t);
+				if (!noExit)
+					return;
+			} finally {
+				_isRunning = false;
 			}
-		} catch (ProcessingTerminated e) {
-			throw e;
-		} catch (IntegrityError e) {
-			addUncaught(e);
-			return;
-		} catch (Throwable t) {
-			addUncaught(t);
-			t.printStackTrace();
-			return;
 		}
 		// We only arrive here if something went wrong and we weren't able
 		// to load top-level.lisp and run the normal top-level loop.
 		run2(false);
+	}
+
+	/**
+	 *
+	 */
+	public void init() {
+		ensureInitialized();
+		initializeTopLevel();
+		Main.leanABCL = false;
+		doPostInits();
 	}
 
 	@SuppressWarnings("CallToThreadDumpStack")
@@ -672,7 +876,8 @@ public final class Interpreter extends Startup implements Runnable {
 	}
 
 	public void kill(int status) {
-		if (jlisp) {
+		flushOutputStreams();
+		if (jlisp_requested && false) {
 			try {
 				if (inputStream != null)
 					inputStream.close();
@@ -686,7 +891,6 @@ public final class Interpreter extends Startup implements Runnable {
 				Debug.trace(e);
 			}
 		} else {
-			flushOutputStreams();
 			Startup.exit(status);
 		}
 	}
@@ -779,7 +983,11 @@ public final class Interpreter extends Startup implements Runnable {
 	 *      should be passed to the Lisp debugger
 	 */
 	public static LispObject evaluate(String s) {
-		ensureInitialized();
+		synchronized (globalLock) {
+			if (!initialized()) {
+				Interpreter.createInstance();
+			}
+		}
 		StringInputStream stream = new StringInputStream(s);
 		final LispThread thread = LispThread.currentThread();
 		LispObject obj = null;
@@ -803,26 +1011,11 @@ public final class Interpreter extends Startup implements Runnable {
 		}
 	}
 
-	private static final String build;
-
-	static {
-		String s = null;
-		InputStream in = Interpreter.class.getResourceAsStream("build");
-		if (in != null) {
-			try {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-				s = reader.readLine();
-				reader.close();
-			} catch (IOException e) {
-			}
-		}
-		build = s;
-	}
-
 	private static String banner() {
 		final String sep = System.getProperty("line.separator");
 		StringBuilder sb = new StringBuilder("Armed Bear Common Lisp ");
 		sb.append(Version.getVersion());
+		String build = calcBuilt();
 		if (build != null) {
 			sb.append(" (built ");
 			sb.append(build);
@@ -840,6 +1033,32 @@ public final class Interpreter extends Startup implements Runnable {
 			sb.append(sep);
 		}
 		return sb.toString();
+	}
+
+	private static String calcBuilt() {
+		try (InputStream in = Interpreter.class.getResourceAsStream("build")) {
+			BufferedReader reader = null;
+			if (in != null) {
+				try {
+					try {
+						final InputStreamReader in2 = new InputStreamReader(in);
+						reader = new BufferedReader(in2);
+					} catch (Exception e) {
+						return null;
+					}
+
+					return reader.readLine();
+				} catch (Exception e) {
+				} finally {
+					try {
+						reader.close();
+					} catch (Exception e) {
+					}
+				}
+			}
+		} catch (IOException e1) {
+		}
+		return null;
 	}
 
 	private static String help() {
@@ -882,6 +1101,10 @@ public final class Interpreter extends Startup implements Runnable {
 
 	public void setIO(InputStream in, OutputStream out) {
 		Lisp.setIO(in, out);
+	}
+
+	public static boolean isInitialized() {
+		return Startup.finishedBoot_lisp;
 	}
 
 }

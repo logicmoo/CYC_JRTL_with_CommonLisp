@@ -65,7 +65,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class event_broker extends SubLTranslatedFile {
     public static final SubLFile me = new event_broker();
@@ -1745,7 +1745,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defconstant("*DTP-EVENT-LISTENER*", EVENT_LISTENER);
         defconstant("*DTP-EVENT-BROKER*", EVENT_BROKER);
         defconstant("*DTP-PROTOCOL-DESCRIPTION*", PROTOCOL_DESCRIPTION);
-        deflexical("*EVENT-BROKER*", SubLTrampolineFile.maybeDefault($event_broker$, $event_broker$, NIL));
+        deflexical("*EVENT-BROKER*", SubLSystemTrampolineFile.maybeDefault($event_broker$, $event_broker$, NIL));
         deflexical("*FAST-HAS-EVENT-CLASS-ANY-TRANSITIVE-LISTENERS?-CACHING-STATE*", NIL);
         defparameter("*DEREGISTRATION-DURING-SYSTEM-INITIALIZATION*", NIL);
         return NIL;

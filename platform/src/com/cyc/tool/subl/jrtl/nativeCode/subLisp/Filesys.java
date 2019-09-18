@@ -15,9 +15,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Filesys extends SubLTrampolineFile {
+public class Filesys extends SubLSystemTrampolineFile {
 	public static SubLObject canonical_null_file_stream_path() {
 		return Filesys.$canonical_null_file_stream_path$.getValue();
 	}

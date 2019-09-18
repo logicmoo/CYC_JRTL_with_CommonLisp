@@ -34,7 +34,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -222,8 +222,8 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
         if (interp_spec == UNPROVIDED) {
             interp_spec = NIL;
         }
-        SubLTrampolineFile.enforceType(output_type, KEYWORDP);
-        SubLTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(output_type, KEYWORDP);
+        SubLSystemTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
         final SubLObject desired_interp_spec = (NIL != interp_spec) ? interp_spec : new_nl_interpretation_spec(UNPROVIDED);
         final SubLObject result = list(output_type, desired_interp_spec);
         return result;
@@ -256,7 +256,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject nl_interp_spec_request_cycl(SubLObject interp_spec) {
-        SubLTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
         interp_spec = putf(interp_spec, $CYCL, T);
         return interp_spec;
     }
@@ -266,7 +266,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject nl_interp_spec_request_weight(SubLObject interp_spec) {
-        SubLTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
         interp_spec = putf(interp_spec, $WEIGHT, T);
         return interp_spec;
     }
@@ -276,7 +276,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject nl_interp_spec_request_justification(SubLObject interp_spec) {
-        SubLTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
         interp_spec = putf(interp_spec, $JUSTIFICATION, T);
         return interp_spec;
     }
@@ -286,7 +286,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject nl_interp_spec_request_phrase_types(SubLObject interp_spec) {
-        SubLTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
         interp_spec = putf(interp_spec, $PHRASE_TYPES, T);
         return interp_spec;
     }
@@ -296,7 +296,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject nl_interp_spec_request_head_inflections(SubLObject interp_spec) {
-        SubLTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
         interp_spec = putf(interp_spec, $INFLECTIONS, T);
         return interp_spec;
     }
@@ -306,7 +306,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject nl_interp_spec_request_pragmatics(SubLObject interp_spec) {
-        SubLTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(interp_spec, NL_INTERPRETATION_SPEC_P);
         interp_spec = putf(interp_spec, $PRAGMATICS, T);
         return interp_spec;
     }
@@ -348,7 +348,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject get_nl_interp_cycl(final SubLObject interp) {
-        SubLTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
+        SubLSystemTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
         return getf(interp, $CYCL, UNPROVIDED);
     }
 
@@ -371,7 +371,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject get_nl_interp_pragmatics(final SubLObject interp) {
-        SubLTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
+        SubLSystemTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
         return getf(interp, $PRAGMATICS, UNPROVIDED);
     }
 
@@ -394,7 +394,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject get_nl_interp_weight(final SubLObject interp) {
-        SubLTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
+        SubLSystemTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
         return getf(interp, $WEIGHT, UNPROVIDED);
     }
 
@@ -417,7 +417,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject get_nl_interp_justification(final SubLObject interp) {
-        SubLTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
+        SubLSystemTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
         return getf(interp, $JUSTIFICATION, UNPROVIDED);
     }
 
@@ -458,7 +458,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject get_nl_interp_phrase_types(final SubLObject interp) {
-        SubLTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
+        SubLSystemTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
         return getf(interp, $PHRASE_TYPES, UNPROVIDED);
     }
 
@@ -481,7 +481,7 @@ public final class nl_api_datastructures extends SubLTranslatedFile {
     }
 
     public static SubLObject get_nl_interp_head_inflections(final SubLObject interp) {
-        SubLTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
+        SubLSystemTrampolineFile.enforceType(interp, NL_INTERPRETATION_P);
         return getf(interp, $INFLECTIONS, UNPROVIDED);
     }
 

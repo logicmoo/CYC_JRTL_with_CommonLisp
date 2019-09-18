@@ -29,7 +29,7 @@ import eu.larkc.plugin.Context;
 import eu.larkc.plugin.Contract;
 import eu.larkc.plugin.transform.InformationSetTransformer;
 import mpi.MPI;
-
+import mpi.MPIException;
 
 /**
  * A particular implementation of the execution on the remote resource for the CollectionInformationTransformManager.
@@ -39,7 +39,7 @@ import mpi.MPI;
  * @param <E> The Input type of the queue that the PluginManager should accept
  * @param <F> The Output type of the queue that the PluginManager should produce
  */
-public class RemoteCollectionInformationSetTransformManagerExecute_MPI extends RemoteMPIPluginManager <String, String> {
+public class RemoteCollectionInformationSetTransformManagerExecute_MPI extends RemoteMPIPluginManager<String, String> {
 
 	/**
 	 * The InformationSetTransformer plugin to be managed
@@ -71,7 +71,7 @@ public class RemoteCollectionInformationSetTransformManagerExecute_MPI extends R
 		}
 
 		@Override
-    public void run() {
+		public void run() {
 			for (;;) {
 				PluginManager.Message controlMessage = getNextControlMessage();
 
@@ -85,11 +85,12 @@ public class RemoteCollectionInformationSetTransformManagerExecute_MPI extends R
 						break;
 					}
 
-					String outputDataID = runJob(mTransformer.getClass(), inputDataID, new Contract() {}, new Context() {});
+					String outputDataID = runJob(mTransformer.getClass(), inputDataID, new Contract() {
+					}, new Context() {
+					});
 
 					putNextOutput(outputDataID);
-				}
-				else if (controlMessage.equals(PluginManager.Message.STOP)) {
+				} else if (controlMessage.equals(PluginManager.Message.STOP)) {
 					break;
 				}
 			}
@@ -103,31 +104,35 @@ public class RemoteCollectionInformationSetTransformManagerExecute_MPI extends R
 
 	public static void main(String[] args) {
 
-		MPI.Init(args);
+		try {
+			MPI.Init(args);
+		} catch (MPIException e) {
+			throw new RuntimeException(e);
+		}
 
 		runRemoteJob(new RemoteContainerStub() {
 			@Override
 			public ArrayList<Object> invoke(ArrayList<Object> params) throws Exception {
 
+				Class<?> transformerClass = (Class<?>) params.get(0);
+				Collection<InformationSet> iscoll_input = (Collection<InformationSet>) params.get(1);
+				Collection<InformationSet> iscoll_output = new ArrayList<InformationSet>();
 
-					Class<?> transformerClass = (Class<?>) params.get(0);
-					Collection<InformationSet> iscoll_input = (Collection<InformationSet>) params.get(1);
-					Collection<InformationSet> iscoll_output = new ArrayList <InformationSet> ();
+				ArrayList<Object> result = new ArrayList<Object>();
 
-					ArrayList<Object> result = new ArrayList<Object>();
+				InformationSetTransformer transformer = (InformationSetTransformer) transformerClass.getConstructor().newInstance();
 
-					InformationSetTransformer transformer = (InformationSetTransformer) transformerClass.getConstructor().newInstance();
-
-					for (InformationSet is : iscoll_input){
-						InformationSet isresult = transformer.transform(is, new Contract() {}, new Context() {});
-						iscoll_output.add(isresult);
-					}
-					result.add(iscoll_output);
+				for (InformationSet is : iscoll_input) {
+					InformationSet isresult = transformer.transform(is, new Contract() {
+					}, new Context() {
+					});
+					iscoll_output.add(isresult);
+				}
+				result.add(iscoll_output);
 
 				return result;
 			}
 		});
-
 
 		MPI.Finalize();
 	}

@@ -1,0 +1,1 @@
+include class BasicEnvelope.class Consumer.class Envelope.class Producer.class Wire.class WireAdmin.class WireAdminEvent.class WireAdminListener.class WireConstants.class WirePermission.class WirePermissionCollection.class version 1.0

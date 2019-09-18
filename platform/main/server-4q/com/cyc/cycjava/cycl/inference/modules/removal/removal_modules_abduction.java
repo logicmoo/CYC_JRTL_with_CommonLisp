@@ -57,7 +57,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -448,7 +448,7 @@ public final class removal_modules_abduction extends SubLTranslatedFile {
 
     public static SubLObject init_removal_modules_abduction_file() {
         deflexical("*ABDUCTIVE-REMOVAL-MODULES*", $list0);
-        deflexical("*ABDUCTION-TERM-ISG*", SubLTrampolineFile.maybeDefault($abduction_term_isg$, $abduction_term_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*ABDUCTION-TERM-ISG*", SubLSystemTrampolineFile.maybeDefault($abduction_term_isg$, $abduction_term_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
         defparameter("*ABDUCE-SUBCOLLECTION-DENOTING-TERMS?*", NIL);
         deflexical("*DEFAULT-ABDUCTION-COST*", ZERO_INTEGER);
         return NIL;

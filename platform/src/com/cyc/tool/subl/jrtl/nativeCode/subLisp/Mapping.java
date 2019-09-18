@@ -4,9 +4,9 @@ package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Mapping extends SubLTrampolineFile {
+public class Mapping extends SubLSystemTrampolineFile {
 	public static SubLObject mapc(SubLObject function, SubLObject list, SubLObject[] moreLists) {
 		return list.toList().mapcar(function.getFunc(), moreLists, false);
 	}

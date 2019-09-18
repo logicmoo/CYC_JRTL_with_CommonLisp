@@ -34,7 +34,7 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	// Begin impl ScriptEnginInfo
 
 	/**
-	 * 
+	 *
 	 */
 	private static final String ANSI_X3_226_1994 = "ANSI X3.226:1994";
 
@@ -46,7 +46,7 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 
 	// End impl ScriptEngineFactory
     private static AbclScriptEngine THE_ONLY_ONE_ENGINE = null;
-	
+
 	@Override
     public String getEngineName() {
 	return "ABCL Script";
@@ -86,9 +86,9 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	}
 	return sb.toString();
     }
-	
+
 	@Override
-	public String getMethodCallSyntax(String obj, String method, String[] args) {
+	public String getMethodCallSyntax(String obj, String method, String... args) {
 	StringBuilder sb = new StringBuilder();
 	sb.append("(jcall \"");
 	sb.append(method);
@@ -101,7 +101,7 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	sb.append(")");
 	return sb.toString();
     }
-    
+
 	@Override
     public List<String> getMimeTypes() {
 		return mimeTypes;
@@ -142,7 +142,7 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
     }
 
 	@Override
-	public String getProgram(String[] statements) {
+	public String getProgram(String... statements) {
 	StringBuilder sb = new StringBuilder();
 	sb.append("(cl:progn");
 	for(String stmt : statements) {
@@ -152,7 +152,7 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	sb.append(")");
 	return sb.toString();
     }
-    
+
 	@Override
     public synchronized ScriptEngine getScriptEngine() {
         if (THE_ONLY_ONE_ENGINE == null) {

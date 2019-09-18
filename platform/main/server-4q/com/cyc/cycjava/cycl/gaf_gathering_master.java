@@ -54,7 +54,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -128,7 +128,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
                 SubLObject cdolist_list_var = v_methods;
                 SubLObject method = NIL;
                 for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                    SubLTrampolineFile.checkType(method, GG_PSG_METHOD_P);
+                    SubLSystemTrampolineFile.checkType(method, GG_PSG_METHOD_P);
                 }
             }
             $gg_psg_methods$.setDynamicValue(v_methods, thread);
@@ -203,7 +203,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
     public static final SubLObject set_fact_gathering_process_name(SubLObject name) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(name, STRINGP);
+            SubLSystemTrampolineFile.checkType(name, STRINGP);
             $fact_gathering_process_name$.setDynamicValue(name, thread);
             return $fact_gathering_process_name$.getDynamicValue(thread);
         }
@@ -241,7 +241,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
                 $fact_gathering_process$.setDynamicValue(list($const12$CycBasedFactGatheringProcessNamed, $fact_gathering_process_name$.getDynamicValue(thread)), thread);
             } else {
                 $fact_gathering_process$.setDynamicValue(generate_gafs.gg_create_unique($$$CycBasedFactGatheringProcess, UNPROVIDED, UNPROVIDED), thread);
-                SubLTrampolineFile.checkType($fact_gathering_process$.getDynamicValue(thread), FORT_P);
+                SubLSystemTrampolineFile.checkType($fact_gathering_process$.getDynamicValue(thread), FORT_P);
             }
             generate_gafs.gg_assert(listS($$isa, $fact_gathering_process$.getDynamicValue(thread), $list_alt16), UNPROVIDED, UNPROVIDED);
             generate_gafs.gg_assert(list($$startingDate, $fact_gathering_process$.getDynamicValue(thread), date_utilities.extended_universal_date_to_cycl_date(numeric_date_utilities.get_extended_universal_date(UNPROVIDED))), UNPROVIDED, UNPROVIDED);
@@ -293,8 +293,8 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
     public static final SubLObject get_next_kag_for_gathering(SubLObject worker_host, SubLObject worker_port) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(worker_host, STRINGP);
-            SubLTrampolineFile.checkType(worker_port, INTEGERP);
+            SubLSystemTrampolineFile.checkType(worker_host, STRINGP);
+            SubLSystemTrampolineFile.checkType(worker_port, INTEGERP);
             {
                 SubLObject kag = NIL;
                 SubLObject iterator_result = NIL;
@@ -467,7 +467,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
 
 
                 if (NIL != iterator) {
-                    SubLTrampolineFile.checkType(iterator, ITERATOR_P);
+                    SubLSystemTrampolineFile.checkType(iterator, ITERATOR_P);
                 }
                 return iterator;
             }
@@ -511,7 +511,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
      * in the given PARAPHRASE-MT.
      */
     public static final SubLObject min_generated_phrase_words_for_pred(SubLObject pred, SubLObject paraphrase_mt) {
-        SubLTrampolineFile.checkType(pred, FORT_P);
+        SubLSystemTrampolineFile.checkType(pred, FORT_P);
         {
             SubLObject min_number_of_phrase_words = $most_positive_fixnum$.getGlobalValue();
             SubLObject sentence = list(pred, $sym53$_ARG1, $sym54$_ARG);
@@ -534,10 +534,10 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
      * Returns an iterator over partial gafs with the given PREDICATE.
      */
     public static final SubLObject new_partial_gaf_arg_iterator(SubLObject predicate) {
-        SubLTrampolineFile.checkType(predicate, FORT_P);
+        SubLSystemTrampolineFile.checkType(predicate, FORT_P);
         {
             SubLObject iterator = iteration.new_lazy_iterator(symbol_function(NEW_ROTATING_ITERATOR_ITERATOR), list(list(LIST, listS(NEW_PARTIAL_GAF_ARG_BINDING_ITERATOR, predicate, $list_alt58), listS(NEW_PARTIAL_GAF_ARG_BINDING_ITERATOR, predicate, $list_alt59))));
-            SubLTrampolineFile.checkType(iterator, ITERATOR_P);
+            SubLSystemTrampolineFile.checkType(iterator, ITERATOR_P);
             return iterator;
         }
     }
@@ -546,11 +546,11 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
      * Returns an iterator over partial gafs with the given PREDICATE and ARGPOS.
      */
     public static final SubLObject new_partial_gaf_arg_binding_iterator(SubLObject predicate, SubLObject argpos) {
-        SubLTrampolineFile.checkType(predicate, FORT_P);
-        SubLTrampolineFile.checkType(argpos, INTEGERP);
+        SubLSystemTrampolineFile.checkType(predicate, FORT_P);
+        SubLSystemTrampolineFile.checkType(argpos, INTEGERP);
         {
             SubLObject iterator = iteration.new_lazy_iterator(symbol_function(NEW_ITERATOR_ITERATOR), list(list(MAKE_PARTIAL_GAF_ARG_BINDING_ITERATORS, predicate, argpos)));
-            SubLTrampolineFile.checkType(iterator, ITERATOR_P);
+            SubLSystemTrampolineFile.checkType(iterator, ITERATOR_P);
             return iterator;
         }
     }
@@ -559,8 +559,8 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
      * Returns the list of iterators for constraining collections over partial gafs with the given PREDICATE and ARGPOS.
      */
     public static final SubLObject make_partial_gaf_arg_binding_iterators(SubLObject predicate, SubLObject argpos) {
-        SubLTrampolineFile.checkType(predicate, FORT_P);
-        SubLTrampolineFile.checkType(argpos, INTEGERP);
+        SubLSystemTrampolineFile.checkType(predicate, FORT_P);
+        SubLSystemTrampolineFile.checkType(argpos, INTEGERP);
         {
             SubLObject appropriate_arg_constraints = get_appropriate_arg_constraints_for_pred(predicate, argpos, $$MachineLearningSpindleHeadMt);
             SubLObject iterators = NIL;
@@ -593,7 +593,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
                     current = current.rest();
                     if (NIL == current) {
                         iterator = new_partial_gaf_arg_binding_constraint_iterator(predicate, argpos, constraining_collection, type);
-                        SubLTrampolineFile.checkType(iterator, ITERATOR_P);
+                        SubLSystemTrampolineFile.checkType(iterator, ITERATOR_P);
                         iterators = cons(iterator, iterators);
                     } else {
                         cdestructuring_bind_error(datum, $list_alt63);
@@ -620,9 +620,9 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
     public static final SubLObject get_appropriate_arg_constraints_for_pred(SubLObject pred, SubLObject pos, SubLObject mt) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(pred, FORT_P);
-            SubLTrampolineFile.checkType(pos, INTEGERP);
-            SubLTrampolineFile.checkType(mt, HLMT_P);
+            SubLSystemTrampolineFile.checkType(pred, FORT_P);
+            SubLSystemTrampolineFile.checkType(pos, INTEGERP);
+            SubLSystemTrampolineFile.checkType(mt, HLMT_P);
             {
                 SubLObject results_list = NIL;
                 SubLObject genls_onlyP = gg_reln_type_level_in_argP(pred, pos, mt);
@@ -859,13 +859,13 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
      * CONSTRAINING-COLLECTION and TYPE.
      */
     public static final SubLObject new_partial_gaf_arg_binding_constraint_iterator(SubLObject predicate, SubLObject argpos, SubLObject constraining_collection, SubLObject type) {
-        SubLTrampolineFile.checkType(predicate, FORT_P);
-        SubLTrampolineFile.checkType(argpos, INTEGERP);
-        SubLTrampolineFile.checkType(constraining_collection, FORT_P);
-        SubLTrampolineFile.checkType(type, SYMBOLP);
+        SubLSystemTrampolineFile.checkType(predicate, FORT_P);
+        SubLSystemTrampolineFile.checkType(argpos, INTEGERP);
+        SubLSystemTrampolineFile.checkType(constraining_collection, FORT_P);
+        SubLSystemTrampolineFile.checkType(type, SYMBOLP);
         {
             SubLObject iterator = iteration.new_lazy_iterator(symbol_function(NEW_LIST_ITERATOR), list(list(GG_GET_PARTIAL_GAF_ARG_BINDINGS, predicate, argpos, constraining_collection, type)));
-            SubLTrampolineFile.checkType(iterator, ITERATOR_P);
+            SubLSystemTrampolineFile.checkType(iterator, ITERATOR_P);
             return iterator;
         }
     }
@@ -875,10 +875,10 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
      * more can be returned.
      */
     public static final SubLObject gg_get_partial_gaf_arg_bindings(SubLObject predicate, SubLObject argpos, SubLObject constraining_collection, SubLObject type) {
-        SubLTrampolineFile.checkType(predicate, FORT_P);
-        SubLTrampolineFile.checkType(argpos, INTEGERP);
-        SubLTrampolineFile.checkType(constraining_collection, FORT_P);
-        SubLTrampolineFile.checkType(type, SYMBOLP);
+        SubLSystemTrampolineFile.checkType(predicate, FORT_P);
+        SubLSystemTrampolineFile.checkType(argpos, INTEGERP);
+        SubLSystemTrampolineFile.checkType(constraining_collection, FORT_P);
+        SubLSystemTrampolineFile.checkType(type, SYMBOLP);
         {
             SubLObject unfiltered_arg_bindings = proposed_arg_bindings_of_type_for_collection(predicate, argpos, constraining_collection, type);
             SubLObject partial_gafs = NIL;
@@ -902,10 +902,10 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
     public static final SubLObject proposed_arg_bindings_of_type_for_collection(SubLObject predicate, SubLObject argpos, SubLObject constraining_collection, SubLObject type) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(predicate, FORT_P);
-            SubLTrampolineFile.checkType(argpos, INTEGERP);
-            SubLTrampolineFile.checkType(constraining_collection, FORT_P);
-            SubLTrampolineFile.checkType(type, SYMBOLP);
+            SubLSystemTrampolineFile.checkType(predicate, FORT_P);
+            SubLSystemTrampolineFile.checkType(argpos, INTEGERP);
+            SubLSystemTrampolineFile.checkType(constraining_collection, FORT_P);
+            SubLSystemTrampolineFile.checkType(type, SYMBOLP);
             if (type == $INSTANCES) {
                 {
                     SubLObject v_instances = rkf_ontology_utilities.rkf_all_instantiations(constraining_collection, $$EverythingPSC);
@@ -1252,7 +1252,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
         if (master_cyc_port == UNPROVIDED) {
             master_cyc_port = NIL;
         }
-        SubLTrampolineFile.checkType(partial_gaf, CONSP);
+        SubLSystemTrampolineFile.checkType(partial_gaf, CONSP);
         if (NIL != master_cyc_host) {
             return generate_gafs.gg_remote_eval(list($sym104$PARTIAL_GAF_PREVIOUSLY_TRIED__INTERNAL, partial_gaf), master_cyc_host, master_cyc_port);
         } else {
@@ -1278,7 +1278,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
         if (master_cyc_port == UNPROVIDED) {
             master_cyc_port = NIL;
         }
-        SubLTrampolineFile.checkType(partial_gaf, CONSP);
+        SubLSystemTrampolineFile.checkType(partial_gaf, CONSP);
         if (NIL != master_cyc_host) {
             return generate_gafs.gg_remote_eval(list($sym105$TRIED_PARTIAL_GAF__INTERNAL, partial_gaf), master_cyc_host, master_cyc_port);
         } else {
@@ -1303,7 +1303,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
         if (master_cyc_port == UNPROVIDED) {
             master_cyc_port = NIL;
         }
-        SubLTrampolineFile.checkType(partial_gaf, CONSP);
+        SubLSystemTrampolineFile.checkType(partial_gaf, CONSP);
         if (NIL != master_cyc_host) {
             return generate_gafs.gg_remote_eval(list(SET_TRIED_PARTIAL_GAF, list(QUOTE, partial_gaf)), master_cyc_host, master_cyc_port);
         }

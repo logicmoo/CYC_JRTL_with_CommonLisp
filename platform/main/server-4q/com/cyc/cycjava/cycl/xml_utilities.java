@@ -110,7 +110,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class xml_utilities extends SubLTranslatedFile implements V12 {
@@ -614,7 +614,7 @@ public final class xml_utilities extends SubLTranslatedFile implements V12 {
 	public static final SubLObject xml_write_char_alt(SubLObject v_char) {
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(v_char, VALID_XML_CHAR_P);
+			SubLSystemTrampolineFile.checkType(v_char, VALID_XML_CHAR_P);
 			write_char(v_char, xml_vars.$xml_stream$.getDynamicValue(thread));
 			return NIL;
 		}
@@ -708,9 +708,9 @@ public final class xml_utilities extends SubLTranslatedFile implements V12 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(version, FLOATP);
-			SubLTrampolineFile.checkType(encoding, STRINGP);
-			SubLTrampolineFile.checkType(standalone, BOOLEANP);
+			SubLSystemTrampolineFile.checkType(version, FLOATP);
+			SubLSystemTrampolineFile.checkType(encoding, STRINGP);
+			SubLSystemTrampolineFile.checkType(standalone, BOOLEANP);
 			com.cyc.cycjava.cycl.xml_utilities.xml_write_string($str_alt10$__xml_version_, UNPROVIDED, UNPROVIDED);
 			{
 				SubLObject _prev_bind_0 = $read_default_float_format$.currentBinding(thread);
@@ -1199,7 +1199,7 @@ public final class xml_utilities extends SubLTranslatedFile implements V12 {
 		if (entity_table == UNPROVIDED) {
 			entity_table = xml_vars.$xml_entity_table$.getDynamicValue();
 		}
-		SubLTrampolineFile.checkType(string, STRINGP);
+		SubLSystemTrampolineFile.checkType(string, STRINGP);
 		{
 			SubLObject cdotimes_end_var = length(string);
 			SubLObject i = NIL;
@@ -1248,7 +1248,7 @@ public final class xml_utilities extends SubLTranslatedFile implements V12 {
 		if (entity_table == UNPROVIDED) {
 			entity_table = xml_vars.$xml_entity_table$.getDynamicValue();
 		}
-		SubLTrampolineFile.checkType(string, STRINGP);
+		SubLSystemTrampolineFile.checkType(string, STRINGP);
 		com.cyc.cycjava.cycl.xml_utilities.xml_write(string, entity_table);
 		com.cyc.cycjava.cycl.xml_utilities.xml_write_char(CHAR_newline);
 		return NIL;
@@ -1284,7 +1284,7 @@ public final class xml_utilities extends SubLTranslatedFile implements V12 {
 	 */
 	@LispMethod(comment = "@return STRINGP NAME with any invalid XML name characters removed.")
 	public static final SubLObject remove_invalid_xml_name_chars_alt(SubLObject name) {
-		SubLTrampolineFile.checkType(name, STRINGP);
+		SubLSystemTrampolineFile.checkType(name, STRINGP);
 		return NIL != unicode_strings.ascii_string_p(name)
 				? ((SubLObject) (com.cyc.cycjava.cycl.xml_utilities
 						.remove_invalid_xml_name_chars_from_ascii_string(name)))
@@ -1683,7 +1683,7 @@ public final class xml_utilities extends SubLTranslatedFile implements V12 {
 	}
 
 	public static final SubLObject xml_write_wXescaped_special_chars_alt(SubLObject string) {
-		SubLTrampolineFile.checkType(string, STRINGP);
+		SubLSystemTrampolineFile.checkType(string, STRINGP);
 		{
 			SubLObject string_var = string;
 			SubLObject end_var = length(string_var);
@@ -1961,7 +1961,7 @@ public final class xml_utilities extends SubLTranslatedFile implements V12 {
 			current = current.rest();
 			{
 				SubLObject body = current;
-				SubLTrampolineFile.checkType(string_var, SYMBOLP);
+				SubLSystemTrampolineFile.checkType(string_var, SYMBOLP);
 				{
 					SubLObject stream = $sym57$STREAM;
 					return list(CWITH_OUTPUT_TO_STRING, list(stream, string_var),

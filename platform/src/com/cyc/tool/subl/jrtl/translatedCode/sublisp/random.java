@@ -25,10 +25,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
 
-public class random extends SubLTrampolineFile {
+public class random extends SubLSystemTrampolineFile {
     public static SubLObject random(SubLObject limit) {
         int randomInt = randomState.nextInt(limit.intValue());
         return SubLNumberFactory.makeInteger(randomInt);

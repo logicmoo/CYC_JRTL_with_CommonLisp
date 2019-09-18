@@ -137,7 +137,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -10119,10 +10119,10 @@ public final class cb_system_tools extends SubLTranslatedFile {
 
     public static SubLObject init_cb_system_tools_file() {
         defparameter("*CYC-SYSTEM-DOC-COMM-MODE-INDEX*", $str1$com_modes);
-        deflexical("*CB-MODE-CHECKPOINT-COLLECTION*", SubLTrampolineFile.maybeDefault($cb_mode_checkpoint_collection$, $cb_mode_checkpoint_collection$, $$Cyc_BasedProject));
-        deflexical("*OE-PATCH-MESSAGES-ENABLED?*", SubLTrampolineFile.maybeDefault($sym74$_OE_PATCH_MESSAGES_ENABLED__, $oe_patch_messages_enabledP$, NIL));
-        deflexical("*DEFAULT-OE-PATCH-MESSAGE-RECIPIENT*", SubLTrampolineFile.maybeDefault($default_oe_patch_message_recipient$, $default_oe_patch_message_recipient$, $str83$));
-        deflexical("*OE-PATCH-MESSAGE-SMTP-HOST*", SubLTrampolineFile.maybeDefault($oe_patch_message_smtp_host$, $oe_patch_message_smtp_host$, $str83$));
+        deflexical("*CB-MODE-CHECKPOINT-COLLECTION*", SubLSystemTrampolineFile.maybeDefault($cb_mode_checkpoint_collection$, $cb_mode_checkpoint_collection$, $$Cyc_BasedProject));
+        deflexical("*OE-PATCH-MESSAGES-ENABLED?*", SubLSystemTrampolineFile.maybeDefault($sym74$_OE_PATCH_MESSAGES_ENABLED__, $oe_patch_messages_enabledP$, NIL));
+        deflexical("*DEFAULT-OE-PATCH-MESSAGE-RECIPIENT*", SubLSystemTrampolineFile.maybeDefault($default_oe_patch_message_recipient$, $default_oe_patch_message_recipient$, $str83$));
+        deflexical("*OE-PATCH-MESSAGE-SMTP-HOST*", SubLSystemTrampolineFile.maybeDefault($oe_patch_message_smtp_host$, $oe_patch_message_smtp_host$, $str83$));
         defparameter("*CYC-SYSTEM-DOC-AGENDA-INDEX*", $str159$cyc_agenda);
         defparameter("*IMAGE-PURPOSE*", NIL);
         deflexical("*CB-NOTIFY-USERS-GENERATE-EXCLUSION-MARK-FROM-USER-CACHING-STATE*", NIL);

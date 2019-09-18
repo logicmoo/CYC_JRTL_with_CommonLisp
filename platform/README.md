@@ -106,4 +106,14 @@ Run-mode [Optional] Loading
   
  
    
-  
+ 
+
+root@gitlab:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform# rm -rf site-lisp/.slime/fasl
+root@gitlab:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform# rm -rf site-lisp/.cache/common-lisp/
+root@gitlab:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform# rm -rf .cache/common-lisp/
+root@gitlab:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform# rm -rf .slime/fasl
+root@gitlab:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform# rm -rf ./site-lisp/daydreamer/HIDE
+root@gitlab:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform# find -name "*.abcl"
+root@gitlab:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform# find -name "*.cls"
+ 
+rm -rf ./site-lisp/quicklisp/cache/asdf-fasls

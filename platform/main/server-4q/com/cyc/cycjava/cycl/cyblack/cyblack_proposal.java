@@ -63,7 +63,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1108,92 +1108,92 @@ public final class cyblack_proposal extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject exprop_cyblack_external_proposal(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.getField2();
     }
 
     public static final SubLObject exprop_internals(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.getField3();
     }
 
     public static final SubLObject exprop_knowledge_source(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.getField4();
     }
 
     public static final SubLObject exprop_activation_pattern(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.getField5();
     }
 
     public static final SubLObject exprop_reasons(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.getField6();
     }
 
     public static final SubLObject exprop_timestamp(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.getField7();
     }
 
     public static final SubLObject exprop_before_withdraw_function(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.getField8();
     }
 
     public static final SubLObject exprop_before_validity_reconfirmed_function(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.getField9();
     }
 
     public static final SubLObject exprop_before_generate_ksi_function(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.getField10();
     }
 
     public static final SubLObject _csetf_exprop_cyblack_external_proposal(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_exprop_internals(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_exprop_knowledge_source(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_exprop_activation_pattern(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_exprop_reasons(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_exprop_timestamp(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_exprop_before_withdraw_function(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_exprop_before_validity_reconfirmed_function(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_exprop_before_generate_ksi_function(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_PROPOSAL_P);
         return v_object.setField10(value);
     }
 

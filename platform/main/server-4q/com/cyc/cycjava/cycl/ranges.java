@@ -69,7 +69,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class ranges extends SubLTranslatedFile {
     public static final SubLFile me = new ranges();
@@ -1467,7 +1467,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         defconstant("*VALID-RANGE-BOUND-TYPES*", $list0);
         defconstant("*RANGES-INITIAL-HASHTABLE-SIZE*", $int$100);
         defparameter("*RANGES-TABLE-UPDATE-LOCK*", make_lock($$$Ranges_Table_Lock));
-        deflexical("*RANGES-TABLE*", SubLTrampolineFile.maybeDefault($ranges_table$, $ranges_table$, () -> make_hash_table($ranges_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
+        deflexical("*RANGES-TABLE*", SubLSystemTrampolineFile.maybeDefault($ranges_table$, $ranges_table$, () -> make_hash_table($ranges_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-RANGE*", RANGE);
         return NIL;
     }

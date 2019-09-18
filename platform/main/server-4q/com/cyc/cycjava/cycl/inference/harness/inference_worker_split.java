@@ -70,7 +70,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1248,7 +1248,7 @@ public final class inference_worker_split extends SubLTranslatedFile {
         deflexical("*SPLIT-TACTIC-DEFAULT-PREFERENCE-LEVEL*", $PREFERRED);
         deflexical("*SPLIT-TACTIC-DEFAULT-PREFERENCE-LEVEL-JUSTIFICATION*", $$$the_default_for_split_tactics);
         defparameter("*META-SPLIT-TACTICS-ENABLED?*", T);
-        deflexical("*DETERMINE-NEW-SPLIT-TACTICS-MODULE*", SubLTrampolineFile.maybeDefault($determine_new_split_tactics_module$, $determine_new_split_tactics_module$, () -> inference_modules.inference_meta_structural_module($DETERMINE_NEW_SPLIT_TACTICS, UNPROVIDED)));
+        deflexical("*DETERMINE-NEW-SPLIT-TACTICS-MODULE*", SubLSystemTrampolineFile.maybeDefault($determine_new_split_tactics_module$, $determine_new_split_tactics_module$, () -> inference_modules.inference_meta_structural_module($DETERMINE_NEW_SPLIT_TACTICS, UNPROVIDED)));
         deflexical("*META-SPLIT-TACTIC-DEFAULT-PREFERENCE-LEVEL*", $PREFERRED);
         deflexical("*META-SPLIT-TACTIC-DEFAULT-PREFERENCE-LEVEL-JUSTIFICATION*", $str24$the_default_for_meta_split_tactic);
         defparameter("*META-SPLIT-CRITERIA*", NIL);

@@ -47,7 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -306,7 +306,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(method, SYMBOLP);
+                    SubLSystemTrampolineFile.checkType(method, SYMBOLP);
                     {
                         SubLObject lock_2 = lock;
                         SubLObject release = NIL;
@@ -371,7 +371,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(res, KEYWORDP);
+                    SubLSystemTrampolineFile.checkType(res, KEYWORDP);
                     {
                         SubLObject lock_3 = lock;
                         SubLObject release = NIL;
@@ -436,7 +436,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(explain, STRINGP);
+                    SubLSystemTrampolineFile.checkType(explain, STRINGP);
                     {
                         SubLObject lock_4 = lock;
                         SubLObject release = NIL;
@@ -501,7 +501,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_time, INTEGERP);
+                    SubLSystemTrampolineFile.checkType(new_time, INTEGERP);
                     {
                         SubLObject lock_5 = lock;
                         SubLObject release = NIL;
@@ -565,7 +565,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(error_message, STRINGP);
+                    SubLSystemTrampolineFile.checkType(error_message, STRINGP);
                     {
                         SubLObject preamble = NIL;
                         SubLObject pcase_var = phase;
@@ -714,7 +714,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
 
 
     public static final SubLObject get_test_category_by_name(SubLObject name) {
-        SubLTrampolineFile.checkType(name, STRINGP);
+        SubLSystemTrampolineFile.checkType(name, STRINGP);
         return gethash(name, $test_category_dictionary$.getGlobalValue(), UNPROVIDED);
     }
 
@@ -723,8 +723,8 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject store_test_category_by_name(SubLObject name, SubLObject test_category) {
-        SubLTrampolineFile.checkType(name, STRINGP);
-        SubLTrampolineFile.checkType(test_category, TEST_CATEGORY_P);
+        SubLSystemTrampolineFile.checkType(name, STRINGP);
+        SubLSystemTrampolineFile.checkType(test_category, TEST_CATEGORY_P);
         {
             SubLObject result = NIL;
             SubLObject lock = $test_category_dictionary_lock$.getGlobalValue();
@@ -742,7 +742,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject remove_test_category_by_name(SubLObject test_category_name) {
-        SubLTrampolineFile.checkType(test_category_name, STRINGP);
+        SubLSystemTrampolineFile.checkType(test_category_name, STRINGP);
         {
             SubLObject test_cat = get_test_category_by_name(test_category_name);
             if (NIL == test_category_p(test_cat)) {
@@ -935,7 +935,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_category_name, STRINGP);
+                    SubLSystemTrampolineFile.checkType(new_category_name, STRINGP);
                     if (name.isString()) {
                         if (!($str_alt28$.equal(name) || name.equal(new_category_name))) {
                             remove_test_category_by_name(name);
@@ -982,7 +982,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
                 SubLObject test_cases = get_test_category_test_cases(self);
                 try {
                     try {
-                        SubLTrampolineFile.checkType(new_test_case, SYMBOLP);
+                        SubLSystemTrampolineFile.checkType(new_test_case, SYMBOLP);
                         {
                             SubLObject test_case = get_test_case_by_symbol(new_test_case);
                             if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
@@ -1099,7 +1099,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
                             SubLObject cdolist_list_var = new_test_cases;
                             SubLObject new_test_case = NIL;
                             for (new_test_case = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , new_test_case = cdolist_list_var.first()) {
-                                SubLTrampolineFile.checkType(new_test_case, SYMBOLP);
+                                SubLSystemTrampolineFile.checkType(new_test_case, SYMBOLP);
                                 {
                                     SubLObject test_case = get_test_case_by_symbol(new_test_case);
                                     if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
@@ -1381,7 +1381,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
                 SubLObject subcategories = get_test_category_subcategories(self);
                 try {
                     try {
-                        SubLTrampolineFile.checkType(new_category_name, STRINGP);
+                        SubLSystemTrampolineFile.checkType(new_category_name, STRINGP);
                         if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                             if (NIL == get_test_category_by_name(new_category_name)) {
                                 Errors.error($str_alt200$_A_is_not_the_name_of_a_known_TES, new_category_name);
@@ -1460,7 +1460,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
                 SubLObject supercategories = get_test_category_supercategories(self);
                 try {
                     try {
-                        SubLTrampolineFile.checkType(new_category_name, STRINGP);
+                        SubLSystemTrampolineFile.checkType(new_category_name, STRINGP);
                         if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
                             if (NIL == get_test_category_by_name(new_category_name)) {
                                 Errors.error($str_alt200$_A_is_not_the_name_of_a_known_TES, new_category_name);
@@ -1627,7 +1627,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject enabled = get_test_category_enabled(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(bool, ATOM);
+                    SubLSystemTrampolineFile.checkType(bool, ATOM);
                     enabled = bool;
                     sublisp_throw($sym231$OUTER_CATCH_FOR_TEST_CATEGORY_METHOD, enabled);
                 } finally {
@@ -1743,7 +1743,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject get_test_case_by_symbol(SubLObject test_case) {
-        SubLTrampolineFile.checkType(test_case, SYMBOLP);
+        SubLSystemTrampolineFile.checkType(test_case, SYMBOLP);
         return classes.classes_retrieve_class(test_case);
     }
 
@@ -1968,7 +1968,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject module = get_test_case_module(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_module, MODULE_P);
+                    SubLSystemTrampolineFile.checkType(new_module, MODULE_P);
                     modules.module_add_test_case(new_module, subloop_structures.class_name(self));
                     {
                         SubLObject lock_13 = lock;
@@ -2366,7 +2366,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject enabled = get_test_case_enabled(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(v_boolean, ATOM);
+                    SubLSystemTrampolineFile.checkType(v_boolean, ATOM);
                     {
                         SubLObject lock_18 = lock;
                         SubLObject release = NIL;
@@ -2406,7 +2406,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject result = get_test_case_result(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_result, TEST_RESULT_P);
+                    SubLSystemTrampolineFile.checkType(new_result, TEST_RESULT_P);
                     {
                         SubLObject lock_19 = lock;
                         SubLObject release = NIL;
@@ -2754,7 +2754,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
     private static final SubLSymbol $test_suite_dictionary_lock$ = makeSymbol("*TEST-SUITE-DICTIONARY-LOCK*");
 
     public static final SubLObject get_test_suite_by_name(SubLObject name) {
-        SubLTrampolineFile.checkType(name, STRINGP);
+        SubLSystemTrampolineFile.checkType(name, STRINGP);
         return gethash(name, $test_suite_dictionary$.getGlobalValue(), UNPROVIDED);
     }
 
@@ -2763,8 +2763,8 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject store_test_suite_by_name(SubLObject name, SubLObject test_suite) {
-        SubLTrampolineFile.checkType(name, STRINGP);
-        SubLTrampolineFile.checkType(test_suite, TEST_SUITE_P);
+        SubLSystemTrampolineFile.checkType(name, STRINGP);
+        SubLSystemTrampolineFile.checkType(test_suite, TEST_SUITE_P);
         {
             SubLObject result = NIL;
             SubLObject lock = $test_suite_dictionary_lock$.getGlobalValue();
@@ -2782,7 +2782,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject remove_test_suite_by_name(SubLObject test_suite_name) {
-        SubLTrampolineFile.checkType(test_suite_name, STRINGP);
+        SubLSystemTrampolineFile.checkType(test_suite_name, STRINGP);
         {
             SubLObject test_suite = get_test_suite_by_name(test_suite_name);
             if (NIL == test_suite_p(test_suite)) {
@@ -2977,7 +2977,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_name, STRINGP);
+                    SubLSystemTrampolineFile.checkType(new_name, STRINGP);
                     if (name.isString()) {
                         if (!($str_alt28$.equal(name) || name.equal(new_name))) {
                             remove_test_suite_by_name(name);
@@ -3150,7 +3150,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_module_struct, MODULE_P);
+                    SubLSystemTrampolineFile.checkType(new_module_struct, MODULE_P);
                     {
                         SubLObject lock_25 = lock;
                         SubLObject release = NIL;
@@ -3191,7 +3191,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(old_module_struct, MODULE_P);
+                    SubLSystemTrampolineFile.checkType(old_module_struct, MODULE_P);
                     {
                         SubLObject lock_26 = lock;
                         SubLObject release = NIL;
@@ -3409,7 +3409,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(v_boolean, ATOM);
+                    SubLSystemTrampolineFile.checkType(v_boolean, ATOM);
                     {
                         SubLObject lock_29 = lock;
                         SubLObject release = NIL;
@@ -3596,7 +3596,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
             SubLObject lock = get_sunit_lockable_lock(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_stream, STREAMP);
+                    SubLSystemTrampolineFile.checkType(new_stream, STREAMP);
                     {
                         SubLObject lock_31 = lock;
                         SubLObject release = NIL;
@@ -3934,8 +3934,8 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
      * cleanup.
      */
     public static final SubLObject cycl_test_case_new_test_constant_method(SubLObject self, SubLObject name, SubLObject collection, SubLObject mt) {
-        SubLTrampolineFile.checkType(name, STRINGP);
-        SubLTrampolineFile.checkType(collection, COLLECTION_P);
+        SubLSystemTrampolineFile.checkType(name, STRINGP);
+        SubLSystemTrampolineFile.checkType(collection, COLLECTION_P);
         {
             SubLObject new_constant = methods.funcall_instance_method_with_1_args(self, CREATE_TEST_CONSTANT, name);
             SubLObject v_isa = constants_high.find_constant($$$isa);

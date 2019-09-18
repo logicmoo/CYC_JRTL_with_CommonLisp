@@ -48,7 +48,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -383,9 +383,9 @@ public final class system_info extends SubLTranslatedFile {
 
     public static SubLObject init_system_info_file() {
         deflexical("*CYC-HOME-DIRECTORY*", Filesys.construct_filename(NIL, NIL, NIL, T));
-        deflexical("*AVAILABLE-CYC-FEATURES*", SubLTrampolineFile.maybeDefault($available_cyc_features$, $available_cyc_features$, NIL));
-        deflexical("*CYCL-START-TIME*", SubLTrampolineFile.maybeDefault($cycl_start_time$, $cycl_start_time$, NIL));
-        deflexical("*SUBL-INITIAL-CONTINUATION*", SubLTrampolineFile.maybeDefault($subl_initial_continuation$, $subl_initial_continuation$, NIL));
+        deflexical("*AVAILABLE-CYC-FEATURES*", SubLSystemTrampolineFile.maybeDefault($available_cyc_features$, $available_cyc_features$, NIL));
+        deflexical("*CYCL-START-TIME*", SubLSystemTrampolineFile.maybeDefault($cycl_start_time$, $cycl_start_time$, NIL));
+        deflexical("*SUBL-INITIAL-CONTINUATION*", SubLSystemTrampolineFile.maybeDefault($subl_initial_continuation$, $subl_initial_continuation$, NIL));
         return NIL;
     }
 

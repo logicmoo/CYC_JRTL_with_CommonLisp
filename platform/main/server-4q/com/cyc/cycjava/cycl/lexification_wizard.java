@@ -76,7 +76,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class lexification_wizard extends SubLTranslatedFile {
@@ -1635,18 +1635,18 @@ public final class lexification_wizard extends SubLTranslatedFile {
 	defconstant("*DTP-LEXIFICATION-PARAMETERS*", LEXIFICATION_PARAMETERS);
 	defparameter("*LEXWIZ-DEFAULTS*", make_lexification_parameters(UNPROVIDED));
 	deflexical("*LEXIFICATION-PART-OF-SPEECH-KEYWORDS*", $list108);
-	deflexical("*MAIN-LEXIFICATION-PARTS-OF-SPEECH*", SubLTrampolineFile.maybeDefault($main_lexification_parts_of_speech$, $main_lexification_parts_of_speech$, NIL));
-	deflexical("*ALL-LEXIFICATION-PARTS-OF-SPEECH-LABELS*", SubLTrampolineFile.maybeDefault($all_lexification_parts_of_speech_labels$, $all_lexification_parts_of_speech_labels$, NIL));
-	deflexical("*LEXIFICATION-PROPER-NAME-PREDICATE-NAMES*", SubLTrampolineFile.maybeDefault($lexification_proper_name_predicate_names$, $lexification_proper_name_predicate_names$, NIL));
-	deflexical("*LEXIFICATION-PROPER-NAME-PREDICATE-CONSTRAINTS*", SubLTrampolineFile.maybeDefault($lexification_proper_name_predicate_constraints$, $lexification_proper_name_predicate_constraints$, NIL));
-	deflexical("*LEXIFICATION-MTS*", SubLTrampolineFile.maybeDefault($lexification_mts$, $lexification_mts$, NIL));
+	deflexical("*MAIN-LEXIFICATION-PARTS-OF-SPEECH*", SubLSystemTrampolineFile.maybeDefault($main_lexification_parts_of_speech$, $main_lexification_parts_of_speech$, NIL));
+	deflexical("*ALL-LEXIFICATION-PARTS-OF-SPEECH-LABELS*", SubLSystemTrampolineFile.maybeDefault($all_lexification_parts_of_speech_labels$, $all_lexification_parts_of_speech_labels$, NIL));
+	deflexical("*LEXIFICATION-PROPER-NAME-PREDICATE-NAMES*", SubLSystemTrampolineFile.maybeDefault($lexification_proper_name_predicate_names$, $lexification_proper_name_predicate_names$, NIL));
+	deflexical("*LEXIFICATION-PROPER-NAME-PREDICATE-CONSTRAINTS*", SubLSystemTrampolineFile.maybeDefault($lexification_proper_name_predicate_constraints$, $lexification_proper_name_predicate_constraints$, NIL));
+	deflexical("*LEXIFICATION-MTS*", SubLSystemTrampolineFile.maybeDefault($lexification_mts$, $lexification_mts$, NIL));
 	deflexical("*DEFAULT-PROPER-NAME-PRED*", $$$nameString);
 	deflexical("*DEFAULT-DENOTATION-PREDICATE*", $$denotation);
-	deflexical("*LEXIFICATION-OBJECT-TABLE*", SubLTrampolineFile.maybeDefault($lexification_object_table$, $lexification_object_table$, () -> make_hash_table($int$256, symbol_function(EQUAL), UNPROVIDED)));
+	deflexical("*LEXIFICATION-OBJECT-TABLE*", SubLSystemTrampolineFile.maybeDefault($lexification_object_table$, $lexification_object_table$, () -> make_hash_table($int$256, symbol_function(EQUAL), UNPROVIDED)));
 	defparameter("*LEXIFICATION-WIZARD-INITIALIZED*", NIL);
 	defvar("*SME-LEXWIZ-ACTIVE*", NIL);
 	defvar("*ALLOW-ADVANCED-LEXWIZ-FEATURES?*", NIL);
-	deflexical("*LEXIFICATION-TEMPLATE-MTS*", SubLTrampolineFile.maybeDefault($lexification_template_mts$, $lexification_template_mts$, NIL));
+	deflexical("*LEXIFICATION-TEMPLATE-MTS*", SubLSystemTrampolineFile.maybeDefault($lexification_template_mts$, $lexification_template_mts$, NIL));
 	deflexical("*ISOLATE-SYNTACTIC-MAPPINGS?*", T);
 	deflexical("*LEXWIZ-SHOW-TERM-INFORMATION?*", T);
 	defconstant("*LEXWIZ-TEST*", $$$Lexification_Wizard_Test);

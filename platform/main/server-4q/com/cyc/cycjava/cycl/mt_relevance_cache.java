@@ -25,7 +25,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -315,9 +315,9 @@ public final class mt_relevance_cache extends SubLTranslatedFile {
 
     public static SubLObject init_mt_relevance_cache_file() {
         deflexical("*MT-RELEVANCE-CACHE-UNKNOWN*", $UNKNOWN);
-        deflexical("*MONAD-MT-FORT-CACHE*", SubLTrampolineFile.maybeDefault($monad_mt_fort_cache$, $monad_mt_fort_cache$, () -> cache.new_cache($int$256, symbol_function(EQL))));
-        deflexical("*MONAD-MT-NAUT-CACHE*", SubLTrampolineFile.maybeDefault($monad_mt_naut_cache$, $monad_mt_naut_cache$, () -> cache.new_cache($int$256, symbol_function(EQUAL))));
-        deflexical("*TIME-MT-CACHE*", SubLTrampolineFile.maybeDefault($time_mt_cache$, $time_mt_cache$, () -> cache.new_cache($int$1024, symbol_function(EQUAL))));
+        deflexical("*MONAD-MT-FORT-CACHE*", SubLSystemTrampolineFile.maybeDefault($monad_mt_fort_cache$, $monad_mt_fort_cache$, () -> cache.new_cache($int$256, symbol_function(EQL))));
+        deflexical("*MONAD-MT-NAUT-CACHE*", SubLSystemTrampolineFile.maybeDefault($monad_mt_naut_cache$, $monad_mt_naut_cache$, () -> cache.new_cache($int$256, symbol_function(EQUAL))));
+        deflexical("*TIME-MT-CACHE*", SubLSystemTrampolineFile.maybeDefault($time_mt_cache$, $time_mt_cache$, () -> cache.new_cache($int$1024, symbol_function(EQUAL))));
         return NIL;
     }
 

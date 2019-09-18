@@ -104,7 +104,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1207,17 +1207,17 @@ public final class eval_in_api extends SubLTranslatedFile {
     }
 
     public static SubLObject valid_api_operator_p(final SubLObject operator) {
-        SubLTrampolineFile.enforceType(operator, SYMBOLP);
+        SubLSystemTrampolineFile.enforceType(operator, SYMBOLP);
         return makeBoolean(((NIL != valid_api_function_p(operator)) || (NIL != valid_api_macro_p(operator))) || (NIL != api_special_p(operator)));
     }
 
     public static SubLObject valid_api_function_p(final SubLObject operator) {
-        SubLTrampolineFile.enforceType(operator, SYMBOLP);
+        SubLSystemTrampolineFile.enforceType(operator, SYMBOLP);
         return makeBoolean(((NIL != api_function_p(operator)) || (NIL != api_predefined_function_p(operator))) || (NIL != external_function_p(operator)));
     }
 
     public static SubLObject valid_api_macro_p(final SubLObject operator) {
-        SubLTrampolineFile.enforceType(operator, SYMBOLP);
+        SubLSystemTrampolineFile.enforceType(operator, SYMBOLP);
         return makeBoolean((NIL != api_macro_p(operator)) || (NIL != api_predefined_macro_p(operator)));
     }
 
@@ -4953,13 +4953,13 @@ public final class eval_in_api extends SubLTranslatedFile {
 
     public static SubLObject init_eval_in_api_file() {
         defvar("*EVAL-IN-API?*", NIL);
-        deflexical("*EVAL-IN-API-MUTABLE-GLOBALS*", SubLTrampolineFile.maybeDefault($eval_in_api_mutable_globals$, $eval_in_api_mutable_globals$, NIL));
-        deflexical("*EVAL-IN-API-IMMUTABLE-GLOBALS*", SubLTrampolineFile.maybeDefault($eval_in_api_immutable_globals$, $eval_in_api_immutable_globals$, NIL));
+        deflexical("*EVAL-IN-API-MUTABLE-GLOBALS*", SubLSystemTrampolineFile.maybeDefault($eval_in_api_mutable_globals$, $eval_in_api_mutable_globals$, NIL));
+        deflexical("*EVAL-IN-API-IMMUTABLE-GLOBALS*", SubLSystemTrampolineFile.maybeDefault($eval_in_api_immutable_globals$, $eval_in_api_immutable_globals$, NIL));
         defparameter("*EVAL-IN-API-ENV*", NIL);
-        deflexical("*API-SPECIAL-VERIFY-TABLE*", SubLTrampolineFile.maybeDefault($api_special_verify_table$, $api_special_verify_table$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
-        deflexical("*API-FUNCTION-TABLE*", SubLTrampolineFile.maybeDefault($api_function_table$, $api_function_table$, () -> make_hash_table($int$100, symbol_function(EQ), UNPROVIDED)));
-        deflexical("*API-MACRO-TABLE*", SubLTrampolineFile.maybeDefault($api_macro_table$, $api_macro_table$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
-        deflexical("*SUBL-EVAL-METHOD*", SubLTrampolineFile.maybeDefault($subl_eval_method$, $subl_eval_method$, EVAL));
+        deflexical("*API-SPECIAL-VERIFY-TABLE*", SubLSystemTrampolineFile.maybeDefault($api_special_verify_table$, $api_special_verify_table$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
+        deflexical("*API-FUNCTION-TABLE*", SubLSystemTrampolineFile.maybeDefault($api_function_table$, $api_function_table$, () -> make_hash_table($int$100, symbol_function(EQ), UNPROVIDED)));
+        deflexical("*API-MACRO-TABLE*", SubLSystemTrampolineFile.maybeDefault($api_macro_table$, $api_macro_table$, () -> make_hash_table(TEN_INTEGER, symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SUBL-EVAL-METHOD*", SubLSystemTrampolineFile.maybeDefault($subl_eval_method$, $subl_eval_method$, EVAL));
         defparameter("*EVAL-IN-API-TRACED-FNS*", NIL);
         defparameter("*EVAL-IN-API-TRACE-LOG*", NIL);
         defparameter("*EVAL-IN-API-LEVEL*", MINUS_ONE_INTEGER);

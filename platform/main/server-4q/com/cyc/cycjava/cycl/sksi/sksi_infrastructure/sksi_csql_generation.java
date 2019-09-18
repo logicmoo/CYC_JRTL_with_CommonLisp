@@ -52,7 +52,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -170,7 +170,7 @@ public final class sksi_csql_generation extends SubLTranslatedFile {
             limit_count = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != limit_count) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(limit_count))) {
+        if (((NIL != limit_count) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(limit_count))) {
             throw new AssertionError(limit_count);
         }
         final SubLObject output_logical_field_indexicals = sksi_removal_module_generation.sksi_referenced_logical_field_indexicals(sentence, output_termnums);

@@ -72,7 +72,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -906,10 +906,10 @@ public final class rkf_concept_harvester extends SubLTranslatedFile {
 
     public static SubLObject init_rkf_concept_harvester_file() {
         deflexical("*RKF-CH-STRING-TOKENIZE-INTERNAL-CACHED-CACHING-STATE*", NIL);
-        deflexical("*RKF-ALL-CONCEPT-HARVESTER-METHODS*", SubLTrampolineFile.maybeDefault($rkf_all_concept_harvester_methods$, $rkf_all_concept_harvester_methods$, NIL));
-        deflexical("*RKF-ACTIVE-CONCEPT-HARVESTER-METHODS*", SubLTrampolineFile.maybeDefault($rkf_active_concept_harvester_methods$, $rkf_active_concept_harvester_methods$, NIL));
+        deflexical("*RKF-ALL-CONCEPT-HARVESTER-METHODS*", SubLSystemTrampolineFile.maybeDefault($rkf_all_concept_harvester_methods$, $rkf_all_concept_harvester_methods$, NIL));
+        deflexical("*RKF-ACTIVE-CONCEPT-HARVESTER-METHODS*", SubLSystemTrampolineFile.maybeDefault($rkf_active_concept_harvester_methods$, $rkf_active_concept_harvester_methods$, NIL));
         defparameter("*RKF-CH-TEMPLATE-PARSES-METHOD*", ITP_SEQUEL);
-        deflexical("*RKF-CH-TEMPLATE-PARSE-CACHE*", SubLTrampolineFile.maybeDefault($rkf_ch_template_parse_cache$, $rkf_ch_template_parse_cache$, NIL));
+        deflexical("*RKF-CH-TEMPLATE-PARSE-CACHE*", SubLSystemTrampolineFile.maybeDefault($rkf_ch_template_parse_cache$, $rkf_ch_template_parse_cache$, NIL));
         return NIL;
     }
 

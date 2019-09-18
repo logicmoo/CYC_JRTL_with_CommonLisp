@@ -156,7 +156,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3873,7 +3873,7 @@ public final class kb_indexing extends SubLTranslatedFile {
                                     }
                                 }
                             } else {
-                                SubLTrampolineFile.enforceType(index, FINAL_INDEX_P);
+                                SubLSystemTrampolineFile.enforceType(index, FINAL_INDEX_P);
                             }
 
 
@@ -3989,7 +3989,7 @@ public final class kb_indexing extends SubLTranslatedFile {
                                     }
                                 }
                             } else {
-                                SubLTrampolineFile.enforceType(index, FINAL_INDEX_P);
+                                SubLSystemTrampolineFile.enforceType(index, FINAL_INDEX_P);
                             }
 
 
@@ -6386,8 +6386,8 @@ public final class kb_indexing extends SubLTranslatedFile {
     }
 
     public static SubLObject find_assertion(final SubLObject cnf, final SubLObject mt) {
-        SubLTrampolineFile.enforceType(cnf, CNF_P);
-        SubLTrampolineFile.enforceType(mt, POSSIBLY_HLMT_P);
+        SubLSystemTrampolineFile.enforceType(cnf, CNF_P);
+        SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_HLMT_P);
         return assertions_interface.kb_lookup_assertion(cnf, mt);
     }
 
@@ -6409,7 +6409,7 @@ public final class kb_indexing extends SubLTranslatedFile {
 
     public static SubLObject find_assertion_any_mt(final SubLObject cnf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(cnf, CNF_P);
+        SubLSystemTrampolineFile.enforceType(cnf, CNF_P);
         SubLObject ans = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -6445,7 +6445,7 @@ public final class kb_indexing extends SubLTranslatedFile {
     }
 
     public static SubLObject find_all_assertions(final SubLObject cnf) {
-        SubLTrampolineFile.enforceType(cnf, CNF_P);
+        SubLSystemTrampolineFile.enforceType(cnf, CNF_P);
         final SubLObject assertion = find_assertion_any_mt(cnf);
         if (NIL == assertion) {
             return NIL;
@@ -6459,8 +6459,8 @@ public final class kb_indexing extends SubLTranslatedFile {
 
     public static SubLObject find_gaf(final SubLObject gaf_formula, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(gaf_formula, EL_FORMULA_P);
-        SubLTrampolineFile.enforceType(mt, HLMT_P);
+        SubLSystemTrampolineFile.enforceType(gaf_formula, EL_FORMULA_P);
+        SubLSystemTrampolineFile.enforceType(mt, HLMT_P);
         SubLObject ans = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -6477,7 +6477,7 @@ public final class kb_indexing extends SubLTranslatedFile {
 
     public static SubLObject find_gaf_any_mt(final SubLObject gaf_formula) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(gaf_formula, EL_FORMULA_P);
+        SubLSystemTrampolineFile.enforceType(gaf_formula, EL_FORMULA_P);
         SubLObject ans = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -6509,7 +6509,7 @@ public final class kb_indexing extends SubLTranslatedFile {
     }
 
     public static SubLObject find_all_gafs(final SubLObject gaf_formula) {
-        SubLTrampolineFile.enforceType(gaf_formula, EL_FORMULA_P);
+        SubLSystemTrampolineFile.enforceType(gaf_formula, EL_FORMULA_P);
         final SubLObject assertion = find_gaf_any_mt(gaf_formula);
         if (NIL == assertion) {
             return NIL;

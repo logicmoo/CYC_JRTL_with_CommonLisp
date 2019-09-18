@@ -257,7 +257,7 @@ public class BshScriptEngine extends AbstractScriptEngine implements Compilable,
 	 * @throws NullPointerException      if method name is null.
 	 */
 	@Override
-	public Object invokeMethod(Object thiz, String name, Object[] args) throws ScriptException, NoSuchMethodException {
+	public Object invokeMethod(Object thiz, String name, Object... args) throws ScriptException, NoSuchMethodException {
 		if (!(thiz instanceof bsh.This)) {
 			throw new ScriptException("Illegal object type: " + (null == thiz ? "null" : thiz.getClass()));
 		}
@@ -291,7 +291,7 @@ public class BshScriptEngine extends AbstractScriptEngine implements Compilable,
 	 * @throws NullPointerException      if method name is null.
 	 */
 	@Override
-	public Object invokeFunction(String name, Object[] args) throws ScriptException, NoSuchMethodException {
+	public Object invokeFunction(String name, Object... args) throws ScriptException, NoSuchMethodException {
 		return invokeMethod(getGlobal(), name, args);
 	}
 

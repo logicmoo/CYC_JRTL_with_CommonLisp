@@ -27,7 +27,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -196,7 +196,7 @@ public final class missing_knowledge_discovery_events extends SubLTranslatedFile
     public static SubLObject init_missing_knowledge_discovery_events_file() {
         defparameter("*UNLEXIFIED-TERM-DISCOVERY-LOGGING*", NIL);
         deflexical("*MISSING-KNOWLEDGE-DISCOVERY-EVENT-DISPATCHER-LOCK*", make_lock($str6$MISSING_KNOWLEDGE_DISCOVERY_EVENT));
-        deflexical("*MISSING-KNOWLEDGE-DISCOVERY-EVENT-DISPATCHER-LISTENERS*", SubLTrampolineFile.maybeDefault($missing_knowledge_discovery_event_dispatcher_listeners$, $missing_knowledge_discovery_event_dispatcher_listeners$, NIL));
+        deflexical("*MISSING-KNOWLEDGE-DISCOVERY-EVENT-DISPATCHER-LISTENERS*", SubLSystemTrampolineFile.maybeDefault($missing_knowledge_discovery_event_dispatcher_listeners$, $missing_knowledge_discovery_event_dispatcher_listeners$, NIL));
         deflexical("*UNLEXIFIED-TERM-DISCOVERY-EVENT-LISTENER*", event_broker.describe_funcall_listener($UNLEXIFIED_TERM_DISCOVERY_EVENT, UNLEXIFIED_TERM_DISCOVERY_EVENT_ACTION, UNPROVIDED, UNPROVIDED));
         return NIL;
     }

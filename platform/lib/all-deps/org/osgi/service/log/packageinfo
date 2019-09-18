@@ -1,0 +1,1 @@
+include class LogEntry.class LogListener.class LogReaderService.class LogService.class version 1.2

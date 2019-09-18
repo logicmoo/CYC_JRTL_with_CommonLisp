@@ -21,7 +21,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -49,7 +49,7 @@ public final class cb_uia_problem_reporting extends SubLTranslatedFile implement
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+            SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
             if (NIL == linktext) {
                 linktext = $str_alt1$_Report_Problem_;
             }

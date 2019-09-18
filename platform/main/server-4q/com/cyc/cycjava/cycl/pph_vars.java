@@ -50,7 +50,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1339,7 +1339,7 @@ public final class pph_vars extends SubLTranslatedFile {
         deflexical("*GEN-TEMPLATE-STORE-LOCK*", make_lock($str44$Gen_Template_Store_Lock));
         defparameter("*LAST-PPH-SENTENCE*", NIL);
         defparameter("*PPH-PHRASE-FNS*", dictionary.new_dictionary(UNPROVIDED, UNPROVIDED));
-        deflexical("*PPH-DATA-STRUCTURES-CODE-REVISION*", SubLTrampolineFile.maybeDefault($pph_data_structures_code_revision$, $pph_data_structures_code_revision$, NIL));
+        deflexical("*PPH-DATA-STRUCTURES-CODE-REVISION*", SubLSystemTrampolineFile.maybeDefault($pph_data_structures_code_revision$, $pph_data_structures_code_revision$, NIL));
         defparameter("*PPH-CYCLS*", NIL);
         defparameter("*PPH-ROOT-PHRASE*", misc_utilities.uninitialized());
         defparameter("*BYPASS-PPH-PHRASE-DESTROYER?*", T);

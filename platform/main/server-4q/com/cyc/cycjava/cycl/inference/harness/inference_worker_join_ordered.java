@@ -101,7 +101,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -420,7 +420,7 @@ public final class inference_worker_join_ordered extends SubLTranslatedFile {
 
     public static SubLObject new_join_ordered_link(final SubLObject supported_problem, final SubLObject focal_supporting_mapped_problem, final SubLObject non_focal_supporting_mapped_problem) {
         assert NIL != inference_datastructures_problem_link.mapped_problem_p(focal_supporting_mapped_problem) : "inference_datastructures_problem_link.mapped_problem_p(focal_supporting_mapped_problem) " + "CommonSymbols.NIL != inference_datastructures_problem_link.mapped_problem_p(focal_supporting_mapped_problem) " + focal_supporting_mapped_problem;
-        if (((NIL != non_focal_supporting_mapped_problem) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.mapped_problem_p(non_focal_supporting_mapped_problem))) {
+        if (((NIL != non_focal_supporting_mapped_problem) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_problem_link.mapped_problem_p(non_focal_supporting_mapped_problem))) {
             throw new AssertionError(non_focal_supporting_mapped_problem);
         }
         final SubLObject link = inference_datastructures_problem_link.new_problem_link($JOIN_ORDERED, supported_problem);

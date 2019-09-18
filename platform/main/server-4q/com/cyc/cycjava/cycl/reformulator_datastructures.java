@@ -55,7 +55,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1590,13 +1590,13 @@ public final class reformulator_datastructures extends SubLTranslatedFile {
     public static SubLObject init_reformulator_datastructures_file() {
         deflexical("*REFORMULATOR-INITIALIZATION-SUCCESS-RATIO*", $float$0_9);
         deflexical("*REFORMULATOR-CORE-CONSTANTS*", $list1);
-        deflexical("*DEFAULT-REFORMULATOR-MODE-PRECEDENCE*", SubLTrampolineFile.maybeDefault($default_reformulator_mode_precedence$, $default_reformulator_mode_precedence$, NIL));
-        deflexical("*DEFAULT-REFORMULATION-DIRECTIONS-IN-MODES-FOR-PREDS*", SubLTrampolineFile.maybeDefault($default_reformulation_directions_in_modes_for_preds$, $default_reformulation_directions_in_modes_for_preds$, NIL));
+        deflexical("*DEFAULT-REFORMULATOR-MODE-PRECEDENCE*", SubLSystemTrampolineFile.maybeDefault($default_reformulator_mode_precedence$, $default_reformulator_mode_precedence$, NIL));
+        deflexical("*DEFAULT-REFORMULATION-DIRECTIONS-IN-MODES-FOR-PREDS*", SubLSystemTrampolineFile.maybeDefault($default_reformulation_directions_in_modes_for_preds$, $default_reformulation_directions_in_modes_for_preds$, NIL));
         defparameter("*DEFAULT-REFORMULATION-RECURSION-LIMIT*", $int$35);
-        deflexical("*REFORMULATOR-IRRELEVANT-FORTS*", SubLTrampolineFile.maybeDefault($reformulator_irrelevant_forts$, $reformulator_irrelevant_forts$, NIL));
-        deflexical("*REFORMULATOR-RELEVANT-PREDICATES*", SubLTrampolineFile.maybeDefault($reformulator_relevant_predicates$, $reformulator_relevant_predicates$, NIL));
-        deflexical("*REFORMULATOR-RULE-PREDICATES*", SubLTrampolineFile.maybeDefault($reformulator_rule_predicates$, $reformulator_rule_predicates$, NIL));
-        deflexical("*REFORMULATOR-RULE-SPEC-PREDS*", SubLTrampolineFile.maybeDefault($reformulator_rule_spec_preds$, $reformulator_rule_spec_preds$, NIL));
+        deflexical("*REFORMULATOR-IRRELEVANT-FORTS*", SubLSystemTrampolineFile.maybeDefault($reformulator_irrelevant_forts$, $reformulator_irrelevant_forts$, NIL));
+        deflexical("*REFORMULATOR-RELEVANT-PREDICATES*", SubLSystemTrampolineFile.maybeDefault($reformulator_relevant_predicates$, $reformulator_relevant_predicates$, NIL));
+        deflexical("*REFORMULATOR-RULE-PREDICATES*", SubLSystemTrampolineFile.maybeDefault($reformulator_rule_predicates$, $reformulator_rule_predicates$, NIL));
+        deflexical("*REFORMULATOR-RULE-SPEC-PREDS*", SubLSystemTrampolineFile.maybeDefault($reformulator_rule_spec_preds$, $reformulator_rule_spec_preds$, NIL));
         deflexical("*REFORMULATOR-PRINT-VERBOSITY-LEVEL*", ONE_INTEGER);
         defparameter("*REFORMULATOR-LOCK*", make_lock($str12$Reformulator_Initialization_Updat));
         defparameter("*REFORMULATOR-MEMOIZATION-STATE*", $UNINITIALIZED);

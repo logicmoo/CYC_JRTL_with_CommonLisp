@@ -25,7 +25,7 @@ public class StreamTest
     }
     
     Pathname pathname = Pathname.makePathname(file);
-    Stream in = new Stream(Symbol.SYSTEM_STREAM, pathname.getInputStream(), Symbol.CHARACTER);
+    Stream in = Stream.createStream(Symbol.SYSTEM_STREAM, pathname.getInputStream(), Symbol.CHARACTER);
     LispObject o = in.read(false, Lisp.EOF, false,
                            LispThread.currentThread(), Stream.currentReadtable);
     assertFalse(o.equal(Lisp.NIL));

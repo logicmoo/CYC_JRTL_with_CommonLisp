@@ -140,7 +140,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3525,7 +3525,7 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile {
                 }
 
             if (attributes.first().equal(rdf_utilities.rdf_name($$$ID))) {
-                SubLTrampolineFile.enforceType(second(attributes), VALID_XML_NAME_P);
+                SubLSystemTrampolineFile.enforceType(second(attributes), VALID_XML_NAME_P);
             }
             xml_utilities.xml_write_string(owl_space(indent_level), UNPROVIDED, UNPROVIDED);
             xml_utilities.xml_start_tag_internal(element_name, attributes, standalone_tagP, UNPROVIDED, UNPROVIDED);
@@ -3560,7 +3560,7 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile {
             stream = xml_vars.$xml_stream$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(tag, VALID_XML_NAME_P);
+        SubLSystemTrampolineFile.enforceType(tag, VALID_XML_NAME_P);
         if (value.isString() && (NIL != search($str135$_u, value, symbol_function(EQUALP), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
             final SubLObject utf8 = unicode_strings.display_to_utf8_string(value);
             if (NIL != utf8) {

@@ -55,7 +55,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1170,7 +1170,7 @@ public final class bindings extends SubLTranslatedFile {
         deflexical("*HL-IDENTITY-BINDING-CACHING-STATE*", NIL);
         deflexical("*HL-IDENTITY-BINDINGS-CACHING-STATE*", NIL);
         defconstant("*DONT-CARE-VARIABLE-BINDING-VALUE*", $DONT_CARE);
-        deflexical("*DUMMY-BINDING*", SubLTrampolineFile.maybeDefault($dummy_binding$, $dummy_binding$, () -> make_variable_binding(T, T)));
+        deflexical("*DUMMY-BINDING*", SubLSystemTrampolineFile.maybeDefault($dummy_binding$, $dummy_binding$, () -> make_variable_binding(T, T)));
         deflexical("*UNIFICATION-SUCCESS-TOKEN*", list($dummy_binding$.getGlobalValue()));
         return NIL;
     }

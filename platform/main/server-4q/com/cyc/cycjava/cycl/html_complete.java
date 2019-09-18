@@ -100,7 +100,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class html_complete extends SubLTranslatedFile {
@@ -1227,7 +1227,7 @@ public final class html_complete extends SubLTranslatedFile {
 
 	public static SubLObject html_complete_insert_choice(final SubLObject choice, final SubLObject submit) {
 		final SubLThread thread = SubLProcess.currentSubLThread();
-		if (((!choice.isString()) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == constant_p(choice))) {
+		if (((!choice.isString()) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == constant_p(choice))) {
 			throw new AssertionError(choice);
 		}
 		final SubLObject name = completion_string(choice);

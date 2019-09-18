@@ -1,254 +1,35 @@
 /* For LarKC */
 package com.cyc.tool.subl.webserver;
 
-import static com.cyc.tool.subl.util.IsolatedClassLoader.*;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.armedbear.lisp.Lisp;
-import org.eclipse.jetty.demo.JettyMain.JspStarter;
-import org.eclipse.jetty.jsp.JettyJspServlet;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.ErrorHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.logicmoo.system.Startup;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.IsolatedClassLoader;
+import com.cyc.tool.subl.webserver.ServletContainer.WarSpec;
 
-public class Jetty {
-
-	public static final IsolatedClassLoader sharingLoader = IsolatedClassLoader.theIsolatedClassLoader;
-
-	public interface RunnableExc {
-
-		void call();
-
-	}
-
-	public static boolean passToSharing;
-
-	public static class CycWebAppContext extends WebAppContext {
-
-		@Override
-		protected void doStart() throws Exception {
-			try {
-				super.doStart();
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
-		}
-
-		@Override
-		public void preConfigure() throws Exception {
-			try {
-				File tmpDir = this.getTempDirectory();
-				if (tmpDir != null) {
-					String tmpDirStr = tmpDir.getAbsolutePath();
-					if (tmpDirStr.endsWith("-UNSET")) {
-						this.setTempDirectory(new File(tmpDir, "ROOT"));
-						info("preConfigure " + this + " tempDir=" + getTempDirectory());
-
-					}
-				}
-				super.preConfigure();
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
-			return;
-		}
-
-	}
-
-	public static final class CycWebAppClassLoader extends WebAppClassLoader {
-		/**
-		 * TODO Describe this constructor.
-		 * @param parent
-		 * @param context
-		 */
-		private Context context;
-
-		private CycWebAppClassLoader(org.eclipse.jetty.webapp.WebAppClassLoader.Context context) throws IOException {
-			super(context);
-			this.context = context;
-		}
-
-		@Override
-		protected Class<?> findClass(String name) throws ClassNotFoundException {
-
-			Class found = null;
-			try {
-				if (!neverFindOurselves(name)) {
-					found = with_classloader(this, () -> sharingLoader.findClass(name));
-					if (found != null) {
-						info(" sharingLoader found " + name);
-						return found;
-					}
-				}
-			} catch (Throwable ee1) {
-				if (!(ee1 instanceof ClassNotFoundException)) {
-					ee1.printStackTrace();
-				}
-			}
-
-			found = with_classloader(this, () -> super.findClass(name));
-			if (found != null) {
-				info(" super found " + name);
-				return found;
-			}
-			return found;
-		}
-
-		@Override
-		public Class<?> loadClass(String name) throws ClassNotFoundException {
-			return with_classloader(this, () -> super.loadClass(name));
-		}
-
-		@Override
-		protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-
-			Class found = null;
-			try {
-				if (!neverFindOurselves(name)) {
-					found = with_classloader(this, () -> sharingLoader.loadClass(name, resolve));
-					if (found != null) {
-						info(" sharingLoader found " + name);
-						if (false && resolve) {
-							claimResolveClass(found);
-						}
-						return found;
-					}
-				}
-			} catch (Throwable ee1) {
-				if (!(ee1 instanceof ClassNotFoundException)) {
-					ee1.printStackTrace();
-				}
-			}
-
-			found = with_classloader(this, () -> super.loadClass(name, resolve));
-			if (found != null) {
-				info(" super found " + name);
-				if (false && resolve) {
-					claimResolveClass(found);
-				}
-				return found;
-			}
-			return found;
-		}
-
-		private void claimResolveClass(Class c) {
-			//String s = c.getName();
-			//classMap.put(s, c);
-			with_classloader(this, () -> resolveClass(c));
-		}
-
-		@Override
-		public void addClassPath(Resource resource) throws IOException {
-			super.addClassPath(resource);
-		}
-
-		private Class maybeGlobal(String name) {
-
-			Class found = classMap.get(name);
-			if (found != null)
-				return found;
-			//			if (name.contentEquals("org.apache.xerces.jaxp.SAXParserFactoryImpl")) {
-			//				return org.apache.xerces.jaxp.SAXParserFactoryImpl.class;
-			//			}
-
-			return found;
-		}
-
-		@Override
-		public void setDefaultAssertionStatus(boolean enabled) {
-			super.setDefaultAssertionStatus(enabled);
-		}
-
-		@Override
-		protected void addURL(URL url) {
-			try {
-				if (passToSharing)
-					sharingLoader.addClassPath(url);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			super.addURL(url);
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.jetty.webapp.WebAppClassLoader#addClassPath(java.lang.String)
-		 */
-		@Override
-		public void addClassPath(String classPath) throws IOException {
-			if (passToSharing)
-				sharingLoader.addToClassPath(classPath);
-			super.addClassPath(classPath);
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.jetty.webapp.WebAppClassLoader#addJars(org.eclipse.jetty.util.resource.Resource)
-		 */
-		@Override
-		public void addJars(Resource lib) {
-			super.addJars(lib);
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.jetty.webapp.WebAppClassLoader#addTransformer(java.lang.instrument.ClassFileTransformer)
-		 */
-		public void addTransformer(ClassFileTransformer transformer) {
-			Class baseClass = getClass().getSuperclass();
-			Method found = null;
-			try {
-				found = baseClass.getMethod("addTransformer", ClassFileTransformer.class);
-			} catch (NoSuchMethodException e1) {
-				return;
-			} catch (SecurityException e1) {
-			}
-			try {
-				MethodHandle h1 = MethodHandles.lookup().findSpecial(found.getDeclaringClass(), "addTransformer", MethodType.methodType(void.class), ClassFileTransformer.class);
-				h1.invokeExact(transformer);
-			} catch (NoSuchMethodException | IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Throwable e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			//MethodHandle h2 = MethodHandles.lookup().findSpecial(Object.class, "toString", MethodType.methodType(String.class), Test.class);
-			//super.addTransformer(transformer);
-		}
-	}
-
+public class Jetty implements CommonSymbols {
 	public static class JettyStartFailureException extends RuntimeException {
 		public JettyStartFailureException(String str) {
 			super(str);
 		}
-
 	}
 
 	private static void deleteDirectory(File dir) {
@@ -261,13 +42,11 @@ public class Jetty {
 					try {
 						f.delete();
 					} catch (Throwable t) {
-						t.printStackTrace();
 					}
 				}
 		try {
 			dir.delete();
 		} catch (Throwable t) {
-			t.printStackTrace();
 		}
 
 	}
@@ -279,49 +58,65 @@ public class Jetty {
 
 	private static void possiblyDeleteTmpDir(File tmpDir) {
 		if (tmpDir != null && tmpDir.exists()) {
-			final String absolutePath = tmpDir.getAbsolutePath();
-			String lc = absolutePath.toLowerCase();
-			if (lc.contains("tmp") || lc.contains("temp")) {
-				//PrintLow.format(T, SubLObjectFactory.makeString("Clearing old webapp tmp directory: " + absolutePath));
-				//streams_high.force_output(T);
-				deleteDirectory(tmpDir);
-			}
+			/*	PrintLow.format(T,
+						SubLObjectFactory.makeString("Clearing old webapp tmp directory: " + tmpDir.getAbsolutePath()));
+				streams_high.force_output(T);*/
+
+			deleteDirectory(tmpDir);
 		}
 	}
 
-	protected static synchronized void startJettyServer(int port, List<ServletContainer.WarSpec> warFiles, String tmpDirString) {
-		addJettyClassesToClasspath();
+	public static void start() {
+		startJettyServer(ServletContainer.usePortNum, ServletContainer.useWarSpecs, ServletContainer.useTmpDir);
+	}
+
+	public static void stop() {
+		stopJettyServer(ServletContainer.useTmpDir);
+	}
+
+	protected static synchronized void startJettyServer(int port, List<WarSpec> warFiles, String tmpDirString) {
+		//addJettyClassesToClasspath(IsolatedClassLoader.getCommonClassLoader());
 
 		Label_0411: {
 			try {
-				if (isJettyRunning()) {
-					info("Jetty is already running on port " + Arrays.toString(jettyServer.getConnectors()));
-					//	break Label_0411;
-				}
+				//configChecks();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
+			if (isJettyRunning()) {
+				info("Jetty is already running on port " + jettyServer.getConnectors()[0]);
+				break Label_0411;
+			}
 			try {
 				File tmpDir = tmpDirString != null ? new File(tmpDirString) : null;
 				possiblyDeleteTmpDir(tmpDir);
+				//deleteDir(tmpDirString);
+				jettyServer = new Server(port);
+				ContextHandlerCollection handlers = (ContextHandlerCollection) jettyServer.getHandler();
+				if (handlers == null) {
+					handlers = new ContextHandlerCollection();
+					jettyServer.setHandler(handlers);
+					handlers = (ContextHandlerCollection) jettyServer.getHandler();
+				}
 
-				ContextHandlerCollection handlers = ensureJettyServer(port);
-
-				for (ServletContainer.WarSpec war : warFiles) {
-					final String contextRoot = war.getContextRoot();
-					final String id = contextKey(port, contextRoot);
-					WebAppContext webapp = jettyContexts.get(id);
-					if (webapp == null) {
-						final String filename = war.getFilename();
-						webapp = addWarSpec(port, tmpDir, filename, contextRoot);
-						jettyContexts.put(id, webapp);
-						handlers.addHandler(webapp);
-						if (filename.endsWith(".war")) {
-							ensureRunning(port, handlers, webapp);
+				for (WarSpec war : warFiles) {
+					WebAppContext ctx = addWarSpec(tmpDir, handlers, war);
+					if (ctx != null) {
+						if (false) {
+							WebAppClassLoader classLoader = new CycWebAppClassLoader(IsolatedClassLoader.getCommonClassLoader(), ctx);
+							ctx.setClassLoader(classLoader);
+						}
+						ctx.setParentLoaderPriority(true);
+						if (!jettyContexts.contains(ctx)) {
+							jettyContexts.add(ctx);
 						}
 					}
+
 				}
+				jettyServer.setHandler(handlers);
+				jettyServer.start();
+
 				if (isJettyRunning()) {
 					info("Jetty server started on port " + port);
 					break Label_0411;
@@ -336,114 +131,42 @@ public class Jetty {
 			} catch (Error ex2) {
 				ex2.printStackTrace();
 				throw new RuntimeException("Jetty server failed to start on port " + Lisp.valueOfString(port), ex2);
-			} catch (Throwable ex2) {
-				ex2.printStackTrace();
-				throw new RuntimeException("Jetty server failed to start on port " + Lisp.valueOfString(port), ex2);
 			}
 		}
-		try
-
-		{
-			Startup.enableAjaxSwing();
-			Startup.configWebSwing();
-			final ContextHandlerCollection contextHandlerCollection = (ContextHandlerCollection) jettyServer.getHandler();
-			Handler[] handlersA = contextHandlerCollection.getHandlers();
+		try {
+			//Startup.enableAjaxSwing();
+			Handler[] handlersA = ((ContextHandlerCollection) jettyServer.getHandler()).getHandlers();
 			for (Handler h : handlersA) {
-				WebAppContext webapp = (WebAppContext) h;
-				//ensureRunning(port, contextHandlerCollection, webapp);
+				System.err.println("Handler=" + h);
 			}
-			for (Map.Entry<String, WebAppContext> sh : jettyContexts.entrySet()) {
-				final WebAppContext value = sh.getValue();
-				vetWebApp(value);
-				info("WebAppContext=" + value);
-				//	h.setAvailable(true); 
+			for (WebAppContext h : jettyContexts) {
+				vetWebApp(h);
+				System.err.println("WebAppContext=" + h); // h.setAvailable(true);
 			}
-			configChecks();
-		} catch (IOException e) {
+			//configChecks();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * @param port
-	 * @param contextHandlerCollection
-	 * @param webapp
-	 */
-	public static void ensureRunning(int port, final ContextHandlerCollection contextHandlerCollection, WebAppContext webapp) {
-		try {
-			if (vetWebApp(webapp)) {
-				if (!webapp.isRunning()) {
-					try {
-						webapp.start();
-					} catch (Exception e) {
-						e.printStackTrace();
-						webapp.stop();
-						throw e;
-					}
-					vetWebApp(webapp);
-				}
-			}
-		} catch (Throwable t) {
-			t.printStackTrace();
-			final String id = contextKey(port, webapp.getContextPath());
-			jettyContexts.remove(id);
-			contextHandlerCollection.removeHandler(webapp);
-		}
-	}
-
-	public static ContextHandlerCollection ensureJettyServer(int port) throws IOException {
-		//deleteDir(tmpDirString);
-		if (jettyServer == null) {
-			jettyServer = new Server(port);
-			ContextHandlerCollection handlers = (ContextHandlerCollection) jettyServer.getHandler();
-			if (handlers == null) {
-				handlers = new ContextHandlerCollection();
-				jettyServer.setHandler(handlers);
-				handlers = (ContextHandlerCollection) jettyServer.getHandler();
-			}
-			try {
-				jettyServer.start();
-			} catch (Throwable t) {
-				throw new IOException(t);
-			}
-		}
-		return (ContextHandlerCollection) jettyServer.getHandler();
-	}
-
-	private static void jettyConfigChecks() throws IOException {
-		classDupes(javax.servlet.ServletContext.class);
-		//classDupes(org.apache.jasper.servlet.JspServlet.class);
-		classDupes(ContextHandlerCollection.class);
-		classDupes(Server.class);
-		classDupes(WebAppContext.class);
-		classDupes(org.eclipse.jetty.security.SecurityHandler.class);
-		//classDupes(com.sun.jndi.url.java.javaURLContextFactory.class);
-		classDupes("com.sun.jndi.url.java.javaURLContextFactory");
-		classDupes("org.eclipse.jetty.webapp.WebAppClassLoader$Context");
-		//classDupes("org.glassfish.jersey.internal.inject.AbstractBinder");
-		//classDupes(org.glassfish.jersey.internal.inject.AbstractBinder.class.getName());
-		//com.sun.enterprise.web.PEWebContainer.class.getName();
-		//		classDupes(sun.awt.shell.PublicShellFolderManager.class.getName());
-		//		classDupes("org.webswing.toolkit.extra.IsolatedFsShellFolderManager");
-		//          org.webswing.toolkit.extra.IsolatedFsShellFolderManager
-		//Class found = org.webswing.server.model.exception.WsInitException.class;
-		//classDupes("org.webswing.server.model.exception.WsInitException");
-	}
-
-	/**
 	 * TODO Describe the purpose of this method.
 	 */
-	private static void addJettyClassesToClasspath() {
-		if (true) {
-			ClassLoader cl = sharingLoader.getCommonClassLoader();
-			final File file = new File("lib/jetty-libs/");
-			if (file.exists()) {
-				for (File f : file.listFiles()) {
-					final String name = f.getName();
-					if (!name.startsWith("~") && name.endsWith("v20190813.jar") && name.startsWith("jetty-")) {
+	private static void addJettyClassesToClasspath(ClassLoader cl) {
+		// TODO Auto-generated method stub
+		final File LibDir = new File(Startup.getPlatformDir(), "lib");
+		if (LibDir != null) {
+			for (File f : LibDir.listFiles()) {
+				if (f.isDirectory()) {
+					final String shortName = f.getName().toLowerCase();
+					if (shortName.contains("unused"))
+						continue;
+					if (shortName.contains("~"))
+						continue;
+					if (shortName.contains("-deps")) {
 						try {
 							final URL url = f.getCanonicalFile().toURL();
-							sharingLoader.addURL(cl, url);
+							IsolatedClassLoader.addURLToClassloader("addJettyClassesToClasspath", cl, url);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -451,92 +174,101 @@ public class Jetty {
 				}
 			}
 		}
-		try
+	}
 
-		{
-			jettyConfigChecks();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	final static List<WebAppContext> jettyContexts = new ArrayList(20);
+
+	public static final class CycWebAppClassLoader extends WebAppClassLoader {
+		/**
+		 * TODO Describe this constructor.
+		 * @param parent
+		 * @param context
+		 */
+		private CycWebAppClassLoader(ClassLoader parent, org.eclipse.jetty.webapp.WebAppClassLoader.Context context) throws IOException {
+			super(parent, context);
 		}
-	}
 
-	final static Map<String, WebAppContext> jettyContexts = new HashMap();
-	final static HashSet<String> neverFind = new HashSet<String>();
-	static {
-		neverFind.add("java.util.ConcurrentNavigableMap");
-		// neverFind.add("com.sun.jndi.url.java.javaURLContextFactory");
-	}
-
-	private static WebAppContext addWarSpec(int port, File tmpDir, String filename, String contextRoot) throws Exception {
-		final String id = contextKey(port, contextRoot);
-		WebAppContext webapp = jettyContexts.get(id);
-		if (webapp == null) {
-			webapp = new CycWebAppContext();
-			WebAppContext servletContextHandler = webapp;
-			//servletContextHandler.setAttribute("javax.servlet.context.tempdir", scratchDir);
-
-			if (!filename.toLowerCase().contains("proxy")) {
-				// Set Classloader of Context to be sane (needed for JSTL)
-				// JSP requires a non-System classloader, this simply wraps the
-				// embedded System classloader in a way that makes it suitable
-				// for JSP to use
-				//ClassLoader jspClassLoader = new URLClassLoader(new URL[0], JettyMain.class.getClassLoader());
-				//servletContextHandler.setClassLoader(jspClassLoader);
-				servletContextHandler.setInitParameter("dirAllowed", "true");
-
-				// Manually call JettyJasperInitializer on context startup
-				servletContextHandler.addBean(new JspStarter(servletContextHandler));
-				// Create / Register JSP Servlet (must be named "jsp" per spec)
-				ServletHolder holderJsp = new ServletHolder("jsp", JettyJspServlet.class);
-				holderJsp.setInitOrder(0);
-				holderJsp.setInitParameter("logVerbosityLevel", "DEBUG");
-				holderJsp.setInitParameter("fork", "false");
-				holderJsp.setInitParameter("xpoweredBy", "false");
-				holderJsp.setInitParameter("compilerTargetVM", "1.8");
-				holderJsp.setInitParameter("compilerSourceVM", "1.8");
-				holderJsp.setInitParameter("keepgenerated", "true");
-				holderJsp.setInitParameter("dirAllowed", "true");
-				servletContextHandler.addServlet(holderJsp, "*.jsp");
+		@Override
+		public Class<?> findClass(String name) throws ClassNotFoundException {
+			Class found;
+			try {
+				found = super.findClass(name);
+				return found;
+			} catch (ClassNotFoundException e) {
+				if (neverFind(name))
+					throw e;
+				found = maybeGlobal(name);
+				if (found != null)
+					return found;
+				e.printStackTrace();
+				throw e;
+			} catch (Error e) {
+				e.printStackTrace();
+				found = maybeGlobal(name);
+				if (found != null)
+					return found;
+				throw e;
 			}
 		}
-		webapp.setContextPath(contextRoot);
 
-		if (tmpDir != null) {
-			File tmpAppDir = new File(tmpDir + id);
-			tmpAppDir.mkdirs();
-			webapp.setTempDirectory(tmpAppDir);
+		private boolean neverFind(String name) {
+			return name.contentEquals("java.util.ConcurrentNavigableMap");
 		}
 
-		final String warFilename = webappHome + filename;
+		private Class maybeGlobal(String name) {
+
+			Class found = classMap.get(name);
+			if (found != null)
+				return found;
+			if (name.contentEquals("org.apache.xerces.jaxp.SAXParserFactoryImpl")) {
+				return org.apache.xerces.jaxp.SAXParserFactoryImpl.class;
+			}
+			return found;
+		}
+
+		@Override
+		public void setDefaultAssertionStatus(boolean enabled) {
+			super.setDefaultAssertionStatus(enabled);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.jetty.webapp.WebAppClassLoader#addClassPath(java.lang.String)
+		 */
+		@Override
+		public void addClassPath(String classPath) throws IOException {
+			super.addClassPath(classPath);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.jetty.webapp.WebAppClassLoader#addJars(org.eclipse.jetty.util.resource.Resource)
+		 */
+		@Override
+		public void addJars(Resource lib) {
+			super.addJars(lib);
+		}
+
+		//		/* (non-Javadoc)
+		//		 * @see org.eclipse.jetty.webapp.WebAppClassLoader#addTransformer(java.lang.instrument.ClassFileTransformer)
+		//		 */
+		//		@Override
+		//		public void addTransformer(ClassFileTransformer transformer) {
+		//			super.addTransformer(transformer);
+		//		}
+	}
+
+	private static WebAppContext addWarSpec(File tmpDir, ContextHandlerCollection handlers, WarSpec war) throws IOException {
+		final String warFilename = webappHome + war.getFilename();
 		File warFile = new File(warFilename);
-		//tmpAppDir.deleteOnExit();
-
-		CycWebAppClassLoader classLoader = new CycWebAppClassLoader(webapp);
-		//		final WebAppClassLoader parent = new CycWebAppClassLoader(sharingLoader.getCommonClassLoader(), webapp);
-		//		final WebAppClassLoader classLoader = new WebAppClassLoaderVis(parent, webapp);
-		//final WebAppClassLoader classLoader = new WebAppClassLoaderVis(sharingLoader.getCommonClassLoader(), webapp);
-		webapp.setClassLoader(classLoader);
-		webapp.setParentLoaderPriority(true);
-		///webapp.setAttribute("org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern", "");
-		//webapp.setThrowUnavailableOnStartupException(true);
-
-		ErrorHandler errorHandler = new ErrorHandler() {//custom event handler to hide running jetty version (pen test)
-			@Override
-			protected void writeErrorPageBody(HttpServletRequest request, Writer writer, int code, String message, boolean showStacks) throws IOException {
-				String uri = request.getRequestURI();
-				this.writeErrorPageMessage(request, writer, code, message, uri);
-			}
-		};
-		webapp.setErrorHandler(errorHandler);
-
-		if (new File(warFilename).isDirectory())
-
-		{
+		final String contextRoot = war.getContextRoot();
+		WebAppContext webapp = new WebAppContext();
+		webapp.setContextPath(contextRoot);
+		if (new File(warFilename).isDirectory()) {
 			String webappDirLocation = warFilename;
 			String asWebApp = asWebApp(webappDirLocation);
 			webapp.setDescriptor(asWebApp);
 			webapp.setResourceBase(webappDirLocation);
+			handlers.addHandler(webapp);
+			vetWebApp(webapp);
 			return webapp;
 		} else if (warFilename.endsWith(".war")) {
 			if (true) {
@@ -545,6 +277,8 @@ public class Jetty {
 				if (new File(webappDirLocation).exists()) {
 					webapp.setDescriptor(asWebApp);
 					webapp.setResourceBase(webappDirLocation);
+					handlers.addHandler(webapp);
+					vetWebApp(webapp);
 					return webapp;
 				}
 				if (webappDirLocation.contains("/apps/")) {
@@ -553,35 +287,26 @@ public class Jetty {
 					if (new File(webappDirLocation).exists()) {
 						webapp.setDescriptor(asWebApp);
 						webapp.setResourceBase(webappDirLocation);
+						handlers.addHandler(webapp);
+						vetWebApp(webapp);
 						return webapp;
 					}
 				}
 			}
+			if (tmpDir != null) {
+				File tmpAppDir = new File(tmpDir + war.getContextRoot());
+				tmpAppDir.mkdirs();
+				webapp.setTempDirectory(tmpAppDir);
+				//tmpAppDir.deleteOnExit();
+			}
 			webapp.setWar(warFilename);
+			handlers.addHandler(webapp);
+			vetWebApp(webapp);
 			return webapp;
 		} else {
 			Errors.warn(SubLObjectFactory.makeString("Unable to find " + warFile + ".  Not loading into \n"));
 			return null;
 		}
-	}
-
-	/**
-	 * @param port
-	 * @param contextRoot
-	 * @return
-	 */
-	public static String contextKey(int port, String contextRoot) {
-		if (contextRoot != null) {
-			if (!contextRoot.startsWith("/")) {
-				contextRoot = "/" + contextRoot;
-			}
-		}
-		String id = contextRoot;
-		if (id == null || id.equals("/")) {
-			id = "/ROOT";
-		}
-		id = id + "-port" + port;
-		return id;
 	}
 
 	/**
@@ -603,10 +328,9 @@ public class Jetty {
 	}
 
 	private static void info(String string) {
-		Startup.getNoticeStream().println(string);
-		//		PrintLow.format(T, SubLObjectFactory.makeString(string));
-		//		PrintLow.format(T, SubLObjectFactory.makeString("~%"));
-		//		streams_high.force_output(T);
+		PrintLow.format(T, SubLObjectFactory.makeString(string));
+		PrintLow.format(T, SubLObjectFactory.makeString("~%"));
+		streams_high.force_output(T);
 	}
 
 	private static boolean vetWebApp(WebAppContext webapp) {
@@ -640,25 +364,6 @@ public class Jetty {
 		return jettyServer != null && jettyServer instanceof Server && jettyServer.isRunning();
 	}
 
-	/**
-	 * @param name
-	 * @return
-	 */
-	public static boolean neverFindOurselves(String name) {
-		name = name.replace('/', '.');
-		if (neverFind.contains(name))
-			return true;
-		if (name.startsWith("com.sun.jersey")) {
-			neverFind.add(name);
-			return true;
-		}
-		if (name.startsWith("org.eclipse.jetty")) {
-			neverFind.add(name);
-			return true;
-		}
-		return false;
-	}
-
 	private static Server jettyServer;
 	private static String webappHome = "webapps/apps/";
 	final private static HashMap<String, Class> classMap = new HashMap<String, Class>();
@@ -667,48 +372,4 @@ public class Jetty {
 			webappHome = "webapps/";
 	}
 
-	static public <T> T with_classloader(ClassLoader replace, Callable<T> call) throws ClassNotFoundException {
-		final Thread currentThread = Thread.currentThread();
-		ClassLoader was = currentThread.getContextClassLoader();
-		try {
-			if (replace != was) {
-				currentThread.setContextClassLoader(replace);
-			}
-			return call.call();
-		} catch (ClassNotFoundException e) {
-			throw e;
-		} catch (Throwable e) {
-			if (e instanceof ClassNotFoundException)
-				throw (ClassNotFoundException) e;
-			e.printStackTrace();
-			if (e instanceof Error) {
-				throw (Error) e;
-			}
-			return null;
-
-		} finally {
-			currentThread.setContextClassLoader(was);
-		}
-	}
-
-	static public <T> T with_classloader(ClassLoader replace, Runnable call) {
-		final Thread currentThread = Thread.currentThread();
-		ClassLoader was = currentThread.getContextClassLoader();
-		try {
-			if (replace != was) {
-				currentThread.setContextClassLoader(replace);
-			}
-			call.run();
-			return null;
-		} catch (Throwable e) {
-			e.printStackTrace();
-			if (e instanceof Error) {
-				throw (Error) e;
-			}
-			return null;
-
-		} finally {
-			currentThread.setContextClassLoader(was);
-		}
-	}
 }

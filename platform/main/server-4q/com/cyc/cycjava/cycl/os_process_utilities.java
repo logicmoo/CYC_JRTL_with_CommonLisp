@@ -82,7 +82,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class os_process_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new os_process_utilities();
@@ -1322,8 +1322,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_os_process_utilities_file() {
         defconstant("*DTP-OS-PROCESS-IMPL*", OS_PROCESS_IMPL);
         defconstant("*VALID-OS-PROCESS-STATUS*", $list65);
-        deflexical("*OS-PROCESS-ENUMERATION-LOCK*", SubLTrampolineFile.maybeDefault($os_process_enumeration_lock$, $os_process_enumeration_lock$, () -> make_lock($$$OS_Process_enumeration_lock)));
-        deflexical("*ACTIVE-OS-PROCESSES*", SubLTrampolineFile.maybeDefault($active_os_processes$, $active_os_processes$, NIL));
+        deflexical("*OS-PROCESS-ENUMERATION-LOCK*", SubLSystemTrampolineFile.maybeDefault($os_process_enumeration_lock$, $os_process_enumeration_lock$, () -> make_lock($$$OS_Process_enumeration_lock)));
+        deflexical("*ACTIVE-OS-PROCESSES*", SubLSystemTrampolineFile.maybeDefault($active_os_processes$, $active_os_processes$, NIL));
         defparameter("*FORKED-CYC-SERVER-PROCESS-TASK*", NIL);
         return NIL;
     }

@@ -1,0 +1,23 @@
+#
+# Sesame configuration template for a rdbms RDF store
+#
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rep: <http://www.openrdf.org/config/repository#>.
+@prefix sr: <http://www.openrdf.org/config/repository/sail#>.
+@prefix sail: <http://www.openrdf.org/config/sail#>.
+@prefix ns: <http://www.openrdf.org/config/sail/rdbms#>.
+
+[] a rep:Repository ;
+   rep:repositoryID "{%Repository ID|pgsql%}" ;
+   rdfs:label "{%Repository title|PostgreSQL Store%}" ;
+   rep:repositoryImpl [
+      rep:repositoryType "openrdf:SailRepository" ;
+      sr:sailImpl [
+         sail:sailType "openrdf:RdbmsStore" ;
+         ns:jdbcDriver "{%JDBC driver|org.postgresql.Driver%}";
+         ns:url "jdbc:postgresql://{%Host|localhost%}:{%Port|5432%}/{%Database|sesame_store%}?{%Connection properties%}";
+         ns:user "{%User name%}";
+         ns:password "{%Password%}";
+         ns:maxTripleTables "{%Max number of triple tables|256%}"
+      ]
+   ].

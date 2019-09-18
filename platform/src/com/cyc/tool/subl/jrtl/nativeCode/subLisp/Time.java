@@ -20,9 +20,9 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SafeRunnable;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Time extends SubLTrampolineFile {
+public class Time extends SubLSystemTrampolineFile {
 	public static SubLObject compute_with_process_resource_tracking_results(SubLObject resourceSpec) {
 		SubLObject now = get_time();
 		SubLObject delta = Numbers.subtract(now, resourceSpec);
@@ -132,7 +132,7 @@ public class Time extends SubLTrampolineFile {
 		}
 		final SubLProcess proc = SubLProcess.currentProcess();
 		secondsBeforeTimeout.enforceType(CommonSymbols.NON_NEGATIVE_NUMBER_P);
-		SafeRunnable safeRunnable = new SafeRunnable() {
+		SafeRunnable safeRunnable = new SafeRunnable(true,null) {
 			@Override
 			public void safeRun() {
 				SubLSymbol with_timeout_signal_timeout = SubLSymbolFactory.makeSymbol("WITH-TIMEOUT-SIGNAL-TIMEOUT");

@@ -72,7 +72,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1116,7 +1116,7 @@ public final class image_demo_internals extends SubLTranslatedFile implements V0
         if (key_preprocessor == UNPROVIDED) {
             key_preprocessor = symbol_function(IDENTITY);
         }
-        SubLTrampolineFile.checkType(filename, STRINGP);
+        SubLSystemTrampolineFile.checkType(filename, STRINGP);
         if (NIL == Filesys.probe_file(filename)) {
             return NIL;
         }
@@ -1204,7 +1204,7 @@ public final class image_demo_internals extends SubLTranslatedFile implements V0
     public static final SubLObject ir_parse_query_cache_lookup(SubLObject string) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(string, STRINGP);
+            SubLSystemTrampolineFile.checkType(string, STRINGP);
             if (NIL != $ir_parse_query_cache$.getGlobalValue()) {
                 thread.resetMultipleValues();
                 {
@@ -1240,7 +1240,7 @@ public final class image_demo_internals extends SubLTranslatedFile implements V0
      * Parse STRING using the IR parse caption cache.
      */
     public static final SubLObject ir_parse_caption_cache_lookup(SubLObject string) {
-        SubLTrampolineFile.checkType(string, STRINGP);
+        SubLSystemTrampolineFile.checkType(string, STRINGP);
         return NIL;
     }
 
@@ -1293,7 +1293,7 @@ public final class image_demo_internals extends SubLTranslatedFile implements V0
      * save for maybe literal order and variable names.
      */
     public static final SubLObject ir_canonicalize_query(SubLObject query) {
-        SubLTrampolineFile.checkType(query, $sym92$EL_SENTENCE_ASKABLE_);
+        SubLSystemTrampolineFile.checkType(query, $sym92$EL_SENTENCE_ASKABLE_);
         {
             SubLObject canonical_forms = czer_main.canonicalize_query(query, UNPROVIDED, UNPROVIDED, UNPROVIDED);
             SubLObject result = NIL;

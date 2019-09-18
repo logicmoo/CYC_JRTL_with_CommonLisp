@@ -62,7 +62,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -89,7 +89,7 @@ public final class uia_trampolines extends SubLTranslatedFile implements V02 {
 		if (parse_template == UNPROVIDED) {
 			parse_template = NIL;
 		}
-		SubLTrampolineFile.checkType(phrase, STRINGP);
+		SubLSystemTrampolineFile.checkType(phrase, STRINGP);
 		if (NIL == parsing_mt) {
 			parsing_mt = user_interaction_agenda.uia_parsing_interaction_mt(v_agenda);
 		}
@@ -165,7 +165,7 @@ public final class uia_trampolines extends SubLTranslatedFile implements V02 {
 		if (domain_mt == UNPROVIDED) {
 			domain_mt = NIL;
 		}
-		SubLTrampolineFile.checkType(phrase, STRINGP);
+		SubLSystemTrampolineFile.checkType(phrase, STRINGP);
 		if (NIL == parsing_mt) {
 			parsing_mt = user_interaction_agenda.uia_parsing_interaction_mt(v_agenda);
 		}
@@ -4834,7 +4834,7 @@ public final class uia_trampolines extends SubLTranslatedFile implements V02 {
 	 * Kill FORT and clean up any lingering references to it on AGENDA.
 	 */
 	public static final SubLObject uia_kill(SubLObject v_agenda, SubLObject fort) {
-		SubLTrampolineFile.checkType(fort, FORT_P);
+		SubLSystemTrampolineFile.checkType(fort, FORT_P);
 		rkf_event_dispatcher.ensure_rkf_event_dispatcher_running();
 		rkf_event_dispatcher.rkf_post_kill_term_event(fort, UNPROVIDED);
 		uia_expunge_term_references(v_agenda, fort);

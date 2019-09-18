@@ -16,7 +16,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -275,14 +275,14 @@ public final class predicate_relevance_cache extends SubLTranslatedFile {
 
     public static SubLObject init_predicate_relevance_cache_file() {
         deflexical("*PRED-RELEVANCE-CACHE-SIZE*", $int$128);
-        deflexical("*SPEC-PRED-FORT-CACHE*", SubLTrampolineFile.maybeDefault($spec_pred_fort_cache$, $spec_pred_fort_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
-        deflexical("*SPEC-INVERSE-FORT-CACHE*", SubLTrampolineFile.maybeDefault($spec_inverse_fort_cache$, $spec_inverse_fort_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
-        deflexical("*GENL-PRED-FORT-CACHE*", SubLTrampolineFile.maybeDefault($genl_pred_fort_cache$, $genl_pred_fort_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
-        deflexical("*GENL-INVERSE-FORT-CACHE*", SubLTrampolineFile.maybeDefault($genl_inverse_fort_cache$, $genl_inverse_fort_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
-        deflexical("*SPEC-PRED-NAUT-CACHE*", SubLTrampolineFile.maybeDefault($spec_pred_naut_cache$, $spec_pred_naut_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
-        deflexical("*SPEC-INVERSE-NAUT-CACHE*", SubLTrampolineFile.maybeDefault($spec_inverse_naut_cache$, $spec_inverse_naut_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
-        deflexical("*GENL-PRED-NAUT-CACHE*", SubLTrampolineFile.maybeDefault($genl_pred_naut_cache$, $genl_pred_naut_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
-        deflexical("*GENL-INVERSE-NAUT-CACHE*", SubLTrampolineFile.maybeDefault($genl_inverse_naut_cache$, $genl_inverse_naut_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
+        deflexical("*SPEC-PRED-FORT-CACHE*", SubLSystemTrampolineFile.maybeDefault($spec_pred_fort_cache$, $spec_pred_fort_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
+        deflexical("*SPEC-INVERSE-FORT-CACHE*", SubLSystemTrampolineFile.maybeDefault($spec_inverse_fort_cache$, $spec_inverse_fort_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
+        deflexical("*GENL-PRED-FORT-CACHE*", SubLSystemTrampolineFile.maybeDefault($genl_pred_fort_cache$, $genl_pred_fort_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
+        deflexical("*GENL-INVERSE-FORT-CACHE*", SubLSystemTrampolineFile.maybeDefault($genl_inverse_fort_cache$, $genl_inverse_fort_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
+        deflexical("*SPEC-PRED-NAUT-CACHE*", SubLSystemTrampolineFile.maybeDefault($spec_pred_naut_cache$, $spec_pred_naut_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
+        deflexical("*SPEC-INVERSE-NAUT-CACHE*", SubLSystemTrampolineFile.maybeDefault($spec_inverse_naut_cache$, $spec_inverse_naut_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
+        deflexical("*GENL-PRED-NAUT-CACHE*", SubLSystemTrampolineFile.maybeDefault($genl_pred_naut_cache$, $genl_pred_naut_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
+        deflexical("*GENL-INVERSE-NAUT-CACHE*", SubLSystemTrampolineFile.maybeDefault($genl_inverse_naut_cache$, $genl_inverse_naut_cache$, () -> cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), symbol_function(EQUAL))));
         return NIL;
     }
 

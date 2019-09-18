@@ -67,7 +67,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -177,10 +177,10 @@ public final class rdf_uri extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != stringp(base_uri) : "Types.stringp(base_uri) " + "CommonSymbols.NIL != Types.stringp(base_uri) " + base_uri;
-        if (((NIL != connector) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_uri_connector_p(connector))) {
+        if (((NIL != connector) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_uri_connector_p(connector))) {
             throw new AssertionError(connector);
         }
-        if (((NIL != local_part) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(local_part))) {
+        if (((NIL != local_part) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(local_part))) {
             throw new AssertionError(local_part);
         }
         if ((NIL == connector) && (NIL == local_part)) {
@@ -499,10 +499,10 @@ public final class rdf_uri extends SubLTranslatedFile {
 
     public static SubLObject new_rdf_uri(final SubLObject base_uri, final SubLObject connector, final SubLObject local_part) {
         assert NIL != web_utilities.uri_p(base_uri, UNPROVIDED) : "web_utilities.uri_p(base_uri, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != web_utilities.uri_p(base_uri, CommonSymbols.UNPROVIDED) " + base_uri;
-        if (((NIL != local_part) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(local_part))) {
+        if (((NIL != local_part) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(local_part))) {
             throw new AssertionError(local_part);
         }
-        if (((NIL != connector) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_uri_connector_p(connector))) {
+        if (((NIL != connector) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == valid_uri_connector_p(connector))) {
             throw new AssertionError(connector);
         }
         final SubLObject uri_struct = make_rdf_uri(UNPROVIDED);

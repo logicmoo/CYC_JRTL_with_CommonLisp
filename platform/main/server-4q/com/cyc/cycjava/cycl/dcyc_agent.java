@@ -74,7 +74,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -255,72 +255,72 @@ public final class dcyc_agent extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject cyc_agent_ccc(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.getField2();
     }
 
     public static final SubLObject cyc_agent_peers(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.getField3();
     }
 
     public static final SubLObject cyc_agent_buffer(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.getField4();
     }
 
     public static final SubLObject cyc_agent_busystate(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.getField5();
     }
 
     public static final SubLObject cyc_agent_busylock(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.getField6();
     }
 
     public static final SubLObject cyc_agent_state(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.getField7();
     }
 
     public static final SubLObject cyc_agent_statelock(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.getField8();
     }
 
     public static final SubLObject _csetf_cyc_agent_ccc(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_cyc_agent_peers(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_cyc_agent_buffer(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_cyc_agent_busystate(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_cyc_agent_busylock(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_cyc_agent_state(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_cyc_agent_statelock(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, CYC_AGENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, CYC_AGENT_P);
         return v_object.setField8(value);
     }
 

@@ -71,7 +71,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -293,7 +293,7 @@ public final class corba_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject corba_object_id_from_object(final SubLObject v_object, final SubLObject corba_connection) {
-        if (((NIL != corba_connection) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == corba_connection_p(corba_connection))) {
+        if (((NIL != corba_connection) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == corba_connection_p(corba_connection))) {
             throw new AssertionError(corba_connection);
         }
         if (v_object.eql($$TheCORBAInitialObject)) {
@@ -306,7 +306,7 @@ public final class corba_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject corba_object_from_object_id(final SubLObject object_id, final SubLObject corba_connection) {
-        if (((NIL != corba_connection) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == corba_connection_p(corba_connection))) {
+        if (((NIL != corba_connection) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == corba_connection_p(corba_connection))) {
             throw new AssertionError(corba_connection);
         }
         final SubLObject initial_object_id = corba_connection_get_initial_object_id(corba_connection);
@@ -564,7 +564,7 @@ public final class corba_utilities extends SubLTranslatedFile {
 
     public static SubLObject corba_connection_set_stream(final SubLObject corba_connection, final SubLObject stream) {
         assert NIL != corba_connection_p(corba_connection) : "corba_utilities.corba_connection_p(corba_connection) " + "CommonSymbols.NIL != corba_utilities.corba_connection_p(corba_connection) " + corba_connection;
-        if (((NIL != stream) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == streamp(stream))) {
+        if (((NIL != stream) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == streamp(stream))) {
             throw new AssertionError(stream);
         }
         _csetf_corba_connection_int_stream(corba_connection, stream);

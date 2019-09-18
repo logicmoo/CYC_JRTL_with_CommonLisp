@@ -80,7 +80,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1012,12 +1012,12 @@ public final class sbhl_graphs extends SubLTranslatedFile {
 
     public static SubLObject init_sbhl_graphs_file() {
         deflexical("*SBHL-GRAPH-EQUALITY-TEST*", symbol_function(EQL));
-        deflexical("*SBHL-BACKING-FILE-VECTOR*", SubLTrampolineFile.maybeDefault($sbhl_backing_file_vector$, $sbhl_backing_file_vector$, NIL));
-        deflexical("*SBHL-BACKING-FILE-VECTOR-CACHES-FOR-MODULES*", SubLTrampolineFile.maybeDefault($sbhl_backing_file_vector_caches_for_modules$, $sbhl_backing_file_vector_caches_for_modules$, NIL));
+        deflexical("*SBHL-BACKING-FILE-VECTOR*", SubLSystemTrampolineFile.maybeDefault($sbhl_backing_file_vector$, $sbhl_backing_file_vector$, NIL));
+        deflexical("*SBHL-BACKING-FILE-VECTOR-CACHES-FOR-MODULES*", SubLSystemTrampolineFile.maybeDefault($sbhl_backing_file_vector_caches_for_modules$, $sbhl_backing_file_vector_caches_for_modules$, NIL));
         defparameter("*SBHL-BACKING-FILE-VECTOR-CACHE-SIZE-PERCENTAGE*", TWO_INTEGER);
         defparameter("*SBHL-BACKING-FILE-VECTOR-CACHE-MINIMUM-SIZE*", $int$100);
         defparameter("*SBHL-BACKING-FILE-VECTOR-CACHE-GATHER-CACHE-METRICS?*", T);
-        deflexical("*SBHL-FILE-VECTOR-DATA-STREAM-LOCK*", SubLTrampolineFile.maybeDefault($sbhl_file_vector_data_stream_lock$, $sbhl_file_vector_data_stream_lock$, () -> make_lock($$$SBHL_File_Vector_Data_Stream_lock)));
+        deflexical("*SBHL-FILE-VECTOR-DATA-STREAM-LOCK*", SubLSystemTrampolineFile.maybeDefault($sbhl_file_vector_data_stream_lock$, $sbhl_file_vector_data_stream_lock$, () -> make_lock($$$SBHL_File_Vector_Data_Stream_lock)));
         deflexical("*SBHL-BACKING-FILE-VECTOR-CACHE-CONSTRUCTOR*", NEW_METERED_PREALLOCATED_CACHE);
         defparameter("*OVERRIDE-SBHL-ISA-MODULE-WITH-KB-LOOKUP?*", NIL);
         deflexical("*DEFAULT-NUMBER-OF-CONCURRENT-READERS*", TWENTY_INTEGER);

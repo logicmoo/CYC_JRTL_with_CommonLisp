@@ -571,7 +571,7 @@ public class SubLObjectFactory {
 	}
 
 	public static SubLProcess makeProcess(SubLString symbolName, final Runnable runnable) {
-		SafeRunnable safeRunnable = new SafeRunnable() {
+		SafeRunnable safeRunnable = new SafeRunnable(null) {
 			@Override
 			public void safeRun() {
 				runnable.run();
@@ -605,6 +605,7 @@ public class SubLObjectFactory {
 		private final SubLFunction func;
 
 		private SafeRunSubLFunction(SubLFunction func) {
+			super(null);
 			this.func = func;
 		}
 

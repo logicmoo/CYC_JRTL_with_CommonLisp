@@ -28,7 +28,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -133,7 +133,7 @@ public final class removal_modules_perform_subl extends SubLTranslatedFile {
     }
 
     public static SubLObject init_removal_modules_perform_subl_file() {
-        deflexical("*PERFORM-SUBL-DEFINING-MT*", SubLTrampolineFile.maybeDefault($perform_subl_defining_mt$, $perform_subl_defining_mt$, $$UniversalVocabularyMt));
+        deflexical("*PERFORM-SUBL-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($perform_subl_defining_mt$, $perform_subl_defining_mt$, $$UniversalVocabularyMt));
         defparameter("*DEFAULT-PERFORM-SUBL-POS-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         defparameter("*DEFAULT-PERFORM-SUBL-NEG-COST*", $default_perform_subl_pos_cost$.getDynamicValue());
         return NIL;

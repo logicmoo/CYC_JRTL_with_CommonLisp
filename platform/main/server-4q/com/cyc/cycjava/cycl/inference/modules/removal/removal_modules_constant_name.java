@@ -25,7 +25,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -327,16 +327,16 @@ public final class removal_modules_constant_name extends SubLTranslatedFile {
     }
 
     public static SubLObject init_removal_modules_constant_name_file() {
-        deflexical("*CONSTANT-NAME-DEFINING-MT*", SubLTrampolineFile.maybeDefault($constant_name_defining_mt$, $constant_name_defining_mt$, $$BaseKB));
+        deflexical("*CONSTANT-NAME-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($constant_name_defining_mt$, $constant_name_defining_mt$, $$BaseKB));
         deflexical("*CONSTANT-NAME-CHECK-DEFAULT-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*CONSTANT-NAME-UNIFY-DEFAULT-COST*", ONE_INTEGER);
-        deflexical("*DENOTATIONAL-TERM-DEFINING-MT*", SubLTrampolineFile.maybeDefault($denotational_term_defining_mt$, $denotational_term_defining_mt$, $$BaseKB));
+        deflexical("*DENOTATIONAL-TERM-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($denotational_term_defining_mt$, $denotational_term_defining_mt$, $$BaseKB));
         deflexical("*DENOTATIONAL-TERM-CHECK-DEFAULT-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*DENOTATIONAL-TERM-UNIFY-DEFAULT-COST*", ONE_INTEGER);
-        deflexical("*CONSTANT-ID-DEFINING-MT*", SubLTrampolineFile.maybeDefault($constant_id_defining_mt$, $constant_id_defining_mt$, $$BaseKB));
+        deflexical("*CONSTANT-ID-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($constant_id_defining_mt$, $constant_id_defining_mt$, $$BaseKB));
         deflexical("*CONSTANT-ID-CHECK-DEFAULT-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*CONSTANT-ID-UNIFY-DEFAULT-COST*", ONE_INTEGER);
-        deflexical("*CONSTANT-GUID-DEFINING-MT*", SubLTrampolineFile.maybeDefault($constant_guid_defining_mt$, $constant_guid_defining_mt$, $$BaseKB));
+        deflexical("*CONSTANT-GUID-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($constant_guid_defining_mt$, $constant_guid_defining_mt$, $$BaseKB));
         deflexical("*CONSTANT-GUID-CHECK-DEFAULT-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*CONSTANT-GUID-UNIFY-DEFAULT-COST*", ONE_INTEGER);
         deflexical("*CONSTANT-GUID-LOOKUP-DEFAULT-COST*", $cheap_hl_module_check_cost$.getGlobalValue());

@@ -57,7 +57,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class set_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new set_utilities();
@@ -1248,7 +1248,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_set_utilities_file() {
-        deflexical("*EMPTY-SET*", SubLTrampolineFile.maybeDefault($empty_set$, $empty_set$, () -> set.new_set(symbol_function(EQ), ZERO_INTEGER)));
+        deflexical("*EMPTY-SET*", SubLSystemTrampolineFile.maybeDefault($empty_set$, $empty_set$, () -> set.new_set(symbol_function(EQ), ZERO_INTEGER)));
         defconstant("*DTP-SLIDING-WINDOW*", SLIDING_WINDOW);
         return NIL;
     }

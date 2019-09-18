@@ -87,7 +87,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1443,8 +1443,8 @@ public final class transcript_utilities extends SubLTranslatedFile {
 
     public static SubLObject write_specific_transcript_file_as_ke_text(final SubLObject transcript_filename, final SubLObject output_filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(transcript_filename, STRINGP);
-        SubLTrampolineFile.enforceType(output_filename, STRINGP);
+        SubLSystemTrampolineFile.enforceType(transcript_filename, STRINGP);
+        SubLSystemTrampolineFile.enforceType(output_filename, STRINGP);
         if (NIL == Filesys.probe_file(transcript_filename)) {
             return $$$transcript_file_not_found;
         }
@@ -2064,19 +2064,19 @@ public final class transcript_utilities extends SubLTranslatedFile {
     public static SubLObject init_transcript_utilities_file() {
         defparameter("*TRANSCRIPT-SUFFIX*", $$$ts);
         defparameter("*MASTER-TRANSCRIPT-ALREADY-EXISTS*", NIL);
-        deflexical("*LOCAL-TRANSCRIPT-VERSION*", SubLTrampolineFile.maybeDefault($local_transcript_version$, $local_transcript_version$, ZERO_INTEGER));
-        deflexical("*LOCAL-TRANSCRIPT-HISTORY*", SubLTrampolineFile.maybeDefault($local_transcript_history$, $local_transcript_history$, NIL));
-        deflexical("*LOCAL-HL-TRANSCRIPT-VERSION*", SubLTrampolineFile.maybeDefault($local_hl_transcript_version$, $local_hl_transcript_version$, ZERO_INTEGER));
-        deflexical("*LOCAL-HL-TRANSCRIPT-HISTORY*", SubLTrampolineFile.maybeDefault($local_hl_transcript_history$, $local_hl_transcript_history$, NIL));
-        deflexical("*READ-TRANSCRIPT-POSITION*", SubLTrampolineFile.maybeDefault($read_transcript_position$, $read_transcript_position$, ZERO_INTEGER));
+        deflexical("*LOCAL-TRANSCRIPT-VERSION*", SubLSystemTrampolineFile.maybeDefault($local_transcript_version$, $local_transcript_version$, ZERO_INTEGER));
+        deflexical("*LOCAL-TRANSCRIPT-HISTORY*", SubLSystemTrampolineFile.maybeDefault($local_transcript_history$, $local_transcript_history$, NIL));
+        deflexical("*LOCAL-HL-TRANSCRIPT-VERSION*", SubLSystemTrampolineFile.maybeDefault($local_hl_transcript_version$, $local_hl_transcript_version$, ZERO_INTEGER));
+        deflexical("*LOCAL-HL-TRANSCRIPT-HISTORY*", SubLSystemTrampolineFile.maybeDefault($local_hl_transcript_history$, $local_hl_transcript_history$, NIL));
+        deflexical("*READ-TRANSCRIPT-POSITION*", SubLSystemTrampolineFile.maybeDefault($read_transcript_position$, $read_transcript_position$, ZERO_INTEGER));
         defparameter("*APPROX-CHARS-PER-OP*", $int$206);
-        deflexical("*LOCAL-TRANSCRIPT*", SubLTrampolineFile.maybeDefault($local_transcript$, $local_transcript$, NIL));
-        deflexical("*READ-TRANSCRIPT*", SubLTrampolineFile.maybeDefault($read_transcript$, $read_transcript$, NIL));
-        deflexical("*MASTER-TRANSCRIPT*", SubLTrampolineFile.maybeDefault($master_transcript$, $master_transcript$, NIL));
-        deflexical("*LOCAL-HL-TRANSCRIPT*", SubLTrampolineFile.maybeDefault($local_hl_transcript$, $local_hl_transcript$, NIL));
-        deflexical("*COUNT-OPS-TABLE*", SubLTrampolineFile.maybeDefault($count_ops_table$, $count_ops_table$, NIL));
-        deflexical("*TRANSCRIPT-RENAME-HASH*", SubLTrampolineFile.maybeDefault($transcript_rename_hash$, $transcript_rename_hash$, NIL));
-        deflexical("*TRANSCRIPT-CREATE-HASH*", SubLTrampolineFile.maybeDefault($transcript_create_hash$, $transcript_create_hash$, NIL));
+        deflexical("*LOCAL-TRANSCRIPT*", SubLSystemTrampolineFile.maybeDefault($local_transcript$, $local_transcript$, NIL));
+        deflexical("*READ-TRANSCRIPT*", SubLSystemTrampolineFile.maybeDefault($read_transcript$, $read_transcript$, NIL));
+        deflexical("*MASTER-TRANSCRIPT*", SubLSystemTrampolineFile.maybeDefault($master_transcript$, $master_transcript$, NIL));
+        deflexical("*LOCAL-HL-TRANSCRIPT*", SubLSystemTrampolineFile.maybeDefault($local_hl_transcript$, $local_hl_transcript$, NIL));
+        deflexical("*COUNT-OPS-TABLE*", SubLSystemTrampolineFile.maybeDefault($count_ops_table$, $count_ops_table$, NIL));
+        deflexical("*TRANSCRIPT-RENAME-HASH*", SubLSystemTrampolineFile.maybeDefault($transcript_rename_hash$, $transcript_rename_hash$, NIL));
+        deflexical("*TRANSCRIPT-CREATE-HASH*", SubLSystemTrampolineFile.maybeDefault($transcript_create_hash$, $transcript_create_hash$, NIL));
         return NIL;
     }
 

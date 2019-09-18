@@ -50,7 +50,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1970,7 +1970,7 @@ public final class cb_uiat_smart extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(state, AR_STATE_P);
+            SubLSystemTrampolineFile.checkType(state, AR_STATE_P);
             {
                 SubLObject interaction = cb_uiat_sr_find_interaction_by_state(state);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($SELF);
@@ -2077,7 +2077,7 @@ public final class cb_uiat_smart extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(state, AR_STATE_P);
+            SubLSystemTrampolineFile.checkType(state, AR_STATE_P);
             {
                 SubLObject interaction = cb_uiat_sr_find_interaction_by_state(state);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($SELF);
@@ -2189,7 +2189,7 @@ public final class cb_uiat_smart extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(state, AR_STATE_P);
+            SubLSystemTrampolineFile.checkType(state, AR_STATE_P);
             {
                 SubLObject interaction = cb_uiat_sr_find_interaction_by_state(state);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($SELF);
@@ -2288,7 +2288,7 @@ public final class cb_uiat_smart extends SubLTranslatedFile implements V02 {
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(state, AR_STATE_P);
+            SubLSystemTrampolineFile.checkType(state, AR_STATE_P);
             {
                 SubLObject interaction = cb_uiat_sr_find_interaction_by_state(state);
                 SubLObject frame_name_var = cb_utilities.cb_frame_name($SELF);

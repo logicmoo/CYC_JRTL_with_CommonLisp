@@ -24,7 +24,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -124,7 +124,7 @@ public final class removal_modules_term_strings extends SubLTranslatedFile {
     }
 
     public static SubLObject init_removal_modules_term_strings_file() {
-        deflexical("*TERM-STRINGS-DEFINING-MT*", SubLTrampolineFile.maybeDefault($term_strings_defining_mt$, $term_strings_defining_mt$, $$BaseKB));
+        deflexical("*TERM-STRINGS-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($term_strings_defining_mt$, $term_strings_defining_mt$, $$BaseKB));
         deflexical("*TERM-STRINGS-CHECK-DEFAULT-COST*", $hl_module_check_cost$.getDynamicValue());
         deflexical("*TERM-STRINGS-UNIFY-DEFAULT-COST*", ONE_INTEGER);
         deflexical("*EXPECTED-NUMBER-OF-TERMS-PER-STRING*", ONE_INTEGER);

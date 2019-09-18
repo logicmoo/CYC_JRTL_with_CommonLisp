@@ -62,7 +62,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1894,8 +1894,8 @@ public final class uia_tools_review_and_testing extends SubLTranslatedFile imple
      * Save out the entire KB state created for AGENDA in FILENAME.
      */
     public static final SubLObject uiat_kreview_save(SubLObject v_agenda, SubLObject filename) {
-        SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-        SubLTrampolineFile.checkType(filename, STRINGP);
+        SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+        SubLSystemTrampolineFile.checkType(filename, STRINGP);
         return uia_serialize.uia_act_serialize_agenda(v_agenda, filename);
     }
 

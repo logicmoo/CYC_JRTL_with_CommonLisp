@@ -152,7 +152,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -4744,7 +4744,7 @@ public final class sksi_smt extends SubLTranslatedFile {
             isas = NIL;
         }
         assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
-        if (((NIL != ps) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sksi_physical_schema_p(ps))) {
+        if (((NIL != ps) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == sksi_physical_schema_p(ps))) {
             throw new AssertionError(ps);
         }
         if (NIL != constant_p(ls)) {
@@ -5915,7 +5915,7 @@ public final class sksi_smt extends SubLTranslatedFile {
         deflexical("*SKSI-SMT-MODE*", $ENABLED);
         deflexical("*SKSI-SMT-COLUMN-OR-FORT-NAME-CACHING-STATE*", NIL);
         defparameter("*SKSI-SMT-WARN-ABOUT-INVARIANTS?*", NIL);
-        deflexical("*SKSI-ISG*", SubLTrampolineFile.maybeDefault($sksi_isg$, $sksi_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*SKSI-ISG*", SubLSystemTrampolineFile.maybeDefault($sksi_isg$, $sksi_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
         return NIL;
     }
 

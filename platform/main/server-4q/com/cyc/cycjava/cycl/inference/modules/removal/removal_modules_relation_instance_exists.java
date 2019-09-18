@@ -93,7 +93,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2652,11 +2652,11 @@ public final class removal_modules_relation_instance_exists extends SubLTranslat
 
     public static SubLObject init_removal_modules_relation_instance_exists_file() {
         deflexical("*RELATION-INSTANCE-EXISTS-RULE*", list_to_elf($list5));
-        deflexical("*RELATION-INSTANCE-EXISTS-DEFINING-MT*", SubLTrampolineFile.maybeDefault($relation_instance_exists_defining_mt$, $relation_instance_exists_defining_mt$, $$BaseKB));
+        deflexical("*RELATION-INSTANCE-EXISTS-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($relation_instance_exists_defining_mt$, $relation_instance_exists_defining_mt$, $$BaseKB));
         deflexical("*DEFAULT-RELATION-INSTANCE-EXISTS-CHECK-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
         deflexical("*MINIMUM-RELATION-INSTANCE-EXISTS-UNIFY-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
         deflexical("*RELATION-EXISTS-INSTANCE-RULE*", list_to_elf($list40));
-        deflexical("*RELATION-EXISTS-INSTANCE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($relation_exists_instance_defining_mt$, $relation_exists_instance_defining_mt$, $$BaseKB));
+        deflexical("*RELATION-EXISTS-INSTANCE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($relation_exists_instance_defining_mt$, $relation_exists_instance_defining_mt$, $$BaseKB));
         deflexical("*DEFAULT-RELATION-EXISTS-INSTANCE-CHECK-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
         deflexical("*MINIMUM-RELATION-EXISTS-INSTANCE-UNIFY-COST*", $expensive_hl_module_check_cost$.getGlobalValue());
         return NIL;

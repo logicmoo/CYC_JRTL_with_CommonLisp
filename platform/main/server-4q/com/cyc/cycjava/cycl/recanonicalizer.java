@@ -84,7 +84,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -359,42 +359,42 @@ public final class recanonicalizer extends SubLTranslatedFile implements V02 {
 	}
 
 	public static final SubLObject recan_rf_rf(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, RECAN_RF_P);
+		SubLSystemTrampolineFile.checkType(v_object, RECAN_RF_P);
 		return v_object.getField2();
 	}
 
 	public static final SubLObject recan_rf_analysis(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, RECAN_RF_P);
+		SubLSystemTrampolineFile.checkType(v_object, RECAN_RF_P);
 		return v_object.getField3();
 	}
 
 	public static final SubLObject recan_rf_recanonicalization(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, RECAN_RF_P);
+		SubLSystemTrampolineFile.checkType(v_object, RECAN_RF_P);
 		return v_object.getField4();
 	}
 
 	public static final SubLObject recan_rf_extra_info(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, RECAN_RF_P);
+		SubLSystemTrampolineFile.checkType(v_object, RECAN_RF_P);
 		return v_object.getField5();
 	}
 
 	public static final SubLObject _csetf_recan_rf_rf(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, RECAN_RF_P);
+		SubLSystemTrampolineFile.checkType(v_object, RECAN_RF_P);
 		return v_object.setField2(value);
 	}
 
 	public static final SubLObject _csetf_recan_rf_analysis(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, RECAN_RF_P);
+		SubLSystemTrampolineFile.checkType(v_object, RECAN_RF_P);
 		return v_object.setField3(value);
 	}
 
 	public static final SubLObject _csetf_recan_rf_recanonicalization(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, RECAN_RF_P);
+		SubLSystemTrampolineFile.checkType(v_object, RECAN_RF_P);
 		return v_object.setField4(value);
 	}
 
 	public static final SubLObject _csetf_recan_rf_extra_info(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, RECAN_RF_P);
+		SubLSystemTrampolineFile.checkType(v_object, RECAN_RF_P);
 		return v_object.setField5(value);
 	}
 
@@ -1051,7 +1051,7 @@ public final class recanonicalizer extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(rf, REIFIED_FORMULA_P);
+			SubLSystemTrampolineFile.checkType(rf, REIFIED_FORMULA_P);
 			{
 				SubLObject result = NIL;
 				if (NIL != recursively_recanonicalizingP(rf)) {
@@ -1092,7 +1092,7 @@ public final class recanonicalizer extends SubLTranslatedFile implements V02 {
 		if (mt_list == UNPROVIDED) {
 			mt_list = NIL;
 		}
-		SubLTrampolineFile.checkType(rf_id, CONSP);
+		SubLSystemTrampolineFile.checkType(rf_id, CONSP);
 		{
 			SubLObject rf = find_rf_by_id(rf_id);
 			if (NIL != rf) {
@@ -1112,7 +1112,7 @@ public final class recanonicalizer extends SubLTranslatedFile implements V02 {
 	public static final SubLObject recanonicalize_recan_rf(SubLObject recan_rf) {
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(recan_rf, RECAN_RF_P);
+			SubLSystemTrampolineFile.checkType(recan_rf, RECAN_RF_P);
 			{
 				SubLObject rf = recan_rf_rf(recan_rf);
 				SubLObject analysis = recan_rf_analysis(recan_rf);
@@ -1148,7 +1148,7 @@ public final class recanonicalizer extends SubLTranslatedFile implements V02 {
 					return handle_unrecanonicalizable_rf(rf, analysis);
 				}
 
-				SubLTrampolineFile.checkType(analysis, RECANONICALIZABLE_ANALYSIS_P);
+				SubLSystemTrampolineFile.checkType(analysis, RECANONICALIZABLE_ANALYSIS_P);
 				if (NIL == $assume_partial_orderP$.getDynamicValue(thread)) {
 					if (NIL == recanonicalize_subrfs(rf)) {
 						return handle_rf_recan_error(rf, $str_alt103$RF_contains_an_unrecanonicalizabl);
@@ -1326,7 +1326,7 @@ public final class recanonicalizer extends SubLTranslatedFile implements V02 {
 				SubLObject recan_info = recan_rf_recanonicalization(recan_nart);
 				SubLObject new_formula = recan_info.first();
 				SubLObject result = NIL;
-				SubLTrampolineFile.checkType(analysis, RECANONICALIZABLE_ANALYSIS_P);
+				SubLSystemTrampolineFile.checkType(analysis, RECANONICALIZABLE_ANALYSIS_P);
 				{
 					SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
 					try {
@@ -1488,7 +1488,7 @@ public final class recanonicalizer extends SubLTranslatedFile implements V02 {
 				SubLObject new_canon_info = recan_rf_recanonicalization(recan_assertion);
 				SubLObject new_cnf = new_canon_info.first();
 				SubLObject result = NIL;
-				SubLTrampolineFile.checkType(analysis, RECANONICALIZABLE_ANALYSIS_P);
+				SubLSystemTrampolineFile.checkType(analysis, RECANONICALIZABLE_ANALYSIS_P);
 				{
 					SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
 					try {

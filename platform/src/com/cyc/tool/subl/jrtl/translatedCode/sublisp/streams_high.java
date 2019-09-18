@@ -45,9 +45,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStreamFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class streams_high extends SubLTrampolineFile {
+public class streams_high extends SubLSystemTrampolineFile {
 	private static SubLObject peekChar(SubLInputTextStream stream, SubLObject eof_error_p, SubLObject eof_value) {
 		int theChar = stream.readChar();
 		if (theChar != (-1)) {
@@ -105,8 +105,8 @@ public class streams_high extends SubLTrampolineFile {
 
 		String stringTyped = string.getStringValue();
 		SubLOutputTextStream streamTyped = stream.toOutputTextStream();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEndUsingSize(end, string);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEndUsingSize(end, string);
 		streamTyped.writeString(stringTyped, startTyped, endTyped - startTyped);
 		if (addNewline)
 			streamTyped.writeNewline();
@@ -344,8 +344,8 @@ public class streams_high extends SubLTrampolineFile {
 
 	public static SubLObject make_string_input_stream(SubLObject string, SubLObject start, SubLObject end) {
 		String stringTyped = string.getStringValue();
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEndUsingSize(end, string);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEndUsingSize(end, string);
 		SubLInputStream result = SubLStreamFactory.makeStringInputStream(stringTyped, startTyped, endTyped);
 		return result;
 	}
@@ -597,8 +597,8 @@ public class streams_high extends SubLTrampolineFile {
 	}
 
 	public static SubLObject read_sequence(SubLObject sequence, SubLObject stream, SubLObject start, SubLObject end) {
-		int startTyped = SubLTrampolineFile.extractStart(start);
-		int endTyped = SubLTrampolineFile.extractEndUsingSize(end, sequence);
+		int startTyped = SubLSystemTrampolineFile.extractStart(start);
+		int endTyped = SubLSystemTrampolineFile.extractEndUsingSize(end, sequence);
 		if (startTyped < 0)
 			Errors.error("Got invalid start index: " + startTyped);
 

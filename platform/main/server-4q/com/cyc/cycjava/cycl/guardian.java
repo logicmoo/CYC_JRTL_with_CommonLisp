@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class guardian extends SubLTranslatedFile {
     public static final SubLFile me = new guardian();
@@ -409,9 +409,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (interrupt_p == UNPROVIDED) {
             interrupt_p = NIL;
         }
-        SubLTrampolineFile.enforceType(checker_fn, FUNCTION_SPEC_P);
-        SubLTrampolineFile.enforceType(notification_fn, FUNCTION_SPEC_P);
-        SubLTrampolineFile.enforceType(interrupt_p, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(checker_fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(notification_fn, FUNCTION_SPEC_P);
+        SubLSystemTrampolineFile.enforceType(interrupt_p, BOOLEANP);
         if (NIL == process) {
             process = current_process();
         }
@@ -430,7 +430,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject cancel_guardian_request(final SubLObject request_id) {
-        SubLTrampolineFile.enforceType(request_id, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(request_id, FIXNUMP);
         if (NIL != process_utilities.ipc_queue_p($guarding_requests$.getGlobalValue())) {
             process_utilities.ipc_enqueue(request_id, $guarding_requests$.getGlobalValue(), UNPROVIDED);
         }
@@ -710,13 +710,13 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_guardian_file() {
-        deflexical("*GUARDIAN-PROCESS*", SubLTrampolineFile.maybeDefault($guardian_process$, $guardian_process$, NIL));
-        deflexical("*GUARDING-REQUESTS*", SubLTrampolineFile.maybeDefault($guarding_requests$, $guarding_requests$, NIL));
+        deflexical("*GUARDIAN-PROCESS*", SubLSystemTrampolineFile.maybeDefault($guardian_process$, $guardian_process$, NIL));
+        deflexical("*GUARDING-REQUESTS*", SubLSystemTrampolineFile.maybeDefault($guarding_requests$, $guarding_requests$, NIL));
         deflexical("*GUARDIAN-TIMESLICE*", TWO_INTEGER);
-        deflexical("*GUARDIAN-ISG*", SubLTrampolineFile.maybeDefault($guardian_isg$, $guardian_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*GUARDIAN-ISG*", SubLSystemTrampolineFile.maybeDefault($guardian_isg$, $guardian_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-GUARDIAN-REQUEST*", GUARDIAN_REQUEST);
-        deflexical("*GUARDIAN-SHUTDOWN-MARKER*", SubLTrampolineFile.maybeDefault($guardian_shutdown_marker$, $guardian_shutdown_marker$, () -> make_symbol($$$Guardian_Shutdown_Marker)));
-        deflexical("*GUARDIAN-SLEEP-MARKER*", SubLTrampolineFile.maybeDefault($guardian_sleep_marker$, $guardian_sleep_marker$, () -> make_symbol($$$Guardian_Sleep_Marker)));
+        deflexical("*GUARDIAN-SHUTDOWN-MARKER*", SubLSystemTrampolineFile.maybeDefault($guardian_shutdown_marker$, $guardian_shutdown_marker$, () -> make_symbol($$$Guardian_Shutdown_Marker)));
+        deflexical("*GUARDIAN-SLEEP-MARKER*", SubLSystemTrampolineFile.maybeDefault($guardian_sleep_marker$, $guardian_sleep_marker$, () -> make_symbol($$$Guardian_Sleep_Marker)));
         return NIL;
     }
 

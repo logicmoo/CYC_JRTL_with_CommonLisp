@@ -136,7 +136,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2362,7 +2362,7 @@ public final class pph_methods_formulas extends SubLTranslatedFile {
 
     public static SubLObject get_list_from_formula(final SubLObject formula, final SubLObject arg_pos) {
         SubLObject list = cycl_utilities.formula_arg(formula, arg_pos, UNPROVIDED);
-        if (((NIL == $pph_allow_subl_listsP$.getGlobalValue()) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == el_list_p(list))) {
+        if (((NIL == $pph_allow_subl_listsP$.getGlobalValue()) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == el_list_p(list))) {
             throw new AssertionError(list);
         }
         if (NIL != el_list_p(list)) {

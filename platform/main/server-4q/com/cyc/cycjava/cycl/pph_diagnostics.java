@@ -106,7 +106,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -1789,7 +1789,7 @@ public final class pph_diagnostics extends SubLTranslatedFile implements V02 {
 				SubLObject idx = assertion_handles.do_assertions_table();
 				SubLObject total = id_index.id_index_count(idx);
 				SubLObject sofar = ZERO_INTEGER;
-				SubLTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
+				SubLSystemTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
 				{
 					SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
 					SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -1849,7 +1849,7 @@ public final class pph_diagnostics extends SubLTranslatedFile implements V02 {
 				SubLObject idx = assertion_handles.do_assertions_table();
 				SubLObject total_39 = id_index.id_index_count(idx);
 				SubLObject sofar = ZERO_INTEGER;
-				SubLTrampolineFile.checkType($str_alt110$Categorizing_assertions_by___of_a, STRINGP);
+				SubLSystemTrampolineFile.checkType($str_alt110$Categorizing_assertions_by___of_a, STRINGP);
 				{
 					SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
 					SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -1917,7 +1917,7 @@ public final class pph_diagnostics extends SubLTranslatedFile implements V02 {
 				SubLObject idx = assertion_handles.do_assertions_table();
 				SubLObject total = id_index.id_index_count(idx);
 				SubLObject sofar = ZERO_INTEGER;
-				SubLTrampolineFile.checkType(progress_message, STRINGP);
+				SubLSystemTrampolineFile.checkType(progress_message, STRINGP);
 				{
 					SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
 					SubLObject _prev_bind_1 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
@@ -2272,7 +2272,7 @@ public final class pph_diagnostics extends SubLTranslatedFile implements V02 {
 		}
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(assertions, PROPER_LIST_P);
+			SubLSystemTrampolineFile.checkType(assertions, PROPER_LIST_P);
 			{
 				SubLObject total_time = ZERO_INTEGER;
 				SubLObject cpu_time = ZERO_INTEGER;
@@ -2970,7 +2970,7 @@ public final class pph_diagnostics extends SubLTranslatedFile implements V02 {
 		if (stats == UNPROVIDED) {
 			stats = $pph_disambiguation_mode_stats$.getDynamicValue();
 		}
-		SubLTrampolineFile.checkType(file_name, STRINGP);
+		SubLSystemTrampolineFile.checkType(file_name, STRINGP);
 		if (NIL == string_utilities.ends_with(file_name, $str_alt168$_csv, UNPROVIDED)) {
 			file_name = cconcatenate(file_name, $str_alt168$_csv);
 		}

@@ -43,7 +43,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -108,10 +108,10 @@ public final class corba_hpac_removal_modules extends SubLTranslatedFile impleme
     }
 
     public static final SubLObject corba_hpac_rate_for_project_at_lat_long_old(SubLObject corba_connection, SubLObject corba_predicate, SubLObject project, SubLObject latitude, SubLObject longitude, SubLObject filename) {
-        SubLTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
-        SubLTrampolineFile.checkType(filename, STRINGP);
-        SubLTrampolineFile.checkType(latitude, NUMBERP);
-        SubLTrampolineFile.checkType(longitude, NUMBERP);
+        SubLSystemTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
+        SubLSystemTrampolineFile.checkType(filename, STRINGP);
+        SubLSystemTrampolineFile.checkType(latitude, NUMBERP);
+        SubLSystemTrampolineFile.checkType(longitude, NUMBERP);
         {
             SubLObject windows_filename = cconcatenate($str_alt10$_, string_utilities.string_substitute($str_alt10$_, $str_alt11$_, filename, UNPROVIDED));
             SubLObject corba_form = list(project, windows_filename, latitude, longitude);
@@ -206,9 +206,9 @@ public final class corba_hpac_removal_modules extends SubLTranslatedFile impleme
     }
 
     public static final SubLObject corba_hpac_project_count_old(SubLObject corba_connection, SubLObject corba_predicate, SubLObject project, SubLObject filename) {
-        SubLTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
-        SubLTrampolineFile.checkType(corba_predicate, CORBA_PREDICATE_P);
-        SubLTrampolineFile.checkType(filename, STRINGP);
+        SubLSystemTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
+        SubLSystemTrampolineFile.checkType(corba_predicate, CORBA_PREDICATE_P);
+        SubLSystemTrampolineFile.checkType(filename, STRINGP);
         {
             SubLObject counts = corba_hpac_project_counts_old(corba_connection, corba_predicate, project, filename);
             if (corba_predicate == $$hpacFatalityCountForProject) {
@@ -228,9 +228,9 @@ public final class corba_hpac_removal_modules extends SubLTranslatedFile impleme
     }
 
     public static final SubLObject corba_hpac_project_counts_old(SubLObject corba_connection, SubLObject corba_predicate, SubLObject project, SubLObject filename) {
-        SubLTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
-        SubLTrampolineFile.checkType(corba_predicate, CORBA_PREDICATE_P);
-        SubLTrampolineFile.checkType(filename, STRINGP);
+        SubLSystemTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
+        SubLSystemTrampolineFile.checkType(corba_predicate, CORBA_PREDICATE_P);
+        SubLSystemTrampolineFile.checkType(filename, STRINGP);
         {
             SubLObject windows_filename = cconcatenate($str_alt10$_, string_utilities.string_substitute($str_alt10$_, $str_alt11$_, filename, UNPROVIDED));
             SubLObject corba_form = list(project, windows_filename);
@@ -324,11 +324,11 @@ public final class corba_hpac_removal_modules extends SubLTranslatedFile impleme
     }
 
     public static final SubLObject corba_hpac_rate_for_project_at_lat_long(SubLObject corba_connection, SubLObject corba_predicate, SubLObject project, SubLObject latitude, SubLObject longitude, SubLObject filename, SubLObject agent_string) {
-        SubLTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
-        SubLTrampolineFile.checkType(latitude, NUMBERP);
-        SubLTrampolineFile.checkType(longitude, NUMBERP);
-        SubLTrampolineFile.checkType(filename, STRINGP);
-        SubLTrampolineFile.checkType(agent_string, STRINGP);
+        SubLSystemTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
+        SubLSystemTrampolineFile.checkType(latitude, NUMBERP);
+        SubLSystemTrampolineFile.checkType(longitude, NUMBERP);
+        SubLSystemTrampolineFile.checkType(filename, STRINGP);
+        SubLSystemTrampolineFile.checkType(agent_string, STRINGP);
         {
             SubLObject windows_filename = cconcatenate($str_alt10$_, string_utilities.string_substitute($str_alt10$_, $str_alt11$_, filename, UNPROVIDED));
             SubLObject corba_form = list(project, windows_filename, latitude, longitude, agent_string);
@@ -433,10 +433,10 @@ public final class corba_hpac_removal_modules extends SubLTranslatedFile impleme
     }
 
     public static final SubLObject corba_hpac_project_count(SubLObject corba_connection, SubLObject corba_predicate, SubLObject project, SubLObject filename, SubLObject agent_string) {
-        SubLTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
-        SubLTrampolineFile.checkType(corba_predicate, CORBA_PREDICATE_P);
-        SubLTrampolineFile.checkType(filename, STRINGP);
-        SubLTrampolineFile.checkType(agent_string, STRINGP);
+        SubLSystemTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
+        SubLSystemTrampolineFile.checkType(corba_predicate, CORBA_PREDICATE_P);
+        SubLSystemTrampolineFile.checkType(filename, STRINGP);
+        SubLSystemTrampolineFile.checkType(agent_string, STRINGP);
         {
             SubLObject counts = corba_hpac_project_counts(corba_connection, corba_predicate, project, filename, agent_string);
             if (corba_predicate == $$hpacFatalityCountForProject) {
@@ -456,9 +456,9 @@ public final class corba_hpac_removal_modules extends SubLTranslatedFile impleme
     }
 
     public static final SubLObject corba_hpac_project_counts(SubLObject corba_connection, SubLObject corba_predicate, SubLObject project, SubLObject filename, SubLObject agent_string) {
-        SubLTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
-        SubLTrampolineFile.checkType(corba_predicate, CORBA_PREDICATE_P);
-        SubLTrampolineFile.checkType(filename, STRINGP);
+        SubLSystemTrampolineFile.checkType(corba_connection, CORBA_CONNECTION_P);
+        SubLSystemTrampolineFile.checkType(corba_predicate, CORBA_PREDICATE_P);
+        SubLSystemTrampolineFile.checkType(filename, STRINGP);
         {
             SubLObject windows_filename = cconcatenate($str_alt10$_, string_utilities.string_substitute($str_alt10$_, $str_alt11$_, filename, UNPROVIDED));
             SubLObject corba_form = list(project, windows_filename, agent_string);

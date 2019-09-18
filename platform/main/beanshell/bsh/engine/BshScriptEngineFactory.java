@@ -79,7 +79,7 @@ public class BshScriptEngineFactory implements ScriptEngineFactory {
 	}
 
 	@Override
-	public String getMethodCallSyntax(String objectName, String methodName, String[] args) {
+	public String getMethodCallSyntax(String objectName, String methodName, String... args) {
 		StringBuffer sb = new StringBuffer();
 		if (objectName != null)
 			sb.append(objectName).append('.');
@@ -93,7 +93,7 @@ public class BshScriptEngineFactory implements ScriptEngineFactory {
 	}
 
 	@Override
-	public String getProgram(String[] statements) {
+	public String getProgram(String... statements) {
 		StringBuffer sb = new StringBuffer();
 		for (final String statement : statements) {
 			sb.append(statement);

@@ -32,7 +32,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -187,13 +187,13 @@ public final class clauses extends SubLTranslatedFile {
     }
 
     public static SubLObject make_clause(final SubLObject neg_lits, final SubLObject pos_lits) {
-        SubLTrampolineFile.enforceType(neg_lits, LISTP);
-        SubLTrampolineFile.enforceType(pos_lits, LISTP);
+        SubLSystemTrampolineFile.enforceType(neg_lits, LISTP);
+        SubLSystemTrampolineFile.enforceType(pos_lits, LISTP);
         return list(neg_lits, pos_lits);
     }
 
     public static SubLObject neg_lits(final SubLObject clause) {
-        SubLTrampolineFile.enforceType(clause, CLAUSE_P);
+        SubLSystemTrampolineFile.enforceType(clause, CLAUSE_P);
         return clause.first();
     }
 
@@ -203,7 +203,7 @@ public final class clauses extends SubLTranslatedFile {
     }
 
     public static SubLObject pos_lits(final SubLObject clause) {
-        SubLTrampolineFile.enforceType(clause, CLAUSE_P);
+        SubLSystemTrampolineFile.enforceType(clause, CLAUSE_P);
         return second(clause);
     }
 
@@ -280,21 +280,21 @@ public final class clauses extends SubLTranslatedFile {
 
     public static SubLObject empty_clauseP(final SubLObject clause) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(clause, CLAUSE_P);
+        SubLSystemTrampolineFile.enforceType(clause, CLAUSE_P);
         return clause_equal(clause, $empty_clause$.getDynamicValue(thread));
     }
 
     public static SubLObject clause_literal(final SubLObject clause, final SubLObject sense, final SubLObject num) {
-        SubLTrampolineFile.enforceType(clause, CLAUSE_P);
-        SubLTrampolineFile.enforceType(sense, SENSE_P);
-        SubLTrampolineFile.enforceType(num, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(clause, CLAUSE_P);
+        SubLSystemTrampolineFile.enforceType(sense, SENSE_P);
+        SubLSystemTrampolineFile.enforceType(num, INTEGERP);
         return nth(num, sense == $POS ? pos_lits(clause) : neg_lits(clause));
     }
 
     public static SubLObject clause_without_literal(final SubLObject clause, final SubLObject sense, final SubLObject num) {
-        SubLTrampolineFile.enforceType(clause, CLAUSE_P);
-        SubLTrampolineFile.enforceType(sense, SENSE_P);
-        SubLTrampolineFile.enforceType(num, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(clause, CLAUSE_P);
+        SubLSystemTrampolineFile.enforceType(sense, SENSE_P);
+        SubLSystemTrampolineFile.enforceType(num, INTEGERP);
         SubLObject neg_lits = copy_tree(neg_lits(clause));
         SubLObject pos_lits = copy_tree(pos_lits(clause));
         if (sense == $POS) {
@@ -383,8 +383,8 @@ public final class clauses extends SubLTranslatedFile {
         if (truth == UNPROVIDED) {
             truth = $TRUE;
         }
-        SubLTrampolineFile.enforceType(cnf, CNF_P);
-        SubLTrampolineFile.enforceType(truth, TRUTH_P);
+        SubLSystemTrampolineFile.enforceType(cnf, CNF_P);
+        SubLSystemTrampolineFile.enforceType(truth, TRUTH_P);
         cnf = czer_utilities.possibly_escape_quote_hl_vars(cnf, UNPROVIDED);
         SubLObject pos_lits = pos_lits(cnf);
         SubLObject neg_lits = neg_lits(cnf);
@@ -414,7 +414,7 @@ public final class clauses extends SubLTranslatedFile {
     }
 
     public static SubLObject cnf_formula_from_clauses(final SubLObject cnf_clauses) {
-        SubLTrampolineFile.enforceType(cnf_clauses, LISTP);
+        SubLSystemTrampolineFile.enforceType(cnf_clauses, LISTP);
         assert NIL != listp(cnf_clauses) : "Types.listp(cnf_clauses) " + "CommonSymbols.NIL != Types.listp(cnf_clauses) " + cnf_clauses;
         if (length(cnf_clauses).numE(ONE_INTEGER)) {
             return cnf_formula(cnf_clauses.first(), UNPROVIDED);
@@ -450,7 +450,7 @@ public final class clauses extends SubLTranslatedFile {
     }
 
     public static SubLObject dnf_formula_from_clauses(final SubLObject dnf_clauses) {
-        SubLTrampolineFile.enforceType(dnf_clauses, LISTP);
+        SubLSystemTrampolineFile.enforceType(dnf_clauses, LISTP);
         assert NIL != listp(dnf_clauses) : "Types.listp(dnf_clauses) " + "CommonSymbols.NIL != Types.listp(dnf_clauses) " + dnf_clauses;
         if (length(dnf_clauses).numE(ONE_INTEGER)) {
             return dnf_formula(dnf_clauses.first());

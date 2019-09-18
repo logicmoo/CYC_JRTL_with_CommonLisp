@@ -49,7 +49,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -157,7 +157,7 @@ public final class query_augmenter_subloop_utils extends SubLTranslatedFile impl
             SubLObject cycl_term = get_nl_annotated_cycl_term_cycl_term(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_val, CYCL_DENOTATIONAL_TERM_P);
+                    SubLSystemTrampolineFile.checkType(new_val, CYCL_DENOTATIONAL_TERM_P);
                     cycl_term = new_val;
                     sublisp_throw($sym22$OUTER_CATCH_FOR_NL_ANNOTATED_CYCL_TERM_METHOD, self);
                 } finally {
@@ -184,7 +184,7 @@ public final class query_augmenter_subloop_utils extends SubLTranslatedFile impl
             SubLObject pph_info = get_nl_annotated_cycl_term_pph_info(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_val, STRINGP);
+                    SubLSystemTrampolineFile.checkType(new_val, STRINGP);
                     pph_info = new_val;
                     sublisp_throw($sym27$OUTER_CATCH_FOR_NL_ANNOTATED_CYCL_TERM_METHOD, self);
                 } finally {
@@ -263,7 +263,7 @@ public final class query_augmenter_subloop_utils extends SubLTranslatedFile impl
             SubLObject ask_status = get_qua_followup_list_ask_status(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_value, SYMBOLP);
+                    SubLSystemTrampolineFile.checkType(new_value, SYMBOLP);
                     ask_status = new_value;
                     sublisp_throw($sym48$OUTER_CATCH_FOR_QUA_FOLLOWUP_LIST_METHOD, self);
                 } finally {
@@ -355,7 +355,7 @@ public final class query_augmenter_subloop_utils extends SubLTranslatedFile impl
             SubLObject ask_status = get_qua_interpretation_list_ask_status(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(new_value, SYMBOLP);
+                    SubLSystemTrampolineFile.checkType(new_value, SYMBOLP);
                     ask_status = new_value;
                     sublisp_throw($sym63$OUTER_CATCH_FOR_QUA_INTERPRETATION_LIST_METHOD, self);
                 } finally {
@@ -625,7 +625,7 @@ public final class query_augmenter_subloop_utils extends SubLTranslatedFile impl
                 SubLObject followup_element_type = get_query_augmenter_followup_element_type(self);
                 try {
                     try {
-                        SubLTrampolineFile.checkType(cycl_term, CYCL_DENOTATIONAL_TERM_P);
+                        SubLSystemTrampolineFile.checkType(cycl_term, CYCL_DENOTATIONAL_TERM_P);
                         {
                             SubLObject followup_concepts_list = NIL;
                             {
@@ -736,7 +736,7 @@ public final class query_augmenter_subloop_utils extends SubLTranslatedFile impl
             SubLObject search_string_function = get_query_augmenter_search_string_function(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(cycl_term, CYCL_DENOTATIONAL_TERM_P);
+                    SubLSystemTrampolineFile.checkType(cycl_term, CYCL_DENOTATIONAL_TERM_P);
                     sublisp_throw($sym101$OUTER_CATCH_FOR_QUERY_AUGMENTER_METHOD, funcall(search_string_function, cycl_term, id, timeout));
                 } finally {
                     {

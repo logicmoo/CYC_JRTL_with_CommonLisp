@@ -76,7 +76,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1092,10 +1092,10 @@ public final class sbhl_time_utilities extends SubLTranslatedFile {
 
     public static SubLObject init_sbhl_time_utilities_file() {
         deflexical("*TIME-CORE-CONSTANTS*", $list0);
-        deflexical("*HL-START-TABLE-LOCK*", SubLTrampolineFile.maybeDefault($hl_start_table_lock$, $hl_start_table_lock$, () -> make_lock($str3$_hl_start_table_lock_)));
-        deflexical("*HL-START-TABLE*", SubLTrampolineFile.maybeDefault($hl_start_table$, $hl_start_table$, () -> make_hash_table($int$100, symbol_function(EQUAL), UNPROVIDED)));
-        deflexical("*HL-END-TABLE-LOCK*", SubLTrampolineFile.maybeDefault($hl_end_table_lock$, $hl_end_table_lock$, () -> make_lock($str7$_hl_end_table_lock_)));
-        deflexical("*HL-END-TABLE*", SubLTrampolineFile.maybeDefault($hl_end_table$, $hl_end_table$, () -> make_hash_table($int$100, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*HL-START-TABLE-LOCK*", SubLSystemTrampolineFile.maybeDefault($hl_start_table_lock$, $hl_start_table_lock$, () -> make_lock($str3$_hl_start_table_lock_)));
+        deflexical("*HL-START-TABLE*", SubLSystemTrampolineFile.maybeDefault($hl_start_table$, $hl_start_table$, () -> make_hash_table($int$100, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*HL-END-TABLE-LOCK*", SubLSystemTrampolineFile.maybeDefault($hl_end_table_lock$, $hl_end_table_lock$, () -> make_lock($str7$_hl_end_table_lock_)));
+        deflexical("*HL-END-TABLE*", SubLSystemTrampolineFile.maybeDefault($hl_end_table$, $hl_end_table$, () -> make_hash_table($int$100, symbol_function(EQUAL), UNPROVIDED)));
         defconstant("*DTP-HL-START*", HL_START);
         defconstant("*DTP-HL-END*", HL_END);
         return NIL;

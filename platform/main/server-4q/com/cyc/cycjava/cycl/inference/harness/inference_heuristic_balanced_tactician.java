@@ -43,7 +43,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -248,7 +248,7 @@ public final class inference_heuristic_balanced_tactician extends SubLTranslated
     }
 
     public static final SubLObject heuristic_balanced_strategy_current_contents(SubLObject strategy) {
-        SubLTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
         {
             SubLObject removal_contents = stacks.stack_elements(inference_balanced_tactician_datastructures.balanced_strategy_removal_strategem_index(strategy));
             SubLObject new_root_contents = queues.queue_elements(inference_balanced_tactician_datastructures.balanced_strategy_new_root_index(strategy));
@@ -460,8 +460,8 @@ public final class inference_heuristic_balanced_tactician extends SubLTranslated
      * The happiness of doing one specific transformation.
      */
     public static final SubLObject heuristic_balanced_strategy_transformation_tactic_happiness(SubLObject transformation_tactic, SubLObject strategy) {
-        SubLTrampolineFile.checkType(transformation_tactic, TRANSFORMATION_TACTIC_P);
-        SubLTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(transformation_tactic, TRANSFORMATION_TACTIC_P);
+        SubLSystemTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
         return heuristic_balanced_strategy_generic_tactic_happiness(transformation_tactic, strategy);
     }
 
@@ -469,8 +469,8 @@ public final class inference_heuristic_balanced_tactician extends SubLTranslated
      * The happiness of introducing a new root problem.
      */
     public static final SubLObject heuristic_balanced_strategy_transformation_link_happiness(SubLObject transformation_link, SubLObject strategy) {
-        SubLTrampolineFile.checkType(transformation_link, TRANSFORMATION_LINK_P);
-        SubLTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(transformation_link, TRANSFORMATION_LINK_P);
+        SubLSystemTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
         {
             SubLObject transformation_tactic = inference_worker_transformation.transformation_link_tactic(transformation_link);
             return heuristic_balanced_strategy_transformation_tactic_happiness(transformation_tactic, strategy);
@@ -481,16 +481,16 @@ public final class inference_heuristic_balanced_tactician extends SubLTranslated
      * The happiness of focusing transformation on a new problem.
      */
     public static final SubLObject heuristic_balanced_strategy_logical_tactic_transformation_happiness(SubLObject logical_tactic, SubLObject strategy) {
-        SubLTrampolineFile.checkType(logical_tactic, LOGICAL_TACTIC_P);
-        SubLTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(logical_tactic, LOGICAL_TACTIC_P);
+        SubLSystemTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
         return heuristic_balanced_strategy_generic_tactic_happiness(logical_tactic, strategy);
     }
 
     public static final SubLObject heuristic_balanced_strategy_generic_tactic_happiness(SubLObject tactic, SubLObject strategy) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(tactic, TACTIC_P);
-            SubLTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
+            SubLSystemTrampolineFile.checkType(tactic, TACTIC_P);
+            SubLSystemTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
             {
                 SubLObject aggregate_happiness = ZERO_INTEGER;
                 SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(inference_strategic_heuristics.strategic_heuristic_index()));
@@ -528,8 +528,8 @@ public final class inference_heuristic_balanced_tactician extends SubLTranslated
     }
 
     public static final SubLObject heuristic_balanced_strategy_transformation_strategem_happiness(SubLObject strategy, SubLObject strategem) {
-        SubLTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
-        SubLTrampolineFile.checkType(strategem, STRATEGEM_P);
+        SubLSystemTrampolineFile.checkType(strategy, HEURISTIC_BALANCED_STRATEGY_P);
+        SubLSystemTrampolineFile.checkType(strategem, STRATEGEM_P);
         if (NIL != inference_worker_transformation.transformation_tactic_p(strategem)) {
             {
                 SubLObject transformation_tactic = strategem;

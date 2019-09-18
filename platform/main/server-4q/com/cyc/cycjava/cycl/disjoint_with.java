@@ -41,7 +41,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -247,7 +247,7 @@ public final class disjoint_with extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(cols, LISTP);
+        SubLSystemTrampolineFile.enforceType(cols, LISTP);
         SubLObject disjoint = NIL;
         SubLObject n = ZERO_INTEGER;
         if (NIL == disjoint) {
@@ -606,7 +606,7 @@ public final class disjoint_with extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(cols, LISTP);
+        SubLSystemTrampolineFile.enforceType(cols, LISTP);
         SubLObject disjointP = NIL;
         SubLObject n = ZERO_INTEGER;
         if (NIL == disjointP) {
@@ -638,8 +638,8 @@ public final class disjoint_with extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(col_1, EL_FORT_P);
-        SubLTrampolineFile.enforceType(col_2, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(col_1, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(col_2, EL_FORT_P);
         return disjoint_withP(col_1, col_2, mt, UNPROVIDED);
     }
 
@@ -681,8 +681,8 @@ public final class disjoint_with extends SubLTranslatedFile {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        SubLTrampolineFile.enforceType(c1, EL_FORT_P);
-        SubLTrampolineFile.enforceType(c2, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(c1, EL_FORT_P);
+        SubLSystemTrampolineFile.enforceType(c2, EL_FORT_P);
         return why_disjoint_withP(c1, c2, mt, UNPROVIDED, UNPROVIDED);
     }
 

@@ -112,7 +112,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -370,7 +370,7 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_start_read_operation(SubLObject thesaurus) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
+            SubLSystemTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
             {
                 SubLObject failureP = NIL;
                 SubLObject lock = $tm_thesaurus_protection_lock$.getDynamicValue(thread);
@@ -400,7 +400,7 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_start_write_operation(SubLObject thesaurus) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
+            SubLSystemTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
             {
                 SubLObject failureP = NIL;
                 SubLObject lock = $tm_thesaurus_protection_lock$.getDynamicValue(thread);
@@ -933,7 +933,7 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_stoplist_wordP(SubLObject string) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(string, STRINGP);
+            SubLSystemTrampolineFile.checkType(string, STRINGP);
             return tries.trie_exact($tm_stoplist_trie$.getDynamicValue(thread), string, NIL, UNPROVIDED, UNPROVIDED);
         }
     }
@@ -951,7 +951,7 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_rotations(SubLObject string) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(string, STRINGP);
+            SubLSystemTrampolineFile.checkType(string, STRINGP);
             return string_utilities.string_rotations(string, $tm_stoplist_trie$.getDynamicValue(thread), $tm_rotate_characters$.getDynamicValue(thread), $tm_rotate_point_string$.getDynamicValue(thread), $tm_valid_rotation_start_test$.getDynamicValue(thread));
         }
     }
@@ -997,7 +997,7 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
      * Add index to SIGN off the lexical string (and its rotations), unless updating is deferred.  Return T if it was indexed.
      */
     public static final SubLObject tm_add_lexical_entry(SubLObject sign) {
-        SubLTrampolineFile.checkType(sign, SIGNP);
+        SubLSystemTrampolineFile.checkType(sign, SIGNP);
         {
             SubLObject string = sign_term(sign);
             SubLObject words = string_utilities.split_string(string, UNPROVIDED);
@@ -1012,7 +1012,7 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
      * Remove index to SIGN off the perferred term string (& its rotations) in the lexical indices
      */
     public static final SubLObject tm_remove_lexical_entry(SubLObject sign) {
-        SubLTrampolineFile.checkType(sign, SIGNP);
+        SubLSystemTrampolineFile.checkType(sign, SIGNP);
         {
             SubLObject thesaurus = sign_thesaurus(sign);
             if (NIL != tm_perform_index_removal_for_thesaurus(thesaurus)) {
@@ -1043,10 +1043,10 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_add_stop_word(SubLObject assertion) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
             {
                 SubLObject string = assertions_high.gaf_arg1(assertion);
-                SubLTrampolineFile.checkType(string, STRINGP);
+                SubLSystemTrampolineFile.checkType(string, STRINGP);
                 if (NIL != tries.trie_exact($tm_stoplist_trie$.getDynamicValue(thread), string, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
                     return ZERO_INTEGER;
                 }
@@ -1081,7 +1081,7 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_remove_rotations_via(SubLObject string, SubLObject lexpred) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(string, STRINGP);
+            SubLSystemTrampolineFile.checkType(string, STRINGP);
             {
                 SubLObject length = length(string);
                 SubLObject prefix_string = Strings.make_string(add(length, ONE_INTEGER), $tm_rotate_point_char$.getDynamicValue(thread));
@@ -1107,10 +1107,10 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_remove_stop_word(SubLObject assertion) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+            SubLSystemTrampolineFile.checkType(assertion, ASSERTION_P);
             {
                 SubLObject string = assertions_high.gaf_arg1(assertion);
-                SubLTrampolineFile.checkType(string, STRINGP);
+                SubLSystemTrampolineFile.checkType(string, STRINGP);
                 if (NIL != tries.trie_exact($tm_stoplist_trie$.getDynamicValue(thread), string, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
                     {
                         SubLObject reindex_lexical_signs = NIL;
@@ -1856,8 +1856,8 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
      * Returns the sign for TERM in THESAURUS, as long as the sign is a preferred-term sign, or the sign is a singleton use-for sign.  An error is generated if both are found, and NIL is returned if there's more than one use-for sign for TERM.
      */
     public static final SubLObject term_sign(SubLObject v_term, SubLObject thesaurus) {
-        SubLTrampolineFile.checkType(v_term, STRINGP);
-        SubLTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
+        SubLSystemTrampolineFile.checkType(v_term, STRINGP);
+        SubLSystemTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
         {
             SubLObject preferred = unique_lexpred_sign_in_thesaurus(v_term, $$preferredTerm, thesaurus);
             SubLObject use_fors = tm_lexical_index.lexpred_signs_in_thesaurus(v_term, $$useFor, thesaurus);
@@ -1879,14 +1879,14 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject concept_term(SubLObject concept, SubLObject thesaurus) {
-        SubLTrampolineFile.checkType(concept, FORT_P);
-        SubLTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
+        SubLSystemTrampolineFile.checkType(concept, FORT_P);
+        SubLSystemTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
         return kb_mapping_utilities.fpred_value_in_mt(concept, $$preferredTerm, thesaurus, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
     public static final SubLObject term_concept(SubLObject v_term, SubLObject thesaurus) {
-        SubLTrampolineFile.checkType(v_term, STRINGP);
-        SubLTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
+        SubLSystemTrampolineFile.checkType(v_term, STRINGP);
+        SubLSystemTrampolineFile.checkType(thesaurus, $sym47$THESAURUS_);
         return sign_concept(term_sign(v_term, thesaurus));
     }
 
@@ -2117,112 +2117,112 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject tm_op_opcode(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField2();
     }
 
     public static final SubLObject tm_op_relation(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField3();
     }
 
     public static final SubLObject tm_op_inverseP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField4();
     }
 
     public static final SubLObject tm_op_args(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField5();
     }
 
     public static final SubLObject tm_op_thesaurus(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField6();
     }
 
     public static final SubLObject tm_op_status(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField7();
     }
 
     public static final SubLObject tm_op_verifyP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField8();
     }
 
     public static final SubLObject tm_op_description(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField9();
     }
 
     public static final SubLObject tm_op_description_args(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField10();
     }
 
     public static final SubLObject tm_op_hiddenP(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField11();
     }
 
     public static final SubLObject tm_op_english(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.getField12();
     }
 
     public static final SubLObject _csetf_tm_op_opcode(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_tm_op_relation(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_tm_op_inverseP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_tm_op_args(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_tm_op_thesaurus(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_tm_op_status(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_tm_op_verifyP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_tm_op_description(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_tm_op_description_args(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField10(value);
     }
 
     public static final SubLObject _csetf_tm_op_hiddenP(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField11(value);
     }
 
     public static final SubLObject _csetf_tm_op_english(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         return v_object.setField12(value);
     }
 
@@ -2352,7 +2352,7 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
      * Place a TM-OP onto the free list
      */
     public static final SubLObject free_tm_op(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TM_OP_P);
+        SubLSystemTrampolineFile.checkType(v_object, TM_OP_P);
         if (NIL == free_tm_op_p(v_object)) {
             v_object = init_tm_op(v_object);
             _csetf_tm_op_opcode(v_object, $FREE);
@@ -2746,7 +2746,7 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
     public static final SubLObject tm_user_id_lookup(SubLObject entity_name) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(entity_name, STRINGP);
+            SubLSystemTrampolineFile.checkType(entity_name, STRINGP);
             return gethash(entity_name, $tm_user_id_hash$.getDynamicValue(thread), UNPROVIDED);
         }
     }

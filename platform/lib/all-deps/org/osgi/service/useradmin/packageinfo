@@ -1,0 +1,1 @@
+include class Authorization.class Group.class Role.class User.class UserAdmin.class UserAdminEvent.class UserAdminListener.class UserAdminPermission.class UserAdminPermissionCollection.class version 1.0

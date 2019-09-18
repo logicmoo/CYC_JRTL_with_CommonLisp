@@ -38,7 +38,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -112,7 +112,7 @@ public final class cb_predicate_creator extends SubLTranslatedFile implements V0
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(v_object, PC_SESSION_P);
+            SubLSystemTrampolineFile.checkType(v_object, PC_SESSION_P);
             {
                 SubLObject interaction = rkf_predicate_creator.pc_session_interaction(v_object);
                 SubLObject id = user_interaction_agenda.ui_id(interaction);

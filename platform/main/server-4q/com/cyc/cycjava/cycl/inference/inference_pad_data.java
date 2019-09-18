@@ -11,7 +11,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -40,8 +40,8 @@ public final class inference_pad_data extends SubLTranslatedFile {
     }
 
     public static SubLObject init_inference_pad_data_file() {
-        deflexical("*NON-TKB-FINAL-BOGOMIPS*", SubLTrampolineFile.maybeDefault($non_tkb_final_bogomips$, $non_tkb_final_bogomips$, $float$4154_98));
-        deflexical("*NON-TKB-FINAL-TIMES-TO-FIRST-ANSWER*", SubLTrampolineFile.maybeDefault($non_tkb_final_times_to_first_answer$, $non_tkb_final_times_to_first_answer$, $list3));
+        deflexical("*NON-TKB-FINAL-BOGOMIPS*", SubLSystemTrampolineFile.maybeDefault($non_tkb_final_bogomips$, $non_tkb_final_bogomips$, $float$4154_98));
+        deflexical("*NON-TKB-FINAL-TIMES-TO-FIRST-ANSWER*", SubLSystemTrampolineFile.maybeDefault($non_tkb_final_times_to_first_answer$, $non_tkb_final_times_to_first_answer$, $list3));
         return NIL;
     }
 

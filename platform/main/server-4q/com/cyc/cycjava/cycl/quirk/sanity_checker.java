@@ -62,7 +62,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -964,7 +964,7 @@ public final class sanity_checker extends SubLTranslatedFile {
             fudge_factor = NIL;
         }
         assert NIL != stringp(guid_string) : "Types.stringp(guid_string) " + "CommonSymbols.NIL != Types.stringp(guid_string) " + guid_string;
-        if (((NIL != fudge_factor) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(fudge_factor))) {
+        if (((NIL != fudge_factor) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(fudge_factor))) {
             throw new AssertionError(fudge_factor);
         }
         if (NIL != fudge_factor) {

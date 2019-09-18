@@ -117,7 +117,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class psp_chart extends SubLTranslatedFile {
     public static final SubLFile me = new psp_chart();
@@ -2471,14 +2471,14 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             non_head_dtrs = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != string) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(string))) {
+        if (((NIL != string) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(string))) {
             throw new AssertionError(string);
         }
         assert NIL != interval_span.interval_span_p(span) : "interval_span.interval_span_p(span) " + "CommonSymbols.NIL != interval_span.interval_span_p(span) " + span;
         if (cycls == $NEW) {
             cycls = NIL;
         }
-        if (((NIL != cycls) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == dictionary.dictionary_p(cycls))) {
+        if (((NIL != cycls) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == dictionary.dictionary_p(cycls))) {
             throw new AssertionError(cycls);
         }
         if (NIL != parsing_vars.$psp_chart_consolidate_edgesP$.getDynamicValue(thread)) {
@@ -2534,13 +2534,13 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         }
         assert NIL != stringp(string) : "Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) " + string;
         assert NIL != interval_span.interval_span_p(span) : "interval_span.interval_span_p(span) " + "CommonSymbols.NIL != interval_span.interval_span_p(span) " + span;
-        if ((((NIL != category) && (NIL != string_utilities.non_empty_string_p(string))) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == fort_types_interface.predicate_p(pos_pred))) {
+        if ((((NIL != category) && (NIL != string_utilities.non_empty_string_p(string))) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == fort_types_interface.predicate_p(pos_pred))) {
             throw new AssertionError(pos_pred);
         }
         if (cycls == $NEW) {
             cycls = NIL;
         }
-        if (((NIL != cycls) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == dictionary.dictionary_p(cycls))) {
+        if (((NIL != cycls) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == dictionary.dictionary_p(cycls))) {
             throw new AssertionError(cycls);
         }
         final SubLObject id = psp_chart_new_edge_id(chart);
@@ -5286,7 +5286,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_psp_chart_file() {
         deflexical("*PSP-PARSE-WH-WORDS?*", NIL);
         defconstant("*DTP-PHRASE-STRUCTURE-PARSER-CHART*", PHRASE_STRUCTURE_PARSER_CHART);
-        deflexical("*PSP-CHART-ID-COUNTER*", SubLTrampolineFile.maybeDefault($psp_chart_id_counter$, $psp_chart_id_counter$, ZERO_INTEGER));
+        deflexical("*PSP-CHART-ID-COUNTER*", SubLSystemTrampolineFile.maybeDefault($psp_chart_id_counter$, $psp_chart_id_counter$, ZERO_INTEGER));
         deflexical("*PSP-CHART-INDEX-EDGES?*", NIL);
         defconstant("*DTP-PHRASE-STRUCTURE-PARSER-PHRASAL-EDGE*", PHRASE_STRUCTURE_PARSER_PHRASAL_EDGE);
         defconstant("*DTP-PHRASE-STRUCTURE-PARSER-LEXICAL-EDGE*", PHRASE_STRUCTURE_PARSER_LEXICAL_EDGE);

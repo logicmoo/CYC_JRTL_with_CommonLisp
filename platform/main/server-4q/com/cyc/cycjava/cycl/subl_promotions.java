@@ -61,7 +61,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -792,9 +792,9 @@ public final class subl_promotions extends SubLTranslatedFile {
     }
 
     public static SubLObject init_subl_promotions_file() {
-        deflexical("*MAKE-PROCESS-WITH-ARGS-TABLE*", SubLTrampolineFile.maybeDefault($make_process_with_args_table$, $make_process_with_args_table$, NIL));
+        deflexical("*MAKE-PROCESS-WITH-ARGS-TABLE*", SubLSystemTrampolineFile.maybeDefault($make_process_with_args_table$, $make_process_with_args_table$, NIL));
         deflexical("*MAKE-PROCESS-WITH-ARGS-TABLE-LOCK*", make_lock($str1$MAKE_PROCESS_WITH_ARGS_TABLE));
-        deflexical("*INTERRUPT-PROCESS-WITH-ARGS-TABLE*", SubLTrampolineFile.maybeDefault($interrupt_process_with_args_table$, $interrupt_process_with_args_table$, NIL));
+        deflexical("*INTERRUPT-PROCESS-WITH-ARGS-TABLE*", SubLSystemTrampolineFile.maybeDefault($interrupt_process_with_args_table$, $interrupt_process_with_args_table$, NIL));
         deflexical("*INTERRUPT-PROCESS-WITH-ARGS-TABLE-LOCK*", make_lock($str9$INTERRUPT_PROCESS_WITH_ARGS_TABLE));
         return NIL;
     }

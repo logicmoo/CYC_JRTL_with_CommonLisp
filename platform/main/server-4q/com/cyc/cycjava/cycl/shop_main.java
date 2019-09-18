@@ -46,7 +46,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -933,13 +933,13 @@ public final class shop_main extends SubLTranslatedFile {
     }
 
     public static SubLObject shop_plan_simple_actions(final SubLObject plan) {
-        SubLTrampolineFile.enforceType(plan, SHOP_PLAN_P);
+        SubLSystemTrampolineFile.enforceType(plan, SHOP_PLAN_P);
         assert NIL != shop_plan_p(plan) : "shop_main.shop_plan_p(plan) " + "CommonSymbols.NIL != shop_main.shop_plan_p(plan) " + plan;
         return methods.funcall_instance_method_with_0_args(plan, PRIMITIVE_FORM);
     }
 
     public static SubLObject shop_plan_goal(final SubLObject plan) {
-        SubLTrampolineFile.enforceType(plan, SHOP_PLAN_P);
+        SubLSystemTrampolineFile.enforceType(plan, SHOP_PLAN_P);
         assert NIL != shop_plan_p(plan) : "shop_main.shop_plan_p(plan) " + "CommonSymbols.NIL != shop_main.shop_plan_p(plan) " + plan;
         final SubLObject var_manager = instances.get_slot(plan, VARIABLE_MANAGER);
         final SubLObject task_struc = methods.funcall_instance_method_with_0_args(plan, GOAL_TASK);
@@ -990,7 +990,7 @@ public final class shop_main extends SubLTranslatedFile {
         deflexical("*SHOP-DOMAIN-DEFINITION-PREDICATES*", union($shop_simple_action_definition_predicates$.getGlobalValue(), $shop_complex_action_definition_predicates$.getGlobalValue(), UNPROVIDED, UNPROVIDED));
         deflexical("*SHOP-DOMAIN-DEFINITION-COLLECTIONS*", $list2);
         deflexical("*PLANNER-CORE-CONSTANTS*", append($shop_domain_definition_predicates$.getGlobalValue(), $shop_domain_definition_collections$.getGlobalValue()));
-        deflexical("*SHOP*", SubLTrampolineFile.maybeDefault($shop$, $shop$, NIL));
+        deflexical("*SHOP*", SubLSystemTrampolineFile.maybeDefault($shop$, $shop$, NIL));
         return NIL;
     }
 

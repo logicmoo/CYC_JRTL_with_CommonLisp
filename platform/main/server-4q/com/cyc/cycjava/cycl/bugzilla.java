@@ -45,7 +45,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -381,7 +381,7 @@ public final class bugzilla extends SubLTranslatedFile implements V02 {
             SubLObject reporter = get_bugzilla_bug_reporter(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(fort, FORT_P);
+                    SubLSystemTrampolineFile.checkType(fort, FORT_P);
                     reporter = fort;
                     {
                         SubLObject address = kb_accessors.email_address_text(fort);
@@ -509,7 +509,7 @@ public final class bugzilla extends SubLTranslatedFile implements V02 {
             SubLObject short_desc = get_bugzilla_bug_short_desc(self);
             try {
                 try {
-                    SubLTrampolineFile.checkType(description, STRINGP);
+                    SubLSystemTrampolineFile.checkType(description, STRINGP);
                     short_desc = list_utilities.first_n(round(multiply($float$0_9, $max_bugzilla_url_length$.getGlobalValue()), UNPROVIDED), description);
                     sublisp_throw($sym75$OUTER_CATCH_FOR_BUGZILLA_BUG_METHOD, self);
                 } finally {

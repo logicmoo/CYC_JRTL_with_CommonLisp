@@ -56,7 +56,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1928,7 +1928,7 @@ public final class html_tm_correlate extends SubLTranslatedFile implements V02 {
      * attempts to parse STRING as a Cyc constant specification, and returns it
      */
     public static final SubLObject tm_parse_input_constant(SubLObject string) {
-        SubLTrampolineFile.checkType(string, STRINGP);
+        SubLSystemTrampolineFile.checkType(string, STRINGP);
         {
             SubLObject result = NIL;
             if (length(string).numE(ZERO_INTEGER)) {

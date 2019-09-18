@@ -125,7 +125,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1001,7 +1001,7 @@ public final class sksi_database_fusion extends SubLTranslatedFile {
         assert NIL != stringp(constant_base_name) : "Types.stringp(constant_base_name) " + "CommonSymbols.NIL != Types.stringp(constant_base_name) " + constant_base_name;
         assert NIL != stringp(db_name) : "Types.stringp(db_name) " + "CommonSymbols.NIL != Types.stringp(db_name) " + db_name;
         assert NIL != stringp(server) : "Types.stringp(server) " + "CommonSymbols.NIL != Types.stringp(server) " + server;
-        if (((NIL != port) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(port))) {
+        if (((NIL != port) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p(port))) {
             throw new AssertionError(port);
         }
         assert NIL != stringp(proxy_host) : "Types.stringp(proxy_host) " + "CommonSymbols.NIL != Types.stringp(proxy_host) " + proxy_host;
@@ -4361,10 +4361,10 @@ public final class sksi_database_fusion extends SubLTranslatedFile {
     public static SubLObject init_sksi_database_fusion_file() {
         defparameter("*WITHIN-SKSI-DATABASE-FUSION?*", NIL);
         defvar("*SKSI-DATABASE-FUSION-DEBUG?*", NIL);
-        deflexical("*SKSI-DATABASE-FUSION-TABLE-INFO-ISG*", SubLTrampolineFile.maybeDefault($sksi_database_fusion_table_info_isg$, $sksi_database_fusion_table_info_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        deflexical("*SKSI-DATABASE-FUSION-TABLE-INFO-ISG*", SubLSystemTrampolineFile.maybeDefault($sksi_database_fusion_table_info_isg$, $sksi_database_fusion_table_info_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
         defconstant("*DTP-DB-INFO*", DB_INFO);
         defconstant("*DTP-TABLE-INFO*", TABLE_INFO);
-        deflexical("*LAST-DB-INFO*", SubLTrampolineFile.maybeDefault($last_db_info$, $last_db_info$, NIL));
+        deflexical("*LAST-DB-INFO*", SubLSystemTrampolineFile.maybeDefault($last_db_info$, $last_db_info$, NIL));
         defparameter("*CURRENT-TABLE-INFO-VARIABLE-COUNT*", NIL);
         defparameter("*TABLE-INFO-LFI-VARIABLE-DICT*", NIL);
         defparameter("*TABLE-INFOIFY-EXPRESSION-TABLE-KB-INDEX*", NIL);

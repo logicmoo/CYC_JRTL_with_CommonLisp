@@ -68,7 +68,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1440,14 +1440,14 @@ public final class parse_tree extends SubLTranslatedFile {
                 assert NIL != cyclifier_lexicon.cyclifier_lexicon_p(lexicon) : "cyclifier_lexicon.cyclifier_lexicon_p(lexicon) " + "CommonSymbols.NIL != cyclifier_lexicon.cyclifier_lexicon_p(lexicon) " + lexicon;
                 assert NIL != function_spec_p(score_function) : "Types.function_spec_p(score_function) " + "CommonSymbols.NIL != Types.function_spec_p(score_function) " + score_function;
                 assert NIL != keywordp(output) : "Types.keywordp(output) " + "CommonSymbols.NIL != Types.keywordp(output) " + output;
-                if (((NIL != v_context_$1) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == context.parse_tree_context_p(v_context_$1))) {
+                if (((NIL != v_context_$1) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == context.parse_tree_context_p(v_context_$1))) {
                     throw new AssertionError(v_context_$1);
                 }
                 assert NIL != booleanp(wff_checkP) : "Types.booleanp(wff_checkP) " + "CommonSymbols.NIL != Types.booleanp(wff_checkP) " + wff_checkP;
                 if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == member(error_handling, $list49, UNPROVIDED, UNPROVIDED))) {
                     Errors.error($str50$Invalid_error_handling_tag__a, error_handling);
                 }
-                if (((NIL != subcyclifier_pool) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subcyclifier.cyclifier_pool_p(subcyclifier_pool))) {
+                if (((NIL != subcyclifier_pool) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subcyclifier.cyclifier_pool_p(subcyclifier_pool))) {
                     throw new AssertionError(subcyclifier_pool);
                 }
                 final SubLObject v_cyclifier = object.new_class_instance(CYCLIFIER);

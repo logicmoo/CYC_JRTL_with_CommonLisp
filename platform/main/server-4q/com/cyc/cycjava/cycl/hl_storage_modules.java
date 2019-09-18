@@ -59,7 +59,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class hl_storage_modules extends SubLTranslatedFile {
@@ -1473,16 +1473,16 @@ public final class hl_storage_modules extends SubLTranslatedFile {
 	}
 
 	public static SubLObject init_hl_storage_modules_file() {
-		deflexical("*HL-STORAGE-MODULES*", SubLTrampolineFile.maybeDefault($hl_storage_modules$, $hl_storage_modules$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
-		deflexical("*PREDICATE-GENERIC-HL-STORAGE-MODULES*", SubLTrampolineFile.maybeDefault($predicate_generic_hl_storage_modules$, $predicate_generic_hl_storage_modules$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
-		deflexical("*PREDICATE-SPECIFIC-HL-STORAGE-MODULES-TABLE*", SubLTrampolineFile.maybeDefault($predicate_specific_hl_storage_modules_table$, $predicate_specific_hl_storage_modules_table$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
-		deflexical("*ARGUMENT-TYPE-SPECIFIC-HL-STORAGE-MODULES-TABLE*", SubLTrampolineFile.maybeDefault($argument_type_specific_hl_storage_modules_table$, $argument_type_specific_hl_storage_modules_table$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
+		deflexical("*HL-STORAGE-MODULES*", SubLSystemTrampolineFile.maybeDefault($hl_storage_modules$, $hl_storage_modules$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
+		deflexical("*PREDICATE-GENERIC-HL-STORAGE-MODULES*", SubLSystemTrampolineFile.maybeDefault($predicate_generic_hl_storage_modules$, $predicate_generic_hl_storage_modules$, () -> set.new_set(symbol_function(EQL), UNPROVIDED)));
+		deflexical("*PREDICATE-SPECIFIC-HL-STORAGE-MODULES-TABLE*", SubLSystemTrampolineFile.maybeDefault($predicate_specific_hl_storage_modules_table$, $predicate_specific_hl_storage_modules_table$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
+		deflexical("*ARGUMENT-TYPE-SPECIFIC-HL-STORAGE-MODULES-TABLE*", SubLSystemTrampolineFile.maybeDefault($argument_type_specific_hl_storage_modules_table$, $argument_type_specific_hl_storage_modules_table$, () -> dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED)));
 		defparameter("*CURRENTLY-EXECUTING-HL-STORAGE-MODULE*", NIL);
 		deflexical("*HL-STORAGE-MODULE-PROPERTIES*", propKeywords);
-		deflexical("*SOLELY-SPECIFIC-HL-STORAGE-MODULE-PREDICATE-STORE*", SubLTrampolineFile.maybeDefault($solely_specific_hl_storage_module_predicate_store$, $solely_specific_hl_storage_module_predicate_store$, () -> set.new_set(EQL, $int$50)));
+		deflexical("*SOLELY-SPECIFIC-HL-STORAGE-MODULE-PREDICATE-STORE*", SubLSystemTrampolineFile.maybeDefault($solely_specific_hl_storage_module_predicate_store$, $solely_specific_hl_storage_module_predicate_store$, () -> set.new_set(EQL, $int$50)));
 		defparameter("*SUCCESSFUL-HL-STORAGE-MODULES*", NIL);
 		deflexical("*ROBUSTLY-REMOVE-UNCANONICAL-DECONTEXTUALIZED-ASSERTIBLES?*", T);
-		deflexical("*DUMMY-ASSERTED-ARGUMENT-SPEC*", SubLTrampolineFile.maybeDefault($dummy_asserted_argument_spec$, $dummy_asserted_argument_spec$, () -> arguments.create_asserted_argument_spec($UNSPECIFIED)));
+		deflexical("*DUMMY-ASSERTED-ARGUMENT-SPEC*", SubLSystemTrampolineFile.maybeDefault($dummy_asserted_argument_spec$, $dummy_asserted_argument_spec$, () -> arguments.create_asserted_argument_spec($UNSPECIFIED)));
 		return NIL;
 	}
 

@@ -99,7 +99,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class reformulator_rule_unifier_datastructures extends SubLTranslatedFile {
     public static final SubLFile me = new reformulator_rule_unifier_datastructures();
@@ -2195,11 +2195,11 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_reformulator_rule_unifier_datastructures_file() {
         defconstant("*DTP-REFORMULATOR-TEMPLATE*", REFORMULATOR_TEMPLATE);
         defconstant("*DTP-REFORMULATOR-RULE*", REFORMULATOR_RULE);
-        deflexical("*REFORMULATOR-RULES*", SubLTrampolineFile.maybeDefault($reformulator_rules$, $reformulator_rules$, NIL));
-        deflexical("*FORT-REFORMULATOR-RULE-TABLE*", SubLTrampolineFile.maybeDefault($fort_reformulator_rule_table$, $fort_reformulator_rule_table$, NIL));
-        deflexical("*CONSTANT-REFORMULATOR-RULE-TABLE*", SubLTrampolineFile.maybeDefault($constant_reformulator_rule_table$, $constant_reformulator_rule_table$, NIL));
-        deflexical("*NART-REFORMULATOR-RULE-TABLE*", SubLTrampolineFile.maybeDefault($nart_reformulator_rule_table$, $nart_reformulator_rule_table$, NIL));
-        deflexical("*UNASSOCIATED-REFORMULATOR-RULES*", SubLTrampolineFile.maybeDefault($unassociated_reformulator_rules$, $unassociated_reformulator_rules$, NIL));
+        deflexical("*REFORMULATOR-RULES*", SubLSystemTrampolineFile.maybeDefault($reformulator_rules$, $reformulator_rules$, NIL));
+        deflexical("*FORT-REFORMULATOR-RULE-TABLE*", SubLSystemTrampolineFile.maybeDefault($fort_reformulator_rule_table$, $fort_reformulator_rule_table$, NIL));
+        deflexical("*CONSTANT-REFORMULATOR-RULE-TABLE*", SubLSystemTrampolineFile.maybeDefault($constant_reformulator_rule_table$, $constant_reformulator_rule_table$, NIL));
+        deflexical("*NART-REFORMULATOR-RULE-TABLE*", SubLSystemTrampolineFile.maybeDefault($nart_reformulator_rule_table$, $nart_reformulator_rule_table$, NIL));
+        deflexical("*UNASSOCIATED-REFORMULATOR-RULES*", SubLSystemTrampolineFile.maybeDefault($unassociated_reformulator_rules$, $unassociated_reformulator_rules$, NIL));
         defparameter("*REFORMULATOR-SHARED-VARS*", NIL);
         defparameter("*REFORMULATOR-SHARED-VAR-BINDINGS*", NIL);
         defparameter("*REFORMULATOR-NEXT-AVAILABLE-HL-VAR-NUM*", ZERO_INTEGER);

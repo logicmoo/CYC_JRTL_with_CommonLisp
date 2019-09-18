@@ -158,7 +158,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class gke_main extends SubLTranslatedFile {
     public static final SubLFile me = new gke_main();
@@ -4036,9 +4036,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         if (v_properties == UNPROVIDED) {
             v_properties = NIL;
         }
-        SubLTrampolineFile.enforceType(sentence, EL_FORMULA_P);
-        SubLTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
-        SubLTrampolineFile.enforceType(v_properties, QUERY_PROPERTIES_P);
+        SubLSystemTrampolineFile.enforceType(sentence, EL_FORMULA_P);
+        SubLSystemTrampolineFile.enforceType(mt, POSSIBLY_MT_P);
+        SubLSystemTrampolineFile.enforceType(v_properties, QUERY_PROPERTIES_P);
         final SubLObject optimized_sentence = optimize_el_formula_variable_names(sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         final SubLObject conditionalP = inference_strategist.inference_conditional_sentence_p(optimized_sentence);
         final SubLObject static_properties = list_utilities.nmerge_plist(inference_datastructures_enumerated_types.extract_query_static_or_meta_properties(v_properties), list($kw198$CONDITIONAL_SENTENCE_, conditionalP));
@@ -4059,9 +4059,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             special_state = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(problem_store_id, INTEGERP);
-        SubLTrampolineFile.enforceType(inference_id, INTEGERP);
-        SubLTrampolineFile.enforceType(v_properties, LISTP);
+        SubLSystemTrampolineFile.enforceType(problem_store_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(inference_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(v_properties, LISTP);
         final SubLObject inference = inference_datastructures_problem_store.find_inference_by_ids(problem_store_id, inference_id);
         final SubLObject dynamic_properties = inference_datastructures_enumerated_types.extract_query_dynamic_properties(v_properties);
         if (NIL != inference_datastructures_inference.continuable_inference_p(inference)) {
@@ -4224,7 +4224,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
                 final ArrayList old_values = extract_dynamic_values(cprogv_var);
                 try {
                     bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(special_state));
-                    SubLTrampolineFile.enforceType(special_state, SPECIAL_VARIABLE_STATE_P);
+                    SubLSystemTrampolineFile.enforceType(special_state, SPECIAL_VARIABLE_STATE_P);
                     inference_kernel.continue_inference(inference, adjusted_dynamic_properties);
                 } finally {
                     rebind_dynamic_vars(cprogv_var, old_values);
@@ -4238,8 +4238,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject gke_get_one_inference_result(final SubLObject problem_store_id, final SubLObject inference_id) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(problem_store_id, INTEGERP);
-        SubLTrampolineFile.enforceType(inference_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(problem_store_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(inference_id, INTEGERP);
         final SubLObject process_wrapper = gethash(string_utilities.to_string(list(problem_store_id, inference_id)), $gke_query_threads$.getDynamicValue(thread), UNPROVIDED);
         if (NIL != process_wrapper) {
             final SubLObject queue = process_utilities.process_wrapper_get_property(process_wrapper, $QUEUE, UNPROVIDED);
@@ -4252,8 +4252,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject gke_get_inference_results(final SubLObject problem_store_id, final SubLObject inference_id) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(problem_store_id, ID_OF_VALID_PROBLEM_STORE_P);
-        SubLTrampolineFile.enforceType(inference_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(problem_store_id, ID_OF_VALID_PROBLEM_STORE_P);
+        SubLSystemTrampolineFile.enforceType(inference_id, INTEGERP);
         final SubLObject problem_store = inference_datastructures_problem_store.find_problem_store_by_id(problem_store_id);
         final SubLObject inference = inference_datastructures_problem_store.find_inference_by_id(problem_store, inference_id);
         SubLObject ans = NIL;
@@ -4368,8 +4368,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject gke_inference_completeP(final SubLObject problem_store_id, final SubLObject inference_id) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(problem_store_id, INTEGERP);
-        SubLTrampolineFile.enforceType(inference_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(problem_store_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(inference_id, INTEGERP);
         if (NIL == inference_datastructures_inference.inference_p(inference_datastructures_problem_store.find_inference_by_ids(problem_store_id, inference_id))) {
             return T;
         }
@@ -4383,15 +4383,15 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject gke_get_inference_status(final SubLObject problem_store_id, final SubLObject inference_id) {
-        SubLTrampolineFile.enforceType(problem_store_id, INTEGERP);
-        SubLTrampolineFile.enforceType(inference_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(problem_store_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(inference_id, INTEGERP);
         final SubLObject inference = inference_datastructures_problem_store.find_inference_by_ids(problem_store_id, inference_id);
         return inference_datastructures_inference.inference_status(inference);
     }
 
     public static SubLObject gke_get_inference_suspend_status(final SubLObject problem_store_id, final SubLObject inference_id) {
-        SubLTrampolineFile.enforceType(problem_store_id, INTEGERP);
-        SubLTrampolineFile.enforceType(inference_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(problem_store_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(inference_id, INTEGERP);
         final SubLObject inference = inference_datastructures_problem_store.find_inference_by_ids(problem_store_id, inference_id);
         final SubLObject suspend_status = inference_datastructures_inference.inference_suspend_status(inference);
         return suspend_status;
@@ -4402,9 +4402,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
             patience = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(problem_store_id, INTEGERP);
-        SubLTrampolineFile.enforceType(inference_id, INTEGERP);
-        SubLTrampolineFile.enforceType(patience, NULL_OR_INTEGERP);
+        SubLSystemTrampolineFile.enforceType(problem_store_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(inference_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(patience, NULL_OR_INTEGERP);
         final SubLObject inference = inference_datastructures_problem_store.find_inference_by_ids(problem_store_id, inference_id);
         final SubLObject time_out = (NIL != patience) ? patience : $default_patience_wait_time$.getDynamicValue(thread);
         if (NIL != inference_datastructures_inference.running_inference_p(inference)) {
@@ -4415,8 +4415,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject gke_release_inference_resources(final SubLObject problem_store_id, final SubLObject inference_id) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLTrampolineFile.enforceType(problem_store_id, INTEGERP);
-        SubLTrampolineFile.enforceType(inference_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(problem_store_id, INTEGERP);
+        SubLSystemTrampolineFile.enforceType(inference_id, INTEGERP);
         final SubLObject problem_store = inference_datastructures_problem_store.find_problem_store_by_id(problem_store_id);
         final SubLObject key = string_utilities.to_string(list(problem_store_id, inference_id));
         inference_datastructures_problem_store.destroy_problem_store(problem_store);
@@ -4786,9 +4786,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         deflexical("*GENERATE-GKE-GLOSS-WRT-MT-CACHED-CACHING-STATE*", NIL);
         deflexical("*CANDIDATE-REPLACEMENTS-FOR-SENTENCE-CACHED-CACHING-STATE*", NIL);
         deflexical("*GKE-GET-ELEMENTS-CACHING-STATE*", NIL);
-        deflexical("*OMIT-SUGGESTION-STUMPS?*", SubLTrampolineFile.maybeDefault($sym140$_OMIT_SUGGESTION_STUMPS__, $omit_suggestion_stumpsP$, NIL));
+        deflexical("*OMIT-SUGGESTION-STUMPS?*", SubLSystemTrampolineFile.maybeDefault($sym140$_OMIT_SUGGESTION_STUMPS__, $omit_suggestion_stumpsP$, NIL));
         defconstant("*DTP-REPLACEMENT-TREE*", REPLACEMENT_TREE);
-        deflexical("*USE-TVA-FOR-SUGGESTIONS?*", SubLTrampolineFile.maybeDefault($sym188$_USE_TVA_FOR_SUGGESTIONS__, $use_tva_for_suggestionsP$, NIL));
+        deflexical("*USE-TVA-FOR-SUGGESTIONS?*", SubLSystemTrampolineFile.maybeDefault($sym188$_USE_TVA_FOR_SUGGESTIONS__, $use_tva_for_suggestionsP$, NIL));
         defparameter("*DEFAULT-PATIENCE-WAIT-TIME*", TWO_INTEGER);
         defparameter("*GKE-QUERY-THREADS*", make_hash_table(FIVE_INTEGER, symbol_function(EQUAL), UNPROVIDED));
         deflexical("*DAEMON-SHOULD-RUN-INFERENCE-STATUSES*", $list220);

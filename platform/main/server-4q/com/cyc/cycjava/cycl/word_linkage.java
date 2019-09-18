@@ -64,7 +64,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -737,7 +737,7 @@ public final class word_linkage extends SubLTranslatedFile {
         try {
             thread.throwStack.push($sym57$OUTER_CATCH_FOR_WORD_LINKAGE_WORD_METHOD);
             try {
-                if (((NIL != link_pattern) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == regular_expressions.regex_pattern_p(link_pattern))) {
+                if (((NIL != link_pattern) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == regular_expressions.regex_pattern_p(link_pattern))) {
                     throw new AssertionError(link_pattern);
                 }
                 if (NIL == link_pattern) {
@@ -784,7 +784,7 @@ public final class word_linkage extends SubLTranslatedFile {
         try {
             thread.throwStack.push($sym62$OUTER_CATCH_FOR_WORD_LINKAGE_WORD_METHOD);
             try {
-                if (((NIL != link_pattern) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == regular_expressions.regex_pattern_p(link_pattern))) {
+                if (((NIL != link_pattern) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == regular_expressions.regex_pattern_p(link_pattern))) {
                     throw new AssertionError(link_pattern);
                 }
                 if (NIL == link_pattern) {
@@ -825,7 +825,7 @@ public final class word_linkage extends SubLTranslatedFile {
         if (link_pattern == UNPROVIDED) {
             link_pattern = NIL;
         }
-        if (((NIL != link_pattern) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == regular_expressions.regex_pattern_p(link_pattern))) {
+        if (((NIL != link_pattern) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == regular_expressions.regex_pattern_p(link_pattern))) {
             throw new AssertionError(link_pattern);
         }
         return append(methods.funcall_instance_method_with_1_args(self, GET_LEFT_LINKS, link_pattern), methods.funcall_instance_method_with_1_args(self, GET_RIGHT_LINKS, link_pattern));

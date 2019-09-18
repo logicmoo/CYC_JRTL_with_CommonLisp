@@ -68,7 +68,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -716,7 +716,7 @@ public final class parser extends SubLTranslatedFile {
             v_context = object.new_class_instance(PARSE_TREE_CONTEXT);
         }
         assert NIL != stringp(text) : "Types.stringp(text) " + "CommonSymbols.NIL != Types.stringp(text) " + text;
-        if (((NIL != v_context) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == context.parse_tree_context_p(v_context))) {
+        if (((NIL != v_context) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == context.parse_tree_context_p(v_context))) {
             throw new AssertionError(v_context);
         }
         final SubLObject parse = methods.funcall_instance_method_with_3_args(self, PARSE_MULTIPLE, substitute(CHAR_space, CHAR_newline, text, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), lexicon, v_context).first();

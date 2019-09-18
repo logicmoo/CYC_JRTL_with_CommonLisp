@@ -69,7 +69,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -904,8 +904,8 @@ public final class sksi_hl_storage_module_generation extends SubLTranslatedFile 
     }
 
     public static SubLObject init_sksi_hl_storage_module_generation_file() {
-        deflexical("*SKSI-HL-STORAGE-MODULES*", SubLTrampolineFile.maybeDefault($sksi_hl_storage_modules$, $sksi_hl_storage_modules$, () -> set.new_set(UNPROVIDED, UNPROVIDED)));
-        deflexical("*SKSI-HL-STORAGE-MODULES-BY-SKS*", SubLTrampolineFile.maybeDefault($sksi_hl_storage_modules_by_sks$, $sksi_hl_storage_modules_by_sks$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
+        deflexical("*SKSI-HL-STORAGE-MODULES*", SubLSystemTrampolineFile.maybeDefault($sksi_hl_storage_modules$, $sksi_hl_storage_modules$, () -> set.new_set(UNPROVIDED, UNPROVIDED)));
+        deflexical("*SKSI-HL-STORAGE-MODULES-BY-SKS*", SubLSystemTrampolineFile.maybeDefault($sksi_hl_storage_modules_by_sks$, $sksi_hl_storage_modules_by_sks$, () -> dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED)));
         defparameter("*SKSI-HL-STORAGE-MODULES-ONLY-PREFERRED-OVER-KB-STORAGE?*", NIL);
         return NIL;
     }

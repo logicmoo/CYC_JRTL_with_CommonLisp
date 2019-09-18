@@ -123,7 +123,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 // import static *;
@@ -256,7 +256,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject tact_strategic_properties_flags(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
 		return v_object.getField5();
 	}
 
@@ -344,7 +344,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject set_tactic_strategic_flags(SubLObject tactic, SubLObject strategy, SubLObject flags) {
-		SubLTrampolineFile.checkType(flags, FIXNUMP);
+		SubLSystemTrampolineFile.checkType(flags, FIXNUMP);
 		{
 			SubLObject tactic_strategic_properties = tactic_strategic_properties(tactic, strategy);
 			_csetf_tact_strategic_properties_flags(tactic_strategic_properties, flags);
@@ -825,7 +825,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject set_problem_strategic_flags(SubLObject problem, SubLObject strategy, SubLObject flags) {
-		SubLTrampolineFile.checkType(flags, FIXNUMP);
+		SubLSystemTrampolineFile.checkType(flags, FIXNUMP);
 		{
 			SubLObject problem_strategic_properties = problem_strategic_properties(problem, strategy);
 			_csetf_prob_strategic_properties_flags(problem_strategic_properties, flags);
@@ -1261,7 +1261,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject prob_strategic_properties_flags(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
 		return v_object.getField5();
 	}
 
@@ -1301,12 +1301,12 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_tact_strategic_properties_flags(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
 		return (($tactic_strategic_properties_native) v_object).$flags = (value);
 	}
 
 	public static SubLObject _csetf_prob_strategic_properties_flags(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
 		return (($tactic_strategic_properties_native) v_object).$flags;
 	}
 
@@ -1764,7 +1764,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_suid_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$suid;
 	}
 
@@ -1776,7 +1776,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_inference_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$inference;
 	}
 
@@ -1788,7 +1788,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_result_uniqueness_criterion_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$result_uniqueness_criterion;
 	}
 
@@ -1800,7 +1800,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_active_problems_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$active_problems;
 	}
 
@@ -1812,7 +1812,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_motivated_problems_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$motivated_problems;
 	}
 
@@ -1824,7 +1824,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_set_aside_problems_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$set_aside_problems;
 	}
 
@@ -1836,7 +1836,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_should_reconsider_set_asidesP_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$should_reconsider_set_asidesP;
 	}
 
@@ -1848,7 +1848,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_productivity_limit_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$productivity_limit;
 	}
 
@@ -1860,7 +1860,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_removal_backtracking_productivity_limit_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$productivity_limit;
 	}
 
@@ -1872,7 +1872,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_proof_spec_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$proof_spec;
 	}
 
@@ -1884,7 +1884,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_problem_proof_spec_index_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$problem_proof_spec_index;
 	}
 
@@ -1896,7 +1896,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_problem_strategic_index_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$problem_strategic_index;
 	}
 
@@ -1908,7 +1908,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_memoization_state_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$memoization_state;
 	}
 
@@ -1927,7 +1927,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_type_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$type;
 	}
 
@@ -1939,7 +1939,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strat_data_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$data;
 	}
 
@@ -1951,7 +1951,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_suid_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$suid = (value);
 	}
 
@@ -1963,7 +1963,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_inference_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$inference = (value);
 	}
 
@@ -1975,7 +1975,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_result_uniqueness_criterion_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$result_uniqueness_criterion = (value);
 	}
 
@@ -1988,7 +1988,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_active_problems_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$active_problems = (value);
 	}
 
@@ -2000,7 +2000,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_motivated_problems_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$motivated_problems = (value);
 	}
 
@@ -2012,7 +2012,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_set_aside_problems_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$set_aside_problems = (value);
 	}
 
@@ -2024,7 +2024,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_should_reconsider_set_asidesP_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$should_reconsider_set_asidesP = (value);
 	}
 
@@ -2037,7 +2037,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_productivity_limit_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$productivity_limit = (value);
 	}
 
@@ -2050,7 +2050,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject _csetf_strat_removal_backtracking_productivity_limit_alt(SubLObject v_object,
 			SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$productivity_limit = (value);
 	}
 
@@ -2063,7 +2063,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_proof_spec_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$proof_spec = (value);
 	}
 
@@ -2075,7 +2075,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_problem_proof_spec_index_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$problem_proof_spec_index = (value);
 	}
 
@@ -2087,7 +2087,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_problem_strategic_index_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$problem_strategic_index = (value);
 	}
 
@@ -2099,7 +2099,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_memoization_state_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$memoization_state = (value);
 	}
 
@@ -2118,7 +2118,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_type_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$type = (value);
 	}
 
@@ -2130,7 +2130,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_strat_data_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_object, inference_datastructures_strategy.STRATEGY_P);
 		return (($strategy_native) v_object).$data = (value);
 	}
 
@@ -2389,8 +2389,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject new_strategy_alt(SubLObject type, SubLObject inference) {
-		SubLTrampolineFile.checkType(type, STRATEGY_TYPE_P);
-		SubLTrampolineFile.checkType(inference, INFERENCE_P);
+		SubLSystemTrampolineFile.checkType(type, STRATEGY_TYPE_P);
+		SubLSystemTrampolineFile.checkType(inference, INFERENCE_P);
 		{
 			SubLObject store = inference_datastructures_inference.inference_problem_store(inference);
 			SubLObject suid = inference_datastructures_problem_store.problem_store_new_strategy_id(store);
@@ -2606,7 +2606,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strategy_suid_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_suid(strategy);
 	}
 
@@ -2620,7 +2620,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strategy_inference_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_inference(strategy);
 	}
 
@@ -2634,7 +2634,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strategy_local_result_uniqueness_criterion_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_result_uniqueness_criterion(strategy);
 	}
 
@@ -2664,7 +2664,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strategy_data_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_data(strategy);
 	}
 
@@ -2678,7 +2678,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strategy_active_problems_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_active_problems(strategy);
 	}
 
@@ -2692,7 +2692,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strategy_motivated_problems_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_motivated_problems(strategy);
 	}
 
@@ -2706,7 +2706,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strategy_set_aside_problems_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_set_aside_problems(strategy);
 	}
 
@@ -2720,7 +2720,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject strategy_should_reconsider_set_asidesP_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_should_reconsider_set_asidesP(strategy);
 	}
 
@@ -2742,7 +2742,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	 */
 	@LispMethod(comment = "@return productivity-p\r\nIf a tactic\'s productivity meets or exceeds this limit, it will be\r\nignored instead of executed.")
 	public static SubLObject strategy_productivity_limit_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_productivity_limit(strategy);
 	}
 
@@ -2772,7 +2772,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	 */
 	@LispMethod(comment = "@return productivity-p\r\nIf a tactic\'s productivity meets or exceeds this limit, it will not be\r\nconsidered for removal backtracking.")
 	public static SubLObject strategy_removal_backtracking_productivity_limit_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_removal_backtracking_productivity_limit(strategy);
 	}
 
@@ -2801,7 +2801,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	 */
 	@LispMethod(comment = "@return proof-spec-p\r\nThe proof spec that this strategy is allowed to apply.")
 	public static SubLObject strategy_proof_spec_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_proof_spec(strategy);
 	}
 
@@ -2828,7 +2828,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	 */
 	@LispMethod(comment = "@return #\'EQ dictionary of problem-p -> proof-spec-p")
 	public static SubLObject strategy_problem_proof_spec_index_alt(SubLObject strategy) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		return strat_problem_proof_spec_index(strategy);
 	}
 
@@ -2858,8 +2858,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject set_strategy_result_uniqueness_criterion_alt(SubLObject strategy,
 			SubLObject result_uniqueness_criterion) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
-		SubLTrampolineFile.checkType(result_uniqueness_criterion, RESULT_UNIQUENESS_CRITERION_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(result_uniqueness_criterion, RESULT_UNIQUENESS_CRITERION_P);
 		_csetf_strat_result_uniqueness_criterion(strategy, result_uniqueness_criterion);
 		return strategy;
 	}
@@ -2882,8 +2882,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject set_strategy_productivity_limit_alt(SubLObject strategy, SubLObject productivity_limit) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
-		SubLTrampolineFile.checkType(productivity_limit, PRODUCTIVITY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(productivity_limit, PRODUCTIVITY_P);
 		_csetf_strat_productivity_limit(strategy, productivity_limit);
 		return strategy;
 	}
@@ -2906,8 +2906,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject set_strategy_removal_backtracking_productivity_limit_alt(SubLObject strategy,
 			SubLObject productivity_limit) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
-		SubLTrampolineFile.checkType(productivity_limit, PRODUCTIVITY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(productivity_limit, PRODUCTIVITY_P);
 		_csetf_strat_removal_backtracking_productivity_limit(strategy, productivity_limit);
 		return strategy;
 	}
@@ -2930,8 +2930,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject set_strategy_proof_spec_alt(SubLObject strategy, SubLObject proof_spec) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
-		SubLTrampolineFile.checkType(proof_spec, PROOF_SPEC_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(proof_spec, PROOF_SPEC_P);
 		_csetf_strat_proof_spec(strategy, proof_spec);
 		return strategy;
 	}
@@ -2951,7 +2951,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject set_strategy_data_alt(SubLObject strategy, SubLObject data) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		_csetf_strat_data(strategy, data);
 		return strategy;
 	}
@@ -3581,8 +3581,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	 */
 	@LispMethod(comment = "@unknown proof-spec-p")
 	public static SubLObject strategy_problem_proof_spec_alt(SubLObject strategy, SubLObject problem) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
-		SubLTrampolineFile.checkType(problem, PROBLEM_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 		return dictionary.dictionary_lookup_without_values(strategy_problem_proof_spec_index(strategy), problem,
 				$ANYTHING);
 	}
@@ -3609,8 +3609,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject set_strategy_property_alt(SubLObject strategy, SubLObject property, SubLObject value) {
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
-		SubLTrampolineFile.checkType(property, STRATEGY_PROPERTY_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(property, STRATEGY_PROPERTY_P);
 		{
 			SubLObject pcase_var = property;
 			if (pcase_var.eql($PRODUCTIVITY_LIMIT)) {
@@ -3667,7 +3667,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject set_strategy_properties_alt(SubLObject strategy, SubLObject strategy_properties) {
-		SubLTrampolineFile.checkType(strategy_properties, STRATEGY_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(strategy_properties, STRATEGY_PROPERTIES_P);
 		{
 			SubLObject remainder = NIL;
 			for (remainder = strategy_properties; NIL != remainder; remainder = cddr(remainder)) {
@@ -3887,7 +3887,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	@LispMethod(comment = "Merge PROOF-SPEC into the existing proof-specs for PROBLEM wrt STRATEGY.\r\n\r\n@return boolean ; T iff the proof spec changed as a result.")
 	public static SubLObject strategy_note_problem_proof_spec_alt(SubLObject strategy, SubLObject problem,
 			SubLObject proof_spec) {
-		SubLTrampolineFile.checkType(problem, PROBLEM_P);
+		SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
 		{
 			SubLObject old_value = dictionary
 					.dictionary_lookup_without_values(strategy_problem_proof_spec_index(strategy), problem, $NOTHING);
@@ -4249,7 +4249,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject new_strategy_type_alt(SubLObject type, SubLObject plist) {
-		SubLTrampolineFile.checkType(plist, PROPERTY_LIST_P);
+		SubLSystemTrampolineFile.checkType(plist, PROPERTY_LIST_P);
 		deregister_strategy_type(type);
 		{
 			SubLObject remainder = NIL;
@@ -4308,7 +4308,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject set_strategy_type_property_alt(SubLObject type, SubLObject property, SubLObject value) {
-		SubLTrampolineFile.checkType(property, STRATEGY_TYPE_PROPERTY_P);
+		SubLSystemTrampolineFile.checkType(property, STRATEGY_TYPE_PROPERTY_P);
 		return dictionary_utilities.dictionary_putf($strategy_type_store$.getGlobalValue(), type, property, value);
 	}
 
@@ -4350,7 +4350,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject prob_strategic_properties_status_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
 		return v_object.getField2();
 	}
 
@@ -4362,7 +4362,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject prob_strategic_properties_tactic_strategic_property_index_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
 		return v_object.getField3();
 	}
 
@@ -4374,7 +4374,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject prob_strategic_properties_possible_tactic_count_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
 		return v_object.getField4();
 	}
 
@@ -4393,7 +4393,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_prob_strategic_properties_status_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
 		return v_object.setField2(value);
 	}
 
@@ -4407,7 +4407,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject _csetf_prob_strategic_properties_tactic_strategic_property_index_alt(SubLObject v_object,
 			SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
 		return v_object.setField3(value);
 	}
 
@@ -4421,7 +4421,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject _csetf_prob_strategic_properties_possible_tactic_count_alt(SubLObject v_object,
 			SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, PROBLEM_STRATEGIC_PROPERTIES_P);
 		return v_object.setField4(value);
 	}
 
@@ -4563,8 +4563,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	 */
 	@LispMethod(comment = "@return problem-strategic-properties-p or NIL if uninitialized")
 	public static SubLObject problem_strategic_properties_int_alt(SubLObject problem, SubLObject strategy) {
-		SubLTrampolineFile.checkType(problem, PROBLEM_P);
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		{
 			SubLObject problem_strategic_properties = gethash_without_values(problem,
 					strategy_problem_strategic_index(strategy), UNPROVIDED);
@@ -4596,9 +4596,9 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject set_problem_strategic_properties_alt(SubLObject problem, SubLObject strategy,
 			SubLObject v_properties) {
-		SubLTrampolineFile.checkType(problem, PROBLEM_P);
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
-		SubLTrampolineFile.checkType(v_properties, PROBLEM_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_properties, PROBLEM_STRATEGIC_PROPERTIES_P);
 		{
 			SubLObject hash = strategy_problem_strategic_index(strategy);
 			sethash(problem, hash, v_properties);
@@ -4813,7 +4813,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	@LispMethod(comment = "If STRATEGIC-CONTEXT is :tactical, returns PROBLEM\'s tactical status.\r\nIf STRATEGIC-CONTEXT is STRATEGY, returns PROBLEM\'s strategic status wrt STRATEGY.\nIf STRATEGIC-CONTEXT is :tactical, returns PROBLEM\'s tactical status.\nIf STRATEGIC-CONTEXT is STRATEGY, returns PROBLEM\'s strategic status wrt STRATEGY.")
 	public static SubLObject problem_tactical_or_strategic_status_alt(SubLObject problem,
 			SubLObject strategic_context) {
-		SubLTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
+		SubLSystemTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
 		return NIL != strategy_p(strategic_context)
 				? ((SubLObject) (problem_strategic_status(problem, strategic_context)))
 				: inference_datastructures_problem.problem_tactical_status(problem);
@@ -4838,7 +4838,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	 */
 	@LispMethod(comment = "If STRATEGIC-CONTEXT is :tactical, returns PROBLEM\'s tactical provability status.\r\nIf STRATEGIC-CONTEXT is STRATEGY, returns PROBLEM\'s strategic provability status wrt STRATEGY.\nIf STRATEGIC-CONTEXT is :tactical, returns PROBLEM\'s tactical provability status.\nIf STRATEGIC-CONTEXT is STRATEGY, returns PROBLEM\'s strategic provability status wrt STRATEGY.")
 	public static SubLObject problem_provability_status_alt(SubLObject problem, SubLObject strategic_context) {
-		SubLTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
+		SubLSystemTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
 		return NIL != strategy_p(strategic_context)
 				? ((SubLObject) (problem_strategic_provability_status(problem, strategic_context)))
 				: inference_datastructures_problem.problem_tactical_provability_status(problem);
@@ -5204,7 +5204,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject tact_strategic_properties_preference_level_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
 		return v_object.getField2();
 	}
 
@@ -5216,7 +5216,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject tact_strategic_properties_preference_level_justification_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
 		return v_object.getField3();
 	}
 
@@ -5228,7 +5228,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject tact_strategic_properties_productivity_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
 		return v_object.getField4();
 	}
 
@@ -5248,7 +5248,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject _csetf_tact_strategic_properties_preference_level_alt(SubLObject v_object,
 			SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
 		return v_object.setField2(value);
 	}
 
@@ -5262,7 +5262,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject _csetf_tact_strategic_properties_preference_level_justification_alt(SubLObject v_object,
 			SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
 		return v_object.setField3(value);
 	}
 
@@ -5275,7 +5275,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject _csetf_tact_strategic_properties_productivity_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(v_object, TACTIC_STRATEGIC_PROPERTIES_P);
 		return v_object.setField4(value);
 	}
 
@@ -5485,8 +5485,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	 */
 	@LispMethod(comment = "@return tactic-strategic-properties-p or NIL if uninitialized")
 	public static SubLObject tactic_strategic_properties_int_alt(SubLObject tactic, SubLObject strategy) {
-		SubLTrampolineFile.checkType(tactic, TACTIC_P);
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(tactic, TACTIC_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		{
 			SubLObject problem = inference_datastructures_tactic.tactic_problem(tactic);
 			SubLObject problem_strategic_properties = problem_strategic_properties(problem, strategy);
@@ -5540,9 +5540,9 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject set_tactic_strategic_properties_alt(SubLObject tactic, SubLObject strategy,
 			SubLObject v_properties) {
-		SubLTrampolineFile.checkType(tactic, TACTIC_P);
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
-		SubLTrampolineFile.checkType(v_properties, TACTIC_STRATEGIC_PROPERTIES_P);
+		SubLSystemTrampolineFile.checkType(tactic, TACTIC_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(v_properties, TACTIC_STRATEGIC_PROPERTIES_P);
 		{
 			SubLObject problem = inference_datastructures_tactic.tactic_problem(tactic);
 			SubLObject problem_strategic_properties = problem_strategic_properties(problem, strategy);
@@ -5609,7 +5609,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject tactic_strategic_completeness_alt(SubLObject tactic, SubLObject strategic_context) {
-		SubLTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
+		SubLSystemTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
 		if ($TACTICAL == strategic_context) {
 			return inference_datastructures_tactic.tactic_completeness(tactic);
 		} else {
@@ -5638,7 +5638,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject tactic_strategic_preference_level_alt(SubLObject tactic, SubLObject strategic_context) {
-		SubLTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
+		SubLSystemTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
 		if ($TACTICAL == strategic_context) {
 			return inference_datastructures_tactic.tactic_preference_level(tactic);
 		} else {
@@ -5674,7 +5674,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject tactic_strategic_preference_level_justification_alt(SubLObject tactic,
 			SubLObject strategic_context) {
-		SubLTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
+		SubLSystemTrampolineFile.checkType(strategic_context, STRATEGIC_CONTEXT_P);
 		if ($TACTICAL == strategic_context) {
 			return inference_datastructures_tactic.tactic_preference_level_justification(tactic);
 		} else {
@@ -5740,7 +5740,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject conjunctive_tactic_strategic_preference_level_alt(SubLObject tactic,
 			SubLObject strategic_context) {
-		SubLTrampolineFile.checkType(tactic, GENERALIZED_CONJUNCTIVE_TACTIC_P);
+		SubLSystemTrampolineFile.checkType(tactic, GENERALIZED_CONJUNCTIVE_TACTIC_P);
 		if (NIL != inference_worker_removal.conjunctive_removal_tactic_p(tactic)) {
 			return completeness_to_preference_level(tactic_strategic_completeness(tactic, strategic_context));
 		} else {
@@ -5764,7 +5764,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject conjunctive_tactic_strategic_preference_level_justification_alt(SubLObject tactic,
 			SubLObject strategic_context) {
-		SubLTrampolineFile.checkType(tactic, GENERALIZED_CONJUNCTIVE_TACTIC_P);
+		SubLSystemTrampolineFile.checkType(tactic, GENERALIZED_CONJUNCTIVE_TACTIC_P);
 		if (NIL != inference_worker_removal.conjunctive_removal_tactic_p(tactic)) {
 			return string_utilities.str(tactic_strategic_completeness(tactic, strategic_context));
 		} else {
@@ -5825,7 +5825,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject set_tactic_strategic_preference_level_alt(SubLObject tactic, SubLObject strategy,
 			SubLObject preference_level, SubLObject justification) {
-		SubLTrampolineFile.checkType(preference_level, PREFERENCE_LEVEL_P);
+		SubLSystemTrampolineFile.checkType(preference_level, PREFERENCE_LEVEL_P);
 		{
 			SubLObject tactic_strategic_properties = tactic_strategic_properties(tactic, strategy);
 			_csetf_tact_strategic_properties_preference_level(tactic_strategic_properties, preference_level);
@@ -5869,8 +5869,8 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	}
 
 	public static SubLObject problem_strategically_possible_tactic_count_alt(SubLObject problem, SubLObject strategy) {
-		SubLTrampolineFile.checkType(problem, PROBLEM_P);
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		{
 			SubLObject problem_strategic_properties = problem_strategic_properties(problem, strategy);
 			return prob_strategic_properties_possible_tactic_count(problem_strategic_properties);
@@ -5897,9 +5897,9 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject problem_note_tactic_strategically_possible_alt(SubLObject problem, SubLObject tactic,
 			SubLObject strategy) {
-		SubLTrampolineFile.checkType(problem, PROBLEM_P);
-		SubLTrampolineFile.checkType(tactic, TACTIC_P);
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+		SubLSystemTrampolineFile.checkType(tactic, TACTIC_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		{
 			SubLObject problem_strategic_properties = problem_strategic_properties(problem, strategy);
 			_csetf_prob_strategic_properties_possible_tactic_count(problem_strategic_properties,
@@ -5935,9 +5935,9 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject problem_note_tactic_not_strategically_possible_alt(SubLObject problem, SubLObject tactic,
 			SubLObject strategy) {
-		SubLTrampolineFile.checkType(problem, PROBLEM_P);
-		SubLTrampolineFile.checkType(tactic, TACTIC_P);
-		SubLTrampolineFile.checkType(strategy, STRATEGY_P);
+		SubLSystemTrampolineFile.checkType(problem, PROBLEM_P);
+		SubLSystemTrampolineFile.checkType(tactic, TACTIC_P);
+		SubLSystemTrampolineFile.checkType(strategy, STRATEGY_P);
 		{
 			SubLObject problem_strategic_properties = problem_strategic_properties(problem, strategy);
 			_csetf_prob_strategic_properties_possible_tactic_count(problem_strategic_properties, subtract(
@@ -8286,7 +8286,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 		if (SubLFiles.USE_V1) {
 			defconstant("*DTP-STRATEGY*", STRATEGY);
 			defparameter("*CURRENT-STRATEGY-WRT-MEMOIZATION*", NIL);
-			deflexical("*STRATEGY-TYPE-STORE*", SubLTrampolineFile.maybeDefault($strategy_type_store$,
+			deflexical("*STRATEGY-TYPE-STORE*", SubLSystemTrampolineFile.maybeDefault($strategy_type_store$,
 					$strategy_type_store$, () -> dictionary.new_dictionary(symbol_function(EQ), FIVE_INTEGER)));
 			defparameter("*UNINTERESTINGNESS-CACHE-LOOKUP-ENABLED?*", T);
 			defconstant("*DTP-PROBLEM-STRATEGIC-PROPERTIES*", PROBLEM_STRATEGIC_PROPERTIES);
@@ -8319,7 +8319,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 	public static SubLObject init_inference_datastructures_strategy_file_Previous() {
 		defconstant("*DTP-STRATEGY*", STRATEGY);
 		defparameter("*CURRENT-STRATEGY-WRT-MEMOIZATION*", NIL);
-		deflexical("*STRATEGY-TYPE-STORE*", SubLTrampolineFile.maybeDefault($strategy_type_store$,
+		deflexical("*STRATEGY-TYPE-STORE*", SubLSystemTrampolineFile.maybeDefault($strategy_type_store$,
 				$strategy_type_store$, () -> dictionary.new_dictionary(symbol_function(EQ), FIVE_INTEGER)));
 		defparameter("*UNINTERESTINGNESS-CACHE-LOOKUP-ENABLED?*", T);
 		defconstant("*DTP-PROBLEM-STRATEGIC-PROPERTIES*", PROBLEM_STRATEGIC_PROPERTIES);

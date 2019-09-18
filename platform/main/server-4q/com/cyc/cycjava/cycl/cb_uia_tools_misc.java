@@ -44,7 +44,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1424,8 +1424,8 @@ public final class cb_uia_tools_misc extends SubLTranslatedFile implements V02 {
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject agr_pred = NIL;
-                SubLTrampolineFile.checkType(list(argnum), PPH_NESTED_ARG_LIST_P);
-                SubLTrampolineFile.checkType(list(argnum), PPH_PRECISION_P);
+                SubLSystemTrampolineFile.checkType(list(argnum), PPH_NESTED_ARG_LIST_P);
+                SubLSystemTrampolineFile.checkType(list(argnum), PPH_PRECISION_P);
                 {
                     SubLObject _prev_bind_0 = pph_vars.$paraphrase_precision$.currentBinding(thread);
                     try {

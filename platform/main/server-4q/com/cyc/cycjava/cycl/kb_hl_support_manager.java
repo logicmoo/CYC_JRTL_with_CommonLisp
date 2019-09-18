@@ -26,7 +26,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -261,10 +261,10 @@ public final class kb_hl_support_manager extends SubLTranslatedFile {
     }
 
     public static SubLObject init_kb_hl_support_manager_file() {
-        deflexical("*KB-HL-SUPPORT-CONTENT-MANAGER*", SubLTrampolineFile.maybeDefault($kb_hl_support_content_manager$, $kb_hl_support_content_manager$, $UNINITIALIZED));
+        deflexical("*KB-HL-SUPPORT-CONTENT-MANAGER*", SubLSystemTrampolineFile.maybeDefault($kb_hl_support_content_manager$, $kb_hl_support_content_manager$, $UNINITIALIZED));
         deflexical("*KB-HL-SUPPORT-LRU-SIZE-PERCENTAGE*", FIVE_INTEGER);
         deflexical("*KB-HL-SUPPORT-LRU-SIZE-MAX*", $int$10000);
-        deflexical("*KB-HL-SUPPORT-CONTENTS-FROM-IDS*", SubLTrampolineFile.maybeDefault($kb_hl_support_contents_from_ids$, $kb_hl_support_contents_from_ids$, NIL));
+        deflexical("*KB-HL-SUPPORT-CONTENTS-FROM-IDS*", SubLSystemTrampolineFile.maybeDefault($kb_hl_support_contents_from_ids$, $kb_hl_support_contents_from_ids$, NIL));
         return NIL;
     }
 

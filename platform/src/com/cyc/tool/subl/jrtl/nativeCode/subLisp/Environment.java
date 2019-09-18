@@ -9,9 +9,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class Environment extends SubLTrampolineFile {
+public class Environment extends SubLSystemTrampolineFile {
 	public static SubLObject get_machine_name(SubLObject defaultVal) {
 		return Environment.$machine_instance$.getValue();
 	}

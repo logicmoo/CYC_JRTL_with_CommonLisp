@@ -69,7 +69,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -200,7 +200,7 @@ public final class typicality_reference_set extends SubLTranslatedFile implement
     }
 
     public static final SubLObject lookup_prevalence(SubLObject property, SubLObject reference_set) {
-        SubLTrampolineFile.checkType(property, $sym28$CYC_TYPICALITY_REFERENCE_SET_PROPERTY_);
+        SubLSystemTrampolineFile.checkType(property, $sym28$CYC_TYPICALITY_REFERENCE_SET_PROPERTY_);
         if (NIL != properties.unknown_property_p(property)) {
             {
                 SubLObject inverse_property = cycl_utilities.formula_arg1(property, UNPROVIDED);
@@ -284,8 +284,8 @@ public final class typicality_reference_set extends SubLTranslatedFile implement
         }
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(collection, CONSTANT_P);
-            SubLTrampolineFile.checkType(collection, $sym35$COLLECTION_);
+            SubLSystemTrampolineFile.checkType(collection, CONSTANT_P);
+            SubLSystemTrampolineFile.checkType(collection, $sym35$COLLECTION_);
             {
                 SubLObject reference_set = NIL;
                 {
@@ -1026,7 +1026,7 @@ public final class typicality_reference_set extends SubLTranslatedFile implement
     }
 
     public static final SubLObject assert_prevalence(SubLObject property, SubLObject reference_set, SubLObject prevalence) {
-        SubLTrampolineFile.checkType(prevalence, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(prevalence, NON_NEGATIVE_INTEGER_P);
         {
             SubLObject mt = typicality_reference_set_mt(reference_set);
             SubLObject sentence = list($const22$prevalenceOfPropertyInReferenceSe, property, reference_set, prevalence);

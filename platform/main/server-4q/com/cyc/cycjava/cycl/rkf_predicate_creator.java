@@ -67,7 +67,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class rkf_predicate_creator extends SubLTranslatedFile {
     public static final SubLFile me = new rkf_predicate_creator();
@@ -1428,7 +1428,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_rkf_predicate_creator_file() {
-        deflexical("*PC-LOCK*", SubLTrampolineFile.maybeDefault($pc_lock$, $pc_lock$, () -> make_lock($$$Predicate_Creator_lock)));
+        deflexical("*PC-LOCK*", SubLSystemTrampolineFile.maybeDefault($pc_lock$, $pc_lock$, () -> make_lock($$$Predicate_Creator_lock)));
         deflexical("*PC-SESSION-MODES*", $list4);
         deflexical("*PC-SESSION-CONSTRAINT-PREDICATES*", $list5);
         defconstant("*DTP-PC-SESSION*", PC_SESSION);

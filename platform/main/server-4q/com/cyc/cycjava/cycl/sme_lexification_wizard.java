@@ -94,7 +94,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class sme_lexification_wizard extends SubLTranslatedFile {
     public static final SubLFile me = new sme_lexification_wizard();
@@ -7153,18 +7153,18 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject init_sme_lexification_wizard_file() {
-        deflexical("*SME-LEXIFICATION-OBJECT-ID-HASH*", SubLTrampolineFile.maybeDefault($sme_lexification_object_id_hash$, $sme_lexification_object_id_hash$, () -> make_hash_table($int$25, symbol_function(EQUAL), UNPROVIDED)));
-        deflexical("*SME-LEXWIZ-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym2$_SME_LEXWIZ_INITIALIZED__, $sme_lexwiz_initializedP$, NIL));
+        deflexical("*SME-LEXIFICATION-OBJECT-ID-HASH*", SubLSystemTrampolineFile.maybeDefault($sme_lexification_object_id_hash$, $sme_lexification_object_id_hash$, () -> make_hash_table($int$25, symbol_function(EQUAL), UNPROVIDED)));
+        deflexical("*SME-LEXWIZ-INITIALIZED?*", SubLSystemTrampolineFile.maybeDefault($sym2$_SME_LEXWIZ_INITIALIZED__, $sme_lexwiz_initializedP$, NIL));
         deflexical("*SME-FORGE-AHEAD?*", NIL);
         deflexical("*VERIFY-BEFOREHAND?*", T);
         deflexical("*USE-INFERRED-PHRASES?*", NIL);
         deflexical("*USE-BLACKBOARD?*", NIL);
         defconstant("*NEWLINE-TAB*", format(NIL, $str3$_a_a, CHAR_newline, CHAR_tab));
         deflexical("*SME-PARTS-OF-SPEECH*", $list4);
-        deflexical("*NEXT-SME-LEXIFICATION-ID*", SubLTrampolineFile.maybeDefault($next_sme_lexification_id$, $next_sme_lexification_id$, ZERO_INTEGER));
+        deflexical("*NEXT-SME-LEXIFICATION-ID*", SubLSystemTrampolineFile.maybeDefault($next_sme_lexification_id$, $next_sme_lexification_id$, ZERO_INTEGER));
         deflexical("*USE-GENFORMAT-TEMPLATE*", NIL);
         deflexical("*LEXWIZ-PERSON-SUB-PREDICATES*", $list6);
-        deflexical("*KNOWN-NAME-TITLES*", SubLTrampolineFile.maybeDefault($known_name_titles$, $known_name_titles$, NIL));
+        deflexical("*KNOWN-NAME-TITLES*", SubLSystemTrampolineFile.maybeDefault($known_name_titles$, $known_name_titles$, NIL));
         deflexical("*FAMILY-NAME-FIRST-GROUPS*", $list8);
         deflexical("*LEXWIZ-ABBREVIATION-CHECK-MIN-WORDS*", FOUR_INTEGER);
         deflexical("*SME-LEXWIZ-TITLE*", $$$Dictionary_Assistant);

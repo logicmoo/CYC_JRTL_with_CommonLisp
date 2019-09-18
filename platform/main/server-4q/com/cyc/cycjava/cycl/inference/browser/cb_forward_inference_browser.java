@@ -127,7 +127,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -710,7 +710,7 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         if (more_info == UNPROVIDED) {
             more_info = NIL;
         }
-        if (((NIL != possible_inference) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_inference.inference_p(possible_inference))) {
+        if (((NIL != possible_inference) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == inference_datastructures_inference.inference_p(possible_inference))) {
             throw new AssertionError(possible_inference);
         }
         final SubLObject forward_inference_info = make_forward_inference_info(UNPROVIDED);

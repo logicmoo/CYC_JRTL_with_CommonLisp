@@ -65,7 +65,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -5996,7 +5996,7 @@ public final class cb_scenario_constructor extends SubLTranslatedFile implements
                                                                 html_utilities.html_princ($$$Add);
                                                                 html_utilities.html_checkbox_input($$$chosen, id, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
                                                                 html_utilities.html_indent(UNPROVIDED);
-                                                                SubLTrampolineFile.checkType(output, PPH_PHRASE_OUTPUT_LIST_P);
+                                                                SubLSystemTrampolineFile.checkType(output, PPH_PHRASE_OUTPUT_LIST_P);
                                                                 {
                                                                     SubLObject start_char_index = ZERO_INTEGER;
                                                                     SubLObject end_char_index = ZERO_INTEGER;
@@ -6657,7 +6657,7 @@ public final class cb_scenario_constructor extends SubLTranslatedFile implements
                         {
                             SubLObject output = pph_main.generate_pph_output_list(constraint_sentence, $ANY, language_mt, domain_mt, $TEXT, $DECLARATIVE);
                             SubLObject find_encoding = cb_sc_uiat_encode_find_and_paste(v_agenda);
-                            SubLTrampolineFile.checkType(output, PPH_PHRASE_OUTPUT_LIST_P);
+                            SubLSystemTrampolineFile.checkType(output, PPH_PHRASE_OUTPUT_LIST_P);
                             {
                                 SubLObject start_char_index = ZERO_INTEGER;
                                 SubLObject end_char_index = ZERO_INTEGER;

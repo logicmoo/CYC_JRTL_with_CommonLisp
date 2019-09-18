@@ -43,7 +43,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -411,7 +411,7 @@ public final class nl_trie_completion extends SubLTranslatedFile {
     }
 
     public static SubLObject init_nl_trie_completion_file() {
-        deflexical("*NL-TRIE-COMPLETION-INDEX*", SubLTrampolineFile.maybeDefault($nl_trie_completion_index$, $nl_trie_completion_index$, $UNPREPARED));
+        deflexical("*NL-TRIE-COMPLETION-INDEX*", SubLSystemTrampolineFile.maybeDefault($nl_trie_completion_index$, $nl_trie_completion_index$, $UNPREPARED));
         deflexical("*NL-TRIE-COMPLETION-NULL-KEY-PROXY*", code_char(SEVEN_INTEGER));
         return NIL;
     }

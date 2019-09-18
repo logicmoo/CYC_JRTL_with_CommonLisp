@@ -108,7 +108,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -365,152 +365,152 @@ public final class tptp_kb_content_generator extends SubLTranslatedFile implemen
     }
 
     public static final SubLObject tptp_kbc_col(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField2();
     }
 
     public static final SubLObject tptp_kbc_part_types_pred(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField3();
     }
 
     public static final SubLObject tptp_kbc_parts_pred(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField4();
     }
 
     public static final SubLObject tptp_kbc_spindle_head_mt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField5();
     }
 
     public static final SubLObject tptp_kbc_spindle_member_mts(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField6();
     }
 
     public static final SubLObject tptp_kbc_spindle_collector_mt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField7();
     }
 
     public static final SubLObject tptp_kbc_object_pred(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField8();
     }
 
     public static final SubLObject tptp_kbc_unary_functions(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField9();
     }
 
     public static final SubLObject tptp_kbc_geo_spindle_head_mt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField10();
     }
 
     public static final SubLObject tptp_kbc_geo_spindle_member_mts(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField11();
     }
 
     public static final SubLObject tptp_kbc_geo_spindle_collector_mt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField12();
     }
 
     public static final SubLObject tptp_kbc_geo_collections(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField13();
     }
 
     public static final SubLObject tptp_kbc_geo_regions(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField14();
     }
 
     public static final SubLObject tptp_kbc_geo_locations(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField15();
     }
 
     public static final SubLObject tptp_kbc_instances(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.getField16();
     }
 
     public static final SubLObject _csetf_tptp_kbc_col(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_part_types_pred(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_parts_pred(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_spindle_head_mt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_spindle_member_mts(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_spindle_collector_mt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField7(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_object_pred(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField8(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_unary_functions(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField9(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_geo_spindle_head_mt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField10(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_geo_spindle_member_mts(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField11(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_geo_spindle_collector_mt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField12(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_geo_collections(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField13(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_geo_regions(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField14(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_geo_locations(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField15(value);
     }
 
     public static final SubLObject _csetf_tptp_kbc_instances(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(v_object, TPTP_KB_CONTENT_P);
         return v_object.setField16(value);
     }
 
@@ -630,77 +630,77 @@ public final class tptp_kb_content_generator extends SubLTranslatedFile implemen
     }
 
     public static final SubLObject tptp_kb_content_col(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_col(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_part_types_pred(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_part_types_pred(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_parts_pred(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_parts_pred(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_spindle_head_mt(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_spindle_head_mt(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_spindle_member_mts(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_spindle_member_mts(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_spindle_collector_mt(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_spindle_collector_mt(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_object_pred(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_object_pred(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_unary_functions(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_unary_functions(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_geo_spindle_head_mt(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_geo_spindle_head_mt(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_geo_spindle_member_mts(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_geo_spindle_member_mts(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_geo_spindle_collector_mt(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_geo_spindle_collector_mt(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_geo_collections(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_geo_collections(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_geo_regions(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_geo_regions(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_geo_locations(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_geo_locations(kb_content);
     }
 
     public static final SubLObject tptp_kb_content_instances(SubLObject kb_content) {
-        SubLTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
+        SubLSystemTrampolineFile.checkType(kb_content, TPTP_KB_CONTENT_P);
         return tptp_kbc_instances(kb_content);
     }
 
@@ -1785,9 +1785,9 @@ public final class tptp_kb_content_generator extends SubLTranslatedFile implemen
     public static final SubLObject tptp_generate_mt_spindle(SubLObject mt, SubLObject size, SubLObject prefix) {
         {
             final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(mt, HLMT_P);
-            SubLTrampolineFile.checkType(size, POSITIVE_INTEGER_P);
-            SubLTrampolineFile.checkType(prefix, VALID_CONSTANT_NAME_P);
+            SubLSystemTrampolineFile.checkType(mt, HLMT_P);
+            SubLSystemTrampolineFile.checkType(size, POSITIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(prefix, VALID_CONSTANT_NAME_P);
             {
                 SubLObject head_name = cconcatenate(format_nil.format_nil_a_no_copy(prefix), $str_alt123$_SpindleHeadMt);
                 SubLObject collector_name = cconcatenate(format_nil.format_nil_a_no_copy(prefix), $str_alt124$_SpindleCollectorMt);
@@ -2298,9 +2298,9 @@ public final class tptp_kb_content_generator extends SubLTranslatedFile implemen
                     SubLObject medium_mt = (NIL != medium_mt_tail) ? ((SubLObject) (cadr(medium_mt_tail))) : NIL;
                     SubLObject low_mts_tail = property_list_member($LOW_MTS, current);
                     SubLObject low_mts = (NIL != low_mts_tail) ? ((SubLObject) (cadr(low_mts_tail))) : NIL;
-                    SubLTrampolineFile.checkType(levels, POSITIVE_INTEGER_P);
-                    SubLTrampolineFile.checkType(x_width, POSITIVE_INTEGER_P);
-                    SubLTrampolineFile.checkType(y_width, POSITIVE_INTEGER_P);
+                    SubLSystemTrampolineFile.checkType(levels, POSITIVE_INTEGER_P);
+                    SubLSystemTrampolineFile.checkType(x_width, POSITIVE_INTEGER_P);
+                    SubLSystemTrampolineFile.checkType(y_width, POSITIVE_INTEGER_P);
                     {
                         SubLObject level_collections_vector = NIL;
                         SubLObject level_regions_vector = NIL;

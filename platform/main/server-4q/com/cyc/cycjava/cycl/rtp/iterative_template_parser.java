@@ -163,7 +163,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1008,7 +1008,7 @@ public final class iterative_template_parser extends SubLTranslatedFile {
             label = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != $kb_node_internal_counter$.getDynamicValue(thread)) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p($kb_node_internal_counter$.getDynamicValue(thread)))) {
+        if (((NIL != $kb_node_internal_counter$.getDynamicValue(thread)) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.non_negative_integer_p($kb_node_internal_counter$.getDynamicValue(thread)))) {
             throw new AssertionError($kb_node_internal_counter$.getDynamicValue(thread));
         }
         SubLObject current;
@@ -3088,7 +3088,7 @@ public final class iterative_template_parser extends SubLTranslatedFile {
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         assert NIL != itp_state_p(state) : "iterative_template_parser.itp_state_p(state) " + "CommonSymbols.NIL != iterative_template_parser.itp_state_p(state) " + state;
-        if (((NIL != parent) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == itp_node_p(parent))) {
+        if (((NIL != parent) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == itp_node_p(parent))) {
             throw new AssertionError(parent);
         }
         SubLObject id = itp_state_sequence(state);
@@ -5467,7 +5467,7 @@ public final class iterative_template_parser extends SubLTranslatedFile {
         defparameter("*RTP-EXHAUSTIVE-KB-PARSE?*", NIL);
         defparameter("*RTP-REIFY-DOOMED-PARSES?*", NIL);
         defparameter("*RTP-LATEST-KB-PARSE-TREE*", NIL);
-        deflexical("*RTP-COMPONENT-TOKENIZATIONS*", SubLTrampolineFile.maybeDefault($rtp_component_tokenizations$, $rtp_component_tokenizations$, () -> dictionary.new_dictionary(EQUAL, UNPROVIDED)));
+        deflexical("*RTP-COMPONENT-TOKENIZATIONS*", SubLSystemTrampolineFile.maybeDefault($rtp_component_tokenizations$, $rtp_component_tokenizations$, () -> dictionary.new_dictionary(EQUAL, UNPROVIDED)));
         defparameter("*RTP-RELEVANT-TOKENIZATION*", NIL);
         defconstant("*DTP-ITP-NODE*", ITP_NODE);
         defconstant("*DTP-ITP-STATE*", ITP_STATE);

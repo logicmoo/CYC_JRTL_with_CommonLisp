@@ -112,7 +112,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2041,32 +2041,32 @@ public final class removal_modules_assertion_mt extends SubLTranslatedFile {
     }
 
     public static SubLObject init_removal_modules_assertion_mt_file() {
-        deflexical("*ASSERTION-MT-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_mt_defining_mt$, $assertion_mt_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-MT-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_mt_defining_mt$, $assertion_mt_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-MT-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
-        deflexical("*ASSERTION-SENTENCE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_sentence_defining_mt$, $assertion_sentence_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-SENTENCE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_sentence_defining_mt$, $assertion_sentence_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-SENTENCE-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         defparameter("*DEFAULT-ASSERTION-SENTENCE-LOOKUP-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
-        deflexical("*ASSERTION-ID-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_id_defining_mt$, $assertion_id_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-ID-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_id_defining_mt$, $assertion_id_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-ID-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*CYCL-DIRECTIONS*", $list52);
-        deflexical("*ASSERTION-DIRECTION-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_direction_defining_mt$, $assertion_direction_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-DIRECTION-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_direction_defining_mt$, $assertion_direction_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-DIRECTION-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*CYCL-STRENGTHS*", $list69);
-        deflexical("*ASSERTION-STRENGTH-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_strength_defining_mt$, $assertion_strength_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-STRENGTH-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_strength_defining_mt$, $assertion_strength_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-STRENGTH-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*CYCL-TRUTHS*", $list86);
-        deflexical("*ASSERTION-TRUTH-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_truth_defining_mt$, $assertion_truth_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-TRUTH-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_truth_defining_mt$, $assertion_truth_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-TRUTH-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
-        deflexical("*ASSERTION-JUST-ATT-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_just_att_defining_mt$, $assertion_just_att_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-JUST-ATT-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_just_att_defining_mt$, $assertion_just_att_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-JUST-ATT-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
-        deflexical("*ASSERTION-ASSERT-BY-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_assert_by_defining_mt$, $assertion_assert_by_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-ASSERT-BY-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_assert_by_defining_mt$, $assertion_assert_by_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-ASSERT-BY-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
-        deflexical("*ASSERTION-ASSERT-TIME-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_assert_time_defining_mt$, $assertion_assert_time_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-ASSERT-TIME-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_assert_time_defining_mt$, $assertion_assert_time_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-ASSERT-TIME-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*EARLIEST-KNOWN-ASSERTED-WHEN*", $int$19950522);
-        deflexical("*ASSERTION-ASSERT-PURPOSE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_assert_purpose_defining_mt$, $assertion_assert_purpose_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-ASSERT-PURPOSE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_assert_purpose_defining_mt$, $assertion_assert_purpose_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-ASSERT-PURPOSE-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
-        deflexical("*ASSERTION-ASSERT-DATE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($assertion_assert_date_defining_mt$, $assertion_assert_date_defining_mt$, $$BaseKB));
+        deflexical("*ASSERTION-ASSERT-DATE-DEFINING-MT*", SubLSystemTrampolineFile.maybeDefault($assertion_assert_date_defining_mt$, $assertion_assert_date_defining_mt$, $$BaseKB));
         defparameter("*DEFAULT-ASSERTION-ASSERT-DATE-CHECK-COST*", $cheap_hl_module_check_cost$.getGlobalValue());
         deflexical("*REMOVAL-ASSERTION-ASSERTED-BY-BETWEEN-DATES-DATE-COMPARISON-PREDICATES*", $list178);
         return NIL;

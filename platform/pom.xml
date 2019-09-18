@@ -10,7 +10,7 @@
 	<name>LarKC Platform</name>
 	<description>LarKC Platform used in LogicMOO</description>
 	<build>
-		<sourceDirectory>main/objectweb-asm-src</sourceDirectory>
+		<sourceDirectory>main/jpl7-hacked</sourceDirectory>
 		<testSourceDirectory>test/src</testSourceDirectory>
 		<resources>
 		</resources>
@@ -38,7 +38,7 @@
 						<configuration>
 							<target>
 								<ant antfile="${basedir}/build.xml">
-									<target name="abcl.compile.lisp" />
+									<target name="abcl.compile.java" />
 								</ant>
 							</target>
 							<failOnError>false</failOnError>
@@ -86,7 +86,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<pluginManagement>			
+		<pluginManagement>
 		</pluginManagement>
 	</build>
 	<dependencies>
@@ -130,7 +130,8 @@
 								<configuration>
 									<mainClass>org.armedbear.lisp.Main</mainClass>
 									<arguments>
-										<argument>--rcyc</argument>
+										<argument>--load</argument>
+										<argument>cyc</argument>
 									</arguments>
 								</configuration>
 							</execution>

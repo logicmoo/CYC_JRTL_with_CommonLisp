@@ -71,8 +71,9 @@ public class MacroObject extends Function {
 
   @Override
   public LispObject arrayify(LispObject... args) {
-    if (true)
+		if (true) {
       return error(new UndefinedFunction(lambdaName));
+		}
     LispObject fun = getExpander();
     LispObject toEval = fun.execute(args);
     //.execute(args);

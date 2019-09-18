@@ -29,7 +29,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -1084,9 +1084,9 @@ public final class red_infrastructure_macros extends SubLTranslatedFile {
         defvar("REDDEF-VAR-PRVT", red_def_helper($red_infrastructure_test_key$.isSymbol() ? symbol_value($red_infrastructure_test_key$) : $red_infrastructure_test_key$, REDDEF_VAR_PRVT, $red_infrastructure_test_default$.isSymbol() ? symbol_value($red_infrastructure_test_default$) : $red_infrastructure_test_default$, $VAR, UNPROVIDED));
         defvar("REDDEF-VAR-PROT", red_def_helper($red_infrastructure_test_key$.isSymbol() ? symbol_value($red_infrastructure_test_key$) : $red_infrastructure_test_key$, REDDEF_VAR_PROT, $red_infrastructure_test_default$.isSymbol() ? symbol_value($red_infrastructure_test_default$) : $red_infrastructure_test_default$, $VAR, UNPROVIDED));
         defvar("REDDEF-VAR-PUBL", red_def_helper($red_infrastructure_test_key$.isSymbol() ? symbol_value($red_infrastructure_test_key$) : $red_infrastructure_test_key$, REDDEF_VAR_PUBL, $red_infrastructure_test_default$.isSymbol() ? symbol_value($red_infrastructure_test_default$) : $red_infrastructure_test_default$, $VAR, UNPROVIDED));
-        deflexical("REDDEF-GBL-PRVT", SubLTrampolineFile.maybeDefault(REDDEF_GBL_PRVT, $reddef_gbl_prvt$, () -> red_def_helper($red_infrastructure_test_key$.isSymbol() ? symbol_value($red_infrastructure_test_key$) : $red_infrastructure_test_key$, REDDEF_GBL_PRVT, $red_infrastructure_test_default$.isSymbol() ? symbol_value($red_infrastructure_test_default$) : $red_infrastructure_test_default$, $GLOBAL, UNPROVIDED)));
-        deflexical("REDDEF-GBL-PROT", SubLTrampolineFile.maybeDefault(REDDEF_GBL_PROT, $reddef_gbl_prot$, () -> red_def_helper($red_infrastructure_test_key$.isSymbol() ? symbol_value($red_infrastructure_test_key$) : $red_infrastructure_test_key$, REDDEF_GBL_PROT, $red_infrastructure_test_default$.isSymbol() ? symbol_value($red_infrastructure_test_default$) : $red_infrastructure_test_default$, $GLOBAL, UNPROVIDED)));
-        deflexical("REDDEF-GBL-PUBL", SubLTrampolineFile.maybeDefault(REDDEF_GBL_PUBL, $reddef_gbl_publ$, () -> red_def_helper($red_infrastructure_test_key$.isSymbol() ? symbol_value($red_infrastructure_test_key$) : $red_infrastructure_test_key$, REDDEF_GBL_PUBL, $red_infrastructure_test_default$.isSymbol() ? symbol_value($red_infrastructure_test_default$) : $red_infrastructure_test_default$, $GLOBAL, UNPROVIDED)));
+        deflexical("REDDEF-GBL-PRVT", SubLSystemTrampolineFile.maybeDefault(REDDEF_GBL_PRVT, $reddef_gbl_prvt$, () -> red_def_helper($red_infrastructure_test_key$.isSymbol() ? symbol_value($red_infrastructure_test_key$) : $red_infrastructure_test_key$, REDDEF_GBL_PRVT, $red_infrastructure_test_default$.isSymbol() ? symbol_value($red_infrastructure_test_default$) : $red_infrastructure_test_default$, $GLOBAL, UNPROVIDED)));
+        deflexical("REDDEF-GBL-PROT", SubLSystemTrampolineFile.maybeDefault(REDDEF_GBL_PROT, $reddef_gbl_prot$, () -> red_def_helper($red_infrastructure_test_key$.isSymbol() ? symbol_value($red_infrastructure_test_key$) : $red_infrastructure_test_key$, REDDEF_GBL_PROT, $red_infrastructure_test_default$.isSymbol() ? symbol_value($red_infrastructure_test_default$) : $red_infrastructure_test_default$, $GLOBAL, UNPROVIDED)));
+        deflexical("REDDEF-GBL-PUBL", SubLSystemTrampolineFile.maybeDefault(REDDEF_GBL_PUBL, $reddef_gbl_publ$, () -> red_def_helper($red_infrastructure_test_key$.isSymbol() ? symbol_value($red_infrastructure_test_key$) : $red_infrastructure_test_key$, REDDEF_GBL_PUBL, $red_infrastructure_test_default$.isSymbol() ? symbol_value($red_infrastructure_test_default$) : $red_infrastructure_test_default$, $GLOBAL, UNPROVIDED)));
         return NIL;
     }
 

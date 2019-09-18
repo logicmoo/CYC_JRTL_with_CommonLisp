@@ -342,7 +342,7 @@ public class BshClassPath
         return unqNameTable;
     }
 
-    public String [] getAllNames()
+    public String [] getAllNames(long miliseconds)
     {
         insureInitialized();
 

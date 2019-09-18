@@ -5,6 +5,9 @@
  */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import static com.cyc.tool.subl.util.IsolatedClassLoader.*;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
@@ -64,11 +67,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
  */
 public class SubLMain extends Startup {
 
-	static {
-		SystemCurrent.setupIO();
-	}
-
-	static boolean didInitialEmbeddedMain = false;
+	static boolean began_inital_embeded_main = false;
 
 	public static final class InitialEmbeddedMain extends SubLProcess {
 		private final Runnable runnable;
@@ -132,7 +131,7 @@ public class SubLMain extends Startup {
 	 */
 
 	public static void doInitialEmbeddedMain(String[] args) {
-		didInitialEmbeddedMain = true;
+		began_inital_embeded_main = true;
 		boolean wasSubLisp = Main.isSubLisp();
 		try {
 			Main.setSubLisp(true);
@@ -151,7 +150,7 @@ public class SubLMain extends Startup {
 				SubLPackage.setCurrentPackage(Lisp.PACKAGE_SYS);
 				long startABCL = System.currentTimeMillis();
 				// Main.setSubLisp(false);
-				Interpreter.createDefaultInstance(new String[] {});
+				Interpreter.createInstance();
 				startTime += (System.currentTimeMillis() - startABCL);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -287,9 +286,9 @@ public class SubLMain extends Startup {
 
 	static void embeddedMain(final String[] args, final Runnable runnable) {
 		synchronized (InitialEmbeddedMain.class) {
-			if (didInitialEmbeddedMain)
+			if (began_inital_embeded_main)
 				return;
-			didInitialEmbeddedMain = true;
+			began_inital_embeded_main = true;
 			me.processCommandLineArgs(args);
 			try {
 				SubLProcess subLProcess = new InitialEmbeddedMain("Initial Lisp Listener", runnable, args);
@@ -322,7 +321,7 @@ public class SubLMain extends Startup {
 	private static boolean didHandleInits;
 	private static boolean didInitFileRunning;
 	private static boolean didAllegroCompatiblityMode;
-	private static boolean didInitFormRunning;
+	private static boolean began_init_form_running;
 
 	public static SubLReader getMainReader() {
 		SubLReader locally = mainReader.get();
@@ -358,9 +357,9 @@ public class SubLMain extends Startup {
 	}
 
 	private static void handleInitFormRunning() {
-		if (didInitFormRunning)
+		if (began_init_form_running)
 			return;
-		SubLMain.didInitFormRunning = true;
+		SubLMain.began_init_form_running = true;
 		boolean exit_with_error = false;
 		try {
 			String initForm = getInitializationForm();
@@ -605,8 +604,25 @@ public class SubLMain extends Startup {
 					SubLFiles.USE_V1 = true;
 					SubLFiles.USE_V2 = false;
 					SubLMain.BOOTY_HACKZ = false;
-					initialize1TranslatedSystem("com.cyc.cycjava.cycl.rcycl");
-
+					try {
+						//sSubLFiles.initialize("eu.cyc.sparql.server.Sparql");
+						classDupes("org.objectweb.asm.MethodVisitor");
+						System.out.println("" + Class.forName("org.objectweb.asm.MethodVisitor"));
+					} catch (Throwable ex) {
+						printStackTrace(ex);
+					}
+					try {
+						//SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
+					} catch (Throwable ex) {
+						printStackTrace(ex);
+					}
+					try {
+						// if(!SubLMain.TINY_KB) //
+						initialize1TranslatedSystem("com.cyc.cycjava.cycl.rcycl");
+						// ;
+					} catch (Throwable ex) {
+						printStackTrace(ex);
+					}
 				} finally {
 					SubLMain.Always_REDEFINE = was;
 				}
@@ -616,9 +632,9 @@ public class SubLMain extends Startup {
 				//initialize1TranslatedSystem(com.cyc.cycjava_3.cycl.cycl.class.getName());
 			}
 
-			if (!SubLMain.OPENCYC)
+			if (false && !SubLMain.OPENCYC)
 				initialize1TranslatedSystem("org.logicmoo.system.export_to_swipl");
-			if (SubLMain.TINY_KB)
+			if (false && SubLMain.TINY_KB)
 				initialize1TranslatedSystem("com.cyc.cycjava_1.cycl.dumper_larkc");
 
 			isSubLInitialized = true;
@@ -637,6 +653,8 @@ public class SubLMain extends Startup {
 		if (loadedTranslatedSystems.contains(str)) {
 			return;
 		}
+		Startup.init_subl();
+		SubLMain.commonSymbolsOK = true;
 		SubLPackage currentPackage = SubLPackage.getCurrentPackage();
 		boolean completed = false;
 		try {
@@ -725,10 +743,9 @@ public class SubLMain extends Startup {
 	 */
 	private static void sublispStartupDefaults() {
 		Main.noPrologJNI = true;
-		Interpreter.noinit = true;
-		Interpreter.nosystem = true;
+		//Startup.noinit = true;
+		//		Interpreter.nosystem = true;
 		Main.setSubLisp(true);
-		Main.isSubLispBindingMode = true;
 		noInitCyc = false;
 		hasCycCmdlineInits = true;
 		commonSymbolsOK = true;

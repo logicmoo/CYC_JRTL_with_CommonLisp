@@ -63,7 +63,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2157,7 +2157,7 @@ public final class html_tm_relation_editing extends SubLTranslatedFile implement
     }
 
     public static final SubLObject tm_cardinality_list_from_format_keyword(SubLObject format) {
-        SubLTrampolineFile.checkType(format, KEYWORDP);
+        SubLSystemTrampolineFile.checkType(format, KEYWORDP);
         {
             SubLObject pcase_var = format;
             if (pcase_var.eql($MANY_TO_MANY)) {

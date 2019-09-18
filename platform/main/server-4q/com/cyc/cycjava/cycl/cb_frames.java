@@ -117,7 +117,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -4151,7 +4151,7 @@ public final class cb_frames extends SubLTranslatedFile {
         deflexical("*CB-SPECIFY-SHOW-GLOSS-OPTIONS-TEXT*", $list67);
         deflexical("*CB-SPECIFY-SHOW-GLOSS-OPTIONS*", $list68);
         defparameter("*CB-SEARCH-AUTOCOMPLETE-ENABLED*", T);
-        deflexical("*COMPUTE-GLOSS-MAX-CLARIFYING-SENTENCES*", SubLTrampolineFile.maybeDefault($compute_gloss_max_clarifying_sentences$, $compute_gloss_max_clarifying_sentences$, THREE_INTEGER));
+        deflexical("*COMPUTE-GLOSS-MAX-CLARIFYING-SENTENCES*", SubLSystemTrampolineFile.maybeDefault($compute_gloss_max_clarifying_sentences$, $compute_gloss_max_clarifying_sentences$, THREE_INTEGER));
         defparameter("*USE-CYC-IR-TERMS-FOR-BROWSING?*", NIL);
         defvar("*CB-DEFAULT-INDEX-VIEW*", $LEGACY);
         return NIL;

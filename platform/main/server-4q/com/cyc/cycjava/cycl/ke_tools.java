@@ -58,7 +58,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -189,8 +189,8 @@ public final class ke_tools extends SubLTranslatedFile {
         if (mode == UNPROVIDED) {
             mode = $MIXED;
         }
-        SubLTrampolineFile.enforceType(fort_1, FORT_P);
-        SubLTrampolineFile.enforceType(fort_2, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort_1, FORT_P);
+        SubLSystemTrampolineFile.enforceType(fort_2, FORT_P);
         final SubLObject pcase_var = mode;
         if (pcase_var.eql($FIGURATIVE)) {
             return preds_of_instances(fort_1, fort_2, mt);

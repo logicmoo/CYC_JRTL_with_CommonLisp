@@ -57,7 +57,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -171,62 +171,62 @@ public final class cyblack_ksi extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject eksi_lock(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.getField2();
     }
 
     public static final SubLObject eksi_internals(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.getField3();
     }
 
     public static final SubLObject eksi_cyblack_application(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.getField4();
     }
 
     public static final SubLObject eksi_activation_pattern(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.getField5();
     }
 
     public static final SubLObject eksi_postings(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.getField6();
     }
 
     public static final SubLObject eksi_execution_function(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.getField7();
     }
 
     public static final SubLObject _csetf_eksi_lock(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.setField2(value);
     }
 
     public static final SubLObject _csetf_eksi_internals(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.setField3(value);
     }
 
     public static final SubLObject _csetf_eksi_cyblack_application(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.setField4(value);
     }
 
     public static final SubLObject _csetf_eksi_activation_pattern(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.setField5(value);
     }
 
     public static final SubLObject _csetf_eksi_postings(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.setField6(value);
     }
 
     public static final SubLObject _csetf_eksi_execution_function(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
+        SubLSystemTrampolineFile.checkType(v_object, EXTERNAL_KNOWLEDGE_SOURCE_INSTANTIATION_P);
         return v_object.setField7(value);
     }
 

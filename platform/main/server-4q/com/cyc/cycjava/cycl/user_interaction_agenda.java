@@ -101,7 +101,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 /**
@@ -173,7 +173,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	 */
 	@LispMethod(comment = "Return a UIMA which already exists for use in interacting with USER, or NIL if none.")
 	public static final SubLObject uimma_find_by_user(SubLObject user) {
-		SubLTrampolineFile.checkType(user, FORT_P);
+		SubLSystemTrampolineFile.checkType(user, FORT_P);
 		{
 			SubLObject v_answer = NIL;
 			SubLObject idx = system_uimma();
@@ -1644,7 +1644,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_id_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField2();
 	}
 
@@ -1654,7 +1654,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_agenda_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField3();
 	}
 
@@ -1664,7 +1664,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_mode_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField4();
 	}
 
@@ -1674,7 +1674,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_status_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField5();
 	}
 
@@ -1684,7 +1684,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_start_time_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField6();
 	}
 
@@ -1694,7 +1694,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_finish_time_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField7();
 	}
 
@@ -1704,7 +1704,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_parent_interaction_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField8();
 	}
 
@@ -1714,7 +1714,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_child_interactions_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField9();
 	}
 
@@ -1724,7 +1724,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_operator_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField10();
 	}
 
@@ -1734,7 +1734,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_args_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField11();
 	}
 
@@ -1744,7 +1744,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_result_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField12();
 	}
 
@@ -1754,7 +1754,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_state_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.getField13();
 	}
 
@@ -1764,7 +1764,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_id_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField2(value);
 	}
 
@@ -1774,7 +1774,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_agenda_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField3(value);
 	}
 
@@ -1784,7 +1784,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_mode_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField4(value);
 	}
 
@@ -1794,7 +1794,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_status_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField5(value);
 	}
 
@@ -1804,7 +1804,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_start_time_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField6(value);
 	}
 
@@ -1814,7 +1814,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_finish_time_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField7(value);
 	}
 
@@ -1824,7 +1824,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_parent_interaction_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField8(value);
 	}
 
@@ -1834,7 +1834,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_child_interactions_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField9(value);
 	}
 
@@ -1844,7 +1844,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_operator_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField10(value);
 	}
 
@@ -1854,7 +1854,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_args_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField11(value);
 	}
 
@@ -1864,7 +1864,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_result_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField12(value);
 	}
 
@@ -1874,7 +1874,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_ui_state_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_P);
 		return v_object.setField13(value);
 	}
 
@@ -2039,10 +2039,10 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 		if (args == UNPROVIDED) {
 			args = NIL;
 		}
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(mode, USER_INTERACTION_MODE_P);
-		SubLTrampolineFile.checkType(operator, UI_OPERATOR_P);
-		SubLTrampolineFile.checkType(args, LISTP);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(mode, USER_INTERACTION_MODE_P);
+		SubLSystemTrampolineFile.checkType(operator, UI_OPERATOR_P);
+		SubLSystemTrampolineFile.checkType(args, LISTP);
 		{
 			SubLObject interaction = make_user_interaction(UNPROVIDED);
 			SubLObject id = integer_sequence_generator.integer_sequence_generator_next(uia_isg(v_agenda));
@@ -2078,8 +2078,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_note_mode_alt(SubLObject interaction, SubLObject mode) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
-		SubLTrampolineFile.checkType(mode, USER_INTERACTION_MODE_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(mode, USER_INTERACTION_MODE_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -2111,8 +2111,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_note_status_alt(SubLObject interaction, SubLObject status) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
-		SubLTrampolineFile.checkType(status, USER_INTERACTION_STATUS_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(status, USER_INTERACTION_STATUS_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -2144,8 +2144,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_note_start_time_alt(SubLObject interaction, SubLObject start_time) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
-		SubLTrampolineFile.checkType(start_time, INTEGERP);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(start_time, INTEGERP);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -2177,8 +2177,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_note_finish_time_alt(SubLObject interaction, SubLObject finish_time) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
-		SubLTrampolineFile.checkType(finish_time, INTEGERP);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(finish_time, INTEGERP);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -2210,8 +2210,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_note_parent_alt(SubLObject interaction, SubLObject parent) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
-		SubLTrampolineFile.checkType(parent, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(parent, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -2243,8 +2243,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_add_child_alt(SubLObject interaction, SubLObject child) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
-		SubLTrampolineFile.checkType(child, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(child, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -2283,7 +2283,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_note_result_alt(SubLObject interaction, SubLObject result) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -2314,7 +2314,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_note_state_alt(SubLObject interaction, SubLObject state) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -2363,7 +2363,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_id_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField2();
 	}
 
@@ -2373,7 +2373,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_meta_agenda_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField3();
 	}
 
@@ -2383,7 +2383,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_isg_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField4();
 	}
 
@@ -2393,7 +2393,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_index_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField5();
 	}
 
@@ -2403,7 +2403,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_history_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField6();
 	}
 
@@ -2413,7 +2413,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_undos_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField7();
 	}
 
@@ -2423,7 +2423,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_messages_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField8();
 	}
 
@@ -2433,7 +2433,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_requirements_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField9();
 	}
 
@@ -2443,7 +2443,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_relevant_suggestions_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField10();
 	}
 
@@ -2453,7 +2453,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_possible_suggestions_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField11();
 	}
 
@@ -2463,7 +2463,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_comments_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField12();
 	}
 
@@ -2473,7 +2473,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_state_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.getField13();
 	}
 
@@ -2483,7 +2483,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_id_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField2(value);
 	}
 
@@ -2493,7 +2493,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_meta_agenda_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField3(value);
 	}
 
@@ -2503,7 +2503,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_isg_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField4(value);
 	}
 
@@ -2513,7 +2513,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_index_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField5(value);
 	}
 
@@ -2523,7 +2523,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_history_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField6(value);
 	}
 
@@ -2533,7 +2533,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_undos_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField7(value);
 	}
 
@@ -2543,7 +2543,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_messages_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField8(value);
 	}
 
@@ -2553,7 +2553,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_requirements_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField9(value);
 	}
 
@@ -2563,7 +2563,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_relevant_suggestions_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField10(value);
 	}
 
@@ -2573,7 +2573,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_possible_suggestions_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField11(value);
 	}
 
@@ -2583,7 +2583,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_comments_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField12(value);
 	}
 
@@ -2593,7 +2593,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uia_state_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_AGENDA_P);
 		return v_object.setField13(value);
 	}
 
@@ -2755,7 +2755,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject new_uia_alt(SubLObject meta_agenda) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 		{
 			SubLObject v_agenda = make_user_interaction_agenda(UNPROVIDED);
 			SubLObject id = integer_sequence_generator.integer_sequence_generator_next(uima_isg(meta_agenda));
@@ -2797,7 +2797,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_reset_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -2846,7 +2846,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_find_by_id_alt(SubLObject v_agenda, SubLObject id) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return dictionary.dictionary_lookup(uia_index(v_agenda), id, UNPROVIDED);
 	}
 
@@ -2856,7 +2856,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_find_by_id_string_alt(SubLObject v_agenda, SubLObject id_string) {
-		SubLTrampolineFile.checkType(id_string, STRINGP);
+		SubLSystemTrampolineFile.checkType(id_string, STRINGP);
 		return uia_find_by_id(v_agenda, parse_integer(id_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
 	}
 
@@ -2866,7 +2866,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_some_interaction_p_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return makeBoolean(NIL == dictionary.dictionary_empty_p(uia_index(v_agenda)));
 	}
 
@@ -2876,7 +2876,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_interaction_sequence_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		{
 			SubLObject interactions = dictionary.dictionary_values(uia_index(v_agenda));
 			interactions = Sort.sort(interactions, symbol_function($sym104$_), symbol_function(UI_ID));
@@ -2892,7 +2892,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_some_history_p_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return makeBoolean(NIL == queues.queue_empty_p(uia_history(v_agenda)));
 	}
 
@@ -2902,7 +2902,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_history_sequence_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return queues.queue_elements(uia_history(v_agenda));
 	}
 
@@ -2912,7 +2912,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_some_undo_p_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return makeBoolean(NIL == stacks.stack_empty_p(uia_undos(v_agenda)));
 	}
 
@@ -2922,7 +2922,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_undo_sequence_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return stacks.stack_elements(uia_undos(v_agenda));
 	}
 
@@ -2932,7 +2932,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_some_message_p_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return makeBoolean(NIL == queues.queue_empty_p(uia_messages(v_agenda)));
 	}
 
@@ -2942,7 +2942,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_message_sequence_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return queues.queue_elements(uia_messages(v_agenda));
 	}
 
@@ -2952,7 +2952,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_some_requirement_p_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return makeBoolean(NIL == stacks.stack_empty_p(uia_requirements(v_agenda)));
 	}
 
@@ -2962,7 +2962,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_requirement_sequence_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return stacks.stack_elements(uia_requirements(v_agenda));
 	}
 
@@ -2972,7 +2972,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_some_relevant_suggestion_p_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return makeBoolean(NIL == stacks.stack_empty_p(uia_relevant_suggestions(v_agenda)));
 	}
 
@@ -2982,7 +2982,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_relevant_suggestion_sequence_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return stacks.stack_elements(uia_relevant_suggestions(v_agenda));
 	}
 
@@ -2992,7 +2992,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_some_possible_suggestion_p_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return makeBoolean(NIL == queues.queue_empty_p(uia_possible_suggestions(v_agenda)));
 	}
 
@@ -3002,7 +3002,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_possible_suggestion_sequence_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return queues.queue_elements(uia_possible_suggestions(v_agenda));
 	}
 
@@ -3012,7 +3012,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_some_comment_p_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return makeBoolean(NIL == queues.queue_empty_p(uia_comments(v_agenda)));
 	}
 
@@ -3022,7 +3022,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_comment_sequence_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return queues.queue_elements(uia_comments(v_agenda));
 	}
 
@@ -3048,7 +3048,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_add_to_index_alt(SubLObject v_agenda, SubLObject id, SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3079,8 +3079,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_add_to_history_alt(SubLObject v_agenda, SubLObject interaction) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3112,7 +3112,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_clear_undos_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3143,8 +3143,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_add_undo_alt(SubLObject v_agenda, SubLObject undo) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(undo, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(undo, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3176,8 +3176,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_rem_undo_alt(SubLObject v_agenda, SubLObject undo) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(undo, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(undo, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3209,8 +3209,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_add_message_alt(SubLObject v_agenda, SubLObject message) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(message, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(message, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3242,8 +3242,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_rem_message_alt(SubLObject v_agenda, SubLObject message) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(message, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(message, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3275,8 +3275,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_add_requirement_alt(SubLObject v_agenda, SubLObject requirement) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(requirement, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(requirement, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3308,8 +3308,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_rem_requirement_alt(SubLObject v_agenda, SubLObject requirement) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(requirement, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(requirement, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3341,8 +3341,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_add_relevant_suggestion_alt(SubLObject v_agenda, SubLObject relevant_suggestion) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(relevant_suggestion, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(relevant_suggestion, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3374,8 +3374,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_rem_relevant_suggestion_alt(SubLObject v_agenda, SubLObject relevant_suggestion) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(relevant_suggestion, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(relevant_suggestion, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3407,8 +3407,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_add_possible_suggestion_alt(SubLObject v_agenda, SubLObject possible_suggestion) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(possible_suggestion, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(possible_suggestion, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3440,8 +3440,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_rem_possible_suggestion_alt(SubLObject v_agenda, SubLObject possible_suggestion) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(possible_suggestion, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(possible_suggestion, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3473,8 +3473,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_add_comment_alt(SubLObject v_agenda, SubLObject comment) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(comment, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(comment, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3506,8 +3506,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_rem_comment_alt(SubLObject v_agenda, SubLObject comment) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(comment, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(comment, USER_INTERACTION_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3539,7 +3539,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_clear_comments_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -3622,8 +3622,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_process_new_comment_alt(SubLObject v_agenda, SubLObject comment) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(comment, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(comment, USER_INTERACTION_P);
 		if (NIL != uima_interface_parameter_declaration.uia_treat_comments_as_mumblingP(v_agenda)) {
 			uia_convert_comment_to_mumble(v_agenda, comment);
 		} else {
@@ -3742,7 +3742,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_note_state_alt(SubLObject v_agenda, SubLObject state) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -4477,7 +4477,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_id_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.getField2();
 	}
 
@@ -4487,7 +4487,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_isg_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.getField3();
 	}
 
@@ -4497,7 +4497,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_index_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.getField4();
 	}
 
@@ -4507,7 +4507,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_open_agendas_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.getField5();
 	}
 
@@ -4517,7 +4517,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_current_agenda_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.getField6();
 	}
 
@@ -4527,7 +4527,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_state_alt(SubLObject v_object) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.getField7();
 	}
 
@@ -4537,7 +4537,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uima_id_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.setField2(value);
 	}
 
@@ -4547,7 +4547,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uima_isg_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.setField3(value);
 	}
 
@@ -4557,7 +4557,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uima_index_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.setField4(value);
 	}
 
@@ -4567,7 +4567,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uima_open_agendas_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.setField5(value);
 	}
 
@@ -4577,7 +4577,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uima_current_agenda_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.setField6(value);
 	}
 
@@ -4587,7 +4587,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject _csetf_uima_state_alt(SubLObject v_object, SubLObject value) {
-		SubLTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_object, USER_INTERACTION_META_AGENDA_P);
 		return v_object.setField7(value);
 	}
 
@@ -4717,7 +4717,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_reset_alt(SubLObject meta_agenda) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -4756,7 +4756,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_find_by_id_alt(SubLObject meta_agenda, SubLObject id) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 		return dictionary.dictionary_lookup(uima_index(meta_agenda), id, UNPROVIDED);
 	}
 
@@ -4766,7 +4766,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_find_by_id_string_alt(SubLObject meta_agenda, SubLObject id_string) {
-		SubLTrampolineFile.checkType(id_string, STRINGP);
+		SubLSystemTrampolineFile.checkType(id_string, STRINGP);
 		return uima_find_by_id(meta_agenda, parse_integer(id_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
 	}
 
@@ -4776,7 +4776,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_some_open_agendas_p_alt(SubLObject meta_agenda) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 		return makeBoolean(NIL == stacks.stack_empty_p(uima_open_agendas(meta_agenda)));
 	}
 
@@ -4786,7 +4786,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_open_agendas_sequence_alt(SubLObject meta_agenda) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 		return stacks.stack_elements(uima_open_agendas(meta_agenda));
 	}
 
@@ -4798,7 +4798,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	public static final SubLObject uima_match_mt_to_agenda_alt(SubLObject meta_agenda, SubLObject mt) {
 		{
 			final SubLThread thread = SubLProcess.currentSubLThread();
-			SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+			SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 			{
 				SubLObject result = NIL;
 				SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(uima_index(meta_agenda)));
@@ -4839,7 +4839,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_add_to_index_alt(SubLObject meta_agenda, SubLObject id, SubLObject v_object) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -4870,8 +4870,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_add_open_agenda_alt(SubLObject meta_agenda, SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -4903,7 +4903,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_clear_current_agenda_alt(SubLObject meta_agenda) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -4934,8 +4934,8 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_note_current_agenda_alt(SubLObject meta_agenda, SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -4967,7 +4967,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_note_state_alt(SubLObject meta_agenda, SubLObject state) {
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 		{
 			SubLObject lock = $uia_lock$.getGlobalValue();
 			SubLObject release = NIL;
@@ -5208,7 +5208,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	 */
 	@LispMethod(comment = "Return the meta-agenda for INTERACTION.")
 	public static final SubLObject ui_meta_agenda_alt(SubLObject interaction) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
 		return uia_meta_agenda(ui_agenda(interaction));
 	}
 
@@ -5245,7 +5245,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_state_plist_to_state_alt(SubLObject plist) {
-		SubLTrampolineFile.checkType(plist, PROPERTY_LIST_P);
+		SubLSystemTrampolineFile.checkType(plist, PROPERTY_LIST_P);
 		return plist;
 	}
 
@@ -5258,7 +5258,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 		if (v_default == UNPROVIDED) {
 			v_default = NIL;
 		}
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
 		return getf(ui_state(interaction), property, v_default);
 	}
 
@@ -5295,7 +5295,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_state_plist_to_state_alt(SubLObject plist) {
-		SubLTrampolineFile.checkType(plist, PROPERTY_LIST_P);
+		SubLSystemTrampolineFile.checkType(plist, PROPERTY_LIST_P);
 		return plist;
 	}
 
@@ -5322,7 +5322,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 		if (v_default == UNPROVIDED) {
 			v_default = NIL;
 		}
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		return getf(uia_state(v_agenda), property, v_default);
 	}
 
@@ -5361,7 +5361,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uima_state_plist_to_state_alt(SubLObject plist) {
-		SubLTrampolineFile.checkType(plist, PROPERTY_LIST_P);
+		SubLSystemTrampolineFile.checkType(plist, PROPERTY_LIST_P);
 		return plist;
 	}
 
@@ -5386,7 +5386,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 		if (v_default == UNPROVIDED) {
 			v_default = NIL;
 		}
-		SubLTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(meta_agenda, USER_INTERACTION_META_AGENDA_P);
 		return getf(uima_state(meta_agenda), property, v_default);
 	}
 
@@ -5589,7 +5589,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	 */
 	@LispMethod(comment = "Return a list of all interactions that are ancestors of INTERACTION.")
 	public static final SubLObject ui_ancestor_interactions_alt(SubLObject interaction) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
 		{
 			SubLObject v_answer = NIL;
 			SubLObject parent = NIL;
@@ -5616,7 +5616,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	 */
 	@LispMethod(comment = "Return all pending interactions that are descendants of INTERACTION.")
 	public static final SubLObject ui_pending_descendant_interactions_alt(SubLObject interaction) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
 		return nreverse(ui_pending_descendants_recursive(interaction, NIL));
 	}
 
@@ -5816,7 +5816,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	 */
 	@LispMethod(comment = "Determine the next interaction to pursue")
 	public static final SubLObject uia_next_action_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		if (NIL != uia_some_message_p(v_agenda)) {
 			{
 				SubLObject pending = uia_best_pending_action(uia_messages(v_agenda));
@@ -6058,7 +6058,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject uia_signature_alt(SubLObject v_agenda) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
 		{
 			SubLObject agenda_id = uia_id(v_agenda);
 			SubLObject meta_agenda = uia_meta_agenda(v_agenda);
@@ -6080,7 +6080,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	 */
 	@LispMethod(comment = "Uses the signature and the UIMMA to find a user interaction.")
 	public static final SubLObject find_uia_by_signature_alt(SubLObject signature) {
-		SubLTrampolineFile.checkType(signature, UIA_SIGNATURE_P);
+		SubLSystemTrampolineFile.checkType(signature, UIA_SIGNATURE_P);
 		{
 			SubLObject datum = signature;
 			SubLObject current = datum;
@@ -6145,7 +6145,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_signature_alt(SubLObject interaction) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
 		{
 			SubLObject interaction_id = ui_id(interaction);
 			SubLObject v_agenda = ui_agenda(interaction);
@@ -6163,7 +6163,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject ui_signature_to_property_list_alt(SubLObject signature) {
-		SubLTrampolineFile.checkType(signature, UI_SIGNATURE_P);
+		SubLSystemTrampolineFile.checkType(signature, UI_SIGNATURE_P);
 		{
 			SubLObject datum = signature;
 			SubLObject current = datum;
@@ -6214,7 +6214,7 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	 */
 	@LispMethod(comment = "Uses the signature and the UIMMA to find a user interaction.")
 	public static final SubLObject find_ui_by_signature_alt(SubLObject signature) {
-		SubLTrampolineFile.checkType(signature, UI_SIGNATURE_P);
+		SubLSystemTrampolineFile.checkType(signature, UI_SIGNATURE_P);
 		{
 			SubLObject datum = signature;
 			SubLObject current = datum;
@@ -7299,9 +7299,9 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject make_ui_request_alt(SubLObject interaction, SubLObject action_type, SubLObject plist) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
-		SubLTrampolineFile.checkType(action_type, UI_ACTION_TYPE_P);
-		SubLTrampolineFile.checkType(plist, PROPERTY_LIST_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(action_type, UI_ACTION_TYPE_P);
+		SubLSystemTrampolineFile.checkType(plist, PROPERTY_LIST_P);
 		return listS(ui_operator(interaction), action_type, ui_signature(interaction), plist);
 	}
 
@@ -7329,9 +7329,9 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject make_ui_reply_with_interaction_alt(SubLObject interaction, SubLObject action_type, SubLObject plist) {
-		SubLTrampolineFile.checkType(interaction, USER_INTERACTION_P);
-		SubLTrampolineFile.checkType(action_type, UI_ACTION_TYPE_P);
-		SubLTrampolineFile.checkType(plist, PROPERTY_LIST_P);
+		SubLSystemTrampolineFile.checkType(interaction, USER_INTERACTION_P);
+		SubLSystemTrampolineFile.checkType(action_type, UI_ACTION_TYPE_P);
+		SubLSystemTrampolineFile.checkType(plist, PROPERTY_LIST_P);
 		return listS(ui_operator(interaction), action_type, $SIGNATURE, ui_signature(interaction), plist);
 	}
 
@@ -7343,10 +7343,10 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject make_ui_reply_with_agenda_alt(SubLObject v_agenda, SubLObject operator, SubLObject action_type, SubLObject plist) {
-		SubLTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
-		SubLTrampolineFile.checkType(operator, UI_OPERATOR_P);
-		SubLTrampolineFile.checkType(action_type, UI_ACTION_TYPE_P);
-		SubLTrampolineFile.checkType(plist, PROPERTY_LIST_P);
+		SubLSystemTrampolineFile.checkType(v_agenda, USER_INTERACTION_AGENDA_P);
+		SubLSystemTrampolineFile.checkType(operator, UI_OPERATOR_P);
+		SubLSystemTrampolineFile.checkType(action_type, UI_ACTION_TYPE_P);
+		SubLSystemTrampolineFile.checkType(plist, PROPERTY_LIST_P);
 		return listS(operator, action_type, $AGENDA_SIGNATURE, uia_signature(v_agenda), plist);
 	}
 
@@ -7359,9 +7359,9 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static final SubLObject make_ui_reply_alt(SubLObject operator, SubLObject action_type, SubLObject plist) {
-		SubLTrampolineFile.checkType(operator, UI_OPERATOR_P);
-		SubLTrampolineFile.checkType(action_type, UI_ACTION_TYPE_P);
-		SubLTrampolineFile.checkType(plist, PROPERTY_LIST_P);
+		SubLSystemTrampolineFile.checkType(operator, UI_OPERATOR_P);
+		SubLSystemTrampolineFile.checkType(action_type, UI_ACTION_TYPE_P);
+		SubLSystemTrampolineFile.checkType(plist, PROPERTY_LIST_P);
 		return listS(operator, action_type, plist);
 	}
 
@@ -8585,17 +8585,17 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 
 	public static SubLObject init_user_interaction_agenda_file() {
 		if (SubLFiles.USE_V1) {
-			deflexical("*UIA-LOCK*", SubLTrampolineFile.maybeDefault($uia_lock$, $uia_lock$, () -> make_lock($$$User_Interaction_Agenda_lock)));
+			deflexical("*UIA-LOCK*", SubLSystemTrampolineFile.maybeDefault($uia_lock$, $uia_lock$, () -> make_lock($$$User_Interaction_Agenda_lock)));
 			deflexical("*USER-INTERACTION-MODES*", $list4);
 			deflexical("*USER-INTERACTION-STATUSES*", $list5);
 			defconstant("*DTP-USER-INTERACTION*", USER_INTERACTION);
 			defconstant("*DTP-USER-INTERACTION-AGENDA*", USER_INTERACTION_AGENDA);
 			defparameter("*UIA-CAN-TREAT-COMMENTS-AS-MUMBLING?*", T);
 			defconstant("*DTP-USER-INTERACTION-META-AGENDA*", USER_INTERACTION_META_AGENDA);
-			deflexical("*UIMMA*", SubLTrampolineFile.maybeDefault($uimma$, $uimma$, NIL));
-			deflexical("*UIMMA-DEFAULT-LOCALE*", SubLTrampolineFile.maybeDefault($uimma_default_locale$, $uimma_default_locale$, () -> NIL != system_info.cycorp_execution_context_p() ? $$EnglishLanguage : $$EnglishLanguage));
-			deflexical("*UIMMA-DEFAULT-GENERATION-MT*", SubLTrampolineFile.maybeDefault($uimma_default_generation_mt$, $uimma_default_generation_mt$, $$EnglishParaphraseMt));
-			deflexical("*UIMMA-DEFAULT-DOMAIN-MT*", SubLTrampolineFile.maybeDefault($uimma_default_domain_mt$, $uimma_default_domain_mt$, $$EverythingPSC));
+			deflexical("*UIMMA*", SubLSystemTrampolineFile.maybeDefault($uimma$, $uimma$, NIL));
+			deflexical("*UIMMA-DEFAULT-LOCALE*", SubLSystemTrampolineFile.maybeDefault($uimma_default_locale$, $uimma_default_locale$, () -> NIL != system_info.cycorp_execution_context_p() ? $$EnglishLanguage : $$EnglishLanguage));
+			deflexical("*UIMMA-DEFAULT-GENERATION-MT*", SubLSystemTrampolineFile.maybeDefault($uimma_default_generation_mt$, $uimma_default_generation_mt$, $$EnglishParaphraseMt));
+			deflexical("*UIMMA-DEFAULT-DOMAIN-MT*", SubLSystemTrampolineFile.maybeDefault($uimma_default_domain_mt$, $uimma_default_domain_mt$, $$EverythingPSC));
 			defparameter("*UIA-FRAMELESS-ENVIRONMENT?*", NIL);
 			deflexical("*INVALID-UI-SIGNATURE*", $list229);
 			deflexical("*INVALID-UI-REQUEST*", list($UNKNOWN_INTERACTION, $UNKNOWN_ACTION, invalid_ui_signature()));
@@ -8614,17 +8614,17 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 	}
 
 	public static SubLObject init_user_interaction_agenda_file_Previous() {
-		deflexical("*UIA-LOCK*", SubLTrampolineFile.maybeDefault($uia_lock$, $uia_lock$, () -> make_lock($$$User_Interaction_Agenda_lock)));
+		deflexical("*UIA-LOCK*", SubLSystemTrampolineFile.maybeDefault($uia_lock$, $uia_lock$, () -> make_lock($$$User_Interaction_Agenda_lock)));
 		deflexical("*USER-INTERACTION-MODES*", $list4);
 		deflexical("*USER-INTERACTION-STATUSES*", $list5);
 		defconstant("*DTP-USER-INTERACTION*", USER_INTERACTION);
 		defconstant("*DTP-USER-INTERACTION-AGENDA*", USER_INTERACTION_AGENDA);
 		defparameter("*UIA-CAN-TREAT-COMMENTS-AS-MUMBLING?*", T);
 		defconstant("*DTP-USER-INTERACTION-META-AGENDA*", USER_INTERACTION_META_AGENDA);
-		deflexical("*UIMMA*", SubLTrampolineFile.maybeDefault($uimma$, $uimma$, NIL));
-		deflexical("*UIMMA-DEFAULT-LOCALE*", SubLTrampolineFile.maybeDefault($uimma_default_locale$, $uimma_default_locale$, () -> NIL != system_info.cycorp_execution_context_p() ? $$EnglishLanguage : $$EnglishLanguage));
-		deflexical("*UIMMA-DEFAULT-GENERATION-MT*", SubLTrampolineFile.maybeDefault($uimma_default_generation_mt$, $uimma_default_generation_mt$, $$EnglishParaphraseMt));
-		deflexical("*UIMMA-DEFAULT-DOMAIN-MT*", SubLTrampolineFile.maybeDefault($uimma_default_domain_mt$, $uimma_default_domain_mt$, $$EverythingPSC));
+		deflexical("*UIMMA*", SubLSystemTrampolineFile.maybeDefault($uimma$, $uimma$, NIL));
+		deflexical("*UIMMA-DEFAULT-LOCALE*", SubLSystemTrampolineFile.maybeDefault($uimma_default_locale$, $uimma_default_locale$, () -> NIL != system_info.cycorp_execution_context_p() ? $$EnglishLanguage : $$EnglishLanguage));
+		deflexical("*UIMMA-DEFAULT-GENERATION-MT*", SubLSystemTrampolineFile.maybeDefault($uimma_default_generation_mt$, $uimma_default_generation_mt$, $$EnglishParaphraseMt));
+		deflexical("*UIMMA-DEFAULT-DOMAIN-MT*", SubLSystemTrampolineFile.maybeDefault($uimma_default_domain_mt$, $uimma_default_domain_mt$, $$EverythingPSC));
 		defparameter("*UIA-FRAMELESS-ENVIRONMENT?*", NIL);
 		deflexical("*INVALID-UI-SIGNATURE*", $list229);
 		deflexical("*INVALID-UI-REQUEST*", list($UNKNOWN_INTERACTION, $UNKNOWN_ACTION, invalid_ui_signature()));

@@ -1,0 +1,1 @@
+include class UPnPAction.class UPnPDevice.class UPnPEventListener.class UPnPIcon.class UPnPService.class UPnPStateVariable.class version 1.0

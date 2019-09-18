@@ -42,7 +42,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -708,9 +708,9 @@ public final class event_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject init_event_utilities_file() {
-        deflexical("*GENERIC-EVENT-DISPATCHER-LOCK*", SubLTrampolineFile.maybeDefault($generic_event_dispatcher_lock$, $generic_event_dispatcher_lock$, () -> make_lock($str9$Generic_Event_Dispatcher_Process_)));
-        deflexical("*GENERIC-EVENT-DISPATCHER-APPLICATIONS*", SubLTrampolineFile.maybeDefault($generic_event_dispatcher_applications$, $generic_event_dispatcher_applications$, () -> bag.new_bag(UNPROVIDED, UNPROVIDED)));
-        deflexical("*GENERIC-EVENT-DISPATCHER-PROCESS*", SubLTrampolineFile.maybeDefault($generic_event_dispatcher_process$, $generic_event_dispatcher_process$, NIL));
+        deflexical("*GENERIC-EVENT-DISPATCHER-LOCK*", SubLSystemTrampolineFile.maybeDefault($generic_event_dispatcher_lock$, $generic_event_dispatcher_lock$, () -> make_lock($str9$Generic_Event_Dispatcher_Process_)));
+        deflexical("*GENERIC-EVENT-DISPATCHER-APPLICATIONS*", SubLSystemTrampolineFile.maybeDefault($generic_event_dispatcher_applications$, $generic_event_dispatcher_applications$, () -> bag.new_bag(UNPROVIDED, UNPROVIDED)));
+        deflexical("*GENERIC-EVENT-DISPATCHER-PROCESS*", SubLSystemTrampolineFile.maybeDefault($generic_event_dispatcher_process$, $generic_event_dispatcher_process$, NIL));
         return NIL;
     }
 

@@ -39,7 +39,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -335,7 +335,7 @@ public final class encapsulation extends SubLTranslatedFile {
         deflexical("*ENCAPSULATE-METHOD-TABLE*", make_vector($int$256, NIL));
         defparameter("*UNENCAPSULATE-BELIEVE-NAMES*", NIL);
         defparameter("*UNENCAPSULATE-CONSTANT-VIA-NAME-OPTIMIZATION?*", NIL);
-        deflexical("*UNENCAPSULATE-FIND-CONSTANT-LOOKASIDE-TABLE*", SubLTrampolineFile.maybeDefault($unencapsulate_find_constant_lookaside_table$, $unencapsulate_find_constant_lookaside_table$, NIL));
+        deflexical("*UNENCAPSULATE-FIND-CONSTANT-LOOKASIDE-TABLE*", SubLSystemTrampolineFile.maybeDefault($unencapsulate_find_constant_lookaside_table$, $unencapsulate_find_constant_lookaside_table$, NIL));
         deflexical("*UNENCAPSULATE-FIND-CONSTANT-CAPACITY*", TWENTY_INTEGER);
         return NIL;
     }

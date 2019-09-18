@@ -36,7 +36,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -597,7 +597,7 @@ public final class parsing_vars extends SubLTranslatedFile {
         deflexical("*PSP-ENVIRONMENTAL-GLOBALS-NEW*", append($list11, lexicon_vars.lexicon_filters()));
         defparameter("*PSP-MAX-EDGES-PER-SPAN*", $int$2120);
         defparameter("*PSP-MAX-EDGES-PER-CHART*", $int$100000);
-        deflexical("*PSP-CACHED-INTERFACE-HELPER-CLEARING-FUNCTIONS*", SubLTrampolineFile.maybeDefault($psp_cached_interface_helper_clearing_functions$, $psp_cached_interface_helper_clearing_functions$, NIL));
+        deflexical("*PSP-CACHED-INTERFACE-HELPER-CLEARING-FUNCTIONS*", SubLSystemTrampolineFile.maybeDefault($psp_cached_interface_helper_clearing_functions$, $psp_cached_interface_helper_clearing_functions$, NIL));
         defparameter("*VARIABLE-UNIQUIFICATION-STORE*", dictionary.new_dictionary(EQUALP, UNPROVIDED));
         defparameter("*LINKAGE-CREATION-RULES*", $DEFAULT);
         defparameter("*PARSE-TREE-MT*", NIL);

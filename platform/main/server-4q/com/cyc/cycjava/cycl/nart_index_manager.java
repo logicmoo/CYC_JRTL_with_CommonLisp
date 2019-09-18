@@ -21,7 +21,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -257,7 +257,7 @@ public final class nart_index_manager extends SubLTranslatedFile {
     }
 
     public static SubLObject init_nart_index_manager_file() {
-        deflexical("*NART-INDEX-MANAGER*", SubLTrampolineFile.maybeDefault($nart_index_manager$, $nart_index_manager$, $UNINITIALIZED));
+        deflexical("*NART-INDEX-MANAGER*", SubLSystemTrampolineFile.maybeDefault($nart_index_manager$, $nart_index_manager$, $UNINITIALIZED));
         deflexical("*NART-INDEX-LRU-SIZE-PERCENTAGE*", TWENTY_INTEGER);
         deflexical("*NART-INDEX-LRU-SIZE-MAX*", $int$30000);
         return NIL;

@@ -75,7 +75,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2081,7 +2081,7 @@ public final class np_parser extends SubLTranslatedFile {
         deflexical("*CODE-CONSTRAINT-POSES*", $list40);
         defparameter("*NPP-SPECIFY-SEMTRANS?*", NIL);
         deflexical("*WF-COL-TEMPLATE-COMBO?-CACHING-STATE*", NIL);
-        deflexical("*PREP-SEMTRANS-HASH*", SubLTrampolineFile.maybeDefault($prep_semtrans_hash$, $prep_semtrans_hash$, () -> make_hash_table($int$48, symbol_function(EQUALP), UNPROVIDED)));
+        deflexical("*PREP-SEMTRANS-HASH*", SubLSystemTrampolineFile.maybeDefault($prep_semtrans_hash$, $prep_semtrans_hash$, () -> make_hash_table($int$48, symbol_function(EQUALP), UNPROVIDED)));
         return NIL;
     }
 

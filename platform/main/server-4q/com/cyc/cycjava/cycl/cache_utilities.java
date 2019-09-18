@@ -68,7 +68,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class cache_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new cache_utilities();
@@ -910,8 +910,8 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     }
 
     public static SubLObject new_cache_metrics_with_counts(final SubLObject hits, final SubLObject misses) {
-        SubLTrampolineFile.enforceType(hits, NON_NEGATIVE_INTEGER_P);
-        SubLTrampolineFile.enforceType(misses, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(hits, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(misses, NON_NEGATIVE_INTEGER_P);
         return reset_cache_metrics_counts(new_cache_metrics(), hits, misses);
     }
 

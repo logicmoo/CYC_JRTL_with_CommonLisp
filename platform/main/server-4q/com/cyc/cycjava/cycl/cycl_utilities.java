@@ -128,7 +128,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -3089,7 +3089,7 @@ public final class cycl_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject negate(final SubLObject form) {
-        SubLTrampolineFile.enforceType(form, POSSIBLY_SENTENCE_OR_VARIABLE_P);
+        SubLSystemTrampolineFile.enforceType(form, POSSIBLY_SENTENCE_OR_VARIABLE_P);
         if (NIL != negatedP(form)) {
             return formula_arg1(form, UNPROVIDED);
         }

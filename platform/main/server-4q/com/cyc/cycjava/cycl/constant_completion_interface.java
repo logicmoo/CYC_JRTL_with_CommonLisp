@@ -12,7 +12,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -92,10 +92,10 @@ public final class constant_completion_interface extends SubLTranslatedFile {
         if (end == UNPROVIDED) {
             end = NIL;
         }
-        SubLTrampolineFile.enforceType(string, STRINGP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         if (NIL != end) {
-            SubLTrampolineFile.enforceType(end, FIXNUMP);
+            SubLSystemTrampolineFile.enforceType(end, FIXNUMP);
         }
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_CONSTANT_COMPLETE_EXACT, list(QUOTE, string), list(QUOTE, start), list(QUOTE, end)));
@@ -120,12 +120,12 @@ public final class constant_completion_interface extends SubLTranslatedFile {
         if (end == UNPROVIDED) {
             end = NIL;
         }
-        SubLTrampolineFile.enforceType(prefix, STRINGP);
-        SubLTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
-        SubLTrampolineFile.enforceType(exact_lengthP, BOOLEANP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(prefix, STRINGP);
+        SubLSystemTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(exact_lengthP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         if (NIL != end) {
-            SubLTrampolineFile.enforceType(end, FIXNUMP);
+            SubLSystemTrampolineFile.enforceType(end, FIXNUMP);
         }
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_CONSTANT_COMPLETE, list(QUOTE, prefix), list(QUOTE, case_sensitiveP), list(QUOTE, exact_lengthP), list(QUOTE, start), list(QUOTE, end)));
@@ -147,11 +147,11 @@ public final class constant_completion_interface extends SubLTranslatedFile {
         if (end == UNPROVIDED) {
             end = NIL;
         }
-        SubLTrampolineFile.enforceType(substring, STRINGP);
-        SubLTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(substring, STRINGP);
+        SubLSystemTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         if (NIL != end) {
-            SubLTrampolineFile.enforceType(end, FIXNUMP);
+            SubLSystemTrampolineFile.enforceType(end, FIXNUMP);
         }
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_CONSTANT_APROPOS, list(QUOTE, substring), list(QUOTE, case_sensitiveP), list(QUOTE, start), list(QUOTE, end)));
@@ -173,11 +173,11 @@ public final class constant_completion_interface extends SubLTranslatedFile {
         if (end == UNPROVIDED) {
             end = NIL;
         }
-        SubLTrampolineFile.enforceType(postfix, STRINGP);
-        SubLTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(postfix, STRINGP);
+        SubLSystemTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         if (NIL != end) {
-            SubLTrampolineFile.enforceType(end, FIXNUMP);
+            SubLSystemTrampolineFile.enforceType(end, FIXNUMP);
         }
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_CONSTANT_POSTFIX, list(QUOTE, postfix), list(QUOTE, case_sensitiveP), list(QUOTE, start), list(QUOTE, end)));
@@ -202,12 +202,12 @@ public final class constant_completion_interface extends SubLTranslatedFile {
         if (strictP == UNPROVIDED) {
             strictP = NIL;
         }
-        SubLTrampolineFile.enforceType(n, NON_NEGATIVE_INTEGER_P);
-        SubLTrampolineFile.enforceType(string, STRINGP);
-        SubLTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(n, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         if (NIL != end) {
-            SubLTrampolineFile.enforceType(end, FIXNUMP);
+            SubLSystemTrampolineFile.enforceType(end, FIXNUMP);
         }
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_N_CONSTANTS_BEFORE, list(QUOTE, n), list(QUOTE, string), list(QUOTE, case_sensitiveP), list(QUOTE, start), list(QUOTE, end), list(QUOTE, strictP)));
@@ -232,12 +232,12 @@ public final class constant_completion_interface extends SubLTranslatedFile {
         if (strictP == UNPROVIDED) {
             strictP = NIL;
         }
-        SubLTrampolineFile.enforceType(n, NON_NEGATIVE_INTEGER_P);
-        SubLTrampolineFile.enforceType(string, STRINGP);
-        SubLTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
-        SubLTrampolineFile.enforceType(start, FIXNUMP);
+        SubLSystemTrampolineFile.enforceType(n, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(string, STRINGP);
+        SubLSystemTrampolineFile.enforceType(case_sensitiveP, BOOLEANP);
+        SubLSystemTrampolineFile.enforceType(start, FIXNUMP);
         if (NIL != end) {
-            SubLTrampolineFile.enforceType(end, FIXNUMP);
+            SubLSystemTrampolineFile.enforceType(end, FIXNUMP);
         }
         if (NIL != hl_interface_infrastructure.hl_access_remoteP()) {
             return hl_interface_infrastructure.hl_store_remote_eval(list(KB_N_CONSTANTS_AFTER, list(QUOTE, n), list(QUOTE, string), list(QUOTE, case_sensitiveP), list(QUOTE, start), list(QUOTE, end), list(QUOTE, strictP)));

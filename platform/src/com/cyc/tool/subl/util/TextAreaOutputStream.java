@@ -44,7 +44,7 @@ public class TextAreaOutputStream extends OutputStream {
 	public void write(byte[] b, int off, int len) throws IOException {
 		isScolledToBottom = true;
 		try {
-			SwingUtilities.invokeAndWait(new SafeRunnable() {
+			SwingUtilities.invokeAndWait(new SafeRunnable(null) {
 				@Override
 				public void safeRun() {
 					isScolledToBottom = TextAreaOutputStream.this.isScolledToBottom();
@@ -63,7 +63,7 @@ public class TextAreaOutputStream extends OutputStream {
 			return;
 		textArea.append(new String(b, off, len));
 		if (isScolledToBottom)
-			SwingUtilities.invokeLater(new SafeRunnable() {
+			SwingUtilities.invokeLater(new SafeRunnable(null) {
 				@Override
 				public void safeRun() {
 					TextAreaOutputStream.this.scrollTextAreaToBottom();

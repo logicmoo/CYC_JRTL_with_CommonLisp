@@ -60,7 +60,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class cycml_generator extends SubLTranslatedFile {
     public static final SubLFile me = new cycml_generator();
@@ -765,19 +765,19 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         }
         assert NIL != cycml_kp_info_p(cycml_kp_info) : "cycml_generator.cycml_kp_info_p(cycml_kp_info) " + "CommonSymbols.NIL != cycml_generator.cycml_kp_info_p(cycml_kp_info) " + cycml_kp_info;
         assert NIL != cycl_grammar.cycl_constant_p(constant) : "cycl_grammar.cycl_constant_p(constant) " + "CommonSymbols.NIL != cycl_grammar.cycl_constant_p(constant) " + constant;
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
-        if (((NIL != operation_second) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_second))) {
+        if (((NIL != operation_second) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_second))) {
             throw new AssertionError(operation_second);
         }
-        if (((NIL != purpose) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
+        if (((NIL != purpose) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
             throw new AssertionError(purpose);
         }
         SubLObject operations = cycml_kp_info_operations(cycml_kp_info);
@@ -804,19 +804,19 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         }
         assert NIL != cycml_kp_info_p(cycml_kp_info) : "cycml_generator.cycml_kp_info_p(cycml_kp_info) " + "CommonSymbols.NIL != cycml_generator.cycml_kp_info_p(cycml_kp_info) " + cycml_kp_info;
         assert NIL != cycl_grammar.cycl_constant_p(constant) : "cycl_grammar.cycl_constant_p(constant) " + "CommonSymbols.NIL != cycl_grammar.cycl_constant_p(constant) " + constant;
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
-        if (((NIL != operation_second) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_second))) {
+        if (((NIL != operation_second) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_second))) {
             throw new AssertionError(operation_second);
         }
-        if (((NIL != purpose) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
+        if (((NIL != purpose) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
             throw new AssertionError(purpose);
         }
         SubLObject operations = cycml_kp_info_operations(cycml_kp_info);
@@ -835,10 +835,10 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         assert NIL != cycml_kp_info_p(cycml_kp_info) : "cycml_generator.cycml_kp_info_p(cycml_kp_info) " + "CommonSymbols.NIL != cycml_generator.cycml_kp_info_p(cycml_kp_info) " + cycml_kp_info;
         assert NIL != cycl_grammar.cycl_constant_p(constant) : "cycl_grammar.cycl_constant_p(constant) " + "CommonSymbols.NIL != cycl_grammar.cycl_constant_p(constant) " + constant;
         assert NIL != constant_completion_high.valid_constant_name_p(new_name) : "constant_completion_high.valid_constant_name_p(new_name) " + "CommonSymbols.NIL != constant_completion_high.valid_constant_name_p(new_name) " + new_name;
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
         SubLObject operations = cycml_kp_info_operations(cycml_kp_info);
@@ -857,10 +857,10 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         assert NIL != cycml_kp_info_p(cycml_kp_info) : "cycml_generator.cycml_kp_info_p(cycml_kp_info) " + "CommonSymbols.NIL != cycml_generator.cycml_kp_info_p(cycml_kp_info) " + cycml_kp_info;
         assert NIL != cycl_grammar.cycl_fort_p(fort_1) : "cycl_grammar.cycl_fort_p(fort_1) " + "CommonSymbols.NIL != cycl_grammar.cycl_fort_p(fort_1) " + fort_1;
         assert NIL != cycl_grammar.cycl_fort_p(fort_2) : "cycl_grammar.cycl_fort_p(fort_2) " + "CommonSymbols.NIL != cycl_grammar.cycl_fort_p(fort_2) " + fort_2;
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
         SubLObject operations = cycml_kp_info_operations(cycml_kp_info);
@@ -881,13 +881,13 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         }
         assert NIL != cycml_kp_info_p(cycml_kp_info) : "cycml_generator.cycml_kp_info_p(cycml_kp_info) " + "CommonSymbols.NIL != cycml_generator.cycml_kp_info_p(cycml_kp_info) " + cycml_kp_info;
         assert NIL != cycl_grammar.cycl_fort_p(fort) : "cycl_grammar.cycl_fort_p(fort) " + "CommonSymbols.NIL != cycl_grammar.cycl_fort_p(fort) " + fort;
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
         SubLObject operations = cycml_kp_info_operations(cycml_kp_info);
@@ -923,28 +923,28 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         }
         assert NIL != cycml_kp_info_p(cycml_kp_info) : "cycml_generator.cycml_kp_info_p(cycml_kp_info) " + "CommonSymbols.NIL != cycml_generator.cycml_kp_info_p(cycml_kp_info) " + cycml_kp_info;
         assert NIL != cycl_grammar.cycl_sentence_p(assertion) : "cycl_grammar.cycl_sentence_p(assertion) " + "CommonSymbols.NIL != cycl_grammar.cycl_sentence_p(assertion) " + assertion;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != strength) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.el_strength_p(strength))) {
+        if (((NIL != strength) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.el_strength_p(strength))) {
             throw new AssertionError(strength);
         }
-        if (((NIL != direction) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.direction_p(direction))) {
+        if (((NIL != direction) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.direction_p(direction))) {
             throw new AssertionError(direction);
         }
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
-        if (((NIL != operation_second) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_second))) {
+        if (((NIL != operation_second) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_second))) {
             throw new AssertionError(operation_second);
         }
-        if (((NIL != purpose) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
+        if (((NIL != purpose) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
             throw new AssertionError(purpose);
         }
         if ((NIL != assertion_handles.assertion_p(assertion)) && (NIL == mt)) {
@@ -989,28 +989,28 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         }
         assert NIL != cycml_kp_info_p(cycml_kp_info) : "cycml_generator.cycml_kp_info_p(cycml_kp_info) " + "CommonSymbols.NIL != cycml_generator.cycml_kp_info_p(cycml_kp_info) " + cycml_kp_info;
         assert NIL != cycl_grammar.cycl_sentence_p(assertion) : "cycl_grammar.cycl_sentence_p(assertion) " + "CommonSymbols.NIL != cycl_grammar.cycl_sentence_p(assertion) " + assertion;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != strength) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.el_strength_p(strength))) {
+        if (((NIL != strength) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.el_strength_p(strength))) {
             throw new AssertionError(strength);
         }
-        if (((NIL != direction) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.direction_p(direction))) {
+        if (((NIL != direction) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == enumeration_types.direction_p(direction))) {
             throw new AssertionError(direction);
         }
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
-        if (((NIL != operation_second) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_second))) {
+        if (((NIL != operation_second) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_second))) {
             throw new AssertionError(operation_second);
         }
-        if (((NIL != purpose) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
+        if (((NIL != purpose) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
             throw new AssertionError(purpose);
         }
         if ((NIL != assertion_handles.assertion_p(assertion)) && (NIL == mt)) {
@@ -1043,16 +1043,16 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         }
         assert NIL != cycml_kp_info_p(cycml_kp_info) : "cycml_generator.cycml_kp_info_p(cycml_kp_info) " + "CommonSymbols.NIL != cycml_generator.cycml_kp_info_p(cycml_kp_info) " + cycml_kp_info;
         assert NIL != cycl_grammar.cycl_sentence_p(assertion) : "cycl_grammar.cycl_sentence_p(assertion) " + "CommonSymbols.NIL != cycl_grammar.cycl_sentence_p(assertion) " + assertion;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
         if ((NIL != assertion_handles.assertion_p(assertion)) && (NIL == mt)) {
@@ -1079,16 +1079,16 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         }
         assert NIL != cycml_kp_info_p(cycml_kp_info) : "cycml_generator.cycml_kp_info_p(cycml_kp_info) " + "CommonSymbols.NIL != cycml_generator.cycml_kp_info_p(cycml_kp_info) " + cycml_kp_info;
         assert NIL != cycl_grammar.cycl_sentence_p(assertion) : "cycl_grammar.cycl_sentence_p(assertion) " + "CommonSymbols.NIL != cycl_grammar.cycl_sentence_p(assertion) " + assertion;
-        if (((NIL != mt) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(mt))) {
+        if (((NIL != mt) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(mt))) {
             throw new AssertionError(mt);
         }
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
         if ((NIL != assertion_handles.assertion_p(assertion)) && (NIL == mt)) {
@@ -1107,13 +1107,13 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
         assert NIL != cycl_grammar.cycl_fort_p(mt) : "cycl_grammar.cycl_fort_p(mt) " + "CommonSymbols.NIL != cycl_grammar.cycl_fort_p(mt) " + mt;
         assert NIL != listp(cnfs) : "Types.listp(cnfs) " + "CommonSymbols.NIL != Types.listp(cnfs) " + cnfs;
         assert NIL != listp(arg_types) : "Types.listp(arg_types) " + "CommonSymbols.NIL != Types.listp(arg_types) " + arg_types;
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
         SubLObject operations = cycml_kp_info_operations(cycml_kp_info);
@@ -1947,19 +1947,19 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
     public static SubLObject cycml_serialize_bookkeeping(final SubLObject cyclist, final SubLObject cyc_image_id, final SubLObject operation_time, final SubLObject operation_second, final SubLObject purpose) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (((NIL != cyclist) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
+        if (((NIL != cyclist) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(cyclist))) {
             throw new AssertionError(cyclist);
         }
-        if (((NIL != cyc_image_id) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
+        if (((NIL != cyc_image_id) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == stringp(cyc_image_id))) {
             throw new AssertionError(cyc_image_id);
         }
-        if (((NIL != operation_time) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
+        if (((NIL != operation_time) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == integerp(operation_time))) {
             throw new AssertionError(operation_time);
         }
-        if (((NIL != operation_second) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numeric_date_utilities.universal_second_p(operation_second))) {
+        if (((NIL != operation_second) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == numeric_date_utilities.universal_second_p(operation_second))) {
             throw new AssertionError(operation_second);
         }
-        if (((NIL != purpose) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
+        if (((NIL != purpose) && (!SubLSystemTrampolineFile.assertionsDisabledInClass)) && (NIL == cycl_grammar.cycl_fort_p(purpose))) {
             throw new AssertionError(purpose);
         }
         if (NIL != cycml.$cycml_indent_mode_on$.getDynamicValue(thread)) {

@@ -9,9 +9,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
-public class ConsesLow extends SubLTrampolineFile {
+public class ConsesLow extends SubLSystemTrampolineFile {
     private static SubLObject appendArrayLists(SubLObject[] lists) {
 	SubLList result = SubLNil.NIL;
 	SubLListListIterator iter = null;

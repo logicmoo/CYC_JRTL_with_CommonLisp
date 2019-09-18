@@ -60,7 +60,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile; 
  public final class event_model extends SubLTranslatedFile {
     public static final SubLFile me = new event_model();
@@ -1173,7 +1173,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
     public static SubLObject init_event_model_file() {
         defconstant("*DTP-EVENT-CLASS*", EVENT_CLASS);
         defconstant("*DTP-EVENT-HIERARCHY*", EVENT_HIERARCHY);
-        deflexical("*EVENT-HIERARCHY*", SubLTrampolineFile.maybeDefault($event_hierarchy$, $event_hierarchy$, NIL));
+        deflexical("*EVENT-HIERARCHY*", SubLSystemTrampolineFile.maybeDefault($event_hierarchy$, $event_hierarchy$, NIL));
         defconstant("*DTP-EVENT*", EVENT);
         return NIL;
     }

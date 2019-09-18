@@ -92,7 +92,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -414,7 +414,7 @@ public final class vector_utilities extends SubLTranslatedFile {
         }
         assert NIL != sequencep(sequence) : "Types.sequencep(sequence) " + "CommonSymbols.NIL != Types.sequencep(sequence) " + sequence;
         final SubLObject length = length(sequence);
-        SubLTrampolineFile.enforceType(length, POSITIVE_INTEGER_P);
+        SubLSystemTrampolineFile.enforceType(length, POSITIVE_INTEGER_P);
         SubLObject witness = NIL;
         for (SubLObject foundP = NIL; NIL == foundP; foundP = funcall(test, witness)) {
             final SubLObject index = random.random(length);

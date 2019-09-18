@@ -114,7 +114,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class forts extends SubLTranslatedFile {
@@ -293,7 +293,7 @@ public final class forts extends SubLTranslatedFile {
 	}
 
 	public static SubLObject fort_el_formula(final SubLObject fort) {
-		SubLTrampolineFile.enforceType(fort, FORT_P);
+		SubLSystemTrampolineFile.enforceType(fort, FORT_P);
 		if (NIL != constant_p(fort)) {
 			return fort;
 		}
@@ -482,7 +482,7 @@ public final class forts extends SubLTranslatedFile {
 	}
 
 	public static SubLObject remove_fort(final SubLObject fort) {
-		SubLTrampolineFile.enforceType(fort, FORT_P);
+		SubLSystemTrampolineFile.enforceType(fort, FORT_P);
 		if (NIL != constant_p(fort)) {
 			return constants_high.remove_constant(fort);
 		}

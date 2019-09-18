@@ -52,10 +52,13 @@ public class SubLFiles {
 
 		String packageName() default "";
 
-		boolean exported() default true;
+		boolean exported() default false;
 
 		// use false is symbol macro
 		boolean evalArgs() default true;
+
+		// use false is symbol macro
+		boolean importEverywhere() default true;
 
 		// Arg has method name
 		boolean popFront() default false;
@@ -452,7 +455,8 @@ public class SubLFiles {
 	}
 
 	public static void initialize(String className) {
-		ABCLStatic.subl_preserve_pkg(true, true, () -> Loader.initialize_subl_file_exact(className, !INEXACT));
+		ABCLStatic.subl_preserve_pkg(true, true, //
+				() -> Loader.initialize_subl_file_exact(className, !INEXACT));
 		checkSymbolConflicts();
 	}
 

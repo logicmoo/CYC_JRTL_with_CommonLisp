@@ -74,7 +74,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -420,7 +420,7 @@ public final class experiment_loop extends SubLTranslatedFile implements V02 {
 
     public static final SubLObject experiment_loop_set_flag(SubLObject counter, SubLObject results_filename, SubLObject analysis_filename) {
         if (NIL != counter) {
-            SubLTrampolineFile.checkType(counter, NON_NEGATIVE_INTEGER_P);
+            SubLSystemTrampolineFile.checkType(counter, NON_NEGATIVE_INTEGER_P);
         }
         if (NIL != counter) {
             {
@@ -472,14 +472,14 @@ public final class experiment_loop extends SubLTranslatedFile implements V02 {
             {
                 SubLObject string = file_utilities.slurp_file(current_experiment_filename);
                 SubLObject index = string_utilities.string_to_integer(string);
-                SubLTrampolineFile.checkType(index, NON_NEGATIVE_INTEGER_P);
+                SubLSystemTrampolineFile.checkType(index, NON_NEGATIVE_INTEGER_P);
                 return index;
             }
         }
     }
 
     public static final SubLObject experiment_loop_set_current_experiment_index(SubLObject new_index) {
-        SubLTrampolineFile.checkType(new_index, NON_NEGATIVE_INTEGER_P);
+        SubLSystemTrampolineFile.checkType(new_index, NON_NEGATIVE_INTEGER_P);
         {
             SubLObject stream = NIL;
             try {

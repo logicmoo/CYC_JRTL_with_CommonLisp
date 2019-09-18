@@ -37,7 +37,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -784,24 +784,24 @@ public final class ctest_utils extends SubLTranslatedFile {
     }
 
     public static SubLObject init_ctest_utils_file() {
-        deflexical("*DEFAULT-EMAIL-NOTIFY-STYLE-ID*", SubLTrampolineFile.maybeDefault($default_email_notify_style_id$, $default_email_notify_style_id$, NIL));
-        deflexical("*DEFAULT-TEST-ID*", SubLTrampolineFile.maybeDefault($default_test_id$, $default_test_id$, NIL));
-        deflexical("*DEFAULT-STRING-BINDING-SET*", SubLTrampolineFile.maybeDefault($default_string_binding_set$, $default_string_binding_set$, NIL));
-        deflexical("*DEFAULT-BINDING-SET*", SubLTrampolineFile.maybeDefault($default_binding_set$, $default_binding_set$, NIL));
-        deflexical("*DEFAULT-BINDING-SET2*", SubLTrampolineFile.maybeDefault($sym4$_DEFAULT_BINDING_SET2_, $default_binding_set2$, NIL));
-        deflexical("*DEFAULT-SET-OF-BINDING-SETS*", SubLTrampolineFile.maybeDefault($default_set_of_binding_sets$, $default_set_of_binding_sets$, NIL));
-        deflexical("*DEFAULT-SET-OF-BINDING-SETS2*", SubLTrampolineFile.maybeDefault($sym6$_DEFAULT_SET_OF_BINDING_SETS2_, $default_set_of_binding_sets2$, NIL));
-        deflexical("*DEFAULT-SET-OF-BINDING-SETS3*", SubLTrampolineFile.maybeDefault($sym7$_DEFAULT_SET_OF_BINDING_SETS3_, $default_set_of_binding_sets3$, NIL));
-        deflexical("*DEFAULT-MODULE-SENTENCE*", SubLTrampolineFile.maybeDefault($default_module_sentence$, $default_module_sentence$, NIL));
-        deflexical("*DEFAULT-MODULE-MT*", SubLTrampolineFile.maybeDefault($default_module_mt$, $default_module_mt$, NIL));
-        deflexical("*DEFAULT-MODULE-MT2*", SubLTrampolineFile.maybeDefault($sym10$_DEFAULT_MODULE_MT2_, $default_module_mt2$, NIL));
-        deflexical("*DEFAULT-DEPENDENCY-TEST-ID*", SubLTrampolineFile.maybeDefault($default_dependency_test_id$, $default_dependency_test_id$, NIL));
-        deflexical("*DEFAULT-DEPENDENCY-TEST-ID2*", SubLTrampolineFile.maybeDefault($sym12$_DEFAULT_DEPENDENCY_TEST_ID2_, $default_dependency_test_id2$, NIL));
-        deflexical("*DEFAULT-ISA-ID*", SubLTrampolineFile.maybeDefault($default_isa_id$, $default_isa_id$, NIL));
-        deflexical("*DEFAULT-ISA-ID2*", SubLTrampolineFile.maybeDefault($sym14$_DEFAULT_ISA_ID2_, $default_isa_id2$, NIL));
-        deflexical("*DEFAULT-TEST-QUERY*", SubLTrampolineFile.maybeDefault($default_test_query$, $default_test_query$, NIL));
-        deflexical("*DEFAULT-TEST-MT*", SubLTrampolineFile.maybeDefault($default_test_mt$, $default_test_mt$, NIL));
-        deflexical("*DEFAULT-COLLECTION-ID*", SubLTrampolineFile.maybeDefault($default_collection_id$, $default_collection_id$, NIL));
+        deflexical("*DEFAULT-EMAIL-NOTIFY-STYLE-ID*", SubLSystemTrampolineFile.maybeDefault($default_email_notify_style_id$, $default_email_notify_style_id$, NIL));
+        deflexical("*DEFAULT-TEST-ID*", SubLSystemTrampolineFile.maybeDefault($default_test_id$, $default_test_id$, NIL));
+        deflexical("*DEFAULT-STRING-BINDING-SET*", SubLSystemTrampolineFile.maybeDefault($default_string_binding_set$, $default_string_binding_set$, NIL));
+        deflexical("*DEFAULT-BINDING-SET*", SubLSystemTrampolineFile.maybeDefault($default_binding_set$, $default_binding_set$, NIL));
+        deflexical("*DEFAULT-BINDING-SET2*", SubLSystemTrampolineFile.maybeDefault($sym4$_DEFAULT_BINDING_SET2_, $default_binding_set2$, NIL));
+        deflexical("*DEFAULT-SET-OF-BINDING-SETS*", SubLSystemTrampolineFile.maybeDefault($default_set_of_binding_sets$, $default_set_of_binding_sets$, NIL));
+        deflexical("*DEFAULT-SET-OF-BINDING-SETS2*", SubLSystemTrampolineFile.maybeDefault($sym6$_DEFAULT_SET_OF_BINDING_SETS2_, $default_set_of_binding_sets2$, NIL));
+        deflexical("*DEFAULT-SET-OF-BINDING-SETS3*", SubLSystemTrampolineFile.maybeDefault($sym7$_DEFAULT_SET_OF_BINDING_SETS3_, $default_set_of_binding_sets3$, NIL));
+        deflexical("*DEFAULT-MODULE-SENTENCE*", SubLSystemTrampolineFile.maybeDefault($default_module_sentence$, $default_module_sentence$, NIL));
+        deflexical("*DEFAULT-MODULE-MT*", SubLSystemTrampolineFile.maybeDefault($default_module_mt$, $default_module_mt$, NIL));
+        deflexical("*DEFAULT-MODULE-MT2*", SubLSystemTrampolineFile.maybeDefault($sym10$_DEFAULT_MODULE_MT2_, $default_module_mt2$, NIL));
+        deflexical("*DEFAULT-DEPENDENCY-TEST-ID*", SubLSystemTrampolineFile.maybeDefault($default_dependency_test_id$, $default_dependency_test_id$, NIL));
+        deflexical("*DEFAULT-DEPENDENCY-TEST-ID2*", SubLSystemTrampolineFile.maybeDefault($sym12$_DEFAULT_DEPENDENCY_TEST_ID2_, $default_dependency_test_id2$, NIL));
+        deflexical("*DEFAULT-ISA-ID*", SubLSystemTrampolineFile.maybeDefault($default_isa_id$, $default_isa_id$, NIL));
+        deflexical("*DEFAULT-ISA-ID2*", SubLSystemTrampolineFile.maybeDefault($sym14$_DEFAULT_ISA_ID2_, $default_isa_id2$, NIL));
+        deflexical("*DEFAULT-TEST-QUERY*", SubLSystemTrampolineFile.maybeDefault($default_test_query$, $default_test_query$, NIL));
+        deflexical("*DEFAULT-TEST-MT*", SubLSystemTrampolineFile.maybeDefault($default_test_mt$, $default_test_mt$, NIL));
+        deflexical("*DEFAULT-COLLECTION-ID*", SubLSystemTrampolineFile.maybeDefault($default_collection_id$, $default_collection_id$, NIL));
         defconstant("*CTEST-OUTPUT-FORMATS*", list($TEXT, $HTML));
         defconstant("*CTEST-OUTPUT-STYLES*", list($BRIEF, $VERBOSE, $POST_BUILD));
         defconstant("*MAX-TEST-RETRY-TIME*", $int$60);

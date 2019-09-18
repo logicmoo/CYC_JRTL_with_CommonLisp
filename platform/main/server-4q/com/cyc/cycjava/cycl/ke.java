@@ -80,7 +80,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -2469,9 +2469,9 @@ public final class ke extends SubLTranslatedFile {
         defparameter("*NOTE-OLD-CONSTANT-NAME*", T);
         defparameter("*KE-ASSERT-NOW-ASSUME-WFF-TEST*", FALSE);
         defparameter("*CHECK-IF-ALREADY-KE-UNASSERTED?*", NIL);
-        deflexical("*KE-EDIT-USE-FI-EDIT*", SubLTrampolineFile.maybeDefault($ke_edit_use_fi_edit$, $ke_edit_use_fi_edit$, T));
+        deflexical("*KE-EDIT-USE-FI-EDIT*", SubLSystemTrampolineFile.maybeDefault($ke_edit_use_fi_edit$, $ke_edit_use_fi_edit$, T));
         defparameter("*KE-ADD-ASSERTION-ORIGINAL-TEXT?*", NIL);
-        deflexical("*OLD-CONSTANT-NAMES-TABLE*", SubLTrampolineFile.maybeDefault($old_constant_names_table$, $old_constant_names_table$, NIL));
+        deflexical("*OLD-CONSTANT-NAMES-TABLE*", SubLSystemTrampolineFile.maybeDefault($old_constant_names_table$, $old_constant_names_table$, NIL));
         defparameter("*KE-ASSERTION-EDIT-FORMULA-FIND-FUNC*", ASSERTION_TL_IST_FORMULA);
         defparameter("*KE-ASSERTION-EDIT-FORMULA-DISPLAY-FUNC*", ASSERTION_EL_FORMULA);
         return NIL;

@@ -127,7 +127,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
@@ -6464,7 +6464,7 @@ public final class pph_methods extends SubLTranslatedFile {
         deflexical("*GENERATE-SKOLEM-NAME-CACHING-STATE*", NIL);
         defparameter("*PPH-FACET-THRESHOLD*", NIL);
         defparameter("*PPH-ASSUME-DISTINCT-VARS-REQUIRE-DIFFERENT-BINDINGS?*", NIL);
-        deflexical("*SELECT-STRING-METHOD-COUNT*", SubLTrampolineFile.maybeDefault($select_string_method_count$, $select_string_method_count$, () -> make_hash_table($int$256, UNPROVIDED, UNPROVIDED)));
+        deflexical("*SELECT-STRING-METHOD-COUNT*", SubLSystemTrampolineFile.maybeDefault($select_string_method_count$, $select_string_method_count$, () -> make_hash_table($int$256, UNPROVIDED, UNPROVIDED)));
         defparameter("*SELECT-STRING-METHODS*", $list150);
         deflexical("*PPH-NAME-STRING-PREDS-CACHING-STATE*", NIL);
         deflexical("*PPH-TERM-STRING-PREDS-CACHING-STATE*", NIL);
@@ -6473,7 +6473,7 @@ public final class pph_methods extends SubLTranslatedFile {
         deflexical("*DISPREFERRED-PPH-NAME-STRING-PREDS*", $list229);
         deflexical("*ENGLISH-INTEGER-PARAPHRASES*", $list272);
         deflexical("*ENGLISH-TENS-PARAPHRASES*", $list273);
-        deflexical("*PPH-DEFAULT-MT-TIME-INDEX*", SubLTrampolineFile.maybeDefault($pph_default_mt_time_index$, $pph_default_mt_time_index$, NIL));
+        deflexical("*PPH-DEFAULT-MT-TIME-INDEX*", SubLSystemTrampolineFile.maybeDefault($pph_default_mt_time_index$, $pph_default_mt_time_index$, NIL));
         defparameter("*IGNORE-MISLEADING-TIME-PARAMETERS?*", NIL);
         deflexical("*BAD-COLLECTIONS-FOR-GENITIVE-PARAPHRASE*", $list362);
         deflexical("*PPH-POSSESSIVE-PREDS-CACHING-STATE*", NIL);
