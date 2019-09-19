@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Deployment &amp; Configuration</title>
+    <version>@version@ (@date@)</version>
+    <authors>
+      <person name="Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+    </authors>
+  </header> 
+  <body> 
+    <section>
+      <title>About</title>
+      <p>
+      This section documents the deployment and configuration possibilities of this library.
+      </p>
+    </section>  
+    <section>
+       <title>Overview</title>
+       <p>
+       For using this library you will principally need to understand and work with two elements:
+       </p>
+       <ol>
+         <li>Configuration of important library provided elements</li>
+         <li>Development of an application specific shell class</li>
+       </ol>
+    </section>
+    <section>
+      <title>Configuration</title>
+       <p>
+       When deployed, telnetd will create the following set of important and configurable instances:
+       </p>
+        <figure src="images/runtime-instances.png" alt="Runtime instances: Daemon, 1 ShellManager, 1 TerminalManager, n Listeners"/>
+       <section>
+         <title>The Daemon</title>
+         <p>
+         TelnetD is a Singleton that will take care of loading and instantiating all required elements including logging.
+         </p>
+         <p>
+         The unified configuration file specifies all the configuration required for startup, except for logging. 
+         It is documented in more detail <link href="site:daemonconfig" title="Configuration documentation.">here</link>.
+         </p>
+       </section>
+       <section>
+         <title>The ShellManager</title>
+         <p>
+         The ShellManager is a singleton that will take care of loading and providing shell instances.
+         </p>
+         <p>
+         The configuration file specifies a special section for the shells that are available as well as their 
+         implementing classes. Once you have written an implementation for a shell, this section needs to be updated.
+         </p>
+       </section>
+       <section>
+         <title>The TerminalManager</title>
+         <p>
+         The TerminalManager is a singleton that will take care of loading and providing instances of terminal
+         type specific terminal implementations (e.g. ansi, vt100, xterm etc.).
+         </p>
+         <p>
+         The configuration file specifies in a special section the terminals that are available, their aliases as well as their
+         implementing classes. 
+         </p>
+       </section>
+       <section>
+         <title>Listeners</title>
+         <p>
+         Listeners will take care about accepting and managing connections. 
+         </p>
+         <p>
+         For each listener defined in the configuration file there should be a 
+         related configuration section that specifies connection and connection management properties. 
+         </p>
+       </section>
+       <section>
+         <title>Logging Configuration</title>
+         <p>
+         telnetd is now using the Jakarta Commons-Logging library and is delivered per default with log4j.
+         The distribution contains a simple config file for console logging, but you might want to
+         take a look at the <link href="http://jakarta.apache.org/commons/logging/commons-logging-1.0.4/docs/guide.html">Commons-Logging User Guide</link>.
+         </p>
+       </section>
+    </section>
+    <section>
+      <title>Implementing a Shell class</title>
+      <p>
+      The actual link between your application and the telnet daemon library is a shell implementation.
+      The incoming connection will start with a configured login shell (see listeners configuration), 
+      that could for example authenticate the user.<br/>
+      A shell should basically take care about interpreting the user input (i.e. executing commands) and handle connection
+      events (which allows your application to react on a broken connection etc.).
+      </p>
+      <p>
+      To help you with implementing the I/O, the library provides you with classes for doing I/O (including colors etc.).
+      Probably you will want to take a look at the toolkit classes, which are somewhat inspired by (but not based on) NEWT 
+      (Not Erik's Windowing Toolkit), a library for building applications with text based interfaces ontop of Slang
+      (if it does not ring a bell, it's the TUI we knew from old RedHat version's text installation).
+      </p>
+      <p>
+      I think it should be possible to implement reasonable TUI's even in Java. If you doubt, probably search Google (you'll
+      find some way to use ncurses via JNI, jcurzez and CHARVA, which probably can somehow be adapted to work over the given I/O).
+      </p>
+      <p>
+      You should take a look at <link href="site:shelltutorial" title="Shell tutorial">the shell implementation tutorial</link>.
+      </p>
+      <p>
+      Many people have asked about cmd.exe and bash implementations. Well, probably you might want to look for Java shell
+      implementations (which indeed exist) and adapt the code to run over the given I/O. Unfortunately most have never realized
+      that it would be interesting to use their shells simply via a given InputStream and OutputStream (or Reader respectively
+      Writer).
+      </p>
+      <note>
+        There will be a release of an extension package to telnetd2 soon, that will demonstrate a BeanShell wrapper.
+      </note>
+    </section>
+    
+  </body>
+</document>

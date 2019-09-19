@@ -492,7 +492,7 @@ public class Startup extends ABCLStatic {
 		}
 
 		if (cycArgsList.size() == 0) {
-			me.processCommandLineArgs(defaultCycCmdArgs);
+			me.processCommandLineArgs(StringArrayZero);
 		} else {
 			cycCmdArgs = cycArgsList.toArray(StringArrayZero);
 		}

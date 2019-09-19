@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Who is using telnetd?</title>
+    <version>@version@ (@date@)</version>
+    <authors>
+      <person name="Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+    </authors>
+  </header> 
+  <body>
+    <p>
+      <link href="http://oscar-osgi.sourceforge.net/"><strong>Oscar</strong></link>
+    </p>
+    <p>
+      In their telnet service bundle. 
+    </p>
+    <p>
+      <link href="http://www.sun.com"><strong>Sun Microsystems</strong></link>
+    </p>
+    <p>
+      In their StoreEdge product (Telnet Configuration Service).
+    </p>
+    <p>
+      <link href="http://www.cisco.com"><strong>Cisco</strong></link>
+    </p>
+    <p>
+      In their Enhanced Devide Interface (EDI) product.
+    </p>
+    <p>
+      <link href="http://www.gemini.edu"><strong>Gemini</strong></link>
+    </p>
+    <p>
+      To monitor some of their observatory control systems for the Gemini 8M  
+      telescopes in Hawaii and in Chile.
+    </p>    
+    <p>
+      <link href="http://www.karanet.at"><strong>KaraNet</strong></link>
+    </p>
+    <p>
+      As telnet proxy for their BBS system.
+    </p>
+    <note>
+    If you would like to appear on this list, or if you would like us to remove 
+    you from this list, please drop us a mail.
+    </note>
+    
+
+  </body>
+</document>

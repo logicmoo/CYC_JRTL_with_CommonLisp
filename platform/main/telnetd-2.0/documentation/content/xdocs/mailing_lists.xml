@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document>
+<header> 
+  <title>Mailing Lists</title>
+  <version>@version@ (@date@)</version>
+  <authors>
+    <person name ="Jon S. Stevens" email=" jon@latchkey.com "/>
+    <person name=" modified by Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+  </authors>
+</header>
+<body>
+
+ <note>
+   These guidelines have been adapted from the Jakarta Project, which you can find at:<br/>
+  <link href="http://jakarta.apache.org/site/mail.html">http://jakarta.apache.org/site/mail.html</link>
+  <br/><br/>
+  The material is copyright by the jakarta project of the Apache Foundation and is published with permission from the PMC. 
+</note>
+
+<section>
+  <title>Guidelines</title>
+  <section>
+    <title>About</title>
+    <p>
+    A mailing list is an electronic discussion forum that anyone can subscribe to. 
+    When someone sends an email message to the mailing list, a copy of that message is 
+    broadcast to everyone who is subscribed to that mailing list. Mailing lists provide 
+    a simple and effective communication mechanism. With potentially thousands of subscribers, 
+    there is a common set of etiquette guidelines that you should observe. Please keep on reading. 
+    </p>
+  </section>
+  
+  <section>
+    <title>"Respect the mailing list type."</title>
+    <p>
+    There are generally two types of lists:
+    </p>
+    <ul>
+      <li>
+        <strong>The "User" lists:</strong><br/>where you can send questions and comments about
+        configuration, setup, usage and other "user" types of questions.
+      </li>
+      <li>
+        <strong>The "Developer" lists:</strong><br/>where you can send questions and
+        comments about the actual software source code and general
+      "development" types of questions.
+      </li>
+    </ul>
+    <p>
+    Some questions are appropriate for posting on both the "user" and
+    the "developer" lists. In this case, pick one and only one. Do not
+    cross post.
+    </p>
+    <p>
+    Asking a configuration question on the developers list is frowned
+    upon because developers' time is as precious as yours. By contacting
+    them directly instead of the user base you are abusing resources. In
+    fact, it is unlikely that you will get a quicker answer, if at
+    all.
+    </p>
+    <p>
+    In some cases you probably will want to use the <link href="ext:supportrequests">Support Request facility</link> instead.
+    </p>
+  </section>
+  
+  <section>
+    <title>"Join the lists that are appropriate for your discussion."</title>
+    <p>
+    Please make sure that you are joining the list that is appropriate for the topic that you would like to discuss.
+   </p>
+  </section>
+  
+  <section>
+    <title>"Ask smart questions."</title>
+    <p>
+    Every volunteer project obtains its strength from the people involved
+    in it. You are welcome to join any of our mailing lists.  You can
+    choose to lurk, or actively participate; it's up to you.  The level of
+    community responsiveness to specific questions is generally directly
+    proportional to the amount of effort you spend formulating your
+    question. Eric Raymond has even written an essay entitled 
+    <link href="http://www.catb.org/~esr/faqs/smart-questions.html">"<em>Asking Smart Questions</em>"</link> 
+    precisely on this topic.  Although somewhat militant, it is definitely worth reading.
+    </p>
+  </section>   
+     
+  <section>  
+    <title>"Keep your email short and to the point."</title>
+    <p>
+    If your email is more than about a page of text, chances are that it
+    won't get read by very many people. It is much better to try to pack a
+    lot of informative information (see above about asking smart questions)
+    into as small of an email as possible. If you are replying to a previous
+    email, it is a good idea to only quote the parts that you are replying
+    to and to remove the unnecessary bits. This makes it easier for people
+    to follow a thread as well as making the email archives easier to search
+    and read.
+    </p>
+  </section>
+  
+  <section>
+    <title>"Do your best to ensure that you are not sending HTML or Stylelized email to the list."</title>
+    <p>
+    If you are using Outlook or Outlook Express or Eudora, chances are that
+    you are sending HTML email by default. There is usually a setting that
+    will allow you to send "Plain Text" email. If you are using Microsoft
+    products to send email, there are several bugs in the software that
+    prevent you from turning off the sending of HTML email. Please read this
+    <link href="http://jakarta.apache.org/site/micromail.html">page</link> as well...
+    </p>
+  </section>    
+
+  <section>
+    <title>"Watch where you are sending email."</title>
+    <p>
+    The majority of our mailing lists have set the Reply-To to go back to the 
+    list. That means that when you Reply to a message, it will go to the list
+    and not to the original author directly. The reason is because it helps
+    facilitate discussion on the list for everyone to benefit from. Be careful 
+    of this as sometimes you may intend to reply to a message directly to someone 
+    instead of the entire list.
+    </p>
+    <p>
+    The appropriate contents of the Reply-To header is an age-old debate that
+    should not be brought up on the mailing lists.  You can examine opposing points of view
+    <link href="http://www.unicom.com/pw/reply-to-harmful.html">condemning</link>
+    our convention and 
+    <link href="http://www.metasystema.org/essays/reply-to-useful.mhtml">condoning</link> 
+    it.  Bringing this up for debate on a mailing list will add nothing new and is considered off-topic.
+    </p>
+  </section>
+  
+  <section>
+    <title>"Do not cross post messages."</title>
+    <p>
+    In other words, pick a mailing list and send your messages to that mailing 
+    list only. Do not send your messages to multiple mailing lists. The reason is 
+    that people may be subscribed to one list and not to the other. Therefore, 
+    some people will only see part of the conversation.
+    </p>
+  </section>
+</section>
+
+<section>
+  <title>Now that you have read above....</title>
+  <p>
+  Now that you have read the guidelines above, <link href="ext:mailinglists"><em>here</em></link> you find a list that gives you 
+  a listing of the different mailing lists that you can join. 
+  If you did not read the above information, chances are high that you will be pointed out to do so. 
+  You might as well read it now and save yourself the embarrassment. 
+  </p>
+</section>
+</body>
+</document> 

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="280" height="50" viewBox="0 0 280 50">
+  <title>telnetd Logo</title>
+
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop style="stop-color: #FBFBC0" offset="0"/>
+      <stop style="stop-color: #004269" offset="1"/>
+    </linearGradient>
+
+    <filter id="shadowFilter"  filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2 2" result="blur"/>
+      <feOffset in="blur" dx="2" dy="2" result="offsetBlur"/>
+      <feComposite in="SourceGraphic" in2="offsetBlur" operator="over"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadowFilter)" fill="url(#gradient)">
+    <text x="50%" y="65%"
+          style="font-size:30pt; font-family:Arial, Helvetica, Sans Serif;
+                 text-anchor: middle ; font-family:Arial, Helvetica, Sans Serif">
+      telnetd
+    </text>
+  </g>
+</svg> 

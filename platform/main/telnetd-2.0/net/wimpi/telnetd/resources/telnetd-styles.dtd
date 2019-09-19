@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!-- 
+ Document type definition for telnet styles that are composed of type, 
+ foreground color and background color and aliases (a reference to
+ a style defined in the same document.
+-->
+
+<!ELEMENT styles (style|style-alias)*>
+<!ATTLIST styles
+          defaultcolor (black|red|green|yellow|blue|magenta|cyan|white) "white"
+          defaultbgcolor (black|red|green|yellow|blue|magenta|cyan|white) "black"
+>
+<!ELEMENT style EMPTY>
+<!ATTLIST style
+          id ID #REQUIRED
+          type (bold|underlined|italic|blink) #IMPLIED
+          color  (black|red|green|yellow|blue|magenta|cyan|white) #IMPLIED
+          bgcolor (black|red|green|yellow|blue|magenta|cyan|white) #IMPLIED
+>
+
+<!ELEMENT style-alias EMPTY>
+<!ATTLIST style-alias 
+          id ID #REQUIRED
+          ref IDREF #REQUIRED
+>

@@ -29,7 +29,6 @@ For help on the automatic tests available, use the Ant target 'help.test'.
          properties in the 'abcl.properties' file. -->
 	<property file="abcl.properties" />
 	<!-- property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter" / -->
-	<property name="forked" value="true" />
 	<property name="build.dir" value="${basedir}/target" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
 	<property name="src.dir" value="${basedir}/src" />
@@ -72,19 +71,15 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 	</patternset>
 
 	<patternset id="abcl.source.lisp">
-		<include name="org/armedbear/lisp/*.lisp" />
-		<include name="org/armedbear/lisp/java/**/*.lisp" />
-		<include name="org/armedbear/lisp/tests/*.lisp" />
-		<include name="org/armedbear/lisp/j.lisp" />
-		<include name="org/armedbear/*/*.lisp" />
-		<!-- if="abcl.jsr-223.p" -->
-		<include name="org/armedbear/lisp/scripting/lisp/*.lisp" />
+		<include name="org/armedbear/**/*.lisp" />
+		<!-- if="abcl.jsr-223.p"
+		<include name="org/armedbear/lisp/scripting/lisp/*.lisp" />  -->
 	</patternset>
 
 	<!-- Lisp files required at runtime -->
 	<patternset id="abcl.source.lisp.dist">
 		<include name="org/armedbear/lisp/boot.lisp" />
-		<include name="org/armedbear/*/*.lisp" />
+		<include name="org/armedbear/**/*.lisp" />
 		<!-- if="abcl.jsr-223.p" -->
 		<include name="org/armedbear/lisp/scripting/lisp/*.lisp" />
 		<include if="abcl.compile.lisp.skip" name="**/*.lisp" />
@@ -126,23 +121,25 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 	<path id="abcl.classpath.dist">
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${java.home}/../lib/tools.jar" />
+		<pathelement location="lib/all-deps/" />
+		<pathelement location="${abcl.jar.path}" />
 		<fileset dir=".">
 			<include name="lib/*.jar" />
-		</fileset>
-		<pathelement location="lib/all-deps/" />
-		<fileset dir=".">
 			<include name="dist/*.jar" />
+			<include name="ext/junit-4.12.jar" />
 		</fileset>
-		<pathelement location="${abcl.jar.path}" />
 	</path>
 
 	<path id="abcl.classpath.build">
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${java.home}/../lib/tools.jar" />
+		<pathelement location="lib/all-deps/" />
+		<pathelement location="${abcl.jar.path}" />
 		<fileset dir=".">
 			<include name="lib/*.jar" />
+			<include name="dist/*.jar" />
+			<include name="ext/junit-4.12.jar" />
 		</fileset>
-		<pathelement location="lib/all-deps/" />
 	</path>
 
 	<target name="abcl.compile" depends="abcl.clean.maybe,abcl.compile.lisp">
@@ -285,13 +282,14 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 		<exclude name="org/armedbear/lisp/run-benchmarks.lisp" />
 	</patternset>
 
-	<target name="abcl.fasls.uptodate">
-		<uptodate property="abcl.fasls.uptodate.p" value="true">
-			<srcfiles dir="${src.dir}">
+	<target name="abcl.fasls.uptodate" depends="abcl.system.uptodate">
+		<uptodate property="abcl.fasls.uptodate.p" targetfile="${abcl.lisp.output.path}/autoloads-gen.abcl" value="true">
+			<srcfiles dir="src" includes="org/armedbear/lisp/**/*.lisp" />
+			<!--srcfiles dir="${src.dir}">
 				<patternset refid="abcl.source.lisp.fasls" />
-			</srcfiles>
-			<mapper type="glob" from="*.lisp" to="${build.classes.dir}/*.abcl" />
+			</srcfiles -->
 		</uptodate>
+		<echo>abcl.fasls.uptodate.p result: ${abcl.fasls.uptodate.p}</echo>
 	</target>
 
 	<path id="abcl.home.dir.path">
@@ -303,18 +301,21 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 	<pathconvert dirsep="/" property="abcl.lisp.output" refid="abcl.lisp.output.path" />
 
 	<property name="system.lisp.file" value="${build.classes.dir}/org/armedbear/lisp/system.lisp" />
+	<property name="system.abcl.file" value="${build.classes.dir}/org/armedbear/lisp/autoloads-gen" />
+
+	<property name="maybe.compile.lisp.debug" value="-Da=b" />
 
 	<target name="abcl.compile.lisp" depends="abcl.stage,abcl.compile.java,abcl.system.update.maybe,abcl.fasls.uptodate" unless="abcl.fasls.uptodate.p">
-		<echo>
-Compiling Lisp system
+		<echo>Compiling Lisp system ${maybe.compile.lisp.debug}
 from ${abcl.home.dir}
  to  ${abcl.lisp.output}</echo>
 		<delete>
-			<fileset dir="${abcl.home.dir}" includes="**/*.abcl **/*.cls **/*._" />
+			<fileset dir="${abcl.home.dir}" includes="**/*.abcl **/*.cls **/*._  **/*.funcs  **/*.macs" />
 		</delete>
 		<java fork="true" classpathref="abcl.classpath.build" failonerror="false" classname="org.armedbear.lisp.Main">
 			<jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}" />
 			<jvmarg value="-Dabcl.autoload.verbose=Y" />
+			<jvmarg value="${maybe.compile.lisp.debug}" />
 			<arg value="--compile-system" />
 		</java>
 		<echo> concat "${system.lisp.file}
@@ -325,32 +326,26 @@ from ${abcl.home.dir}
 		<echo> Done with abcl.compile.lisp</echo>
 	</target>
 
-	<target name="abcl.compile.lisp.debug" depends="abcl.stage,abcl.compile.java,abcl.system.update.maybe,abcl.fasls.uptodate" unless="abcl.fasls.uptodate.p">
-		<echo>
-DEBUG Compiling Lisp system ${abcl.compile.lisp.debug.jvmarg}
-from ${abcl.home.dir}
- to  ${abcl.lisp.output}</echo>
 
-		<!-- Not good if ${abcl.home.dir} == ${abcl.lisp.output} -->
-		<delete>
-			<fileset dir="${abcl.home.dir}" includes="**/*.abcl **/*.cls **/*._" />
-		</delete>
-		<java classpathref="abcl.classpath.dist" fork="true" failonerror="true" inputstring="(handler-case (compile-system :zip nil :quit t :output-path &quot;${abcl.lisp.output}/&quot;) (t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))" classname="org.armedbear.lisp.Main">
-			<jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}" />
-			<jvmarg value="-Dabcl.autoload.verbose=Y" />
-			<jvmarg value="${abcl.compile.lisp.debug.jvmarg}" />
-			<arg value="--noinit" />
-			<arg value="--nosystem" />
-			<arg value="--eval" />
-			<arg value="(setf *load-verbose* t)" />
-		</java>
-		<echo> concat "${system.lisp.file}
-      		${abcl.startup.file} </echo>
-		<concat destfile="${system.lisp.file}" append="true">
-			<fileset file="${abcl.startup.file}" />
-		</concat>
+	<target name="abcl.compile.lisp.debug">
+		<echo>DEBUG </echo>
+		<antcall target="abcl.compile.lisp">
+			<param name="maybe.compile.lisp.debug" value="${abcl.compile.lisp.debug.jvmarg}" />
+		</antcall>
 		<echo> Done with abcl.compile.lisp.debug</echo>
 	</target>
+
+	<!--
+	<java classpathref="abcl.classpath.dist" fork="true" failonerror="true" inputstring="(handler-case (compile-system :zip nil :quit t :output-path &quot;${abcl.lisp.output}/&quot;) (t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))" classname="org.armedbear.lisp.Main">
+		<jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}" />
+		<jvmarg value="-Dabcl.autoload.verbose=Y" />
+		<jvmarg value="${maybe.compile.lisp.debug}" />
+		<arg value="- -noinit" />
+		<arg value="- -nosystem" />
+		<arg value="- -eval" />
+		<arg value="(setf *load-verbose* t)" />
+	</java>
+	-->
 
 
 
@@ -448,7 +443,7 @@ from ${abcl.home.dir}
 			<and>
 				<available file="${system.lisp.file}" />
 				<available file="${abcl.startup.file}" />
-				<uptodate srcfile="${system.lisp.file}" targetfile="${abcl.startup.file}" />
+				<uptodate srcfile="${abcl.startup.file}" targetfile="${system.lisp.file}" />
 			</and>
 		</condition>
 	</target>
@@ -458,7 +453,7 @@ from ${abcl.home.dir}
 	</target>
 
 	<target name="abcl.jar.uptodate" depends="abcl.compile,abcl.stamp">
-		<uptodate property="abcl.jar.uptodate.p" targetfile="${abcl.jar.path}">
+		<uptodate property="abcl.jar.uptodate.p" targetfile="${abcl.jar.path}" value="true">
 			<srcfiles dir="${build.classes.dir}">
 				<patternset refid="abcl.objects" />
 			</srcfiles>
@@ -1028,6 +1023,7 @@ ${basedir}/../cl-bench
 	</target>
 
 	<path id="abcl.classpath.test">
+		<pathelement location="ext/junit-4.12.jar" />
 		<pathelement location="lib/junit-4.12.jar" />
 		<pathelement location="lib/hamcrest-all-1.3.jar" />
 		<pathelement location="${abcl.jar.path}" />

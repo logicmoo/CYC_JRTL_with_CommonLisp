@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Credits</title>
+    <version>@version@ (@date@)</version>
+    <authors>
+      <person name="Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+    </authors>
+  </header> 
+  <body>
+    <section>
+      <title>Thank You!</title>
+      <p>
+        In this place we want to say thank you to everybody that is/was somehow
+        involved  in this project. Even if you did not end up here, whether it was
+        just a few comments,  criticism, some good ideas, patience, software to
+        build on or build with, or lines  of code, you have all taken part in 
+        making this project a working reality. 
+      </p>
+      <p>
+        Below you can find a list of people which have significantly contributed to 
+        the project by working long and hard to make quality software for the rest 
+        of  the world to use. 
+      </p>
+    </section>
+    
+    <section>
+	  <title>Committers</title>
+	  <ul>
+        <li>
+          Dieter Wimberger (wimpi at users.sourceforge.net) 
+        </li>
+	  </ul>  	 
+    </section>
+    
+<!--    
+    <section>
+	  <title>Users (Special mention)</title>
+	  <ul>
+        <li>
+          Blah Blah
+        </li>
+        <li>
+          Blah blah
+        </li>
+      </ul>  	 
+    </section>
+-->
+    
+    <section>
+      <title>Credits for Work and Dervices We Depend On</title>
+      <ul>
+        <li>
+          <link href="http://java.sun.com/docs/books/jls/second_edition/html/j.title.doc.html">The 
+          Java language</link>, for multiple reasons e.g. expressivity, portability 
+          etc.
+        </li>
+        <li>
+          <link href="http://ant.apache.org/ant">The apache-ant project</link>, 
+          for the great build tool.
+        </li>
+        <li>
+          <link href="http://xml.apache.org/forrest">The Forrest Project</link>,
+          for their great project documentation framework.
+        </li>
+        <li>
+          <link href="http://www.sourceforge.net">SourceForge</link>, for all the facilities 
+           provided to open source efforts, and all the people that made SF becoming 
+           a reality.
+        </li>
+      </ul>
+    </section>
+  </body>
+</document>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metatype:MetaData
+    xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    localization="OSGI-INF/l10n/listener-config"
+    >
+  <OCD name="%config" id="6279fd749626cce58cbe769085af6096" description="%config.description">
+    <AD name="%listener.autostart" description="%listener.autostart.description" id="listener.autostart" type="Boolean"
+        cardinality="0" default="false"/>
+    <AD name="%name" description="%name.description" id="name" type="String" default="Telnet Service"/>
+    <AD name="%port" description="%port.description" id="port" type="Integer" cardinality="0"
+        default="23"/>
+    <AD name="%floodprotection" description="%floodprotection.description" id="floodprotection" type="Integer"
+        cardinality="0" default="10"/>
+    <AD name="%secure" description="%secure.description" id="secure" type="Boolean" cardinality="0"
+        default="false"/>
+    <AD name="%pkey" description="%pkey.description" id="pkey" type="String" default=""/>
+    <AD name="%pkeypass" description="%pkeypass.description" id="pkeypass" type="String" default=""/>
+    <AD name="%connection.startshell" description="%connection.startshell.description" id="connection.startshell"
+        type="String" default="net.wimpi.telnetd.shell.DummyShell"/>
+    <AD name="%connection.max" description="%connection.max.description" id="connection.max" type="Integer"
+        default="100"/>
+    <AD name="%connection.idle.warning" description="%connection.idle.warning.description" id="connection.idle.warning"
+        type="Integer"
+        default="3000000"/>
+    <AD name="%connection.idle.logout" description="%connection.idle.logout.description" id="connection.idle.logout"
+        type="Integer"
+        default="60000"/>
+    <AD name="%connection.housekeeping.interval" description="%connection.housekeeping.interval.description"
+        id="connection.housekeeping.interval"
+        type="Integer" default="60000"/>
+    <AD name="%connection.inputmode" description="%connection.inputmode.description" id="connection.inputmode"
+        type="String" default="character">
+      <Option label="%connection.mode.line" value="line"/>
+      <Option label="%connection.mode.char" value="character"/>
+    </AD>
+  </OCD>
+
+  <Designate pid="net.wimpi.telnetd.service.TelnetListenerServiceFactory"
+             factory="true">
+    <Object ocdref="6279fd749626cce58cbe769085af6096"/>
+  </Designate>
+</metatype:MetaData>

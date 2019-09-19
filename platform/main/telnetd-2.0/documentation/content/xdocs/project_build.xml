@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Building telnetd</title>
+    <version>@version@ (@date@)</version>
+    <authors>
+      <person name="Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+    </authors>
+  </header> 
+  <body>
+    <section>
+      <title>About</title>
+      <p>
+      This document describes how to build telnetd from the source package.
+      </p>
+    </section>
+    <section>
+      <title>Invoking the build</title>
+      <p>
+      telnetd's build is based on <link href="ext:ant">ant</link> and <em>requires &gt;=v1.6 to
+      be properly installed on your system</em> and available from the command line.
+      </p>
+      <warning>
+      The only supported way for building this library is via the delivered build scripts for ant.
+      (Most IDE's nowadays provide ant integration or at least support anyway.)
+      </warning>
+      <note>
+      Documentation builds are based on Apache <link href="ext:forrest">forrest</link>. <em>To invoke these
+      you will need release version 0.7 installed on your system.</em>
+      </note>
+      <dl>
+        <dt><strong>Standard JDK Builds</strong></dt>
+        <dd>
+          The build script that needs to be invoked by ant is <em>build.xml</em>. This is the default
+          so if you do not pass the file parameter, this file will be used.
+        </dd>
+      </dl>
+      <p>
+      To see the build targets and the default target, you should invoke ant with the option 
+      <em>-projecthelp</em>
+      </p>
+          <section>
+      <title>Build Properties</title>
+      <p>
+        Build properties will be read from your home directory (<code>.build.properties</code>) or from the actual 
+        directory (<code>build.properties</code>).<br/>
+        These allow you to toggle flags for the building procedure (standard build.properties file):
+      </p>
+      <source>
+# Compiler to be used
+build.compiler=modern     
+
+# Deprecation warnings
+compile.deprecation=on
+
+## Optimization and Debug
+# Development Set
+compile.optimize=off
+compile.debug=on
+
+# Production/Release set
+#compile.optimize=on
+#compile.debug=off
+
+javadocs.additionalparam=-breakiterator
+      </source>
+    </section>  
+    </section>
+    <note>All build products including the docs and the distributions will be written to the 
+     build directory.</note>
+  </body>
+</document>

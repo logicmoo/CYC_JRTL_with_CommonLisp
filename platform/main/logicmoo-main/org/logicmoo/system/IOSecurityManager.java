@@ -223,9 +223,9 @@ public class IOSecurityManager extends SecurityManager {
 		return true;
 	}
 
-	String mayRead = null;
+	static private String mayRead = null;
 
-	static boolean allowCompiler = true;
+	static private boolean allowCompiler = true;
 
 	/**
 	 * @param filename
@@ -282,7 +282,7 @@ public class IOSecurityManager extends SecurityManager {
 	 * @param f
 	 * @return
 	 */
-	public String canonicalPath(String filename) {
+	public static String canonicalPath(String filename) {
 		java.io.File f = null;
 		String wasMayRead = mayRead;
 
@@ -302,7 +302,8 @@ public class IOSecurityManager extends SecurityManager {
 		if (File.separatorChar != '/')
 			p = p.replace(File.separatorChar, '/');
 
-		if (!p.endsWith("/") && isDirectory(f))
+		final boolean isDir = isDirectory(f);
+		if (!p.endsWith("/") && isDir)
 			p = p + "/";
 
 		//		if (!p.startsWith("/"))
@@ -316,7 +317,7 @@ public class IOSecurityManager extends SecurityManager {
 	}
 
 	// calls check read
-	private boolean exists(File f) {
+	private static boolean exists(File f) {
 		String wasMayRead = mayRead;
 		try {
 			mayRead = f.getPath();
@@ -327,7 +328,7 @@ public class IOSecurityManager extends SecurityManager {
 	}
 
 	// calls check read
-	private boolean isDirectory(File f) {
+	private static boolean isDirectory(File f) {
 		String wasMayRead = mayRead;
 		try {
 			mayRead = f.getPath();

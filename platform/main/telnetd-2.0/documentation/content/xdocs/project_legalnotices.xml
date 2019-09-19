@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Legal Notices</title>
+    <version>@version@ (@date@)</version>
+    <authors>
+      <person name="Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+    </authors>
+  </header> 
+  <body>
+    <ul>
+      <li>
+        Java and StorEdge are trademarks of Sun Microsystems, Inc. 
+      </li>
+      <li>
+        Commons-Logging is a library provided by the Apache Jakarta Commons Project 
+        <link href="http://jakarta.apache.org/commons/logging">http://jakarta.apache.org/commons/logging</link>.
+        It is used and distributed under <link href="licenses/CL_LICENSE.txt">the Apache License</link>.
+      </li>
+      <li>
+        Log4J is a logging library provided by the Apache Logging Services Project 
+        <link href="http://logging.apache.org/log4j">http://logging.apache.org/log4j</link>.
+        It is used and distributed under <link href="licenses/LOG4J_LICENSE.txt">the Apache License</link>.
+      </li>
+      <li>
+        Jaramiko is used and distributed under <link href="licenses/JARAMIKO_LICENSE.txt"></link>
+      </li>
+    </ul>
+  </body>
+</document>

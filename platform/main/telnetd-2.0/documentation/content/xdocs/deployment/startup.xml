@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Startup How-To</title>
+    <version>@version@ (@date@)</version>
+    <authors>
+      <person name="Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+    </authors>
+  </header> 
+  <body> 
+    <section>
+      <title>About</title>
+      <p>
+      This document describes how to start the telnetd with the given main() or 
+      from within your own application.
+      </p>
+    </section>  
+    <section>
+       <title>Basics</title>
+       <p>
+       For starting up the telnetd and the required number of listeners, you have two choices:
+       </p>
+       <ol>
+         <li>using the existing main() in the TelnetD class</li>
+         <li>instantiating and activating the daemon from within your application.</li> 
+       </ol>
+       <p>
+       Either way you will have to provide the appropiate configuration properties as well as
+       shell implementations (see <link href="site:deployment">deployment and configuration index</link>).
+       </p>
+    </section>
+    <section>
+      <title>Using the existing main()</title>
+       <p>
+       Assemble/prepare the properties that resemble your desired configuration and issue:
+       </p>
+       <source>
+java -classpath telnetd.jar:commons-logging.jar:log4j.jar net.wimpi.telnetd.TelnetD -D -Dlog4j.configuration=&lt;your URL for log4j.properties&gt; &lt;your URL for telnetd.properties&gt;</source>
+       <p>
+       Logically you will need a JRE/JDK installed (1 and above should work) and the java VM binary in your PATH.
+       </p>
+     </section>  
+     <section>
+      <title>Bootstrapping from within your application</title>
+       <p>
+       It will be required to take the following steps:
+       </p>
+       <ol>
+         <li>Assemble/prepare the properties that resemble your desired configuration.</li>
+         <li>Create a <em>TelnetD</em> instance using one of the given factory methods in the <em>TelnetD</em> class 
+         (see API docs).</li>
+         <li>Start the daemon calling <em>start()</em></li>
+       </ol>
+       <p>
+       An example is given below, <em>props</em> represents a single <em>Properties</em> instance containing all
+       properties for your desired configuration:
+       </p>
+       <source>//1. create singleton instance
+TelnetD daemon = TelnetD.createTelnetD(props);
+//2.start serving
+daemon.start();
+</source>
+     </section>
+     <section>
+       <title>Starting through ant (build script)</title>
+       <p>
+       You can as well use ant to start the daemon invoking ant with the <code>runit</code> target.
+       </p>
+     </section>
+  </body>
+</document>

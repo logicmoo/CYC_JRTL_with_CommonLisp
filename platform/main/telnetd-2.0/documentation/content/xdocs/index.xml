@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Welcome to telnetd2!</title>
+    <version>@version@ (@date@)</version>
+    <authors>
+      <person name="Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+    </authors>
+  </header> 
+  <body> 
+    <section>
+      <title>About</title>
+      <p>
+      telnetd is an Open Source effort to implement a Java telnet daemon 
+      that is compact and generic and thus easily embeddable into other applications.
+      </p>
+      <note>
+      telnetd2 is an "update" of the last release to newer Java standards (will require >=1.4). 
+      Please see the changes for more information. telnetd2 should compile and run under Java 5, which
+      is probably not the case for the last release.
+      </note>
+      <note>
+      telnetd2-osgi is a new branch that is designed to be used as OSGi bundle.
+      </note>
+      <p>
+      Main Features are:
+      </p>
+      <ul>
+        <li>Telnet protocol implementation (following specifications, support for NVT, ECHO, TTYPE, NAWS, LINEMODE,NEWENV)</li>        
+        <li>Terminal I/O with support for various terminal types</li>
+        <li>Simple UI toolkit as OO layer on top of the basic terminal I/O (work progress)</li>
+        <li>Connection management (host based access and handling of idle connections)</li>
+        <li>SSH Listener</li>
+      </ul>
+      <p>
+        Main focus is a design that is flexible and powerful, yet at the same time stable
+        and with a small runtime footprint. Threads required are two system threads per listener, 
+        as well as one per connection.
+      </p> 
+    </section>
+    <section>
+       <title>Target Audience</title>
+       <p>
+       Developers that want to integrate reasonable telnet and SSH 2 access into their application.
+       </p>
+    </section>
+    <note>This project is free and open source and this will not change in the future.
+However, working on the project requires resources (beyond the ones provided
+by SF). If you are willing to support the project financially, you are welcome
+to make donations (via SF/PayPal).<br/>
+Donated money will be used to pay Internet provider bills, provide and maintain
+network facilities, enhance computing power and memory capacity. 5% will automatically   
+be transfered to SF.net, for providing the hosting facilities on SF.</note>
+  </body>
+</document>

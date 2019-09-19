@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+
+<document>
+<header>
+  <title>Project Guidelines</title>
+  <version>@version@ (@date@)</version>
+  <authors>
+    <person name="Ted Husted" email=" ted@husted.com "/>
+    <person name="modified by Dieter Wimberger" email=" wimpi@users.sourceforge.net"/>
+  </authors>
+</header>
+
+<body>
+
+<note>
+  These project guidelines have been adapted from the Jakarta Project Guidelines
+  (as well as their working proposal), which you can find at:<br/>
+  <link href="http://jakarta.apache.org/site/guidelines.html">http://jakarta.apache.org/site/guidelines.html</link><br/>
+  <link href="http://jakarta.apache.org/site/proposal.html">http://jakarta.apache.org/site/proposal.html</link>
+  <br/><br/>
+  Modifications were required to adapt the wording to a single non-Jakarta project 
+  (i.e. not subproject, and not subject of supervision by the PMC).<br/>
+  The material is copyright by the jakarta project of the Apache Foundation and is published with permission from the PMC. 
+</note>
+
+<section>
+  <title>Overview</title>
+  <p>
+  This document defines the guidelines of the project. It includes definitions of the various 
+  categories of membership, who is able to vote, how conflicts are resolved by voting and 
+  the procedures to follow for proposing and making changes to the codebases of the project.
+  </p>
+  <ul>
+   <li><link href="#roles">Roles and Responsibilities</link><br/>Defines the recognized roles in the project
+     <ul>
+       <li><link href="#roles-users">Users</link></li>
+       <li><link href="#roles-contributors">Contributors</link></li> 
+       <li><link href="#roles-committers">Committers</link></li>
+       <li><link href="#roles-releasemanager">Release Manager</link></li>
+    </ul>
+  </li>
+  <li><link href="#communication">Communication</link><br />Defines how users and developers communicate
+    <ul>
+      <li><link href="#communication-ann">Announcement Lists</link></li>
+      <li><link href="#communication-user">User Lists</link></li>
+      <li><link href="#communication-dev">Developer Lists</link></li>
+      <li><link href="#communication-commit">Commit Lists</link></li>
+    </ul>
+  </li>
+  <li><link href="#decisions">Decision Making</link><br />Defines how action items are proposed and voted on.
+    <ul>
+      <li><link href="#decisions-items">Action Item</link>
+        <ul>
+          <li><link href="#decisions-items-ltplans">Long Term Plans</link></li>
+          <li><link href="#decisions-items-stplans">Short Term Plans</link></li>
+          <li><link href="#decisions-items-releaseplan">Release Plan</link></li>
+          <li><link href="#decisions-items-testing">Release Testing</link></li>
+          <li><link href="#decisions-items-release">Public Release</link></li>
+          <li><link href="#decisions-items-showstoppers">Showstoppers</link></li>
+          <li><link href="#decisions-items-changes">Product Changes</link></li>
+        </ul>
+      </li>
+      <li><link href="#decisions-voting">Voting</link>
+        <ul>
+          <li><link href="#decisions-voting-items">Action Item Votes</link></li>
+          <li><link href="#decisions-voting-caveats">Voting Caveats</link></li>
+          <li><link href="#decisions-voting-plans">Other Items</link></li>
+          <li><link href="#decisions-voting-others">Voting on Other Matters</link></li>
+        </ul>
+      </li>
+      <li><link href="#decisions-branches">Branches</link></li>
+    </ul>
+  </li>
+  <li><link href="#source">Source Repository</link><br />Defines how the Project's source code is organized and developed.
+    <ul>
+      <li><link href="#source-license">License</link></li>
+      <li><link href="#source-status">Status Files</link></li>
+      <li><link href="#source-branches">Branches</link></li>
+      <li><link href="#source-changes">Changes</link></li>
+      <li><link href="#source-patches">Patches</link></li>
+    </ul>
+  </li>
+</ul>
+</section>
+
+<anchor id="roles"/>
+<section>
+  <title>Roles and Responsibilities</title>
+  <p>
+  The roles and responsibilities that people can assume in the project are based on merit.
+  Everybody can help no matter what their role. Those who have been long term or valuable 
+  contributors to the project obtain the right to vote and commit directly to the source repository. 
+  </p>
+  <anchor id="roles-users"/>
+  <section>
+    <title>Users</title>
+    <p>
+    Users are the people who use the products of this project. People in this role aren't contributing
+    code, but they are using the products, reporting bugs, making feature requests, helping other users,
+    extending an online FAQ and such. This is by far the most important category of people as, without
+    users, there is no reason for the project.<br/> 
+    When users start to contribute code or documentation patches, they become contributors. 
+    </p>
+  </section>
+  <anchor id="roles-contributors"/>
+  <section>
+    <title>Contributors</title>
+    <p>
+    Contributors are the people who write code or documentation patches or contribute positively to
+    the project in other ways. A volunteer's contribution is always recognized. In source code, all
+    volunteers who contribute to a source file may add their name to the list of authors for that file. 
+    </p>
+  </section>
+  <anchor id="roles-committers"/>
+  <section>
+    <title>Committers</title>
+    <p>
+    Contributors who give frequent and valuable contributions to the project can have their status 
+    promoted to that of a "Committer". A committer has write access to the source code repository
+    and gains voting rights allowing them to affect the future of the project.<br/>
+    In order for a Contributor to become a Committer, another Committer can nominate that Contributor 
+    or the Contributor can ask for it. Once a Contributor is nominated, all of the Committers of this 
+    project will vote. If there are at least 3 positive votes and no negative votes, the Contributor is
+    converted into a Committer and given write access to the source code repository for the project.<br/>
+    Before receiving write access, a Committer must also affirm that they have read and understood these 
+    guidelines, and agree to abide by their terms, as they may be revised from time to time.
+    </p>
+    <p> 
+    At times, Committers may go inactive for a variety of reasons. A Committer that has been inactive 
+    for 6 months or more may lose his or her status as a Committer.
+    </p>
+    <p>
+    A list of some of our current Committers can be found in our <link href="site:projectcredits">project credits</link>.
+    </p>
+  </section>
+  <anchor id="roles-releasemanager"/>
+  <section>
+    <title>Release Manager</title>
+    <p>
+    Product releases will be managed by a selected committer. A release manager should actively
+    manage the release process, watch the deadlines, release and make announcements.    
+    </p>
+  </section>
+</section>
+
+<anchor id="communication"/>
+<section>
+  <title>Communications</title>
+  <p>
+  The project obtains its strength from the communication of its members. In order for members to 
+  easily communicate with each other, the project has <link href="ext:mailinglists">mailing lists</link> as well as 
+  <link href="ext:discussionfora">discussion fora</link>.<br/>
+  These lists, with the exception of the announcement lists, are not moderated and anybody is more than welcome
+  to join them. However, you must be subscribed to post to a list. To reduce the bandwidth demands on everyone,
+  mail should not contain attachments. It is recommended that you place interesting material (such as patches)
+  either within the body of the message or provide a URL for retrieval.<br/>
+  To join the mailing lists, see our <link href="site:mailinglists">Mailing List</link> page. 
+  </p>
+  <p>The project's list fall into the following categories:</p>
+  <p></p>
+  <anchor id="communication-ann"/>
+  <table> 
+    <tr>
+      <td><strong>Announcement Lists</strong></td>
+    </tr>
+    <tr>
+      <td>
+        Announcement lists are very low traffic designed to communicate
+        important information, such as releases of a product of this
+        project, to a wide audience.
+      </td>
+    </tr>
+  </table>
+  <p></p>
+  <anchor id="communication-user"/>  
+  <table>
+    <tr>
+      <td>
+        <strong>User Lists</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        User lists are for users of a product to converse about such things
+        as configuration and operating of the products of the project.
+      </td>
+    </tr>
+  </table>
+  <p></p>
+  <anchor id="communication-dev"/>
+  <table>
+    <tr>
+      <td>
+        <strong>Developer Lists</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Developer lists are for the contributors to the project. On these
+        lists suggestions and comments for code changes are discussed and
+        action items are raised and voted on. For the developer community,
+        these lists are the very center of the project where all the
+        "action" is.
+      </td>
+    </tr>
+  </table>
+  <p></p>
+  <anchor id="communication-commit"/>
+  <table>
+    <tr>
+      <td>
+        <strong>Commit Lists</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        The commit lists are where all CVS code commit messages are sent. All committers
+        are required to subscribe to this list so that they can stay aware of changes to the repository.
+     </td>
+    </tr>
+  </table>
+  <p></p>
+</section>
+  
+<anchor id="decisions"/>  
+<section>
+  <title>Decision Making</title>
+  <p>
+  All <link href="#roles-contributors">Contributors</link> are encouraged to participate in decisions, 
+  but the decision itself is made by those that have <link href="#roles-committers">Committer</link>
+  status in the project.<br/>
+  In other words, the project is a <em>"Minimum Threshold Meritocracy"</em>. 
+  </p>
+  <anchor id="decisions-items"/>
+  <section>
+    <title>Action Items</title>
+    <p>
+      All decisions revolve around <em>"action items"</em>. Most action items require a <link href="#decisions-voting">vote</link>
+      to be approved. Votes can either be by <link href="#decisions-voting-approval">majority</link> or by
+      <link href="#decisions-voting-approval">consensus</link>.
+    </p>
+    <p>
+     Action items include the following:
+    </p>
+    <ul>
+      <li>
+        <link href="#decisions-items-ltplans">Long Term Plans</link>:
+        No vote required.
+      </li>
+      <li>
+        <link href="#decisions-items-stplans">Short Term Plans</link>:
+        No vote required.
+      </li>
+      <li>
+        <link href="#decisions-items-releaseplan">Release Plan</link>: 
+        Lazy majority vote on each issue, or lazy consensus if issue involves a product change.
+      </li>
+      <li>
+        <link href="#decisions-items-testing">Release Testing</link>:
+        No vote required, once Release Plan is approved.
+      </li>
+      <li>
+        <link href="#decisions-items-release">Public Release</link>:
+        Majority vote, if no showstoppers are listed in the status file.
+      </li>
+      <li>
+        <link href="#decisions-items-showstoppers">Showstoppers</link>:
+        Lazy consensus until resolved and removed from status file.
+      </li>
+      <li>
+        <link href="#decisions-items-changes">Product Changes</link>:
+        Lazy consensus.
+      </li>
+    </ul>
+    <anchor id="decisions-items-ltplans"/>  
+    <table>
+      <tr>
+        <td>
+          <strong>Long Term Plans</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Long term plans are simply announcements that group members are working on particular 
+          issues related to the Project. These are not voted on, but Committers who do not agree
+          with a particular plan, or think that an alternative plan would be better, are obligated 
+          to inform the group of their feelings. 
+        </td>
+      </tr>
+    </table>
+    <p></p>
+    <anchor id="decisions-items-stplans"/>  
+    <table>
+      <tr>
+        <td>
+          <strong>Short Term Plans</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Short term plans are announcements that a volunteer is working on a particular set of 
+          documentation or code files with the implication that other volunteers should avoid them
+          or try to coordinate their changes. 
+        </td>
+      </tr>
+    </table>
+    <p></p>   
+    <anchor id="decisions-items-releaseplan"/>  
+    <table>
+      <tr>
+        <td>
+          <strong>Release Plan</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          A release plan is used to keep all volunteers aware of when a release is desired, who will
+          be the Release Manager, when the repository will be frozen to create a release, and other 
+          assorted information to keep volunteers from tripping over each other. Lazy majority decides
+          each issue in a release plan, or lazy consensus if the issue involves a product change.
+        </td>
+      </tr>
+    </table>
+    <p></p>   
+    <anchor id="decisions-items-testing"/>  
+    <table>
+      <tr>
+        <td>
+          <strong>Release Testing</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          After a new release is built, it must be tested before being released to the public.
+          After the release plan is approved, the Release Manager will announce that a product
+          is ready for testing. 
+        </td>
+      </tr>
+    </table>
+    <p></p>   
+    <anchor id="decisions-items-release"/>  
+    <table>
+      <tr>
+        <td>
+          <strong>Public Release</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Once the Release Manager determines that testing is complete, and all showstoppers for
+          the release have been resolved, the Release Manager shall call for a vote on the public
+          release. Majority approval is required before the public release can be made. 
+          The Committers who approve a public release (vote <strong>+1</strong>) are expected to 
+          provide ongoing support for that release while it is current. 
+          The Release Manager must summarize the outcome of the vote before the public release becomes final.
+        </td>
+      </tr>
+    </table>
+    <p></p>   
+    <anchor id="decisions-items-showstoppers"/>  
+    <table>
+      <tr>
+        <td>
+          <strong>Showstoppers</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+         Showstoppers are issues that require a fix be in place before the next public release.
+         They are listed in the status file in order to focus special attention on these problems. 
+         An issue becomes a showstopper when it is listed as such in the status file and remains so by lazy consensus.
+        </td>
+      </tr>
+    </table>
+    <p></p>   
+    <anchor id="decisions-items-changes"/>  
+    <table>
+      <tr>
+        <td>
+          <strong>Product Changes</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+         Changes to the products of the project, including code and documentation, 
+         will appear as action items in the status file. All product 
+         <link href="#source-changes">changes to the currently active repository</link>
+         are subject to lazy consensus. 
+        </td>
+      </tr>
+    </table>
+    <p></p>     
+  </section>
+  <anchor id="decisions-voting"/>
+  <section>
+    <title>Voting</title>
+    <anchor id="decisions-voting-items"/>
+    <section>
+      <title>Action Item Votes</title>
+      <p>
+      The act of voting on an action item carries certain obligations. Voting members are not only
+      stating their opinion, they are also agreeing to help do the work. <br/>
+      Any Contributor or Committer ("member") may call for an action-item vote on the 
+      <link href="#communication-dev">Developer mailing list</link>.
+      It is preferred that a vote be preceded by a formal proposal offered for discussion purposes. 
+      The message announcing a vote should contain a Subject beginning with "[VOTE]", and a distinctive 
+      one-line summary corresponding to the <link href="#decisions-items">action item</link> for the vote. 
+      </p>
+      <p>Each vote on an action item can be made in one of four flavors:</p>
+      <p></p>
+      <table>
+        <tr>
+          <td><strong>+1</strong></td>
+          <td>"The action should be performed, and I will help."</td>
+        </tr>
+        <tr>
+          <td><strong>+0</strong></td>
+          <td>"Abstain", "I support the action but I can't help."</td>
+        </tr>
+        <tr>
+          <td><strong>-0</strong></td>
+          <td>"Abstain", "I don't support the action but I can't help with an alternative."</td>
+        </tr>
+        <tr>
+          <td><strong>-1</strong></td>
+          <td>"The action should not be performed and I am offering an explanation or alternative."</td>
+        </tr>
+      </table>
+      <p></p>
+      <p>
+      Votes cast by the project's committers are considered "binding". When needed, at least 3 binding
+      <strong>+1</strong> votes are required for approval of an action item. 
+      </p>
+      <anchor id="decisions-voting-approval"/>
+      <p>An action item may need one of two types of approval:</p>
+      <ol>
+        <li>
+          <em>Consensus approval:</em><br/>
+          An action requiring consensus approval must receive at least <strong>3 binding +1</strong> votes 
+          and <strong>no binding vetos</strong>.
+        </li>
+        <li>
+          <em>Majority approval:</em><br/>
+          An action requiring majority approval must receive at least <strong>3 binding +1</strong> votes 
+          and more <strong>+1</strong> votes than <strong>-1</strong> votes. 
+        </li>
+      </ol>
+      <p>
+        Except for a public release, all action items are considered to have lazy approval until somebody 
+        votes <strong>-1</strong>, at which point the action item is converted to a formal consensus or majority
+        vote, depending on the type of action item .
+      </p>
+      <note>
+        <em>"Lazy"</em> means the action item has immediate tactic approval, and it is not necessary to tally the 
+        vote until a <strong>-1</strong> reply is posted. Once a <strong>-1</strong> reply is posted, the vote must
+        be tallied and reported before the action item is considered approved.<br/> 
+        <strong>All action-item votes are lazy except for a public release vote.</strong>
+      </note>
+      <p>
+       Any member may vote on any action item or related issue. When voting on an action item, the project's 
+       committers may also include the word "binding" next to their vote, to simplify a tally if it is needed.
+       All binding vetos <strong>must</strong> also contain an explanation of why the veto is appropriate. 
+      </p>
+    </section>
+    <anchor id="decisions-voting-caveats"/>
+    <section>
+      <title>Voting Caveats</title>
+      <ul>
+        <li>
+          A <strong>+1</strong> vote regarding product code can only
+          be made binding if the voter has tested the action on their own equipment.
+        </li>
+        <li>
+          A binding <strong>+1</strong> vote on a public release means
+          the project's committer agrees to provide ongoing support for that release
+          while it is current.
+        </li>
+        <li>
+          An abstention may have detrimental effects if too many people abstain.
+        </li>
+        <li>
+          Vetos with no explanation are void. If you disagree
+          with the veto, you should lobby the person who cast the veto. Voters intending
+          to veto an action item should make their opinions known to the group immediately
+          so that the problem can be remedied as early as possible.
+        </li>
+        <li>
+          If a committer believes the explanation for a veto
+          is invalid, an affirmation of the veto can be requested. If some other
+          committer does not affirm that the explanation for the veto is valid, the
+          veto shall be void.
+        </li>
+        <li>
+          Members who wish to discuss a vote before replying,
+          may open another thread to help avoid premature vetos. Any <strong>+/-1</strong>'s
+          or <strong>+/-0</strong>'s posted to an alternate thread, or any other thread not
+          labeled "[VOTE]", are considered conversational, and <strong>do not</strong> qualify
+          as an valid action-item vote. A "lazy item" remains subject to lazy approval
+          until a valid <strong>-1</strong> reply is posted to the "[VOTE]" thread.
+        </li>
+     </ul>
+    </section>
+    <anchor id="decisions-voting-results"/>
+    <section>
+      <title>Vote Results</title>
+      <p>
+        Most action items are subject to lazy approval, and do not require the posting of a formal result. 
+        However, any other majority item that receives any <strong>-1</strong> reply (later rescinded or not)
+        must be followed by a "[VOTE-RESULT]" message before the action item is considered approved.
+      </p>
+      <p>
+        Likewise, any consensus item that receives any binding veto must post a "[VOTE-RESULT]" message 
+        summarizing the result, and show that each veto was rescinded, before it is considered approved. 
+        In either case, the member who requested the vote should also post the result within 120 hours (5 days). 
+      </p>
+      <p>
+        A <link href="#decisions-items-release">Public Release</link> is not considered approved until 
+        the Release Manager posts a followup message with the legend "[VOTE-RESULT]" summarizing the replies.
+      </p>      
+    </section>
+    <anchor id="decisions-voting-plans"/>
+    <section>
+      <title>Proposals (and plans)</title>  
+      <p>
+        Proposals are not a formal action item; however, the message offering a proposal
+        should contain a Subject beginning with "[PROPOSAL]".<br/>
+        It is strongly recommended that a proposal be circulated before calling for a formal vote.
+        Often, once  members have had the chance to critique a proposal, an updated copy of a 
+        proposal can be reposted as the vote document. 
+      </p>
+      <p>
+        Most other messages posted to the Developer's List usually involve either short-term
+        or long-term plans. Often, a long-term plan will be made in the form of a "[PROPOSAL]". 
+        If appropriate, the proposed change or feature may then be entered to the project's 
+        STATUS file or TODO list.
+      </p>
+    </section>
+    <anchor id="decisions-voting-others"/>
+    <section>
+      <title>Voting on other matters</title>
+      <p>
+        There are other matters upon which members will vote that do not involve action items.
+        The same general voting structure is used in these cases, except that the "flavors" are taken to mean: 
+      </p>
+      <p></p>
+      <table>
+        <tr>
+          <td><strong>+1</strong></td>
+          <td>"Yes", "I agree."</td>
+        </tr>
+        <tr>
+          <td><strong>+0</strong></td>
+          <td>"Abstain", "No opinion."</td>
+        </tr>
+        <tr>
+          <td><strong>-0</strong></td>
+          <td>"Abstain", "Unsure."</td>
+        </tr>
+        <tr>
+          <td><strong>-1</strong></td>
+          <td>"No", "I disagree."</td>
+        </tr>
+      </table>
+      <p></p>
+    </section>
+  </section>  
+  <anchor id="decisions-branches"/>
+  <section>
+    <title>Branches</title>
+    <p>
+      In any software development project there is a natural tension between revolution and 
+      evolution. Many software development teams, open or closed, have a team leader who can
+      declare whether the code base is in evolutionary or revolutionary mode. 
+      In a volunteer meritocracy, this type of decision is difficult to make and impossible
+      to enforce. Our meritocracy is fueled by voluntary contributions, and so we must allow
+      everyone to contribute and then base our final product decisions on the contributions
+      we actually receive. 
+    </p>
+    <p>
+    Accordingly, as a matter of project policy, these principles are adopted:
+    </p>
+    <ol>
+      <li>
+        Every committer has the right to revolution. Anyone can establish a branch or seperate
+        whiteboard directory in which to experiment with new code seperate from the main trunk.
+        The only responsibility a committer has when they do this is to announce their short 
+        and long term plans and allow others who want to help to do so.
+        Committers working on a revolutionary branch have the right to develop their approach 
+        free of interference. 
+      </li>
+      <li>
+        When a revolution is considered ready for prime time, the committer(s) shall propose 
+        a merge to the developers list. At that time, the overall community evaluates whether
+        or not the code is ready to become part of, or to potentially replace, the trunk.
+        Suggestions may be made, changes may be required. Once all issues have been taken care
+        of and the merge is approved, the new code may become the trunk. 
+      </li>
+      <li>
+        All development branches should be unversioned. No branch, evolutionary or revolutionary,
+        should have any official version standing.
+        This allows several parallel tracks of development to occur with the final authority 
+        of what eventually becomes the trunk resting with the entire community of committers. 
+      </li>
+      <li>
+        The trunk is the official versioned line of the project. All evolutionary minded people
+        are welcome to work on it to improve it. Evolutionary work is important and should not stop
+        as it is always unclear when any particular revolution will be ready for prime time or 
+        whether it will be officially accepted. 
+      </li>
+    </ol>
+  </section>
+</section>
+
+<anchor id="source"/>
+<section>
+  <title>Source Repository</title>
+  <p>
+  The project's codebase is maintained in a shared information repository using CVS. 
+  Only Committers have write access to this repository. Everyone has read access via anonymous CVS. 
+  All Java Language source code in the repository must be written in conformance to the 
+  <link href="http://java.sun.com/docs/codeconv/html/CodeConvTOC.doc.html">"Code Conventions for the Java Programming Language"</link>
+  as published by Sun. 
+  </p>
+  <anchor id="source-license"/>
+  <section>
+    <title>License</title>
+    <p>
+      All source code committed to the Project's repositories must be covered by the 
+      <link href="site:license">project license</link> or contain a copyright and license 
+      that allows redistribution under the same conditions as the project license. 
+    </p>
+  </section>
+  <anchor id="source-status"/>
+  <section>
+    <title>Status</title>
+    <p>
+      The project's active source code repository contains a file named 
+      <em>STATUS.xml</em> which is used to keep track of the agenda and plans 
+      for work within the repository. The status file includes information about release plans,
+      a summary of code changes committed since the last release, a list of proposed changes 
+      that are under discussion, brief notes about items that individual volunteers are working 
+      on or want discussion about, and anything else that may be useful to help the group track progress. 
+    </p>
+  </section>
+  <anchor id="source-branches"/>
+  <section>
+    <title>Branches</title>
+    <p>
+      It is allowed to create a branch for each release cycle, etc. They are expected to 
+      merge completely back with the main branch as soon as their release cycle is complete. 
+    </p>
+    <p>
+      A branch is considered "evolutionary" by lazy consensus. Upon any dispute 
+      (<link href="#decisions-voting">binding veto</link>),
+      a branch must be converted to "revolutionary" status, and must be assigned a working name 
+      that does not imply it will be the next version of the product. Once a release plan for the 
+      branch has been approved, and the proposed release is ready for testing, it may be assigned
+      a version name reflecting it is a product release candidate, and merged back with the main
+      branch, as appropriate to the circumstances. Any branch, "evolutionary" or "revolutionary",
+      shall meet the same standard for release approval. 
+    </p>
+  </section>
+  
+  
+  <anchor id="source-changes"/>
+  <section>
+    <title>Changes</title>
+    <p>
+      Simple patches to fix bugs can be committed then reviewed. With a commit-then-review
+      process, the committer is trusted to have a high degree of confidence in the change. 
+      Doubtful changes, new features, and large scale overhauls need to be discussed before
+      committing them into the repository. Any change that affects the semantics of an existing
+      API function, the size of the program, configuration data formats, or other major areas must
+      receive consensus approval before being committed.
+    </p>
+    <p>
+      Related changes should be committed as a group, or very closely together. Half complete
+      changes should never be committed to the main branch of a development repository.
+      All code changes must be successfully compiled on the contributor's platform before being 
+      committed. The current source code tree for the project should be capable of complete 
+      compilation at all times. However, it is sometimes impossible for a contributor on one
+      platform to avoid breaking some other platform when a change is committed. If it is anticipated 
+      that a given change will break the build on some other platform, the committer must indicate 
+      that in the commit message. 
+    </p>
+    <p>
+      A committed change must be reversed if it is vetoed by one of the voting members and 
+      the veto conditions cannot be immediately satisfied by the equivalent of a "bug fix" commit. 
+      The veto must be rescinded before the change can be included in any public release.
+    </p>
+  </section>
+    <anchor id="source-patches"/>
+  <section>
+    <title>Patches</title>
+    <p>
+     When a specific change to a product is proposed for discussion or voting on the appropriate
+     development mailing list, it should be presented in the form of input to the patch command.
+     When sent to the mailing list, the message should contain a Subject beginning with [PATCH]
+     and a distinctive one-line summary corresponding to the 
+     <link href="#decisions-items">action item</link> for that patch.
+    </p>
+    <p>
+      Related changes should be committed as a group, or very closely together. Half complete
+      changes should never be committed to the main branch of a development repository.
+      All code changes must be successfully compiled on the contributor's platform before being 
+      committed. The current source code tree for the project should be capable of complete 
+      compilation at all times. However, it is sometimes impossible for a contributor on one
+      platform to avoid breaking some other platform when a change is committed. If it is anticipated 
+      that a given change will break the build on some other platform, the committer must indicate 
+      that in the commit message. 
+    </p>
+    <p>
+      The patch should be created by using the diff -u command from the original software file(s)
+      to the modified software file(s). For example: 
+    </p>
+    <source>diff -u Main.java.orig Main.java >> patchfile.txt</source>
+    <p>
+      or
+    </p>
+    <source>cvs diff -u Main.java >> patchfile.txt</source>
+    <p>
+      On Win32 you can use <link href="http://www.wincvs.org/">WinCVS </link> for a nice GUI or 
+      you can install <link href="http://sources.redhat.com/cygwin">Cygwin</link> which will
+      enable you to use the bash shell and also installs a lot of other utilities 
+      (such as diff and patch) that will turn your PC into a virtual Unix machine.
+    </p>
+    <p>
+      All patches necessary to address an action item should be concatenated within a single 
+      patch message. If later modification to the patch proves necessary, the entire new patch
+      should be posted and not just the difference between the two patches.
+    </p>
+  </section>
+</section>
+</body>
+</document>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Telnet Specifications</title>
+    <version>@version@ (@date@)</version>
+    <authors>
+      <person name="Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+    </authors>
+  </header> 
+  <body> 
+    <section>
+      <title>About</title>
+      <p>
+      This document provides links to telnet specifications, and describes the implementation
+      status of this library.
+      </p>
+    </section>
+    <section>
+      <title>Telnet Protocol Specifications</title>  
+      <dl> 
+          <dt><link href="http://www.faqs.org/rfcs/rfc854.html">RFC 854</link></dt> 
+          <dd>Telnet Protocol Specification</dd>
+          <dt><link href="http://www.faqs.org/rfcs/rfc855.html">RFC 855</link></dt> 
+          <dd>Telnet Option Specifications</dd>
+          <dt><link href="http://www.faqs.org/rfcs/rfc857.html">RFC 857</link></dt> 
+          <dd>Telnet Echo Option</dd>
+          <dt><link href="http://www.faqs.org/rfcs/rfc858.html">RFC 858</link></dt> 
+          <dd>Telnet Supress Go Ahead Option</dd>
+          <dt><link href="http://www.faqs.org/rfcs/rfc727.html">RFC 727</link></dt> 
+          <dd>Telnet Logout Option</dd>
+          <dt><link href="http://www.faqs.org/rfcs/rfc1073.html">RFC 1073</link></dt> 
+          <dd>Telnet Window Size Option</dd>
+          <dt><link href="http://www.faqs.org/rfcs/rfc1091.html">RFC 1091</link></dt> 
+          <dd>Telnet Terminal-Type Option</dd>
+          <dt><link href="http://www.faqs.org/rfcs/rfc1184.html">RFC 1184</link></dt> 
+          <dd>Telnet Linemode Option</dd>
+          <dt><link href="http://www.faqs.org/rfcs/rfc1143.html">RFC 1143</link></dt>
+          <dd>Telnet Environment Option</dd> 
+          <dt><link href="http://www.faqs.org/rfcs/rfc1572.html">RFC 1572</link></dt>
+          <dd>The Q Method of Implementing Option Negotiation</dd>
+      </dl>
+    </section>
+    <section>
+       <title>Implementation Comments</title>
+       <section>
+         <title>General</title>
+         <p>
+         telnetd has been implemented based on the standard specifications, as well as
+         the <link href="http://www.faqs.org/rfcs/rfc1143.html">Q Method of Implementing 
+         Option Negotiation (RFC 1143)</link>.
+         </p>
+         <p>
+         Although it does some and could do more sophisticated option/suboption negiotiation,
+         the idea is to keep it down to the minimum required to work properly for the application
+         you want to expose via telnet. At the moment the largest part of the negotiation is mainly
+         limited to the beginning of the connection, this is specifically the case for ECHO and for 
+         LINEMODE, which means you will have to extend the code in case you require dynamic switching 
+         at throughout the connection.
+         </p>
+         <warning>Although there exists a standard, telnet is a rather "complex" protocol which
+         is implemented to different extent and with different success in various clients.
+         Often, clients are "broken" or lack support for more complex negotiation/subnegotiation 
+         schemes.
+         </warning>
+         <p>
+         Not always it is the telnetd implementation that has to be blamed. A good way to figure out
+         what is going wrong is to enable debug in a standard UNIX telnet implementation (e.g. BSD telnet).
+         <br/> The following snippet shows how this can be achieved and what the output looks like:
+         </p>         
+         <source>[Fangorn:~] wimpi$ telnet
+telnet> set options
+Will show option processing.
+telnet> open localhost 6666
+Trying ::1...
+Connected to localhost.
+Escape character is '^]'.
+RCVD WILL ECHO
+SENT DO ECHO
+RCVD DONT ECHO
+RCVD DO NAWS
+SENT WILL NAWS
+SENT IAC SB NAWS 0 130 (130) 0 24 (24)
+RCVD WILL SUPPRESS GO AHEAD
+SENT DO SUPPRESS GO AHEAD
+RCVD DO SUPPRESS GO AHEAD
+SENT WILL SUPPRESS GO AHEAD
+RCVD DO TERMINAL TYPE
+SENT WILL TERMINAL TYPE
+RCVD IAC SB TERMINAL-TYPE SEND
+SENT IAC SB TERMINAL-TYPE IS "VT100"
+</source>
+       </section>
+       <section>
+         <title>Specific</title>
+         <dl>
+           <dt><strong>NVT</strong></dt>
+           <dd>The implementation has support for AYT and BRK. The first will be answered by writing directly
+           to the terminal (which might cause troubles if you are using screens), the latter will trigger a connection
+           event that can be handled by your application.</dd>
+           <dt><strong>Options always negotiated</strong></dt>
+           <dd>The implementation will always try to negotiate "SUPRESS GO AHEAD", "WINDOW SIZE", as well as
+           "TERMINAL TYPE".
+           </dd>
+           <dt><strong>Character Mode</strong></dt>
+           <dd>The implementation will negotiate server side only echo at the beginning of the
+           connection. For the specification, IAC DONT ECHO would not be necessary, but for some clients
+           that have a broken ECHO otpion implementation.</dd>
+           <dt><strong>Line Mode</strong></dt>
+           <dd>The implementation will negotiate "LINEMODE" at the beginning of the
+           connection. If the client does support and acknowledge linemode, subnegotiations about the mode mask and
+           the special characters will take place.<br/>
+           telnetd will subnegotiate the standard mode mask EDIT|TRAPSIG, as well as the special character set (sending
+           or acknowledging defaults (as there is no actual support). If you need anything more sophisticated you will have
+           to modify the existing implementation to add support for SLC as well as for the more complex subnegotiation 
+           to be expected.
+           </dd>
+          </dl>
+          <warning>There is quite a number of clients which do not support line mode.</warning>                  
+       </section>  
+    </section>
+  </body>
+</document>

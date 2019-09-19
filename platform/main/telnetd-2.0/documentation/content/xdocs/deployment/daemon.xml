@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Daemon Configuration</title>
+    <version>@version@ (@date@)</version>
+    <authors>
+      <person name="Dieter Wimberger" email=" wimpi@users.sourceforge.net "/>
+    </authors>
+  </header> 
+  <body> 
+    <section>
+      <title>About</title>
+      <p>
+      This document describes the daemon configuration options.
+      </p>
+    </section>
+    <section>
+      <title>Configuration Sections</title>      
+      <section>
+        <title>Terminals</title>
+        <p>
+        The terminals section will configure the terminal management.
+        </p>
+        <section>
+          <title>Configuration Keys and Values</title> 
+          <dl> 
+            <dt>terminals</dt> 
+            <dd>comma separated list of terminal names, each of which should be defined in the configuration</dd>
+            <dt>term.<em>&lt;name&gt;</em>.class</dt> 
+            <dd>Fully qualified class name of a class that implements the <em>net.wimpi.telnetd.io.terminal.Terminal</em> interface.</dd>
+            <dt>term.<em>&lt;name&gt;</em>.aliases</dt> 
+            <dd>comma separated list of aliases for the terminal</dd>
+          </dl>
+          <note>
+            The alias <em>default</em> should be placed to the terminal implementation you would like to make default 
+            (i.e. if negotiation fails or the type negotiated is not available).
+          </note>
+          <warning>
+            The name and the aliases are directly used to map from the result of the terminal type negotiation to a
+            terminal implementation.
+          </warning>
+         </section> <!-- Configuration Key-value pairs -->
+       </section><!-- Terminals -->
+       <section>
+        <title>Shells</title>
+        <p>
+        The shells section will configure the shell management.
+        </p>
+        <section>
+          <title>Configuration Keys and Values</title> 
+          <dl> 
+            <dt>shells</dt> 
+            <dd>comma separated list of shell names, each of which should be defined in the configuration</dd>
+            <dt>shell.<em>&lt;name&gt;</em>.class</dt> 
+            <dd>Fully qualified class name of a class that implements the <em>net.wimpi.telnetd.shell.Shell</em>
+            interface.</dd>
+          </dl>
+        </section><!-- Configuration Keys and Values -->
+      </section><!-- Shells -->
+            <section>
+        <title>Listeners</title>
+        <p>
+        The listeners section will configure the listeners to be started
+        when the daemon is started.
+        </p>        
+        <section>
+          <title>Configuration Keys and Values</title> 
+          <dl> 
+             <dt>listeners</dt> 
+             <dd>(=<em>name[(,name)*]</em>An enumeration of the listeners that are configured with the following 
+             key-value pairs.</dd>
+             <dt><em>name</em>.port</dt> 
+             <dd>Port the listener will listen to.</dd>
+             <dt><em>name</em>.floodprotection</dt> 
+             <dd>The maximum queue length for incoming connection indications (a request to connect)
+             is set to this parameter. If a connection indication arrives when the queue is full, 
+             the connection is refused.</dd>
+             <dt><em>name</em>.maxcon</dt> 
+             <dd>Maximum number of concurrent connections allowed.<br/>
+             If there is space in the queue, the connection will be queued.</dd>
+             <dt><em>name</em>.time_to_warning</dt> 
+             <dd>Maximum idle time until an idle warning will be issued. This happens in form of a connection event,
+             which each shell can handle it's own way.</dd>
+             <dt><em>name</em>.time_to_timedout</dt> 
+             <dd>Maximum idle time after an idle warning, until a timedout event will be issued. 
+             Each shell can handle this it's own way.</dd>
+             <dt><em>name</em>.housekeeping</dt> 
+             <dd>Time interval for the connection manager to check for idle and timedout warnings.</dd>
+             <dt><em>name</em>.inputmode</dt> 
+             <dd><em>line</em> or <em>character</em><br/>
+             When put in linemode, the server will try to negotiate line mode with the client. If 
+             not possible, it will fall back to character mode and set the line mode flag in the ConnectionData
+             instance.<br/>
+             When put in charactermode, the server will negotiate server side echo.
+             </dd>
+             <dt><em>name</em>.loginshell</dt> 
+            <dd>The name of the default login shell of this listener. The shell should be configured in the
+            shells section.</dd>
+            <dt><em>name</em>.connectionfilter</dt> 
+            <dd>Fully qualified class name of a class implementing the <em>net.wimpi.telnetd.net.ConnectionFilter</em> interface.
+            <br/>The connection manager will instantiate it, and call initialize, passing the listener properties. 
+            </dd>
+        </dl>
+        <note>
+          All time intervals are to be given in milliseconds (milliseconds/1000=seconds/60=minutes). They are to be understood
+          as <em>best-effort</em> values.
+        </note>
+        </section><!-- Configuration Key-value pairs -->
+      </section><!-- Listeners -->
+      
+      
+    </section><!-- Daemon Configuration Sections -->
+     
+     
+     
+      <section>
+        <title>Example</title>
+       <source>#Unified telnet proxy properties
+#Daemon configuration example.
+#Created: 15/11/2004 wimpi
+
+
+############################
+# Telnet daemon properties #
+############################
+
+#####################
+# Terminals Section #
+#####################
+
+# List of terminals available and defined below
+terminals=vt100,ansi,windoof,xterm
+
+# vt100 implementation and aliases
+term.vt100.class=net.wimpi.telnetd.io.terminal.vt100
+term.vt100.aliases=default,vt100-am,vt102,dec-vt100
+
+# ansi implementation and aliases
+term.ansi.class=net.wimpi.telnetd.io.terminal.ansi
+term.ansi.aliases=color-xterm,xterm-color,vt320,vt220,linux,screen
+
+# windoof implementation and aliases
+term.windoof.class=net.wimpi.telnetd.io.terminal.Windoof
+term.windoof.aliases=
+
+# xterm implementation and aliases
+term.xterm.class=net.wimpi.telnetd.io.terminal.xterm
+term.xterm.aliases=
+
+##################
+# Shells Section #
+##################
+
+# List of shells available and defined below
+shells=dummy
+
+# shell implementations
+shell.dummy.class=net.wimpi.telnetd.shell.DummyShell
+
+#####################
+# Listeners Section #
+#####################
+listeners=std
+
+
+# std listener specific properties
+
+#Basic listener and connection management settings
+std.port=6666
+std.floodprotection=5
+std.maxcon=25
+
+
+# Timeout Settings for connections (ms)
+std.time_to_warning=3600000
+std.time_to_timedout=60000
+
+# Housekeeping thread active every 1 secs
+std.housekeepinginterval=1000
+
+std.inputmode=character
+
+# Login shell
+std.loginshell=dummy
+
+# Connection filter class
+std.connectionfilter=none
+</source>      
+    </section>
+  </body>
+</document>

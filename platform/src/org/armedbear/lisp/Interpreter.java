@@ -63,6 +63,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
+import org.logicmoo.system.IOSecurityManager;
 import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 
@@ -712,26 +713,34 @@ public final class Interpreter extends Startup implements Runnable {
 
 	/**
 	 * @throws ConditionThrowable
+	 * @throws IOException
 	 */
 	public static void compile_the_system() throws ConditionThrowable {
 		try {
 			evaluate("(setf *load-verbose* t)");
-			evaluate("(setf trace-lisp 10)");
+			// evaluate("(setf trace-lisp 10)");
 			//String eval = "(handler-case (compile-system :zip nil :quit t :output-path \"${abcl.lisp.output}/\") (t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))";
-			evaluate("(handler-case (compile-system :zip nil :quit t :output-path \".\") " + "(t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))");
-		} catch (UnhandledCondition c) {
+			String abcl_lisp_output = new File("./target/classes/org/armedbear/lisp/").getCanonicalPath();
+			abcl_lisp_output = IOSecurityManager.canonicalPath(abcl_lisp_output);
+			evaluate("(handler-case (compile-system :zip nil :quit t :output-path \"" + abcl_lisp_output + "\") " //
+					+ "(t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))");
+		} catch (Throwable c) {
 			addUncaught(c);
 			final String separator = System.getProperty("line.separator");
 			StringBuilder sb = new StringBuilder();
 			sb.append(separator);
 			sb.append("Caught ");
-			sb.append(c.getCondition().typeOf().printObject());
-			sb.append(" while processing --compile-system");
-			sb.append(separator);
-			sb.append("  ");
 			final LispThread thread = LispThread.currentThread();
 			thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
-			sb.append(c.getCondition().princToString());
+			if (c instanceof ConditionThrowable) {
+				final LispObject condition = ((ConditionThrowable) c).getCondition();
+				sb.append(condition.typeOf().printObject());
+				sb.append(separator);
+				sb.append(condition);
+			} else {
+				sb.append(c);
+			}
+			sb.append(" while processing --compile-system");
 			sb.append(separator);
 			System.err.print(sb.toString());
 			exit(2); // FIXME

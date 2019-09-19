@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!DOCTYPE styles PUBLIC "-//Dieter Wimberger//DTD TelnetD Styles 1.0//EN"
+                        "http://telnetd.sourceforge.net/dtd/telnetd-styles.dtd">
+
+<!--
+  You can define styles and style aliases.
+  Basic styles are already defined, this includes all colors (e.g. white, bgwhite) and types (eg. underlined).
+  An alias is more lightweight than a style.
+  A style can define the type (bold,italic, underlined, blinking),
+  the foreground color (black,red,blue,green,yellow,cyan,magenta,white)
+  and the background color (black,red,blue,green,yellow,cyan,magenta,white).  
+-->
+<styles>  
+  <style id="important" type="bold" color="yellow" bgcolor="blue"/>
+  <style id="error" color="red"/>
+  <style id="warning" color="magenta"/>
+  <style id="standard" color="white"/>
+  <style id="osgi" color="yellow" />
+  <style-alias id="highlight" ref="important"/>
+</styles>

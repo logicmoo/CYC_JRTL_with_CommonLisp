@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+telnetd site.xml
+
+This file contains an outline of the site's information content.  It is used to:
+- Generate the website menus (though these can be overridden - see docs)
+- Provide semantic, location-independent aliases for internal 'site:' URIs, eg
+<link href="site:changes"> links to changes.html (or ../changes.html if in
+  subdir).
+- Provide aliases for external URLs in the external-refs section.  Eg, <link
+  href="ext:cocoon"> links to http://xml.apache.org/cocoon/ 
+
+See http://xml.apache.org/forrest/linking.html for more info
+-->
+<site label="telnetd" href="" xmlns="http://apache.org/forrest/linkmap/1.0">
+    
+    <project label="About">
+      <index label="Index" href="index.html"/>
+      <news label="News" href="http://sourceforge.net/news/?group_id=6330"/>
+      <license label="License" href="license.html"/>
+      <download label="Download" href="http://sourceforge.net/project/showfiles.php?group_id=6330"/>
+      <sf label="SF Project Home" href="http://www.sourceforge.net/projects/telnetd"/>
+      <changes label="Changes" href="changes.html"/>
+      <todo label="Todo" href="todo.html"/>
+    </project>
+    
+    <involve label="Getting Involved">
+      <guideline label="Project Guidelines" href="project_guidelines.html"/>
+      <fora label="Discussion Fora" href="http://sourceforge.net/forum/?group_id=6330"/>
+      <support label="Support Requests" href="http://sourceforge.net/tracker/?atid=206330&amp;group_id=6330&amp;func=browse"/>
+      <mailinglists label="Mailing Lists" href="mailing_lists.html"/>
+      <bugtracker label="Bug Reporting &amp; Tracking" href="http://sourceforge.net/tracker/?atid=106330&amp;group_id=6330&amp;func=browse"/>
+      <rfe label="Feature Request" href="http://sourceforge.net/tracker/?atid=356330&amp;group_id=6330&amp;func=browse"/>
+      <cvs label="CVS Repository">
+        <access label="access information" href="http://sourceforge.net/cvs/?group_id=6330"/>
+        <webview label="online browsing" href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/telnetd"/>
+      </cvs>
+      <projectusers label="Who is using telnetd?" href="project_users.html"/>   
+    </involve>
+  
+    <documentation label="Documentation">
+      <apidocs label="API Documentation" href="api/"/>
+      <specifications label="Specifications" href="specifications.html"/>
+      <deployment label="Deployment &amp; Configuration" href="deployment/">
+        <overview label="Overview" href="index.html"/>
+        <daemonconfig label="Daemon" href="daemon.html"/>
+        <startuphowto label="Startup How-To" href="startup.html"/>
+        <shelltutorial label="Shell Tutorial" href="shell_tutorial.html"/>
+      </deployment>
+      <prjbuild label="Building" href="project_build.html"/>
+    </documentation>
+    <credits label="Credits">
+      <projectcredits label="Project Credits" href="project_credits.html"/>
+      <projectdependencies label="Legal Notices" href="project_legalnotices.html"/>
+    </credits>
+    
+
+<!--  Add external references -->
+<external-refs>
+    <www.sourceforge.net href="http://www.sourceforge.net/">
+      <projects href="projects/">
+        <telnetd href="telnetd"/>
+      </projects>
+      <mailinglists href="mail/?group_id=6330"/>
+      <discussionfora href="forum/?group_id=6330"/>
+      <trackers href="tracker/?group_id=6330&amp;func=browse">
+        <supportrequests href="&amp;atid=206330"/>
+        <bugreporting href="&amp;atid=106330"/>
+        <featurerequests href="&amp;atid=356330"/>
+      </trackers>
+    </www.sourceforge.net>
+    <jakarta.apache.org href="http://jakarta.apache.org"/>
+    <ant href="http://ant.apache.org"/>
+    <forrest href="http://forrest.apache.org"/>
+    
+</external-refs>
+
+</site>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE templates PUBLIC "-//Dieter Wimberger//DTD TelnetD Styles 1.0//EN"
+                        "http://telnetd.sourceforge.net/dtd/telnetd-templates.dtd">
+
+
+<!--
+  Templates can be organized into sets in a tree like structure. This tree structure will
+  only be reflected by a prefix added to the template key, but in reality be flattened out
+  into a single group of templates.
+  The advantage is that any defined template can be called from within other templates.
+  Note that all styles (basic and custom) are templates as well, an might be used within 
+  template definitions.
+  Static templates will be translated once when loaded and cached for reuse.
+  Dynamic templates will be translated at runtime (except the style markup) and filled
+  with given attributes accordingly. The template language is simple but powerful, allowing
+  flexible conditional and list (multivalue/loop) constructs. Note that the compiled templates
+  (they are translated into an AST basically) will be held in a pool for reuse by the 
+  TemplatesManager.
+  
+  You can use style markup and linebreaks anywhere in a template, these will be
+  applied when the template is loaded. Standard linebreaks of any type (i.e. system dependent)
+  will be !FILTERED!, so you need to place linebreak tags deliberately.
+-->
+
+<templates>
+
+  <template key="test1" type="static" style="highlight">TelnetD Extensions</template>
+  <template key="test2" type="static" style="important">http://telnetd.sourceforge.net</template>
+ 
+  <template-set id="errors" style="error">
+    <template key="some" type="static">Some error occurred.</template> 
+    <template key="io" type="static">An I/O error has occurred.</template>
+    <template key="exception" type="dynamic">An Exception has occured $trace$.</template>    
+  </template-set>
+
+</templates>
+
+

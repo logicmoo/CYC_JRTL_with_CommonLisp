@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Specified Umlaut Entities as UTF-8 Hex values -->
+<!ENTITY Auml "&#x00C4;">
+<!ENTITY Ouml "&#x00D6;">
+<!ENTITY Uuml "&#x00DC;">
+<!ENTITY auml "&#x00E4;">
+<!ENTITY ouml "&#x00F6;">
+<!ENTITY uuml "&#x00FC;">
+
+<!ELEMENT templates (template-set|template)*>
+
+<!ELEMENT template-set (template-set|template)*>
+<!ATTLIST template-set 
+          id CDATA #REQUIRED
+          style CDATA #IMPLIED
+>
+
+<!ELEMENT template (#PCDATA|br|color|style|bgcolor)*>
+<!ATTLIST template
+          key CDATA #REQUIRED
+          type (static|dynamic) #IMPLIED
+          style CDATA #IMPLIED
+          wsfilter (on|off) #IMPLIED
+>
+
+<!ELEMENT br EMPTY>
+<!ATTLIST br lines CDATA #IMPLIED>
+
+<!ELEMENT style (#PCDATA)>
+<!ATTLIST style value CDATA #REQUIRED>
+
+<!ELEMENT color (#PCDATA)>
+<!ATTLIST color value (black|red|green|yellow|blue|magenta|cyan|white) #IMPLIED>
+
+<!ELEMENT bgcolor (#PCDATA)>
+<!ATTLIST bgcolor value (black|red|green|yellow|blue|magenta|cyan|white) #IMPLIED>
+
+          
+          
