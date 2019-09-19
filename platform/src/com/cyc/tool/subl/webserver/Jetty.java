@@ -84,7 +84,8 @@ public class Jetty implements CommonSymbols {
 				e.printStackTrace();
 			}
 
-			if (isJettyRunning()) {
+			boolean wasJettyRunning = isJettyRunning();
+			if (wasJettyRunning) {
 				info("Jetty is already running on port " + jettyServer.getConnectors()[0]);
 				break Label_0411;
 			}
@@ -115,9 +116,14 @@ public class Jetty implements CommonSymbols {
 
 				}
 				jettyServer.setHandler(handlers);
+				wasJettyRunning = isJettyRunning();
+				if (wasJettyRunning) {
+					info("Jetty server started on port " + port);
+					break Label_0411;
+				}
 				jettyServer.start();
-
-				if (isJettyRunning()) {
+				wasJettyRunning = isJettyRunning();
+				if (wasJettyRunning) {
 					info("Jetty server started on port " + port);
 					break Label_0411;
 				}
