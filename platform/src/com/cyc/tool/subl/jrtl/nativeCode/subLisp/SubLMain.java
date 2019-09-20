@@ -468,7 +468,7 @@ public class SubLMain extends Startup {
 		if (isSubLInitialized || isSubLInitialized_part0)
 			return;
 		isSubLInitialized_part0 = true;
-		preInitLisp();
+		init_lisp();
 		try {
 			PatchFileLoader.PATCH_FILE_LOADER.loadClass("com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage");
 		} catch (Exception e) {

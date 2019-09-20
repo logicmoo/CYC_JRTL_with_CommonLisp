@@ -280,7 +280,7 @@ public class SystemCurrent {
 				}
 			}
 
-			InputStream is = inOutErr.in;
+			InputStream is = inOutErr.mustIn();
 			if (is == null) {
 				if (currentThread == originalSystemThread) {
 					return originalSystemIn;

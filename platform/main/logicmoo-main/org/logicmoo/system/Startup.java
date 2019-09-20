@@ -831,19 +831,6 @@ public class Startup extends ABCLStatic {
 		return argsNew;
 	}
 
-	private static void startServers(int portOffset) throws IOException {
-		final bsh.Interpreter ensureBSH = BeanShellCntrl.ensureBSH();
-		final NameSpace nameSpace = ensureBSH.getNameSpace();
-		final Sessiond sessiond = new Sessiond(nameSpace, portOffset + 4123);
-		sessiond.start();
-		SystemCurrent.recheckStdIO();
-		LispClient.startServer(portOffset + 3223);
-		if (USE_TOMCAT) {
-			start_servlet(portOffset + 3603);
-		}
-		SystemCurrent.recheckStdIO();
-	}
-
 	/**
 	 * TODO Describe the purpose of this method.
 	 * @param substring
@@ -895,75 +882,6 @@ public class Startup extends ABCLStatic {
 			return Boolean.FALSE;
 		}
 	};
-
-	static JLisp headless_j_object_instance;
-
-	@LispMethod
-	public static int init_jlisp() {
-		if (headless_j_object_instance == null) {
-			headless_j_object_instance = JLisp.jlispHeadless();
-		}
-		return headless_j_object_instance.port;
-	}
-
-	@LispMethod
-	public static Interpreter init_lisp() {
-		synchronized (Interpreter.globalLock) {
-			synchronized (StartupLock) {
-				boolean wasleanABCL = leanABCL;
-				boolean wasNeedSubLMAIN = needSubLMAIN;
-				if (Interpreter.globalInterpreter == null) {
-					try {
-						needSubLMAIN = false;
-						MainThreaded = true;
-						noExit = true;
-						leanABCL = true;
-						final Class c = Class.forName("org.armedbear.lisp.Main");
-						//c.getMethod("main", String[].class).invoke(null, new Object[] { new String[] { "--noinit", "--lisp" } });
-						String canonicalPath = "./";
-						try {
-							canonicalPath = new File(canonicalPath).getCanonicalPath();
-						} catch (IOException e) {
-							canonicalPath = new File(canonicalPath).getAbsolutePath();
-						}
-						final boolean firstInstance = (lispInstances.get() == 0);
-						final String fcanonicalPath = canonicalPath;
-						//passedArgs = new String[] {}; // "--load", "cyc"
-						//final String[] args = passedArgs;
-						final InputStream inputStream = SystemCurrent.mustIn();
-						final OutputStream outputStream = SystemCurrent.mustOut();
-						Interpreter interp = Interpreter. //
-								createNewLispInstance(inputStream, outputStream, //
-										fcanonicalPath, Version.getVersion(), jlisp_requested, //
-										passedArgs, firstInstance);
-						globalInterpreter = interp;
-
-						//t.run();// Main.runThread(t);
-					} catch (Exception e) {
-						printStackTrace(e);
-					} finally {
-						leanABCL = wasleanABCL;
-						needSubLMAIN = wasNeedSubLMAIN;
-					}
-				}
-				return Interpreter.globalInterpreter;
-			}
-		}
-	}
-
-	@LispMethod
-	public static void init_j() {
-		if (noGUI)
-			return;
-		try {
-			final Class c = Class.forName("org.armedbear.j.Editor");
-			final Method method = c.getMethod("startJ", String[].class, boolean.class, boolean.class);
-			method.invoke(null, new String[] { "--no-session", "--debug", "--force-new-instance" }, false, false);
-			j_desktop();
-		} catch (Throwable e) {
-			MsgBox.error(e);
-		}
-	}
 
 	public static String[] copyParams(String[] args) {
 		List<String> av = new ArrayList<String>(Arrays.asList(args));
@@ -1121,13 +1039,6 @@ public class Startup extends ABCLStatic {
 		return argsNew;
 	}
 
-	// Breakpoint to set in IDE
-	public static void bp() {
-		if (false) {
-		}
-		// BeanBowlGUI.startBeanBowl();
-	}
-
 	public static final Object StartupLock = new Object() {
 		@Override
 		public String toString() {
@@ -1200,14 +1111,6 @@ public class Startup extends ABCLStatic {
 		}
 	}
 
-	/**
-	 * TODO Describe the purpose of this method.
-	 */
-	private static void nop() {
-		// TODO Auto-generated method stub
-
-	}
-
 	@LispMethod
 	public static void cl_imports_cyc() {
 		if (true)
@@ -1259,6 +1162,164 @@ public class Startup extends ABCLStatic {
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL, true);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL_USER, true);
 		}
+	}
+
+	static JLisp headless_j_object_instance;
+
+	@LispMethod
+	public static int init_jlisp() {
+		if (headless_j_object_instance == null) {
+			headless_j_object_instance = JLisp.jlispHeadless();
+		}
+		return headless_j_object_instance.port;
+	}
+
+	@LispMethod
+	public static void init_j() {
+		if (noGUI)
+			return;
+		try {
+			final Class c = Class.forName("org.armedbear.j.Editor");
+			final Method method = c.getMethod("startJ", String[].class, boolean.class, boolean.class);
+			method.invoke(null, new String[] { "--no-session", "--debug", "--force-new-instance" }, false, false);
+			j_desktop();
+		} catch (Throwable e) {
+			MsgBox.error(e);
+		}
+	}
+
+	@LispMethod
+	public static Interpreter new_lisp_instance() {
+		final InputStream inputStream = SystemCurrent.mustIn();
+		final OutputStream outputStream = SystemCurrent.mustOut();
+
+		final boolean firstInstance = (lispInstances.get() == 0);
+		final Interpreter lispInstance;
+		if (firstInstance) {
+			lispInstance = init_lisp();
+		} else {
+			lispInstance = Interpreter. //
+					createNewLispInstance(inputStream, outputStream, //
+							new File(".").getAbsolutePath() + "/", Version.getVersion(), //
+							false, null, false);
+		}
+		lispInstance.init();
+		return lispInstance;
+	}
+
+	@LispMethod
+	public static Interpreter init_lisp() {
+		synchronized (Interpreter.globalLock) {
+			synchronized (StartupLock) {
+				boolean wasleanABCL = leanABCL;
+				boolean wasNeedSubLMAIN = needSubLMAIN;
+				if (Interpreter.globalInterpreter == null) {
+					try {
+						needSubLMAIN = false;
+						MainThreaded = true;
+						noExit = true;
+						leanABCL = true;
+						final Class c = Class.forName("org.armedbear.lisp.Main");
+						//c.getMethod("main", String[].class).invoke(null, new Object[] { new String[] { "--noinit", "--lisp" } });
+						String canonicalPath = "./";
+						try {
+							canonicalPath = new File(canonicalPath).getCanonicalPath();
+						} catch (IOException e) {
+							canonicalPath = new File(canonicalPath).getAbsolutePath();
+						}
+						final boolean firstInstance = (lispInstances.get() == 0);
+						final String fcanonicalPath = canonicalPath;
+						//passedArgs = new String[] {}; // "--load", "cyc"
+						//final String[] args = passedArgs;
+
+						final InputStream inputStream = SystemCurrent.mustIn();
+						final OutputStream outputStream = SystemCurrent.mustOut();
+
+						Interpreter interp = Interpreter. //
+								createNewLispInstance(inputStream, outputStream, //
+										fcanonicalPath, Version.getVersion(), jlisp_requested, //
+										passedArgs, firstInstance);
+
+						globalInterpreter = interp;
+
+						//t.run();// Main.runThread(t);
+					} catch (Exception e) {
+						printStackTrace(e);
+					} finally {
+						leanABCL = wasleanABCL;
+						needSubLMAIN = wasNeedSubLMAIN;
+					}
+				}
+				return Interpreter.globalInterpreter;
+			}
+		}
+	}
+
+	@LispMethod
+	public static LispObject lisp_repl() {
+		boolean wasSubLisp = Main.isSubLisp();
+		Main.setSubLisp(false);
+		boolean was_noExit = Main.noExit;
+		try {
+			try {
+				Main.noExit = true;
+				final Interpreter lispInstance = new_lisp_instance();
+				if (wasSubLisp) {
+					cl_imports_cyc();
+					cyc_imports_cl();
+				}
+				lispInstance.run();
+			} catch (org.armedbear.lisp.ProcessingTerminated e) {
+				// printStackTrace(e);
+				// TODO: handle exception
+			} catch (ConditionThrowable e) {
+				bp();
+				throw e;
+			} catch (Throwable e) {
+				printStackTrace(e);
+				// TODO: handle exception
+			}
+			return Symbol.STAR.symbolValue();
+			// return
+			// Lisp.PACKAGE_TPL.findAccessibleSymbol("TOP-LEVEL-LOOP").execute();
+		} finally {
+			Main.setSubLisp(wasSubLisp);
+			System.out.println("Exiting inner CommonLisp REPL");
+			Main.noExit = was_noExit;
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+
+	private static void startServers(int portOffset) throws IOException {
+		final bsh.Interpreter ensureBSH = BeanShellCntrl.ensureBSH();
+		final NameSpace nameSpace = ensureBSH.getNameSpace();
+		final Sessiond sessiond = new Sessiond(nameSpace, portOffset + 4123);
+		sessiond.start();
+		SystemCurrent.recheckStdIO();
+		LispClient.startServer(portOffset + 3223);
+		if (USE_TOMCAT) {
+			start_servlet(portOffset + 3603);
+		}
+		SystemCurrent.recheckStdIO();
+	}
+
+	// Breakpoint to set in IDE
+	public static void bp() {
+		if (false) {
+		}
+		// BeanBowlGUI.startBeanBowl();
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	private static void nop() {
+		// TODO Auto-generated method stub
+
 	}
 
 	public static String addObject(String named, Object value) {
@@ -1900,8 +1961,6 @@ public class Startup extends ABCLStatic {
 		synchronized (StartupInitLock) {
 			SubLMain.commonSymbolsOK = true;
 			IsolatedClassLoader.addDefaultJarsToClassPath(getPlatformDir());
-			init_lisp();
-			init_swipl();
 			boolean b = SubLMain.isInitialized();
 			if (b) {
 				return;
@@ -1910,7 +1969,6 @@ public class Startup extends ABCLStatic {
 			boolean wasshouldRunInBackground = SubLMain.shouldRunInBackground;
 			SubLPackage prevPackage = Lisp.getCurrentPackage();
 			Main.setSubLisp(true);
-			SubLPackage.initPackages();
 			try {
 				SubLMain.shouldRunInBackground = true;
 				SubLMain.initializeSubL(StringArrayZero);
@@ -2162,49 +2220,6 @@ public class Startup extends ABCLStatic {
 		@Override
 		public RuntimeException doThrow(Throwable box) {
 			return doThrow(box);
-		}
-	}
-
-	@LispMethod
-	public static LispObject lisp_repl() {
-		boolean wasSubLisp = Main.isSubLisp();
-		Main.setSubLisp(false);
-		boolean was_noExit = Main.noExit;
-		try {
-			try {
-				Main.noExit = true;
-				SystemCurrent.setupIO();
-				final boolean firstInstance = (lispInstances.get() == 0);
-				final Interpreter lispInstance;
-				if (firstInstance) {
-					lispInstance = init_lisp();
-				} else {
-					lispInstance = Interpreter. //
-							createNewLispInstance( //
-									SystemCurrent.mustIn(), SystemCurrent.mustOut(), //
-									new File(".").getAbsolutePath() + "/", Version.getVersion(), //
-									false, null, false);
-				}
-				if (wasSubLisp) {
-					cl_imports_cyc();
-					cyc_imports_cl();
-				}
-				lispInstance.run();
-			} catch (org.armedbear.lisp.ProcessingTerminated e) {
-				// printStackTrace(e);
-				// TODO: handle exception
-			} catch (ConditionThrowable e) {
-				throw e;
-			} catch (Throwable e) {
-				printStackTrace(e);
-				// TODO: handle exception
-			}
-			return Symbol.STAR.symbolValue();
-			// return
-			// Lisp.PACKAGE_TPL.findAccessibleSymbol("TOP-LEVEL-LOOP").execute();
-		} finally {
-			Main.setSubLisp(wasSubLisp);
-			Main.noExit = was_noExit;
 		}
 	}
 
