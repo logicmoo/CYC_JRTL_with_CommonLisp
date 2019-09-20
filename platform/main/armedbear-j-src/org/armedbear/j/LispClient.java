@@ -160,7 +160,7 @@ public final class LispClient extends CommandInterpreter {
 					socket = serverSocket.accept(); // Blocks
 					new LispClient(null, socket);
 				} catch (Throwable e) {
-					Startup.printStackTrace(e);
+					Startup.uncaughtException(e);
 				}
 			}
 		});

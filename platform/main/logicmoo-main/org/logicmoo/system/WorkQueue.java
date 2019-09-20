@@ -153,7 +153,7 @@ public class WorkQueue {
 					setMode("working " + r);
 					r.run();
 				} catch (Throwable e) {
-					Startup.addUncaught(e);
+					Startup.uncaughtException(e);
 				}
 			}
 		}

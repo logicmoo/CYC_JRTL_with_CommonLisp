@@ -83,7 +83,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			}
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
-			Startup.printStackTrace(e);
+			Startup.uncaughtException(e);
 		}
 		//classDupes(sun.awt.shell.PublicShellFolderManager.class.getName());
 	}
@@ -116,7 +116,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 				Thread.dumpStack();
 			}
 		} catch (Throwable e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			method.invoke(pcl, modpatch1);
 			System.out.println("parent of java.system.class.loader=" + pcl);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 		System.out.println("parentClassLoader=" + parentClassLoader);
 		final Thread currentThread = Thread.currentThread();
@@ -208,7 +208,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 					foo.accept(normalizedFile(file));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				printStackTrace(e);
+				uncaughtException(e);
 			}
 		}
 		for (File f : al) {
@@ -346,7 +346,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			method.invoke(lcl, url);
 			return lcl;
 		} catch (NoSuchMethodException e) {
-			printStackTrace(e);
+			uncaughtException(e);
 			new IOException("No URL (addURL) classloader", e).printStackTrace();
 			return lcl;
 		} catch (Throwable t) {
@@ -501,7 +501,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		try {
 			addURLToClassloader("addCommonClassPath", theIsolatedClassLoader, stringTyped);
 		} catch (IOException e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 	}
 
@@ -538,7 +538,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			addURLToClassloader("addCommonClassPath", lcl, url);
 			return true;
 		} catch (Throwable e) {
-			printStackTrace(e);
+			uncaughtException(e);
 			return false;
 		}
 	}
@@ -568,7 +568,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 					stringTyped = url.getFile();
 					continue do_more;
 				} catch (MalformedURLException e) {
-					printStackTrace(e);
+					uncaughtException(e);
 				}
 
 			} else if (stringTyped.startsWith("jar:")) {
@@ -578,7 +578,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 					continue do_more;
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
-					printStackTrace(e);
+					uncaughtException(e);
 				}
 			}
 
@@ -661,7 +661,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 				}
 				url = new URL(s2);
 			} catch (MalformedURLException e) {
-				printStackTrace(e);
+				uncaughtException(e);
 			}
 		}
 		try {
@@ -732,15 +732,15 @@ public class IsolatedClassLoader extends URLClassLoader {
 			// Create a URL that refers to a jar file in the file system
 			addJarClass(lcl, jarFileClassURL(jfile, className), className);
 		} catch (MalformedURLException e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		} catch (IOException e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		} catch (ClassFormatError e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		} catch (Error e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		} catch (Throwable e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 		return;
 	}
@@ -794,15 +794,15 @@ public class IsolatedClassLoader extends URLClassLoader {
 			}
 			loadedAlready.put(className, c);
 		} catch (MalformedURLException e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		} catch (IOException e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		} catch (ClassFormatError e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		} catch (Error e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		} catch (Throwable e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 		return;
 
@@ -1396,7 +1396,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		//			//org.apache.tomcat.util.security.MD5Encoder.class.getConstructor().setAccessible(true);
 		//		} catch (SecurityException | NoSuchMethodException e) {
 		//			// TODO Auto-generated catch block
-		//			printStackTrace(e);
+		//			uncaughtException(e);
 		//		}
 		//classDupes(com.sun.jersey.spi.scanning.AnnotationScannerListener.class);
 	}

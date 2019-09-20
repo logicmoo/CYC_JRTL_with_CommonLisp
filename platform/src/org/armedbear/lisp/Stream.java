@@ -2122,7 +2122,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 			}
 		} catch (NullPointerException e) {
 			// writer is null
-			Startup.printStackTrace(e);
+			Startup.uncaughtException(e);
 			streamNotCharacterOutputStream();
 		} catch (IOException e) {
 			ioe(e);

@@ -55,7 +55,7 @@ public class UpdateZip {
 			zipMap("webapps/apps/webapp-manifest.xml", "webapps" + name + ".zip", "./");
 			zipMap("httpd/htdocs/javascript/similarity.js", "httpd.zip", "httpd/");
 		} catch (Throwable t) {
-			Startup.addUncaught(t);
+			Startup.uncaughtException(t);
 		}
 
 	}
@@ -84,7 +84,7 @@ public class UpdateZip {
 				System.err.println("Exists " + testfile);
 			}
 		} catch (Throwable e) {
-			Startup.addUncaught(e);
+			Startup.uncaughtException(e);
 			e.printStackTrace();
 			if (!Startup.keepGoing)
 				throw new RuntimeException(e);

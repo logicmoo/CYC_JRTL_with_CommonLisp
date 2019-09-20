@@ -203,7 +203,7 @@ public class Startup extends ABCLStatic {
 				try {
 					r.run();
 				} catch (Throwable e) {
-					addUncaught(e);
+					uncaughtException(e);
 				}
 				return;
 			}
@@ -804,8 +804,7 @@ public class Startup extends ABCLStatic {
 				method.invoke(null, parameters);
 
 			} catch (Throwable e) {
-				printStackTrace(e);
-				addUncaught(e);
+				uncaughtException(e);
 			}
 		}
 
@@ -1107,7 +1106,7 @@ public class Startup extends ABCLStatic {
 		try {
 			cyc_classes_loaded_cdl.await();
 		} catch (InterruptedException e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 	}
 
@@ -1244,7 +1243,7 @@ public class Startup extends ABCLStatic {
 
 						//t.run();// Main.runThread(t);
 					} catch (Exception e) {
-						printStackTrace(e);
+						uncaughtException(e);
 					} finally {
 						leanABCL = wasleanABCL;
 						needSubLMAIN = wasNeedSubLMAIN;
@@ -1276,7 +1275,7 @@ public class Startup extends ABCLStatic {
 				bp();
 				throw e;
 			} catch (Throwable e) {
-				printStackTrace(e);
+				uncaughtException(e);
 				// TODO: handle exception
 			}
 			return Symbol.STAR.symbolValue();
@@ -1815,7 +1814,7 @@ public class Startup extends ABCLStatic {
 						IsolatedClassLoader.suspendAdding = true;
 						start_servlet(3603);
 					} catch (Throwable ex) {
-						printStackTrace(ex);
+						uncaughtException(ex);
 					}
 					if (hasCycCmdlineInits)
 						SubLMain.handleInits();
@@ -1846,7 +1845,7 @@ public class Startup extends ABCLStatic {
 				web_utilities.start_servlet_container(SubLObjectFactory.makeInteger(port));
 			}
 		} catch (Throwable ex) {
-			printStackTrace(ex);
+			uncaughtException(ex);
 		}
 	}
 
@@ -1928,7 +1927,7 @@ public class Startup extends ABCLStatic {
 					}
 					LarKCHttpServer.start_sparql_server();
 				} catch (Throwable e) {
-					printStackTrace(e);
+					uncaughtException(e);
 					te = e;
 				}
 				if (!cycPart2Early)
@@ -1941,6 +1940,7 @@ public class Startup extends ABCLStatic {
 					te = e;
 				}
 				if (te != null) {
+					uncaughtException(te);
 					doThrow(te);
 				}
 				return null;
@@ -2006,7 +2006,7 @@ public class Startup extends ABCLStatic {
 				if (tt != null)
 					return Lisp.error(tt);
 			}
-			printStackTrace(t);
+			uncaughtException(t);
 			String msg = t.getMessage();
 			if (msg == null || msg.length() == 0) {
 				msg = createStackTraceString(t);
@@ -2709,7 +2709,7 @@ public class Startup extends ABCLStatic {
 			}
 		} catch (Error e) {
 			showClassLoaderInfo(term);
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 		if (term instanceof Atom) {
 			return atom_to_object((Atom) term);
@@ -2909,14 +2909,14 @@ public class Startup extends ABCLStatic {
 					installedCR = Class.forName("com.cyc.cycjava.cycl.constants_high_oc").getDeclaredMethod("f10737", SubLObject.class);
 				} catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
 					// TODO Auto-generated catch block
-					printStackTrace(e);
+					uncaughtException(e);
 				}
 			}
 			try {
 				return (SubLObject) installedCR.invoke(constant);
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				// TODO Auto-generated catch block
-				printStackTrace(e);
+				uncaughtException(e);
 			}
 		}
 		if (constant_completion_low.$require_valid_constants$ == null)
@@ -3021,7 +3021,7 @@ public class Startup extends ABCLStatic {
 				cons.setTermRef(term);
 			} catch (Error e) {
 				// TODO Auto-generated catch block
-				printStackTrace(e);
+				uncaughtException(e);
 			}
 			cons.setCar(term_to_lobject(arg1));
 			cons.setCdr(term_to_lobject(term.arg(2)));
@@ -3320,19 +3320,19 @@ public class Startup extends ABCLStatic {
 			if (cycPart2Early)
 				init_cyc_classes_part2();
 		} catch (Throwable e) {
-			addUncaught(e);
+			uncaughtException(e);
 		}
 
 		try {
 			init_cyc();
 		} catch (Throwable e) {
-			addUncaught(e);
+			uncaughtException(e);
 		}
 
 		try {
 			cyc_imports_cl();
 		} catch (Throwable e) {
-			addUncaught(e);
+			uncaughtException(e);
 		}
 		//
 		//		if (!noinform) {
@@ -3528,7 +3528,7 @@ public class Startup extends ABCLStatic {
 		}
 	}
 
-	public static void addUncaught(Throwable e) {
+	public static void uncaughtException(Throwable e) {
 		addUncaught(Thread.currentThread(), e);
 	}
 
@@ -3592,7 +3592,7 @@ public class Startup extends ABCLStatic {
 							Throwable why = e.getCause();
 							if (why instanceof UnsupportedOperationException)
 								continue;
-							e.printStackTrace();
+							uncaughtException(e);
 						}
 					}
 				}
@@ -3676,7 +3676,7 @@ public class Startup extends ABCLStatic {
 					printed++;
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					printStackTrace(e);
 					needComma = false;
 				}
 			}

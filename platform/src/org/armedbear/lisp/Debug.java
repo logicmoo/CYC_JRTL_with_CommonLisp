@@ -57,7 +57,7 @@ public final class Debug {
 		final String m = "Assert violation: " + msg;
 		Error e = new Error(m);
 		Startup.printStackTrace(e);
-		Startup.addUncaught(e);
+		Startup.uncaughtException(e);
 		//		System.err.println(m);
 		//		e.printStackTrace(System.err);
 

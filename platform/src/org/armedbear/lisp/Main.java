@@ -95,12 +95,12 @@ public final class Main extends Startup {
 			}
 		} catch (InterruptedException e) {
 			exitCode = 3;
-			addUncaught(e);
+			uncaughtException(e);
 		} catch (TerminationRequest e) {
 			exitCode = 0;
 		} catch (Throwable e) {
 			exitCode = 1;
-			addUncaught(e);
+			uncaughtException(e);
 		} finally {
 			Startup.reportUncaughts();
 		}

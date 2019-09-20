@@ -307,7 +307,7 @@ public class SystemCurrent {
 		try {
 			return isTLStream(s, newIdentitySet());
 		} catch (Throwable t) {
-			printStackTrace(t);
+			uncaughtException(t);
 			return false;
 		}
 	}
@@ -339,7 +339,7 @@ public class SystemCurrent {
 						continue;
 
 				} catch (IllegalArgumentException | IllegalAccessException e) {
-					printStackTrace(e);
+					uncaughtException(e);
 				}
 				if (!isStreamOfDirection(a, '?')) {
 					continue;
@@ -382,7 +382,7 @@ public class SystemCurrent {
 						}
 					}
 				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
+					uncaughtException(e);
 				}
 			}
 			clz = clz.getSuperclass();
@@ -416,7 +416,7 @@ public class SystemCurrent {
 						}
 					}
 				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
+					uncaughtException(e);
 				}
 			}
 			clz = clz.getSuperclass();
@@ -464,7 +464,7 @@ public class SystemCurrent {
 				try {
 					a = f.get(s);
 				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
+					uncaughtException(e);
 				}
 				if (a == null)
 					continue;
@@ -784,7 +784,7 @@ public class SystemCurrent {
 					interrupted = true;
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					uncaughtException(e);
 					throw new IOException(e);
 				}
 
@@ -1035,7 +1035,7 @@ public class SystemCurrent {
 					redirect.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					uncaughtException(e);
 				}
 		}
 
@@ -1046,8 +1046,7 @@ public class SystemCurrent {
 				try {
 					redirect.flush();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					uncaughtException(e);
 				}
 				super.flush();
 			}
@@ -1145,7 +1144,7 @@ public class SystemCurrent {
 					return true;
 				}
 			} catch (Throwable e) {
-				printStackTrace(e);
+				uncaughtException(e);
 			}
 		}
 		return false;
@@ -1195,7 +1194,7 @@ public class SystemCurrent {
 			}
 
 		} catch (Throwable e2) {
-			printStackTrace(e2);
+			uncaughtException(e2);
 		}
 	}
 
@@ -1209,7 +1208,7 @@ public class SystemCurrent {
 				return true;
 			}
 		} catch (IOException e) {
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 		return false;
 	}
@@ -1306,7 +1305,7 @@ public class SystemCurrent {
 			try {
 				out = new FileOutputStream((File) out, true);
 			} catch (FileNotFoundException e) {
-				printStackTrace(e);
+				uncaughtException(e);
 			}
 		}
 		if (out instanceof OutputStream) {
@@ -1340,7 +1339,7 @@ public class SystemCurrent {
 			try {
 				return new FileInputStream((File) in);
 			} catch (FileNotFoundException e) {
-				printStackTrace(e);
+				uncaughtException(e);
 			}
 		}
 
@@ -1355,8 +1354,8 @@ public class SystemCurrent {
 		return null;
 	}
 
-	private static void printStackTrace(Throwable e) {
-		Startup.printStackTrace(e);
+	private static void uncaughtException(Throwable e) {
+		Startup.uncaughtException(e);
 	}
 
 	private static void bp() {

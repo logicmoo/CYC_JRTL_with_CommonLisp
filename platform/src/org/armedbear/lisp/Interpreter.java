@@ -352,7 +352,7 @@ public final class Interpreter extends Startup implements Runnable {
 			try {
 				r.run();
 			} catch (Throwable e) {
-				Startup.addUncaught(e);
+				Startup.uncaughtException(e);
 			}
 		}
 	}
@@ -375,7 +375,7 @@ public final class Interpreter extends Startup implements Runnable {
 			try {
 				r.run();
 			} catch (Throwable e) {
-				Startup.addUncaught(e);
+				Startup.uncaughtException(e);
 			}
 		}
 	}
@@ -427,14 +427,14 @@ public final class Interpreter extends Startup implements Runnable {
 
 						Class.forName("org.armedbear.j.LispAPI");
 					} catch (ClassNotFoundException e) {
-						Startup.addUncaught(e);
+						Startup.uncaughtException(e);
 					} // FIXME: what to do?
 
 					try {
 
 						Load.loadSystemFile("j.lisp", false); // not being autoloaded
 					} catch (Throwable e) {
-						Startup.addUncaught(e);
+						Startup.uncaughtException(e);
 					} // FIXME: what to do?
 
 					try {
@@ -442,14 +442,14 @@ public final class Interpreter extends Startup implements Runnable {
 							Load.loadSystemFile("emacs.lisp", true); // not being autoloaded
 
 					} catch (Throwable e) {
-						Startup.addUncaught(e);
+						Startup.uncaughtException(e);
 					}
 
 					began_load_J_lisp = true;
 
 				} catch (Throwable e) {
 					began_load_J_lisp = false;
-					Startup.addUncaught(e);
+					Startup.uncaughtException(e);
 				} // FIXME: what to do?
 			}
 		}
@@ -497,7 +497,7 @@ public final class Interpreter extends Startup implements Runnable {
 					return;
 				}
 			} catch (IOException e) {
-				Startup.addUncaught(e);
+				Startup.uncaughtException(e);
 				noinit = wasNoInit;
 			}
 		}
@@ -693,7 +693,7 @@ public final class Interpreter extends Startup implements Runnable {
 		try {
 			evaluate(argi1);
 		} catch (UnhandledCondition c) {
-			addUncaught(c);
+			uncaughtException(c);
 			final String separator = System.getProperty("line.separator");
 			StringBuilder sb = new StringBuilder();
 			sb.append(separator);
@@ -726,7 +726,7 @@ public final class Interpreter extends Startup implements Runnable {
 			evaluate("(handler-case (compile-system :zip nil :quit t :output-path \"" + abcl_lisp_output + "\") " //
 					+ "(t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))");
 		} catch (Throwable c) {
-			addUncaught(c);
+			uncaughtException(c);
 			final String separator = System.getProperty("line.separator");
 			StringBuilder sb = new StringBuilder();
 			sb.append(separator);
@@ -769,11 +769,11 @@ public final class Interpreter extends Startup implements Runnable {
 				}
 				throw e;
 			} catch (IntegrityError e) {
-				addUncaught(e);
+				uncaughtException(e);
 				if (!noExit)
 					return;
 			} catch (Throwable t) {
-				addUncaught(t);
+				uncaughtException(t);
 				printStackTrace(t);
 				if (!noExit)
 					return;
@@ -843,21 +843,21 @@ public final class Interpreter extends Startup implements Runnable {
 				}
 				standardOut._finishOutput();
 			} catch (StackOverflowError e) {
-				addUncaught(e);
+				uncaughtException(e);
 				standardInput.clearInput();
 				standardOut._writeLine("Stack overflow");
 			} catch (ControlTransfer c) {
 				// We're on the toplevel, if this occurs,
 				// we're toast...
-				addUncaught(c);
+				uncaughtException(c);
 				reportError(c, thread);
 			} catch (ProcessingTerminated e) {
 				throw e;
 			} catch (IntegrityError e) {
-				addUncaught(e);
+				uncaughtException(e);
 				return;
 			} catch (Throwable t) {
-				addUncaught(t);
+				uncaughtException(t);
 				standardInput.clearInput();
 				standardOut.printStackTrace(t);
 				thread.printBacktrace();

@@ -76,7 +76,7 @@ public class BeanShellCntrl extends Startup {
 			//main0(args1);
 			Thread.currentThread().wait();
 		} catch (Throwable e) {
-			printStackTrace(e);
+			uncaughtException(e);
 			throw e;
 			// TODO: handle exception
 		}
@@ -202,7 +202,7 @@ public class BeanShellCntrl extends Startup {
 						stdin.write(s);
 						stdin.flush();
 					} catch (IOException e) {
-						printStackTrace(e);
+						uncaughtException(e);
 						throw doThrow(e);
 					}
 				}
@@ -255,8 +255,7 @@ public class BeanShellCntrl extends Startup {
 			// vm.detach();
 			return true;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 		return false;
 	}
@@ -296,14 +295,14 @@ public class BeanShellCntrl extends Startup {
 									out.println("Started: " + desktopStatement);
 								} catch (Throwable e) {
 									began_bsh_desktop = false;
-									printStackTrace(e);
+									uncaughtException(e);
 									out.println("Error:" + desktopStatement + e);
 								}
 							}
 						});
 					} catch (Throwable e) {
 						began_bsh_desktop = false;
-						printStackTrace(e);
+						uncaughtException(e);
 					}
 				}
 			});
@@ -311,7 +310,7 @@ public class BeanShellCntrl extends Startup {
 			//t.join();
 		} catch (Throwable e) {
 			began_bsh_desktop = false;
-			printStackTrace(e);
+			uncaughtException(e);
 		}
 		return;
 	}
@@ -384,9 +383,8 @@ public class BeanShellCntrl extends Startup {
 		noExit = true;
 		try {
 			interp.run();
-		} catch (Exception e) {
-			printStackTrace(e);
-			// TODO: handle exception
+		} catch (Throwable e) {
+			uncaughtException(e);
 		}
 		return true;
 	}
@@ -510,7 +508,7 @@ public class BeanShellCntrl extends Startup {
 			if (!wasNoDebug) {
 				setNoDebug(false);
 			}
-			printStackTrace(t);
+			uncaughtException(t);
 			System.err.println("" + t.getMessage());
 			if (t instanceof JPLException) {
 				throw (JPLException) t;
@@ -560,7 +558,7 @@ public class BeanShellCntrl extends Startup {
 		try {
 			invoke(demoBrowserClass(), "showObject", o);
 		} catch (EvalError e) {
-			printStackTrace(e);
+			uncaughtException(e);;
 			throw new RuntimeException(e);
 		}
 	}
@@ -614,7 +612,7 @@ public class BeanShellCntrl extends Startup {
 			// TODO
 			bowl.addListener((BeansContextListener) ui_inspector_object_instance);
 		} catch (Throwable e) {
-			printStackTrace(e);
+			uncaughtException(e);
 			// TODO Auto-generated catch block
 			// MsgBox.error(e);
 		}
@@ -637,12 +635,10 @@ public class BeanShellCntrl extends Startup {
 	 * @param string2
 	 */
 	private static Object bshInvoke(String string) {
-		// TODO Auto-generated method stub
 		try {
 			return ensureBSH().eval(string);
 		} catch (EvalError e) {
-			// TODO Auto-generated catch block
-			printStackTrace(e);
+			uncaughtException(e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -668,7 +664,7 @@ public class BeanShellCntrl extends Startup {
 				Class<SimpleNode> simpleNodeClass = (Class<SimpleNode>) Class.forName("bsh.SimpleNode");
 				final Method method = bshReflect.getMethod("invokeObjectMethod", Object.class, String.class, Object[].class, bsh.Interpreter.class, CallStack.class, simpleNodeClass);
 				return method //
-						.invoke(null, o, (Object)string, (Object)objects, (Object)ensureBSH, (Object)null, (Object)null);
+						.invoke(null, o, (Object) string, (Object) objects, (Object) ensureBSH, (Object) null, (Object) null);
 			}
 		} catch (InvocationTargetException e) {
 			throw new RuntimeException(e.getCause());

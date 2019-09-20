@@ -89,6 +89,7 @@ public class SubLMain extends Startup {
 				runnable.run();
 			} catch (RuntimeException e2) {
 				SystemCurrent.out.println("Initial Lisp Listener Exiting Now");
+				uncaughtException(e2);
 				throw e2;
 			} finally {
 				SystemCurrent.out.println("Initial Lisp Listener Exiting Now");
@@ -104,8 +105,8 @@ public class SubLMain extends Startup {
 		try {
 			SubLMain.initializeSubL(args);
 			SubLMain.initializeTranslatedSystems();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Throwable e) {
+			uncaughtException(e);
 			SubLMain.me.doSystemCleanupAndExit(-1);
 		}
 		long endTime = System.currentTimeMillis();
@@ -141,8 +142,8 @@ public class SubLMain extends Startup {
 			try {
 				preInitLisp();
 				initializeSubL(args);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Throwable e) {
+				uncaughtException(e);
 				me.doSystemCleanupAndExit(-1);
 			}
 			SubLPackage prevPackage = SubLPackage.getCurrentPackage();
@@ -152,8 +153,8 @@ public class SubLMain extends Startup {
 				// Main.setSubLisp(false);
 				Interpreter.createInstance();
 				startTime += (System.currentTimeMillis() - startABCL);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Throwable e) {
+				uncaughtException(e);
 				// me.doSystemCleanupAndExit(-1);
 			} finally {
 				Main.setSubLisp(true);
@@ -203,9 +204,8 @@ public class SubLMain extends Startup {
 					// CycEval.LISP_REPL.execute();
 					lisp_repl();
 				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Throwable e) {
+				uncaughtException(e);
 				throw new RuntimeException(e);
 			} finally {
 				Main.setSubLisp(wasSubLisp);
@@ -293,7 +293,7 @@ public class SubLMain extends Startup {
 			try {
 				SubLProcess subLProcess = new InitialEmbeddedMain("Initial Lisp Listener", runnable, args);
 				SubLThreadPool.getDefaultPool().execute(subLProcess);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				Errors.handleError(e);
 			}
 		}
@@ -351,7 +351,7 @@ public class SubLMain extends Startup {
 		if (initFile != null)
 			try {
 				Eval.load(initFile);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				Errors.handleError("Failed to load initialization file: " + initFile, e);
 			}
 	}
@@ -471,8 +471,8 @@ public class SubLMain extends Startup {
 		init_lisp();
 		try {
 			PatchFileLoader.PATCH_FILE_LOADER.loadClass("com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage");
-		} catch (Exception e) {
-			e.printStackTrace(); // @hack
+		} catch (Throwable e) {
+			uncaughtException(e); // @hack
 		}
 		SubLPackage.initPackages();
 		commonSymbolsOK = true;
@@ -484,8 +484,8 @@ public class SubLMain extends Startup {
 			SubLSymbol sym3 = CommonSymbols_SYM.OBJECT_MONITOR; // initialized first
 			SubLSymbol sym4 = CommonSymbols_SYM.ARGLIST; // initialized first
 			SubLSymbol sym = CommonSymbols.EQ; // @hack to make sure this get
-		} catch (Exception e) {
-			e.printStackTrace(); // @hack
+		} catch (Throwable e) {
+			uncaughtException(e); // @hack
 		}
 		SubLPackage.setCurrentPackage("SUBLISP");
 		assert CommonSymbols.EQ.getPackage() == SubLPackage.getCurrentPackage();
@@ -609,19 +609,19 @@ public class SubLMain extends Startup {
 						classDupes("org.objectweb.asm.MethodVisitor");
 						System.out.println("" + Class.forName("org.objectweb.asm.MethodVisitor"));
 					} catch (Throwable ex) {
-						printStackTrace(ex);
+						uncaughtException(ex);
 					}
 					try {
 						//SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
 					} catch (Throwable ex) {
-						printStackTrace(ex);
+						uncaughtException(ex);
 					}
 					try {
 						// if(!SubLMain.TINY_KB) //
 						initialize1TranslatedSystem("com.cyc.cycjava.cycl.rcycl");
 						// ;
 					} catch (Throwable ex) {
-						printStackTrace(ex);
+						uncaughtException(ex);
 					}
 				} finally {
 					SubLMain.Always_REDEFINE = was;
@@ -666,16 +666,16 @@ public class SubLMain extends Startup {
 			try {
 				Eval.initialize_subl_interface_file(SubLObjectFactory.makeString(str));
 				completed = true;
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Throwable e) {
+				uncaughtException(e);
 				// Logger.getAnonymousLogger().log(Level.SEVERE, e.getMessage(),
 				// e);
 				// ignore
 			} finally {
 				try {
 					initializeLowMemoryDetection();
-				} catch (Exception e2) {
-					e2.printStackTrace();
+				} catch (Throwable e2) {
+					uncaughtException(e2);
 				}
 			}
 			isSubLInitialized = completed;
@@ -713,7 +713,7 @@ public class SubLMain extends Startup {
 			try {
 				SystemCurrent.out.println("  Calling: " + func);
 				Functions.funcall(func);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				Errors.warn("Warning: low memory callback function error for " + func);
 			}
 		SystemCurrent.out.println("Done calling low memory situation callbacks.");
@@ -811,21 +811,21 @@ public class SubLMain extends Startup {
 		try {
 			// use reader to avoid direct code dependency on cycl
 			SystemCurrent.out.println("Current KB: " + Eval.eval(reader.read_from_string(SubLObjectFactory.makeString("(clet ((result \"<none>\")) (ignore-errors (pwhen (fboundp 'KB-VERSION-STRING) (csetq result (format nil \"~A\" (kb-version-string))))) result)"), CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)).getStringValue());
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			SystemCurrent.out.println("KB: <none>");
 		}
 		try {
 			// use reader to avoid direct code dependency on cycl
 			SystemCurrent.out
 					.println("Patch Level: " + Eval.eval(reader.read_from_string(SubLObjectFactory.makeString("(clet ((result \"<unknown>\")) (ignore-errors (pwhen (fboundp 'CYC-REVISION-STRING) (csetq result (format nil \"~A\" (cyc-revision-string))))) result)"), CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)).getStringValue());
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			SystemCurrent.out.println("Patch level: <unknown>");
 		}
 		try {
 			SystemCurrent.out.println("Working Directory: " + Eval.eval(
 					reader.read_from_string(SubLObjectFactory.makeString("(clet ((result \"" + System.getProperty("user.dir").replace('\\', '/') + "\")) " + "(ignore-errors (pwhen (fboundp 'CANONICAL-CYC-WORKING-DIRECTORY) (csetq result (canonical-cyc-working-directory))) result))"), CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED))
 					.getStringValue());
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			SystemCurrent.out.println("Working directory (Java): " + System.getProperty("user.dir"));
 		}
 		SystemCurrent.out.println("Running on: " + Environment.machine_instance().getStringValue());
@@ -844,7 +844,7 @@ public class SubLMain extends Startup {
 		for (int i = 0, size = cleanups.size(); i < size; ++i)
 			try {
 				cleanups.get(i).cleanup();
-			} catch (Exception ex) {
+			} catch (Throwable ex) {
 			}
 		StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
 		exit(code);
