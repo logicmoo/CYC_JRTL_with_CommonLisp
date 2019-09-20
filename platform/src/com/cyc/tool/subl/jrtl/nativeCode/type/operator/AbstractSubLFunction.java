@@ -22,6 +22,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
+@SuppressWarnings("unused")
 public abstract class AbstractSubLFunction extends AbstractSubLOperator implements SubLFunction {
 
 	protected AbstractSubLFunction(SubLSymbol functionSymbol) {

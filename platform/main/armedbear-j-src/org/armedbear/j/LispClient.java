@@ -23,7 +23,9 @@ package org.armedbear.j;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -59,7 +61,11 @@ public final class LispClient extends CommandInterpreter {
 			synchronized (this) {
 				notify();
 			}
-			interpreter = Interpreter.createNewLispInstance(socket.getInputStream(), socket.getOutputStream(), initialDir.canonicalPath(), Version.getLongVersionString(), true);
+			final OutputStream outputStream = socket.getOutputStream();
+			PrintStream ps = new PrintStream(outputStream);
+			ps.println("You will be ocnnected to Lisp Instance " + Interpreter.lispInstances.get() + 1);
+			ps.flush();
+			interpreter = Interpreter.createNewLispInstance(socket.getInputStream(), outputStream, initialDir.canonicalPath(), Version.getLongVersionString(), true);
 			interpreter.run();
 		} catch (Throwable t) {
 			Log.error(t);

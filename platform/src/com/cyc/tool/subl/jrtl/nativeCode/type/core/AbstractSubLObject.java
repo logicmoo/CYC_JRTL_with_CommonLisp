@@ -33,6 +33,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
+@SuppressWarnings("unused")
 public abstract class AbstractSubLObject extends Lisp implements SubLObject {
 
 	/* (non-Javadoc)
@@ -47,7 +48,7 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
 
 	/**
 	 * Getter. Retrieves the termRef.
-	 * 
+	 *
 	 * @return the termRef
 	 */
 	public Object getTermRef() {
@@ -56,7 +57,7 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
 
 	/**
 	 * Setter. Sets or updates the termRef to the passed value.
-	 * 
+	 *
 	 * @param termRef the termRef to set
 	 */
 	public Object setTermRef(Object termRef) {
@@ -406,7 +407,7 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject#printObject()
 	 */
 	@Override

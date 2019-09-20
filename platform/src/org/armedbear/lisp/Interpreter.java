@@ -70,6 +70,7 @@ import org.logicmoo.system.SystemCurrent;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
+@SuppressWarnings("unused")
 public final class Interpreter extends Startup implements Runnable {
 
 	public int doubledash = -1;

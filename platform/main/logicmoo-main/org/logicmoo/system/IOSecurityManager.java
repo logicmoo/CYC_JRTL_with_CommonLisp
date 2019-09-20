@@ -269,7 +269,7 @@ public class IOSecurityManager extends SecurityManager {
 		if (filename.endsWith(".txt"))
 			return true;
 
-		if (!Startup.began_init_cyc_server)
+		if (!Startup.began_init_server)
 			return true;
 
 		if (filename.contains("/."))

@@ -55,6 +55,8 @@ import java.io.Reader;
         }
     </pre></code>
 */
+
+@SuppressWarnings("unused")
 public class Parser/*@bgen(jjtree)*/implements ParserTreeConstants, ParserConstants {/*@bgen(jjtree)*/
   protected JJTParserState jjtree = new JJTParserState();boolean retainComments = false;
 
@@ -2974,7 +2976,7 @@ if (jjtc000) {
 /*
  * Statement syntax follows.
  */
-  final public 
+  final public
 void Statement() throws ParseException {
     if (jj_2_20(2)) {
       LabeledStatement();
@@ -7308,7 +7310,7 @@ if (jjtc000) {
       }
       p = p.next;
     }
-    p.gen = jj_gen + xla - jj_la; 
+    p.gen = jj_gen + xla - jj_la;
     p.first = token;
     p.arg = xla;
   }

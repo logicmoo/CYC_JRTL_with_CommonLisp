@@ -159,7 +159,7 @@ public final class CycEval {
 
 		@Override
 		public LispObject execute() {
-			BeanShellCntrl.load_kb();
+			BeanShellCntrl.init_kb();
 			return T;
 		}
 	}

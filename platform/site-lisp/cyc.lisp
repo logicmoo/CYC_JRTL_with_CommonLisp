@@ -38,7 +38,7 @@
 ;; Do ansi tests
 (defun cyc-ansi ()
   (let ((cl:*default-pathname-defaults*
-    (cl:merge-pathnames "../old-ansi-tests/" #.(cl:directory-namestring cl:*load-truename*)))) 
+    (cl:merge-pathnames "../old-ansi-tests/" #.(cl:directory-namestring cl:*load-truename*))))
     (cl:load "doit.lsp")))
 
 
@@ -75,26 +75,26 @@
 
 ;; Do Load KB and rename things
 (defun ss ()
-     (cyc:init-cyc-server)
+     (cyc::ensure-kb)
      (cyc::safely-rename-now))
 
 
 '(dat)
 
 ;; Starts CYC RTL
-(let ((*PACKAGE* *PACKAGE*)) (cyc:init-subl))
+(let ((*PACKAGE* *PACKAGE*)) (cyc::init-subl))
 
 
 #+USE-CYC
 (let
   ((*PACKAGE* *PACKAGE*))
-     (cyc:init-cyc) ;; Loads CYC code (without a KB)
+     (cyc::load-cyc) ;; Loads CYC code (without a KB)
      '(cyc::setup-kb-tables 0)
-     (cyc:init-kb) ;; Loads CYC's KB (a server without TCP services)
+     (cyc::ensure-kb) ;; Loads CYC's KB (a server without TCP services)
  )
 
 
-(setf (symbol-plist 'SUBLISP::CSETQ) (symbol-plist 'cl::setq)) 
+(setf (symbol-plist 'SUBLISP::CSETQ) (symbol-plist 'cl::setq))
 
 ;; makes constant names slightly friendlier to prolog
 ;; #+CYC-EXTERNAL
@@ -144,7 +144,7 @@
 ;; Starts rest of CYC
 #+USE-CYC
 (let ((*PACKAGE* *PACKAGE*))
-   (user:init-cyc-server))
+   (user:ensure-cyc))
 
 
 ;; ABCL JSS:     (#"setText" my-label "The Larch")
@@ -177,7 +177,7 @@
 ;; list of the public functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File organization:
-;; 
+;;
 ;; outline of file contents
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;}}}EDOC
@@ -188,10 +188,10 @@
 
 
 (defmacro-private create-constant-from-symbol (symbol)
-  (ret `(csetq ,symbol (print-create ,(symbol-name symbol) ,symbol)))) 
-		   
+  (ret `(csetq ,symbol (print-create ,(symbol-name symbol) ,symbol))))
 
-(define-inference-test :shop-generic-test  
+
+(define-inference-test :shop-generic-test
     (:comment
      ""
      :owner "cyndy"
@@ -204,12 +204,12 @@
        ((col1 col2) #$Collection)
        ((object1 object2 object3) #$Thing)
        ((complex1 complex2 complex3) #$BinaryPredicate)
-       ((simple1 simple2) #$BinaryPredicate)       
+       ((simple1 simple2) #$BinaryPredicate)
        ((precond1 precond2)  #$BinaryPredicate)
        ((complex-precond1 complex-precond2 complex-precond3) #$BinaryPredicate)
        ((scond1 scond2)  #$BinaryPredicate)
        (precond3 #$BinaryPredicate))
-       
+
     ;; make test model mt
 
     (print-assert
@@ -219,7 +219,7 @@
      #$BaseKB :monotonic :forward)
 
     ;; arg constraints. add as needed
-      
+
     (print-assert
      `((#$isa ,reified-func1 #$FixedArityRelation)
        (#$arity ,reified-func1 1)
@@ -235,60 +235,60 @@
 ;;;       (print-assert
 ;;;	`((#$isa (,reified-func1 ,object3) ,col2))
 ;;;	model-mt :monotonic :forward)
-	
+
     (print-assert
      `((#$isa ,complex1 #$ComplexActionPredicate)
        (#$isa ,complex2 #$ComplexActionPredicate))
      model-mt :monotonic :forward)
-      
+
     (print-assert
      `((#$isa ,simple1 #$SimpleActionPredicate)
        (#$isa ,simple2 #$SimpleActionPredicate))
      model-mt :monotonic :forward)
-    
+
     (print-assert
      `((#$preconditionFor-Props (,precond1 ?X ?Y) (,simple1 ?X ?Y))
        (#$preconditionFor-Props (,precond2 ?X ?Y) (,simple2 ?X ?Y)))
      model-mt :monotonic :forward)
-      
+
     (print-assert
      `((#$sufficientFor-Props (,scond1 ?X ?Y) (,complex1 ?X ?Y))
        (#$sufficientFor-Props (,scond2 ?X ?Y) (,complex2 ?X ?Y)))
      model-mt :monotonic :forward)
-      
+
     (print-assert
-     `((#$implies (,complex-precond1 ?X ?Y) 
-		  (#$methodForAction 
+     `((#$implies (,complex-precond1 ?X ?Y)
+		  (#$methodForAction
 		   (,complex1 ?X ?Y)
-		   (#$actionSequence 
+		   (#$actionSequence
 		    (#$TheList
 		     (,simple1 ?X ?Y)
 		     (,simple2 ?X ?Y))))))
      model-mt :monotonic :forward)
 
     (print-assert
-     `((#$implies (,complex-precond2 ?X ?Y) 
-		  (#$methodForAction 
+     `((#$implies (,complex-precond2 ?X ?Y)
+		  (#$methodForAction
 		   (,complex2 ?X ?Y)
-		   (#$actionSequence 
+		   (#$actionSequence
 		    (#$TheList
 		     (,simple2 ?X ?Y)
 		     (,simple1 ?X ?Y))))))
      model-mt :monotonic :forward)
-      
+
     (print-assert
-     `((#$implies (,complex-precond3 ?X ?Y) 
-		  (#$methodForAction 
+     `((#$implies (,complex-precond3 ?X ?Y)
+		  (#$methodForAction
 		   (,complex3 ?X ?Y)
-		   (#$actionSequence 
+		   (#$actionSequence
 		    (#$TheList
 		     (,complex1 ?X ?Y)
 		     (,complex2 ?X ?Y))))))
      model-mt :monotonic :forward)
 
     ;; initial state
-      
-    (print-assert 
+
+    (print-assert
      `((,precond1 ,agent ,object1)
        (,precond2 ,agent ,object1)
        (,precond1 ,agent ,object2)
@@ -297,26 +297,26 @@
        (,scond2 ,agent ,object2)
        (,complex-precond1 ,agent ,object2)
        (,complex-precond3 ,agent ,object2)
-	 
+
        (,precond1 ,agent (,reified-func1 ,object3))
        (,precond2 ,agent (,reified-func1 ,object3))
        (,complex-precond1 ,agent (,reified-func1 ,object3))
        (,complex-precond2 ,agent (,reified-func1 ,object3))
        (,complex-precond3 ,agent (,reified-func1 ,object3))
-	 
-	 
+
+
        )
-       
+
      model-mt :monotonic :forward)
-      
+
     ;; basic preliminary tests
     (clet ((task1 `(,complex1 ,agent ,object1))
 	   (result1 `(((,simple1 ,agent ,object1) (,simple2 ,agent ,object1))))
-	     
+
 	   ;;testing #$sufficientFor-Props functionality
 	   (task2 `(,complex2 ,agent ,object2))
 	   (result2 `(nil))
-	     
+
 	   (task3 `(,complex3 ,agent ,object2))
 	   (result3 `(((,simple1 ,agent ,object2) (,simple2 ,agent ,object2))))
 
@@ -329,7 +329,7 @@
 	   (task5 `(,complex2 ,agent (,reified-func1 ,object3)))
 	   (result5 `(((,simple2 ,agent (,reified-func1 ,object3))
 		       (,simple1 ,agent (,reified-func1 ,object3))))))
-									
+
 
       (format t "Test Model Mt: ~s~%" model-mt)
       (form-verify 'eq t `(planner-test ',result1 ',task1 ,model-mt))
@@ -346,7 +346,7 @@
    @param TASK    el-formula-p
    @param MT      hlmt-p
    @return booleanp"
-  
+
   (clet ((plans (shop-find-plans task mt 7))
 	 (cycl-plans nil))
     (cdolist (cur-plan plans)
@@ -363,7 +363,7 @@
 
 
 #|
- (ql:QUICKLOAD "shop3") (ql:QUICKLOAD "fiveam") 
+ (ql:QUICKLOAD "shop3") (ql:QUICKLOAD "fiveam")
   (ql:QUICKLOAD "pddl-utils") (ql:QUICKLOAD "openstacks-problem-translator")
    (ql:QUICKLOAD "shop3-thmpr-api") (ql:QUICKLOAD "shop3/test")
 

@@ -8,7 +8,7 @@
   (defpackage "COMMON-LISP-USER" (:nicknames "USER" "CL-USER")))
 
 
-#-clisp 
+#-clisp
 #-prolog-lisp-Ignored
 #+load-all
 (defmethod print-object ((obj class) stream)
@@ -42,12 +42,12 @@
 ;; (pushnew :use-dd *features*)
 
 ;; Loads CYC's SubL code (not CYC yet)
-#+use-cyc 
+#+use-cyc
 (let ((*PACKAGE* *PACKAGE*))
-  (cl:load "e2c/hash-dollar.lisp")  
-  (cyc:init-subl) )
+  (cl:load "e2c/hash-dollar.lisp")
+  (cyc::init-subl) )
 
-(cyc:init-subl)
+(cyc::init-subl)
 (print "called init-cycl")
 (force-output)
 
@@ -78,29 +78,29 @@
 
         (:tree ,(merge-pathnames "cusp/" *site-lisp*))
         (:tree ,(merge-pathnames "slime/" *site-lisp*))
-        
+
         (:tree ,(merge-pathnames "pddl-tools/" *site-lisp*))
         (:tree ,(merge-pathnames "shop3/shop3/" *site-lisp*))
-        
+
         (:tree ,(merge-pathnames "shop3/shop3/examples/openstacks-adl/" *site-lisp*))
         (:tree ,(merge-pathnames "shop3/shop3/examples/rovers/strips/" *site-lisp*))
         (:tree ,(merge-pathnames "shop3/shop3/examples/satellite/strips/" *site-lisp*))
         (:tree ,(merge-pathnames "shop3/shop3/shop3-theorem-prover.api/" *site-lisp*))
         (:tree ,(merge-pathnames "jnil/" *site-lisp*))
-        (:tree ,(merge-pathnames "linj/" *site-lisp*))        
-        (:tree ,(merge-pathnames "./" *site-lisp*))       
-        
+        (:tree ,(merge-pathnames "linj/" *site-lisp*))
+        (:tree ,(merge-pathnames "./" *site-lisp*))
+
       :inherit-configuration))
 
 
 #+load-all
 #+quicklisp
-(progn 
+(progn
   ;;  (ql:quickload "shop3")
-  (ql:quickload "fiveam")  
+  (ql:quickload "fiveam")
   (ql:quickload "pddl-utils")
   (ql:quickload "openstacks-problem-translator")
-  (ql:quickload "shop3-thmpr-api")  
+  (ql:quickload "shop3-thmpr-api")
   ;; (ql:quickload "jnil")
  )
 
@@ -149,7 +149,7 @@
 (load "larkc-home")
 
 :cd jnil
-(asdf:operate 'asdf:load-op :jnil) 
+(asdf:operate 'asdf:load-op :jnil)
 (time (jnil:translate-java-project "platform" "out2/" :common-lisp :overwrite-existing-p t))
 (time (jnil:translate-java-project "exportL" "out1/" :common-lisp :overwrite-existing-p t))
 
@@ -162,12 +162,12 @@
 ;; (ql:quickload "swank")
 ;; (ql:quickload "swank.live")
 
-(print 
+(print
  `(progn (ql:quickload "shop3")
-    (ql:quickload "fiveam")  
+    (ql:quickload "fiveam")
     (ql:quickload "pddl-utils")
     (ql:quickload "openstacks-problem-translator")
-    (ql:quickload "shop3-thmpr-api")  
+    (ql:quickload "shop3-thmpr-api")
     (ql:quickload "shop3/test")
     ))
 

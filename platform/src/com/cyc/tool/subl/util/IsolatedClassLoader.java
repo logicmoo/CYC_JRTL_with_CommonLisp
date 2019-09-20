@@ -44,6 +44,7 @@ import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
+@SuppressWarnings("unused")
 public class IsolatedClassLoader extends URLClassLoader {
 	public static final String BANG_SLASH = "!/";
 	public static boolean suspendAdding = false;

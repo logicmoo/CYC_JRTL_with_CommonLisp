@@ -45,6 +45,8 @@ import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 import static com.cyc.tool.subl.util.SubLFiles.defvar;
 
+import org.logicmoo.system.Startup;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Environment;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
@@ -1642,6 +1644,7 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 			throw new AssertionError(kb);
 		}
 		$kb_loaded$.setGlobalValue(kb);
+		Startup.setKBLoaded();
 		return kb;
 	}
 

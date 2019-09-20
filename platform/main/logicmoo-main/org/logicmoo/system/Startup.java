@@ -129,6 +129,7 @@ import com.cyc.cycjava.cycl.constant_completion_high;
 import com.cyc.cycjava.cycl.constant_completion_low;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.constants_high;
+import com.cyc.cycjava.cycl.dumper;
 import com.cyc.cycjava.cycl.ke;
 import com.cyc.cycjava.cycl.web_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
@@ -265,7 +266,7 @@ public class Startup extends ABCLStatic {
 	// CYC needs ABCLs Argument Processor to run
 	public static boolean abclProcessArgs = true;
 	// ABCL has imported limited CYC functions
-	public static boolean began_cl_sees_cyc;
+	public static boolean status_cl_sees_cyc_began;
 	// Use CYC Error Handlers/Threading by default (This becomes true as CYC loads)
 	public static boolean isSublispDefault = false;
 	// Initialize SubL (This becomes true)
@@ -279,15 +280,15 @@ public class Startup extends ABCLStatic {
 	// Assume (init-cyc) has happened
 	public static boolean began_load_cyc_classes;
 	// Assume CYC has imported the CL
-	public static boolean began_cyc_sees_cl;
+	public static boolean status_cyc_sees_cl_began;
 	// System is ready to load KB
 	public static boolean finished_load_cyc_classes;
 	// World files mentioned on cmdline
 	public static boolean hasCycCmdlineInits = false;
 	// Assume (init-kb) has happened
 	public static boolean began_load_kb;
-	// Assume (init-cyc-server) has happened
-	public static boolean began_init_cyc_server;
+	// Assume (init-cyc) has happened
+	public static boolean began_init_server;
 	// Load all Tactics before the KB
 	public static boolean cycPart2Early = false;
 	// Skip loading possibly broken/experiental tactics
@@ -651,10 +652,6 @@ public class Startup extends ABCLStatic {
 
 			if (av.remove("--rcyc")) {
 				SubLMain.OPENCYC = false;
-				needSubLMAIN = true;
-				isSublispDefault = true;
-				noExit = true;
-				pushNew(av, "--cyc");
 				try {
 					UpdateZip.updateUnits("7166");
 				} catch (Throwable e) {
@@ -662,6 +659,8 @@ public class Startup extends ABCLStatic {
 					if (!keepGoing)
 						throw new RuntimeException(" UpdateZip.updateUnits throw " + e, e);
 				}
+				av.add("--load");
+				av.add("cyc.lisp");
 			}
 
 			if (av.remove("--cyc2")) {
@@ -1165,13 +1164,16 @@ public class Startup extends ABCLStatic {
 		// int hc = CycEval.CYC_PROGN.hotCount;
 	}
 
-	final static private AtomicInteger nthCall = new AtomicInteger(0);
-	final static private CountDownLatch cdl = new CountDownLatch(1);
+	final static private AtomicInteger nth_need_cyc_class_loaded = new AtomicInteger(0);
+	final static private CountDownLatch abcl_lisp_loaded_cdl = new CountDownLatch(1);
+	final static private CountDownLatch cyc_classes_loaded_cdl = new CountDownLatch(1);
+	final static private CountDownLatch cyc_kb_loaded_cdl = new CountDownLatch(1);
+	final static private CountDownLatch cyc_server_running_cdl = new CountDownLatch(1);
 
 	public static void needRunningSystem(Class class1) {
 		if (MainThreaded)
 			return;
-		int myId = nthCall.addAndGet(1);
+		int myId = nth_need_cyc_class_loaded.addAndGet(1);
 
 		if (myId == 1) {
 			if (class1 != Prolog.class) {
@@ -1184,7 +1186,7 @@ public class Startup extends ABCLStatic {
 					SubLMain.commonSymbolsOK = true;
 					load_cyc();
 				}
-				cdl.countDown();
+				cyc_classes_loaded_cdl.countDown();
 			});
 			Owner.start();
 
@@ -1192,7 +1194,7 @@ public class Startup extends ABCLStatic {
 			return;
 		}
 		try {
-			cdl.await();
+			cyc_classes_loaded_cdl.await();
 		} catch (InterruptedException e) {
 			printStackTrace(e);
 		}
@@ -1213,9 +1215,9 @@ public class Startup extends ABCLStatic {
 		if (SubLMain.Never_REDEFINE)
 			return;
 		synchronized (StartupLock) {
-			if (began_cl_sees_cyc)
+			if (status_cl_sees_cyc_began)
 				return;
-			began_cl_sees_cyc = true;
+			status_cl_sees_cyc_began = true;
 			// if(true) return ;
 			// SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
 			Lisp.PACKAGE_SYS.ALLOW_INHERIT_CONFLICTS = true;
@@ -1247,9 +1249,9 @@ public class Startup extends ABCLStatic {
 		if (SubLMain.Never_REDEFINE)
 			return;
 		synchronized (StartupLock) {
-			if (began_cyc_sees_cl)
+			if (status_cyc_sees_cl_began)
 				return;
-			began_cyc_sees_cl = true;
+			status_cyc_sees_cl_began = true;
 			// PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
 			// PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, false);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_JAVA, true);
@@ -1532,11 +1534,15 @@ public class Startup extends ABCLStatic {
 		}).call();
 	}
 
-	static final CountDownLatch cyc_cdl = new CountDownLatch(1);
+	@LispMethod
+	public static void ensure_cyc() throws IOException {
+		init_cyc();
+		wait_for_cyc();
+	}
 
 	protected static void wait_for_cyc() {
 		try {
-			cyc_cdl.await();
+			cyc_server_running_cdl.await();
 		} catch (InterruptedException e) {
 			throwException(e);
 		}
@@ -1786,13 +1792,19 @@ public class Startup extends ABCLStatic {
 	@LispMethod
 	public static void init_cyc() throws IOException {
 		synchronized (StartupInitLock) {
-			load_kb();
+			init_kb();
 			init_server();
 		}
 	}
 
 	@LispMethod
-	public static void load_kb() {
+	public static void ensure_kb() throws InterruptedException {
+		init_kb();
+		cyc_kb_loaded_cdl.await();
+	}
+
+	@LispMethod
+	public static void init_kb() {
 		synchronized (StartupLock) {
 			if (began_load_kb)
 				return;
@@ -1832,15 +1844,15 @@ public class Startup extends ABCLStatic {
 
 	public static void init_server0() {
 		synchronized (StartupLock) {
-			if (began_init_cyc_server)
+			if (began_init_server)
 				return;
-			began_init_cyc_server = true;
+			began_init_server = true;
 		}
 		synchronized (StartupInitLock) {
 			subl_preserve_pkg(true, true, () -> {
 				Throwable te = null;
 				try {
-					load_kb();
+					ensure_kb();
 					SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");
 					SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
 					if (!hasCycCmdlineInits) {
@@ -1861,7 +1873,7 @@ public class Startup extends ABCLStatic {
 				if (!cycPart2Early)
 					init_cyc_classes_part2();
 				try {
-					cyc_cdl.countDown();
+					cyc_server_running_cdl.countDown();
 					PrologSync.setPrologReady(true);
 					LispSync.setLispReady(true);
 				} catch (Throwable e) {
@@ -3732,6 +3744,10 @@ public class Startup extends ABCLStatic {
 			this.e = e;
 		}
 
+	}
+
+	public static void setKBLoaded() {
+		cyc_kb_loaded_cdl.countDown();
 	}
 
 }

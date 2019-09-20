@@ -30,6 +30,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
+@SuppressWarnings("unused")
 public abstract class AbstractSubLStruct extends LispObject implements SubLStruct, IPrologifiable {
 
 	@Override
@@ -379,7 +380,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.armedbear.lisp.SLispObject#printObjectImpl()
 		 */
 		@Override
@@ -396,7 +397,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		return new LispSharedSlot() {
 			/*
 			 * (non-Javadoc)
-			 * 
+			 *
 			 * @see org.armedbear.lisp.SLispObject#printObjectImpl()
 			 */
 			@Override
@@ -504,7 +505,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @param effectiveSlot
 	 * @return
 	 */
@@ -644,7 +645,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isDontTrack() {
