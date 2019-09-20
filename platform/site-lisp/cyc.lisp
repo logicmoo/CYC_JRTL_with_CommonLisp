@@ -144,7 +144,7 @@
 ;; Starts rest of CYC
 #+USE-CYC
 (let ((*PACKAGE* *PACKAGE*))
-   (user:ensure-cyc))
+   (ensure-cyc))
 
 
 ;; ABCL JSS:     (#"setText" my-label "The Larch")
