@@ -350,7 +350,8 @@ public class Processes extends SubLSystemTrampolineFile {
 		SubLOutputStream outStream = stdoutStream.toOutputTextStream();
 		SubLOutputStream errStream = stderrStream.toOutputTextStream();
 		SubLObject origIn = StreamsLow.originalSynInputStream;
-		if (SubLMain.getMainReader() != null && !SubLMain.getMainReader().isInReaderThread() && stdinStream == origIn)
+		final SubLReader mainReader = SubLMain.getMainReader();
+		if (mainReader != null && !mainReader.isInReaderThread() && stdinStream == origIn)
 			Errors.error("Invalid attempt to read from standard input from multiple thread.");
 		Runtime rt = Runtime.getRuntime();
 		Process proc = null;

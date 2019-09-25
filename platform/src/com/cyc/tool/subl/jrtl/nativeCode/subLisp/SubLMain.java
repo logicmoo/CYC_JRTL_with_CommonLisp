@@ -317,16 +317,21 @@ public class SubLMain extends Startup {
 	}
 
 	static ThreadLocal<SubLReader> mainReader = new ThreadLocal<SubLReader>();
+
 	private static SubLReader trueMainReader;
-	private static boolean didHandleInits;
-	private static boolean didInitFileRunning;
-	private static boolean didAllegroCompatiblityMode;
+	private static boolean began_handle_inits;
+	private static boolean began_init_file_running;
+	private static boolean began_AllegroCompatiblityMode;
 	private static boolean began_init_form_running;
 
 	public static SubLReader getMainReader() {
 		SubLReader locally = mainReader.get();
 		if (locally != null)
 			return locally;
+		if (trueMainReader != null) {
+			bp();
+			return trueMainReader;
+		}
 		return null;
 	}
 
@@ -336,17 +341,17 @@ public class SubLMain extends Startup {
 	}
 
 	private static void handleAllegroCompatiblityMode() {
-		if (didAllegroCompatiblityMode)
+		if (began_AllegroCompatiblityMode)
 			return;
-		SubLMain.didAllegroCompatiblityMode = true;
+		SubLMain.began_AllegroCompatiblityMode = true;
 		if (isInAllegroCompatibilityMode())
 			SubLProcess.setAllegoSingleThreadedThread(SubLProcess.currentSubLThread());
 	}
 
 	private static void handleInitFileRunning() {
-		if (didInitFileRunning)
+		if (began_init_file_running)
 			return;
-		SubLMain.didInitFileRunning = true;
+		SubLMain.began_init_file_running = true;
 		SubLString initFile = getInitializationFileName();
 		if (initFile != null)
 			try {
@@ -393,9 +398,9 @@ public class SubLMain extends Startup {
 	}
 
 	public static synchronized void handleInits() {
-		if (didHandleInits)
+		if (began_handle_inits)
 			return;
-		SubLMain.didHandleInits = true;
+		SubLMain.began_handle_inits = true;
 		SubLString worldFile = getWorldFileName();
 		// @todo do something with worldFile if not null here -APB
 		setIsInitialized();
@@ -580,8 +585,9 @@ public class SubLMain extends Startup {
 		}
 		AbstractSubLSequence.init();
 		if (!shouldRunInBackground()) {
-			setMainReader(new SubLReader());
-			getMainReader().setThread(SubLProcess.currentSubLThread());
+			final SubLReader reader = new SubLReader();
+			setMainReader(reader);
+			reader.setThread(SubLProcess.currentSubLThread());
 		}
 		isSubLInitialized_part0 = true;
 	}
@@ -728,7 +734,7 @@ public class SubLMain extends Startup {
 		final String[] args = extractOptions(SubLMain.class, argsIn);
 		preInitLisp();
 		SubLPackage.initPackages();
-		trueMainReader = new SubLReader();
+		trueMainReader = new SubLReader(true, System.in, System.out);
 		setMainReader(trueMainReader);
 
 		handlePatches();
@@ -797,6 +803,13 @@ public class SubLMain extends Startup {
 			return true;
 		Boolean value = (Boolean) me.argNameToArgValueMap.get("-b");
 		return value == Boolean.TRUE;
+	}
+
+	public static void doMainReadLoop() {
+		if (shouldRunReadloopInGUI())
+			setMainReader(SubLReaderPanel.startReadloopWindow());
+		final SubLReader reader = SubLMain.getMainReader();
+		reader.doReadLoop();
 	}
 
 	public static boolean shouldRunReadloopInGUI() {

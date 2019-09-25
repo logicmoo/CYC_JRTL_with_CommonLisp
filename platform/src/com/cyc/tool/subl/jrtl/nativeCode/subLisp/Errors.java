@@ -13,6 +13,7 @@ import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.Main;
 import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -29,6 +30,7 @@ import com.cyc.tool.subl.util.SubLErrorHistory;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLReader.*;
 
 public class Errors extends SubLSystemTrampolineFile {
 
@@ -67,13 +69,6 @@ public class Errors extends SubLSystemTrampolineFile {
 		return se;
 	}
 
-	private static SubLReader getReaderForCurrentThread() {
-		SubLReader reader = SubLMain.getMainReader();
-		if (reader == null || !reader.isInReaderThread())
-			return null;
-		return reader;
-	}
-
 	private static void handleErrorInternal(Throwable e) {
 		synchronized (Errors.handleErrorInternalLock) {
 			if (e instanceof Error)
@@ -88,7 +83,7 @@ public class Errors extends SubLSystemTrampolineFile {
 	}
 
 	private static boolean isInitializedAndReaderThreadAndOriginalErrorStream() {
-		SubLReader reader = getReaderForCurrentThread();
+		SubLReader reader = SubLReader.getReaderForCurrentThread();
 		if (reader == null)
 			return false;
 		SubLOutputTextStream stream1 = StreamsLow.$error_output$.getDynamicValue().toOutputTextStream();
@@ -206,9 +201,14 @@ public class Errors extends SubLSystemTrampolineFile {
 				return NIL;
 			String errorString = PrintLow.format(NIL, formatString, arguments).getStringValue();
 			errorString = possiblyCallErrorHandler(errorString, null);
-			if (!isInitializedAndReaderThreadAndOriginalErrorStream())
+			if (!isInitializedAndReaderThreadAndOriginalErrorStream()) {
 				error(errorString);
+			}
 			SubLReader reader = getReaderForCurrentThread();
+			if (reader == null) {
+				Startup.bp();
+				reader = ensureReaderForCurrentThread();
+			}
 			String continueString = PrintLow.format(NIL, continue_string, arguments).getStringValue();
 			RestartMethod restartMethod = reader.askRestartChoiceQuestion("Continuable error: " + errorString, continueString, Errors.ERROR_RESTARTS, true, SubLObjectFactory.makeException());
 			if (restartMethod.process(reader, errorString, null))
@@ -287,11 +287,12 @@ public class Errors extends SubLSystemTrampolineFile {
 		}
 		SubLReader reader = getReaderForCurrentThread();
 		if (reader == null) {
-			reader = BeanShellCntrl.ensureMainReader();
+			reader = ensureReaderForCurrentThread();
 		}
 		RestartMethod restartMethod = null;
 		if (!reader.isInReaderThread()) {
 			if (!SubLMain.isInitialized()) {
+				Startup.bp();
 				throw new ResumeException();
 			}
 			restartMethod = SubLReader.CONTINUE_RESTART_METHOD;
@@ -396,7 +397,7 @@ public class Errors extends SubLSystemTrampolineFile {
 				handleErrorInternal(se);
 				return;
 			}
-			SubLReader reader = getReaderForCurrentThread();
+			SubLReader reader = ensureReaderForCurrentThread();
 			RestartMethod restartMethod = reader.askRestartChoiceQuestion("Error: " + description, null, Errors.ERROR_RESTARTS, true, se);
 			if (restartMethod.process(reader, description, se))
 				handleError(description, e);

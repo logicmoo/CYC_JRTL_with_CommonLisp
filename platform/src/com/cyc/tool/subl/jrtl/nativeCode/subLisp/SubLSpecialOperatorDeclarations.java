@@ -1033,7 +1033,6 @@ public class SubLSpecialOperatorDeclarations extends SubLSystemTrampolineFile {
 	public static SubLObject quit() {
 		boolean was = Main.isSubLisp();
 		SubLReader o = SubLMain.getMainReader();
-
 		if (o != null)
 			o.exitReadloop();
 		if (!was) {

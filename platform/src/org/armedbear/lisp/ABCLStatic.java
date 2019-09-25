@@ -12,7 +12,7 @@ import org.logicmoo.system.SystemCurrent;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 
-public class ABCLStatic {
+abstract public class ABCLStatic {
 	static {
 		SystemCurrent.setupIO();
 	}

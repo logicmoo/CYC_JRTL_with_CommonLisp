@@ -368,8 +368,12 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 			initAsCharacterInputStream(r);
 		} else {
 			isBinaryStream = true;
-			InputStream stream = new BufferedInputStream(inputStream);
-			initAsBinaryInputStream(stream);
+			if (!(inputStream instanceof BufferedInputStream)) {
+				InputStream stream = new BufferedInputStream(inputStream);
+				initAsBinaryInputStream(stream);
+			} else {
+				initAsBinaryInputStream(inputStream);
+			}
 		}
 	}
 

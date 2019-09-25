@@ -47,7 +47,9 @@ public class Threads extends SubLSystemTrampolineFile {
 	}
 
 	public static SubLObject interruptMainReadLoop() {
-		SubLProcess process = SubLMain.getMainReader().getThread().getSubLProcess();
+		final SubLReader mainReader = SubLMain.getMainReader();
+		final SubLThread thread = mainReader.getThread();
+		SubLProcess process = thread.getSubLProcess();
 		if (process == null)
 			return SubLNil.NIL;
 		process.addInterrupt(SubLProcess.READ_LOOP_INTERRUPT_THUNK);

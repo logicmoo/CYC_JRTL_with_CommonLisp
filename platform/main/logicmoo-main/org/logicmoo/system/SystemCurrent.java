@@ -55,7 +55,12 @@ public class SystemCurrent {
 	public static Thread originalSystemThread = Thread.currentThread();
 	public static InOutErr originalInOutErr = new InOutErr("originalInOutErr " + originalSystemThread.getName());
 
+	final public static InputStream originalSystemIn0 = (InputStream) checkNonTLStream(System.in);
+	final public static PrintStream originalSystemOut0 = System.out;
+	final public static PrintStream originalSystemErr0 = (PrintStream) checkNonTLStream(System.err);
+
 	public static InputStream originalSystemIn = (InputStream) checkNonTLStream(System.in);
+	BufferedInputStream bif = new BufferedInputStream(originalSystemIn0);
 	public static PrintStream originalSystemOut = System.out;
 	public static PrintStream originalSystemErr = System.err;
 
@@ -1083,6 +1088,7 @@ public class SystemCurrent {
 				return;
 			PrintStream altout = System.out;
 			if (!(altout instanceof ThreadLocalStream)) {
+				bp();
 				System.setOut(out);
 				PrintStream nonTL = (PrintStream) getNonTLStream(altout);
 				if (nonTL != null) {
@@ -1091,6 +1097,7 @@ public class SystemCurrent {
 			}
 			InputStream altIn = System.in;
 			if (!(altIn instanceof ThreadLocalStream)) {
+				bp();
 				System.setIn(in);
 				InputStream nonTL = (InputStream) getNonTLStream(altIn);
 				if (nonTL != null) {
@@ -1158,10 +1165,6 @@ public class SystemCurrent {
 		printTo("stderr", originalSystemErr, errorTees, s);
 	}
 
-	final public static InputStream originalSystemIn0 = (InputStream) checkNonTLStream(System.in);
-	final public static PrintStream originalSystemOut0 = System.out;
-	final public static PrintStream originalSystemErr0 = (PrintStream) checkNonTLStream(System.err);
-
 	public static void printTo(String desc, PrintStream where, Constituents group, String s) {
 		try {
 			if (where == null && group == null) {
@@ -1176,20 +1179,20 @@ public class SystemCurrent {
 					failedWrite = !writeTo(s, where);
 				}
 			}
-			final boolean needsGroup = group != null && where != null && !group.contains(where);
+			final boolean needsGroup = failedWrite && group != null && (where == null || !group.contains(where));
 
 			if (needsGroup) {
 				if (group != null)
 					failedWrite = !actOn(group, (o) -> writeTo(s, o));
 			}
 
-			if (s == NewLine) {
+			if (s.contains(NewLine)) {
 				if (where != null) {
-					flustIt(where);
+					flushIt(where);
 				}
 				if (needsGroup) {
 					if (group != null)
-						actOn(group, SystemCurrent::flustIt);
+						actOn(group, SystemCurrent::flushIt);
 				}
 			}
 
@@ -1201,7 +1204,7 @@ public class SystemCurrent {
 	/**
 	 * @return
 	 */
-	public static boolean flustIt(Object o) {
+	public static boolean flushIt(Object o) {
 		try {
 			if (o instanceof Flushable) {
 				((Flushable) o).flush();
@@ -1219,6 +1222,9 @@ public class SystemCurrent {
 	 * @return
 	 */
 	public static boolean writeTo(String s, Object o) {
+		if (isTLStream(s)) {
+			return false;
+		}
 		if (o instanceof Writer) {
 			try {
 				((Writer) o).write(s);
@@ -1253,8 +1259,10 @@ public class SystemCurrent {
 
 	public static void setupIO() {
 		synchronized (DRASTIC_CHANGE) {
-			if (hasSetupIO)
+			if (hasSetupIO) {
+				recheckStdIO();
 				return;
+			}
 			hasSetupIO = true;
 			if (DONT_USE)
 				return;
@@ -1262,7 +1270,6 @@ public class SystemCurrent {
 				new IOSecurityManager(true).setSecurityManager();
 			} catch (Throwable e) {
 			}
-			recheckStdIO();
 
 			final InputStream wasIn = System.in;
 			if (!isTLStream(wasIn) || wasIn != in) {

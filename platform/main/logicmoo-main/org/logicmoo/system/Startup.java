@@ -789,7 +789,7 @@ public class Startup extends ABCLStatic {
 
 			if (!leanABCL) {
 				//SystemCurrent.setupIO();
-				SystemCurrent.attachConsole(true);
+				//SystemCurrent.attachConsole(true);
 				//SystemCurrent.takeOwnerShip();
 			}
 		}
@@ -1580,7 +1580,7 @@ public class Startup extends ABCLStatic {
 	public static LispObject cyc_repl() throws InterruptedException, Exception {
 		return with_sublisp(true, new Callable<LispObject>() {
 			@Override
-			public LispObject call() {
+			public LispObject call() throws IOException {
 				SystemCurrent.setupIO();
 				// init_cyc();
 				// ensureMainReader();
@@ -1600,8 +1600,11 @@ public class Startup extends ABCLStatic {
 		wait_for_cyc();
 	}
 
-	protected static void wait_for_cyc() {
+	protected static void wait_for_cyc() throws IOException {
 		try {
+			if (!began_init_server) {
+				init_cyc();
+			}
 			cyc_server_running_cdl.await();
 		} catch (InterruptedException e) {
 			throwException(e);
@@ -1609,24 +1612,33 @@ public class Startup extends ABCLStatic {
 	}
 
 	@LispMethod
-	public static LispObject cyc_repl_no_suspend() {
+	public static LispObject cyc_repl_no_suspend() throws IOException {
 		boolean wasSubLisp = Main.isSubLisp();
+		SubLPackage prevPackage = Lisp.getCurrentPackage();
 		LispObject io = Symbol.TERMINAL_IO.symbolValue();
 		LispObject out = Symbol.STANDARD_OUTPUT.symbolValue();
 		LispObject in = Symbol.STANDARD_INPUT.symbolValue();
-		load_cyc();
 
 		Main.noExit = true;
-		SubLReader SLR = ensureMainReader();
+		boolean newlyCreated = false;
+		load_cyc();
+		SubLReader SLR = SubLReader.getReaderForCurrentThread();
+		if (SLR == null) {
+			newlyCreated = true;
+			SLR = SubLReader.ensureReaderForCurrentThread();
+		}
 		boolean wasQuitOnExit = SLR.quitOnExit;
 		boolean was_shouldReadloopExit = SLR.shouldReadloopExit;
 		boolean was_noExit = Main.noExit;
-		SubLPackage prevPackage = Lisp.getCurrentPackage();
 		try {
-			wait_for_cyc();
+			if (began_init_server)
+				wait_for_cyc();
 			try {
 				SLR.quitOnExit = false;
 				SLR.shouldReadloopExit = false;
+				if (newlyCreated) {
+					SubLPackage.setCurrentPackage("CYC");
+				}
 				if (false && SubLMain.shouldRunReadloopInGUI()) {
 					SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
 				}
@@ -1683,14 +1695,14 @@ public class Startup extends ABCLStatic {
 	// /**
 	// *
 	// */
-	public static SubLReader ensureMainReader() {
-		SubLReader SLR = SubLMain.getMainReader();
-		if (SLR == null) {
-			SLR = new SubLReader();
-			SubLMain.setMainReader(SLR);
-		}
-		return SLR;
-	}
+	//	public static SubLReader ensureMainReader() {
+	//		SubLReader SLR = SubLMain.getMainReader();
+	//		if (SLR == null) {
+	//			SLR = new SubLReader(false, SystemCurrent.mustIn(), SystemCurrent.mustOut());
+	//			SubLMain.setMainReader(SLR);
+	//		}
+	//		return SLR;
+	//	}
 
 	public static void importEverywhere(Operator oper) {
 		final Symbol lispObject = oper.getLambdaName().toSymbol().toLispObject();
@@ -1810,16 +1822,17 @@ public class Startup extends ABCLStatic {
 					init_subl();
 					SubLPackage.setCurrentPackage("CYC");
 					SubLMain.initializeTranslatedSystems();
-					try {
-						IsolatedClassLoader.suspendAdding = true;
-						start_servlet(3603);
-					} catch (Throwable ex) {
-						uncaughtException(ex);
-					}
 					if (hasCycCmdlineInits)
 						SubLMain.handleInits();
 					SubLMain.handlePatches();
 					began_load_cyc_classes = true;
+					try {
+						IsolatedClassLoader.suspendAdding = true;
+						SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
+						//start_servlet(3603);
+					} catch (Throwable ex) {
+						uncaughtException(ex);
+					}
 					finished_load_cyc_classes = true;
 				} catch (Throwable e) {
 					began_load_cyc_classes = false;
@@ -1840,7 +1853,6 @@ public class Startup extends ABCLStatic {
 		try {
 			synchronized (StartupInitLock) {
 				load_cyc();
-				SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
 				//new Thread(() -> web_utilities.start_servlet_container(SubLObjectFactory.makeInteger(3603))).start();
 				web_utilities.start_servlet_container(SubLObjectFactory.makeInteger(port));
 			}
@@ -1877,6 +1889,8 @@ public class Startup extends ABCLStatic {
 				if (!hasCycCmdlineInits) {
 					SubLPackage.setCurrentPackage("CYC");
 					Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
+				} else {
+					SubLMain.handleInits();
 				}
 				return null;
 			});
@@ -1917,6 +1931,8 @@ public class Startup extends ABCLStatic {
 					SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
 					if (!hasCycCmdlineInits) {
 						Eval.eval("(sl:load \"init/services-init.lisp\")");
+					} else {
+						SubLMain.handleInits();
 					}
 					//SubLMain.BOOTY_HACKZ = true;
 					//SubLFiles.initialize("com.cyc.cycjava_3.cycl.cycl");
@@ -3545,7 +3561,8 @@ public class Startup extends ABCLStatic {
 		final PrintStream noticeStream = getNoticeStream();
 
 		showST(e, noticeStream);
-		Debug.forkInterpreter();
+		if (keepGoing)
+			Debug.forkInterpreter();
 		UncaughtException te = new UncaughtException(t, e);
 		if (unexpectedThrowables != null)
 			unexpectedThrowables.add(te);

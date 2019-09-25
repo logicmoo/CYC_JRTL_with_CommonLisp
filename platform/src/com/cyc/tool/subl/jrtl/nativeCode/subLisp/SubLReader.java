@@ -11,6 +11,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.InitialContext;
+
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -35,34 +37,59 @@ import com.cyc.tool.subl.util.SubLCommandHistory;
 import com.cyc.tool.subl.util.SubLCommandHistoryItem;
 
 public class SubLReader {
+	private BufferedInputStream initialInputStream;
+	private PrintStream initialOutputStream;
+	private SubLInOutTextStream ioStream;
+
 	public SubLReader() {
-		this(true, SystemCurrent.in, SystemCurrent.out);
+		this(true, SystemCurrent.mustIn(), SystemCurrent.mustOut());
+		//SubLObjectFactory.makeSublispSymbol("*TERMINAL-IO*").setDynamicValue(ioStream, SubLProcess.currentSubLThread());
+		//		SystemCurrent.setIn(is);
+		//		SystemCurrent.setOut(ps);
+		//		SystemCurrent.setErr(new PrintStream(os, true));
+
+	}
+
+	public static SubLReader getReaderForCurrentThread() {
+		SubLReader reader = SubLMain.mainReader.get();
+		if (reader == null) {
+			reader = SubLMain.getMainReader();
+		}
+		if (reader == null || !reader.isInReaderThread())
+			return null;
+		return reader;
+	}
+
+	public static SubLReader ensureReaderForCurrentThread() {
+		SubLReader reader = SubLMain.mainReader.get();
+		if (reader == null) {
+			reader = new SubLReader(false, SystemCurrent.mustIn(), SystemCurrent.mustOut());
+			SubLMain.mainReader.set(reader);
+		}
+		return reader;
 	}
 
 	public SubLReader(boolean quitOnExit, InputStream is, OutputStream os) {
-	        
+
 		shouldReadloopExit = false;
 		history = new SubLCommandHistory();
 		historyCount = 1;
 		isBusy = false;
-		if (!(is instanceof BufferedInputStream))
-			is = new BufferedInputStream(is);
-		SystemCurrent.setIn(is);
-		PrintStream ps = null;
+		if (!(is instanceof BufferedInputStream)) {
+			initialInputStream = new BufferedInputStream(is);
+		} else {
+			initialInputStream = (BufferedInputStream) is;
+		}
 		if (os instanceof PrintStream)
-			ps = (PrintStream) os;
+			initialOutputStream = (PrintStream) os;
 		else
-			ps = new PrintStream(os, true);
-		SystemCurrent.setOut(ps);
-		SystemCurrent.setErr(ps);
-		SubLOutputTextStream standardOutputStream = SubLStreamFactory.makeOutputTextStream(SystemCurrent.out);
-		SubLInputTextStream inputTextStream = SubLStreamFactory.makeInputTextStream(SystemCurrent.in);
-		inputStream = inputTextStream;
-		SubLInputTextStream standardInputStream = inputTextStream;
-		SubLInOutTextStream ioStream = SubLStreamFactory.makeInOutTextStream(standardInputStream, standardOutputStream);
-		SubLObjectFactory.makeSublispSymbol("*TERMINAL-IO*").setValue(ioStream);
+			initialOutputStream = new PrintStream(os, true);
+
+		SubLOutputTextStream standardOutputStream = SubLStreamFactory.makeOutputTextStream(initialOutputStream);
+		inputStream = SubLStreamFactory.makeInputTextStream(initialInputStream);
+		ioStream = SubLStreamFactory.makeInOutTextStream(inputStream, standardOutputStream);
 		reader = new BufferedReader(new InputStreamReader(is));
-		writer = new PrintWriter(os, false);
+		writer = new PrintWriter(initialOutputStream, false);
 		this.quitOnExit = quitOnExit;
 	}
 
@@ -71,8 +98,7 @@ public class SubLReader {
 
 	static synchronized void addRestartChoices(List<String> choices) {
 		SubLList cur;
-		for (SubLList restarts = cur = Errors.$restarts$.getValue()
-				.toList(); cur != SubLNil.NIL; cur = (SubLList) cur.rest()) {
+		for (SubLList restarts = cur = Errors.$restarts$.getValue().toList(); cur != SubLNil.NIL; cur = (SubLList) cur.rest()) {
 			SubLList restart = cur.first().toList();
 			if (restart.size() < 2)
 				Errors.error("Unable to parse *restarts*.");
@@ -110,8 +136,7 @@ public class SubLReader {
 	}
 
 	private void maintainStar(SubLObject latestResult) {
-		SubLSpecialOperatorDeclarations.tripleStar
-				.setDynamicValue(SubLSpecialOperatorDeclarations.doubleStar.getValue());
+		SubLSpecialOperatorDeclarations.tripleStar.setDynamicValue(SubLSpecialOperatorDeclarations.doubleStar.getValue());
 		SubLSpecialOperatorDeclarations.doubleStar.setDynamicValue(SubLSpecialOperatorDeclarations.star.getValue());
 		SubLSpecialOperatorDeclarations.star.setDynamicValue(latestResult);
 	}
@@ -140,8 +165,7 @@ public class SubLReader {
 		return statement;
 	}
 
-	public int askMultiChoiceQuestion(String header, List<String> choices, String prompt, String optionsStr,
-			SubLOutputTextStream out) {
+	public int askMultiChoiceQuestion(String header, List<String> choices, String prompt, String optionsStr, SubLOutputTextStream out) {
 		if (!isInReaderThread())
 			throw new RuntimeException("Unable to ask multichoice question from alternate thread.");
 		clearInput();
@@ -180,8 +204,7 @@ public class SubLReader {
 		return result;
 	}
 
-	public Errors.RestartMethod askRestartChoiceQuestion(String message, String continueString,
-			List<Errors.Restarter> restarters, boolean addConfigurableRestarters, SubLException se) {
+	public Errors.RestartMethod askRestartChoiceQuestion(String message, String continueString, List<Errors.Restarter> restarters, boolean addConfigurableRestarters, SubLException se) {
 		SubLReader reader = SubLMain.getMainReader();
 		if (!reader.isInReaderThread())
 			Errors.error(message);
@@ -195,8 +218,7 @@ public class SubLReader {
 		int restartsCount = choices.size() - initialCount;
 		for (Errors.Restarter restarter : restarters)
 			choices.add(restarter.toString());
-		final int result = reader.askMultiChoiceQuestion(message, choices, "? ", "Restart options:",
-				StreamsLow.$error_output$.getDynamicValue().toOutputTextStream());
+		final int result = reader.askMultiChoiceQuestion(message, choices, "? ", "Restart options:", StreamsLow.$error_output$.getDynamicValue().toOutputTextStream());
 		if (hasContinueChoice & result == initialCount)
 			return SubLReader.CONTINUE_RESTART_METHOD;
 		if (result > initialCount && result <= restartsCount + initialCount)
@@ -229,17 +251,13 @@ public class SubLReader {
 			try {
 				if (lastException != null)
 					try {
-						Errors.handleError(lastException instanceof SubLException ? lastException.getMessage()
-								: lastException.toString() + "\nWhile processing readloop statement \n        "
-										+ statement + "",
-								lastException);
+						Errors.handleError(lastException instanceof SubLException ? lastException.getMessage() : lastException.toString() + "\nWhile processing readloop statement \n        " + statement + "", lastException);
 					} finally {
 						lastException = null;
 					}
 
 				final String packageName = env.getCurrentPackage().getName();
-				SubLCommandHistoryItem historyItem = new SubLCommandHistoryItem(historyCount++,
-						packageName);
+				SubLCommandHistoryItem historyItem = new SubLCommandHistoryItem(historyCount++, packageName);
 				history.add(historyItem);
 				writePrompt(historyItem.getCommandPrompt());
 				streams_high.force_output(StreamsLow.$standard_output$.getDynamicValue());
@@ -248,9 +266,7 @@ public class SubLReader {
 				writeCommand(historyItem.getCommand());
 				String command = historyItem.getCommand();
 				SubLString commandTyped = SubLObjectFactory.makeString(command);
-				SubLObject form = com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string(commandTyped,
-						CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-						CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
+				SubLObject form = com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string(commandTyped, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
 				long startTime = System.nanoTime();
 				setIsBusy(true);
 				SubLList resultValues = Values.multiple_value_list_eval(form, env);
@@ -267,7 +283,7 @@ public class SubLReader {
 				shouldReadloopExit = true;
 			} catch (org.armedbear.lisp.ProcessingTerminated tr) {
 				shouldReadloopExit = true;
-		    } catch (SubLException e) {
+			} catch (SubLException e) {
 				lastException = e;
 			} catch (Exception e2) {
 				lastException = e2;
@@ -319,8 +335,7 @@ public class SubLReader {
 	}
 
 	public void showStackTrace(Throwable e) {
-		PrintLow.format(StreamsLow.$error_output$.getDynamicValue().toOutputTextStream(),
-				SubLObjectFactory.makeString(SubLException.getStringForException(e)));
+		PrintLow.format(StreamsLow.$error_output$.getDynamicValue().toOutputTextStream(), SubLObjectFactory.makeString(SubLException.getStringForException(e)));
 		StreamsLow.$error_output$.getDynamicValue().toOutputTextStream().flush();
 	}
 
@@ -360,6 +375,7 @@ public class SubLReader {
 	}
 
 	public void setThread(SubLThread thread) {
+		SubLObjectFactory.makeSublispSymbol("*TERMINAL-IO*").setDynamicValue(ioStream, thread);
 		this.thread = thread;
 	}
 }

@@ -508,7 +508,7 @@ public class BeanShellCntrl extends Startup {
 			if (!wasNoDebug) {
 				setNoDebug(false);
 			}
-			uncaughtException(t);
+			printStackTrace(t);
 			System.err.println("" + t.getMessage());
 			if (t instanceof JPLException) {
 				throw (JPLException) t;

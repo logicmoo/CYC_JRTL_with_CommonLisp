@@ -368,17 +368,12 @@ public abstract class Function extends Operator implements SubLFunction {
 	// }
 	@Override
 	public boolean isAlien() {
-		// TODO Auto-generated method stub
-		// if(true) Errors.unimplementedMethod("Auto-generated method stub:
-		// SubLObject.isAlien");
+
 		return false;
 	}
 
 	@Override
 	public boolean isAtom() {
-		// TODO Auto-generated method stub
-		// if(true) Errors.unimplementedMethod("Auto-generated method stub:
-		// SubLObject.isAtom");
 		return true;
 	}
 
