@@ -448,7 +448,7 @@ public final class JavaObject extends SubLAlienObject {
                         parts = parts.push(new Cons("Member classes", classesList.nreverse()));
                     }
                 } catch (SecurityException e) {
-                    Debug.trace(e);
+                    Debug.printStackTrace(e);
                 }
                 Class[] interfaces = o.getInterfaces();
                 LispObject interfacesList = NIL;

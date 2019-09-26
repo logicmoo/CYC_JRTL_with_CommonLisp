@@ -58,7 +58,7 @@ public final class SymbolHashTable
                     return e.symbol; // Return the symbol.
             }
             catch (Throwable t) {
-                Debug.trace(t); // Shouldn't happen.
+                Debug.printStackTrace(t); // Shouldn't happen.
             }
             e = e.next;
         }
@@ -74,7 +74,7 @@ public final class SymbolHashTable
                     return e.symbol; // Return the symbol.
             }
             catch (Throwable t) {
-                Debug.trace(t); // Shouldn't happen.
+                Debug.printStackTrace(t); // Shouldn't happen.
             }
             e = e.next;
         }
@@ -98,7 +98,7 @@ public final class SymbolHashTable
                 }
             }
             catch (Throwable t) {
-                Debug.trace(t); // FIXME
+                Debug.printStackTrace(t); // FIXME
             }
             e = e.next;
         }
@@ -129,7 +129,7 @@ public final class SymbolHashTable
                 }
             }
             catch (Throwable t) {
-                Debug.trace(t); // FIXME
+                Debug.printStackTrace(t); // FIXME
             }
             e = e.next;
         }
@@ -163,7 +163,7 @@ public final class SymbolHashTable
                 }
             }
             catch (Throwable t) {
-                Debug.trace(t); // FIXME
+                Debug.printStackTrace(t); // FIXME
             }
             last = e;
             e = e.next;

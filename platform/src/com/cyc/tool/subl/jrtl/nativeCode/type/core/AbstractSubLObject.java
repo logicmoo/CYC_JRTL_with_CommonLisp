@@ -188,7 +188,7 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
 		}
 		if (obj == T)
 			return false;
-		Debug.bug();
+		Debug.bug(false);
 		return obj == this;
 	}
 
@@ -197,7 +197,7 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
 		if (obj.getClass() == getClass()) {
 			return equal((LispObject) obj);
 		}
-		Debug.bug();
+		Debug.bug(false);
 		return obj == this;
 	}
 	//

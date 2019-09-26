@@ -483,7 +483,7 @@ public class JavaLink extends SubLSystemTrampolineFile {
 				if (nonNull != null) {
 					args[j] = nonNull;
 				} else {
-					Startup.bp();
+					Startup.bug();
 				}
 			}
 		}

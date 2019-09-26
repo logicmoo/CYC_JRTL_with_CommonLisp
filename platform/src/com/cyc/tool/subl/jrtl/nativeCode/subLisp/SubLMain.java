@@ -332,7 +332,7 @@ public class SubLMain extends Startup {
 		if (locally != null)
 			return locally;
 		if (trueMainReader != null) {
-			bp();
+			bug();
 			return trueMainReader;
 		}
 		return null;

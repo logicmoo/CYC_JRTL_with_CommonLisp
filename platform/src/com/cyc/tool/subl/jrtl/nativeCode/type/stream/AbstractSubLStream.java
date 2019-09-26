@@ -9,10 +9,12 @@ import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.io.Writer;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Main;
 import org.armedbear.lisp.Stream;
 import org.armedbear.lisp.StructureObject;
 import org.armedbear.lisp.Symbol;
@@ -38,6 +40,21 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		init(elementType, direction, ifExists, ifNotExists);
 		setStreamProps(elementType, direction);
 		//AbstractSubLObject op;
+	}
+
+	public int overDeadLine() {
+		if (false || true)
+			throw new RuntimeException("overDeadLine");
+		return -1;
+	}
+
+	public static final long INFINITE_TIMEOUT = 0;
+	public static long DEFAULT_TIMEOUT = INFINITE_TIMEOUT;
+	protected long streamTimeOut = DEFAULT_TIMEOUT;
+
+	@Override
+	final public boolean isStructure() {
+		return !!!Main.isSubLisp();
 	}
 
 	//protected LispObject elementType;
@@ -369,29 +386,29 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		return this;
 	}
 
-	@Override
-	public SubLObject getField(int fieldNum) {
-		lisp_type_error(this, "STRUCT");
-		return SubLNil.NIL;
-	}
-
-	@Override
-	public SubLStream getStream(boolean followSynonymStream) {
-		lisp_type_error(this, "STREAM");
-		return null;
-	}
-
-	//@Override
-	@Override
-	public String getStringValue() {
-		lisp_type_error(this, "STRING");
-		return "";
-	}
-
-	@Override
-	public String getString() {
-		return getStringValue();
-	}
+	//	@Override
+	//	public SubLObject getField(int fieldNum) {
+	//		lisp_type_error(this, "STRUCT");
+	//		return SubLNil.NIL;
+	//	}
+	//
+	//	@Override
+	//	public SubLStream getStream(boolean followSynonymStream) {
+	//		lisp_type_error(this, "STREAM");
+	//		return null;
+	//	}
+	//
+	//	//@Override
+	//	@Override
+	//	public String getStringValue() {
+	//		lisp_type_error(this, "STRING");
+	//		return "";
+	//	}
+	//
+	//	@Override
+	//	public String getString() {
+	//		return getStringValue();
+	//	}
 
 	@Override
 	public SubLObject makeCopy() {
@@ -432,11 +449,6 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	}
 
 	public boolean isStringOutputStream() {
-		return false;
-	}
-
-	@Override
-	public boolean isStructure() {
 		return false;
 	}
 

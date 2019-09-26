@@ -40,7 +40,7 @@ import static org.armedbear.lisp.Lisp.exportSpecial;
 
 import org.logicmoo.system.Startup;
 
-public final class Debug {
+public final class Debug extends Startup {
 
 	public static final void assertTrue(boolean b) {
 		String msg = "ABCL Debug.assertTrue(false) assertion failed!";
@@ -70,11 +70,19 @@ public final class Debug {
 		}
 		throw new Error(buffer.toString());
 	}
+	//
+	//	// Does not throw an exception.
+	//	public static void bug(boolean trouble) {
+	//		printStackTrace(new Exception("BUG!"));
+	//		forkInterpreter();
+	//	}
 
-	// Does not throw an exception.
-	public static void bug() {
-		trace(new Exception("BUG!"));
-		forkInterpreter();
+	@SuppressWarnings("CallToThreadDumpStack")
+	public static final void printStackTrace(Throwable t) {
+		t.printStackTrace();
+		Throwable c = t.getCause();
+		if (c != null && c != t)
+			printStackTrace(c);
 	}
 
 	/**
@@ -98,17 +106,9 @@ public final class Debug {
 		System.err.println(s);
 	}
 
-	@SuppressWarnings("CallToThreadDumpStack")
-	public static final void trace(Throwable t) {
-		t.printStackTrace();
-		Throwable c = t.getCause();
-		if (c != null && c != t)
-			trace(c);
-	}
-
 	public static final void trace(String message, Throwable t) {
 		trace(message);
-		trace(t);
+		printStackTrace(t);
 	}
 
 	public static final Symbol _DEBUG_WARN_ = exportSpecial("*DEBUG-WARN*", PACKAGE_SYS, NIL);

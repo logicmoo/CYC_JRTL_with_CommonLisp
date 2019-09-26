@@ -139,7 +139,7 @@ public class FaslClassLoader extends JavaClassLoader {
             return f;
         } catch(Throwable e) {
             if(e instanceof ControlTransfer) { throw (ControlTransfer) e; }
-            Debug.trace(e);
+            Debug.printStackTrace(e);
             return error(new LispError("Compiled function can't be loaded: " + name + " from " + Symbol.LOAD_TRUENAME.symbolValue()));
         }
     }

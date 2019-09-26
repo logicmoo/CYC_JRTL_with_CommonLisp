@@ -7,7 +7,7 @@ import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index
 import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
 import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
 import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-//// 
+////
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
@@ -16,7 +16,7 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.make
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static org.logicmoo.system.Startup.bp;
+import static org.logicmoo.system.Startup.bug;
 
 import java.util.HashMap;
 
@@ -1530,7 +1530,7 @@ public final class export_to_swipl extends SubLTranslatedFile {
 			makeSymbol("SINGLE-LITERAL-RULE?"), makeSymbol("OBSOLETE-RULE?"), makeSymbol("SKOLEM-RULE?"), makeSymbol("FORWARD-TMS-RULE?"), makeSymbol("CYCL-REFORMULATION-RULE?"), makeSymbol("IS-KNOWN-ILP-EXPORT-RULE?"), makeSymbol("VERBOSIFIED-EL-RULE?"), makeSymbol("PPH-REQUIRED-RULE?"), makeSymbol("NON-ABDUCIBLE-RULE?"), makeSymbol("CYCL-REFORMULATOR-RULE?"), makeSymbol("LIFTING-RULE?") });
 	private static final SubLList $list105 = list(makeSymbol("ATOMIC-ASSERTION?"), makeSymbol("GROUND-ASSERTION?"));
 	private static final SubLList $list106 = list(makeSymbol("CONSIDERED-RULE?"));
-	private static final SubLList $list107 = list(makeSymbol("VALID-PPH-BLACKLIST-ASSERTION?"), makeSymbol("WHY-KBS-ASSERTION?"), // makeSymbol("EXPORTABLE-ASSERTION?"), 
+	private static final SubLList $list107 = list(makeSymbol("VALID-PPH-BLACKLIST-ASSERTION?"), makeSymbol("WHY-KBS-ASSERTION?"), // makeSymbol("EXPORTABLE-ASSERTION?"),
 			makeSymbol("TRUE-ASSERTION?"), makeSymbol("HL-ASSERTION-P"), makeSymbol("NON-TVA-GAF-ASSERTION-P"), makeSymbol("STR-META-ASSERTION-P"), makeSymbol("FIRST-ORDER-ASSERTION-P"));
 	private static final SubLList $list108 = list(new SubLObject[] { makeSymbol("ASSERTED-ASSERTION?"), makeSymbol("DEDUCED-ASSERTION?"), makeSymbol("CODE-ASSERTION?"), makeSymbol("ASSERTION-HAS-DEPENDENTS-P"), makeSymbol("ASSERTION-VARIABLE-GUARD"), makeSymbol("ASSERTED-BY"), makeSymbol("ASSERTED-WHEN"), makeSymbol("ASSERTION-HAS-META-ASSERTIONS?"), makeSymbol("SYNTACTICALLY-ILL-FORMED-ASSERTION?"),
 			makeSymbol("SOME-CONSERVATIVE-VIA-ARG-ASSERTION?"), makeSymbol("RELEVANT-ASSERTION?"), makeSymbol("REFORMULATOR-RELEVANT-ASSERTION?"), makeSymbol("PPH-HL-SUPPORT-WITH-ISOMORPHIC-ASSERTION?"), makeSymbol("OWL-EXPORTABLE-RULE-ASSERTION?"), makeSymbol("NL-TRIE-SYNTACTIC-ASSERTION?"), makeSymbol("IST-SENTENCE-DESIGNATING-ASSERTION?"), makeSymbol("INVALID-ASSERTION?"),
@@ -1584,7 +1584,7 @@ public final class export_to_swipl extends SubLTranslatedFile {
 			sym = makeSymbol(string);
 			foundSymbols.put(string, sym);
 			if (sym.getFunction() == null) {
-				bp();
+				bug();
 			}
 		}
 		return sym;

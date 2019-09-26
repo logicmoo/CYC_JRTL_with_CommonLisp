@@ -79,7 +79,7 @@ public String printObjectImpl()
        result = unreadableString(LISP_STACK_FRAME + " " + toLispList().printObject());
      } catch (Throwable t) { // error while printing stack
        Debug.trace("Serious printing error: ");
-       Debug.trace(t);
+       Debug.printStackTrace(t);
        result = unreadableString(LISP_STACK_FRAME);
      }
      return result;
@@ -135,7 +135,7 @@ public AbstractString toLispString()
       result = this.toLispList().printObject();
     } catch (Throwable t) { // error while printing stack
       Debug.trace("Serious printing error: ");
-      Debug.trace(t);
+      Debug.printStackTrace(t);
       result = unreadableString("LISP-STACK-FRAME");
     }
     return new SimpleString(result);

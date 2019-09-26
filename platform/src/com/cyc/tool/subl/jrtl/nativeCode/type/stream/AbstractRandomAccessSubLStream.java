@@ -33,7 +33,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLStreamNilException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream {
+public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream implements SubLInputBinaryStream {
 	private static final long MapThreshold = 100000L;
 
 	protected enum Direction {
@@ -316,18 +316,18 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		return "/dev/null".equals(fileName.toLowerCase());
 	}
 
-	private int readInternalARASS() {
+	private int readInternalARASS(long deadline) {
 		try {
 			final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 			int remaining = readByteBuffer.remaining();
 			if (remaining < 1) {
-				return this.readMoreData() <= 0 ? -1 : this.read();
+				return this.readMoreData() <= 0 ? -1 : this.readWithTimeOut(deadline);
 			}
 			final byte b = readByteBuffer.get();
 			incrementFilePosition(1L);
 			return 0xFF & b;
 		} catch (BufferUnderflowException bue) {
-			return this.readMoreData() <= 0 ? -1 : this.read();
+			return this.readMoreData() <= 0 ? -1 : this.readWithTimeOut(deadline);
 		} catch (Exception e) {
 			Errors.error("Unable to read character from stream: " + this, e);
 			return -1;
@@ -588,9 +588,9 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		return getFileSize() - getUnderlyingFilePos() + (readByteBuffer.limit() - readByteBuffer.position());
 	}
 
-	public int read() {
+	public int readWithTimeOut(long deadline) {
 		lastDirection = Direction.READ;
-		return readInternalARASS();
+		return readInternalARASS(deadline);
 	}
 
 	public int read(byte[] b) {
@@ -630,18 +630,18 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			return result;
 		} catch (BufferUnderflowException bue) {
 			if (!expectedUnderFlow)
-				BeanShellCntrl.bp();
+				BeanShellCntrl.bug();
 			long curChar = -1L;
 			if (useNetworkByteOrder)
 				for (int j = (bytesInInteger - 1) * 8; j >= 0; j -= 8) {
-					curChar = readInternalARASS();
+					curChar = readInternalARASS(streamTimeOut);
 					if (curChar == -1L)
 						throw new RuntimeException("EOF");
 					result |= curChar << j;
 				}
 			else
 				for (int j = 0, size = bytesInInteger * 8; j < size; j += 8) {
-					curChar = readInternalARASS();
+					curChar = readInternalARASS(streamTimeOut);
 					if (curChar == -1L)
 						throw new RuntimeException("EOF");
 					result |= curChar << j;
@@ -672,7 +672,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 				}
 			int curChar = 1;
 			for (int i = 0; i < size; ++i) {
-				curChar = readInternalARASS();
+				curChar = readInternalARASS(streamTimeOut);
 				if (curChar == -1)
 					Errors.error("Got unexpected end of file on stream: " + this);
 				str.setInternal(i, (char) curChar);
@@ -687,7 +687,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	//		return readChar();
 	//	}
 	//
-	public int readChar() {
+	public int readCharWithTimeOut(long deadline) {
 		lastDirection = Direction.READ;
 		try {
 			incrementFilePosition(1L);
@@ -695,7 +695,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			return readByteBuffer.get();
 		} catch (BufferUnderflowException bue) {
 			incrementFilePosition(-1L);
-			return this.readMoreData() <= 0 ? -1 : this.readChar();
+			return this.readMoreData() <= 0 ? -1 : this.readCharWithTimeOut(deadline);
 		} catch (Exception e) {
 			incrementFilePosition(-1L);
 			Errors.error("Unable to read character from stream: " + this, e);
@@ -979,8 +979,12 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	}
 
 	public void writeChar(char[] cbuf, int off, int len) {
-		lastDirection = Direction.WRITE;
-		for (int i = off, size = len + off; i < size; ++i)
+		int i = off, size = len + off;
+		if (i >= size) {
+			lastDirection = Direction.WRITE;
+			return;
+		}
+		for (; i < size; ++i)
 			this.writeChar(cbuf[i]);
 	}
 
@@ -1005,7 +1009,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	}
 
 	private void write1Byte(byte val) {
-		write(new byte[] { val });
+		write(val);
+		//write(new byte[] { val });
 	}
 
 	protected void invalidateReadData() {
@@ -1151,14 +1156,14 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 				writeByteBuffer0 = readByteBuffer0;
 				return readByteBuffer0;
 			}
-			Startup.bp();
+			Startup.bug();
 		}
 		return writeByteBuffer0;
 	}
 
 	public ByteBuffer getReadableByteBuffer(boolean requireNonNull) {
 		if (requireNonNull && readByteBuffer0 == null) {
-			Startup.bp();
+			Startup.bug();
 		}
 		return readByteBuffer0;
 	}

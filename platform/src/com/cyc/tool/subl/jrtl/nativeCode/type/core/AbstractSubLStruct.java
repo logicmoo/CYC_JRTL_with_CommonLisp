@@ -74,9 +74,9 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 			if (layout != null)
 				return (SubLStructDecl) layout;
 			LispClass c2 = (LispClass) LispClass.findClass((Symbol) symbol);
-//			if (c2 == null) {
-//				c2 = (LispClass) classOf();
-//			}
+			//			if (c2 == null) {
+			//				c2 = (LispClass) classOf();
+			//			}
 			if (c2 != null) {
 				layout = c2.getClassLayout();
 				if (layout == null) {
@@ -597,9 +597,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	}
 
 	@Override
-	public boolean isStructure() {
-		return true;
-	}
+	abstract public boolean isStructure();
 
 	public boolean structures_bag_p() {
 		return true;

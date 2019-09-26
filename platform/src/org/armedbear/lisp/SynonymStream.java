@@ -139,9 +139,9 @@ public class SynonymStream extends Stream
     }
 
     @Override
-	protected int _readChar() throws java.io.IOException
+	protected int _readChar(long deadline) throws java.io.IOException
     {
-        return checkStream(streamSymbol.symbolValue())._readChar();
+        return checkStream(streamSymbol.symbolValue())._readChar(deadline);
     }
 
     @Override

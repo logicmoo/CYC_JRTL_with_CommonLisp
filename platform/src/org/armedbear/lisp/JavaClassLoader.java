@@ -179,7 +179,7 @@ public class JavaClassLoader extends URLClassLoader {
                 throw e;
         }
         catch (Throwable t) {
-            Debug.trace(t);
+            Debug.printStackTrace(t);
         }
         return null;
     }
@@ -205,7 +205,7 @@ public class JavaClassLoader extends URLClassLoader {
             error(new LispError("Class verification failed: " + e.getMessage()));
           }
         catch (Throwable t) {
-            Debug.trace(t);
+            Debug.printStackTrace(t);
         }
         return null;
     }

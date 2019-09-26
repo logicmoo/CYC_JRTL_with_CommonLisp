@@ -357,7 +357,7 @@ public final class Extensions {
 					return new Pathname(dir + "/");
 				}
 			} catch (Throwable t) {
-				Debug.trace(t);
+				Debug.printStackTrace(t);
 			}
 			return NIL;
 		}

@@ -239,6 +239,7 @@ public final class NewsGroupSummary extends Mailbox
                     writer.write(s);
                     writer.write('\n');
                 }
+                reader.close();
                 writer.flush();
                 writer.close();
             }

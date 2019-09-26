@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.armedbear.lisp.Main;
+import org.armedbear.lisp.Stream;
 import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence;
@@ -56,6 +57,7 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 public class UnitTest extends TestCase {
+
 	static private String MYNIL = "NIL";
 
 	private static class CeilingTest extends DivisionTest {
@@ -5697,7 +5699,10 @@ public class UnitTest extends TestCase {
 		}
 	}
 
+	long deadline = Stream.DEFAULT_TIMEOUT;
+
 	public void testStreamFlushing() {
+
 		try {
 			File file = File.createTempFile("unit", "test");
 			try {
@@ -5731,18 +5736,18 @@ public class UnitTest extends TestCase {
 					for (int i = 0; i < iterations; ++i) {
 						ioStream.seek(1000000L);
 						ioStream.seek(0L);
-						ioStream.read();
+						ioStream.readWithTimeOut(deadline);
 						ioStream.seek(3L);
-						int theChar = ioStream.read();
+						int theChar = ioStream.readWithTimeOut(deadline);
 						assertEquals('a', (char) theChar);
 						ioStream.seek(2L);
-						theChar = ioStream.read();
+						theChar = ioStream.readWithTimeOut(deadline);
 						assertEquals('b', (char) theChar);
 						ioStream.seek(1L);
-						theChar = ioStream.read();
+						theChar = ioStream.readWithTimeOut(deadline);
 						assertEquals('c', (char) theChar);
 						ioStream.seek(0L);
-						theChar = ioStream.read();
+						theChar = ioStream.readWithTimeOut(deadline);
 						assertEquals('d', (char) theChar);
 					}
 					ioStream.flush();

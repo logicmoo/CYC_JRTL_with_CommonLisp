@@ -103,7 +103,7 @@ public class Profiler
                                 }
                                 //### FIXME exception
                                 catch (InterruptedException e) {
-                                    Debug.trace(e);
+                                    Debug.printStackTrace(e);
                                 }
                             }
                         }

@@ -425,7 +425,7 @@ abstract public class LispObject extends AbstractSubLObject {
 		if (obj == T)
 			return this == T;
 		if (false)
-			Debug.bug();
+			Debug.bug(true);
 		return obj == this;
 	}
 
@@ -437,7 +437,7 @@ abstract public class LispObject extends AbstractSubLObject {
 			return equal((LispObject) obj);
 		}
 		if (false)
-			Debug.bug();
+			Debug.bug(true);
 		return obj == this;
 	}
 

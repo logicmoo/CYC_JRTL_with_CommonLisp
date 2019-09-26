@@ -137,17 +137,17 @@ public final class ConcatenatedStream extends Stream
 
     // Returns -1 at end of file.
     @Override
-	protected int _readChar() throws java.io.IOException
+	protected int _readChar(long deadline) throws java.io.IOException
     {
         int n;
         if (streams == NIL)
             return -1;
         Stream stream = (Stream) streams.car();
-        n = stream._readChar();
+        n = stream._readChar(deadline);
         if (n >= 0)
             return n;
         streams = streams.cdr();
-        return _readChar();
+        return _readChar(deadline);
     }
 
     @Override

@@ -49,7 +49,7 @@ public class JMultiMethodSelector {
 			Class[] pt = m.getParameterTypes();
 			if (pt.length == 0) {
 				if (methodCount != 1) {
-					Startup.bp();
+					Startup.bug();
 				}
 				isSpecial();
 			}
@@ -159,7 +159,7 @@ public class JMultiMethodSelector {
 		}
 		Method m = methodByArity[paramLen];
 		if (m == null) {
-			Startup.bp();
+			Startup.bug();
 			return executeEML(env, paramLen, false, args);
 		}
 		return invokeArgs(m, env, args);

@@ -116,9 +116,9 @@ public class SubLInputBinaryStreamImpl extends AbstractSubLBinaryStream implemen
 	}
 
 	@Override
-	public int read() {
+	public int readWithTimeOut(long deadline) {
 		if (shouldParentDoWork())
-			return super.read();
+			return super.readWithTimeOut(deadline);
 		this.ensureOpen("READ-CHAR");
 		return readInternal();
 	}

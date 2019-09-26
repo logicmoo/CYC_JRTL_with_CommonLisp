@@ -116,10 +116,10 @@ public class SubLInOutTextStreamImpl extends AbstractSubLTextStream
 	}
 
 	@Override
-	public int readChar() {
+	public int readCharWithTimeOut(long deadline) {
 		if (shouldParentDoWork())
-			return super.readChar();
-		return toInputTextStream().readChar();
+			return super.readCharWithTimeOut(deadline);
+		return toInputTextStream().readCharWithTimeOut(deadline);
 	}
 
 	@Override

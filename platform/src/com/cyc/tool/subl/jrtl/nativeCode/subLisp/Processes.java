@@ -1,10 +1,10 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.OUTPUT_KEYWORD;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 
 import java.io.IOException;
@@ -38,8 +38,6 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
-
-import sun.jvm.hotspot.oops.CheckedExceptionElement;
 
 public class Processes extends SubLSystemTrampolineFile {
 	private static class ExternalProcessErrorHandler extends ExternalProcessHandler implements Runnable {
@@ -122,6 +120,7 @@ public class Processes extends SubLSystemTrampolineFile {
 		private boolean shouldCloseOutput;
 		private boolean shouldCloseErr;
 		private volatile boolean isDone;
+		long deadline = 0;
 
 		SubLInputTextStream inTextStream = null;
 		SubLInputBinaryStream inBinaryStream = null;
@@ -141,6 +140,7 @@ public class Processes extends SubLSystemTrampolineFile {
 
 		@Override
 		public void run() {
+
 			boolean isInStreamClosed = false;
 			boolean isOutStreamClosed = false;
 			boolean isErrStreamClosed = false;
@@ -189,13 +189,13 @@ public class Processes extends SubLSystemTrampolineFile {
 						}
 						if (inTextStream != null) {
 							if (inTextStream.ready()) {
-								c = inTextStream.readChar();
+								c = inTextStream.readCharWithTimeOut(deadline);
 								procInStream.write(c);
 								procInStream.flush();
 								hasSomeInData = true;
 							}
 						} else if (inBinaryStream.numBytesAvailable() > 0L) {
-							c = inBinaryStream.read();
+							c = inBinaryStream.readWithTimeOut(deadline);
 							procInStream.write(c);
 							procInStream.flush();
 							hasSomeInData = true;
@@ -338,7 +338,6 @@ public class Processes extends SubLSystemTrampolineFile {
 	public static SubLObject restart_process(SubLObject world_spec, SubLObject init_file_pathname, SubLObject init_form_spec) {
 		return Errors.error("The function 'restart-process' is not supported.");
 	}
-
 
 	public static SubLObject run_external_process(SubLObject program, SubLObject args, SubLObject stdinStream, SubLObject stdoutStream, SubLObject stderrStream) {
 		if (args == UNPROVIDED)

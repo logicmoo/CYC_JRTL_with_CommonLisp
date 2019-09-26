@@ -133,10 +133,10 @@ public class TwoWayStream extends SubLInOutTextStreamImpl {
 
 	// Returns -1 at end of file.
 	@Override
-	protected int _readChar() throws java.io.IOException {
+	protected int _readChar(long deadline) throws java.io.IOException {
 		if (!Main.maybeTooSlow)
 			flush();
-		return inStream._readChar();
+		return inStream._readChar(deadline);
 	}
 
 	@Override

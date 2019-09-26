@@ -825,7 +825,7 @@ public LispObject ash(LispObject obj)
           return error(new LispError("Can't represent result of left shift."));
         if (shift.signum() < 0)
           return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
-        Debug.bug(); // Shouldn't happen.
+        Debug.bug(true); // Shouldn't happen.
       }
     return type_error(obj, Symbol.INTEGER);
   }

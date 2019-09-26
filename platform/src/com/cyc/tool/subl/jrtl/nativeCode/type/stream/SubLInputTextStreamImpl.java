@@ -12,11 +12,14 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 
+import org.apache.axis.transport.http.SocketInputStream;
 import org.armedbear.lisp.Keyword;
+import org.armedbear.lisp.Stream;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ResumeException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements SubLInputTextStream {
@@ -128,9 +131,9 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 	}
 
 	@Override
-	public int read() {
+	public int readWithTimeOut(long deadline) {
 		if (shouldParentDoWork())
-			return super.read();
+			return super.readWithTimeOut(deadline);
 		this.ensureOpen("READ");
 		if (socket != null)
 			return socketRead();
@@ -154,6 +157,9 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 			} else {
 				try {
 					Threads.possiblyHandleInterrupts(true);
+					if (deadline > 0 && System.currentTimeMillis() > deadline) {
+						return overDeadLine();
+					}
 					Thread.currentThread();
 					Thread.sleep(5L);
 				} catch (InterruptedException ie) {
@@ -220,8 +226,8 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 	}
 
 	@Override
-	public int readChar() {
-		return this.read();
+	public int readCharWithTimeOut(long deadline) {
+		return this.readWithTimeOut(deadline);
 	}
 
 	@Override

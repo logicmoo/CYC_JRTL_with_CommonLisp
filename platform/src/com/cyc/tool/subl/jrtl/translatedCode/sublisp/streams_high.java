@@ -24,6 +24,7 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import java.math.BigInteger;
 
 import org.armedbear.lisp.Fixnum;
+import org.armedbear.lisp.Stream;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
@@ -48,6 +49,7 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
 
 public class streams_high extends SubLSystemTrampolineFile {
+
 	private static SubLObject peekChar(SubLInputTextStream stream, SubLObject eof_error_p, SubLObject eof_value) {
 		int theChar = stream.readChar();
 		if (theChar != (-1)) {
@@ -115,18 +117,19 @@ public class streams_high extends SubLSystemTrampolineFile {
 	}
 
 	public static SubLObject clear_input(SubLObject stream) {
+		long deadline = 0;
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_input$.getValue();
 
 		if (stream instanceof SubLInputTextStream) {
 			SubLInputTextStream streamTyped = stream.toInputTextStream();
 			while (streamTyped.ready())
-				streamTyped.readChar();
+				streamTyped.readCharWithTimeOut(deadline);
 
 		} else if (stream instanceof SubLInputBinaryStream) {
 			SubLInputBinaryStream streamTyped2 = stream.toInputBinaryStream();
 			while (streamTyped2.numBytesAvailable() > 0L)
-				streamTyped2.read();
+				streamTyped2.readWithTimeOut(deadline);
 
 		}
 
@@ -408,7 +411,8 @@ public class streams_high extends SubLSystemTrampolineFile {
 	}
 
 	public static SubLObject read_byte(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value) {
-		int theByte = stream.toInputBinaryStream().read();
+		long deadline = 0;
+		int theByte = stream.toInputBinaryStream().readWithTimeOut(deadline);
 		if (theByte != (-1))
 			return SubLNumberFactory.makeSmallInteger(theByte);
 
@@ -541,10 +545,10 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return read_line_with_timeout(stream, eof_error_p, eof_value, recursive_p, UNPROVIDED);
 	}
 
-	public static SubLObject read_line_with_timeout(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value, SubLObject recursive_p, SubLObject maxtime) {
-		long maxtimeLong = Long.MAX_VALUE;
-		if (maxtime.isNumber()) {
-			maxtimeLong = -System.currentTimeMillis() + maxtime.longValue();
+	public static SubLObject read_line_with_timeout(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value, SubLObject recursive_p, SubLObject maxtimeMS) {
+		long maxtimeLong = Stream.DEFAULT_TIMEOUT;
+		if (maxtimeMS.isNumber()) {
+			maxtimeLong = System.currentTimeMillis() + maxtimeMS.longValue();
 		}
 
 		if (stream == UNPROVIDED)
@@ -563,7 +567,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		int currentChar = 0;
 		boolean isEOL = false;
 		while (currentChar != (-1)) {
-			currentChar = streamTyped.readChar();
+			currentChar = streamTyped.readCharWithTimeOut(maxtimeLong);
 			if (currentChar == (-1))
 				break;
 
@@ -622,10 +626,12 @@ public class streams_high extends SubLSystemTrampolineFile {
 			return makeInteger(position);
 		}
 		SubLSequence seq = sequence.toSeq();
+		long deadline = 0;
+
 		if (seq.isArrayBased()) {
 			int i = startTyped;
 			for (int size = seq.size(); (i < size) && (i < endTyped); ++i) {
-				int cur = (inputTextStream != null) ? inputTextStream.readChar() : inputBinaryStream.read();
+				int cur = (inputTextStream != null) ? inputTextStream.readCharWithTimeOut(deadline) : inputBinaryStream.readWithTimeOut(deadline);
 				if (cur < 0)
 					return makeInteger(i);
 
@@ -636,7 +642,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		int i = startTyped;
 		for (SubLList curList = seq.toList().nthCdr(startTyped).toList(); (curList != SubLNil.NIL) && (i < endTyped); curList = curList.rest().toList()) {
 			SubLCons cons = curList.toCons();
-			int cur2 = (inputTextStream != null) ? inputTextStream.readChar() : inputBinaryStream.read();
+			int cur2 = (inputTextStream != null) ? inputTextStream.readCharWithTimeOut(deadline) : inputBinaryStream.readWithTimeOut(deadline);
 			if (cur2 < 0)
 				return makeInteger(i);
 

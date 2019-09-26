@@ -2,6 +2,9 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
 public interface SubLInputTextStream extends SubLInputStream, SubLInputBinaryStream {
+
+	int readCharWithTimeOut(long deadline);
+
 	int readChar();
 
 	int readChar(char[] p0);

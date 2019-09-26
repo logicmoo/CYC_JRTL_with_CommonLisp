@@ -242,7 +242,7 @@ public LispObject execute(LispObject[] args)
 	  try {
 	      return loadClassBytes((byte[]) arg.javaInstance(byte[].class));
 	  } catch(Throwable t) {
-	      Debug.trace(t);
+	      Debug.printStackTrace(t);
 	      return error(new LispError("Unable to load " + arg.princToString()));
 	  }
       }

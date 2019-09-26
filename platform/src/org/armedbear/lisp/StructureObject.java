@@ -50,6 +50,11 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	}
 
 	@Override
+	public boolean isStructure() {
+		return true;
+	}
+
+	@Override
 	public boolean equalp(SubLObject obj) {
 		if (obj instanceof LispObject) {
 			return equalp((LispObject) obj);
@@ -327,23 +332,23 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		}
 		return result & 0x7fffffff;
 	}
-//
-//	@Override
-//	public String printObjectImpl()
-//	{
-//		List set = printingObjectR.get();
-//		int index = set.indexOf(this);
-//		if (index >= 0) { return "#=(" + index + "#|" + easyToString() + "|#)=#"; }
-//		try
-//		{
-//			set.add(this);
-//			return printObjectImpl();
-//		} finally
-//		{
-//			set.remove(this);
-//		}
-//
-//	}
+	//
+	//	@Override
+	//	public String printObjectImpl()
+	//	{
+	//		List set = printingObjectR.get();
+	//		int index = set.indexOf(this);
+	//		if (index >= 0) { return "#=(" + index + "#|" + easyToString() + "|#)=#"; }
+	//		try
+	//		{
+	//			set.add(this);
+	//			return printObjectImpl();
+	//		} finally
+	//		{
+	//			set.remove(this);
+	//		}
+	//
+	//	}
 
 	public String printObjectImpl() {
 		try {
@@ -615,20 +620,17 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		}
 
 		@Override
-		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
-				LispObject fifth) {
+		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth) {
 			return new StructureObject(checkSymbol(first), second, third, fourth, fifth);
 		}
 
 		@Override
-		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
-				LispObject fifth, LispObject sixth) {
+		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth) {
 			return new StructureObject(checkSymbol(first), second, third, fourth, fifth, sixth);
 		}
 
 		@Override
-		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
-				LispObject fifth, LispObject sixth, LispObject seventh) {
+		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh) {
 			return new StructureObject(checkSymbol(first), second, third, fourth, fifth, sixth, seventh);
 		}
 	};

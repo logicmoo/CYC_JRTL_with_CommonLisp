@@ -424,7 +424,7 @@ public class BeanShellCntrl extends Startup {
 					bshInterpreter.set("conns", shells);
 					SystemCurrent.recheckStdIO();
 				} catch (Throwable e) {
-					Debug.trace(e);
+					Debug.printStackTrace(e);
 				}
 			}
 			return bshInterpreter;

@@ -35,319 +35,243 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
 
-public final class LispReader
-{
-    // ### read-comment
-    public static final ReaderMacroFunction READ_COMMENT =
-        new ReaderMacroFunction("read-comment", PACKAGE_SYS, false,
-                                "stream character")
-    {
-        @Override
+public final class LispReader {
+	// ### read-comment
+	public static final ReaderMacroFunction READ_COMMENT = new ReaderMacroFunction("read-comment", PACKAGE_SYS, false, "stream character") {
+		@Override
 		public LispObject execute(Stream stream, char ignored)
 
-        {
-          try
-            {
-              while (true) {
-                int n = stream._readChar();
-                if (n < 0)
-                  return LispThread.currentThread().setValues();
-                if (n == '\n')
-                  return LispThread.currentThread().setValues();
-              }
-            }
-          catch (java.io.IOException e)
-            {
-                return LispThread.currentThread().setValues();
-            }
-        }
-    };
+		{
+			try {
+				while (true) {
+					int n = stream._readChar(Stream.INFINITE_TIMEOUT);
+					if (n < 0)
+						return LispThread.currentThread().setValues();
+					if (n == '\n')
+						return LispThread.currentThread().setValues();
+				}
+			} catch (java.io.IOException e) {
+				return LispThread.currentThread().setValues();
+			}
+		}
+	};
 
-    // ### read-string
-    public static final ReaderMacroFunction READ_STRING =
-        new ReaderMacroFunction("read-string", PACKAGE_SYS, false,
-                                "stream character")
-    {
-        @Override
+	// ### read-string
+	public static final ReaderMacroFunction READ_STRING = new ReaderMacroFunction("read-string", PACKAGE_SYS, false, "stream character") {
+		@Override
 		public LispObject execute(Stream stream, char terminator)
 
-        {
-            return stream.readString(terminator, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readString(terminator, Stream.currentReadtable);
+		}
+	};
 
-    // ### read-list
-    public static final ReaderMacroFunction READ_LIST =
-        new ReaderMacroFunction("read-list", PACKAGE_SYS, false,
-                                "stream character")
-    {
-        @Override
+	// ### read-list
+	public static final ReaderMacroFunction READ_LIST = new ReaderMacroFunction("read-list", PACKAGE_SYS, false, "stream character") {
+		@Override
 		public LispObject execute(Stream stream, char ignored)
 
-        {
-            return stream.readList(false, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readList(false, Stream.currentReadtable);
+		}
+	};
 
-    // ### read-right-paren
-    public static final ReaderMacroFunction READ_RIGHT_PAREN =
-        new ReaderMacroFunction("read-right-paren", PACKAGE_SYS, false,
-                                "stream character")
-    {
-        @Override
+	// ### read-right-paren
+	public static final ReaderMacroFunction READ_RIGHT_PAREN = new ReaderMacroFunction("read-right-paren", PACKAGE_SYS, false, "stream character") {
+		@Override
 		public LispObject execute(Stream stream, char ignored)
 
-        {
-            return error(new ReaderError("Unmatched right parenthesis.", stream));
-        }
-    };
+		{
+			return error(new ReaderError("Unmatched right parenthesis.", stream));
+		}
+	};
 
-    // ### read-quote
-    public static final ReaderMacroFunction READ_QUOTE =
-        new ReaderMacroFunction("read-quote", PACKAGE_SYS, false,
-                                "stream character")
-    {
-        @Override
+	// ### read-quote
+	public static final ReaderMacroFunction READ_QUOTE = new ReaderMacroFunction("read-quote", PACKAGE_SYS, false, "stream character") {
+		@Override
 		public LispObject execute(Stream stream, char ignored)
 
-        {
-            return new Cons(Symbol.QUOTE,
-                            new Cons(stream.read(true, NIL, true,
-                                                 LispThread.currentThread(),
-                                                 Stream.currentReadtable)));
-        }
-    };
+		{
+			return new Cons(Symbol.QUOTE, new Cons(stream.read(true, NIL, true, LispThread.currentThread(), Stream.currentReadtable)));
+		}
+	};
 
-    // ### read-dispatch-char
-    public static final ReaderMacroFunction READ_DISPATCH_CHAR =
-        new ReaderMacroFunction("read-dispatch-char", PACKAGE_SYS, false,
-                                "stream character")
-    {
-        @Override
+	// ### read-dispatch-char
+	public static final ReaderMacroFunction READ_DISPATCH_CHAR = new ReaderMacroFunction("read-dispatch-char", PACKAGE_SYS, false, "stream character") {
+		@Override
 		public LispObject execute(Stream stream, char c)
 
-        {
-            return stream.readDispatchChar(c, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readDispatchChar(c, Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-left-paren
-    public static final DispatchMacroFunction SHARP_LEFT_PAREN =
-        new DispatchMacroFunction("sharp-left-paren", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-left-paren
+	public static final DispatchMacroFunction SHARP_LEFT_PAREN = new DispatchMacroFunction("sharp-left-paren", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-          return stream.readSharpLeftParen(c, n, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readSharpLeftParen(c, n, Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-star
-    public static final DispatchMacroFunction SHARP_STAR =
-        new DispatchMacroFunction("sharp-star", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-star
+	public static final DispatchMacroFunction SHARP_STAR = new DispatchMacroFunction("sharp-star", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char ignored, int n)
 
-        {
-          return stream.readSharpStar(ignored, n, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readSharpStar(ignored, n, Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-dot
-    public static final DispatchMacroFunction SHARP_DOT =
-        new DispatchMacroFunction("sharp-dot", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-dot
+	public static final DispatchMacroFunction SHARP_DOT = new DispatchMacroFunction("sharp-dot", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-          return stream.readSharpDot(c, n, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readSharpDot(c, n, Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-colon
-    public static final DispatchMacroFunction SHARP_COLON =
-        new DispatchMacroFunction("sharp-colon", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-colon
+	public static final DispatchMacroFunction SHARP_COLON = new DispatchMacroFunction("sharp-colon", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return stream.readSymbol();
-        }
-    };
+		{
+			return stream.readSymbol();
+		}
+	};
 
-    // ### sharp-a
-    public static final DispatchMacroFunction SHARP_A =
-        new DispatchMacroFunction("sharp-a", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-a
+	public static final DispatchMacroFunction SHARP_A = new DispatchMacroFunction("sharp-a", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return stream.readArray(n, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readArray(n, Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-b
-    public static final DispatchMacroFunction SHARP_B =
-        new DispatchMacroFunction("sharp-b", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-b
+	public static final DispatchMacroFunction SHARP_B = new DispatchMacroFunction("sharp-b", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return stream.readRadix(2, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readRadix(2, Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-c
-    public static final DispatchMacroFunction SHARP_C =
-        new DispatchMacroFunction("sharp-c", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-c
+	public static final DispatchMacroFunction SHARP_C = new DispatchMacroFunction("sharp-c", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return stream.readComplex(Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readComplex(Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-o
-    public static final DispatchMacroFunction SHARP_O =
-        new DispatchMacroFunction("sharp-o", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-o
+	public static final DispatchMacroFunction SHARP_O = new DispatchMacroFunction("sharp-o", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return stream.readRadix(8, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readRadix(8, Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-p
-    public static final DispatchMacroFunction SHARP_P =
-        new DispatchMacroFunction("sharp-p", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-p
+	public static final DispatchMacroFunction SHARP_P = new DispatchMacroFunction("sharp-p", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return stream.readPathname(Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readPathname(Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-r
-    public static final DispatchMacroFunction SHARP_R =
-        new DispatchMacroFunction("sharp-r", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-r
+	public static final DispatchMacroFunction SHARP_R = new DispatchMacroFunction("sharp-r", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return stream.readRadix(n, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readRadix(n, Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-s
-    public static final DispatchMacroFunction SHARP_S =
-        new DispatchMacroFunction("sharp-s", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-s
+	public static final DispatchMacroFunction SHARP_S = new DispatchMacroFunction("sharp-s", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return stream.readStructure(Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readStructure(Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-x
-    public static final DispatchMacroFunction SHARP_X =
-        new DispatchMacroFunction("sharp-x", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-x
+	public static final DispatchMacroFunction SHARP_X = new DispatchMacroFunction("sharp-x", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return stream.readRadix(16, Stream.currentReadtable);
-        }
-    };
+		{
+			return stream.readRadix(16, Stream.currentReadtable);
+		}
+	};
 
-    // ### sharp-quote
-    public static final DispatchMacroFunction SHARP_QUOTE =
-        new DispatchMacroFunction("sharp-quote", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-quote
+	public static final DispatchMacroFunction SHARP_QUOTE = new DispatchMacroFunction("sharp-quote", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            return new Cons(Symbol.FUNCTION,
-                            new Cons(stream.read(true, NIL, true,
-                                                 LispThread.currentThread(),
-                                                 Stream.currentReadtable)));
-        }
-    };
+		{
+			return new Cons(Symbol.FUNCTION, new Cons(stream.read(true, NIL, true, LispThread.currentThread(), Stream.currentReadtable)));
+		}
+	};
 
-    // ### sharp-backslash
-    public static final DispatchMacroFunction SHARP_BACKSLASH =
-        new DispatchMacroFunction("sharp-backslash", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-backslash
+	public static final DispatchMacroFunction SHARP_BACKSLASH = new DispatchMacroFunction("sharp-backslash", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            final LispThread thread = LispThread.currentThread();
-            final Readtable rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
-            return stream.readCharacterLiteral(rt, thread);
-        }
-    };
+		{
+			final LispThread thread = LispThread.currentThread();
+			final Readtable rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
+			return stream.readCharacterLiteral(rt, thread);
+		}
+	};
 
-    // ### sharp-vertical-bar
-    public static final DispatchMacroFunction SHARP_VERTICAL_BAR =
-        new DispatchMacroFunction("sharp-vertical-bar", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-vertical-bar
+	public static final DispatchMacroFunction SHARP_VERTICAL_BAR = new DispatchMacroFunction("sharp-vertical-bar", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            stream.skipBalancedComment();
-            return LispThread.currentThread().setValues();
-        }
-    };
+		{
+			stream.skipBalancedComment();
+			return LispThread.currentThread().setValues();
+		}
+	};
 
-    // ### sharp-illegal
-    public static final DispatchMacroFunction SHARP_ILLEGAL =
-        new DispatchMacroFunction("sharp-illegal", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        @Override
+	// ### sharp-illegal
+	public static final DispatchMacroFunction SHARP_ILLEGAL = new DispatchMacroFunction("sharp-illegal", PACKAGE_SYS, false, "stream sub-char numarg") {
+		@Override
 		public LispObject execute(Stream stream, char c, int n)
 
-        {
-            StringBuilder sb = new StringBuilder("Illegal # macro character: #\\");
-            String s = LispCharacter.charToName(c);
-            if (s != null)
-                sb.append(s);
-            else
-                sb.append(c);
-            return error(new ReaderError(sb.toString(), stream));
-        }
-    };
+		{
+			StringBuilder sb = new StringBuilder("Illegal # macro character: #\\");
+			String s = LispCharacter.charToName(c);
+			if (s != null)
+				sb.append(s);
+			else
+				sb.append(c);
+			return error(new ReaderError(sb.toString(), stream));
+		}
+	};
 }

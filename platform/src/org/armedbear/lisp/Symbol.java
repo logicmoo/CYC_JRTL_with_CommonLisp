@@ -1166,7 +1166,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 		if (!myFirstBlock) {
 			Environment env = envI != null ? envI : Environment.currentLispEnvironment();
 			if (env == null) {
-				Startup.bp();
+				Startup.bug();
 				env = Environment.newEnvironment();
 			}
 			// final Environment env = envI != null ? envI :

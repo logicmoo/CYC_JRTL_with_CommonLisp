@@ -1417,7 +1417,7 @@ public class SystemCurrent {
 		if (in instanceof String) {
 			return new ReaderInputStream(new StringReader((String) in));
 		}
-		Startup.bp();
+		Startup.bug();
 		Errors.unimplementedMethod("Auto-generated method stub:  SystemCurrent.asPrintStream");
 		return null;
 	}
@@ -1427,7 +1427,7 @@ public class SystemCurrent {
 	}
 
 	private static void bp() {
-		Startup.bp();
+		Startup.bug();
 	}
 
 	public static void attachConsole(boolean becomeOwner) {

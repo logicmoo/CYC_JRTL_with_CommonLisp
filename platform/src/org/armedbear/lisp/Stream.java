@@ -33,7 +33,7 @@
 
 package org.armedbear.lisp;
 
-import static org.logicmoo.system.Startup.bp;
+import static org.logicmoo.system.Startup.bug;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -78,6 +78,50 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		SubLInputTextStream, //
 		SubLInputBinaryStream, //
 		SubLOutputBinaryStream, SubLOutputTextStream {
+
+	PrintWriter azPW;
+
+	@Override
+	public synchronized PrintWriter asPrintWriter() {
+		if (azPW == null) {
+			OutputStream outputStream = getWrappedOutputStream();
+			if (outputStream == null) {
+				outputStream = new OutputStream() {
+					@Override
+					public void write(int b) throws IOException {
+						Stream.this.write(b);
+						Stream.this.flush();
+					}
+
+					@Override
+					public void flush() throws IOException {
+						Stream.this.flush();
+					}
+
+					@Override
+					public synchronized void close() {
+					}
+				};
+			}
+			azPW = new PrintWriter(outputStream, true) {
+				@Override
+				public synchronized void close() {
+				}
+
+			};
+		}
+		return azPW;
+	}
+
+	@Override
+	final public int read() {
+		return readWithTimeOut(streamTimeOut);
+	}
+
+	@Override
+	final public int readChar() {
+		return readCharWithTimeOut(streamTimeOut);
+	}
 
 	/**
 	 * Attempts to read characters into the specified character buffer.
@@ -789,7 +833,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		if (result != eofValue && !recursive) {
 			try {
 				if (_charReady()) {
-					int n = _readChar();
+					int n = _readChar(streamTimeOut);
 					if (n >= 0) {
 						char c = (char) n; // ### BUG: Codepoint conversion
 						Readtable rt = rta.rt(thread);
@@ -816,7 +860,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 	public LispObject readPreservingWhitespace(boolean eofError, LispObject eofValue, boolean recursive, LispThread thread, ReadtableAccessor rta) {
 		if (true)
 			return readPreservingWhitespace0(eofError, eofValue, recursive, thread, rta);
-		return with_thread_prefix("lisp:read " + this, forcedCLRead, () -> readPreservingWhitespace0(eofError, eofValue, recursive, thread, rta));
+		return with_thread_prefix("lisp:readPreservingWhitespace " + this, forcedCLRead, () -> readPreservingWhitespace0(eofError, eofValue, recursive, thread, rta));
 	}
 
 	public LispObject readPreservingWhitespace0(boolean eofError, LispObject eofValue, boolean recursive, LispThread thread, ReadtableAccessor rta)
@@ -827,9 +871,9 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 			while (true) {
 				int n = -1;
 				try {
-					n = _readChar();
+					n = _readChar(streamTimeOut);
 				} catch (IOException e) {
-					Debug.trace(e);
+					Debug.printStackTrace(e);
 					ioe(e);
 				}
 				if (n < 0) {
@@ -841,7 +885,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 				char c = (char) n; // ### BUG: Codepoint conversion
 				if (rt.isWhitespace(c))
 					continue;
-				LispObject result = processChar(thread, c, rt);
+				LispObject result = processChar(thread, c, rt, streamTimeOut);
 				if (result != null)
 					return result;
 			}
@@ -862,8 +906,9 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 	 *
 	 * When the macro function returns zero values, this function returns null or
 	 * the token or returned value otherwise.
+	 * @param deadline TODO
 	 */
-	private final LispObject processChar(LispThread thread, char c, Readtable rt) {
+	private final LispObject processChar(LispThread thread, char c, Readtable rt, long deadline) {
 		final LispObject handler = rt.getReaderMacroFunction(c);
 		LispObject value;
 
@@ -874,7 +919,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 			thread._values = null;
 			value = handler.execute(this, LispCharacter.getInstance(c));
 		} else
-			return readToken(c, rt);
+			return readToken(c, rt, deadline);
 
 		// If we're looking at zero return values, set 'value' to null
 		if (value == NIL) {
@@ -907,7 +952,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 	@Override
 	public LispObject readSymbol(Readtable rt) {
 		final StringBuilder sb = new StringBuilder();
-		final BitSet flags = _readToken(sb, rt);
+		final BitSet flags = _readToken(sb, rt, streamTimeOut);
 		return new Symbol(rt.getReadtableCase() == Keyword.INVERT ? invert(sb.toString(), flags) : sb.toString());
 	}
 
@@ -952,14 +997,14 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		StringBuilder sb = new StringBuilder();
 		try {
 			while (true) {
-				int n = _readChar();
+				int n = _readChar(streamTimeOut);
 				if (n < 0)
 					return error(new EndOfFile(this));
 
 				char c = (char) n; // ### BUG: Codepoint conversion
 				if (rt.getSyntaxType(c) == Readtable.SYNTAX_TYPE_SINGLE_ESCAPE) {
 					// Single escape.
-					n = _readChar();
+					n = _readChar(streamTimeOut);
 					if (n < 0)
 						return error(new EndOfFile(this));
 
@@ -987,12 +1032,12 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		try {
 			while (true) {
 				rt = rta.rt(thread);
-				char c = flushWhitespace(rt);
+				char c = flushWhitespace(rt, streamTimeOut);
 				if (c == ')') {
 					return first == null ? NIL : first;
 				}
 				if (c == '.') {
-					int n = _readChar();
+					int n = _readChar(streamTimeOut);
 					if (n < 0)
 						return error(new EndOfFile(this));
 					char nextChar = (char) n; // ### BUG: Codepoint conversion
@@ -1016,7 +1061,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 					_unreadChar(nextChar);
 				}
 
-				LispObject obj = processChar(thread, c, rt);
+				LispObject obj = processChar(thread, c, rt, streamTimeOut);
 				if (obj == null)
 					continue;
 
@@ -1050,7 +1095,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		char c = 0;
 		try {
 			while (true) {
-				int n = _readChar();
+				int n = _readChar(streamTimeOut);
 				if (n < 0)
 					return error(new EndOfFile(this));
 				c = (char) n; // ### BUG: Codepoint conversion
@@ -1110,7 +1155,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		StringBuilder sb = new StringBuilder();
 		try {
 			while (true) {
-				int ch = _readChar();
+				int ch = _readChar(streamTimeOut);
 				if (ch < 0)
 					break;
 				char c = (char) ch;
@@ -1168,13 +1213,13 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 
 	{
 		try {
-			int n = _readChar();
+			int n = _readChar(streamTimeOut);
 			if (n < 0)
 				return error(new EndOfFile(this));
 			char c = (char) n; // ### BUG: Codepoint conversion
 			StringBuilder sb = new StringBuilder(String.valueOf(c));
 			while (true) {
-				n = _readChar();
+				n = _readChar(streamTimeOut);
 				if (n < 0)
 					break;
 				c = (char) n; // ### BUG: Codepoint conversion
@@ -1204,17 +1249,17 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 	public void skipBalancedComment() {
 		try {
 			while (true) {
-				int n = _readChar();
+				int n = _readChar(streamTimeOut);
 				if (n < 0)
 					return;
 				if (n == '|') {
-					n = _readChar();
+					n = _readChar(streamTimeOut);
 					if (n == '#')
 						return;
 					else
 						_unreadChar(n);
 				} else if (n == '#') {
-					n = _readChar();
+					n = _readChar(streamTimeOut);
 					if (n == '|')
 						skipBalancedComment(); // Nested comment. Recurse!
 					else
@@ -1275,11 +1320,11 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		return error(new ReaderError(sb.toString(), this));
 	}
 
-	private String readMultipleEscape(Readtable rt) {
+	private String readMultipleEscape(Readtable rt, long deadline) {
 		StringBuilder sb = new StringBuilder();
 		try {
 			while (true) {
-				int n = _readChar();
+				int n = _readChar(deadline);
 				if (n < 0) {
 					error(new EndOfFile(this));
 					return "";
@@ -1288,7 +1333,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 				char c = (char) n; // ### BUG: Codepoint conversion
 				byte syntaxType = rt.getSyntaxType(c);
 				if (syntaxType == Readtable.SYNTAX_TYPE_SINGLE_ESCAPE) {
-					n = _readChar();
+					n = _readChar(deadline);
 					if (n < 0) {
 						error(new EndOfFile(this));
 						return "";
@@ -1335,12 +1380,12 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		return -1;
 	}
 
-	private final LispObject readToken(char c, Readtable rt)
+	private final LispObject readToken(char c, Readtable rt, long deadline)
 
 	{
 		StringBuilder sb = new StringBuilder(String.valueOf(c));
 		final LispThread thread = LispThread.currentThread();
-		BitSet flags = _readToken(sb, rt);
+		BitSet flags = _readToken(sb, rt, deadline);
 		if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
 			return NIL;
 		final LispObject readtableCase = rt.getReadtableCase();
@@ -1451,10 +1496,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		}
 	}
 
-	private final BitSet _readToken(StringBuilder sb, Readtable rt)
-
-	{
-
+	private final BitSet _readToken(StringBuilder sb, Readtable rt, long deadline) {
 		lastDirection = Direction.READ;
 		BitSet flags = null;
 		final LispObject readtableCase = rt.getReadtableCase();
@@ -1465,7 +1507,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 			if (syntaxType == Readtable.SYNTAX_TYPE_SINGLE_ESCAPE) {
 				int n = -1;
 				try {
-					n = _readChar();
+					n = _readChar(deadline);
 				} catch (IOException e) {
 					ioe(e);
 					return flags;
@@ -1480,7 +1522,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 				flags.set(0);
 			} else if (syntaxType == Readtable.SYNTAX_TYPE_MULTIPLE_ESCAPE) {
 				sb.setLength(0);
-				sb.append(readMultipleEscape(rt));
+				sb.append(readMultipleEscape(rt, deadline));
 				flags = new BitSet(sb.length());
 				flags.set(0, sb.length());
 			} else if (rt.isInvalid(c)) {
@@ -1493,7 +1535,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		}
 		try {
 			while (true) {
-				int n = _readChar();
+				int n = _readChar(deadline);
 				if (n < 0)
 					break;
 				char c = (char) n; // ### BUG: Codepoint conversion
@@ -1508,7 +1550,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 				}
 				rt.checkInvalid(c, this);
 				if (syntaxType == Readtable.SYNTAX_TYPE_SINGLE_ESCAPE) {
-					n = _readChar();
+					n = _readChar(deadline);
 					if (n < 0)
 						break;
 					sb.append((char) n); // ### BUG: Codepoint conversion
@@ -1519,7 +1561,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 				}
 				if (syntaxType == Readtable.SYNTAX_TYPE_MULTIPLE_ESCAPE) {
 					int begin = sb.length();
-					sb.append(readMultipleEscape(rt));
+					sb.append(readMultipleEscape(rt, deadline));
 					int end = sb.length();
 					if (flags == null)
 						flags = new BitSet(sb.length());
@@ -1741,7 +1783,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		StringBuilder sb = new StringBuilder();
 		final LispThread thread = LispThread.currentThread();
 		final Readtable rt = rta.rt(thread);
-		boolean escaped = (_readToken(sb, rt) != null);
+		boolean escaped = (_readToken(sb, rt, streamTimeOut) != null);
 		if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
 			return NIL;
 		if (escaped)
@@ -1767,10 +1809,10 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		return error(new LispError());
 	}
 
-	private char flushWhitespace(Readtable rt) {
+	private char flushWhitespace(Readtable rt, long deadline) {
 		try {
 			while (true) {
-				int n = _readChar();
+				int n = _readChar(deadline);
 				if (n < 0) {
 					error(new EndOfFile(this));
 					return (char) 0;
@@ -1793,11 +1835,11 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		LispObject result = NIL;
 		while (true) {
 			Readtable rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
-			char c = flushWhitespace(rt);
+			char c = flushWhitespace(rt, streamTimeOut);
 			if (c == delimiter)
 				break;
 
-			LispObject obj = processChar(thread, c, rt);
+			LispObject obj = processChar(thread, c, rt, streamTimeOut);
 			if (obj != null)
 				result = new Cons(obj, result);
 		}
@@ -1818,7 +1860,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		StringBuilder sb = new StringBuilder();
 		try {
 			while (true) {
-				int n = _readChar();
+				int n = _readChar(streamTimeOut);
 				if (n < 0) {
 					if (sb.length() == 0) {
 						if (eofError)
@@ -1842,7 +1884,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 	@Override
 	public LispObject READ_CHAR() {
 		try {
-			int n = _readChar();
+			int n = _readChar(streamTimeOut);
 			if (n < 0)
 				return error(new EndOfFile(this));
 			return LispCharacter.getInstance((char) n); // ### BUG: Codepoint conversion
@@ -1857,7 +1899,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 
 	{
 		try {
-			int n = _readChar();
+			int n = _readChar(streamTimeOut);
 			if (n < 0) {
 				if (eofError)
 					return error(new EndOfFile(this));
@@ -1984,7 +2026,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 				if (!_charReady())
 					return NIL;
 
-				int n = _readChar();
+				int n = _readChar(streamTimeOut);
 				if (n < 0)
 					return NIL;
 
@@ -2037,10 +2079,11 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 
 	/**
 	 * Reads a character off an underlying stream
+	 * @param deadline TODO
 	 *
 	 * @return a character, or -1 at end-of-file
 	 */
-	protected int _readChar() throws IOException {
+	protected int _readChar(long deadline) throws IOException {
 		if (reader == null)
 			streamNotCharacterInputStream();
 
@@ -2054,7 +2097,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 
 		++offset;
 		if (n == '\r' && eolStyle == EolStyle.CRLF) {
-			n = _readChar();
+			n = _readChar(deadline);
 			if (n != '\n') {
 				_unreadChar(n);
 				return '\r';
@@ -2093,7 +2136,6 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 
 	/**
 	 * Returns a boolean indicating input readily available
-	 *
 	 * @return true if a character is available
 	 */
 	protected boolean _charReady() throws IOException {
@@ -2291,7 +2333,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 			int c = 0;
 			try {
 				while (_charReady() && (c >= 0))
-					c = _readChar();
+					c = _readChar(streamTimeOut);
 			} catch (IOException e) {
 				ioe(e);
 			}
@@ -2327,7 +2369,7 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 					}
 				}
 
-				bp();
+				bug();
 
 			}
 		}
@@ -3120,4 +3162,5 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 	public boolean isDontTrack() {
 		return true;
 	}
+
 }

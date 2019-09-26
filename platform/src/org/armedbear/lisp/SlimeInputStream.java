@@ -93,7 +93,7 @@ public class SlimeInputStream extends Stream
     }
 
     @Override
-    protected int _readChar()
+    protected int _readChar(long deadline)
     {
         if (offset >= length) {
             ostream.finishOutput();

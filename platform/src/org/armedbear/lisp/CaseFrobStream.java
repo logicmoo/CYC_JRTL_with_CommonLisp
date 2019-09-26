@@ -123,7 +123,7 @@ public abstract class CaseFrobStream extends Stream
 
     // Returns -1 at end of file.
     @Override
-    protected int _readChar()
+    protected int _readChar(long deadline)
     {
         notSupported();
         // Not reached.

@@ -10,8 +10,8 @@
 	<name>LarKC Platform</name>
 	<description>LarKC Platform used in LogicMOO</description>
 	<build>
-		<sourceDirectory>main/jpl7-hacked</sourceDirectory>
-		<testSourceDirectory>test/src</testSourceDirectory>
+		<sourceDirectory>main/for-maven</sourceDirectory>
+		<testSourceDirectory>test/for-maven</testSourceDirectory>
 		<resources>
 		</resources>
 		<testResources>

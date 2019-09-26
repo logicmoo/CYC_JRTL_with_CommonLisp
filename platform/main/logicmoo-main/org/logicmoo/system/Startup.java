@@ -1017,7 +1017,7 @@ public class Startup extends ABCLStatic {
 	public static void showClassLoaderInfo(Object term) {
 		Class termClass = term.getClass();
 		ClassLoader cl = termClass.getClassLoader();
-		bp();
+		bug();
 	}
 
 	/**
@@ -1295,7 +1295,7 @@ public class Startup extends ABCLStatic {
 				// printStackTrace(e);
 				// TODO: handle exception
 			} catch (ConditionThrowable e) {
-				bp();
+				bug();
 				throw e;
 			} catch (Throwable e) {
 				uncaughtException(e);
@@ -1329,17 +1329,18 @@ public class Startup extends ABCLStatic {
 		SystemCurrent.recheckStdIO();
 	}
 
-	// Breakpoint to set in IDE
-	public static void bp() {
-		bp(true);
-	}
-
-	public static void bp(boolean trouble) {
-		bp(UNKNOWN, trouble);
-	}
 
 	// Breakpoint to set in IDE
-	public static void bp(String why, boolean trouble) {
+	public static void bug() {
+		bug(true);
+	}
+
+	public static void bug(boolean trouble) {
+		bug(UNKNOWN, trouble);
+	}
+
+	// Breakpoint to set in IDE
+	public static void bug(String why, boolean trouble) {
 		if (!trouble)
 			return;
 		noticeStream = getNoticeStream();
@@ -1400,7 +1401,7 @@ public class Startup extends ABCLStatic {
 	public static void printStackTrace(Throwable t) {
 		final PrintStream stStream = getNoticeStream();
 		String info = getStackTraceString(t);
-		bp();
+		bug();
 		printStackTrace(t, stStream);
 
 	}
@@ -2474,7 +2475,7 @@ public class Startup extends ABCLStatic {
 				if (m.isAnnotationPresent(LispMethod.class)) {
 					//registerMethod(m);
 					//continue;
-					bp();
+					bug();
 				}
 
 			}

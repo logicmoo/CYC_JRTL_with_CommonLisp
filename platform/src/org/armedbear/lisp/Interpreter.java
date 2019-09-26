@@ -892,13 +892,13 @@ public final class Interpreter extends Startup implements Runnable {
 				if (inputStream != null)
 					inputStream.close();
 			} catch (Throwable e) {
-				Debug.trace(e);
+				Debug.printStackTrace(e);
 			}
 			try {
 				if (outputStream != null)
 					outputStream.close();
 			} catch (Throwable e) {
-				Debug.trace(e);
+				Debug.printStackTrace(e);
 			}
 		} else {
 			Startup.exit(status);

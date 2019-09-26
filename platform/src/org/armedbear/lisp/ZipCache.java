@@ -170,7 +170,7 @@ public class ZipCache {
                 try {
                   dateString = HttpHead.get(url, "Last-Modified");
                 } catch (IOException ex) {
-                  Debug.trace(ex);
+                  Debug.printStackTrace(ex);
                 }
                 Date date = null;
                 ParsePosition pos = new ParsePosition(0);

@@ -73,7 +73,7 @@ public final class disassemble_class_bytes extends Primitive
                 file.delete();
                 return new SimpleString(sc.getOutput());
             } catch (IOException e) {
-                Debug.trace(e);
+                Debug.printStackTrace(e);
             }
         }
         return NIL;

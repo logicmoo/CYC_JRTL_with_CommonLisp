@@ -1150,7 +1150,7 @@ public final class hl_supports extends SubLTranslatedFile {
             mt_relevance_macros.$mt$.rebind(_prev_bind_2, thread);
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
-        Startup.bp(false);
+        Startup.bug(false);
         return result;
     }
 

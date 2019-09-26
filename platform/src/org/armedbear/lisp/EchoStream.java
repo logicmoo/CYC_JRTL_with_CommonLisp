@@ -135,10 +135,10 @@ public final class EchoStream extends Stream
 
     // Returns -1 at end of file.
     @Override
-	protected int _readChar() throws java.io.IOException
+	protected int _readChar(long deadline) throws java.io.IOException
     {
     	lastDirection = Direction.READ;
-        int n = inStream._readChar();
+        int n = inStream._readChar(deadline);
         if (n >= 0) {
             // Not at end of file.
             if (unreadChar < 0)

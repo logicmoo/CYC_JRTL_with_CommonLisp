@@ -27,7 +27,7 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 		if (o == null)
 			return null;
 		SubLStream s = o.getStream(true);
-		if(s==null) {
+		if (s == null) {
 			return Keyword.UNDERFLOW;
 		}
 		SubLSymbol d = s.getDirection();
@@ -80,7 +80,9 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 			return this;
 		try {
 			SubLStream result;
-			for (result = streamSymbol.getValue().getStream(true); result instanceof SubLSynonymStream; result = ((SubLSynonymStream) result).getStreamSymbol().getValue().getStream(true)) {
+			for (result = streamSymbol.getValue().getStream(true); //
+					result instanceof SubLSynonymStream; //
+					result = ((SubLSynonymStream) result).getStreamSymbol().getValue().getStream(true)) {
 			}
 			return result;
 		} catch (Exception e) {
@@ -190,5 +192,15 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 		toOutputTextStream().write(c);
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public int read() {
+		return readWithTimeOut(streamTimeOut);
+	}
+
+	//@Override
+	public int readChar() {
+		return readCharWithTimeOut(streamTimeOut);
 	}
 }

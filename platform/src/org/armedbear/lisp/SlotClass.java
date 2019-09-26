@@ -184,7 +184,7 @@ abstract public class SlotClass extends LispClass {
 				instanceSlotNames[i] = slotDefinition.AREF(1);
 				Debug.assertTrue(slotDefinition.AREF(2).eql(loc));
 			} else {
-				Debug.bug();
+				Debug.bug(true);
 			}
 
 			i++;

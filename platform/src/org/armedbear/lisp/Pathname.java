@@ -1637,9 +1637,9 @@ public class Pathname extends NLispObject {
 					} catch (IOException e) {
 						return error(new FileError("Unable to list directory " + pathname.princToString() + ".", pathname));
 					} catch (SecurityException e) {
-						Debug.trace(e);
+						Debug.printStackTrace(e);
 					} catch (NullPointerException e) {
-						Debug.trace(e);
+						Debug.printStackTrace(e);
 					}
 				}
 			}

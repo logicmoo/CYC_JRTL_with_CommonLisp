@@ -329,7 +329,7 @@ abstract public class Lisp extends ABCLStatic {
 				throw c;
 			} catch (Throwable t) // ControlTransfer handled above
 			{
-				Debug.trace(t);
+				Debug.printStackTrace(t);
 				thread.setSpecialVariable(_SAVED_BACKTRACE_, thread.backtrace(0));
 				return error(new LispError("Caught " + t + "."));
 			}
@@ -1317,7 +1317,7 @@ abstract public class Lisp extends ABCLStatic {
 
 			return bytes;
 		} catch (IOException t) {
-			Debug.trace(t); // FIXME: call error()?
+			Debug.printStackTrace(t); // FIXME: call error()?
 		}
 		return null;
 	}
@@ -1345,7 +1345,7 @@ abstract public class Lisp extends ABCLStatic {
 		try {
 			return obj.printObject();
 		} catch (NullPointerException e) {
-			Debug.trace(e);
+			Debug.printStackTrace(e);
 			return "null";
 		}
 	}
@@ -2537,7 +2537,7 @@ abstract public class Lisp extends ABCLStatic {
 		try {
 			Class.forName(className);
 		} catch (ClassNotFoundException e) {
-			Debug.trace(e);
+			Debug.printStackTrace(e);
 		}
 	}
 

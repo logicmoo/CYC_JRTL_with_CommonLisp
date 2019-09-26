@@ -88,11 +88,11 @@ public class SubLInOutBinaryStreamImpl extends AbstractSubLBinaryStream implemen
 	}
 
 	@Override
-	public int read() {
+	public int readWithTimeOut(long deadline) {
 		this.ensureOpen("read");
 		if (shouldParentDoWork())
-			return super.read();
-		return toInputBinaryStream().read();
+			return super.readWithTimeOut(deadline);
+		return toInputBinaryStream().readWithTimeOut(deadline);
 	}
 
 	@Override

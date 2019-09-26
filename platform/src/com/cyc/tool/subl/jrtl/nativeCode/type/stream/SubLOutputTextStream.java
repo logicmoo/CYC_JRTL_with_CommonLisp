@@ -1,6 +1,8 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
+import java.io.PrintWriter;
+
 public interface SubLOutputTextStream extends SubLOutputStream, SubLOutputBinaryStream {
 	boolean freshLine();
 
@@ -15,4 +17,6 @@ public interface SubLOutputTextStream extends SubLOutputStream, SubLOutputBinary
 	void writeString(String p0);
 
 	void writeString(String p0, int p1, int p2);
+
+	PrintWriter asPrintWriter();
 }

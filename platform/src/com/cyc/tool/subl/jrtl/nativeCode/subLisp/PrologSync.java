@@ -771,7 +771,7 @@ public class PrologSync extends SubLSystemTrampolineFile {
 			final SubLObject o = s.getField(i + 2);
 			Term t = toProlog(o, l);
 			if (t == null) {
-				BeanShellCntrl.bp();
+				BeanShellCntrl.bug();
 			}
 			args[argN] = t;
 			argN++;

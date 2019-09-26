@@ -97,7 +97,7 @@ public class Errors extends SubLSystemTrampolineFile {
 		if (errorMessage == null || "".equals(errorMessage))
 			errorMessage = SubLException.getStringForException(e == null ? new Exception("possiblyCallErrorHandler") : e);
 		else if (NIL != CommonSymbols.APPEND_STACK_TRACES_TO_ERROR_MESSAGES.getDynamicValue())
-			errorMessage = errorMessage + "\n" + SubLException.getStringForException(e == null ? new Exception() : e);
+			errorMessage = errorMessage + "\n" + SubLException.getStringForException(e == null ? new Exception(errorMessage) : e);
 		SubLString errorStr = SubLObjectFactory.makeString(errorMessage);
 		if (NIL != Errors.$break_on_errorP$.getDynamicValue())
 			sublisp_break(errorStr);
@@ -206,7 +206,7 @@ public class Errors extends SubLSystemTrampolineFile {
 			}
 			SubLReader reader = getReaderForCurrentThread();
 			if (reader == null) {
-				Startup.bp();
+				Startup.bug();
 				reader = ensureReaderForCurrentThread();
 			}
 			String continueString = PrintLow.format(NIL, continue_string, arguments).getStringValue();
@@ -302,7 +302,7 @@ public class Errors extends SubLSystemTrampolineFile {
 		}
 		if (restartMethod.process(reader, se.getMessage(), se))
 			return error(errorString, e);
-		Startup.bp(errorString, true);
+		Startup.bug(errorString, true);
 		throw new ResumeException(errorString, e);
 	}
 

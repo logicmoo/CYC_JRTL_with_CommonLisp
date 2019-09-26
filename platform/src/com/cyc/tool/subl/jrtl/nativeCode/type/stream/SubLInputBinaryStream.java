@@ -6,8 +6,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 public interface SubLInputBinaryStream extends SubLInputStream {
 	long numBytesAvailable();
 
-
 	int read();
+
+	int readWithTimeOut(long deadline);
 
 	int read(byte[] p0);
 

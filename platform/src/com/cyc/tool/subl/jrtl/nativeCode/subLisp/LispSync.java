@@ -325,7 +325,7 @@ public class LispSync extends SubLSystemTrampolineFile {
 	}
 
 	public static void bp() {
-		BeanShellCntrl.bp();
+		BeanShellCntrl.bug();
 	}
 
 	private static Atom checkReady(AbstractSubLStruct struct) {

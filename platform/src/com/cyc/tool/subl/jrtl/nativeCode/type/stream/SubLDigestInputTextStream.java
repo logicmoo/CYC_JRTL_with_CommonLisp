@@ -46,6 +46,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLDigestInputTextStream extends LispObject implements SubLStream, SubLInputTextStream {
+	protected long streamTimeOut = Stream.DEFAULT_TIMEOUT;
+
 	public SubLDigestInputTextStream(SubLInputTextStream outerStream, MessageDigest digest) {
 		bytes = null;
 		buffer_size = 0;
@@ -54,6 +56,16 @@ public class SubLDigestInputTextStream extends LispObject implements SubLStream,
 		bytes = new byte[131072];
 		buffer = ByteBuffer.wrap(bytes);
 		buffer_size = 131072;
+	}
+
+	@Override
+	public int read() {
+		return readWithTimeOut(streamTimeOut);
+	}
+
+	@Override
+	public int readChar() {
+		return readCharWithTimeOut(streamTimeOut);
 	}
 
 	/**
@@ -832,8 +844,8 @@ public class SubLDigestInputTextStream extends LispObject implements SubLStream,
 	}
 
 	@Override
-	public int read() {
-		int result = wrapped.read();
+	public int readWithTimeOut(long deadline) {
+		int result = wrapped.readWithTimeOut(deadline);
 		if (result == -1)
 			return result;
 		maybeResizeBuffer();
@@ -865,8 +877,8 @@ public class SubLDigestInputTextStream extends LispObject implements SubLStream,
 	}
 
 	@Override
-	public int readChar() {
-		return this.read();
+	public int readCharWithTimeOut(long deadline) {
+		return this.readWithTimeOut(deadline);
 	}
 
 	@Override

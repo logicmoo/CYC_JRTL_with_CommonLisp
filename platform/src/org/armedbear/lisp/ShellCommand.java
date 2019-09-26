@@ -115,7 +115,7 @@ public final class ShellCommand implements Runnable
             }
         }
         catch (IOException e) {
-            Debug.trace(e);
+            Debug.printStackTrace(e);
         }
         if (process != null) {
             ReaderThread stdoutThread =
@@ -128,19 +128,19 @@ public final class ShellCommand implements Runnable
                 exitValue = process.waitFor();
             }
             catch (InterruptedException e) {
-                Debug.trace(e);
+                Debug.printStackTrace(e);
             }
             try {
                 stdoutThread.join();
             }
             catch (InterruptedException e) {
-                Debug.trace(e);
+                Debug.printStackTrace(e);
             }
             try {
                 stderrThread.join();
             }
             catch (InterruptedException e) {
-                Debug.trace(e);
+                Debug.printStackTrace(e);
             }
         }
     }
