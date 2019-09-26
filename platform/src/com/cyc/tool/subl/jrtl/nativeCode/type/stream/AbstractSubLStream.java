@@ -33,37 +33,34 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractSubLStream extends StructureObject implements SubLStream, Closeable {
-	public AbstractSubLStream(SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists,
-			SubLSymbol ifNotExists) {
+	public AbstractSubLStream(SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists, SubLSymbol ifNotExists) {
 		this();
 		init(elementType, direction, ifExists, ifNotExists);
-		setStreamProps(elementType,direction);
+		setStreamProps(elementType, direction);
 		//AbstractSubLObject op;
 	}
 
 	//protected LispObject elementType;
-    protected boolean isInputStream;
-    protected boolean isOutputStream;
-    protected boolean isCharacterStream;
-    protected boolean isBinaryStream;
-
+	protected boolean isInputStream;
+	protected boolean isOutputStream;
+	protected boolean isCharacterStream;
+	protected boolean isBinaryStream;
 
 	protected void setStreamProps(SubLSymbol elementType, SubLSymbol direction) {
 		setStreamDirection(direction);
 		setElementType(elementType);
-		isCharacterStream = elementType!= Keyword.BINARY_KEYWORD;
+		isCharacterStream = elementType != Keyword.BINARY_KEYWORD;
 		isBinaryStream = !isCharacterStream;
 	}
 
 	protected void setStreamDirection(SubLSymbol direction) {
 		this.direction = direction;
-		isOutputStream = direction!= Keyword.INPUT;
-		isInputStream = direction!= Keyword.OUTPUT;
+		isOutputStream = direction != Keyword.INPUT;
+		isInputStream = direction != Keyword.OUTPUT;
 	}
 
-
 	protected LispObject elementType;
-	private SubLSymbol subLElementType;
+	protected SubLSymbol subLElementType;
 	protected SubLSymbol direction;
 	protected SubLSymbol ifExists;
 	protected SubLSymbol ifNotExists;
@@ -80,8 +77,6 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	// Character input.
 	protected java.io.PushbackReader reader;
 
-
-
 	//protected OutputStream javaBufferedOutStream;
 	protected OutputStream out;
 	//protected OutputStreamWriter writer;
@@ -91,8 +86,6 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	protected Writer asBuffredWriter(Writer writer) {
 		return writer;
 	}
-
-
 
 	public AbstractSubLStream() {
 		this(Symbol.SYSTEM_STREAM);
@@ -106,7 +99,6 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		inputIndex = 0L;
 	}
 
-
 	//private Stream lispStream;
 
 	protected void init(SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists, SubLSymbol ifNotExists) {
@@ -116,16 +108,11 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		this.ifNotExists = ifNotExists;
 		if (!Lisp.isText(elementType) && elementType != Keyword.BINARY_KEYWORD)
 			Errors.error("Invalid stream element type: " + elementType);
-		if ((this.direction = direction) != Keyword.INPUT_KEYWORD && direction != Keyword.OUTPUT_KEYWORD
-				&& direction != Keyword.IO_KEYWORD && direction != Keyword.PROBE_KEYWORD)
+		if ((this.direction = direction) != Keyword.INPUT_KEYWORD && direction != Keyword.OUTPUT_KEYWORD && direction != Keyword.IO_KEYWORD && direction != Keyword.PROBE_KEYWORD)
 			Errors.error("Invalid stream direction: " + direction);
-		if ((this.ifExists = ifExists) != Keyword.ERROR_KEYWORD && ifExists != CommonSymbols.NEW_VERSION_KEYWORD
-				&& ifExists != Keyword.RENAME_AND_DELETE_KEYWORD && ifExists != CommonSymbols.OVERWRITE_KEYWORD
-				&& ifExists != Keyword.APPEND_KEYWORD && ifExists != CommonSymbols.SUPERSEDE_KEYWORD
-				&& ifExists != SubLNil.NIL)
+		if ((this.ifExists = ifExists) != Keyword.ERROR_KEYWORD && ifExists != CommonSymbols.NEW_VERSION_KEYWORD && ifExists != Keyword.RENAME_AND_DELETE_KEYWORD && ifExists != CommonSymbols.OVERWRITE_KEYWORD && ifExists != Keyword.APPEND_KEYWORD && ifExists != CommonSymbols.SUPERSEDE_KEYWORD && ifExists != SubLNil.NIL)
 			Errors.error("Invalid stream if-exists parameter: " + ifExists);
-		if ((this.ifNotExists = ifNotExists) != Keyword.ERROR_KEYWORD
-				&& ifNotExists != Keyword.CREATE_KEYWORD && ifNotExists != SubLNil.NIL)
+		if ((this.ifNotExists = ifNotExists) != Keyword.ERROR_KEYWORD && ifNotExists != Keyword.CREATE_KEYWORD && ifNotExists != SubLNil.NIL)
 			Errors.error("Invalid stream if-not-exists parameter: " + ifNotExists);
 		if (ifExists == Keyword.RENAME_AND_DELETE_KEYWORD)
 			Errors.error("Streams implementation does not currently support :rename-and-delete.");
@@ -160,11 +147,16 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 
 	@Override
 	public SubLSymbol getElementType() {
-		return subLElementType;
+		if (subLElementType == null) {
+			subLElementType = elementType.toSymbol();
+		}
+		return subLElementType.toSymbol();
 	}
 
-
 	public LispObject getStreamElementType() {
+		if (elementType == null) {
+			elementType = subLElementType.toLispObject();
+		}
 		return elementType.toLispObject();
 	}
 
@@ -240,7 +232,6 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		return isClosed;
 	}
 
-
 	@Override
 	public boolean isInteractive() {
 		return interactive;
@@ -276,48 +267,51 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 
 	@Override
 	public SubLOutputTextStream toOutputTextStream() {
-		if(this instanceof SubLOutputTextStream) return (SubLOutputTextStream) this;
+		if (this instanceof SubLOutputTextStream)
+			return (SubLOutputTextStream) this;
 		type_error_str(this, "OUTPUT-TEXT-STREAM");
 		return null;
 	}
 
 	@Override
 	public SubLOutputBinaryStream toOutputBinaryStream() {
-		if(this instanceof SubLOutputBinaryStream) return (SubLOutputBinaryStream) this;
+		if (this instanceof SubLOutputBinaryStream)
+			return (SubLOutputBinaryStream) this;
 		type_error_str(this, "OUTPUT-BINARY-STREAM");
 		return null;
 	}
 
 	@Override
 	public SubLOutputStream toOutputStream() {
-		if(this instanceof SubLOutputStream) return (SubLOutputStream) this;
+		if (this instanceof SubLOutputStream)
+			return (SubLOutputStream) this;
 		type_error_str(this, "OUTPUT-STREAM");
 		return null;
 	}
 
-
-
 	@Override
 	public SubLInputTextStream toInputTextStream() {
-		if(this instanceof SubLInputTextStream) return (SubLInputTextStream) this;
+		if (this instanceof SubLInputTextStream)
+			return (SubLInputTextStream) this;
 		type_error_str(this, "OUTPUT-TEXT-STREAM");
 		return null;
 	}
 
 	@Override
 	public SubLInputBinaryStream toInputBinaryStream() {
-		if(this instanceof SubLInputBinaryStream) return (SubLInputBinaryStream) this;
+		if (this instanceof SubLInputBinaryStream)
+			return (SubLInputBinaryStream) this;
 		type_error_str(this, "OUTPUT-BINARY-STREAM");
 		return null;
 	}
 
 	@Override
 	public SubLInputStream toInputStream() {
-		if(this instanceof SubLInputStream) return (SubLInputStream) this;
+		if (this instanceof SubLInputStream)
+			return (SubLInputStream) this;
 		type_error_str(this, "OUTPUT-STREAM");
 		return null;
 	}
-
 
 	@Override
 	public void checkType(SubLSymbol predicate) throws SubLException {
@@ -327,27 +321,23 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	public void checkTypeInternal(SubLSymbol predicate) throws SubLException {
 	}
 
-	  @Override
-	public Object clone()
-	  {
-		  Object result = null;
-	      try {
-		  result = super.clone();
-	      } catch (Exception e) {
-	    	  e.printStackTrace();
-	    	  return this;
-	      }
-	      return result;
-	  }
-
-
+	@Override
+	public Object clone() {
+		Object result = null;
+		try {
+			result = super.clone();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this;
+		}
+		return result;
+	}
 
 	@Override
 	public void enforceType(SubLSymbol predicate) throws SubLException {
 		UnaryFunction Function = UnaryFunction.makeInstance(predicate);
 		if (SubLNil.NIL == Function.processItem(this))
-			Errors.error(SubLObjectFactory.makeString("Got invalid type for object: " + this + "." + " Wanted type: "
-					+ predicate + " Actual type: " + toTypeName()));
+			Errors.error(SubLObjectFactory.makeString("Got invalid type for object: " + this + "." + " Wanted type: " + predicate + " Actual type: " + toTypeName()));
 	}
 
 	@Override
@@ -385,7 +375,6 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		return SubLNil.NIL;
 	}
 
-
 	@Override
 	public SubLStream getStream(boolean followSynonymStream) {
 		lisp_type_error(this, "STREAM");
@@ -398,6 +387,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		lisp_type_error(this, "STRING");
 		return "";
 	}
+
 	@Override
 	public String getString() {
 		return getStringValue();
@@ -426,8 +416,6 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		return null;
 	}
 
-
-
 	@Override
 	public boolean isMemoryMapped() {
 		return false;
@@ -437,8 +425,6 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	public boolean isNil() {
 		return false;
 	}
-
-
 
 	@Override
 	public boolean isStream() {
@@ -453,7 +439,6 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	public boolean isStructure() {
 		return false;
 	}
-
 
 	@Override
 	public boolean isAlien() {
@@ -471,7 +456,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 
 	protected void setElementType(SubLSymbol elementType) {
 		this.subLElementType = elementType;
-		if(this.elementType==null) {
+		if (this.elementType == null) {
 			this.elementType = elementType.toLispObject();
 		}
 	}

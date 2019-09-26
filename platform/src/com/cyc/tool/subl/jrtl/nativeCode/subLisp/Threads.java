@@ -159,7 +159,8 @@ public class Threads extends SubLSystemTrampolineFile {
 	}
 
 	public static SubLObject sleep(SubLObject seconds) {
-		SubLSemaphore.sleepSem.acquireWithTimeoutNanoSecs(1, (long) (seconds.doubleValue() * 1.0E9));
+		final long nanosecs = (long) (seconds.doubleValue() * 1.0E9);
+		SubLSemaphore.sleepSem.acquireWithTimeoutNanoSecs(1, nanosecs);
 		return SubLNil.NIL;
 	}
 

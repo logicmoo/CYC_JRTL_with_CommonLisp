@@ -21,11 +21,11 @@ public class AwtDialogPromptStream extends DialogPromptStream {
 	Dialog dialog = new Dialog((Frame)null, true);
 	private Label prompt = new Label();
 	private TextField input = new TextField(32);
-	
+
 	public AwtDialogPromptStream() {
 		this("Prompt");
 	}
-	
+
 	public AwtDialogPromptStream(String title) {
 		super();
 		dialog.setTitle(title);
@@ -46,12 +46,12 @@ public class AwtDialogPromptStream extends DialogPromptStream {
 		tmpPanel.add(okBtn);
 		dialog.add(tmpPanel, BorderLayout.SOUTH);
 	}
-	
+
 	@Override
 	protected void closeDialog() {
 		dialog.dispose();
 	}
-	
+
 	@Override
 	protected String readInputFromModalDialog(String promptText) {
 		prompt.setText(promptText);
@@ -59,5 +59,4 @@ public class AwtDialogPromptStream extends DialogPromptStream {
 		dialog.setVisible(true);
 		return input.getText();
 	}
-	
 }

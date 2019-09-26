@@ -32,6 +32,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess.TerminationRequest;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ExceptionFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
@@ -610,10 +611,13 @@ public class SubLObjectFactory {
 		}
 
 		@Override
-		public void safeRun() {
+		public void safeRun() throws TerminationRequest {
 			try {
 				SubLObject result = Functions.funcall(func);
 			} catch (Throwable e) {
+				if (e instanceof TerminationRequest) {
+					throw (TerminationRequest) e;
+				}
 				e.printStackTrace();
 				throw JVMImpl.doThrow(e);
 			}

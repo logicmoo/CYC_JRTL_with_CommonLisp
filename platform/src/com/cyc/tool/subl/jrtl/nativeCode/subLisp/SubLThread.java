@@ -10,6 +10,7 @@ import java.util.List;
 import org.armedbear.lisp.Environment;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispThread;
+import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -43,7 +44,7 @@ final public class SubLThread extends Thread {
 
 	/**
 	 * TODO Describe the purpose of this method.
-	 * 
+	 *
 	 * @return
 	 */
 	public LispThread getLispThread() {
@@ -642,7 +643,7 @@ final public class SubLThread extends Thread {
 			// TODO? Main.setSubLisp(true);
 			super.run();
 		} catch (Throwable t) {
-			t.printStackTrace(SystemCurrent.originalSystemErr);
+			Startup.uncaughtException(t);
 		} finally {
 			assert previousName != null;
 			SubLProcess.currentSubLThread().setSubLProcess(null);
@@ -732,8 +733,7 @@ final public class SubLThread extends Thread {
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
-			SubLObject value5) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4, SubLObject value5) {
 		valuesCount = 5;
 		this.value5 = value5;
 		this.value4 = value4;
@@ -742,8 +742,7 @@ final public class SubLThread extends Thread {
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
-			SubLObject value5, SubLObject value6) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4, SubLObject value5, SubLObject value6) {
 		valuesCount = 6;
 		this.value6 = value6;
 		this.value5 = value5;
@@ -753,8 +752,7 @@ final public class SubLThread extends Thread {
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
-			SubLObject value5, SubLObject value6, SubLObject value7) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4, SubLObject value5, SubLObject value6, SubLObject value7) {
 		valuesCount = 7;
 		this.value7 = value7;
 		this.value6 = value6;
@@ -765,8 +763,7 @@ final public class SubLThread extends Thread {
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
-			SubLObject value5, SubLObject value6, SubLObject value7, SubLObject value8) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4, SubLObject value5, SubLObject value6, SubLObject value7, SubLObject value8) {
 		valuesCount = 8;
 		this.value8 = value8;
 		this.value7 = value7;

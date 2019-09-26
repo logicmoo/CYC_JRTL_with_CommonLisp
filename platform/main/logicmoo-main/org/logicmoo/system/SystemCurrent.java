@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
@@ -49,11 +50,17 @@ public class SystemCurrent {
 			return "DRASTIC_CHANGE";
 		}
 	};
+	public static Map<Thread, InOutErr> consoles = new HashMap();
 
 	static public boolean DONT_USE = false;
 
 	public static Thread originalSystemThread = Thread.currentThread();
 	public static InOutErr originalInOutErr = new InOutErr("originalInOutErr " + originalSystemThread.getName());
+	static {
+		synchronized (consoles) {
+			consoles.put(originalSystemThread, originalInOutErr);
+		}
+	}
 
 	final public static InputStream originalSystemIn0 = (InputStream) checkNonTLStream(System.in);
 	final public static PrintStream originalSystemOut0 = System.out;
@@ -61,15 +68,73 @@ public class SystemCurrent {
 
 	public static InputStream originalSystemIn = (InputStream) checkNonTLStream(System.in);
 	BufferedInputStream bif = new BufferedInputStream(originalSystemIn0);
+
 	public static PrintStream originalSystemOut = System.out;
 	public static PrintStream originalSystemErr = System.err;
+
+	final private static TlIO threadLocalIO = new TlIO();
+
+	static {
+		originalInOutErr.setIn(originalSystemIn);
+		originalInOutErr.setOut(originalSystemOut);
+		originalInOutErr.setErr(originalSystemErr);
+	}
+
+	public static InputStream getInputFor(PrintStream noticeStream) {
+		final Collection<InOutErr> values;
+		synchronized (consoles) {
+			values = Collections.unmodifiableCollection(consoles.values());
+		}
+		for (InOutErr inOutErr : values) {
+			if (inOutErr.getOut() == noticeStream)
+				return inOutErr.mustIn();
+			if (inOutErr.getErr() == noticeStream)
+				return inOutErr.mustIn();
+		}
+		for (InOutErr inOutErr : values) {
+			if (inOutErr.mustOut() == noticeStream)
+				return inOutErr.mustIn();
+		}
+		return null;
+	}
+
+	public static InOutErr getInputOutputFor(Object noticeStream) {
+		final Collection<InOutErr> values;
+		synchronized (consoles) {
+			if (noticeStream instanceof Thread) {
+				return consoles.get(noticeStream);
+			}
+			values = Collections.unmodifiableCollection(consoles.values());
+		}
+		for (InOutErr inOutErr : values) {
+			if (inOutErr.getOut() == noticeStream)
+				return inOutErr;
+			if (inOutErr.getErr() == noticeStream)
+				return inOutErr;
+			if (inOutErr.getIn() == noticeStream)
+				return inOutErr;
+		}
+		for (InOutErr inOutErr : values) {
+			if (inOutErr.contains(noticeStream))
+				return inOutErr;
+		}
+		return null;
+	}
 
 	public static class Constituents {
 
 		private Set objects;
 		private Set parts;
 
-		public boolean addObject(Object i, Set partz) {
+		public boolean addObject(Object t) {
+			if (contains(t))
+				return false;
+			Set s1 = newIdentitySet();
+			addAllMembes(t, s1);
+			return addObject2(t, s1);
+		}
+
+		public boolean addObject2(Object i, Set partz) {
 			if (isTLStream(i))
 				return false;
 			for (Object p : partz) {
@@ -128,7 +193,12 @@ public class SystemCurrent {
 	static final class TlIO extends InheritableThreadLocal<InOutErr> {
 		@Override
 		protected InOutErr initialValue() {
-			return new InOutErr(Thread.currentThread().getName());
+			final Thread currentThread = Thread.currentThread();
+			final InOutErr inOutErr = new InOutErr(currentThread.getName());
+			synchronized (consoles) {
+				consoles.put(currentThread, inOutErr);
+			}
+			return inOutErr;
 		}
 
 		@Override
@@ -136,7 +206,6 @@ public class SystemCurrent {
 			if (parentValue == null) {
 				bp();
 			}
-
 			InOutErr inOutErr = new InOutErr(Thread.currentThread().getName());
 			inOutErr.parent = parentValue;
 			return inOutErr;
@@ -146,14 +215,6 @@ public class SystemCurrent {
 	public interface ThreadLocalStream {
 
 	}
-
-	static {
-		originalInOutErr.in = originalSystemIn;
-		originalInOutErr.out = originalSystemOut;
-		originalInOutErr.err = originalSystemErr;
-	}
-
-	final private static TlIO threadLocalIO = new TlIO();
 
 	/**
 	 * Reassigns the "standard" input stream.
@@ -235,7 +296,7 @@ public class SystemCurrent {
 	public static void releaseOwnerShip() {
 		final Thread currentThread = Thread.currentThread();
 		final InOutErr inOutErr = currentIO();
-		if (inOutErr.in != originalSystemIn) {
+		if (inOutErr.getIn() != originalSystemIn) {
 			return;
 		}
 
@@ -646,12 +707,12 @@ public class SystemCurrent {
 	public static PrintStream getBestOut() {
 		synchronized (DRASTIC_CHANGE) {
 			final InOutErr currentIO = currentIO();
-			OutputStream is = currentIO.out;
+			OutputStream is = currentIO.getOut();
 			if (is == null) {
 				is = originalSystemOut;
 				if (is == null)
 					if (is == null) {
-						is = currentIO.err;
+						is = currentIO.getErr();
 						if (is == null)
 							is = originalSystemErr;
 					}
@@ -666,12 +727,12 @@ public class SystemCurrent {
 	public static PrintStream getBestErr() {
 		synchronized (DRASTIC_CHANGE) {
 			final InOutErr currentIO = currentIO();
-			OutputStream is = currentIO.err;
+			OutputStream is = currentIO.getErr();
 			if (is == null) {
 				is = originalSystemErr;
 				if (is == null)
 					if (is == null) {
-						is = currentIO.out;
+						is = currentIO.getOut();
 						if (is == null)
 							is = originalSystemOut;
 					}
@@ -1060,9 +1121,16 @@ public class SystemCurrent {
 	}
 
 	static boolean hasSetupIO = false;
-	private static Constituents inputTees = new Constituents(newIdentitySet(), newIdentitySet());
-	private static Constituents outputTees = new Constituents(newIdentitySet(), newIdentitySet());
-	private static Constituents errorTees = new Constituents(newIdentitySet(), newIdentitySet());
+	private static Constituents inputTees = newConstituents();
+	private static Constituents outputTees = newConstituents();
+	private static Constituents errorTees = newConstituents();
+
+	/**
+	 * @return
+	 */
+	public static Constituents newConstituents() {
+		return new Constituents(newIdentitySet(), newIdentitySet());
+	}
 
 	static {
 		addTee(errorTees, System.err);
@@ -1117,14 +1185,7 @@ public class SystemCurrent {
 
 	public static boolean addTee(Constituents tee, Object t) {
 		synchronized (DRASTIC_CHANGE) {
-
-			if (tee.parts.contains(t)) {
-				return false;
-			}
-			Set s1 = newIdentitySet();
-			addAllMembes(t, s1);
-			tee.addObject(t, s1);
-			return true;
+			return tee.addObject(t);
 		}
 	}
 
@@ -1384,7 +1445,7 @@ public class SystemCurrent {
 				}
 				attactedConsoleThread = Thread.currentThread();
 			}
-			if (oldIO.in != null) {
+			if (oldIO.getIn() != null) {
 				originalInOutErr = oldIO;
 			} else {
 				threadLocalIO.set(originalInOutErr);
@@ -1399,53 +1460,107 @@ public class SystemCurrent {
 	public static void setOriginals(InOutErr wif) {
 		synchronized (DRASTIC_CHANGE) {
 
-			if (!isTLStream(wif.in)) {
-				originalInOutErr.in = originalSystemIn = (InputStream) checkNonTLStream(wif.in);
+			if (!isTLStream(wif.getIn())) {
+				originalInOutErr.setIn(originalSystemIn = (InputStream) checkNonTLStream(wif.getIn()));
 			}
-			if (!isTLStream(wif.out)) {
-				originalInOutErr.out = originalSystemOut = (PrintStream) checkNonTLStream(wif.out);
+			if (!isTLStream(wif.getOut())) {
+				originalInOutErr.setOut(originalSystemOut = (PrintStream) checkNonTLStream(wif.getOut()));
 			}
-			if (!isTLStream(wif.err)) {
-				originalInOutErr.err = originalSystemOut = (PrintStream) checkNonTLStream(wif.err);
+			if (!isTLStream(wif.getErr())) {
+				originalInOutErr.setErr(originalSystemOut = (PrintStream) checkNonTLStream(wif.getErr()));
 			}
 		}
 	}
 
+	@SuppressWarnings("hiding")
 	static public class InOutErr {
 		public InOutErr parent;
+		public boolean isAttached = true;
+		Constituents constituents = newConstituents();
 		private String name;
 
 		public InOutErr(String name) {
 			this.name = name;
 		}
 
-		@Override
-		public String toString() {
-			return name + "(in=" + in + " out=" + out + " err=" + err + ")";
+		public boolean contains(Object noticeStream) {
+			return constituents != null && constituents.contains(noticeStream);
 		}
 
-		public transient InputStream in;
-		public transient PrintStream out;
-		public transient PrintStream err;
+		@Override
+		public String toString() {
+			return name + "(in=" + str(in) + " out=" + str(out) + " err=" + str(err) + ")";
+		}
+
+		static String str(Object o) {
+			try {
+				return "" + o;
+			} catch (Throwable e) {
+				Throwable c = e.getCause();
+				if (c == null) {
+					c = e;
+				}
+				return "" + c;
+			}
+		}
+
+		private transient InputStream in;
+		private transient PrintStream out;
+		private transient PrintStream err;
 
 		public InputStream mustIn() {
-			if (in == null) {
+			InputStream must = getIn();
+			if (must == null) {
 				if (parent != null) {
-					in = parent.in;
+					must = parent.mustIn();
+					setIn(must);
 				}
 			}
-			in.toString();
-			return in;
+			if (must == null) {
+				bp();
+			}
+			return must;
 		}
 
 		public PrintStream mustOut() {
-			if (out == null) {
+			PrintStream must = getOut();
+			if (must == null) {
 				if (parent != null) {
-					out = parent.out;
+					must = parent.mustOut();
+					setOut(must);
 				}
 			}
-			out.toString();
+			if (must == null) {
+				bp();
+			}
+			return must;
+		}
+
+		public InputStream getIn() {
+			return in;
+		}
+
+		public void setIn(InputStream in) {
+			constituents.addObject(in);
+			this.in = in;
+		}
+
+		public PrintStream getOut() {
 			return out;
+		}
+
+		public void setOut(PrintStream out) {
+			constituents.addObject(out);
+			this.out = out;
+		}
+
+		public PrintStream getErr() {
+			return err;
+		}
+
+		public void setErr(PrintStream err) {
+			constituents.addObject(err);
+			this.err = err;
 		}
 
 	}
@@ -1456,9 +1571,9 @@ public class SystemCurrent {
 
 	public static void registerAsInteractive(String name, InputStream inputStream, PrintStream outStream, PrintStream errStream) {
 		InOutErr inOutErr = new InOutErr(name);
-		inOutErr.in = inputStream;
-		inOutErr.out = outStream;
-		inOutErr.err = errStream;
+		inOutErr.setIn(inputStream);
+		inOutErr.setOut(outStream);
+		inOutErr.setErr(errStream);
 		addTee(errorTees, errStream);
 		interactiveConsoles.put(name, inOutErr);
 	}

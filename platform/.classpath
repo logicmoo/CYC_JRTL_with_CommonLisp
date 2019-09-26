@@ -32,7 +32,9 @@
 	<classpathentry excluding="com/cyc/tool/subl/~webserver~/|com/cyc/tool/subl/webserver/Tomcat.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
 	<classpathentry kind="src" path="main/KBAPI-1.0.0-Preview-SNAPSHOT-src"/>
 	<classpathentry kind="src" path="main/opencyc-local"/>
+	<classpathentry excluding="classifiers/|javadoc/" kind="src" path="data/parsers/stanford-ner-cyc-2006-09-18"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="lib/all-deps"/>
+	<classpathentry kind="lib" path="data/parsers/stanford-ner-cyc-2006-09-18/stanford-ner.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

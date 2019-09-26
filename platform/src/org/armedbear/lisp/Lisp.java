@@ -2791,6 +2791,8 @@ abstract public class Lisp extends ABCLStatic {
 			return true;
 		if (Keyword.TEXT_KEYWORD.eql(elementType))
 			return true;
+		if (Symbol.T.eql(elementType))
+			return true;
 		return false;
 	}
 

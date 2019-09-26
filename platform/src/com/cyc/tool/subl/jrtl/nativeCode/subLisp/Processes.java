@@ -4,8 +4,8 @@ package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.OUTPUT_KEYWORD;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols_SYM.ONE;
-import static org.armedbear.lisp.Fixnum.ZERO;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,15 +33,17 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLSystemTrampolineFile;
+
+import sun.jvm.hotspot.oops.CheckedExceptionElement;
+
 public class Processes extends SubLSystemTrampolineFile {
 	private static class ExternalProcessErrorHandler extends ExternalProcessHandler implements Runnable {
-		ExternalProcessErrorHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream,
-				SubLOutputStream errStream, SubLInteger processId, SubLString errorMessage, boolean shouldCloseInput,
-				boolean shouldCloseOutput, boolean shouldCloseErr) {
+		ExternalProcessErrorHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream, SubLOutputStream errStream, SubLInteger processId, SubLString errorMessage, boolean shouldCloseInput, boolean shouldCloseOutput, boolean shouldCloseErr) {
 			super(proc, inStream, outStream, errStream, processId, shouldCloseInput, shouldCloseOutput, shouldCloseErr);
 			this.errorMessage = errorMessage;
 		}
@@ -64,9 +66,39 @@ public class Processes extends SubLSystemTrampolineFile {
 	}
 
 	public static class ExternalProcessHandler implements Runnable {
-		public ExternalProcessHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream,
-				SubLOutputStream errStream, SubLInteger processId, boolean shouldCloseInput, boolean shouldCloseOutput,
-				boolean shouldCloseErr) {
+
+		private void checkedElementTypes() {
+			final SubLSymbol inStreamElementType = inStream.getElementType().toSymbol();
+
+			if (Lisp.isText(inStreamElementType))
+				inTextStream = (SubLInputTextStream) inStream;
+			else if (inStreamElementType == Keyword.BINARY_KEYWORD)
+				inBinaryStream = (SubLInputBinaryStream) inStream;
+			else
+				Errors.error("Don't know about stream element type: " + inStreamElementType);
+
+			final SubLSymbol outStreamElementType = outStream.getElementType().toSymbol();
+
+			if (Lisp.isText(outStreamElementType))
+				outTextStream = (SubLOutputTextStream) outStream;
+			else if (outStreamElementType == Keyword.BINARY_KEYWORD)
+				outBinaryStream = (SubLOutputBinaryStream) outStream;
+			else {
+				outStream.getElementType().toSymbol();
+				Errors.error("Don't know about stream element type: " + outStreamElementType);
+			}
+
+			final SubLSymbol errStreamElementType = errStream.getElementType().toSymbol();
+
+			if (Lisp.isText(errStreamElementType))
+				errTextStream = (SubLOutputTextStream) errStream;
+			else if (errStreamElementType == Keyword.BINARY_KEYWORD)
+				errBinaryStream = (SubLOutputBinaryStream) errStream;
+			else
+				Errors.error("Don't know about stream element type: " + errStreamElementType);
+		}
+
+		public ExternalProcessHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream, SubLOutputStream errStream, SubLInteger processId, boolean shouldCloseInput, boolean shouldCloseOutput, boolean shouldCloseErr) {
 			isDestroyed = false;
 			isDone = false;
 			this.proc = proc;
@@ -77,6 +109,7 @@ public class Processes extends SubLSystemTrampolineFile {
 			this.shouldCloseInput = shouldCloseInput;
 			this.shouldCloseOutput = shouldCloseOutput;
 			this.shouldCloseErr = shouldCloseErr;
+			checkedElementTypes();
 		}
 
 		private Process proc;
@@ -89,6 +122,13 @@ public class Processes extends SubLSystemTrampolineFile {
 		private boolean shouldCloseOutput;
 		private boolean shouldCloseErr;
 		private volatile boolean isDone;
+
+		SubLInputTextStream inTextStream = null;
+		SubLInputBinaryStream inBinaryStream = null;
+		SubLOutputTextStream outTextStream = null;
+		SubLOutputBinaryStream outBinaryStream = null;
+		SubLOutputTextStream errTextStream = null;
+		SubLOutputBinaryStream errBinaryStream = null;
 
 		private void possiblyCloseStream(boolean shouldClose, SubLStream stream1, SubLStream stream2) {
 			if (!shouldClose)
@@ -108,31 +148,10 @@ public class Processes extends SubLSystemTrampolineFile {
 			OutputStream procInStream = proc.getOutputStream();
 			InputStream procOutStream = proc.getInputStream();
 			InputStream procErrStream = proc.getErrorStream();
-			SubLInputTextStream inTextStream = null;
-			SubLInputBinaryStream inBinaryStream = null;
-			SubLOutputTextStream outTextStream = null;
-			SubLOutputBinaryStream outBinaryStream = null;
-			SubLOutputTextStream errTextStream = null;
-			SubLOutputBinaryStream errBinaryStream = null;
+
 			try {
-				if (Lisp.isText(inStream.getElementType()))
-					inTextStream = (SubLInputTextStream) inStream;
-				else if (inStream.getElementType() == Keyword.BINARY_KEYWORD)
-					inBinaryStream = (SubLInputBinaryStream) inStream;
-				else
-					Errors.error("Don't know about stream element type: " + inStream.getElementType());
-				if (Lisp.isText(outStream.getElementType()))
-					outTextStream = (SubLOutputTextStream) outStream;
-				else if (outStream.getElementType() == Keyword.BINARY_KEYWORD)
-					outBinaryStream = (SubLOutputBinaryStream) outStream;
-				else
-					Errors.error("Don't know about stream element type: " + inStream.getElementType());
-				if (Lisp.isText(outStream.getElementType()))
-					errTextStream = (SubLOutputTextStream) errStream;
-				else if (outStream.getElementType() == Keyword.BINARY_KEYWORD)
-					errBinaryStream = (SubLOutputBinaryStream) errStream;
-				else
-					Errors.error("Don't know about stream element type: " + inStream.getElementType());
+				checkedElementTypes();
+
 				boolean hasSomeOutData = false;
 				int nConsecutiveFinishes = 0;
 				while (!isInStreamClosed && !isOutStreamClosed && !isErrStreamClosed) {
@@ -249,22 +268,18 @@ public class Processes extends SubLSystemTrampolineFile {
 
 	private static SubLInteger makeNewProcessId() {
 		SubLInteger val = Processes.currentFakeProcessId;
-		Processes.currentFakeProcessId = (SubLInteger) Numbers.subtract(Processes.currentFakeProcessId,
-				ONE);
+		Processes.currentFakeProcessId = (SubLInteger) Numbers.subtract(Processes.currentFakeProcessId, ONE_INTEGER);
 		return val;
 	}
 
 	public static SubLObject exit(SubLObject code) {
 		if (code == UNPROVIDED)
-			code = ZERO;
+			code = ZERO_INTEGER;
 		SubLInteger codeTyped = code.toInteger();
 		int status = codeTyped.intValue();
-		if (Main.noExit)
-		{
+		if (Main.noExit) {
 			BeanShellCntrl.exit(status);
-		}
-		else
-		{
+		} else {
 			SubLMain.me.doSystemCleanupAndExit(status);
 		}
 		return SubLNil.NIL;
@@ -320,13 +335,12 @@ public class Processes extends SubLSystemTrampolineFile {
 		return process;
 	}
 
-	public static SubLObject restart_process(SubLObject world_spec, SubLObject init_file_pathname,
-			SubLObject init_form_spec) {
+	public static SubLObject restart_process(SubLObject world_spec, SubLObject init_file_pathname, SubLObject init_form_spec) {
 		return Errors.error("The function 'restart-process' is not supported.");
 	}
 
-	public static SubLObject run_external_process(SubLObject program, SubLObject args, SubLObject stdinStream,
-			SubLObject stdoutStream, SubLObject stderrStream) {
+
+	public static SubLObject run_external_process(SubLObject program, SubLObject args, SubLObject stdinStream, SubLObject stdoutStream, SubLObject stderrStream) {
 		if (args == UNPROVIDED)
 			args = SubLNil.NIL;
 		if (stdinStream == UNPROVIDED)
@@ -358,31 +372,22 @@ public class Processes extends SubLSystemTrampolineFile {
 		try {
 			proc = rt.exec(argStrings);
 		} catch (IOException ioe) {
-			StringBuilder message = new StringBuilder("Unable to start process: ").append(progName.getStringValue())
-					.append(" ");
+			StringBuilder message = new StringBuilder("Unable to start process: ").append(progName.getStringValue()).append(" ");
 			i = 1;
 			for (int size = argStrings.length; i < size; ++i)
 				message.append(" ").append(argStrings[i]);
 			message.append("\n").append(ioe.getMessage());
 			SubLInteger processId = makeNewProcessId();
-			ExternalProcessHandler procHandler = new ExternalProcessErrorHandler(proc, inStream, outStream, errStream,
-					processId, SubLObjectFactory.makeString(message.toString()), shouldCloseInput, shouldCloseOutput,
-					shouldCloseErr);
+			ExternalProcessHandler procHandler = new ExternalProcessErrorHandler(proc, inStream, outStream, errStream, processId, SubLObjectFactory.makeString(message.toString()), shouldCloseInput, shouldCloseOutput, shouldCloseErr);
 			Processes.processIdToProcessHandlerMap.put(processId, procHandler);
-			streams_high.write_string(SubLObjectFactory.makeString(message.toString()), outStream,
-					UNPROVIDED, UNPROVIDED);
-			return Values.values(stdinStream.isStream() ? stdinStream : inStream,
-					stdoutStream.isStream() ? stdoutStream : outStream,
-					stderrStream.isStream() ? stderrStream : errStream, processId);
+			streams_high.write_string(SubLObjectFactory.makeString(message.toString()), outStream, UNPROVIDED, UNPROVIDED);
+			return Values.values(stdinStream.isStream() ? stdinStream : inStream, stdoutStream.isStream() ? stdoutStream : outStream, stderrStream.isStream() ? stderrStream : errStream, processId);
 		}
 		SubLInteger processId2 = makeNewProcessId();
-		ExternalProcessHandler procHandler2 = new ExternalProcessHandler(proc, inStream, outStream, errStream,
-				processId2, shouldCloseInput, shouldCloseOutput, shouldCloseErr);
+		ExternalProcessHandler procHandler2 = new ExternalProcessHandler(proc, inStream, outStream, errStream, processId2, shouldCloseInput, shouldCloseOutput, shouldCloseErr);
 		SubLObjectFactory.makeProcess(SubLObjectFactory.makeString("External Process: " + progName), procHandler2);
 		Processes.processIdToProcessHandlerMap.put(processId2, procHandler2);
-		return Values.values(stdinStream.isStream() ? stdinStream : inStream,
-				stdoutStream.isStream() ? stdoutStream : outStream, stderrStream.isStream() ? stderrStream : errStream,
-				processId2);
+		return Values.values(stdinStream.isStream() ? stdinStream : inStream, stdoutStream.isStream() ? stdoutStream : outStream, stderrStream.isStream() ? stderrStream : errStream, processId2);
 	}
 
 	public static SubLSystemTrampolineFile me;
@@ -391,8 +396,7 @@ public class Processes extends SubLSystemTrampolineFile {
 	private static Map processIdToProcessHandlerMap;
 	static {
 		me = new Processes();
-		INITIAL_FAKE_EXTERNAL_PROCESS_ID = SubLNumberFactory
-				.makeInteger(new BigInteger("-320498509348509034853094580985434"));
+		INITIAL_FAKE_EXTERNAL_PROCESS_ID = SubLNumberFactory.makeInteger(new BigInteger("-320498509348509034853094580985434"));
 		Processes.currentFakeProcessId = Processes.INITIAL_FAKE_EXTERNAL_PROCESS_ID;
 		processIdToProcessHandlerMap = Collections.synchronizedMap(new HashMap<Object, Object>());
 	}
@@ -404,11 +408,9 @@ public class Processes extends SubLSystemTrampolineFile {
 		SubLFiles.declareFunction(Processes.me, "fork_process", "FORK-PROCESS", 1, 2, false);
 		SubLFiles.declareFunction(Processes.me, "restart_process", "RESTART-PROCESS", 0, 3, false);
 		SubLFiles.declareFunction(Processes.me, "run_external_process", "RUN-EXTERNAL-PROCESS", 1, 4, false);
-		SubLFiles.declareFunction(Processes.me, "external_processes_supportedP", "EXTERNAL-PROCESSES-SUPPORTED?", 0, 0,
-				false);
+		SubLFiles.declareFunction(Processes.me, "external_processes_supportedP", "EXTERNAL-PROCESSES-SUPPORTED?", 0, 0, false);
 		SubLFiles.declareFunction(Processes.me, "kill_external_process", "KILL-EXTERNAL-PROCESS", 1, 0, false);
-		SubLFiles.declareFunction(Processes.me, "get_external_process_status", "GET-EXTERNAL-PROCESS-STATUS", 1, 1,
-				false);
+		SubLFiles.declareFunction(Processes.me, "get_external_process_status", "GET-EXTERNAL-PROCESS-STATUS", 1, 1, false);
 	}
 
 	@Override

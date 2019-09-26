@@ -53,7 +53,7 @@
          (load-kb units-directory)
          (system-code-initializations))))
 
-(common-lisp:defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
+;; (common-lisp:defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
 
 (pwhen (fboundp 'cl-imports-cyc) (cl-imports-cyc))
 

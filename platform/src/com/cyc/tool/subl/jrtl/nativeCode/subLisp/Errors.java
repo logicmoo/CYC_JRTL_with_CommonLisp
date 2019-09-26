@@ -292,8 +292,9 @@ public class Errors extends SubLSystemTrampolineFile {
 		RestartMethod restartMethod = null;
 		if (!reader.isInReaderThread()) {
 			if (!SubLMain.isInitialized()) {
-				Startup.bp();
-				throw new ResumeException();
+				final String why = "!isInitialized() and " + errorString;
+				//Startup.bp(why, true);
+				throw new ResumeException(why, e);
 			}
 			restartMethod = SubLReader.CONTINUE_RESTART_METHOD;
 		} else {
@@ -301,7 +302,8 @@ public class Errors extends SubLSystemTrampolineFile {
 		}
 		if (restartMethod.process(reader, se.getMessage(), se))
 			return error(errorString, e);
-		throw new ResumeException();
+		Startup.bp(errorString, true);
+		throw new ResumeException(errorString, e);
 	}
 
 	public static SubLObject error(SubLObject formatString) {

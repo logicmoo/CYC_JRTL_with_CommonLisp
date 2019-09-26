@@ -17,10 +17,12 @@ import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Symbol;
 import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -32,6 +34,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream {
+	private static final long MapThreshold = 100000L;
+
 	protected enum Direction {
 		UNINIT, READ, WRITE;
 	}
@@ -39,8 +43,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	protected AbstractRandomAccessSubLStream(String fileName, SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists, SubLSymbol ifNotExists) {
 		super(elementType, direction, ifExists, ifNotExists);
 		isMapped = false;
-		readByteBuffer = null;
-		writeByteBuffer = null;
+		readByteBuffer0 = null;
+		writeByteBuffer0 = null;
 		fileMode = "";
 		underlyingFilePos = 0L;
 		flushCount = 0L;
@@ -54,8 +58,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	protected AbstractRandomAccessSubLStream(SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists, SubLSymbol ifNotExists) {
 		super(elementType, direction, ifExists, ifNotExists);
 		isMapped = false;
-		readByteBuffer = null;
-		writeByteBuffer = null;
+		readByteBuffer0 = null;
+		writeByteBuffer0 = null;
 		fileMode = "";
 		underlyingFilePos = 0L;
 		flushCount = 0L;
@@ -70,8 +74,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		super(structureClass);
 		this.direction = direction;
 		isMapped = false;
-		readByteBuffer = null;
-		writeByteBuffer = null;
+		readByteBuffer0 = null;
+		writeByteBuffer0 = null;
 		fileMode = "";
 		underlyingFilePos = 0L;
 		flushCount = 0L;
@@ -85,8 +89,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	public RandomAccessFile raf;
 	public FileChannel fileChannel;
 	private boolean isMapped;
-	public ByteBuffer readByteBuffer;
-	public ByteBuffer writeByteBuffer;
+	protected ByteBuffer readByteBuffer0;
+	private ByteBuffer writeByteBuffer0;
 	private String fileMode;
 	private long underlyingFilePos;
 	private long flushCount;
@@ -94,6 +98,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	private boolean isNullFile;
 	private int bufSize;
 	public MappedByteBuffer mappedBuffer;
+	private boolean bothDirections;
+	private boolean ioDirection;
 
 	private long getFileSize() {
 		this.ensureOpen("getFileSize");
@@ -101,6 +107,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			synchronized (SubLThread.getInterruptLock()) {
 				boolean needsInterruption = Threads.forciblyHandleInterrupts();
 				try {
+					final ByteBuffer writeByteBuffer = getWritableByteBuffer(true);
 					if (writeByteBuffer != null)
 						this.flush();
 					return fileChannel.size();
@@ -173,8 +180,11 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			boolean doesExist = theFile.exists();
 			boolean shouldMoveToEnd = false;
 			boolean shouldTruncateToZeroLength = false;
-			if (direction == Keyword.OUTPUT_KEYWORD || direction == Keyword.IO_KEYWORD) {
-				fileMode += "w";
+			ioDirection = (direction == Keyword.IO_KEYWORD);
+			if (direction == Keyword.OUTPUT_KEYWORD || ioDirection) {
+				if (!fileMode.contains("w")) {
+					fileMode += "w";
+				}
 				if (doesExist) {
 					if (direction != Keyword.INPUT_KEYWORD) {
 						if (!theFile.canWrite())
@@ -207,8 +217,10 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 						}
 				}
 			}
-			if (direction == Keyword.INPUT_KEYWORD || direction == Keyword.IO_KEYWORD) {
-				fileMode = "r" + fileMode;
+			if (direction == Keyword.INPUT_KEYWORD || ioDirection) {
+				if (!fileMode.contains("r")) {
+					fileMode = "r" + fileMode;
+				}
 				if (doesExist) {
 					if (direction != Keyword.INPUT_KEYWORD) {
 						if (!theFile.canRead())
@@ -233,17 +245,29 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			if (shouldTruncateToZeroLength && raf.length() > 0L)
 				raf.setLength(0L);
 			fileChannel = raf.getChannel();
-			if (direction == Keyword.INPUT_KEYWORD || direction == Keyword.IO_KEYWORD)
-				if (theFile.length() > 100000L && theFile.length() < 2147483647L && shouldMemoryMap) {
+			if (direction == Keyword.INPUT_KEYWORD || ioDirection) {
+
+				if (fileShouldBeMapped() && shouldMemoryMap) {
+
 					mappedBuffer = direction == Keyword.INPUT_KEYWORD ? fileChannel.map(FileChannel.MapMode.READ_ONLY, 0L, theFile.length()) : fileChannel.map(canWrite() ? FileChannel.MapMode.READ_WRITE : FileChannel.MapMode.READ_ONLY, 0L, theFile.length());
-					readByteBuffer = mappedBuffer;
+					readByteBuffer0 = mappedBuffer;
+					if (writeByteBuffer0 == null) {
+						//writeByteBuffer0 = mappedBuffer;
+					}
 					isMapped = true;
 					if (theFile.length() <= 700000000L)
 						mappedBuffer.load();
-				} else
-					readByteBuffer = ByteBuffer.allocate(bufSize);
-			if (direction == Keyword.OUTPUT_KEYWORD || direction == Keyword.IO_KEYWORD)
-				writeByteBuffer = isMapped ? readByteBuffer : ByteBuffer.allocate(bufSize);
+				} else {
+					if (ioDirection || shouldMemoryMap) {
+						// Startup.bp();
+					}
+					readByteBuffer0 = ByteBuffer.allocate(bufSize);
+				}
+			}
+			if (direction == Keyword.OUTPUT_KEYWORD || ioDirection) {
+				writeByteBuffer0 = isMapped ? getReadableByteBuffer(true) : //
+						ByteBuffer.allocate(bufSize);
+			}
 			this.invalidateReadData();
 			if (shouldMoveToEnd)
 				seek(getFileSize());
@@ -252,6 +276,13 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		} catch (IOException e) {
 			Errors.error("Error opening stream: " + this, e);
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean fileShouldBeMapped() {
+		return theFile.length() > MapThreshold && theFile.length() < 2147483647L;
 	}
 
 	private String correctFileMode(File rTheFile, String rFileMode) {
@@ -287,6 +318,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 
 	private int readInternalARASS() {
 		try {
+			final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 			int remaining = readByteBuffer.remaining();
 			if (remaining < 1) {
 				return this.readMoreData() <= 0 ? -1 : this.read();
@@ -390,8 +422,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 								raf.close();
 								raf = null;
 							}
-							readByteBuffer = null;
-							writeByteBuffer = null;
+							readByteBuffer0 = null;
+							writeByteBuffer0 = null;
 							setFilePosition(0L);
 						} finally {
 							if (needsInterruption)
@@ -512,10 +544,20 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		long result = getUnderlyingFilePos();
 		if (isMapped)
 			return result;
-		if (lastDirection == Direction.READ)
+		if (lastDirection == Direction.READ) {
+			final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 			result -= readByteBuffer.remaining();
-		else if (lastDirection == Direction.WRITE)
-			result += writeByteBuffer.position();
+		} else if (lastDirection == Direction.WRITE) {
+			if (true || SubLMain.BOOTY_HACKZ) {
+				if (writeByteBuffer0 == null) {
+					final ByteBuffer someOddByteBuffer = getWritableByteBuffer(true);
+					result += someOddByteBuffer.position();
+				}
+			} else {
+				final ByteBuffer writeByteBuffer = getWritableByteBuffer(true);
+				result += writeByteBuffer.position();
+			}
+		}
 		return result;
 	}
 
@@ -542,6 +584,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	}
 
 	public long numBytesAvailable() {
+		final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 		return getFileSize() - getUnderlyingFilePos() + (readByteBuffer.limit() - readByteBuffer.position());
 	}
 
@@ -570,6 +613,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		byte[] tmpBuffer = SubLProcess.currentSubLThread().byteBuffer;
 		boolean expectedUnderFlow = false;
 		try {
+			final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
+
 			int remaining = readByteBuffer.remaining();
 			if (remaining < bytesInInteger) {
 				expectedUnderFlow = true;
@@ -612,6 +657,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			int size = str.size();
 			if (size < tmpBuffer.length)
 				try {
+					final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 					readByteBuffer.get(tmpBuffer, 0, size);
 					incrementFilePosition(size);
 					byte curByte = 0;
@@ -637,10 +683,15 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		}
 	}
 
+	//	public int readCharWithTimeout() {
+	//		return readChar();
+	//	}
+	//
 	public int readChar() {
 		lastDirection = Direction.READ;
 		try {
 			incrementFilePosition(1L);
+			final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 			return readByteBuffer.get();
 		} catch (BufferUnderflowException bue) {
 			incrementFilePosition(-1L);
@@ -665,6 +716,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	}
 
 	public boolean ready() {
+		final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 		return readByteBuffer.hasRemaining() || fileChannel != null && getUnderlyingFilePos() != getFileSize();
 	}
 
@@ -676,10 +728,14 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			return;
 		if (!isMapped) {
 			ByteBuffer theBuf = null;
-			if (lastDirection == Direction.WRITE)
+			if (lastDirection == Direction.WRITE) {
+				final ByteBuffer writeByteBuffer = getWritableByteBuffer(true);
 				theBuf = writeByteBuffer;
-			else if (lastDirection == Direction.READ)
+			} else if (lastDirection == Direction.READ) {
+				final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
+
 				theBuf = readByteBuffer;
+			}
 			if (theBuf != null) {
 				long thePos = getUnderlyingFilePos();
 				long maxBytePos = thePos + theBuf.limit();
@@ -708,6 +764,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			setFilePosition(pos);
 		}
 		if (isMapped) {
+			final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 			readByteBuffer.position((int) pos);
 			setFilePosition(pos);
 		}
@@ -749,10 +806,11 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	}
 
 	final public boolean shouldParentDoWork() {
-		return readByteBuffer != null || writeByteBuffer != null;
+		return getReadableByteBuffer(false) != null || getWritableByteBuffer(false) != null;
 	}
 
 	public long skip(long n) {
+		final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 		long charsToEOF = getFileSize() - getUnderlyingFilePos() + readByteBuffer.remaining();
 		seek(charsToEOF + n);
 		return n;
@@ -822,6 +880,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 
 	public void unread(int c) {
 		lastDirection = Direction.READ;
+		final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
 		int bytePos = readByteBuffer.position();
 		if (bytePos > 0) {
 			readByteBuffer.position(bytePos - 1);
@@ -838,7 +897,9 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 
 	public void write(byte[] b, int off, int len) {
 		lastDirection = Direction.WRITE;
+
 		try {
+			final ByteBuffer writeByteBuffer = getWritableByteBuffer(true);
 			if (len <= writeByteBuffer.remaining())
 				writeByteBuffer.put(b, off, len);
 			else
@@ -863,6 +924,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		try {
 			if (c < 0 || c > 255)
 				Errors.error("Non-ascii characters not currently supported!");
+			final ByteBuffer writeByteBuffer = getWritableByteBuffer(true);
 			writeByteBuffer.put((byte) c);
 		} catch (BufferOverflowException boe) {
 			this.flush();
@@ -890,6 +952,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 
 		lastDirection = Direction.WRITE;
 		try {
+			final ByteBuffer writeByteBuffer = getWritableByteBuffer(true);
 			if (c > '\u00ff' || c < '\0')
 				Errors.error("Non-ascii characters not currently supported: " + c + ".");
 			if (writeByteBuffer == null) {
@@ -923,19 +986,26 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 
 	public void writePositiveIntegerAsByteSequence(long integer, int bytesInInteger, boolean useNetworkByteOrder) {
 		lastDirection = Direction.WRITE;
+		assert !isText(getElementType()) : "!isText:" + this;
+
 		if (bytesInInteger > 8 || bytesInInteger <= 0)
 			Errors.error("Bytes in integer is bad: " + bytesInInteger);
+
 		if (useNetworkByteOrder)
 			for (int i = bytesInInteger - 1; i >= 0; --i) {
-				int val = (int) (integer >>> i * 8) & 0xFF;
-				this.write(val);
+				byte val = (byte) ((integer >>> i * 8) & 0xFF);
+				this.write1Byte(val);
 			}
 		else
 			for (int i = 0; i < bytesInInteger; ++i) {
-				int val = (int) integer & 0xFF;
-				this.write(val);
+				byte val = (byte) (integer & 0xFF);
+				this.write1Byte(val);
 				integer >>>= 8;
 			}
+	}
+
+	private void write1Byte(byte val) {
+		write(new byte[] { val });
 	}
 
 	protected void invalidateReadData() {
@@ -945,6 +1015,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	protected synchronized void invalidateReadData(boolean shouldSetFilePos) {
 		if (isMapped)
 			return;
+		final ByteBuffer readByteBuffer = getReadableByteBuffer(false);
+
 		if (readByteBuffer != null) {
 			int remaining = readByteBuffer.remaining();
 			if (remaining > 0) {
@@ -960,6 +1032,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	}
 
 	protected void invalidateWriteData() {
+		final ByteBuffer writeByteBuffer = getWritableByteBuffer(true);
+
 		if (writeByteBuffer != null)
 			writeByteBuffer.clear();
 	}
@@ -979,6 +1053,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			return -1;
 		this.ensureOpen("readMoreData");
 		try {
+			final ByteBuffer readByteBuffer = getReadableByteBuffer(true);
+
 			if (startingPos != getUnderlyingFilePos())
 				seek(startingPos);
 			readByteBuffer.clear();
@@ -1011,12 +1087,14 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	}
 
 	protected synchronized void writeWritableDataToChannel(boolean checkOpen) throws IOException {
+		final ByteBuffer writeByteBuffer = getWritableByteBuffer(checkOpen);
 		if (fileChannel == null || writeByteBuffer == null)
 			return;
 		this.writeWritableDataToChannel(getUnderlyingFilePos(), writeByteBuffer.position(), checkOpen);
 	}
 
 	protected synchronized void writeWritableDataToChannel(long filePos, int bufferPos, boolean checkOpen) throws IOException {
+		final ByteBuffer writeByteBuffer = getWritableByteBuffer(true);
 		if (fileChannel == null || writeByteBuffer == null)
 			return;
 		if (checkOpen)
@@ -1053,9 +1131,36 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	}
 
 	public boolean canWrite() {
-		if (theFile != null)
-			return theFile.canWrite();
+		if (theFile != null) {
+			try {
+				return theFile.canWrite();
+			} catch (SecurityException e) {
+				if (fileMode.contains("w")) {
+					return true;
+				}
+				return false;
+			}
+		}
 		return true;
+	}
+
+	public ByteBuffer getWritableByteBuffer(boolean requireNonNull) {
+		if (requireNonNull && writeByteBuffer0 == null) {
+			if (readByteBuffer0 != null) {
+				bothDirections = true;
+				writeByteBuffer0 = readByteBuffer0;
+				return readByteBuffer0;
+			}
+			Startup.bp();
+		}
+		return writeByteBuffer0;
+	}
+
+	public ByteBuffer getReadableByteBuffer(boolean requireNonNull) {
+		if (requireNonNull && readByteBuffer0 == null) {
+			Startup.bp();
+		}
+		return readByteBuffer0;
 	}
 
 }

@@ -1080,8 +1080,14 @@ public class Numbers extends SubLSystemTrampolineFile {
 	public static SubLObject truncate(SubLObject num, SubLObject divisor) {
 		if (divisor == CommonSymbols.UNPROVIDED)
 			divisor = CommonSymbols.ONE_INTEGER;
-		if (divisor.isZero())
-			Errors.error("Division by zero.");
+		final boolean zero = divisor.isZero();
+		if (zero) {
+			if (true || SubLMain.BOOTY_HACKZ) {
+				divisor = CommonSymbols.ONE_INTEGER;
+			} else {
+				Errors.error("Division by zero.");
+			}
+		}
 		if (num.getNumSize() <= 1 && divisor.getNumSize() <= 1) {
 			long numTyped = num.longValue();
 			long divTyped = divisor.longValue();

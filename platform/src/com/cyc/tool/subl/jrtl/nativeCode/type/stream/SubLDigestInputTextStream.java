@@ -99,7 +99,7 @@ public class SubLDigestInputTextStream extends LispObject implements SubLStream,
 
 	public static void main(String[] args) throws NoSuchAlgorithmException {
 		MessageDigest digest = MessageDigest.getInstance("SHA-1");
-	final PrintStream sout = Errors.trout;
+		final PrintStream sout = Errors.trout;
 
 		sout.println("--  " + makeHexStringFromByteArray(digest.digest()));
 		byte[] curr = { 0, 10 };
@@ -1096,11 +1096,11 @@ public class SubLDigestInputTextStream extends LispObject implements SubLStream,
 	public SubLObject sub(SubLObject num) {
 		return wrapped.sub(num);
 	}
-//
-//	@Override
-//	public int superHash() {
-//		return wrapped.superHash();
-//	}
+	//
+	//	@Override
+	//	public int superHash() {
+	//		return wrapped.superHash();
+	//	}
 
 	@Override
 	public SubLObject tenth() {

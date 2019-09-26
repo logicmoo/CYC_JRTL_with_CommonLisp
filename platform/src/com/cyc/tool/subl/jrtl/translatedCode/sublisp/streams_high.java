@@ -8,8 +8,8 @@
  *
  */
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
 
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
@@ -62,8 +62,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return eof_value;
 	}
 
-	private static SubLObject peekCharSkippingChar(int charToSkip, SubLInputTextStream stream, SubLObject eof_error_p,
-			SubLObject eof_value) {
+	private static SubLObject peekCharSkippingChar(int charToSkip, SubLInputTextStream stream, SubLObject eof_error_p, SubLObject eof_value) {
 		int theChar;
 		do
 			theChar = stream.readChar();
@@ -80,8 +79,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return eof_value;
 	}
 
-	private static SubLObject peekCharSkippingWS(SubLInputTextStream stream, SubLObject eof_error_p,
-			SubLObject eof_value) {
+	private static SubLObject peekCharSkippingWS(SubLInputTextStream stream, SubLObject eof_error_p, SubLObject eof_value) {
 		int theChar;
 		do
 			theChar = stream.readChar();
@@ -98,8 +96,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return eof_value;
 	}
 
-	private static void writeString(SubLObject string, SubLObject stream, SubLObject start, SubLObject end,
-			boolean addNewline) {
+	private static void writeString(SubLObject string, SubLObject stream, SubLObject start, SubLObject end, boolean addNewline) {
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_output$.getDynamicValue();
 
@@ -171,10 +168,8 @@ public class streams_high extends SubLSystemTrampolineFile {
 		declareFunction(me, "read_char", "READ-CHAR", 0, 4, false);
 		declareFunction(me, "read_byte_sequence_into_string", "READ-BYTE-SEQUENCE-INTO-STRING", 1, 3, false);
 		declareFunction(me, "write_string_to_byte_sequence", "WRITE-STRING-TO-BYTE-SEQUENCE", 1, 3, false);
-		declareFunction(me, "read_byte_sequence_to_positive_integer", "READ-BYTE-SEQUENCE-TO-POSITIVE-INTEGER", 1, 4,
-				false);
-		declareFunction(me, "write_positive_integer_as_byte_sequence", "WRITE-POSITIVE-INTEGER-AS-BYTE-SEQUENCE", 2, 2,
-				false);
+		declareFunction(me, "read_byte_sequence_to_positive_integer", "READ-BYTE-SEQUENCE-TO-POSITIVE-INTEGER", 1, 4, false);
+		declareFunction(me, "write_positive_integer_as_byte_sequence", "WRITE-POSITIVE-INTEGER-AS-BYTE-SEQUENCE", 2, 2, false);
 		declareFunction(me, "read_char_no_hang", "READ-CHAR-NO-HANG", 0, 4, false);
 		declareFunction(me, "unread_char", "UNREAD-CHAR", 1, 1, false);
 		declareFunction(me, "unread_byte", "UNREAD-BYTE", 2, 0, false);
@@ -385,8 +380,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return stream.getStream(true) instanceof SubLOutputStream ? RET_T : SubLNil.NIL;
 	}
 
-	public static SubLObject peek_char(SubLObject peek_type, SubLObject stream, SubLObject eof_error_p,
-			SubLObject eof_value, SubLObject recursivep) {
+	public static SubLObject peek_char(SubLObject peek_type, SubLObject stream, SubLObject eof_error_p, SubLObject eof_value, SubLObject recursivep) {
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_input$.getDynamicValue();
 
@@ -425,8 +419,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return eof_value == UNPROVIDED ? SubLNil.NIL : eof_value;
 	}
 
-	public static SubLObject read_byte_sequence_into_string(SubLObject string, SubLObject stream,
-			SubLObject eof_error_p, SubLObject eof_value) {
+	public static SubLObject read_byte_sequence_into_string(SubLObject string, SubLObject stream, SubLObject eof_error_p, SubLObject eof_value) {
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_input$.getDynamicValue();
 
@@ -441,13 +434,11 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return eof_value == UNPROVIDED ? SubLNil.NIL : eof_value;
 	}
 
-	public static SubLObject read_byte_sequence_to_positive_integer(SubLObject byteCount, SubLObject stream,
-			SubLObject eof_error_p, SubLObject eof_value) {
+	public static SubLObject read_byte_sequence_to_positive_integer(SubLObject byteCount, SubLObject stream, SubLObject eof_error_p, SubLObject eof_value) {
 		return read_byte_sequence_to_positive_integer(byteCount, stream, eof_error_p, eof_value, T);
 	}
 
-	public static SubLObject read_byte_sequence_to_positive_integer(SubLObject byteCount, SubLObject stream,
-			SubLObject eof_error_p, SubLObject eof_value, SubLObject networkByteOrder) {
+	public static SubLObject read_byte_sequence_to_positive_integer(SubLObject byteCount, SubLObject stream, SubLObject eof_error_p, SubLObject eof_value, SubLObject networkByteOrder) {
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_input$.getDynamicValue();
 
@@ -458,8 +449,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		boolean useNetworkByteOrder = networkByteOrder != SubLNil.NIL;
 		long positiveInteger = 0L;
 		try {
-			positiveInteger = stream.toInputBinaryStream().readByteSequenceToPositiveInteger(byteCountVal,
-					useNetworkByteOrder);
+			positiveInteger = stream.toInputBinaryStream().readByteSequenceToPositiveInteger(byteCountVal, useNetworkByteOrder);
 		} catch (RuntimeException re) {
 			if (!re.getMessage().equals("EOF"))
 				throw re;
@@ -513,8 +503,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return SubLNumberFactory.makeInteger(positiveInteger);
 	}
 
-	public static SubLObject read_char(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value,
-			SubLObject recursive_p) {
+	public static SubLObject read_char(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value, SubLObject recursive_p) {
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_input$.getDynamicValue();
 
@@ -529,8 +518,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return eof_value == UNPROVIDED ? SubLNil.NIL : eof_value;
 	}
 
-	public static SubLObject read_char_no_hang(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value,
-			SubLObject recursive_p) {
+	public static SubLObject read_char_no_hang(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value, SubLObject recursive_p) {
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_input$.getDynamicValue();
 
@@ -549,8 +537,16 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return eof_value;
 	}
 
-	public static SubLObject read_line(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value,
-			SubLObject recursive_p) {
+	public static SubLObject read_line(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value, SubLObject recursive_p) {
+		return read_line_with_timeout(stream, eof_error_p, eof_value, recursive_p, UNPROVIDED);
+	}
+
+	public static SubLObject read_line_with_timeout(SubLObject stream, SubLObject eof_error_p, SubLObject eof_value, SubLObject recursive_p, SubLObject maxtime) {
+		long maxtimeLong = Long.MAX_VALUE;
+		if (maxtime.isNumber()) {
+			maxtimeLong = -System.currentTimeMillis() + maxtime.longValue();
+		}
+
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_input$.getValue();
 
@@ -638,8 +634,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 			return makeInteger(i);
 		}
 		int i = startTyped;
-		for (SubLList curList = seq.toList().nthCdr(startTyped).toList(); (curList != SubLNil.NIL)
-				&& (i < endTyped); curList = curList.rest().toList()) {
+		for (SubLList curList = seq.toList().nthCdr(startTyped).toList(); (curList != SubLNil.NIL) && (i < endTyped); curList = curList.rest().toList()) {
 			SubLCons cons = curList.toCons();
 			int cur2 = (inputTextStream != null) ? inputTextStream.readChar() : inputBinaryStream.read();
 			if (cur2 < 0)
@@ -724,8 +719,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return string;
 	}
 
-	public static SubLObject write_positive_integer_as_byte_sequence(SubLObject positiveInteger, SubLObject byteCount,
-			SubLObject stream, SubLObject networkByteOrder) {
+	public static SubLObject write_positive_integer_as_byte_sequence(SubLObject positiveInteger, SubLObject byteCount, SubLObject stream, SubLObject networkByteOrder) {
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_output$.getDynamicValue();
 
@@ -735,8 +729,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		int byteCountVal = byteCount.intValue();
 		boolean useNetworkByteOrder = networkByteOrder != SubLNil.NIL;
 		long positiveIntegerVal = positiveInteger.longValue();
-		stream.toOutputBinaryStream().writePositiveIntegerAsByteSequence(positiveIntegerVal, byteCountVal,
-				useNetworkByteOrder);
+		stream.toOutputBinaryStream().writePositiveIntegerAsByteSequence(positiveIntegerVal, byteCountVal, useNetworkByteOrder);
 		return positiveInteger;
 	}
 
@@ -755,8 +748,7 @@ public class streams_high extends SubLSystemTrampolineFile {
 		return string;
 	}
 
-	public static SubLObject write_string_to_byte_sequence(SubLObject string, SubLObject stream, SubLObject offset,
-			SubLObject length) {
+	public static SubLObject write_string_to_byte_sequence(SubLObject string, SubLObject stream, SubLObject offset, SubLObject length) {
 		SubLString str = string.toStr();
 		if (stream == UNPROVIDED)
 			stream = StreamsLow.$standard_output$.getDynamicValue();

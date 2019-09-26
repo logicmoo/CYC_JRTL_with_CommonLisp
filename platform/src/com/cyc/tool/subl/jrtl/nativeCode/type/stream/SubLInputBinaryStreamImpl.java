@@ -27,8 +27,7 @@ public class SubLInputBinaryStreamImpl extends AbstractSubLBinaryStream implemen
 	}
 
 	SubLInputBinaryStreamImpl(InputStream inStream) {
-		super(Keyword.BINARY_KEYWORD, Keyword.INPUT_KEYWORD, Keyword.ERROR_KEYWORD,
-				Keyword.ERROR_KEYWORD);
+		super(Keyword.BINARY_KEYWORD, Keyword.INPUT_KEYWORD, Keyword.ERROR_KEYWORD, Keyword.ERROR_KEYWORD);
 		this.in = inStream;
 		pushbackStream = new PushbackInputStream(inStream);
 		reader = new PushbackReader(new InputStreamReader(pushbackStream));
@@ -39,7 +38,6 @@ public class SubLInputBinaryStreamImpl extends AbstractSubLBinaryStream implemen
 		super(filename, Keyword.BINARY_KEYWORD, Keyword.INPUT_KEYWORD, ifExists, ifNotExists);
 		init();
 	}
-
 
 	private void init() {
 		if (isRandomAccess())

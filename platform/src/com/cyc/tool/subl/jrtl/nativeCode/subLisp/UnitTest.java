@@ -332,6 +332,8 @@ public class UnitTest extends TestCase {
 
 	public static void main(final String[] args) {
 		SubLMain.commonSymbolsOK = true;
+		Startup.MainThreaded = true;
+		SubLMain me = SubLMain.me;
 		System.out.println("Starting.");
 		try {
 			SubLProcess subLProcess = new SubLProcess("Initial Lisp Listener") {

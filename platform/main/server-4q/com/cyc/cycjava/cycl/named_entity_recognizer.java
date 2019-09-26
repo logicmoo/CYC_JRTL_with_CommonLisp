@@ -838,7 +838,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
             }
             cdolist_list_var = cdolist_list_var.rest();
             denot = cdolist_list_var.first();
-        } 
+        }
         return results;
     }
 
@@ -901,7 +901,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
                             }
                             cdolist_list_var = cdolist_list_var.rest();
                             v_answer = cdolist_list_var.first();
-                        } 
+                        }
                     } finally {
                         final SubLObject _prev_bind_0_$3 = $is_thread_performing_cleanupP$.currentBinding(thread);
                         try {
@@ -968,7 +968,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
                         tighter_types = tighter_types_from_string(type_string, lexicon, entity_string, cyc_type, lexical_lookup_onlyP);
                         csome_list_var = csome_list_var.rest();
                         tree = csome_list_var.first();
-                    } 
+                    }
                 }
 
         } finally {
@@ -1028,10 +1028,10 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
                         result = cons(cycl, result);
                         cdolist_list_var_$9 = cdolist_list_var_$9.rest();
                         cycl = cdolist_list_var_$9.first();
-                    } 
+                    }
                     cdolist_list_var = cdolist_list_var.rest();
                     word = cdolist_list_var.first();
-                } 
+                }
             }
         }
         return result;
@@ -1108,7 +1108,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
                         }
                         cdolist_list_var = cdolist_list_var.rest();
                         span_and_answers = cdolist_list_var.first();
-                    } 
+                    }
                 } finally {
                     parsing_vars.$psp_chart$.rebind(_prev_bind_0_$10, thread);
                 }
@@ -1173,7 +1173,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
                 }
                 cdolist_list_var = cdolist_list_var.rest();
                 collision = cdolist_list_var.first();
-            } 
+            }
         }
         final SubLObject results3 = arg2(thread.resetMultipleValues(), multiple_value_list(denots_of_ps_harvest_nbars_internal(string, non_trivialP, forbidden_string, lexicon)));
         memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results3, list(string, non_trivialP, forbidden_string, lexicon));
@@ -1262,10 +1262,10 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
                                 }
                                 cdolist_list_var_$15 = cdolist_list_var_$15.rest();
                                 named_entity = cdolist_list_var_$15.first();
-                            } 
+                            }
                             cdolist_list_var = cdolist_list_var.rest();
                             named_entity_disjunction = cdolist_list_var.first();
-                        } 
+                        }
                     }
                 } catch (final Throwable catch_var) {
                     Errors.handleThrowable(catch_var, NIL);
@@ -1306,7 +1306,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
                 }
                 cdolist_list_var = cdolist_list_var.rest();
                 collision = cdolist_list_var.first();
-            } 
+            }
         }
         final SubLObject results3 = arg2(resetMultipleValues(), multiple_value_list(named_entityP_internal(sent, ans)));
         memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results3, list(sent, ans));
@@ -1420,7 +1420,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
             tokens = cddr(tokens);
             string = tokens.first();
             type = intern(second(tokens), UNPROVIDED);
-        } 
+        }
         entities = cons(list(new_contextualized_named_entity(latest_string, latest_type, self, text, NIL, NIL, methods.funcall_instance_method_with_1_args(self, TO_CYC, latest_type))), entities);
         return nreverse(entities);
     }
@@ -1476,7 +1476,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
             }
             cdolist_list_var = cdolist_list_var.rest();
             entry = cdolist_list_var.first();
-        } 
+        }
         return NIL;
     }
 
@@ -1525,7 +1525,8 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
                 princ(string, stream);
                 terpri(stream);
                 finish_output(stream);
-                result = string_utilities.split_string(string_utilities.trim_whitespace(read_line(stream, UNPROVIDED, UNPROVIDED, UNPROVIDED)), $list133);
+                final SubLObject read_line = read_line(stream, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+				result = string_utilities.split_string(string_utilities.trim_whitespace(read_line), $list133);
             }
         } finally {
             final SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
@@ -1572,7 +1573,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
             tokens = nthcdr(card, tokens);
             entity = methods.funcall_instance_method_with_1_args(self, NEXT_RESPORATOR_ENTITY, tokens);
             card = length(entity);
-        } 
+        }
         return nreverse(entities);
     }
 
@@ -1596,7 +1597,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
             types_so_far = cons(typeXstring.first(), types_so_far);
             cdolist_list_var = cdolist_list_var.rest();
             typeXstring = cdolist_list_var.first();
-        } 
+        }
         return disjunction;
     }
 
@@ -1613,10 +1614,10 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
                 sethash(intern(string_utilities.strip_final(assertions_high.gaf_arg1(assertion), UNPROVIDED), UNPROVIDED), map, assertions_high.gaf_arg2(assertion));
                 cdolist_list_var_$16 = cdolist_list_var_$16.rest();
                 assertion = cdolist_list_var_$16.first();
-            } 
+            }
             cdolist_list_var = cdolist_list_var.rest();
             predicate = cdolist_list_var.first();
-        } 
+        }
         return map;
     }
 
@@ -1665,7 +1666,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
             }
             cdolist_list_var = cdolist_list_var.rest();
             head_word_cycl = cdolist_list_var.first();
-        } 
+        }
         return more_specific_places;
     }
 
@@ -1890,7 +1891,7 @@ public final class named_entity_recognizer extends SubLTranslatedFile {
         setup_named_entity_recognizer_file();
     }
 
-    
+
 }
 
 /**

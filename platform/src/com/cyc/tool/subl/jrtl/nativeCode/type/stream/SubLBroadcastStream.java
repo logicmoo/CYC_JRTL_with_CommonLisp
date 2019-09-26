@@ -10,10 +10,11 @@ import org.armedbear.lisp.Stream;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLBroadcastStream extends BroadcastStream implements SubLOutputTextStream, SubLOutputBinaryStream {
 	SubLBroadcastStream() {
-		this((SubLOutputStream[])null);
+		this((SubLOutputStream[]) null);
 	}
 
 	public SubLBroadcastStream(SubLOutputStream[] streams) {
@@ -21,8 +22,10 @@ public class SubLBroadcastStream extends BroadcastStream implements SubLOutputTe
 		isClosed = false;
 		freshLine = true;
 	}
+
 	private static Stream[] asOutputStreams(SubLOutputStream[] ostreams) {
-		if(ostreams==null) return null;
+		if (ostreams == null)
+			return null;
 		Stream[] streams = new Stream[ostreams.length];
 		System.arraycopy(ostreams, 0, streams, 0, streams.length);
 		return streams;
@@ -31,12 +34,13 @@ public class SubLBroadcastStream extends BroadcastStream implements SubLOutputTe
 	public SubLBroadcastStream(Stream[] streams) {
 		super(streams);
 	}
+
 	public static void main(String[] args) {
 	}
 
 	//private SubLOutputStream[] streams;
 	//private boolean isClosed;
-//	private boolean freshLine;
+	//	private boolean freshLine;
 
 	@Override
 	public synchronized void close() {
@@ -228,12 +232,21 @@ public class SubLBroadcastStream extends BroadcastStream implements SubLOutputTe
 		}
 		freshLine = false;
 	}
-//	@Override
-//	public SubLSymbol getName() {
-//		return getType();
-//	}
-//	@Override
-//	public SubLSymbol getElementType() {
-//		return super.getStreamElementType().toSymbol();
-//	}
+
+	//	@Override
+	//	public SubLSymbol getName() {
+	//		return getType();
+	//	}
+	@Override
+	public SubLSymbol getElementType() {
+		final int size = streams.length;
+		for (int i = 0; i < size; ++i) {
+			SubLSymbol et = streams[i].getElementType();
+			if (et != null) {
+				return et;
+			}
+			//			((SubLOutputTextStream) streams[i]).writeString(str);
+		}
+		return super.getElementType();
+	}
 }

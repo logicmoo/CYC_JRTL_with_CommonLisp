@@ -27,7 +27,6 @@ public abstract class AbstractSubLTextStream extends Stream {
 	public AbstractSubLTextStream(Symbol twoWayStream) {
 		super(twoWayStream);
 		setElementType(Keyword.TEXT_KEYWORD_CHARACTER);
-
 	}
 //
 //	@Override

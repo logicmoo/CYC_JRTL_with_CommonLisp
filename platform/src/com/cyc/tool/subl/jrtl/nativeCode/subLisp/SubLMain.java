@@ -67,6 +67,9 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
  */
 public class SubLMain extends Startup {
 
+	static {
+		Lisp.initLisp();
+	}
 	static boolean began_inital_embeded_main = false;
 
 	public static final class InitialEmbeddedMain extends SubLProcess {
@@ -254,15 +257,13 @@ public class SubLMain extends Startup {
 	public static InputStream ORIGINAL_IN_STREAM;
 	public static PrintStream ORIGINAL_OUT_STREAM;
 	public static PrintStream ORIGINAL_ERR_STREAM;
+	private static volatile boolean isSubLInitialized;
 	private static volatile boolean isInitialized;
 	private static volatile boolean isFullyInitialized;
-	private static volatile boolean isSubLInitialized;
-	public static volatile boolean isSubLInitialized_part0;
 
 	public static long fistStartTime;
 	protected static long startTime;
-	public static boolean shouldRunInBackground;
-	private static boolean isInitializedTranslatedSystems;
+	public static boolean shouldRunInBackground = false;
 	static {
 		captureStreams();
 	}
@@ -318,7 +319,9 @@ public class SubLMain extends Startup {
 
 	static ThreadLocal<SubLReader> mainReader = new ThreadLocal<SubLReader>();
 
-	private static SubLReader trueMainReader;
+	static SubLReader trueMainReader;
+	private static boolean began_initializeSubL;
+	private static boolean began_initializeTranslatedSystems;
 	private static boolean began_handle_inits;
 	private static boolean began_init_file_running;
 	private static boolean began_AllegroCompatiblityMode;
@@ -420,12 +423,12 @@ public class SubLMain extends Startup {
 		// placeholder
 	}
 
-	static boolean initializedLMD = false;
+	static boolean began_initializedLMD = false;
 
 	private static void initializeLowMemoryDetection() {
-		if (initializedLMD)
+		if (began_initializedLMD)
 			return;
-		initializedLMD = true;
+		began_initializedLMD = true;
 		MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
 		NotificationEmitter emitter = (NotificationEmitter) mbean;
 		MemoryListener listener = new MemoryListener();
@@ -443,9 +446,11 @@ public class SubLMain extends Startup {
 					threshold = percent90;
 				if (pool.isCollectionUsageThresholdSupported()) {
 					SystemCurrent.out.println("Low memory situations will be triggered when post-gc usage exceeds " + (int) (threshold / 1048576.0) + "MB(" + (int) (100L * threshold / max) + "% of " + (int) (max / 1048576.0) + "MB) for " + curPoolType + " pool " + pool.getName());
+					memStatus("CollectionUsageThresholdSupported");
 					pool.setCollectionUsageThreshold(threshold);
 				} else if (pool.isUsageThresholdSupported()) {
 					SystemCurrent.out.println("Low memory situations will be triggered when usage exceeds " + (int) (threshold / 1048576.0) + "MB(" + (int) (100L * threshold / max) + "% of " + (int) (max / 1048576.0) + "MB) for " + curPoolType + " pool " + pool.getName());
+					memStatus("UsageThresholdSupported");
 					pool.setUsageThreshold(threshold);
 				} else
 					Errors.warn("Unable to detect low memory situations.");
@@ -470,9 +475,9 @@ public class SubLMain extends Startup {
 	}
 
 	public static synchronized void initializeSubL(String[] argsIgnored) {
-		if (isSubLInitialized || isSubLInitialized_part0)
+		if (isSubLInitialized || began_initializeSubL)
 			return;
-		isSubLInitialized_part0 = true;
+		began_initializeSubL = true;
 		init_lisp();
 		try {
 			PatchFileLoader.PATCH_FILE_LOADER.loadClass("com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage");
@@ -584,20 +589,19 @@ public class SubLMain extends Startup {
 			Lisp.addFeature("MAIN-RCYC");
 		}
 		AbstractSubLSequence.init();
-		if (!shouldRunInBackground()) {
-			final SubLReader reader = new SubLReader();
-			setMainReader(reader);
-			reader.setThread(SubLProcess.currentSubLThread());
-		}
-		isSubLInitialized_part0 = true;
+
+		//		if (!shouldRunInBackground()) {
+		//          setTrueMainReaderThread();
+		//		}
+		began_initializeSubL = true;
 	}
 
 	public synchronized static void initializeTranslatedSystems() {
-		if (isInitializedTranslatedSystems)
+		if (began_initializeTranslatedSystems)
 			return;
 		boolean completed = false;
 		try {
-			isInitializedTranslatedSystems = true;
+			began_initializeTranslatedSystems = true;
 			if (SubLMain.OPENCYC)
 				initialize1TranslatedSystem("com.cyc.cycjava.cycl.cycl");
 			if (!SubLMain.OPENCYC) {
@@ -649,7 +653,7 @@ public class SubLMain extends Startup {
 			PrintLow.registerJRTLPrintMethods();
 
 		} finally {
-			isInitializedTranslatedSystems = completed;
+			began_initializeTranslatedSystems = completed;
 		}
 	}
 
@@ -702,7 +706,11 @@ public class SubLMain extends Startup {
 	}
 
 	public static boolean isInitialized() {
-		return isInitialized;
+		if (isInitialized)
+			return true;
+		if (isSubLInitialized)
+			return true;
+		return false;
 	}
 
 	public static boolean isInternalInitializationDone() {
@@ -734,9 +742,7 @@ public class SubLMain extends Startup {
 		final String[] args = extractOptions(SubLMain.class, argsIn);
 		preInitLisp();
 		SubLPackage.initPackages();
-		trueMainReader = new SubLReader(true, System.in, System.out);
-		setMainReader(trueMainReader);
-
+		setTrueMainReaderThread();
 		handlePatches();
 		// Interpreter.createInstance();
 		SubLMain.commonSymbolsOK = true;
@@ -877,5 +883,23 @@ public class SubLMain extends Startup {
 				Errors.error("Got invalid command line argument: " + args[i]);
 			}
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public static void memStatus(String when) {
+		final Runtime rt = Runtime.getRuntime();
+		System.out.println(when + " Total memory allocated to VM: " + (int) (rt.totalMemory() / 1048576.0) + "MB.");
+		System.out.println(when + " Memory currently available: " + (int) (rt.freeMemory() / 1048576.0) + "MB.");
+		System.out.println(when + " Memory currently used: " + (int) ((rt.totalMemory() - rt.freeMemory()) / 1048576.0) + "MB.");
+	}
+
+	public static void setTrueMainReaderThread() {
+		if (trueMainReader == null) {
+			trueMainReader = new SubLReader(true, System.in, System.out);
+		}
+		setMainReader(SubLMain.trueMainReader);
+		trueMainReader.setThread(SubLProcess.currentSubLThread());
 	}
 }

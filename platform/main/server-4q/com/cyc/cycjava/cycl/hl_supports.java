@@ -686,7 +686,7 @@ public final class hl_supports extends SubLTranslatedFile {
             remprop(name, indicator);
             cdolist_list_var = cdolist_list_var.rest();
             indicator = cdolist_list_var.first();
-        } 
+        }
         SubLObject indicator2 = NIL;
         SubLObject value = NIL;
         indicator2 = plist.first();
@@ -699,7 +699,7 @@ public final class hl_supports extends SubLTranslatedFile {
             plist = cddr(plist);
             indicator2 = plist.first();
             value = second(plist);
-        } 
+        }
         if (NIL == member(name, $hl_support_modules$.getGlobalValue(), symbol_function(EQL), symbol_function(IDENTITY))) {
             $hl_support_modules$.setGlobalValue(cons(name, $hl_support_modules$.getGlobalValue()));
         }
@@ -778,7 +778,7 @@ public final class hl_supports extends SubLTranslatedFile {
             sub_justifications = cons(hl_justify_expanded(sub_support), sub_justifications);
             cdolist_list_var = cdolist_list_var.rest();
             sub_support = cdolist_list_var.first();
-        } 
+        }
         sub_justifications = nreverse(sub_justifications);
         SubLObject expanded_justification = apply(symbol_function(APPEND), sub_justifications);
         expanded_justification = delete_duplicates(expanded_justification, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -867,7 +867,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 }
                 cdolist_list_var = cdolist_list_var.rest();
                 embedded_assertion = cdolist_list_var.first();
-            } 
+            }
         }
         return justification;
     }
@@ -908,7 +908,7 @@ public final class hl_supports extends SubLTranslatedFile {
 
             cdolist_list_var = cdolist_list_var.rest();
             support = cdolist_list_var.first();
-        } 
+        }
         rules = assertion_utilities.sort_assertions(rules);
         gafs = assertion_utilities.sort_assertions(gafs);
         v_hl_supports = kb_utilities.sort_terms(v_hl_supports, NIL, NIL, T, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -935,10 +935,10 @@ public final class hl_supports extends SubLTranslatedFile {
                 }
                 cdolist_list_var_$5 = cdolist_list_var_$5.rest();
                 missed_assertion = cdolist_list_var_$5.first();
-            } 
+            }
             cdolist_list_var = cdolist_list_var.rest();
             support = cdolist_list_var.first();
-        } 
+        }
         return result;
     }
 
@@ -1106,7 +1106,7 @@ public final class hl_supports extends SubLTranslatedFile {
             mt_lists = cons(Mapping.mapcar(SUPPORT_MT, combo_supports), mt_lists);
             cdolist_list_var = cdolist_list_var.rest();
             sub_support = cdolist_list_var.first();
-        } 
+        }
         cdolist_list_var = list_utilities.cartesian_product(mt_lists, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         SubLObject mt_cartesian_product = NIL;
         mt_cartesian_product = cdolist_list_var.first();
@@ -1121,10 +1121,10 @@ public final class hl_supports extends SubLTranslatedFile {
                 mt_combos = cons(result_support, mt_combos);
                 cdolist_list_var_$8 = cdolist_list_var_$8.rest();
                 mt = cdolist_list_var_$8.first();
-            } 
+            }
             cdolist_list_var = cdolist_list_var.rest();
             mt_cartesian_product = cdolist_list_var.first();
-        } 
+        }
         return mt_combos;
     }
 
@@ -1150,7 +1150,7 @@ public final class hl_supports extends SubLTranslatedFile {
             mt_relevance_macros.$mt$.rebind(_prev_bind_2, thread);
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
-        Startup.bp();
+        Startup.bp(false);
         return result;
     }
 
@@ -1169,7 +1169,7 @@ public final class hl_supports extends SubLTranslatedFile {
             }
             cdolist_list_var = cdolist_list_var.rest();
             support = cdolist_list_var.first();
-        } 
+        }
         SubLObject cdolist_list_var2;
         final SubLObject mt_cartesian_product = cdolist_list_var2 = list_utilities.cartesian_product(mt_lists, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         SubLObject mts = NIL;
@@ -1179,7 +1179,7 @@ public final class hl_supports extends SubLTranslatedFile {
             max_floor_mts = append(max_floor_mts, max_floors);
             cdolist_list_var2 = cdolist_list_var2.rest();
             mts = cdolist_list_var2.first();
-        } 
+        }
         if (NIL != list_utilities.lengthG(mt_cartesian_product, ONE_INTEGER, UNPROVIDED)) {
             max_floor_mts = genl_mts.max_mts(list_utilities.fast_delete_duplicates(max_floor_mts, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED);
         }
@@ -1270,7 +1270,7 @@ public final class hl_supports extends SubLTranslatedFile {
                                     set.set_add(rule2, next_rules);
                                     cdolist_list_var_$12 = cdolist_list_var_$12.rest();
                                     rule2 = cdolist_list_var_$12.first();
-                                } 
+                                }
                                 cdolist_list_var_$13 = gafs_$10;
                                 gaf_$14 = NIL;
                                 gaf_$14 = cdolist_list_var_$13.first();
@@ -1278,7 +1278,7 @@ public final class hl_supports extends SubLTranslatedFile {
                                     set.set_add(gaf_$14, next_gafs);
                                     cdolist_list_var_$13 = cdolist_list_var_$13.rest();
                                     gaf_$14 = cdolist_list_var_$13.first();
-                                } 
+                                }
                                 cdolist_list_var_$14 = v_hl_supports_$11;
                                 hl_support = NIL;
                                 hl_support = cdolist_list_var_$14.first();
@@ -1286,11 +1286,11 @@ public final class hl_supports extends SubLTranslatedFile {
                                     set.set_add(hl_support, next_hl_supports);
                                     cdolist_list_var_$14 = cdolist_list_var_$14.rest();
                                     hl_support = cdolist_list_var_$14.first();
-                                } 
+                                }
                             }
                             cdolist_list_var = cdolist_list_var.rest();
                             deduction = cdolist_list_var.first();
-                        } 
+                        }
                     }
                     gaf_mt = assertions_high.assertion_mt(gaf);
                     query_mt_support = removal_modules_genlmt.possibly_make_query_mt_support(query_mt, gaf_mt);
@@ -1328,7 +1328,7 @@ public final class hl_supports extends SubLTranslatedFile {
                             set.set_add(rule3, next_rules);
                             cdolist_list_var2 = cdolist_list_var2.rest();
                             rule3 = cdolist_list_var2.first();
-                        } 
+                        }
                         cdolist_list_var2 = gafs_$11;
                         gaf2 = NIL;
                         gaf2 = cdolist_list_var2.first();
@@ -1336,7 +1336,7 @@ public final class hl_supports extends SubLTranslatedFile {
                             set.set_add(gaf2, next_gafs);
                             cdolist_list_var2 = cdolist_list_var2.rest();
                             gaf2 = cdolist_list_var2.first();
-                        } 
+                        }
                         cdolist_list_var2 = v_hl_supports_$12;
                         hl_support_$19 = NIL;
                         hl_support_$19 = cdolist_list_var2.first();
@@ -1344,7 +1344,7 @@ public final class hl_supports extends SubLTranslatedFile {
                             set.set_add(hl_support_$19, next_hl_supports);
                             cdolist_list_var2 = cdolist_list_var2.rest();
                             hl_support_$19 = cdolist_list_var2.first();
-                        } 
+                        }
                     }
                     support_mt = arguments.hl_support_mt(hl_support2);
                     query_mt_support = removal_modules_genlmt.possibly_make_query_mt_support(query_mt, support_mt);
@@ -1494,7 +1494,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 }
                 cdolist_list_var = cdolist_list_var.rest();
                 why_not_sentence = cdolist_list_var.first();
-            } 
+            }
             return nreverse(why_not_supports);
         }
         return list(support);
@@ -1732,7 +1732,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$28, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$28 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -1990,7 +1990,7 @@ public final class hl_supports extends SubLTranslatedFile {
                     ans = cons(arguments.make_hl_support(hl_module, literal, mt_$33, tv), ans);
                     cdolist_list_var = cdolist_list_var.rest();
                     mt_$33 = cdolist_list_var.first();
-                } 
+                }
             } else {
                 ans = list(support);
             }
@@ -2145,7 +2145,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, max_mt, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 max_mt = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -2232,7 +2232,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$40, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$40 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -2644,7 +2644,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$45, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$45 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -2697,13 +2697,13 @@ public final class hl_supports extends SubLTranslatedFile {
                         answer_mts = append(answer_mts, inference_trampolines.inference_max_floor_mts_with_cycles_pruned(list(reflex_mt, unify_mt, arg1_mt), UNPROVIDED));
                         cdolist_list_var_$47 = cdolist_list_var_$47.rest();
                         arg1_mt = cdolist_list_var_$47.first();
-                    } 
+                    }
                     cdolist_list_var_$46 = cdolist_list_var_$46.rest();
                     unify_mt = cdolist_list_var_$46.first();
-                } 
+                }
                 cdolist_list_var = cdolist_list_var.rest();
                 reflex_mt = cdolist_list_var.first();
-            } 
+            }
         } else {
             SubLObject cdolist_list_var = reflex_mts;
             SubLObject reflex_mt = NIL;
@@ -2724,16 +2724,16 @@ public final class hl_supports extends SubLTranslatedFile {
                             answer_mts = append(answer_mts, inference_trampolines.inference_max_floor_mts_with_cycles_pruned(list(reflex_mt, unify_mt, arg1_mt, arg2_mt), UNPROVIDED));
                             cdolist_list_var_$50 = cdolist_list_var_$50.rest();
                             arg2_mt = cdolist_list_var_$50.first();
-                        } 
+                        }
                         cdolist_list_var_$49 = cdolist_list_var_$49.rest();
                         arg1_mt = cdolist_list_var_$49.first();
-                    } 
+                    }
                     cdolist_list_var_$48 = cdolist_list_var_$48.rest();
                     unify_mt = cdolist_list_var_$48.first();
-                } 
+                }
                 cdolist_list_var = cdolist_list_var.rest();
                 reflex_mt = cdolist_list_var.first();
-            } 
+            }
         }
         return list_utilities.fast_delete_duplicates(answer_mts, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
@@ -2755,7 +2755,7 @@ public final class hl_supports extends SubLTranslatedFile {
             mt_combos = cons(mt_combo, mt_combos);
             cdolist_list_var = cdolist_list_var.rest();
             collection = cdolist_list_var.first();
-        } 
+        }
         cdolist_list_var = list_utilities.cartesian_product(mt_combos, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         SubLObject mt_combo2 = NIL;
         mt_combo2 = cdolist_list_var.first();
@@ -2763,7 +2763,7 @@ public final class hl_supports extends SubLTranslatedFile {
             result = append(result, inference_trampolines.inference_max_floor_mts_with_cycles_pruned(mt_combo2, UNPROVIDED));
             cdolist_list_var = cdolist_list_var.rest();
             mt_combo2 = cdolist_list_var.first();
-        } 
+        }
         return result;
     }
 
@@ -2802,7 +2802,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 }
                 cdolist_list_var = cdolist_list_var.rest();
                 collision = cdolist_list_var.first();
-            } 
+            }
         }
         final SubLObject results3 = arg2(thread.resetMultipleValues(), multiple_value_list(max_floor_mts_where_arg_constraints_met_internal(v_term, collections, tv)));
         memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results3, list(v_term, collections, tv));
@@ -2949,7 +2949,7 @@ public final class hl_supports extends SubLTranslatedFile {
                     ans = cons(arguments.make_hl_support(hl_module, literal, mt_$53, tv), ans);
                     cdolist_list_var = cdolist_list_var.rest();
                     mt_$53 = cdolist_list_var.first();
-                } 
+                }
                 return nreverse(ans);
             }
         } else {
@@ -3002,7 +3002,7 @@ public final class hl_supports extends SubLTranslatedFile {
                                         reflex_mt_col_pairs = cons(cons(assertions_high.assertion_mt(gaf), assertions_high.gaf_arg2(gaf)), reflex_mt_col_pairs);
                                     }
                                     done_var_$54 = makeBoolean(NIL == valid_$56);
-                                } 
+                                }
                             } finally {
                                 final SubLObject _prev_bind_0_$57 = $is_thread_performing_cleanupP$.currentBinding(thread);
                                 try {
@@ -3018,7 +3018,7 @@ public final class hl_supports extends SubLTranslatedFile {
                             }
                         }
                         done_var = makeBoolean(NIL == valid);
-                    } 
+                    }
                 }
             } finally {
                 mt_relevance_macros.$mt$.rebind(_prev_bind_2, thread);
@@ -3059,16 +3059,16 @@ public final class hl_supports extends SubLTranslatedFile {
                             }
                             cdolist_list_var_$60 = cdolist_list_var_$60.rest();
                             isa2_mt = cdolist_list_var_$60.first();
-                        } 
+                        }
                         cdolist_list_var_$59 = cdolist_list_var_$59.rest();
                         isa1_mt = cdolist_list_var_$59.first();
-                    } 
+                    }
                     cdolist_list_var_$58 = cdolist_list_var_$58.rest();
                     cons = cdolist_list_var_$58.first();
-                } 
+                }
                 cdolist_list_var = cdolist_list_var.rest();
                 unify_mt = cdolist_list_var.first();
-            } 
+            }
             SubLObject cdolist_list_var2 = mt_combos;
             SubLObject mt_combo = NIL;
             mt_combo = cdolist_list_var2.first();
@@ -3077,7 +3077,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 answer_mts = append(target_set, answer_mts);
                 cdolist_list_var2 = cdolist_list_var2.rest();
                 mt_combo = cdolist_list_var2.first();
-            } 
+            }
             answer_mts = list_utilities.remove_duplicate_forts(answer_mts);
             SubLObject sane_mts = NIL;
             cdolist_list_var = answer_mts;
@@ -3089,7 +3089,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 }
                 cdolist_list_var = cdolist_list_var.rest();
                 answer_mt = cdolist_list_var.first();
-            } 
+            }
             answer_mts = sane_mts;
             return answer_mts;
         }
@@ -3196,7 +3196,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$67, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$67 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -3369,7 +3369,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, asent, mt_$70, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$70 = cdolist_list_var.first();
-            } 
+            }
         } else {
             cdestructuring_bind_error(support, $list116);
         }
@@ -3452,7 +3452,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, asent, mt, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt = cdolist_list_var.first();
-            } 
+            }
         } else {
             cdestructuring_bind_error(support, $list119);
         }
@@ -3634,7 +3634,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$71, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$71 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -3898,7 +3898,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$76, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$76 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -3942,7 +3942,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$77, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$77 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -4334,7 +4334,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 }
                 cdolist_list_var = cdolist_list_var.rest();
                 assertion = cdolist_list_var.first();
-            } 
+            }
             return mts;
         }
         return list(mt);
@@ -4482,7 +4482,7 @@ public final class hl_supports extends SubLTranslatedFile {
                     result_supports = cons(arguments.make_hl_support(hl_module, el_sentence, result_mt, tv), result_supports);
                     cdolist_list_var = cdolist_list_var.rest();
                     result_mt = cdolist_list_var.first();
-                } 
+                }
                 return nreverse(result_supports);
             }
         } else {
@@ -4898,10 +4898,10 @@ public final class hl_supports extends SubLTranslatedFile {
                                             mts = append(mts, inference_trampolines.inference_max_floor_mts_with_cycles_pruned(list(mt2, mt3), UNPROVIDED));
                                             cdolist_list_var_$96 = cdolist_list_var_$96.rest();
                                             mt3 = cdolist_list_var_$96.first();
-                                        } 
+                                        }
                                         cdolist_list_var = cdolist_list_var.rest();
                                         mt2 = cdolist_list_var.first();
-                                    } 
+                                    }
                                     mts = list_utilities.fast_delete_duplicates(mts, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
                                 } else {
                                     cdestructuring_bind_error(datum_$91, $list169);
@@ -4936,7 +4936,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$99, tv), ans);
                 cdolist_list_var2 = cdolist_list_var2.rest();
                 mt_$99 = cdolist_list_var2.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -5028,7 +5028,7 @@ public final class hl_supports extends SubLTranslatedFile {
             }
             cdolist_list_var = cdolist_list_var.rest();
             gafXtv = cdolist_list_var.first();
-        } 
+        }
         return nreverse(result);
     }
 
@@ -5062,7 +5062,7 @@ public final class hl_supports extends SubLTranslatedFile {
             }
             cdolist_list_var = cdolist_list_var.rest();
             gafXtv = cdolist_list_var.first();
-        } 
+        }
         return nreverse(result);
     }
 
@@ -5223,7 +5223,7 @@ public final class hl_supports extends SubLTranslatedFile {
             ans = cons(arguments.make_hl_support(hl_module, literal, mt_$102, tv), ans);
             cdolist_list_var = cdolist_list_var.rest();
             mt_$102 = cdolist_list_var.first();
-        } 
+        }
         return nreverse(ans);
     }
 
@@ -5419,7 +5419,7 @@ public final class hl_supports extends SubLTranslatedFile {
                     ans = cons(arguments.make_hl_support(hl_module, literal, max_mt, tv), ans);
                     cdolist_list_var = cdolist_list_var.rest();
                     max_mt = cdolist_list_var.first();
-                } 
+                }
                 return nreverse(ans);
             }
             cdestructuring_bind_error(support, $list42);
@@ -5517,7 +5517,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$112, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$112 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -5664,7 +5664,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$119, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$119 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -5780,7 +5780,7 @@ public final class hl_supports extends SubLTranslatedFile {
                 ans = cons(arguments.make_hl_support(hl_module, literal, mt_$124, tv), ans);
                 cdolist_list_var = cdolist_list_var.rest();
                 mt_$124 = cdolist_list_var.first();
-            } 
+            }
             return nreverse(ans);
         }
         cdestructuring_bind_error(support, $list42);
@@ -6307,16 +6307,16 @@ public final class hl_supports extends SubLTranslatedFile {
                         mt_combos = cons(list(hl_module, asent, combo_mt, tv), mt_combos);
                         cdolist_list_var_$126 = cdolist_list_var_$126.rest();
                         combo_mt = cdolist_list_var_$126.first();
-                    } 
+                    }
                 } else {
                     cdestructuring_bind_error(datum_$126, $list223);
                 }
                 cdolist_list_var_$125 = cdolist_list_var_$125.rest();
                 mt_support_combo = cdolist_list_var_$125.first();
-            } 
+            }
             cdolist_list_var = cdolist_list_var.rest();
             query_supports = cdolist_list_var.first();
-        } 
+        }
         return mt_combos;
     }
 
@@ -6730,7 +6730,7 @@ public final class hl_supports extends SubLTranslatedFile {
         setup_hl_supports_file();
     }
 
-    
+
 
     public static final class $non_hl_predicate_p$UnaryFunction extends UnaryFunction {
         public $non_hl_predicate_p$UnaryFunction() {

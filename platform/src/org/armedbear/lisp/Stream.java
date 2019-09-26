@@ -74,7 +74,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
  * A base class for all Lisp built-in streams.
  *
  */
-abstract public class Stream extends AbstractRandomAccessSubLStream implements ILispStream, SubLOutputStream, SubLInputStream, SubLInputTextStream, SubLInputBinaryStream, SubLOutputBinaryStream, SubLOutputTextStream {
+abstract public class Stream extends AbstractRandomAccessSubLStream implements ILispStream, SubLOutputStream, SubLInputStream, //
+		SubLInputTextStream, //
+		SubLInputBinaryStream, //
+		SubLOutputBinaryStream, SubLOutputTextStream {
 
 	/**
 	 * Attempts to read characters into the specified character buffer.
@@ -700,10 +703,14 @@ abstract public class Stream extends AbstractRandomAccessSubLStream implements I
 		return super.typep(typeSpecifier);
 	}
 
-	@Override
-	public LispObject getStreamElementType() {
-		return elementType;
-	}
+	//	@Override
+	//	public LispObject getStreamElementType() {
+	//		final SubLSymbol subLelementType = subLElementType;
+	//		if (subLelementType != null) {
+	//			return subLElementType.toLispObject();
+	//		}
+	//		return elementType.toLispObject();
+	//	}
 
 	// Character input.
 	@Override

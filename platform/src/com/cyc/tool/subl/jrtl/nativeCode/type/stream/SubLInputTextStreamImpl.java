@@ -28,9 +28,8 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 	}
 
 	SubLInputTextStreamImpl(ByteBuffer byteBuffer) {
-		super(Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, Keyword.ERROR,
-				Keyword.ERROR);
-		this.readByteBuffer = byteBuffer;
+		super(Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, Keyword.ERROR, Keyword.ERROR);
+		this.readByteBuffer0 = byteBuffer;
 	}
 
 	SubLInputTextStreamImpl(ByteBuffer byteBuffer, int start) {
@@ -40,8 +39,7 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 	}
 
 	SubLInputTextStreamImpl(InputStream inStream) {
-		super(Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, Keyword.ERROR,
-				Keyword.ERROR);
+		super(Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, Keyword.ERROR, Keyword.ERROR);
 		this.in = inStream;
 		InputStream javaBufferedInStream = inStream;//		javaBufferedInStream = new BufferedInputStream(inStream);
 		pushbackStream = new PushbackInputStream(javaBufferedInStream);
@@ -54,8 +52,7 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 	}
 
 	SubLInputTextStreamImpl(Socket socket) {
-		super(Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, Keyword.ERROR,
-				Keyword.ERROR);
+		super(Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, Keyword.ERROR, Keyword.ERROR);
 		this.socket = socket;
 		try {
 			in = socket.getInputStream();
@@ -71,14 +68,12 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		super(filename, Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, ifExists, ifNotExists);
 	}
 
-	public SubLInputTextStreamImpl(String filename, SubLSymbol binaryKeyword, SubLSymbol inputKeyword,
-			SubLSymbol ifExists, SubLSymbol ifNotExists) {
+	public SubLInputTextStreamImpl(String filename, SubLSymbol binaryKeyword, SubLSymbol inputKeyword, SubLSymbol ifExists, SubLSymbol ifNotExists) {
 		super(filename, binaryKeyword, inputKeyword, ifExists, ifNotExists);
 	}
 
-	public SubLInputTextStreamImpl(SubLSymbol binaryKeyword, SubLSymbol inputKeyword, SubLSymbol errorKeyword,
-			SubLSymbol errorKeyword2) {
-		super( binaryKeyword, inputKeyword, errorKeyword, errorKeyword2);
+	public SubLInputTextStreamImpl(SubLSymbol binaryKeyword, SubLSymbol inputKeyword, SubLSymbol errorKeyword, SubLSymbol errorKeyword2) {
+		super(binaryKeyword, inputKeyword, errorKeyword, errorKeyword2);
 
 	}
 
@@ -143,28 +138,30 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		while (!isClosed()) {
 			try {
 				ready = pushbackStream.available() > 0;
-			} catch (Exception e) {
+			} catch (IOException e) {
 				return -1;
 			}
-			if (ready)
+			if (ready) {
 				try {
 					int result = pushbackStream.read();
 					if (result >= 0)
 						incrementInputIndex(1L);
 					return result;
-				} catch (Exception e) {
+				} catch (IOException e) {
 					Errors.error("Unable to read character from stream: " + this, e);
 					continue;
 				}
-			try {
-				Threads.possiblyHandleInterrupts(true);
-				Thread.currentThread();
-				Thread.sleep(5L);
-			} catch (InterruptedException ie) {
-				Threads.possiblyHandleInterrupts(false);
+			} else {
+				try {
+					Threads.possiblyHandleInterrupts(true);
+					Thread.currentThread();
+					Thread.sleep(5L);
+				} catch (InterruptedException ie) {
+					Threads.possiblyHandleInterrupts(false);
+				}
+				if (isClosed())
+					return -1;
 			}
-			if (isClosed())
-				return -1;
 		}
 		return -1;
 	}

@@ -26,7 +26,6 @@ import static org.armedbear.lisp.Lisp.PACKAGE_JAVA;
 import static org.armedbear.lisp.Lisp.PACKAGE_SUBLISP;
 import static org.armedbear.lisp.Lisp.UNPROVIDED;
 import static org.logicmoo.system.BeanShellCntrl.bsh_desktop;
-import static org.logicmoo.system.BeanShellCntrl.bsh_eval;
 import static org.logicmoo.system.BeanShellCntrl.showObject;
 
 import java.awt.Container;
@@ -129,7 +128,6 @@ import com.cyc.cycjava.cycl.constant_completion_high;
 import com.cyc.cycjava.cycl.constant_completion_low;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.constants_high;
-import com.cyc.cycjava.cycl.dumper;
 import com.cyc.cycjava.cycl.ke;
 import com.cyc.cycjava.cycl.web_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
@@ -145,6 +143,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLReader;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnitTest_CycLTiny;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -153,6 +152,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess.TerminationRequest;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLBoolean;
@@ -160,14 +160,14 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.ui.SubLReaderPanel;
+import com.cyc.tool.subl.util.AbstractSubLPatcher;
 import com.cyc.tool.subl.util.IsolatedClassLoader;
-import com.cyc.tool.subl.util.SafeRunnable;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import bsh.EvalError;
+import bsh.FileReader;
 import bsh.NameSpace;
 import bsh.util.Sessiond;
 import eu.larkc.core.orchestrator.servers.LarKCHttpServer;
@@ -184,6 +184,7 @@ import sun.misc.Unsafe;
 //import org.opencyc.cycobject.CycConstant;
 public class Startup extends ABCLStatic {
 
+	private static final String UNKNOWN = "bp()";
 	public static final String[] StringArrayZero = new String[0];
 	static WorkQueue initServerQueue = null;
 	private static Thread cycInitThread;
@@ -289,10 +290,10 @@ public class Startup extends ABCLStatic {
 	public static boolean began_load_kb;
 	// Assume (init-cyc) has happened
 	public static boolean began_init_server;
-	// Load all Tactics before the KB
+	// Load all 2ndary Tactics before running the KB inits (currently breaks things)
 	public static boolean cycPart2Early = false;
 	// Skip loading possibly broken/experiental tactics
-	public static boolean noCycPart2 = false;
+	public static boolean noCycPart2 = true;
 
 	public static boolean OPENCYC = false;
 	public static boolean TINY_KB = false;
@@ -310,6 +311,7 @@ public class Startup extends ABCLStatic {
 	public static String[] cycCmdArgs = StringArrayZero;
 	public static String[] defaultCycCmdArgs = new String[] { "-f", "(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))" };
 
+	private static boolean noExtraServers = true;
 	// Disable Prolog Features
 	public static boolean noProlog = true;
 	// Disable JNI Prolog Features
@@ -373,8 +375,9 @@ public class Startup extends ABCLStatic {
 				} catch (Throwable e) {
 					noticeStream.println("Shutdown Hook Error");
 					showST(e, noticeStream);
+				} finally {
+					waitForTermination = false;
 				}
-				waitForTermination = false;
 			}
 
 			@Override
@@ -542,6 +545,7 @@ public class Startup extends ABCLStatic {
 
 			if (av.remove("--telnetd")) {
 				TelnetD.main(StringArrayZero);
+				noExtraServers = false;
 			}
 
 			if (av.contains("--fakewebswing")) {
@@ -773,7 +777,8 @@ public class Startup extends ABCLStatic {
 
 		try {
 			if (!leanABCL) {
-				startServers(0);
+				if (!noExtraServers)
+					startServers(0);
 			}
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
@@ -796,15 +801,33 @@ public class Startup extends ABCLStatic {
 
 		if (mainClass != null) {
 			try {
-				Class c = Class.forName(mainClass);
+				Class c = null;
+				try {
+					c = Class.forName(mainClass);
+				} catch (Exception e0) {
+					for (Class p : new Class[] { UnitTest_CycLTiny.class, AbstractSubLPatcher.class, BeanShellCntrl.class, Main.class }) {
+						try {
+							c = Class.forName(p.getPackage().getName() + "." + mainClass);
+							if (c != null)
+								break;
+						} catch (Exception e1) {
+						}
+					}
+					if (c == null)
+						throw e0;
+				}
 				Class[] parameterTypes = new Class[1];
 				parameterTypes[0] = String[].class;
 				Method method = c.getMethod("main", parameterTypes);
+				method.setAccessible(true);
 				Object[] parameters = new Object[] { argsNew };
 				method.invoke(null, parameters);
-
+				waitForTermination = true;
 			} catch (Throwable e) {
-				uncaughtException(e);
+				Throwable c = e.getCause();
+				if (c == null)
+					c = e;
+				uncaughtException(c);
 			}
 		}
 
@@ -1308,8 +1331,41 @@ public class Startup extends ABCLStatic {
 
 	// Breakpoint to set in IDE
 	public static void bp() {
-		if (false) {
+		bp(true);
+	}
+
+	public static void bp(boolean trouble) {
+		bp(UNKNOWN, trouble);
+	}
+
+	// Breakpoint to set in IDE
+	public static void bp(String why, boolean trouble) {
+		if (!trouble)
+			return;
+		noticeStream = getNoticeStream();
+		try {
+			new Throwable(why).printStackTrace(noticeStream);
+		} catch (Exception e) {
 		}
+
+		final InputStream expectedIn = SystemCurrent.getInputFor(noticeStream);
+		boolean tainted = (expectedIn != System.in);
+		if (false && tainted) {
+			return;
+		}
+		try {
+			if (expectedIn != null) {
+				noticeStream.println("Press the [return] key to continue... " + why);
+				// Console con = System.console();
+				final BufferedReader bufferedReader = new BufferedReader(new FileReader(expectedIn));
+				bufferedReader.readLine();
+				bufferedReader.close();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		noticeStream.println("continuing...");
 		// BeanBowlGUI.startBeanBowl();
 	}
 
@@ -1977,7 +2033,7 @@ public class Startup extends ABCLStatic {
 		synchronized (StartupInitLock) {
 			SubLMain.commonSymbolsOK = true;
 			IsolatedClassLoader.addDefaultJarsToClassPath(getPlatformDir());
-			boolean b = SubLMain.isInitialized();
+			boolean b = SubLMain.isInternalInitializationDone();
 			if (b) {
 				return;
 			}
@@ -2006,11 +2062,11 @@ public class Startup extends ABCLStatic {
 		} catch (ControlTransfer t) {
 			throw t;
 		} catch (SecurityException e) {
-			return Lisp.error(new LispError("inaccessible method " + m));
+			return Lisp.error(new LispError("inaccessible method " + m + " " + e));
 		} catch (IllegalAccessException e) {
-			return Lisp.error(new LispError("illegal access" + m));
+			return Lisp.error(new LispError("illegal access" + m + " " + e));
 		} catch (IllegalArgumentException e) {
-			return Lisp.error(new LispError("illegal argument " + m));
+			return Lisp.error(new LispError("illegal argument " + m + " " + e));
 		} catch (Throwable t) { // no code -> no ControlTransfer
 			if (t instanceof InvocationTargetException) {
 				Throwable tt = ((InvocationTargetException) t).getTargetException();
@@ -3293,10 +3349,18 @@ public class Startup extends ABCLStatic {
 	}
 
 	/**
+	 * @throws ClassNotFoundException
 	 *
 	 */
 	public static void registerForiegnMethods() {
 		scanForExports(BeanShellCntrl.class);
+		Class<?> forName;
+		try {
+			forName = Class.forName("CycNER");
+			scanForExports(forName);
+		} catch (Throwable e) {
+			uncaughtException(e);
+		}
 
 	}
 
@@ -3544,13 +3608,15 @@ public class Startup extends ABCLStatic {
 		}
 	}
 
-	public static void uncaughtException(Throwable e) {
+	public static void uncaughtException(Throwable e) throws TerminationRequest {
 		addUncaught(Thread.currentThread(), e);
 	}
 
-	public static void addUncaught(Thread t, Throwable e) {
+	public static void addUncaught(Thread t, Throwable e) throws TerminationRequest {
 		if (e == null)
 			return;
+		if (e instanceof TerminationRequest)
+			throw (TerminationRequest) e;
 		if (t == null)
 			t = Thread.currentThread();
 		if (e instanceof ProcessingTerminated) {

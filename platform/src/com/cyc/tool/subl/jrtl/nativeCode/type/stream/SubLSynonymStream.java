@@ -38,32 +38,40 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 
 	@Override
 	public SubLSymbol getDirection() {
-		return getStream(true).getDirection();
+		return getStreamTrue().getDirection();
 	}
 
 	@Override
 	public SubLSymbol getElementType() {
-		return getStream(true).getElementType();
+		final SubLStream stream = getStreamTrue();
+		return stream.getElementType().toSymbol();
 	}
 
 	@Override
 	public FileDescriptor getFD() {
-		return getStream(true).getFD();
+		return getStreamTrue().getFD();
 	}
 
 	@Override
 	public File getFile() {
-		return getStream(true).getFile();
+		return getStreamTrue().getFile();
 	}
 
 	@Override
 	public long getFilePointer() {
-		return getStream(true).getFilePointer();
+		return getStreamTrue().getFilePointer();
 	}
 
 	@Override
 	public String getNewline() {
-		return getStream(true).getNewline();
+		return getStreamTrue().getNewline();
+	}
+
+	/**
+	 * @return
+	 */
+	public SubLStream getStreamTrue() {
+		return getStream(true).toLispObject();
 	}
 
 	@Override
@@ -87,39 +95,39 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 
 	@Override
 	public SubLSymbol ifExists() {
-		return getStream(true).ifExists();
+		return getStreamTrue().ifExists();
 	}
 
 	@Override
 	public SubLSymbol ifNotExists() {
-		return getStream(true).ifNotExists();
+		return getStreamTrue().ifNotExists();
 	}
 
 	@Override
 	public boolean isInteractive() {
-		return getStream(true).isInteractive();
+		return getStreamTrue().isInteractive();
 	}
 
 	@Override
 	public boolean isRandomAccess() {
-		return getStream(true).isRandomAccess();
+		return getStreamTrue().isRandomAccess();
 	}
 
 	/** throws exception if isRandomAccess() returns false */
 	@Override
 	public long file_length() {
-		return getStream(true).file_length();
+		return getStreamTrue().file_length();
 	}
 
 	/** throws exception if isRandomAccess() returns false */
 	@Override
 	public void seek(long pos) {
-		getStream(true).seek(pos);
+		getStreamTrue().seek(pos);
 	}
 
 	@Override
 	public void setIsInteractive(boolean newValue) {
-		getStream(true).setIsInteractive(newValue);
+		getStreamTrue().setIsInteractive(newValue);
 	}
 
 	/*
@@ -131,47 +139,47 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 	/** throws exception if isRandomAccess() returns false */
 	@Override
 	public void setLength(long newLength) {
-		getStream(true).setLength(newLength);
+		getStreamTrue().setLength(newLength);
 	}
 
 	@Override
 	public void setNewline(String newline) {
-		getStream(true).setNewline(newline);
+		getStreamTrue().setNewline(newline);
 	}
 
 	/** Method created to avoid casting */
 	@Override
 	public SubLInputBinaryStream toInputBinaryStream() {
-		return getStream(true).toInputBinaryStream();
+		return getStreamTrue().toInputBinaryStream();
 	}
 
 	/** Method created to avoid casting */
 	@Override
 	public SubLInputStream toInputStream() {
-		return getStream(true).toInputStream();
+		return getStreamTrue().toInputStream();
 	}
 
 	/** Method created to avoid casting */
 	@Override
 	public SubLInputTextStream toInputTextStream() {
-		return getStream(true).toInputTextStream();
+		return getStreamTrue().toInputTextStream();
 	}
 
 	/** Method created to avoid casting */
 	@Override
 	public SubLOutputBinaryStream toOutputBinaryStream() {
-		return getStream(true).toOutputBinaryStream();
+		return getStreamTrue().toOutputBinaryStream();
 	}
 
 	/** Method created to avoid casting */
 	@Override
 	public SubLOutputStream toOutputStream() {
-		return getStream(true).toOutputStream();
+		return getStreamTrue().toOutputStream();
 	}
 
 	@Override
 	public SubLOutputTextStream toOutputTextStream() {
-		return getStream(true).toOutputTextStream();
+		return getStreamTrue().toOutputTextStream();
 	}
 
 	/* (non-Javadoc)
