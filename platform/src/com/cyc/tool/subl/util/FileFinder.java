@@ -1,5 +1,5 @@
 /*
-   This file is part of the LarKC platform 
+   This file is part of the LarKC platform
    http://www.larkc.eu/
 
    Copyright 2010 LarKC project consortium
@@ -40,17 +40,34 @@ public class FileFinder extends SimpleFileVisitor<Path> {
 	Path startingDir;
 	private boolean recurse;
 
-	FileFinder(String pattern, boolean recurse, Consumer<File> method) throws IOException {
+	public FileFinder(String pattern, boolean recurse, Consumer<File> method) throws IOException {
+		this.eachFile = method;
+		this.recurse = recurse;
 		String startingDirString = ".";
-		int lastSlash = pattern.lastIndexOf("/");
-		if (lastSlash > 0) {
-			startingDirString = pattern.substring(0, lastSlash);
-			pattern = pattern.substring(lastSlash + 1);
+		int globcard = pattern.indexOf("**");
+		if (globcard == -1) {
+			int lastSlash = pattern.lastIndexOf("/");
+			if (lastSlash > 0) {
+				startingDirString = pattern.substring(0, lastSlash);
+				pattern = pattern.substring(lastSlash + 1);
+			}
+		} else {
+			this.recurse = true;
+			int lastSlash = pattern.substring(0, globcard).lastIndexOf("/");
+			if (lastSlash > 0) {
+				startingDirString = pattern.substring(0, lastSlash);
+				pattern = pattern.substring(lastSlash + 1);
+			}
+			int nextSlash = pattern.indexOf("/");
+			if (nextSlash > 0) {
+				pattern = pattern.substring(nextSlash + 1);
+			}
+
+			//System.err.println("startingDirString=" + startingDirString);
+			//System.err.println("pattern=" + pattern);
 		}
 
 		startingDir = Paths.get(startingDirString);
-		this.recurse = recurse;
-		eachFile = method;
 		matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
 
 	}

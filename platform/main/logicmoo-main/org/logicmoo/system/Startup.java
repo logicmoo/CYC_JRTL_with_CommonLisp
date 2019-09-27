@@ -512,10 +512,6 @@ public class Startup extends ABCLStatic {
 
 		args = extractMissedDsAndAllegro(args);
 
-		if (!orginalArgs.contains("-cp")) {
-			IsolatedClassLoader.addDefaultJarsToClassPath(getPlatformDir());
-		}
-
 		List<String> av = new ArrayList(Arrays.asList(args));
 
 		Label_argList: do {
@@ -726,12 +722,13 @@ public class Startup extends ABCLStatic {
 			}
 
 			if (!leanABCL) {
-				if (!av.contains("-cp")) {
-					final String baseFrom = System.getProperty("user.dir", ".");
-					to.println("addDefaultJarsToClassPath from " + baseFrom);
-					IsolatedClassLoader.getCommonClassLoader().addDefaultJarsToClassPath(baseFrom);
+				if (!orginalArgs.contains("-cp")) {
+					String from = getPlatformDir();
+					to.println("addDefaultJarsToClassPath from " + from);
+					IsolatedClassLoader.addDefaultJarsToClassPath(from);
 				}
 			}
+
 			if (av.remove("--beanshell")) {
 				extractOptions("--lisp");
 				waitForTermination = true;
@@ -1328,7 +1325,6 @@ public class Startup extends ABCLStatic {
 		}
 		SystemCurrent.recheckStdIO();
 	}
-
 
 	// Breakpoint to set in IDE
 	public static void bug() {
@@ -2451,14 +2447,27 @@ public class Startup extends ABCLStatic {
 	// TODO decide if we should care about CloassLoader context
 	static HashSet scannedforExport = new HashSet();
 
+	public static void scanForExports(String className) {
+		Class<?> c;
+		try {
+			c = Class.forName(className);
+			scanForExports(c);
+		} catch (ClassNotFoundException e) {
+			getNoticeStream().println(";; WARN: scanForExports did not find: " + className);
+		} catch (Throwable e) {
+			uncaughtException(e);
+		}
+	}
+
 	public static void scanForExports(Class clz) {
 		if (clz == Object.class || clz == null)
 			return;
 		synchronized (scannedforExport) {
-			if (scannedforExport.contains(clz)) {
+			final String name = clz.getName();
+			if (scannedforExport.contains(name)) {
 				return;
 			}
-			scannedforExport.add(clz);
+			scannedforExport.add(name);
 		}
 
 		for (java.lang.reflect.Method m : clz.getDeclaredMethods()) {
@@ -3355,13 +3364,7 @@ public class Startup extends ABCLStatic {
 	 */
 	public static void registerForiegnMethods() {
 		scanForExports(BeanShellCntrl.class);
-		Class<?> forName;
-		try {
-			forName = Class.forName("CycNER");
-			scanForExports(forName);
-		} catch (Throwable e) {
-			uncaughtException(e);
-		}
+		scanForExports("CycNER");
 
 	}
 

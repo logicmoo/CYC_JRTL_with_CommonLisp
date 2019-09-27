@@ -171,48 +171,14 @@ public class IsolatedClassLoader extends URLClassLoader {
 			//	"./lib/jsp/*.jar", "./lib/jetty-libs/*.jar",
 			//"./lib/jetty-libs/*v20190813.jar",
 			//"./lib/larkc/*.jar", //
-			"./lib/all-deps/", //
-			//"./lib/*.jar"
-	};
+			"${platform}/lib/*.jar", //
+			"${platform}/dist/*-*.jar", //
+			"${platform}/lib/all-deps/", //
+			"${platform}/data/parsers/**/*.jar", };
 
 	static public void addDefaultJarsToClassPath(String LARKC_HOME) {
-		ArrayList<File> al = new ArrayList();
-		Consumer<File> foo = new Consumer<File>() {
-
-			@Override
-			public void accept(File t) {
-				t = normalizedFile(t);
-				if (!isSkipped(t)) {
-					if (!al.contains(t))
-						al.add(t);
-				}
-			}
-		};
 		for (String s : larkcDefaultJarFiles) {
-			final File file = new File(s);
-			if (file.isDirectory()) {
-				addCommonClassPath(file);
-				continue;
-			}
-			if (false && s.startsWith(".")) {
-				if (!file.exists()) {
-					s = LARKC_HOME + s.substring(1);
-				}
-			}
-
-			try {
-				if (s.contains("*")) {
-
-					new FileFinder(s, false, foo).doFiles();
-				} else
-					foo.accept(normalizedFile(file));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				uncaughtException(e);
-			}
-		}
-		for (File f : al) {
-			addCommonClassPath(f);
+			addCommonClassPath(s.replace("${platform}", LARKC_HOME));
 		}
 	}
 
@@ -444,7 +410,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			if (isCompilationUnit(s)) {
 				try {
 					if (defineClasses)
-						addClassFile(jfile);
+						theIsolatedClassLoader.addClassFile(lcl, jfile);
 				} catch (Exception e) {
 					Errors.error("Error while loading inner classes for: " + jfile, e);
 				}
@@ -479,7 +445,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		}
 	}
 
-	public Class addClassFile(File jfile) throws IOException, ClassNotFoundException {
+	public Class addClassFile(ClassLoader lcl, File jfile) throws IOException, ClassNotFoundException {
 		Class c = loadClassFile(jfile);
 		String className = c.getName();
 		String simpleName = c.getSimpleName();
@@ -494,7 +460,12 @@ public class IsolatedClassLoader extends URLClassLoader {
 
 	static public void addCommonClassPath(String stringTyped) {
 		ClassLoader lcl = getSystemClassLoader();
-		theIsolatedClassLoader.addCode(lcl, stringTyped, false);
+		try {
+			theIsolatedClassLoader.addCode(lcl, stringTyped, false);
+		} catch (IOException e) {
+			Startup.uncaughtException(e);
+			e.printStackTrace();
+		}
 	}
 
 	static public void addCommonClassPath(URL stringTyped) {
@@ -543,7 +514,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		}
 	}
 
-	public void addCode(ClassLoader lcl, String stringTyped, boolean loadNow) {
+	public static void addCode(ClassLoader lcl, String stringTyped, boolean loadNow) throws IOException {
 		stringTyped = org.logicmoo.system.Startup.unquote(stringTyped);
 		if (stringTyped.contains(";")) {
 			for (String s : stringTyped.split(";")) {
@@ -551,6 +522,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			}
 			return;
 		}
+
 		int indexOf = stringTyped.indexOf(":");
 		if (indexOf > 6) {
 			for (String s : stringTyped.split(":")) {
@@ -559,6 +531,21 @@ public class IsolatedClassLoader extends URLClassLoader {
 			return;
 		}
 		stringTyped = org.logicmoo.system.Startup.unquote(stringTyped);
+
+		if (stringTyped.contains("*")) {
+			new FileFinder(stringTyped, false, (t) -> {
+				t = normalizedFile(t);
+				if (!isSkipped(t)) {
+					try {
+						addCode(lcl, t.getAbsolutePath(), loadNow);
+					} catch (IOException e) {
+						Startup.uncaughtException(e);
+					}
+				}
+			}).doFiles();
+			return;
+		}
+
 		URL url;
 		do_more: do {
 			if (stringTyped.startsWith("file:")) {
@@ -608,7 +595,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 				}
 			else if (isCompilationUnit(stringTyped))
 				try {
-					addClassFile(jfile);
+					theIsolatedClassLoader.addClassFile(lcl, jfile);
 				} catch (Throwable e3) {
 					Errors.error("Error accessing classfile: " + stringTyped, e3);
 				}
@@ -682,11 +669,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 			scanFiles(lcl, jfiles[i], false, true);
 	}
 
-	public void addJar(ClassLoader lcl, File jfile, boolean loadNow) throws IOException {
+	static public void addJar(ClassLoader lcl, File jfile, boolean loadNow) throws IOException {
 		jfile = normalizedFile(jfile);
 		final URL url = jfile.toURI().toURL();
 		ArrayList<String> classFileList = new ArrayList<String>();
-		addURL(url);
+		addURLToClassloader("addJar", lcl, url);
 		if (!loadNow)
 			return;
 		//CodeSource src =  getProtectionDomain().getCodeSource();
@@ -725,7 +712,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		return cn;
 	}
 
-	public void addJarClass(ClassLoader lcl, File jfile, String className) throws IOException {
+	static public void addJarClass(ClassLoader lcl, File jfile, String className) throws IOException {
 		try {
 			//
 			jfile = normalizedFile(jfile);
@@ -745,7 +732,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		return;
 	}
 
-	public void addJarClass(ClassLoader lcl, URL FileSysUrl, String className) throws IOException {
+	static public void addJarClass(ClassLoader lcl, URL FileSysUrl, String className) throws IOException {
 		try {
 
 			// Create a jar URL connection object
@@ -788,11 +775,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 			}
 			InputStream is = jarURLConn.getInputStream();
 			byte[] byteArray = toByteArray(is);
-			Class c = defineClass(null, byteArray, 0, byteArray.length);
+			Class c = theIsolatedClassLoader.defineClass(null, byteArray, 0, byteArray.length);
 			if (className == null) {
 				className = c.getName();
 			}
-			loadedAlready.put(className, c);
+			theIsolatedClassLoader.loadedAlready.put(className, c);
 		} catch (MalformedURLException e) {
 			uncaughtException(e);
 		} catch (IOException e) {
@@ -814,7 +801,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * @return
 	 * @throws MalformedURLException
 	 */
-	public URL jarFileClassURL(File jfile, String className) throws MalformedURLException {
+	static public URL jarFileClassURL(File jfile, String className) throws MalformedURLException {
 		jfile = normalizedFile(jfile);
 		String classfileName = className.replace('.', File.separatorChar);
 		if (classfileName.length() > 0) {
@@ -849,7 +836,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		Startup.getNoticeStream().printf(s, a);
 	}
 
-	private byte[] toByteArray(InputStream inputStream) throws IOException {
+	static private byte[] toByteArray(InputStream inputStream) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		int read;
 		byte[] byteArray = new byte[1024];
