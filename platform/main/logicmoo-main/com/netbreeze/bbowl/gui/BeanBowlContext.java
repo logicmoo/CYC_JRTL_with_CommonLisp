@@ -24,7 +24,7 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
 import org.armedbear.lisp.Lisp;
-import org.logicmoo.bb.BeanBowl;
+import org.logicmoo.bb.TrackedObjects;
 import org.logicmoo.bb.BeanWrapper;
 import org.logicmoo.bb.BeansContext;
 import org.logicmoo.bb.BeansContextListener;
@@ -64,7 +64,7 @@ public class BeanBowlContext implements BeansContext {
 
 	// ==== Property getters and setters ==================
 
-	public BeanBowl getBowl() {
+	public TrackedObjects getBowl() {
 		return gui.getBowl();
 	}
 

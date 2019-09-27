@@ -17,12 +17,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import javax.swing.event.InternalFrameEvent;
 
 import org.armedbear.j.Log;
 import org.armedbear.j.ReaderThread;
@@ -68,6 +71,8 @@ public class BeanShellCntrl extends Startup {
 	//	final private static ScriptEngine nashorn = scriptEngineManager.getEngineByName("nashorn");
 
 	private static boolean hasAppdapter;
+	private static Map frameMap;
+	private static JPopupMenu popupMenu;
 
 	public static void main(String[] args0) throws Throwable {
 		try {
@@ -87,6 +92,53 @@ public class BeanShellCntrl extends Startup {
 		SystemCurrent.setupIO();
 	}
 
+	public static void internalFrameClosing(InternalFrameEvent v1, Map v2, This v3) throws EvalError {
+		v1.getID();
+		v1.getSource();
+		v1.getInternalFrame();
+		v1.paramString();
+		if (v2.size() == 1) {
+			ensureBSH().eval("makeWorkspace()");
+		}
+	}
+
+	static {
+		final BeansContextListener desktopListener = new BeansContextListener() {
+
+			@Override
+			public void beanRemoved(String named, Object obj) {
+
+			}
+
+			@Override
+			public void beanAdded(String named, Object value) {
+				try {
+					if (value instanceof This) {
+						final boolean isDesktop = named != null && named.equals("bsh_desktop");
+						if (isDesktop)
+							BeanShellCntrl.addBshDeskTop((This) value, isDesktop);
+					}
+				} catch (Throwable e) {
+					uncaughtException(e);
+				}
+			}
+		};
+		bowl.addListener(desktopListener);
+	}
+
+	public static void addBshDeskTop(This desk, boolean doSets) throws UtilEvalError {
+		final NameSpace nameSpace = desk.getNameSpace();
+		if (doSets) {
+			frameMap = (Map) nameSpace.getVariable("frameMap");
+			desktop_pain_object_instance = (Container) nameSpace.getVariable("pane");
+			popupMenu = (JPopupMenu) nameSpace.getVariable("popup");
+		}
+		for (bsh.Variable v : nameSpace.getDeclaredVariables()) {
+			System.err.println(v.toString());
+		}
+
+	}
+
 	public static void addConsole(bsh.This thiz, final JConsole console) throws UtilEvalError, EvalError, InterruptedException, IOException {
 		final NameSpace nameSpace = thiz.getNameSpace();
 		String myName = null;
@@ -103,7 +155,7 @@ public class BeanShellCntrl extends Startup {
 				//				SystemCurrent.cantSetOut = true;
 				//				//	SystemCurrent.originalSystemIn = console.getInputStream();
 				//				SystemCurrent.addErrorTee(console.getErr());
-				SystemCurrent.registerAsInteractive(myName, console.getInputStream(), console.getOut(), console.getErr());
+				SystemCurrent.registerAsInteractive(myName, false, console.getInputStream(), console.getOut(), console.getErr());
 				maybeCapture(thiz);
 			} else if (myNameL.startsWith("bsh workspace")) {
 				standardConsoleImports(nameSpace);
@@ -123,7 +175,7 @@ public class BeanShellCntrl extends Startup {
 				//				SystemCurrent.originalSystemIn = console.getInputStream();
 				//				SystemCurrent.originalSystemErr = console.getErr();
 				//				maybeCapture(thiz);
-				SystemCurrent.registerAsInteractive(myName, console.getInputStream(), console.getOut(), console.getErr());
+				SystemCurrent.registerAsInteractive(myName, true, console.getInputStream(), console.getOut(), console.getErr());
 				maybeCapture(thiz);
 			} else if (myNameL.contains("prolog")) {
 				/// console.setNameCompletion(new LispNameCompletion());
@@ -408,7 +460,7 @@ public class BeanShellCntrl extends Startup {
 			}
 			return pane;
 		} catch (Exception e) {
-			MsgBox.error(e);
+			uncaughtException(e);
 		}
 		return null;
 	}
@@ -424,7 +476,7 @@ public class BeanShellCntrl extends Startup {
 					bshInterpreter.set("conns", shells);
 					SystemCurrent.recheckStdIO();
 				} catch (Throwable e) {
-					Debug.printStackTrace(e);
+					uncaughtException(e);
 				}
 			}
 			return bshInterpreter;
@@ -484,6 +536,7 @@ public class BeanShellCntrl extends Startup {
 			try {
 				return object_to_term(invokeFromProlog);
 			} catch (StackOverflowError e) {
+				uncaughtException(e);
 				throw new JPLException("Stack Overflow!");
 			}
 		}
@@ -508,7 +561,7 @@ public class BeanShellCntrl extends Startup {
 			if (!wasNoDebug) {
 				setNoDebug(false);
 			}
-			printStackTrace(t);
+			uncaughtException(t);
 			System.err.println("" + t.getMessage());
 			if (t instanceof JPLException) {
 				throw (JPLException) t;
@@ -558,7 +611,8 @@ public class BeanShellCntrl extends Startup {
 		try {
 			invoke(demoBrowserClass(), "showObject", o);
 		} catch (EvalError e) {
-			uncaughtException(e);;
+			uncaughtException(e);
+			;
 			throw new RuntimeException(e);
 		}
 	}
@@ -597,7 +651,7 @@ public class BeanShellCntrl extends Startup {
 				invokeDemoBrowser("testLoggingSetup();");
 				invokeDemoBrowser("setLoggerTo(java.util.logging.Level.ALL);");
 			} catch (Throwable e1) {
-				// e1.printStackTrace();
+				// e1.uncaughtException();
 				// TODO Auto-generated catch block
 				// MsgBox.error(e1);
 			}
@@ -651,7 +705,7 @@ public class BeanShellCntrl extends Startup {
 				try {
 					o = Class.forName((String) o);
 				} catch (ClassNotFoundException e) {
-					printStackTrace(e);
+					uncaughtException(e);
 					throw new RuntimeException(e);
 				}
 			}
@@ -670,11 +724,11 @@ public class BeanShellCntrl extends Startup {
 			throw new RuntimeException(e.getCause());
 		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
-			printStackTrace(e);
+			uncaughtException(e);
 			throw new RuntimeException(e);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
-			printStackTrace(e);
+			uncaughtException(e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -692,14 +746,8 @@ public class BeanShellCntrl extends Startup {
 		} else
 			console = console0;
 		console.setNameCompletion(new LispNameCompletion());
-		String canonicalPath = "/.";
-		try {
-			canonicalPath = new File(canonicalPath).getCanonicalPath();
-		} catch (IOException e) {
-			canonicalPath = new File(canonicalPath).getAbsolutePath();
-		}
+
 		final boolean firstInstance = (lispInstances.get() == 0);
-		final String fcanonicalPath = canonicalPath;
 		//passedArgs = new String[] {}; // "--load", "cyc"
 		//final String[] args = passedArgs;
 		SafeRunnable r = new SafeRunnable() {
@@ -707,16 +755,10 @@ public class BeanShellCntrl extends Startup {
 			@Override
 			public void safeRun() {
 				final InputStream inputStream = console.getInputStream();
-				org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter. //
-				createNewLispInstance(inputStream, console.getOut(), //
-						fcanonicalPath, Version.getVersion(), jlisp_requested, passedArgs, firstInstance);
-
-				if (firstInstance || noticeStream == null) {
-					noticeStream = console.getErr();
-					//					interp.addPreInit(0, () -> {
-					//						noticeStream = console.getErr();
-					//					});
-				}
+				final PrintStream outputStream = console.getOut();
+				SystemCurrent.registerAsInteractive(myName, true, inputStream, outputStream, console.getErr());
+				SystemCurrent.currentIO().setOut(outputStream);
+				org.armedbear.lisp.Interpreter interp = new_lisp_instance();
 				interp.run();
 			}
 		};

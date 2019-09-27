@@ -87,7 +87,7 @@ public class PatchFileLoader extends ClassLoader {
 	private Map<String, Class> classNameToClassMap;
 	public static ClassLoader PATCH_FILE_LOADER;
 	static {
-		PATCH_FILE_LOADER = PatchFileLoader.class.getClassLoader();
+		PATCH_FILE_LOADER = IsolatedClassLoader.theIsolatedClassLoader; // PatchFileLoader.class.getClassLoader();
 	}
 
 	@Override

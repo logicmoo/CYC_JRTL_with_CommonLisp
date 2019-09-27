@@ -76,6 +76,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.armedbear.j.Editor;
 import org.armedbear.j.JLisp;
@@ -122,7 +123,8 @@ import org.jpl7.Term;
 import org.jpl7.Variable;
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
-import org.logicmoo.bb.BeanBowl;
+import org.logicmoo.bb.BeansContextListener;
+import org.logicmoo.bb.TrackedObjects;
 
 import com.cyc.cycjava.cycl.constant_completion_high;
 import com.cyc.cycjava.cycl.constant_completion_low;
@@ -169,6 +171,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 import bsh.FileReader;
 import bsh.NameSpace;
+import bsh.This;
 import bsh.util.Sessiond;
 import eu.larkc.core.orchestrator.servers.LarKCHttpServer;
 import net.wimpi.telnetd.TelnetD;
@@ -267,7 +270,7 @@ public class Startup extends ABCLStatic {
 	// CYC needs ABCLs Argument Processor to run
 	public static boolean abclProcessArgs = true;
 	// ABCL has imported limited CYC functions
-	public static boolean status_cl_sees_cyc_began;
+	public static boolean began_cl_sees_cyc;
 	// Use CYC Error Handlers/Threading by default (This becomes true as CYC loads)
 	public static boolean isSublispDefault = false;
 	// Initialize SubL (This becomes true)
@@ -281,7 +284,7 @@ public class Startup extends ABCLStatic {
 	// Assume (init-cyc) has happened
 	public static boolean began_load_cyc_classes;
 	// Assume CYC has imported the CL
-	public static boolean status_cyc_sees_cl_began;
+	public static boolean began_cyc_sees_cl;
 	// System is ready to load KB
 	public static boolean finished_load_cyc_classes;
 	// World files mentioned on cmdline
@@ -523,6 +526,9 @@ public class Startup extends ABCLStatic {
 			if (av.remove("--guij")) {
 				guiJRequested = true;
 			}
+			if (av.remove("--jgui")) {
+				guiJRequested = true;
+			}
 
 			if (av.remove("--all")) {
 				pushNew(av, "--rcyc");
@@ -617,6 +623,11 @@ public class Startup extends ABCLStatic {
 			if (av.remove("--main-thread")) {
 				Main.useMainThread = true;
 			}
+
+			if (av.contains("--j")) {
+				Main.jlisp_requested = true;
+			}
+
 			if (av.remove("--nomain-thread")) {
 				Main.useMainThread = false;
 			}
@@ -721,14 +732,6 @@ public class Startup extends ABCLStatic {
 				noPrologJNI = false;
 			}
 
-			if (!leanABCL) {
-				if (!orginalArgs.contains("-cp")) {
-					String from = getPlatformDir();
-					to.println("addDefaultJarsToClassPath from " + from);
-					IsolatedClassLoader.addDefaultJarsToClassPath(from);
-				}
-			}
-
 			if (av.remove("--beanshell")) {
 				extractOptions("--lisp");
 				waitForTermination = true;
@@ -748,14 +751,6 @@ public class Startup extends ABCLStatic {
 				noExit = false;
 			}
 
-			if (!leanABCL) {
-				try {
-					IsolatedClassLoader.configChecks();
-				} catch (Throwable e) {
-					printStackTrace(e);
-				}
-			}
-
 			break;
 		} while (true);
 
@@ -765,7 +760,7 @@ public class Startup extends ABCLStatic {
 			final java.io.File file = new java.io.File(argsNew[0]);
 			if (file.exists() && file.isFile() && file.canRead()) {
 				av = new ArrayList<String>(Arrays.asList(argsNew));
-				pushNew(av, "--load");
+				av.add(0, "--load");
 				argsNew = av.toArray(StringArrayZero);
 			}
 		}
@@ -774,6 +769,21 @@ public class Startup extends ABCLStatic {
 
 		try {
 			if (!leanABCL) {
+
+				if (!leanABCL) {
+
+					if (!orginalArgs.contains("-cp")) {
+						String from = getPlatformDir();
+						to.println("addDefaultJarsToClassPath from " + from);
+						IsolatedClassLoader.addDefaultJarsToClassPath(from);
+					}
+
+					try {
+						IsolatedClassLoader.configChecks();
+					} catch (Throwable e) {
+						printStackTrace(e);
+					}
+				}
 				if (!noExtraServers)
 					startServers(0);
 			}
@@ -787,15 +797,7 @@ public class Startup extends ABCLStatic {
 			useBeanDeskGUI = FeatureStatus.Begun;
 			needIOConsole = false;
 
-		} else if (needIOConsole) {
-
-			if (!leanABCL) {
-				//SystemCurrent.setupIO();
-				//SystemCurrent.attachConsole(true);
-				//SystemCurrent.takeOwnerShip();
-			}
 		}
-
 		if (mainClass != null) {
 			try {
 				Class c = null;
@@ -832,7 +834,20 @@ public class Startup extends ABCLStatic {
 
 			Runtime.getRuntime().removeShutdownHook(shutdownhook);
 		}
+		if (needIOConsole) {
 
+			if (!leanABCL) {
+				Interpreter interpreter = init_lisp();
+				interpreter.init();
+				registerForiegnMethods();
+				interpreter.TOP_LEVEL_LOOP = (Symbol) Lisp.PACKAGE_CYC.findSymbol("CYC-REPL");
+				interpreter.tplFun = interpreter.TOP_LEVEL_LOOP.getSymbolFunctionOrDie();
+				//SystemCurrent.setupIO();
+				//SystemCurrent.attachConsole(true);
+				//SystemCurrent.takeOwnerShip();
+				needIOConsole = true;
+			}
+		}
 		while (waitForTermination) {
 			try {
 				Thread.sleep(1000);
@@ -1071,7 +1086,7 @@ public class Startup extends ABCLStatic {
 		}
 	};
 
-	public static BeanBowl bowl = new BeanBowl();
+	public static TrackedObjects bowl = new TrackedObjects();
 
 	public static boolean began_ui_inspector = false;
 	public static Object ui_inspector_object_instance = null;
@@ -1132,14 +1147,13 @@ public class Startup extends ABCLStatic {
 
 	@LispMethod
 	public static void cl_imports_cyc() {
-		if (true)
-			return;
+		// if (true) return;
 		if (SubLMain.Never_REDEFINE)
 			return;
 		synchronized (StartupLock) {
-			if (status_cl_sees_cyc_began)
+			if (began_cl_sees_cyc)
 				return;
-			status_cl_sees_cyc_began = true;
+			began_cl_sees_cyc = true;
 			// if(true) return ;
 			// SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
 			Lisp.PACKAGE_SYS.ALLOW_INHERIT_CONFLICTS = true;
@@ -1155,7 +1169,7 @@ public class Startup extends ABCLStatic {
 			PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, true);
 			PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CYC, true);
 			PACKAGE_CL_USER.addNickname("USER");
-			PACKAGE_CL_USER.addNickname("U");
+			//PACKAGE_CL_USER.addNickname("U");
 			// PACKAGE_SUBLISP.usePackage(PACKAGE_CL, true);
 		}
 	}
@@ -1171,9 +1185,9 @@ public class Startup extends ABCLStatic {
 		if (SubLMain.Never_REDEFINE)
 			return;
 		synchronized (StartupLock) {
-			if (status_cyc_sees_cl_began)
+			if (began_cyc_sees_cl)
 				return;
-			status_cyc_sees_cl_began = true;
+			began_cyc_sees_cl = true;
 			// PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
 			// PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, false);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_JAVA, true);
@@ -1218,8 +1232,8 @@ public class Startup extends ABCLStatic {
 			lispInstance = init_lisp();
 		} else {
 			lispInstance = Interpreter. //
-					createNewLispInstance(inputStream, outputStream, //
-							new File(".").getAbsolutePath() + "/", Version.getVersion(), //
+					createNewLispInstanceNoInit(inputStream, outputStream, //
+							"./", Version.getVersion(), //
 							false, null, false);
 		}
 		lispInstance.init();
@@ -1255,7 +1269,7 @@ public class Startup extends ABCLStatic {
 						final OutputStream outputStream = SystemCurrent.mustOut();
 
 						Interpreter interp = Interpreter. //
-								createNewLispInstance(inputStream, outputStream, //
+								createNewLispInstanceNoInit(inputStream, outputStream, //
 										fcanonicalPath, Version.getVersion(), jlisp_requested, //
 										passedArgs, firstInstance);
 
@@ -1375,6 +1389,7 @@ public class Startup extends ABCLStatic {
 	}
 
 	public static String addObject(String named, Object value) {
+
 		return addObject(named, value, false);
 	}
 
@@ -1842,7 +1857,7 @@ public class Startup extends ABCLStatic {
 	}
 
 	@LispMethod
-	public static BeanBowl getBowl() {
+	public static TrackedObjects getBowl() {
 		return bowl;
 	}
 
@@ -1937,6 +1952,7 @@ public class Startup extends ABCLStatic {
 		synchronized (StartupInitLock) {
 			began_load_kb = true;
 			UpdateZip.updateUnits("7166");
+			SubLMain.commonSymbolsOK = true;
 			subl_preserve_pkg(true, true, () -> {
 				load_cyc();
 				if (!hasCycCmdlineInits) {
@@ -1999,8 +2015,8 @@ public class Startup extends ABCLStatic {
 					uncaughtException(e);
 					te = e;
 				}
-				if (!cycPart2Early)
-					init_cyc_classes_part2();
+				//if (!cycPart2Early)
+				init_cyc_classes_part2();
 				try {
 					cyc_server_running_cdl.countDown();
 					PrologSync.setPrologReady(true);
@@ -3349,6 +3365,8 @@ public class Startup extends ABCLStatic {
 			// Lisp.exit(status);
 			return;
 		}
+		if (SwingUtilities.isEventDispatchThread())
+			return;
 		shutdownRequested = Thread.currentThread();
 		System.exit(status);
 		// TODO Auto-generated method stub

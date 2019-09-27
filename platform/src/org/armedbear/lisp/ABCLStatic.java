@@ -13,9 +13,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 
 abstract public class ABCLStatic {
-	static {
-		SystemCurrent.setupIO();
-	}
+	//	static {
+	//		SystemCurrent.setupIO();
+	//	}
 
 	@LispMethod
 	public static <T> T subl_preserve_pkg(final boolean clOrSubL, boolean keepPackage, final Callable<T> str) {

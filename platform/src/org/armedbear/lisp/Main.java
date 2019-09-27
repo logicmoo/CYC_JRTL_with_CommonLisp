@@ -56,7 +56,8 @@ public final class Main extends Startup {
 				Editor.main(prependArgs("--no-session", prependArgs("--force-new-instance", argsNew)));
 
 			} else if (needIOConsole) {
-				Runnable t = Interpreter.createDefaultInstance(argsNew);
+				Interpreter.createDefaultInstance(argsNew);
+				Runnable t = Interpreter.getInstance();
 				runThread(t);
 			}
 

@@ -97,6 +97,7 @@ sdesktop()
 		iframeListener=new javax.swing.event.InternalFrameListener() {
 
 			internalFrameClosing(ife) {
+				org.logicmoo.system.BeanShellCntrl.internalFrameClosing(ife,frameMap,this);
 				for(e:new Hashtable(frameMap).entrySet()) {
 					if(e.value.equals(ife.source)) {
 						taskBar.remove(e.key);
@@ -168,14 +169,14 @@ sdesktop()
 			if(c.contains("workspace")) makeWorkspace( ""+ super.windowCount++);
 			else if(c.contains("subl")) embedComponent(new com.cyc.tool.subl.ui.SubLReaderPanel(com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment.currentEnvironment()) , "SubLisp Console: "+ super.windowCount++);
 			else if(c.contains("lisp")) makeConsole( "Lisp Console: "+ super.windowCount++);
-			else if(c.contains("class browser")) classBrowser();			
+			else if(c.contains("class browser")) classBrowser();
 		}
 		else if	( c.equals("save workspace") )
 			JOptionPane.showInternalMessageDialog( pane, "Unimplemented" );
 		else if	( c.equals("exit") )
 			shutdown();
 	}
-	
+
 	this.pane = org.logicmoo.system.BeanShellCntrl.findDesktopPane(this);
 
 	if(this.pane==null || this.pane==void) {
@@ -194,19 +195,19 @@ sdesktop()
 	mi=new JMenuItem("Save Workspace");
 	mi.addActionListener(this);
 	popup.add( mi );
-	
+
 	mi=new JMenuItem("New SubLisp Thread");
 	mi.addActionListener(this);
 	popup.add( mi );
-	
+
 	mi=new JMenuItem("New Prolog Thread");
 	mi.addActionListener(this);
 	popup.add( mi );
-	
+
 	mi=new JMenuItem("New Lisp Thread");
 	mi.addActionListener(this);
 	popup.add( mi );
-	
+
 	mi=new JMenuItem("Exit");
 	mi.addActionListener(this);
 	popup.add( mi );
@@ -216,7 +217,7 @@ sdesktop()
 	if(this.frame==null || this.frame==void)
 	 {
 	   this.frame=new JFrame("BeanShell Desktop 1.1s");
-	   	
+
         com.netbreeze.util.Utility.centerWindow(this.frame);
 		JPanel stage=new JPanel(new BorderLayout());
 		stage.add(pane);
@@ -235,7 +236,7 @@ sdesktop()
 	/*
 		If available, add a listener for classpath mapping
 		I'm planning to implement a GUI progress indicator here
-  
+
 	if ( Capabilities.canGenerateInterfaces() )
 	{
 		import bsh.classpath.BshClassPath;
@@ -250,7 +251,7 @@ sdesktop()
 	}
 
 	 */
-	
+
 
 	// start one terminal
 	workSpace=makeWorkspace( ""+windowCount++	);
@@ -269,13 +270,13 @@ sdesktop()
 
 	frame.toFront();
 	workSpace.frame.selected=true;
-	
+
 	// start next terminal
 	// makeConsole( "Lisp Console: "+windowCount++	);
-	
+
 	//if(!org.logicmoo.system.BeanShellCntrl.noInitCyc) actNow("new subl");
 
 	//if(!org.logicmoo.system.BeanShellCntrl.noProlog)  actNow("new prolog");
+    org.logicmoo.system.BeanShellCntrl.addObject("bsh_desktop",this);
 
-	
 }

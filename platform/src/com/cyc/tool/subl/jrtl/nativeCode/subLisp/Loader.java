@@ -290,7 +290,7 @@ public class Loader {
 				SubLPackage.setCurrentPackage("CYC");
 			SubLFiles.originalFileClassName = className;
 			try {
-				final ClassLoader pATCH_FILE_LOADER = PatchFileLoader.PATCH_FILE_LOADER;
+				final ClassLoader pATCH_FILE_LOADER = IsolatedClassLoader.theIsolatedClassLoader;// PatchFileLoader.PATCH_FILE_LOADER;
 				Class clazz = findClassOrNearby(className, pATCH_FILE_LOADER, isExact);
 				initialize_subl_file(clazz);
 				removeAgain = false;
@@ -319,6 +319,7 @@ public class Loader {
 	 */
 	private static Class findClassOrNearby(String className, final ClassLoader pATCH_FILE_LOADER, boolean isExact) throws ClassNotFoundException {
 		Class clazz = null;
+		eu.cyc.sparql.server.Sparql foo = null;
 		try {
 			if (clazz == null)
 				clazz = pATCH_FILE_LOADER.loadClass(className);

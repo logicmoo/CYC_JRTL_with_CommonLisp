@@ -46,7 +46,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
  * @see BeanWrapper
  * @author Henrik Kniberg
  */
-public class BeanBowl implements VetoableChangeListener, PropertyChangeListener, Serializable {
+public class TrackedObjects implements VetoableChangeListener, PropertyChangeListener, Serializable {
 	// ==== Static variables ===================
 	// private static Category cat = Category.getInstance(BeanBowl.class);
 
@@ -74,7 +74,7 @@ public class BeanBowl implements VetoableChangeListener, PropertyChangeListener,
 	// ============ Constructors
 	// ==================================================
 
-	public BeanBowl() {
+	public TrackedObjects() {
 	}
 
 	// ==== Manipulating the collection of beans ==================
@@ -529,10 +529,10 @@ public class BeanBowl implements VetoableChangeListener, PropertyChangeListener,
 		Errors.showMessageOnErrorStream("Successfully saved!");
 	}
 
-	static public BeanBowl load(File source) throws IOException, ClassNotFoundException {
+	static public TrackedObjects load(File source) throws IOException, ClassNotFoundException {
 		FileInputStream fileIn = new FileInputStream(source);
 		ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-		BeanBowl b = (BeanBowl) objectIn.readObject();
+		TrackedObjects b = (TrackedObjects) objectIn.readObject();
 		fileIn.close();
 
 		b.initAfterLoading();

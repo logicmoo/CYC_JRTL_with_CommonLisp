@@ -1,7 +1,8 @@
 /* For LarKC */
 package com.cyc.tool.subl.util;
 
-import static org.logicmoo.system.Startup.*;
+import static org.logicmoo.system.Startup.uncaughtException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -17,18 +18,14 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLConnection;
-import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -40,7 +37,6 @@ import org.armedbear.lisp.JavaClassLoader;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Main;
 import org.logicmoo.system.Startup;
-import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
@@ -77,7 +73,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		parentClassLoader = IsolatedClassLoader.class.getClassLoader();
 		try {
 			modpatch1 = normalizedFile(new File("lib/java.desktop.modpatch-1.jar")).toURL();
-			if (!Main.noinform) {
+			if (!Startup.noinform) {
 				String lcl = System.getProperty("java.system.class.loader", null);
 				System.out.println("java.system.class.loader=" + lcl);
 			}
@@ -89,7 +85,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 	}
 
 	volatile public static IsolatedClassLoader theIsolatedClassLoader = new IsolatedClassLoader();
+	static {
+		PatchFileLoader.PATCH_FILE_LOADER = theIsolatedClassLoader;
+	}
 
+	@Override
 	public String toString() {
 		//com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider
 		// javax.ws.rs.ext.MessageBodyReader
@@ -102,13 +102,13 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 *
 	 */
 	public void checkForlderOverride() {
-		ClassLoader lcl = getSystemClassLoader();
+		ClassLoader lcl = ClassLoader.getSystemClassLoader();
 		try {
 			Method method = getDeclaredMethod(lcl.getClass(), "loadClass", String.class, boolean.class);
 			method.setAccessible(true);
 			Class psfm1 = parentClassLoader.loadClass("sun.awt.shell.PublicShellFolderManager");
 			Class psfm0 = (Class) method.invoke(lcl, "sun.awt.shell.ShellFolderManager", true);
-			Class psfm2 = loadClass("sun.awt.shell.PublicShellFolderManager", true);
+			Class psfm2 = this.loadClass("sun.awt.shell.PublicShellFolderManager", true);
 			if (psfm1 != psfm2) {
 				Thread.dumpStack();
 			}
@@ -116,20 +116,20 @@ public class IsolatedClassLoader extends URLClassLoader {
 				Thread.dumpStack();
 			}
 		} catch (Throwable e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		}
 	}
 
 	public IsolatedClassLoader() {
 		super(new URL[0], parentClassLoader);
 		safeToGetSystemClassLaoder = true;
-		outerNames = new ArrayList<String>();
+		this.outerNames = new ArrayList<String>();
 		theIsolatedClassLoader = this;
-		blockedNames = new ArrayList<String>();
-		loadedAlready = new HashMap<String, Class>();
+		this.blockedNames = new ArrayList<String>();
+		this.loadedAlready = new HashMap<String, Class>();
 		if (false) {
-			addURL(modpatch1);
-			checkForlderOverride();
+			this.addURL(modpatch1);
+			this.checkForlderOverride();
 		}
 	}
 
@@ -143,19 +143,19 @@ public class IsolatedClassLoader extends URLClassLoader {
 			method.invoke(pcl, modpatch1);
 			System.out.println("parent of java.system.class.loader=" + pcl);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		}
 		System.out.println("parentClassLoader=" + parentClassLoader);
 		final Thread currentThread = Thread.currentThread();
 		System.out.println("getContextClassLoader=" + currentThread.getContextClassLoader());
 		currentThread.setContextClassLoader(this);
-		outerNames = new ArrayList<String>();
+		this.outerNames = new ArrayList<String>();
 		theIsolatedClassLoader = this;
-		blockedNames = new ArrayList<String>();
-		loadedAlready = new HashMap<String, Class>();
-		addURL(modpatch1);
+		this.blockedNames = new ArrayList<String>();
+		this.loadedAlready = new HashMap<String, Class>();
+		this.addURL(modpatch1);
 		if (false) {
-			checkForlderOverride();
+			this.checkForlderOverride();
 		}
 	}
 
@@ -230,7 +230,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		if (classLoader instanceof URLClassLoader) {
 			return classLoader;
 		}
-		classLoader = IsolatedClassLoader.mightSystemClassLoader();
+		classLoader = mightSystemClassLoader();
 		if (traceSearch)
 			println("Checking System Classloader: " + classLoader);
 		if (classLoader instanceof URLClassLoader) {
@@ -259,7 +259,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 
 	private static ClassLoader mightSystemClassLoader() {
 		if (safeToGetSystemClassLaoder)
-			return getSystemClassLoader();
+			return ClassLoader.getSystemClassLoader();
 		return null;
 	}
 
@@ -312,7 +312,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			method.invoke(lcl, url);
 			return lcl;
 		} catch (NoSuchMethodException e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 			new IOException("No URL (addURL) classloader", e).printStackTrace();
 			return lcl;
 		} catch (Throwable t) {
@@ -386,7 +386,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 
 	private Class loadClassFile(File jfile) throws IOException {
 		String sfile = jfile.getAbsolutePath();
-		Class c = loadedAlready.get(sfile);
+		Class c = this.loadedAlready.get(sfile);
 		if (c != null)
 			return c;
 		DataInputStream dis = new DataInputStream(new FileInputStream(jfile));
@@ -396,11 +396,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 		try {
 			c = this.defineClass(null, byteArray, 0, size);
 			String className = c.getName();
-			outerNames.add(className);
+			this.outerNames.add(className);
 		} catch (Throwable t) {
 			println("defineClass: " + t);
 		}
-		loadedAlready.put(sfile, c);
+		this.loadedAlready.put(sfile, c);
 		return c;
 	}
 
@@ -428,7 +428,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		if (jfile.isDirectory() && decendDirs) {
 			File[] jfiles = jfile.listFiles();
 			for (int i = 0; i < jfiles.length; ++i)
-				scanFiles(lcl, jfiles[i], defineClasses, decendDirs);
+				this.scanFiles(lcl, jfiles[i], defineClasses, decendDirs);
 		}
 	}
 
@@ -438,7 +438,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			String named = innersMaybe[i].getName();
 			if (named.startsWith(className))
 				try {
-					loadClassFile(innersMaybe[i]);
+					this.loadClassFile(innersMaybe[i]);
 				} catch (Throwable t) {
 					Errors.error("Error while loading inner classes for: " + className, t);
 				}
@@ -446,22 +446,22 @@ public class IsolatedClassLoader extends URLClassLoader {
 	}
 
 	public Class addClassFile(ClassLoader lcl, File jfile) throws IOException, ClassNotFoundException {
-		Class c = loadClassFile(jfile);
+		Class c = this.loadClassFile(jfile);
 		String className = c.getName();
 		String simpleName = c.getSimpleName();
-		scanForInners(jfile.getParentFile(), simpleName);
-		myResolveClass(Class.forName(className, false, this));
+		this.scanForInners(jfile.getParentFile(), simpleName);
+		this.myResolveClass(Class.forName(className, false, this));
 		Class[] inners = c.getDeclaredClasses();
 		for (Class ic : inners) {
-			myResolveClass(ic);
+			this.myResolveClass(ic);
 		}
 		return c;
 	}
 
 	static public void addCommonClassPath(String stringTyped) {
-		ClassLoader lcl = getSystemClassLoader();
+		ClassLoader lcl = ClassLoader.getSystemClassLoader();
 		try {
-			theIsolatedClassLoader.addCode(lcl, stringTyped, false);
+			addCode(lcl, stringTyped, false);
 		} catch (IOException e) {
 			Startup.uncaughtException(e);
 			e.printStackTrace();
@@ -472,12 +472,12 @@ public class IsolatedClassLoader extends URLClassLoader {
 		try {
 			addURLToClassloader("addCommonClassPath", theIsolatedClassLoader, stringTyped);
 		} catch (IOException e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		}
 	}
 
 	public static boolean addCommonClassPath(File f) {
-		ClassLoader lcl = getSystemClassLoader();
+		ClassLoader lcl = ClassLoader.getSystemClassLoader();
 		f = normalizedFile(f);
 		try {
 
@@ -509,7 +509,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			addURLToClassloader("addCommonClassPath", lcl, url);
 			return true;
 		} catch (Throwable e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 			return false;
 		}
 	}
@@ -555,7 +555,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 					stringTyped = url.getFile();
 					continue do_more;
 				} catch (MalformedURLException e) {
-					uncaughtException(e);
+					Startup.uncaughtException(e);
 				}
 
 			} else if (stringTyped.startsWith("jar:")) {
@@ -565,7 +565,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 					continue do_more;
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
-					uncaughtException(e);
+					Startup.uncaughtException(e);
 				}
 			}
 
@@ -648,7 +648,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 				}
 				url = new URL(s2);
 			} catch (MalformedURLException e) {
-				uncaughtException(e);
+				Startup.uncaughtException(e);
 			}
 		}
 		try {
@@ -663,10 +663,10 @@ public class IsolatedClassLoader extends URLClassLoader {
 		final String extracted = slashify(jfile.getAbsolutePath(), false);
 		final URL withHost = new URL("file", "", extracted);
 		URL url = normalizedURL(withHost);
-		addURL(url);
+		this.addURL(url);
 		File[] jfiles = jfile.listFiles();
 		for (int i = 0; i < jfiles.length; ++i)
-			scanFiles(lcl, jfiles[i], false, true);
+			this.scanFiles(lcl, jfiles[i], false, true);
 	}
 
 	static public void addJar(ClassLoader lcl, File jfile, boolean loadNow) throws IOException {
@@ -719,15 +719,15 @@ public class IsolatedClassLoader extends URLClassLoader {
 			// Create a URL that refers to a jar file in the file system
 			addJarClass(lcl, jarFileClassURL(jfile, className), className);
 		} catch (MalformedURLException e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		} catch (IOException e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		} catch (ClassFormatError e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		} catch (Error e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		} catch (Throwable e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		}
 		return;
 	}
@@ -781,15 +781,15 @@ public class IsolatedClassLoader extends URLClassLoader {
 			}
 			theIsolatedClassLoader.loadedAlready.put(className, c);
 		} catch (MalformedURLException e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		} catch (IOException e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		} catch (ClassFormatError e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		} catch (Error e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		} catch (Throwable e) {
-			uncaughtException(e);
+			Startup.uncaughtException(e);
 		}
 		return;
 
@@ -861,7 +861,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 			return;
 		}
 		if (safeToGetSystemClassLaoder) {
-			ClassLoader parent = getParent();
+			ClassLoader parent = this.getParent();
 			if (containsURL(parent, url)) {
 				if (debug > 0) {
 					println(why + ": ALREADY PARENT " + url + " to " + parent);
@@ -876,7 +876,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 					return;
 				}
 			}
-			ClassLoader sscl = getSystemClassLoader();
+			ClassLoader sscl = ClassLoader.getSystemClassLoader();
 			if (lcl != parentClassLoader) {
 				if (containsURL(sscl, url)) {
 					if (debug > 0) {
@@ -1000,7 +1000,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	}
 
 	public boolean isDefinedHere(String s) {
-		for (String sl : outerNames)
+		for (String sl : this.outerNames)
 			if (s.startsWith(sl))
 				return true;
 		return false;
@@ -1024,11 +1024,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 */
 	@Override
 	public synchronized Class loadClass(String className) throws ClassNotFoundException {
-		Class c = maybeFindLoadedClass(className);
+		Class c = this.maybeFindLoadedClass(className);
 		boolean parentFirst = false;
 		ClassNotFoundException ex = null;
 		if (c == null) {
-			if (!isDefinedHere(className) && c == null)
+			if (!this.isDefinedHere(className) && c == null)
 				try {
 					final ClassLoader pcl = getIsolatedParent();
 					if (parentFirst)
@@ -1036,7 +1036,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 							c = pcl.loadClass(className);
 							if (debug > 1)
 								println("Parent Loading: " + className);
-							myResolveClass(c);
+							this.myResolveClass(c);
 							return c;
 
 						}
@@ -1047,7 +1047,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 				println("local Loading: " + className);
 			if (c == null)
 				try {
-					c = findClass(className);
+					c = this.findClass(className);
 				} catch (ClassNotFoundException e) {
 					if (ex == null)
 						ex = e;
@@ -1063,7 +1063,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 				}
 		}
 		if (c != null) {
-			myResolveClass(c);
+			this.myResolveClass(c);
 			return c;
 		}
 		if (debug > 1)
@@ -1072,14 +1072,14 @@ public class IsolatedClassLoader extends URLClassLoader {
 	}
 
 	public void saveClass(Class<?> class1) {
-		loadedAlready.put(class1.getName(), class1);
+		this.loadedAlready.put(class1.getName(), class1);
 		// TODO Auto-generated method stub
 
 	}
 
 	public Class<?> findClassP(String name) throws ClassNotFoundException {
 		Class c = super.findClass(name);
-		saveClass(c);
+		this.saveClass(c);
 		return c;
 	}
 
@@ -1089,6 +1089,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * along with any URLs subsequently appended by the addURL() method.
 	 * @return the search path of URLs for loading classes and resources.
 	 */
+	@Override
 	public URL[] getURLs() {
 		return super.getURLs();
 	}
@@ -1175,8 +1176,8 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * @param c
 	 */
 	private void myResolveClass(Class c) {
-		saveClass(c);
-		resolveClass(c);
+		this.saveClass(c);
+		this.resolveClass(c);
 		// TODO Auto-generated method stub
 
 	}
@@ -1186,7 +1187,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * @return
 	 */
 	public static ClassLoader getIsolatedParent() {
-		return IsolatedClassLoader.parentClassLoader;
+		return parentClassLoader;
 	}
 
 	/**
@@ -1194,7 +1195,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * @return
 	 */
 	public static ClassLoader[] getPeers() {
-		return peerLoaders.toArray(new ClassLoader[] { IsolatedClassLoader.parentClassLoader });
+		return peerLoaders.toArray(new ClassLoader[] { parentClassLoader });
 	}
 
 	/**
@@ -1238,10 +1239,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * @throws  ClassNotFoundException
 	 *          If the class could not be found
 	 */
+	@Override
 	public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-		synchronized (getClassLoadingLock(name)) {
+		synchronized (this.getClassLoadingLock(name)) {
 			// First, check if the class has already been loaded
-			Class<?> c = maybeFindLoadedClass(name);
+			Class<?> c = this.maybeFindLoadedClass(name);
 			if (c == null) {
 				try {
 					c = super.loadClass(name, false);
@@ -1253,11 +1255,11 @@ public class IsolatedClassLoader extends URLClassLoader {
 				if (c == null) {
 					// If still not found, then invoke findClass in order
 					// to find the class.
-					c = findClass(name);
+					c = this.findClass(name);
 				}
 			}
 			if (resolve) {
-				myResolveClass(c);
+				this.myResolveClass(c);
 			}
 			return c;
 		}
@@ -1280,7 +1282,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	public final Class<?> maybeFindLoadedClass(String name) {
 		if (isCompilationUnit(name)) {
 			name = classNameFromFile(name);
-			Class c = loadedAlready.get(name);
+			Class c = this.loadedAlready.get(name);
 			if (c != null)
 				return c;
 		}
@@ -1292,7 +1294,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * @return
 	 */
 	public static IsolatedClassLoader getCommonClassLoader() {
-		IsolatedClassLoader lcl = IsolatedClassLoader.theIsolatedClassLoader;
+		IsolatedClassLoader lcl = theIsolatedClassLoader;
 		//assert lcl == Thread.currentThread().getContextClassLoader();
 		return lcl;
 	}
@@ -1306,7 +1308,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 		String classAsResource = name.replace('.', '/') + ".class";
 		//printf("Looking for: %s%n", classAsResource);
 		int found = 0;
-		ClassLoader lcl = IsolatedClassLoader.getCommonClassLoader();
+		ClassLoader lcl = getCommonClassLoader();
 		Enumeration<URL> urls = lcl.getResources(classAsResource);
 		while (urls.hasMoreElements()) {
 			found++;
@@ -1334,7 +1336,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 */
 	public static void classDupes(final Class<?> class1) throws IOException {
 		addPreloadedClass(class1);
-		IsolatedClassLoader.classDupes(class1.getName());
+		classDupes(class1.getName());
 	}
 
 	/**
@@ -1352,7 +1354,7 @@ public class IsolatedClassLoader extends URLClassLoader {
 	 * @throws IOException
 	 */
 	public static void configChecks() throws IOException {
-		if (!Main.noinform) {
+		if (!Startup.noinform) {
 			printf("CLASSPATH=%s%n", System.getProperty("java.class.path"));
 		}
 

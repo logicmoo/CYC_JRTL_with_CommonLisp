@@ -27,7 +27,7 @@ import javax.swing.JToolBar;
 
 //import org.apache.log4j.Category;
 //import org.appdapter.gui.demo.DemoBrowser;
-import org.logicmoo.bb.BeanBowl;
+import org.logicmoo.bb.TrackedObjects;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.Startup;
 import org.logicmoo.system.ToplevelMethod;
@@ -52,7 +52,7 @@ private static Logger theLogger;
  // private static Category cat = Category.getInstance(BeanBowlGUI.class);
 
 //==== Instance variables ==========
-  public BeanBowl bowl;
+  public TrackedObjects bowl;
   public BeanBowlContext context;
 
 
@@ -66,11 +66,11 @@ private static Logger theLogger;
 	  getStaticBowl().addBean(named, obj);
 	  return true;
   }
-  public static BeanBowl getStaticBowl() {
+  public static TrackedObjects getStaticBowl() {
 	  if(defaultFrame==null) {
-		  startBeanBowl(new BeanBowl());
+		  startBeanBowl(new TrackedObjects());
 	  }
-	  BeanBowl v = defaultFrame.getBowl();
+	  TrackedObjects v = defaultFrame.getBowl();
 	  return v;
   }
 
@@ -96,7 +96,7 @@ private static Logger theLogger;
 
 
   @ToplevelMethod
-  public static void startBeanBowl( BeanBowl bb ) {
+  public static void startBeanBowl( TrackedObjects bb ) {
 	 // org.apache.log4j.Category.class.getName();
 	  if(defaultFrame!=null) {
 		  defaultFrame.show(true);
@@ -127,7 +127,7 @@ private static Logger theLogger;
 
 //==== Main method ==========================
   public static void main(String[] args0) {
-	startBeanBowl(new BeanBowl());
+	startBeanBowl(new TrackedObjects());
   }
 
 //======== Constructors =============================0
@@ -135,7 +135,7 @@ private static Logger theLogger;
   /**
    * Creates a new BeanBowlGUI that shows the given bowl
    */
-  public BeanBowlGUI(BeanBowl bowl) {
+  public BeanBowlGUI(TrackedObjects bowl) {
     String version = BeanBowlGUI.class.getPackage().getImplementationVersion();
     if (version == null) {
       setTitle("Bean bowl");
@@ -180,15 +180,15 @@ private static Logger theLogger;
   /**
    * The current bean bowl being displayed
    */
-  public BeanBowl getBowl() {
+  public TrackedObjects getBowl() {
     return bowl;
   }
 
   /**
    * Sets the bowl to be displayed
    */
-  private void setBowl(BeanBowl newBowl) {
-    BeanBowl oldBowl = bowl;
+  private void setBowl(TrackedObjects newBowl) {
+    TrackedObjects oldBowl = bowl;
     if (newBowl != oldBowl) {
       this.bowl = newBowl;
       this.panel = new BeanBowlPanel(context);
@@ -246,7 +246,7 @@ protected void processEvent(AWTEvent e) {
   void openBowl(File file) {
     if (file.exists()) {
       try {
-        setBowl(BeanBowl.load(file));
+        setBowl(TrackedObjects.load(file));
         Settings.addRecentFile(file);
         fileMenu.refreshRecentFileList();
       } catch (Exception err) {
@@ -259,7 +259,7 @@ protected void processEvent(AWTEvent e) {
 
   void newBowl() {
     //@feature ask save changes?
-    setBowl(new BeanBowl());
+    setBowl(new TrackedObjects());
     file = null;
     checkControls();
   }
@@ -365,12 +365,12 @@ protected void processEvent(AWTEvent e) {
 				//System.setProperty("log4j.defaultInitOverride", "true");
 				System.setProperty("log4j.debug", "true");
 				String loc = "mylog4j.properties";
-				URL url = BeanBowl.class.getResource("mylog4j.properties");
+				URL url = TrackedObjects.class.getResource("mylog4j.properties");
 				if (url != null) {
 					loc = url.toExternalForm();
 				}
 				System.setProperty("log4j.configuration", loc);
-				theLogger = LoggerFactory.getLogger(BeanBowl.class);
+				theLogger = LoggerFactory.getLogger(TrackedObjects.class);
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();

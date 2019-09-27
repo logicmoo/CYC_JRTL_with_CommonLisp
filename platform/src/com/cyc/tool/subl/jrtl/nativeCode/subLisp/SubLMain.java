@@ -319,7 +319,7 @@ public class SubLMain extends Startup {
 
 	static ThreadLocal<SubLReader> mainReader = new ThreadLocal<SubLReader>();
 
-	static SubLReader trueMainReader;
+	public static SubLReader trueMainReader;
 	private static boolean began_initializeSubL;
 	private static boolean began_initializeTranslatedSystems;
 	private static boolean began_handle_inits;

@@ -31,7 +31,7 @@ import org.jpl7.Query;
 import org.jpl7.Term;
 import org.jpl7.Variable;
 import org.jpl7.fli.term_t;
-import org.logicmoo.bb.BeanBowl;
+import org.logicmoo.bb.TrackedObjects;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
@@ -238,7 +238,7 @@ public class PrologSync extends SubLSystemTrampolineFile {
 			serial = fvs.longValue();
 		}
 		if (serial < 0) {
-			final BeanBowl guibowl = BeanShellCntrl.bowl;
+			final TrackedObjects guibowl = BeanShellCntrl.bowl;
 			serial = guibowl.generateUniqueName(className, struct);
 			if (Main.trackStructs) {
 				BeanShellCntrl.addObject(className + serial, struct);

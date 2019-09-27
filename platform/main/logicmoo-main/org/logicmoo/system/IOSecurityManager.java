@@ -3,7 +3,13 @@ package org.logicmoo.system;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.SocketPermission;
 import java.security.AccessControlContext;
@@ -17,40 +23,121 @@ import java.util.PropertyPermission;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+
 /**
  * @author Administrator
  *
  */
 public class IOSecurityManager extends SecurityManager {
 
+	static private boolean allowCompiler = true;
+	static private String mayRead = null;
 	final static public WorkQueue workQueue = WorkQueue.getWorkerQueue("IOSecurityManager");
-
 	private static final Class<?>[] PARAMS = new Class[] { String.class, String.class };
 
-	private static final IOSecurityManager delegated = new IOSecurityManager(true);
+	//private static final IOSecurityManager delegated = new IOSecurityManager(true);
+
+	/**
+	 * @param f
+	 * @return
+	 */
+	public static String canonicalPath(String filename) {
+		java.io.File f = null;
+		String wasMayRead = IOSecurityManager.mayRead;
+
+		try {
+			IOSecurityManager.mayRead = filename;
+			f = new java.io.File(filename);
+		} finally {
+			IOSecurityManager.mayRead = wasMayRead;
+		}
+		try {
+			f = f.getCanonicalFile();
+		} catch (IOException e) {
+			f = f.getAbsoluteFile();
+		}
+		String p = f.getAbsolutePath();
+
+		if (File.separatorChar != '/')
+			p = p.replace(File.separatorChar, '/');
+
+		final boolean isDir = IOSecurityManager.isDirectory(f);
+		if (!p.endsWith("/") && isDir)
+			p = p + "/";
+
+		//		if (!p.startsWith("/"))
+		//			p = "/" + p;
+
+		return p;
+	}
 
 	static public void execute(Runnable r) {
-		workQueue.execute(r);
+		IOSecurityManager.workQueue.execute(r);
+	}
+
+	// calls check read
+	private static boolean exists(File f) {
+		String wasMayRead = IOSecurityManager.mayRead;
+		try {
+			IOSecurityManager.mayRead = f.getPath();
+			return f.exists();
+		} finally {
+			IOSecurityManager.mayRead = wasMayRead;
+		}
+	}
+
+	public static void install() {
+		final SecurityManager securityManager = System.getSecurityManager();
+		if (securityManager instanceof IOSecurityManager)
+			return;
+		try {
+			new IOSecurityManager(securityManager, true).setSecurityManager();
+		} catch (SecurityException se) {
+			System.err.println("SecurityManager already set!");
+		}
+	}
+
+	static boolean isCompiler() {
+		return IOSecurityManager.allowCompiler;
+	}
+
+	// calls check read
+	private static boolean isDirectory(File f) {
+		String wasMayRead = IOSecurityManager.mayRead;
+		try {
+			IOSecurityManager.mayRead = f.getPath();
+			return f.isDirectory();
+		} finally {
+			IOSecurityManager.mayRead = wasMayRead;
+		}
 	}
 
 	private final List<APermission> grantedPermissions;
+
+	//	private IOSecurityManager() {
+	//		this(false);
+	//	}
+
 	private final List<APermission> revokedPermissions;
+
 	private java.security.Permissions granted;
+
 	private SecurityManager origSm;
+
 	private boolean active;
+
 	private final boolean delegateToOldSM;
 
-	public IOSecurityManager() {
-		this(false);
-	}
+	private Lookup LKP;
 
-	public IOSecurityManager(boolean delegateToOldSM) {
+	private IOSecurityManager(SecurityManager old, boolean delegateToOldSM) {
 		this.grantedPermissions = new LinkedList();
 		this.revokedPermissions = new LinkedList();
 		this.granted = null;
-		this.origSm = null;
+		this.origSm = old;
 		this.active = false;
-		this.delegateToOldSM = delegateToOldSM;
+		this.delegateToOldSM = delegateToOldSM && origSm != null;
 	}
 
 	private boolean accessOK() {
@@ -66,65 +153,100 @@ public class IOSecurityManager extends SecurityManager {
 	}
 
 	@Override
-	public void checkAccept(String host, int port) {
-		if (permitNetwork())
+	public void checkAccept(String host, int port) throws SecurityException {
+		if (this.permitNetwork())
 			return;
 		super.checkAccept(host, port);
+		if (!delegateToOldSM) {
+			return;
+		} else {
+			origSm.checkAccept(host, port);
+		}
 	}
 
 	@Override
-	public void checkAccess(Thread t) {
-		if (permitOurs())
+	public void checkAccess(Thread t) throws SecurityException {
+		if (this.permitOurs())
 			return;
-		super.checkAccess(t);
-	}
+		if (!delegateToOldSM) {
+			super.checkAccess(t);
+			return;
+		} else {
+			origSm.checkAccess(t);
+		}
+	}//checkAccess
 
 	@Override
-	public void checkAccess(ThreadGroup g) {
-		if (permitOurs())
+	public void checkAccess(ThreadGroup threadGroup) throws SecurityException {
+		if (this.permitOurs())
 			return;
-		super.checkAccess(g);
+		if (!delegateToOldSM) {
+			super.checkAccess(threadGroup);
+		} else {
+			origSm.checkAccess(threadGroup);
+		}
 	}
 
-	@Override
-	public void checkAwtEventQueueAccess() {
-		if (permitOurs())
+	@Deprecated
+	public void checkAwtEventQueueAccess() throws SecurityException {
+		if (this.permitOurs())
 			return;
-		super.checkAwtEventQueueAccess();
+		//super.checkAwtEventQueueAccess();
+		try {
+			invokeSuperIfExists(boolean.class, "checkAwtEventQueueAccess");
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+			return;
+		}
+
 	}
 
 	@Override
 	public void checkConnect(String host, int port) {
-		if (permitNetwork())
+		if (this.permitNetwork())
 			return;
 		super.checkConnect(host, port);
+		if (origSm != null)
+			origSm.checkConnect(host, port);
 	}
 
 	@Override
 	public void checkConnect(String host, int port, Object context) {
-		if (permitNetwork())
+		if (this.permitNetwork())
 			return;
+		if (origSm != null)
+			origSm.checkConnect(host, port, context);
 		super.checkConnect(host, port, context);
 	}
 
 	@Override
-	public void checkCreateClassLoader() {
-		if (permitOurs())
+	public void checkCreateClassLoader() throws SecurityException {
+		if (this.permitOurs())
 			return;
 		super.checkCreateClassLoader();
-	}
+		if (origSm != null) {
+			origSm.checkCreateClassLoader();
+		}
+	}//checkCreateClassLoader
 
 	@Override
-	public void checkDelete(String filename) {
-		super.checkDelete(filename);
-		checkFilesystemDelete(filename);
-
+	public void checkDelete(String filename) throws SecurityException {
+		this.checkFilesystemDelete(filename);
+		if (!delegateToOldSM) {
+			super.checkDelete(filename);
+		} else {
+			origSm.checkDelete(filename);
+		}
 	}
 
-	@Override
-	public void checkExec(String cmd) {
-		checkFilesystemWrite(cmd);
+	public void checkExec(String cmd) throws SecurityException {
+		this.checkFilesystemWrite(cmd);
 		super.checkExec(cmd);
+		if (!delegateToOldSM) {
+			return;
+		} else {
+			origSm.checkExec(cmd);
+		}
 	}
 
 	/**
@@ -136,7 +258,7 @@ public class IOSecurityManager extends SecurityManager {
 	 * @param status The exit status requested.
 	 */
 	@Override
-	public void checkExit(final int status) {
+	public void checkExit(final int status) throws SecurityException {
 
 		if (Startup.noExit)
 			throw new SecurityException("Startup.noExit " + status);
@@ -147,28 +269,45 @@ public class IOSecurityManager extends SecurityManager {
 		final java.security.Permission perm = new RuntimePermission("exitVM", null);
 
 		try {
-			checkPermission(perm);
+			this.checkPermission(perm);
 		} catch (final SecurityException e) {
 
-			if (permitNetwork())
+			if (this.permitNetwork())
 				return;
 
 			throw new SecurityException(e.getMessage() + ": " + status);
 		}
 	}
 
+	private void checkFilesystemDelete(String filename) {
+
+		filename = IOSecurityManager.canonicalPath(filename);
+
+		super.checkWrite(filename);
+
+		super.checkRead(filename);
+
+		if (this.isOkToWrite(filename))
+			return;
+
+		if (IOSecurityManager.isCompiler())
+			return;
+
+		throw new SecurityException("checkFilesystemDelete! " + filename);
+	}
+
 	private void checkFilesystemRead(String filename) {
-		if (mayRead != null)
+		if (IOSecurityManager.mayRead != null)
 			return;
 		if (Startup.leanABCL)
 			return;
 
 		super.checkRead(filename);
 
-		if (isOkToRead(filename))
+		if (this.isOkToRead(filename))
 			return;
 
-		if (isCompiler())
+		if (IOSecurityManager.isCompiler())
 			return;
 
 		throw new SecurityException("checkFilesystemRead! " + filename);
@@ -180,215 +319,99 @@ public class IOSecurityManager extends SecurityManager {
 
 		super.checkWrite(filename);
 		super.checkRead(filename);
-		if (isOkToWrite(filename))
+		if (this.isOkToWrite(filename))
 			return;
 
-		if (isCompiler())
+		if (IOSecurityManager.isCompiler())
 			return;
 
 		throw new SecurityException("checkFilesystemWrite! " + filename);
 	}
 
-	private void checkFilesystemDelete(String filename) {
-
-		filename = canonicalPath(filename);
-
-		super.checkWrite(filename);
-
-		super.checkRead(filename);
-
-		if (isOkToWrite(filename))
-			return;
-
-		if (isCompiler())
-			return;
-
-		throw new SecurityException("checkFilesystemDelete! " + filename);
-	}
-
-	public boolean isOkToRead(String filename) {
-
-		if (Startup.leanABCL)
-			return true;
-
-		if (mayRead != null)
-			return true;
-
-		filename = canonicalPath(filename);
-
-		if (filename.contains("/../")) {
-			return false;
-		}
-
-		return true;
-	}
-
-	static private String mayRead = null;
-
-	static private boolean allowCompiler = true;
-
-	/**
-	 * @param filename
-	 * @param f
-	 */
-	public boolean isOkToWrite(String filename) {
-		filename = canonicalPath(filename);
-		filename = filename.toLowerCase();
-		if (filename.contains("/../"))
-			return false;
-		if (filename.contains("/tmp/"))
-			return true;
-		if (filename.contains("/temp/"))
-			return true;
-		if (filename.contains("/log/"))
-			return true;
-		if (filename.contains("/logs/"))
-			return true;
-		if (filename.contains("/work/"))
-			return true;
-		if (filename.contains("/transcripts/"))
-			return true;
-		if (filename.contains("/classes/"))
-			return true;
-		if (filename.contains("/upload/"))
-			return true;
-
-		// checkFilesystemRead(filename);
-		if (filename.endsWith(".class"))
-			return true;
-		if (filename.endsWith(".abcl"))
-			return true;
-		if (filename.endsWith(".cls"))
-			return true;
-		if (filename.endsWith(".log"))
-			return true;
-		if (filename.endsWith(".jar"))
-			return true;
-		if (filename.endsWith(".lisp"))
-			return true;
-		if (filename.endsWith(".txt"))
-			return true;
-
-		if (!Startup.began_init_server)
-			return true;
-
-		if (filename.contains("/."))
-			return false;
-
-		return false;
-	}
-
-	/**
-	 * @param f
-	 * @return
-	 */
-	public static String canonicalPath(String filename) {
-		java.io.File f = null;
-		String wasMayRead = mayRead;
-
-		try {
-			mayRead = filename;
-			f = new java.io.File(filename);
-		} finally {
-			mayRead = wasMayRead;
-		}
-		try {
-			f = f.getCanonicalFile();
-		} catch (IOException e) {
-			f = f.getAbsoluteFile();
-		}
-		String p = f.getAbsolutePath();
-
-		if (File.separatorChar != '/')
-			p = p.replace(File.separatorChar, '/');
-
-		final boolean isDir = isDirectory(f);
-		if (!p.endsWith("/") && isDir)
-			p = p + "/";
-
-		//		if (!p.startsWith("/"))
-		//			p = "/" + p;
-
-		return p;
-	}
-
-	static boolean isCompiler() {
-		return allowCompiler;
-	}
-
-	// calls check read
-	private static boolean exists(File f) {
-		String wasMayRead = mayRead;
-		try {
-			mayRead = f.getPath();
-			return f.exists();
-		} finally {
-			mayRead = wasMayRead;
-		}
-	}
-
-	// calls check read
-	private static boolean isDirectory(File f) {
-		String wasMayRead = mayRead;
-		try {
-			mayRead = f.getPath();
-			return f.isDirectory();
-		} finally {
-			mayRead = wasMayRead;
-		}
-	}
-
 	@Override
 	public void checkLink(String lib) {
-		if (permitNetwork())
+		if (this.permitNetwork())
 			return;
-		super.checkLink(lib);
+		if (!delegateToOldSM) {
+			super.checkLink(lib);
+		} else {
+			origSm.checkLink(lib);
+		}
 	}
 
 	@Override
-	public void checkListen(int port) {
-		if (permitNetwork())
+	public void checkListen(int port) throws SecurityException {
+		if (this.permitNetwork())
 			return;
-		super.checkListen(port);
+		if (!delegateToOldSM) {
+			super.checkListen(port);
+		} else {
+			origSm.checkListen(port);
+		}
 	}
 
-	@Override
+	@Deprecated
 	public void checkMemberAccess(Class<?> clazz, int which) {
-		if (permitOurs())
+		if (this.permitOurs())
 			return;
-		super.checkMemberAccess(clazz, which);
+		//super.checkMemberAccess(clazz, which);
+		try {
+			invokeSuperIfExists(void.class, Class.class, int.class, "checkMemberAccess", clazz, which);
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+		}
+
 	}
 
 	@Override
-	public void checkMulticast(InetAddress maddr) {
-		if (permitNetwork())
+	public void checkMulticast(InetAddress inetAddress) {
+		if (this.permitNetwork())
 			return;
-		super.checkMulticast(maddr);
+		if (!delegateToOldSM) {
+			super.checkMulticast(inetAddress);
+		} else {
+			origSm.checkMulticast(inetAddress);
+		}
 	}
 
-	@Override
+	@Deprecated
 	public void checkMulticast(InetAddress maddr, byte ttl) {
-		if (permitNetwork())
+		if (this.permitNetwork())
 			return;
-		super.checkMulticast(maddr, ttl);
+		//super.checkMulticast(maddr, ttl);
+		try {
+			invokeSuperIfExists(void.class, InetAddress.class, byte.class, "checkMulticast", maddr, ttl);
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+		}
 	}
 
 	@Override
 	public void checkPackageAccess(String pkg) {
 		if ("java.lang".equals(pkg)) {
-			if (permitAll())
+			if (this.permitAll())
 				return;
 		}
-		if (permitOurs())
+		if (this.permitOurs())
 			return;
 		super.checkPackageAccess(pkg);
+		if (!delegateToOldSM) {
+			return;
+		} else {
+			origSm.checkPackageAccess(pkg);
+		}
 	}
 
 	@Override
 	public void checkPackageDefinition(String pkg) {
-		if (permitOurs())
+		if (this.permitOurs())
 			return;
 		super.checkPackageDefinition(pkg);
+		if (!delegateToOldSM) {
+			return;
+		} else {
+			origSm.checkPackageDefinition(pkg);
+		}
 	}
 
 	/**
@@ -409,33 +432,38 @@ public class IOSecurityManager extends SecurityManager {
 	@Override
 	public void checkPermission(java.security.Permission perm) {
 		if (perm instanceof RuntimePermission) {
-			checkRuntimePermision(perm, perm.getName(), perm.getActions(), null);
+			this.checkRuntimePermision(perm, perm.getName(), perm.getActions(), null);
 			return;
 		}
-		if (permitNetwork())
+		if (this.permitNetwork())
 			return;
-		if (active) {
-			if (delegateToOldSM && !perm.getName().equals("exitVM")) {
+		if (this.active) {
+			if (this.delegateToOldSM && !perm.getName().equals("exitVM")) {
 				boolean permOK = false;
-				if (granted.implies(perm)) {
+				if (this.granted.implies(perm)) {
 					permOK = true;
 				}
-				checkRevoked(perm);
+				this.checkRevoked(perm);
 				/*
 				 if the permission was not explicitly granted or revoked
 				 the original security manager will do its work
 				*/
-				if (!permOK && origSm != null) {
-					origSm.checkPermission(perm);
+				if (!permOK && this.origSm != null) {
+					this.origSm.checkPermission(perm);
 				}
 			} else {
-				if (!granted.implies(perm)) {
+				if (!this.granted.implies(perm)) {
 					throw new SecurityException("Permission " + perm + " was not granted.");
 				}
-				checkRevoked(perm);
+				this.checkRevoked(perm);
 			}
 		}
 		super.checkPermission(perm);
+		if (!delegateToOldSM) {
+			return;
+		} else {
+			origSm.checkPermission(perm);
+		}
 	}
 
 	/**
@@ -469,56 +497,89 @@ public class IOSecurityManager extends SecurityManager {
 	 * @see java.security.AccessControlContext#checkPermission(java.security.Permission)
 	 * @since      1.2
 	 */
+	@Override
 	public void checkPermission(java.security.Permission perm, Object context) {
 		if (perm instanceof RuntimePermission) {
-			checkRuntimePermision(perm, perm.getName(), perm.getActions(), context);
+			this.checkRuntimePermision(perm, perm.getName(), perm.getActions(), context);
 			return;
 		}
-		if (permitAll())
+		if (this.permitAll())
 			return;
 		if (context instanceof AccessControlContext) {
 			((AccessControlContext) context).checkPermission(perm);
 		} else {
 			throw new SecurityException();
 		}
+		if (!delegateToOldSM) {
+			return;
+		} else {
+			origSm.checkPermission(perm, context);
+		}
 	}
 
 	@Override
-	public void checkPrintJobAccess() {
-		if (permitNetwork())
+
+	public void checkPrintJobAccess() throws SecurityException {
+		if (this.permitNetwork())
 			return;
-		super.checkPrintJobAccess();
+		if (!delegateToOldSM) {
+			super.checkPrintJobAccess();
+		} else {
+			origSm.checkPrintJobAccess();
+		}
 	}
 
 	@Override
-	public void checkPropertiesAccess() {
-		if (permitNetwork())
+	public void checkPropertiesAccess() throws SecurityException {
+		if (this.permitNetwork())
 			return;
-
-		super.checkPropertiesAccess();
+		if (!delegateToOldSM) {
+			super.checkPropertiesAccess();
+		} else {
+			origSm.checkPropertiesAccess();
+		}
 	}
 
 	@Override
-	public void checkPropertyAccess(String key) {
-		if (permitOurs())
+	public void checkPropertyAccess(String key) throws SecurityException {
+		if (this.permitOurs())
 			return;
-		super.checkPropertyAccess(key);
+		if (!delegateToOldSM) {
+			super.checkPropertyAccess(key);
+		} else {
+			origSm.checkPropertyAccess(key);
+		}
 	}
 
+	@Override
 	public void checkRead(FileDescriptor filedescriptor) {
-		super.checkRead(filedescriptor);
-		checkFilesystemRead(nameOf(filedescriptor));
+		if (!delegateToOldSM) {
+			super.checkRead(filedescriptor);
+		} else {
+			origSm.checkRead(filedescriptor);
+		}
+		this.checkFilesystemRead(this.nameOf(filedescriptor));
 
 	}
 
-	public void checkRead(String filename) {
-		checkFilesystemRead(filename);
-		super.checkRead(filename);
+	@Override
+	public void checkRead(String filename) throws SecurityException {
+		this.checkFilesystemRead(filename);
+		if (!delegateToOldSM) {
+			super.checkRead(filename);
+		} else {
+			origSm.checkRead(filename);
+		}
 	}
 
+	@Override
 	public void checkRead(String filename, Object executionContext) {
-		checkFilesystemRead(filename);
-		super.checkRead(filename, executionContext);
+		this.checkFilesystemRead(filename);
+		if (!delegateToOldSM) {
+			super.checkRead(filename, executionContext);
+		} else {
+			origSm.checkRead(filename, executionContext);
+		}
 	}
 
 	/**
@@ -526,7 +587,7 @@ public class IOSecurityManager extends SecurityManager {
 	 * @param perm the permission being checked
 	 */
 	private void checkRevoked(final java.security.Permission perm) {
-		for (final APermission revoked : revokedPermissions) {
+		for (final APermission revoked : this.revokedPermissions) {
 			if (revoked.matches(perm)) {
 				throw new SecurityException("Permission " + perm + " was revoked.");
 			}
@@ -576,7 +637,7 @@ public class IOSecurityManager extends SecurityManager {
 	 * class)</td>
 	 *   <td>This would grant an attacker permission to get the
 	 * class loader for a particular class. This is dangerous because
-	 * having access to a class's class loader allows the attacker to
+	 * having access to a class'filename class loader allows the attacker to
 	 * load other classes available to that class loader. The attacker
 	 * would typically otherwise not have access to those classes.</td>
 	 * </tr>
@@ -719,7 +780,7 @@ public class IOSecurityManager extends SecurityManager {
 	 *   <td>This allows code to obtain filename system information such as disk usage
 	 *       or disk space available to the caller.  This is potentially dangerous
 	 *       because it discloses information about the system hardware
-	 *       configuration and some information about the caller's privilege to
+	 *       configuration and some information about the caller'filename privilege to
 	 *       write files.</td>
 	 * </tr>
 	 *
@@ -750,7 +811,7 @@ public class IOSecurityManager extends SecurityManager {
 	 *
 	 * <tr>
 	 *   <td>accessClassInPackage.{package name}</td>
-	 *   <td>Access to the specified package via a class loader's
+	 *   <td>Access to the specified package via a class loader'filename
 	 * <code>loadClass</code> method when that class loader calls
 	 * the SecurityManager <code>checkPackageAccess</code> method</td>
 	 *   <td>This gives code access to classes in packages
@@ -762,7 +823,7 @@ public class IOSecurityManager extends SecurityManager {
 	 * <tr>
 	 *   <td>defineClassInPackage.{package name}</td>
 	 *   <td>Definition of classes in the specified package, via a class
-	 * loader's <code>defineClass</code> method when that class loader calls
+	 * loader'filename <code>defineClass</code> method when that class loader calls
 	 * the SecurityManager <code>checkPackageDefinition</code> method.</td>
 	 *   <td>This grants code permission to define a class
 	 * in a particular package. This is dangerous because malicious
@@ -828,9 +889,9 @@ public class IOSecurityManager extends SecurityManager {
 	 *
 	 * <tr>
 	 *   <td>usePolicy</td>
-	 *   <td>Granting this permission disables the Java Plug-In's default
+	 *   <td>Granting this permission disables the Java Plug-In'filename default
 	 *   security prompting behavior.</td>
-	 *   <td>For more information, refer to Java Plug-In's guides, <a href=
+	 *   <td>For more information, refer to Java Plug-In'filename guides, <a href=
 	 *   "../../../technotes/guides/plugin/developer_guide/security.html">
 	 *   Applet Security Basics</a> and <a href=
 	 *   "../../../technotes/guides/plugin/developer_guide/rsa_how.html#use">
@@ -853,7 +914,7 @@ public class IOSecurityManager extends SecurityManager {
 		if (name == null)
 			throw new NullPointerException("checkRuntimePermision");
 		if (name.equals("setIO")) {
-			workQueue.execute((() -> SystemCurrent.recheckStdIO()));
+			IOSecurityManager.workQueue.execute((() -> SystemCurrent.recheckStdIO()));
 			return;
 		}
 		if (true)
@@ -886,7 +947,7 @@ public class IOSecurityManager extends SecurityManager {
 			}
 		}
 		if (name.equals("setIO")) {
-			workQueue.execute((() -> SystemCurrent.recheckStdIO()));
+			IOSecurityManager.workQueue.execute((() -> SystemCurrent.recheckStdIO()));
 			return;
 		}
 		if (true)
@@ -894,7 +955,7 @@ public class IOSecurityManager extends SecurityManager {
 		Thread.dumpStack();
 		SystemCurrent.setupIO();
 		if (context instanceof AccessControlContext) {
-			if (permitAll())
+			if (this.permitAll())
 				return;
 			((AccessControlContext) context).checkPermission(perm);
 		} else {
@@ -903,57 +964,96 @@ public class IOSecurityManager extends SecurityManager {
 	}
 
 	@Override
-	public void checkSecurityAccess(String target) {
-		if (permitNetwork())
+	public void checkSecurityAccess(String filename) throws SecurityException {
+		if (this.permitNetwork())
 			return;
-		super.checkSecurityAccess(target);
+		if (!delegateToOldSM) {
+			super.checkSecurityAccess(filename);
+		} else {
+			origSm.checkSecurityAccess(filename);
+		}
 	}
 
 	@Override
-	public void checkSetFactory() {
-		if (permitNetwork())
+	public void checkSetFactory() throws SecurityException {
+		if (this.permitNetwork())
 			return;
-		super.checkSetFactory();
+		if (!delegateToOldSM) {
+			super.checkSetFactory();
+		} else {
+			origSm.checkSetFactory();
+		}
 	}
 
-	@Override
+	@Deprecated
 	public void checkSystemClipboardAccess() {
-		if (permitNetwork())
+		if (this.permitNetwork())
 			return;
-		super.checkSystemClipboardAccess();
+		try {
+			invokeSuperIfExists(void.class, "checkSystemClipboardAccess");
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+		}
 	}
 
-	@Override
+	@Deprecated
 	public boolean checkTopLevelWindow(Object window) {
-		if (permitNetwork())
+		if (this.permitNetwork())
 			return true;
-		return super.checkTopLevelWindow(window);
-	}
-
-	public void checkWrite(FileDescriptor filedescriptor) {
-		super.checkWrite(filedescriptor);
-		// checkFilesystemWrite(nameOf(filedescriptor));
-
-	}
-
-	public void checkWrite(String filename) {
-		checkFilesystemWrite(filename);
-
+		try {
+			return invokeSuperIfExists(boolean.class, Object.class, "checkTopLevelWindow", window);
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+			return false;
+		}
 	}
 
 	@Override
+	public void checkWrite(FileDescriptor fileDescriptor) throws SecurityException {
+		super.checkWrite(fileDescriptor);
+		if (!delegateToOldSM) {
+		} else {
+			origSm.checkWrite(fileDescriptor);
+		}
+	}
+
+	@Override
+	public void checkWrite(String filename) throws SecurityException {
+		this.checkFilesystemWrite(filename);
+		if (!delegateToOldSM) {
+			return;
+		} else {
+			origSm.checkWrite(filename);
+		}
+	}
+
+	@Deprecated
 	protected int classDepth(String name) {
-		return super.classDepth(name);
+		try {
+			return invokeSuperIfExists(int.class, "classDepth");
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+			return -666;
+		}
 	}
 
-	@Override
+	@Deprecated
 	protected int classLoaderDepth() {
-		return super.classLoaderDepth();
+		try {
+			return invokeSuperIfExists(int.class, "classLoaderDepth");
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+			return -666;
+		}
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	protected Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			return this;
+		}
 	}
 
 	private java.security.Permission createPermission(APermission permission) {
@@ -961,26 +1061,37 @@ public class IOSecurityManager extends SecurityManager {
 			Class<? extends java.security.Permission> clazz = Class.forName(permission.getClassName()).asSubclass(java.security.Permission.class);
 			String name = permission.getName();
 			String actions = permission.getActions();
-			Constructor<? extends java.security.Permission> ctr = clazz.getConstructor(PARAMS);
+			Constructor<? extends java.security.Permission> ctr = clazz.getConstructor(IOSecurityManager.PARAMS);
 			return (java.security.Permission) ctr.newInstance(name, actions);
 		} catch (Exception var6) {
 			return new UnresolvedPermission((String) permission.getClassName(), permission.getName(), permission.getActions(), (java.security.cert.Certificate[]) null);
 		}
 	}
 
-	@Override
+	@Deprecated
 	protected ClassLoader currentClassLoader() {
-		return super.currentClassLoader();
+		//return super.currentClassLoader();
+		try {
+			return invokeSuperIfExists(ClassLoader.class, "currentClassLoader");
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+			return null;// Thread.currentThread().getContextClassLoader();
+		}
 	}
 
-	@Override
+	@Deprecated
 	protected Class<?> currentLoadedClass() {
-		return super.currentLoadedClass();
+		try {
+			return invokeSuperIfExists(Class.class, "currentLoadedClass");
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+			return null;
+		}
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
-		restoreSecurityManager();
+		this.restoreSecurityManager();
 		super.finalize();
 	}
 
@@ -989,29 +1100,81 @@ public class IOSecurityManager extends SecurityManager {
 		return super.getClassContext();
 	}
 
-	@Override
+	@Deprecated
 	public boolean getInCheck() {
-		return super.getInCheck();
+		try {
+			return invokeSuperIfExists(boolean.class, "getInCheck");
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+			return false;
+		}
+
+		//return super.getInCheck();
+	}
+
+	/**
+	 * @return
+	 */
+	public MethodHandles.Lookup getLookerUpper() {
+		if (LKP == null) {
+			try {
+				Field IMPL_LOOKUP = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
+				IMPL_LOOKUP.setAccessible(true);
+				LKP = (MethodHandles.Lookup) IMPL_LOOKUP.get(null);
+			} catch (Exception e) {
+				try {
+					Method m = MethodHandles.class.getMethod("lookup");
+					m.setAccessible(true);
+					LKP = (MethodHandles.Lookup) m.invoke(null);
+				} catch (Exception e1) {
+					LKP = MethodHandles.lookup();
+				}
+			}
+		}
+		return LKP;
 	}
 
 	@Override
-	public Object getSecurityContext() {
-		return super.getSecurityContext();
-	}
+	public Object getSecurityContext() throws SecurityException {
+		if (!delegateToOldSM) {
+			return super.getSecurityContext();
+		} else {
+			return origSm.getSecurityContext();
+		}
+	}//getSecurityContext
+
+	//	public SecurityManager getSystemSecurityManager() {
+	//		return origSm;
+	//	}//getSystemSecurityManager
 
 	@Override
 	public ThreadGroup getThreadGroup() {
-		return super.getThreadGroup();
+		if (!delegateToOldSM) {
+			return super.getThreadGroup();
+		} else {
+			return origSm.getThreadGroup();
+		}
 	}
 
-	@Override
+	@Deprecated
 	protected boolean inClass(String name) {
-		return super.inClass(name);
+		try {
+			return invokeSuperIfExists(boolean.class, String.class, "inClass", name);
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+			return false;
+		}
 	}
 
-	@Override
+	@Deprecated
 	protected boolean inClassLoader() {
-		return super.inClassLoader();
+		//return super.inClassLoader();
+		try {
+			return invokeSuperIfExists(boolean.class, "inClassLoader");
+		} catch (NoSuchMethodException e) {
+			this.missingcheck();
+			return false;
+		}
 	}
 
 	private void init() {
@@ -1063,12 +1226,88 @@ public class IOSecurityManager extends SecurityManager {
 		throw new RuntimeException("Revoked permission " + p + " does not contain a class.");
 	}
 
+	public boolean isOkToRead(String filename) {
+
+		if (Startup.leanABCL)
+			return true;
+
+		if (IOSecurityManager.mayRead != null)
+			return true;
+
+		filename = IOSecurityManager.canonicalPath(filename);
+
+		if (filename.contains("/../")) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param filename
+	 * @param f
+	 */
+	public boolean isOkToWrite(String filename) {
+		filename = IOSecurityManager.canonicalPath(filename);
+		filename = filename.toLowerCase();
+		if (filename.contains("/../"))
+			return false;
+		if (filename.contains("/tmp/"))
+			return true;
+		if (filename.contains("/temp/"))
+			return true;
+		if (filename.contains("/log/"))
+			return true;
+		if (filename.contains("/logs/"))
+			return true;
+		if (filename.contains("/work/"))
+			return true;
+		if (filename.contains("/transcripts/"))
+			return true;
+		if (filename.contains("/classes/"))
+			return true;
+		if (filename.contains("/upload/"))
+			return true;
+
+		// checkFilesystemRead(filename);
+		if (filename.endsWith(".class"))
+			return true;
+		if (filename.endsWith(".abcl"))
+			return true;
+		if (filename.endsWith(".cls"))
+			return true;
+		if (filename.endsWith(".log"))
+			return true;
+		if (filename.endsWith(".jar"))
+			return true;
+		if (filename.endsWith(".lisp"))
+			return true;
+		if (filename.endsWith(".txt"))
+			return true;
+
+		if (!Startup.began_init_server)
+			return true;
+
+		if (filename.contains("/."))
+			return false;
+
+		return false;
+	}
+
+	private void missingcheck() {
+		Errors.unimplementedMethod("Auto-generated method stub:  IOSecurityManager.missingcheck");
+	}
+
 	private String nameOf(FileDescriptor filedescriptor) {
 		return filedescriptor.toString();
 	}
 
 	private boolean permitAll() {
 		return true;
+	}
+
+	private boolean permitDanger() {
+		return false;
 	}
 
 	private boolean permitNetwork() {
@@ -1079,10 +1318,6 @@ public class IOSecurityManager extends SecurityManager {
 		return true;
 	}
 
-	private boolean permitDanger() {
-		return false;
-	}
-
 	public synchronized void restoreSecurityManager() {
 		this.active = false;
 		if (this.origSm != null) {
@@ -1091,25 +1326,91 @@ public class IOSecurityManager extends SecurityManager {
 	}
 
 	public synchronized void setSecurityManager() {
-		this.origSm = System.getSecurityManager();
 		this.init();
-		System.setSecurityManager(delegated);
+		System.setSecurityManager(this);
 		this.active = true;
+	}
+
+	public <T> T invokeSuperIfExists(Class<T> retType, Class ptype1, Class ptype2, String name, Object... args) throws NoSuchMethodException {
+		try {
+			MethodHandle mh = getLookerUpper().findSpecial(SecurityManager.class, name, MethodType.methodType(retType, ptype1, ptype2), this.getClass());
+			if (retType == void.class) {
+				mh.invoke(this, args);
+				return null;
+			}
+			return (T) mh.invoke(this, args);
+		} catch (Throwable e) {
+			if (e instanceof SecurityException) {
+				throw (SecurityException) e;
+			}
+			if (e instanceof NullPointerException) {
+				throw (NullPointerException) e;
+			}
+
+			throw new NoSuchMethodException(name);
+		}
+	}
+
+	public <T> T invokeSuperIfExists(Class<T> retType, Class ptype, String name, Object arg) throws NoSuchMethodException {
+		try {
+			MethodHandle mh = getLookerUpper().findSpecial(SecurityManager.class, name, MethodType.methodType(retType, ptype), this.getClass());
+			if (retType == void.class) {
+				mh.invoke(this, arg);
+				return null;
+			}
+			return (T) mh.invoke(this, arg);
+		} catch (Throwable e) {
+			if (e instanceof SecurityException) {
+				throw (SecurityException) e;
+			}
+			if (e instanceof NullPointerException) {
+				throw (NullPointerException) e;
+			}
+
+			throw new NoSuchMethodException(name);
+		}
+
+	}
+
+	/**
+	 * @return
+	 * @throws SecurityException
+	 * @throws NoSuchFieldException
+	 * @throws NullPointerException
+	 */
+	public <T> T invokeSuperIfExists(Class<T> retType, String name) throws NoSuchMethodException {
+		try {
+			MethodHandle mh = getLookerUpper().findSpecial(SecurityManager.class, name, MethodType.methodType(retType), this.getClass());
+			if (retType == void.class) {
+				mh.invoke(this);
+				return null;
+			}
+			return (T) mh.invoke(this);
+		} catch (Throwable e) {
+			if (e instanceof SecurityException) {
+				throw (SecurityException) e;
+			}
+			if (e instanceof NullPointerException) {
+				throw (NullPointerException) e;
+			}
+
+			throw new NoSuchMethodException(name);
+		}
 	}
 
 	/** Represents a permission. */
 	public static class APermission {
+		private Set<String> actions;
+		private String actionString;
 		private String className;
 		private String name;
-		private String actionString;
-		private Set<String> actions;
 
 		/**
 		 * Get the actions.
 		 * @return The actions of the permission.
 		 */
 		public String getActions() {
-			return actionString;
+			return this.actionString;
 		}
 
 		/**
@@ -1117,7 +1418,7 @@ public class IOSecurityManager extends SecurityManager {
 		 * @return The class name of the permission.
 		 */
 		public String getClassName() {
-			return className;
+			return this.className;
 		}
 
 		/**
@@ -1125,7 +1426,7 @@ public class IOSecurityManager extends SecurityManager {
 		 * @return The name of the permission.
 		 */
 		public String getName() {
-			return name;
+			return this.name;
 		}
 
 		/**
@@ -1133,22 +1434,22 @@ public class IOSecurityManager extends SecurityManager {
 		 * @param perm The permission to check against.
 		 */
 		boolean matches(final java.security.Permission perm) {
-			if (!className.equals(perm.getClass().getName())) { //NOSONAR
+			if (!this.className.equals(perm.getClass().getName())) { //NOSONAR
 				return false;
 			}
-			if (name != null) {
-				if (name.endsWith("*")) {
-					if (!perm.getName().startsWith(name.substring(0, name.length() - 1))) {
+			if (this.name != null) {
+				if (this.name.endsWith("*")) {
+					if (!perm.getName().startsWith(this.name.substring(0, this.name.length() - 1))) {
 						return false;
 					}
-				} else if (!name.equals(perm.getName())) {
+				} else if (!this.name.equals(perm.getName())) {
 					return false;
 				}
 			}
-			if (actions != null) {
-				final Set<String> as = parseActions(perm.getActions());
+			if (this.actions != null) {
+				final Set<String> as = this.parseActions(perm.getActions());
 				final int size = as.size();
-				as.removeAll(actions);
+				as.removeAll(this.actions);
 				// If no actions removed, then all allowed
 				return as.size() != size;
 			}
@@ -1176,9 +1477,9 @@ public class IOSecurityManager extends SecurityManager {
 		 * @param actions The actions of the permission.
 		 */
 		public void setActions(final String actions) {
-			actionString = actions;
+			this.actionString = actions;
 			if (!actions.isEmpty()) {
-				this.actions = parseActions(actions);
+				this.actions = this.parseActions(actions);
 			}
 		}
 
@@ -1187,7 +1488,7 @@ public class IOSecurityManager extends SecurityManager {
 		 * @param aClass The class name of the permission.
 		 */
 		public void setClass(final String aClass) {
-			className = aClass.trim();
+			this.className = aClass.trim();
 		}
 
 		/**
@@ -1195,7 +1496,7 @@ public class IOSecurityManager extends SecurityManager {
 		 * @param aName The name of the permission.
 		 */
 		public void setName(final String aName) {
-			name = aName.trim();
+			this.name = aName.trim();
 		}
 
 		/**
@@ -1204,7 +1505,8 @@ public class IOSecurityManager extends SecurityManager {
 		 */
 		@Override
 		public String toString() {
-			return ("Permission: " + className + " (\"" + name + "\", \"" + actions + "\")");
+			return ("Permission: " + this.className + " (\"" + this.name + "\", \"" + this.actions + "\")");
 		}
 	}
+
 }

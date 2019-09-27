@@ -25,6 +25,7 @@ public abstract class SubLSystemTrampolineFile extends SubLFiles
 		//
 		implements SubLFile, Singleton {
 
+
 	//public static SubLObject NIL = Lisp.NIL;
 	public boolean USE_V2_METHODS = true;
 

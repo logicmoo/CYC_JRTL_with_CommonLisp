@@ -21,6 +21,7 @@ import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
@@ -40,16 +41,42 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
+import org.logicmoo.system.Startup;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLReader;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnitTest_CycLTiny;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.util.SafeRunnable;
 import com.cyc.tool.subl.util.SubLCommandHistory;
 import com.cyc.tool.subl.util.TextAreaInputStream;
 import com.cyc.tool.subl.util.TextAreaOutputStream;
+import com.sun.org.apache.xml.internal.security.Init;
 
 public class SubLReaderPanel extends JPanel {
+
+	public void setFrame(JInternalFrame internalFrame) {
+		//		UnitTest_CycLTiny.main(null);
+	}
+
+	public void init() {
+
+	}
+
+	public void initY() {
+		final SubLReader reader = getReader();
+		SubLMain.setMainReader(reader);
+		if (SubLMain.trueMainReader == null) {
+			SubLMain.me.argNameToArgValueMap.put("-gui", Boolean.TRUE);
+			SubLMain.trueMainReader = reader;
+		}
+		SubLMain.setSubLisp(true);
+		Startup.init_kb();
+		SubLMain.memStatus("Init Complete");
+	}
+
 	protected class SubLReaderUndoableEditListener implements UndoableEditListener {
 		@Override
 		public void undoableEditHappened(UndoableEditEvent e) {
@@ -467,7 +494,7 @@ public class SubLReaderPanel extends JPanel {
 	}
 
 	private void resetUIAfterProcessing() {
-		Runnable runnable = new SafeRunnable(true,null) {
+		Runnable runnable = new SafeRunnable(true, null) {
 			@Override
 			public void safeRun() {
 				resultsTextArea.setCaretPosition(resultsTextArea.getText().length());
@@ -484,8 +511,7 @@ public class SubLReaderPanel extends JPanel {
 	}
 
 	private void verifyQuit() {
-		int result = JOptionPane.showConfirmDialog(SubLReaderPanel.mainReaderPanel,
-				"Do you want to quit the application?", "Quit?", 0, 3);
+		int result = JOptionPane.showConfirmDialog(SubLReaderPanel.mainReaderPanel, "Do you want to quit the application?", "Quit?", 0, 3);
 		if (result == 0)
 			SubLMain.me.doSystemCleanupAndExit(0);
 	}

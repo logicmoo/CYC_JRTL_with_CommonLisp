@@ -26,6 +26,8 @@
 package bsh.util;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.net.ServerSocket;
@@ -93,17 +95,20 @@ class SessiondConnection extends Thread {
 
 	@Override
 	public void run() {
-		try (Reader in = new FileReader(client.getInputStream())) {
-			PrintStream out = new PrintStream(client.getOutputStream(), true, "UTF-8");
-			SystemCurrent.setIn(in);
+		try {
+			final OutputStream outputStream = client.getOutputStream();
+			final InputStream inputStream = client.getInputStream();
+			PrintStream out = new PrintStream(outputStream, true, "UTF-8");
+			SystemCurrent.setIn(inputStream);
 			SystemCurrent.setOut(out);
 			SystemCurrent.setErr(out);
 			//final bsh.ConsoleAssignable console = new Interpreter.Console(in, out, out);
-			i = new Interpreter(in, out, out, true, globalNameSpace, BeanShellCntrl.ensureBSH(), "");
+			i = new Interpreter(new FileReader(inputStream), out, out, true, globalNameSpace, BeanShellCntrl.ensureBSH(), "");
 			i.setExitOnEOF(false); // don't exit interpreter
 			i.run();
-		} catch (IOException e) {
-			System.out.println(e);
+		} catch (IOException e1) {
+			System.out.println(e1);
+			e1.printStackTrace();
 		} finally {
 			dispose();
 		}

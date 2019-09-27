@@ -358,8 +358,8 @@ public final class Interpreter extends Startup implements Runnable {
 	}
 
 	ArrayList<Runnable> runnablePostInits = new ArrayList<>();
-	private Symbol TOP_LEVEL_LOOP;
-	private LispObject tplFun;
+	public Symbol TOP_LEVEL_LOOP;
+	public LispObject tplFun;
 
 	public void addPostInit(int pos, Runnable obj) {
 		if (pos < 0) {

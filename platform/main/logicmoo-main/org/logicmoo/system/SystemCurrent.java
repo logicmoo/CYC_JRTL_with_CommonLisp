@@ -40,10 +40,16 @@ import java.util.function.Function;
 
 import org.armedbear.lisp.ReaderInputStream;
 import org.armedbear.lisp.WriterOutputStream;
+import org.logicmoo.system.SystemCurrent.ITLCreated;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
 public class SystemCurrent {
+	public enum ITLCreated {
+		UnknownITL, CHILD, ROOT, CONSOLE,
+
+	}
+
 	private static final Object DRASTIC_CHANGE = new Object() {
 		@Override
 		public String toString() {
@@ -169,11 +175,7 @@ public class SystemCurrent {
 	}
 
 	public static void installSM() {
-		try {
-			System.setSecurityManager(new IOSecurityManager());
-		} catch (SecurityException se) {
-			System.err.println("SecurityManager already set!");
-		}
+		IOSecurityManager.install();
 
 		try {
 			DataInputStream fis = new DataInputStream(new FileInputStream("inputtext.txt"));
@@ -195,6 +197,7 @@ public class SystemCurrent {
 		protected InOutErr initialValue() {
 			final Thread currentThread = Thread.currentThread();
 			final InOutErr inOutErr = new InOutErr(currentThread.getName());
+			inOutErr.itlCreated = ITLCreated.ROOT;
 			synchronized (consoles) {
 				consoles.put(currentThread, inOutErr);
 			}
@@ -207,6 +210,7 @@ public class SystemCurrent {
 				bp();
 			}
 			InOutErr inOutErr = new InOutErr(Thread.currentThread().getName());
+			inOutErr.itlCreated = ITLCreated.CHILD;
 			inOutErr.parent = parentValue;
 			return inOutErr;
 		}
@@ -236,28 +240,25 @@ public class SystemCurrent {
 	 *
 	 * @since JDK1.1
 	 */
-	public static void setIn(Object sObj) {
+	public static void setIn(InputStream sObj) {
 		synchronized (DRASTIC_CHANGE) {
 
 			if (DONT_USE) {
+				checkThreadCanSetIO();
 				System.setIn((InputStream) sObj);
 				return;
 			}
 			final InOutErr currentIO = currentIO();
-			if (sObj == null) {
-				currentIO.in = null;
-				return;
-			}
-			Object under = getNonTLStream(sObj, 'i');
-			if (under == null) {
-				if (isTLStream(sObj)) {
-					currentIO.in = originalSystemIn;
-					return;
-				}
-				return;
-			} else {
-				currentIO.in = asInputStream(sObj);
-			}
+			currentIO.setIn(sObj);
+		}
+	}
+
+	/**
+	 *
+	 */
+	public static void checkThreadCanSetIO() {
+		if (Thread.currentThread() != SystemCurrent.originalSystemThread) {
+			throw new UnsupportedOperationException("setIn on wrong Thread " + Thread.currentThread());
 		}
 	}
 
@@ -612,9 +613,10 @@ public class SystemCurrent {
 	 *
 	 * @since JDK1.1
 	 */
-	public static void setOut(Object sObj) {
+	public static void setOut(PrintStream sObj) {
 		synchronized (DRASTIC_CHANGE) {
 			if (DONT_USE) {
+				checkThreadCanSetIO();
 				System.setOut((PrintStream) sObj);
 				return;
 			}
@@ -656,9 +658,9 @@ public class SystemCurrent {
 
 	//public static PrintStream out = System.out;
 	static {
-		//if (!DONT_USE) {
-		out = new Out("#<System.out>", tlout);
-		//}
+		if (!DONT_USE) {
+			out = new Out("#<System.out>", tlout);
+		}
 	}
 
 	/**
@@ -1138,6 +1140,7 @@ public class SystemCurrent {
 	public static boolean mustShow;
 
 	private static Map<String, InOutErr> interactiveConsoles = new HashMap();
+	private static boolean cce = true;
 
 	public static void recheckStdIO() {
 		synchronized (DRASTIC_CHANGE) {
@@ -1319,6 +1322,8 @@ public class SystemCurrent {
 	}
 
 	public static void setupIO() {
+		if (cce)
+			return;
 		synchronized (DRASTIC_CHANGE) {
 			if (hasSetupIO) {
 				recheckStdIO();
@@ -1327,8 +1332,9 @@ public class SystemCurrent {
 			hasSetupIO = true;
 			if (DONT_USE)
 				return;
+
 			try {
-				new IOSecurityManager(true).setSecurityManager();
+				IOSecurityManager.install();
 			} catch (Throwable e) {
 			}
 
@@ -1350,11 +1356,11 @@ public class SystemCurrent {
 		}
 	}
 
-	public static void setupIO(Object in, Object out, Object err) {
+	public static void setupIO(InputStream in, PrintStream out, PrintStream err) {
 		synchronized (DRASTIC_CHANGE) {
 			if (DONT_USE)
 				return;
-			setupIO();
+			//setupIO();
 			setIn(asInputStream(in));
 			setOut(asPrintStream(out));
 			setErr(asPrintStream(err));
@@ -1423,11 +1429,13 @@ public class SystemCurrent {
 	}
 
 	private static void uncaughtException(Throwable e) {
-		Startup.uncaughtException(e);
+		if (!cce)
+			Startup.uncaughtException(e);
 	}
 
 	private static void bp() {
-		Startup.bug();
+		if (!cce)
+			Startup.bug();
 	}
 
 	public static void attachConsole(boolean becomeOwner) {
@@ -1474,10 +1482,11 @@ public class SystemCurrent {
 
 	@SuppressWarnings("hiding")
 	static public class InOutErr {
-		public InOutErr parent;
-		public boolean isAttached = true;
-		Constituents constituents = newConstituents();
 		private String name;
+		public ITLCreated itlCreated;
+		public boolean isTTY = false;
+		Constituents constituents = newConstituents();
+		public InOutErr parent;
 
 		public InOutErr(String name) {
 			this.name = name;
@@ -1489,7 +1498,7 @@ public class SystemCurrent {
 
 		@Override
 		public String toString() {
-			return name + "(in=" + str(in) + " out=" + str(out) + " err=" + str(err) + ")";
+			return name + "(tty=" + isTTY + " itl=" + str(itlCreated) + " in=" + str(in) + " out=" + str(out) + " err=" + str(err) + ")";
 		}
 
 		static String str(Object o) {
@@ -1540,9 +1549,18 @@ public class SystemCurrent {
 			return in;
 		}
 
-		public void setIn(InputStream in) {
-			constituents.addObject(in);
-			this.in = in;
+		public void setIn(InputStream sObj) {
+			if (sObj == null) {
+				this.in = null;
+				return;
+			}
+			Object under = getNonTLStream(sObj, 'i');
+			if (under == null || isTLStream(sObj)) {
+				// this.in = null;//originalSystemIn;
+				return;
+			}
+			constituents.addObject(under);
+			this.in = asInputStream(under);
 		}
 
 		public PrintStream getOut() {
@@ -1569,13 +1587,18 @@ public class SystemCurrent {
 		threadLocalIO.set(mainIO);
 	}
 
-	public static void registerAsInteractive(String name, InputStream inputStream, PrintStream outStream, PrintStream errStream) {
-		InOutErr inOutErr = new InOutErr(name);
-		inOutErr.setIn(inputStream);
+	public static void registerAsInteractive(String name, boolean isTTY, InputStream inputStream, PrintStream outStream, PrintStream errStream) {
+
+		InOutErr inOutErr = threadLocalIO.get();
+		inOutErr.name = name;
+		inOutErr.isTTY = isTTY;
+		inOutErr.itlCreated = ITLCreated.CONSOLE;
 		inOutErr.setOut(outStream);
+		inOutErr.setIn(inputStream);
 		inOutErr.setErr(errStream);
 		addTee(errorTees, errStream);
 		interactiveConsoles.put(name, inOutErr);
+
 	}
 
 	public static InputStream mustIn() {

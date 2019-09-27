@@ -30,12 +30,13 @@
  ***/
 package net.wimpi.telnetd.impl;
 
+import org.logicmoo.system.IOSecurityManager;
 import org.osgi.framework.BundleContext;
 
 import net.wimpi.telnetd.shell.BeanScriptShell;
 import net.wimpi.telnetd.shell.Shell;
 import net.wimpi.telnetd.shell.ShellService;
-import net.wimpi.telnetd.util.NoExitSecurityManager;
+//import net.wimpi.telnetd.util.NoExitSecurityManager;
 
 /**
  * This class implements a BeanShellScript shell.
@@ -50,8 +51,9 @@ public class BeanScriptShellService implements ShellService {
 
 	public boolean activate(BundleContext bc) {
 		//set no exit security manager
-		m_SystemSecurity = System.getSecurityManager();
-		System.setSecurityManager(new NoExitSecurityManager(m_SystemSecurity));
+		IOSecurityManager.install();
+		//m_SystemSecurity = System.getSecurityManager();
+		//System.setSecurityManager(new NoExitSecurityManager(m_SystemSecurity));
 		return true;
 	}//activate
 

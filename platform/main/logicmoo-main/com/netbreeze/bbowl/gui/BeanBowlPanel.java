@@ -14,7 +14,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.logicmoo.bb.BeanBowl;
+import org.logicmoo.bb.TrackedObjects;
 
 import com.netbreeze.swing.BeanUtils;
 
@@ -39,7 +39,7 @@ public class BeanBowlPanel extends JPanel implements ActionListener, DocumentLis
     return desk;
   }
 
-  public BeanBowl getBowl() {
+  public TrackedObjects getBowl() {
     return context.getBowl();
   }
 
