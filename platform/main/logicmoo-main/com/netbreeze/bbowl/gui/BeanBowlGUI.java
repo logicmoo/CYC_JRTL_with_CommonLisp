@@ -29,7 +29,6 @@ import javax.swing.JToolBar;
 //import org.appdapter.gui.demo.DemoBrowser;
 import org.logicmoo.bb.TrackedObjects;
 import org.logicmoo.system.BeanShellCntrl;
-import org.logicmoo.system.Startup;
 import org.logicmoo.system.ToplevelMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

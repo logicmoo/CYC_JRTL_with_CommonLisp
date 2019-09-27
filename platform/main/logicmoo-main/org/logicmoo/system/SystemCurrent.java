@@ -40,7 +40,6 @@ import java.util.function.Function;
 
 import org.armedbear.lisp.ReaderInputStream;
 import org.armedbear.lisp.WriterOutputStream;
-import org.logicmoo.system.SystemCurrent.ITLCreated;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 

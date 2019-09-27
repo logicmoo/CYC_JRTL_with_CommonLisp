@@ -123,7 +123,6 @@ import org.jpl7.Term;
 import org.jpl7.Variable;
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
-import org.logicmoo.bb.BeansContextListener;
 import org.logicmoo.bb.TrackedObjects;
 
 import com.cyc.cycjava.cycl.constant_completion_high;
@@ -152,9 +151,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess.TerminationRequest;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess.TerminationRequest;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLBoolean;
@@ -171,7 +170,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 import bsh.FileReader;
 import bsh.NameSpace;
-import bsh.This;
 import bsh.util.Sessiond;
 import eu.larkc.core.orchestrator.servers.LarKCHttpServer;
 import net.wimpi.telnetd.TelnetD;

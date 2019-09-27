@@ -24,10 +24,10 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
 import org.armedbear.lisp.Lisp;
-import org.logicmoo.bb.TrackedObjects;
 import org.logicmoo.bb.BeanWrapper;
 import org.logicmoo.bb.BeansContext;
 import org.logicmoo.bb.BeansContextListener;
+import org.logicmoo.bb.TrackedObjects;
 
 import com.netbreeze.swing.ErrorDialog;
 import com.netbreeze.swing.LargeBeanView;
