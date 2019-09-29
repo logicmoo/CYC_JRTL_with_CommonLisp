@@ -249,8 +249,8 @@ public class SystemCurrent {
 			}
 			final InOutErr currentIO = currentIO();
 			currentIO.setIn(sObj);
-		}
-	}
+				}
+			}
 
 	/**
 	 *
@@ -658,7 +658,7 @@ public class SystemCurrent {
 	//public static PrintStream out = System.out;
 	static {
 		if (!DONT_USE) {
-			out = new Out("#<System.out>", tlout);
+		out = new Out("#<System.out>", tlout);
 		}
 	}
 
@@ -850,7 +850,6 @@ public class SystemCurrent {
 				} catch (InterruptedException e) {
 					interrupted = true;
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					uncaughtException(e);
 					throw new IOException(e);
 				}
@@ -1331,7 +1330,6 @@ public class SystemCurrent {
 			hasSetupIO = true;
 			if (DONT_USE)
 				return;
-
 			try {
 				IOSecurityManager.install();
 			} catch (Throwable e) {
@@ -1429,12 +1427,12 @@ public class SystemCurrent {
 
 	private static void uncaughtException(Throwable e) {
 		if (!cce)
-			Startup.uncaughtException(e);
+		Startup.uncaughtException(e);
 	}
 
 	private static void bp() {
 		if (!cce)
-			Startup.bug();
+		Startup.bug();
 	}
 
 	public static void attachConsole(boolean becomeOwner) {
@@ -1587,7 +1585,6 @@ public class SystemCurrent {
 	}
 
 	public static void registerAsInteractive(String name, boolean isTTY, InputStream inputStream, PrintStream outStream, PrintStream errStream) {
-
 		InOutErr inOutErr = threadLocalIO.get();
 		inOutErr.name = name;
 		inOutErr.isTTY = isTTY;
@@ -1597,7 +1594,6 @@ public class SystemCurrent {
 		inOutErr.setErr(errStream);
 		addTee(errorTees, errStream);
 		interactiveConsoles.put(name, inOutErr);
-
 	}
 
 	public static InputStream mustIn() {

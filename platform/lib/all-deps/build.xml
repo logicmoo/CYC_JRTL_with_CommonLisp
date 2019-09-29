@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cycAppToolkitJS" default="" basedir=".">
+  <description>Deployment targets for cycJS</description>
+  <!--
+  <property name="build.dir"            value="war"/>
+  <property name="build.meta.inf.dir"   value="${build.dir}/"/>
+  <property name="dist.dir"             value="dist"/>
+  <property name="dist.war"             value="${dist.dir}/${ant.project.name}.war"/>
+  -->
+  <property name="webapp.dir"           value="../webapp"/>
+  <!--
+  <property name="cb.src.dir"           value="/home/nwinant/src/head/cycorp/cyc/doc/js"/>
+  -->
+  <property name="cb.src.dir"           value="/home/nwinant/kea/test"/>
+
+<!--
+  <target name="clean">
+    <delete dir="${dist.dir}"/>
+  </target>
+  
+  <target name="compile">
+    <echo message="=====   Please make sure that you've compiled the ${ant.project.name} project via Google > GWT Compile Project   ====="/>
+  </target>
+  
+  <target name="dist" depends="compile, clean">
+    <mkdir dir="${dist.dir}"/>
+    <jar compress="true" jarfile="${dist.war}">
+      <fileset dir="${build.dir}">
+        <exclude name="data-backup/**"/>
+      </fileset>
+    </jar>
+    <echo message="WAR built!"/>
+  </target>
+  -->
+  
+  <target name="deploy-cb">
+    <copy todir="${cb.src.dir}">
+      <fileset dir="${webapp.dir}"/>
+    </copy>
+  </target>
+  
+</project>

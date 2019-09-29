@@ -1,0 +1,39 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cyc.library.methodcaching</groupId>
+    <artifactId>tuple</artifactId>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.cyc.parentPom</groupId>
+        <artifactId>parentPom</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../com.cyc.parentPom</relativePath>
+    </parent>
+        
+    <name>tupleMaven</name>
+  
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <build>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.cyc.library</groupId>
+            <artifactId>hashing</artifactId>
+        </dependency>
+    </dependencies>
+</project>

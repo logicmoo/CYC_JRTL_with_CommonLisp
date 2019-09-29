@@ -3,6 +3,8 @@ package org.logicmoo.system;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.MenuItem;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,17 +25,20 @@ import java.util.Properties;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameEvent;
 
 import org.armedbear.j.Log;
 import org.armedbear.j.ReaderThread;
+import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Pathname;
 import org.armedbear.lisp.Symbol;
+import org.armedbear.lisp.Version;
 import org.jpl7.JPLException;
 import org.jpl7.Term;
 import org.jpl7.Variable;
@@ -121,13 +127,19 @@ public class BeanShellCntrl extends Startup {
 
 	public static void addBshDeskTop(This desk, boolean doSets) throws UtilEvalError {
 		final NameSpace nameSpace = desk.getNameSpace();
+		for (bsh.Variable v : nameSpace.getDeclaredVariables()) {
+			System.err.println(v.toString());
+		}
 		if (doSets) {
 			frameMap = (Map) nameSpace.getVariable("frameMap");
 			desktop_pain_object_instance = (Container) nameSpace.getVariable("pane");
 			popupMenu = (JPopupMenu) nameSpace.getVariable("popup");
-		}
-		for (bsh.Variable v : nameSpace.getDeclaredVariables()) {
-			System.err.println(v.toString());
+			for (MenuElement menuItem : popupMenu.getSubElements()) {
+				System.out.println("" + menuItem);
+			}
+			//			for (Object menuItem : popupMenu.getActionMap().allKeys()) {
+			//				System.out.println("" + menuItem);
+			//			}
 		}
 
 	}
@@ -148,7 +160,7 @@ public class BeanShellCntrl extends Startup {
 				//				SystemCurrent.cantSetOut = true;
 				//				//	SystemCurrent.originalSystemIn = console.getInputStream();
 				//				SystemCurrent.addErrorTee(console.getErr());
-				SystemCurrent.registerAsInteractive(myName, false, console.getInputStream(), console.getOut(), console.getErr());
+				SystemCurrent.registerAsInteractive(myName, true, console.getInputStream(), console.getOut(), console.getErr());
 				maybeCapture(thiz);
 			} else if (myNameL.startsWith("bsh workspace")) {
 				standardConsoleImports(nameSpace);
@@ -605,7 +617,6 @@ public class BeanShellCntrl extends Startup {
 			invoke(demoBrowserClass(), "showObject", o);
 		} catch (EvalError e) {
 			uncaughtException(e);
-			;
 			throw new RuntimeException(e);
 		}
 	}
@@ -644,7 +655,7 @@ public class BeanShellCntrl extends Startup {
 				invokeDemoBrowser("testLoggingSetup();");
 				invokeDemoBrowser("setLoggerTo(java.util.logging.Level.ALL);");
 			} catch (Throwable e1) {
-				// e1.uncaughtException();
+				// e1.printStackTrace();
 				// TODO Auto-generated catch block
 				// MsgBox.error(e1);
 			}
@@ -750,13 +761,20 @@ public class BeanShellCntrl extends Startup {
 				final InputStream inputStream = console.getInputStream();
 				final PrintStream outputStream = console.getOut();
 				SystemCurrent.registerAsInteractive(myName, true, inputStream, outputStream, console.getErr());
-				SystemCurrent.currentIO().setOut(outputStream);
+				if (isWebSwing) {
+					SystemCurrent.originalSystemErr = noticeStream = new PrintStream(console.getErr(), true);
+					SystemCurrent.originalSystemOut = new PrintStream(outputStream, true);
+					SystemCurrent.originalSystemIn = inputStream;
+
+				}
 				org.armedbear.lisp.Interpreter interp = new_lisp_instance();
+				interp.init();
 				interp.run();
 			}
 		};
 
 		if (firstInstance) {
+			needIOConsole = false;
 			final String name = "main for " + myName;
 
 			// Run the interpreter in a secondary thread so we can control the stack size.

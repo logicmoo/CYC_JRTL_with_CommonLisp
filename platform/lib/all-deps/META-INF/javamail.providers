@@ -1,0 +1,1 @@
+protocol=gm; type=transport; class=com.google.appengine.api.mail.stdimpl.GMTransport;

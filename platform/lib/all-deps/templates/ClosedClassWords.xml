@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ebmtTemplates
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://ws.opencyc.org/xsd/EBMT http://ws.opencyc.org/xsd/EBMT.xml"
+  xmlns="http://ws.opencyc.org/xsd/EBMT">  
+  
+  <template>
+    <examples>
+      <example>itself</example>
+    </examples>
+    <nlPattern class="2000001">itself</nlPattern>
+    <anaphoricReference>$NonHumanAnimal#1</anaphoricReference>
+    <cyclPattern>
+           (#$equalSymbols ?X $NonHumanAnimal#1)
+    </cyclPattern>
+    <type>$NonHumanAnimal#1</type>
+    <variable>?X</variable>
+  </template>      
+
+  <template>
+    <examples>
+      <example>himself</example>
+    </examples>
+    <nlPattern class="2000001">himself</nlPattern>
+    <anaphoricReference>$MaleAnimal#1</anaphoricReference>
+    <cyclPattern>
+           (#$equalSymbols ?X $MaleAnimal#1)
+    </cyclPattern>
+    <type>$MaleAnimal#1</type>
+    <variable>?X</variable>
+  </template>    
+
+  <template>
+    <examples>
+      <example>herself</example>
+    </examples>
+    <nlPattern class="2000001">herself</nlPattern>
+    <anaphoricReference>$FemaleAnimal#1</anaphoricReference>
+    <cyclPattern>
+           (#$equalSymbols ?X $FemaleAnimal#1)
+    </cyclPattern>
+    <type>$FemaleAnimal#1</type>
+    <variable>?X</variable>
+  </template>    
+  
+  <template>
+    <examples>
+      <example>she</example>
+    </examples>
+    <nlPattern class="2000001">[she|She]</nlPattern>
+    <anaphoricReference>$FemaleAnimal#1</anaphoricReference>
+    <cyclPattern>
+           (#$equalSymbols ?X $FemaleAnimal#1)
+    </cyclPattern>
+    <type>$FemaleAnimal#1</type>
+    <variable>?X</variable>
+  </template>    
+  <template>
+    <examples>
+      <example>he</example>
+    </examples>
+    <nlPattern class="2000001">[He|he]</nlPattern>
+    <anaphoricReference>$MaleAnimal#1</anaphoricReference>
+    <cyclPattern>
+           (#$equalSymbols ?X $MaleAnimal#1)
+    </cyclPattern>
+    <type>$MaleAnimal#1</type>
+    <variable>?X</variable>
+  </template>  
+ 
+ 
+ <template>
+    <examples>
+      <example>it</example>
+    </examples>
+    <nlPattern class="2000001">[It|it]</nlPattern>
+    <anaphoricReference>$MaleAnimal#1</anaphoricReference>
+    <cyclPattern>
+           (#$equalSymbols ?X $MaleAnimal#1)
+    </cyclPattern>
+    <type>$MaleAnimal#1</type>
+    <variable>?X</variable>
+  </template>    
+ <template>
+    <examples>
+      <example>him</example>
+    </examples>
+    <nlPattern class="2000001">[Him|him]</nlPattern>
+    <anaphoricReference>$MaleAnimal#1</anaphoricReference>
+    <cyclPattern>
+           (#$equalSymbols ?X $MaleAnimal#1)
+    </cyclPattern>
+    <type>$MaleAnimal#1</type>
+    <variable>?X</variable>
+  </template>    
+  <template>
+    <examples>
+      <example>her</example>
+    </examples>
+    <nlPattern class="2000001">[Her|her]</nlPattern>
+    <anaphoricReference>$FemaleAnimal#1</anaphoricReference>
+    <cyclPattern>
+           (#$equalSymbols ?X $FemaleAnimal#1)
+    </cyclPattern>
+    <type>$FemaleAnimal#1</type>
+    <variable>?X</variable>
+  </template>
+    
+</ebmtTemplates>

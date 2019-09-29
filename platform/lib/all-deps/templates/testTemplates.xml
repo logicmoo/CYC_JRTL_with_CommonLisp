@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ebmtTemplates
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://ws.opencyc.org/xsd/EBMT http://ws.opencyc.org/xsd/EBMT.xml"
+  xmlns="http://ws.opencyc.org/xsd/EBMT">
+  <template>
+    <nlPattern class="110900">$Person#0 was born in $NonNegativeInteger#4</nlPattern>
+    <cyclPattern>(#$birthDate $Person#0 (#$YearFn $NonNegativeInteger#4))</cyclPattern>
+    <type>#$CycLSentence-Assertible</type>
+    <microTheory>#$CurrentWorldDataCollectorMt-NonHomocentric</microTheory>
+    <inferenceMode type=":MINIMAL"/>
+  </template>
+  <template>
+    <nlPattern class="808002">
+      [How much|What|how much|what] [is|'s] [the price|the cost|{}] 
+      [for|of|to buy|to get|{}] $EdibleStuff#0 
+      [from|at|in] $Facility-Generic#1 [?|{}]
+    </nlPattern>
+    <cyclPattern>
+      (#$priceChargedFor $Facility-Generic#1 $EdibleStuff#0 ?PRICE)
+    </cyclPattern>
+    <microTheory>(#$MtSpace #$CurrentWorldDataCollectorMt-NonHomocentric #$AnytimePSC)</microTheory>
+    <inferenceMode type=":MINIMAL"/>
+  </template>
+</ebmtTemplates>

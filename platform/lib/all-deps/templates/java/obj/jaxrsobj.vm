@@ -1,0 +1,109 @@
+#set( $primaryIDName = $class_obj.PrimaryImpl.Name.toLowerCase() )
+#set( $primaryDAOName = "get${class_obj.PrimaryImpl.Name}" )
+#java_headers()
+
+@Path("$jaxrs_path")
+$visibility class $name #class_extends( $superclass ) {
+  
+  @GET
+  @Path("/list")
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response getList(
+          @QueryParam("context") String context,
+          @QueryParam("predicateContext") String predicateContext) {
+    try {
+      return JSON_SERIALIZER.response(${class_obj.Name}.getAllObjects(getContextMap(context, predicateContext)));
+//      return JSON_SERIALIZER.response(${class_obj.Name}.getAllIndividuals(getCollectionContext(context)));
+    } catch (Exception ex) {
+      return getSerializer().response(ex);
+    }
+  }
+  
+  @GET
+  @Path("/name/{name}")
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response getValue(
+          @PathParam("name") String name,
+          @QueryParam("context") String context,
+          @QueryParam("predicateContext") String predicateContext) {
+    try {
+      return getSerializer().response(${primaryDAOName}(name, context, predicateContext));
+    } catch (Exception ex) {
+      return getSerializer().response(ex);
+    }
+  }
+  
+#foreach( $method in $ws_methods )
+#if( $method.FType != "GET" )/*
+#end
+  #jaxrs_method_request_type( $method )
+  @Path("/name/{name}/${method.PathName}")
+  @Produces({MediaType.APPLICATION_JSON})
+  $method.Visibility Response $method.getName()(
+          @PathParam("name") String name,
+          @QueryParam("context") String context,
+          @QueryParam("predicateContext") String predicateContext#foreach( $arg in $method.Arguments ),
+          #jaxrs_queryparam( $arg )#end) {
+    try {
+      return getSerializer().response(${primaryDAOName}(name, context, predicateContext).${method.Name}() + "");
+    } catch (Exception e) {
+      return returnException(e);
+    }
+  }
+#if( $method.FType != "GET" )*/
+#end
+  
+#end
+  
+  // Protected
+  
+  @Override
+  protected void initializeService() {
+    super.initializeService();
+    this.forceResponseType(MediaType.APPLICATION_JSON_TYPE);
+  }
+
+  protected ${class_obj.PrimaryImpl.Name} ${primaryDAOName}(
+          String name,
+          String collCtxParam, 
+          String predCtxParam) throws ModelAPIException {
+    try {      
+      if (name != null) {
+        return new ${class_obj.Name}(
+                getContextMap(collCtxParam, predCtxParam),
+                ${class_obj.PrimaryImpl.InstanceType}.findOrCreate(name));
+      }
+      return null;
+    } catch (Exception e) {
+      throw new ModelAPIException(e.getMessage(), e);
+    }
+  }
+  
+  protected ContextMap getContextMap(String collCtxParam, String predCtxParam) throws ModelAPIException {
+    return new SimpleContextMap(
+              getCollectionContext(collCtxParam),
+              getPredicateContext(predCtxParam));
+  }
+  
+  protected Context getCollectionContext(String param) throws ModelAPIException {
+    try {
+      if (param != null) {
+        return Context.get(param);
+      }
+      return ${class_obj.Name}.getDefaultContexts().getCollectionContext();
+    } catch (Exception e) {
+      throw new ModelAPIException(e.getMessage(), e);
+    }
+  }
+  
+  protected Context getPredicateContext(String param) throws ModelAPIException {
+    try {
+      if (param != null) {
+        return Context.get(param);
+      }
+      return ${class_obj.Name}.getDefaultContexts().getRelationContext();
+    } catch (Exception e) {
+      throw new ModelAPIException(e.getMessage(), e);
+    }
+  }
+}

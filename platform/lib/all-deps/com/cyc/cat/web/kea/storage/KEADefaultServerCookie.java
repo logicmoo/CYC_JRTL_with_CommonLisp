@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cyc.cat.web.kea.storage;
 
 import com.cyc.cat.common.config.CycServer;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd ">
+
+	        <named-query name="Nlpattern.findByLexeme-and-User-and-Tag">
+		<query>
+			SELECT n 
+			FROM Template t 
+				JOIN t.nlpatternCollection n
+                                JOIN n.lexemeCollection l
+                                JOIN t.checkedOutById c
+				JOIN t.underConstructionById u
+				JOIN t.tagsCollection g
+			WHERE 
+				t.isActive = true
+				AND
+				((c.email = 'nobody') OR (NOT c.email = :userId))	
+				AND 
+				((u.email = 'nobody') OR (u.email = :userId))
+				AND l.text = :string
+				AND
+				(g.label IN :tags)
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<hint name="eclipselink.query-results-cache.expiry" value="120000" />
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+		<hint name="eclipselink.read-only" value="true" />
+	</named-query>
+</entity-mappings>

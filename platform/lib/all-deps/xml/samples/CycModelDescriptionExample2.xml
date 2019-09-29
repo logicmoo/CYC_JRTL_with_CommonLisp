@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cycModelDescription 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://ws.opencyc.org/xsd/CycModelDescription">
+  
+  <project name="TestAppDC"/>
+  
+  <interface collection="DreamcatcherWell">
+    <method predicate="wellObservedToBeInProductionOnDate" collection="DreamcatcherWell" functionType="get"/>
+    <method predicate="wellObservedToBeShutInOnDate" collection="DreamcatcherWell"/>
+  </interface>
+  
+</cycModelDescription>

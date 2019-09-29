@@ -141,7 +141,12 @@ public class UpdateZip {
 				throw new IOException("Could not create directory: " + file.getParentFile());
 			}
 			if (!entry.isDirectory()) {
-				copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(file)));
+				// dont overwrite existing files
+				if (!file.exists()) {
+					final BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+					copyInputStream(zipFile.getInputStream(entry), out);
+					out.close();
+				}
 			} else {
 				if (!buildDirectory(file)) {
 					throw new IOException("Could not create directory: " + file);

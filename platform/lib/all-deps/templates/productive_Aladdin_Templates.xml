@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ebmtTemplates
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://ws.opencyc.org/xsd/EBMT http://ws.opencyc.org/xsd/EBMT.xml"
+  xmlns="http://ws.opencyc.org/xsd/EBMT">
+    
+ 
+    <template>
+        <examples>
+            <example>
+                What shot has skateboards in it?
+            </example>
+        </examples>
+        <nlPattern class="8110011">
+           [What|Which] 
+                [video|film|{}] 
+                [clip|shot|recording|clips|shots|recordings|video|videos|film|films]
+                [are|are there|is|is there|{}]
+                [which|that|{}]
+                [having|showing|show|have|shows|has|with] 
+                [a|an|some|{}] $PartiallyTangible#0 
+                [shown|appearing|appear|{}] 
+                [in|on|{}] [them|it|{}]
+               ?
+               </nlPattern>
+        <cyclPattern>
+         (#$visuallyDepicts-Type-Precise
+           ?SHOT $PartiallyTangible#0 
+           )
+        </cyclPattern>
+        <microTheory>#$MultiMediaAnalysisQueryMt</microTheory>
+        <inferenceMode type=":SHALLOW"/>
+    </template>
+
+    <template>
+        <!--This template loses some information about timelapse, professional, etc -->
+        <nlPattern class="250001">
+            [this is|showing|{}] [a|an|some|various|assorted|{}] 
+            [time lapse|time-lapse|professionally shot|stop motion|stop-motion|{}] 
+            [fotage|footage|video|videos|clip|clips|movie|video clip|video clips] 
+            [of|showing|that show|which show|that shows|which shows|with]
+            $Situation#0 
+            [video|{}]</nlPattern>       
+        <cyclPattern>
+            (#$equalSymbols ?VID
+                 (#$SubcollectionOfWithRelationToTypeFn 
+                    #$VideoConceptualWork #$workVisuallyDepicts $Situation#0)
+                    )
+        </cyclPattern>
+        <type>#$VideoConceptualWork</type>
+        <variable>?ACT</variable>
+    </template>
+    <template>
+        <!--This template loses some information about timelapse, professional, etc -->
+        <nlPattern class="250001">[this is|showing|{}] [a|an|some|various|assorted|{}] [time lapse|time-lapse|professionally shot|stop motion|stop-motion|{}] [fotage|footage|video|videos|clip|clips|movie|video clip|video clips] [of|showing|that show|which show|that shows|depicting|which shows|with] $PartiallyTangible#0 [video|{}]</nlPattern>       
+        <cyclPattern>
+            (#$equalSymbols ?VID
+                 (#$SubcollectionOfWithRelationToTypeFn 
+                    #$VideoConceptualWork #$workVisuallyDepicts $PartiallyTangible#0)
+                    )
+        </cyclPattern>
+        <type>#$VideoConceptualWork</type>
+        <variable>?ACT</variable>
+    </template>
+        
+      <template>
+        <examples>
+            <example>
+                What is a filling for a truffle and proscuitto panino?
+            </example>
+        </examples>
+        <nlPattern class="201">
+            [what|What|Which|which|{}] 
+            [is|are|{}] [the|a|{}] 
+            [filling|fillings] 
+            [in|that|for|on|of|{}] [a|an|{}]
+            $Sandwich#0 
+            [has|have|{}] [got|put|{}]
+            [inside|in it|in them|{}] ?</nlPattern>
+        <cyclPattern>
+         (#$relationAllExists 
+           #$sandwichFillings 
+           $Sandwich#0
+          ?FILLING)
+        </cyclPattern>
+        <microTheory>#$CurrentWorldDataCollectorMt-NonHomocentric</microTheory>
+        <inferenceMode type=":SHALLOW"/>
+    </template>
+     <template>
+          <examples>
+            <example>
+                What has a ham toasted cheese sandwich got as a filling?
+            </example>
+        </examples>
+        <nlPattern class="202">
+            [What|what|which|Which|{}] [do|have|has|have|{}] [a|an|{}]
+            $Sandwich#0 
+              [has|have|{}] [got|put|{}]
+             [as|for|{}] [the|a|{}] 
+            [filling|fillings] 
+            [in|inside|inside of|on|of|for|{}]
+            [it|them|{}] ?</nlPattern>
+        <cyclPattern>
+          (#$relationAllExists 
+           #$sandwichFillings 
+           $Sandwich#0
+          ?FILLING)
+        </cyclPattern>
+        <microTheory>#$CurrentWorldDataCollectorMt-NonHomocentric</microTheory>
+        <inferenceMode type=":SHALLOW"/>
+    </template>
+     <template>
+        <nlPattern class="201">
+            [what|What|Which|which|{}] 
+            [is|are|{}] [the|a|{}] 
+                [ingredients|ingredient|makings|fixings] 
+            [in|that|on|of|{}] [a|an|{}]
+                $EdibleStuff#0 
+            [has|have|{}] [got|put|{}]
+            [inside|in it|in them|{}] ?</nlPattern>
+        <cyclPattern>
+         (#$relationAllExists 
+           #$ingredients 
+             $EdibleStuff#0 
+          ?FILLING)
+        </cyclPattern>
+        <microTheory>#$CurrentWorldDataCollectorMt-NonHomocentric</microTheory>
+        <inferenceMode type=":SHALLOW"/>
+    </template>
+     <template>
+        <nlPattern class="202">
+            [What|what|which|Which|{}] [has|have|{}] [a|an|{}]
+            $EdibleStuff#0 
+              [has|have|{}] [got|put|{}]
+             [as|for|{}] [the|a|{}] 
+            [ingredients|ingredient|makings|fixings] 
+            [in|inside|inside of|on|of|for|{}]
+            [it|them|{}] ?</nlPattern>
+        <cyclPattern>
+          (#$relationAllExists 
+           #$ingredients
+           $EdibleStuff#0
+          ?FILLING)
+        </cyclPattern>
+        <microTheory>#$CurrentWorldDataCollectorMt-NonHomocentric</microTheory>
+        <inferenceMode type=":SHALLOW"/>
+    </template>
+</ebmtTemplates> 

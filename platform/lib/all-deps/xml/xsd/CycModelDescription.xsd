@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+   CycModelDescription.xsd
+
+   To generate code internally at Cyorp, use something like:
+     pushd  ~/src/head/cycorp/cyc/java/library/xml/CycModelDescription/resource/xml
+     xjc -d ~/src/head/cycorp/cyc/java/library/xml/CycModelDescription/generated CycModelDescription -extension -b customization.xml
+     popd
+-->  
+
+<xs:schema
+  xmlns:xs='http://www.w3.org/2001/XMLSchema'
+  targetNamespace='http://ws.opencyc.org/xsd/CycModelDescription'
+  xmlns:cmd='http://ws.opencyc.org/xsd/CycModelDescription'
+  xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0">
+
+  <xs:element name="method">
+    <xs:complexType>
+      <xs:attribute name='predicate' type='xs:string' use='required'/>
+      <xs:attribute name='collection' type='xs:string' use='required'/>
+      <xs:attribute name='configArgPos' type='xs:int' use='optional'/>
+      <xs:attribute name='functionType' use='required'>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="get"/>
+            <xs:enumeration value="set"/>
+            <xs:enumeration value="getTypeList"/>
+            <xs:enumeration value="factory"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="interface">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='cmd:method' minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref='cmd:extends' minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name='collection' type='xs:string' use='required'/>
+      <xs:attribute name='relationType' type='xs:string' use='optional'/>
+      <xs:attribute name='context' type='xs:string' use='optional'/>
+      <xs:attribute name='predicateContext' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="project">
+    <xs:complexType>
+      <xs:attribute name='name' type='xs:string' use='required'/>
+      <xs:attribute name='package' type='xs:string' use='required'/>
+      <xs:attribute name='workspace' type='xs:string' use='optional'/>
+      <xs:attribute name='javaDir' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="cycModelDescription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='cmd:project' minOccurs="1" maxOccurs="1"/>
+        <xs:element ref='cmd:interface' minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name='extends'>
+    <xs:complexType>
+      <xs:attribute name='collection' type='xs:string' use='required'/>
+    </xs:complexType>
+  </xs:element>
+  
+</xs:schema>

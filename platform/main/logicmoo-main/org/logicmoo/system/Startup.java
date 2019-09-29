@@ -566,10 +566,11 @@ public class Startup extends ABCLStatic {
 					to.println("PWD:" + (new File(".").getAbsolutePath()));
 				}
 				isWebSwing = true;
+				IOSecurityManager.disable = true;
 				noExit = true;
 				pushNew(av, "--gui");
 				pushNew(av, "--noj");
-				pushNew(av, "--rcyc");
+				//pushNew(av, "--rcyc");
 				noExit = true;
 				enablewebswing();
 			}
@@ -775,7 +776,6 @@ public class Startup extends ABCLStatic {
 						to.println("addDefaultJarsToClassPath from " + from);
 						IsolatedClassLoader.addDefaultJarsToClassPath(from);
 					}
-
 					try {
 						IsolatedClassLoader.configChecks();
 					} catch (Throwable e) {
@@ -796,6 +796,7 @@ public class Startup extends ABCLStatic {
 			needIOConsole = false;
 
 		}
+
 		if (mainClass != null) {
 			try {
 				Class c = null;
@@ -1387,15 +1388,16 @@ public class Startup extends ABCLStatic {
 	}
 
 	public static String addObject(String named, Object value) {
-
 		return addObject(named, value, false);
 	}
 
 	public static String addObject(String named, Object value, boolean showNow) {
+
 		bowl.addBean(named, value);
 		if (showNow)
 			showObject(value);
 		return bowl.getWrapper(value).getName();
+
 	}
 
 	public static void addSingleton(Object self) {

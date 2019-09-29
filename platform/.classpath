@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path=".apt_generated">
-		<attributes>
-			<attribute name="optional" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry excluding="lib/|src/|src2/net/wimpi/telnetd/" kind="src" path="main/telnetd-2.0"/>
-	<classpathentry kind="src" path="webapps/docs/appdev/sample/src"/>
-	<classpathentry kind="src" path="webapps/docs/appdev/sample/web"/>
-	<classpathentry kind="src" path="webapps/manager"/>
-	<classpathentry kind="src" path="webapps/host-manager"/>
 	<classpathentry kind="src" path="examples/google-app-engine/src"/>
 	<classpathentry kind="src" path="examples/gui"/>
 	<classpathentry kind="src" path="examples/java-exception"/>
@@ -26,7 +17,6 @@
 	<classpathentry kind="src" path="main/jpl7-hacked"/>
 	<classpathentry kind="src" path="main/java"/>
 	<classpathentry including="**/*" kind="src" path="main/beanshell"/>
-	<classpathentry kind="src" path="main/opencyc-0.0.1-SNAPSHOT-src"/>
 	<classpathentry kind="src" path="main/server-4q"/>
 	<classpathentry kind="src" path="main/logicmoo-main"/>
 	<classpathentry excluding="com/cyc/tool/subl/~webserver~/|com/cyc/tool/subl/webserver/Tomcat.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
@@ -34,7 +24,7 @@
 	<classpathentry kind="src" path="main/opencyc-local"/>
 	<classpathentry excluding="classifiers/|javadoc/" kind="src" path="data/parsers/stanford-ner-cyc-2006-09-18"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="lib/all-deps"/>
+	<classpathentry kind="lib" path="lib/all-deps"/>
 	<classpathentry kind="lib" path="data/parsers/stanford-ner-cyc-2006-09-18/stanford-ner.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

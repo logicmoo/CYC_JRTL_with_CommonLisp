@@ -1,0 +1,159 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cyc.library</groupId>
+    <artifactId>nlAPI</artifactId>
+
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.cyc.parentPom</groupId>
+        <artifactId>parentPom</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../com.cyc.parentPom</relativePath>
+    </parent>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.cyc.api.CycAccess_Enterprise</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.8.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaIncludes>
+                                <include>jaxb/cycML/*.xsd</include>
+                            </schemaIncludes>
+                            <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-cycML.episode</episodeFile>
+                            <generatePackage>org.opencyc.cycml</generatePackage>
+                        </configuration>
+                        <id>jaxb-generate-cycML</id>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaIncludes>
+                                <include>jaxb/cycML/*.xsd</include>
+                            </schemaIncludes>
+                            <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-cycML.episode</episodeFile>
+                            <generatePackage>org.opencyc.cycml</generatePackage>
+                        </configuration>
+                        <id>jaxb-generate-cycML_1</id>
+                    </execution>
+                </executions>
+                <configuration>
+                    <catalog>src/main/resources/jaxb/catalog.xml</catalog>
+                    <catalogResolver>org.jvnet.jaxb2.maven2.resolver.tools.ClasspathCatalogResolver</catalogResolver>
+                    <forceRegenerate>true</forceRegenerate>
+                    <generateDirectory>${project.build.directory}/generated-sources/xjc</generateDirectory>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+            
+            <!-- Make sure the sources are available so the JavaDoc can be generated from them -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>bundle-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <!-- produce source artifact for main project sources -->
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- generate the actual javadoc -->
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- switch on dependency-driven aggregation -->
+                            <includeDependencySources>true</includeDependencySources>
+              
+                            <dependencySourceExcludes>
+                                <!--dependencySourceExclude>com.cyc.webservice.client:genericRestfulWSClient</dependencySourceExclude -->
+                                <dependencySourceExclude>com.google.code.findbugs:jsr305</dependencySourceExclude>
+                                <dependencySourceExclude>commons-lang:commons-lang:2.6</dependencySourceExclude>
+                            </dependencySourceExcludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>resource-bundles</id>
+                        <phase>package</phase>
+                        <goals>
+                            <!-- produce source artifact for main project sources -->
+                            <goal>resource-bundle</goal>
+
+                        </goals>
+                        <configuration>
+                            <detectOfflineLinks>false</detectOfflineLinks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>                           
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>com.cyc.library</groupId>
+            <artifactId>opencyc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cyc.library.xml</groupId>
+            <artifactId>textProcessing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cyc.webservice.client</groupId>
+            <artifactId>genericRestfulWSClient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cyc.library.xml</groupId>
+            <artifactId>cycConcept</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>KBAPI</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    <name>NL API</name>
+</project>

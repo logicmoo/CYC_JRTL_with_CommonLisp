@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd ">
+	
+	<named-query name="Template.countAll-by-User-and-Tags">
+		<query>
+			SELECT DISTINCT COUNT(t)
+			FROM Template t 
+				JOIN t.checkedOutById c 
+				JOIN t.underConstructionById u 
+				JOIN t.tagsCollection g 
+			WHERE 
+				((c.email = 'nobody') OR (NOT c.email = :userId))	
+				AND 
+				((u.email = 'nobody') OR (u.email = :userId))
+				AND
+				(g.label IN :tags)
+		</query>
+
+	</named-query>
+	
+	<named-query name="Template.findByNLPattern-Expansion-and-User-and-Tag">
+		<query>
+			SELECT t 
+			FROM Template t 
+				JOIN t.nlpatternCollection n 
+				JOIN n.expansionPatternCollection x 
+				JOIN t.checkedOutById c 
+				JOIN t.underConstructionById u 
+				JOIN t.tagsCollection g 
+			WHERE 
+				((c.email = 'nobody') OR (NOT c.email = :userId))	
+				AND 
+				((u.email = 'nobody') OR (u.email = :userId))
+				AND
+				(x.text = :text)
+				AND
+				(g.label IN :tags)
+		</query>
+		
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<hint name="eclipselink.query-results-cache.expiry" value="120000" />
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+		<hint name="eclipselink.read-only" value="true" />
+
+	</named-query>
+	
+        <!-- find the template, and return a template containing just the expansion and NLPattern that were used to actually
+        find the template, rather than all of the NLPatterns and expansions that are associated with the template. -->
+	<named-query name="Template.findBySingleNLPattern-Expansions-and-User-and-Tag">
+		<query>
+			SELECT new com.cyc.library.scgrepositorydata.Template(t, n, x.text, x.textWithNumberedVariables)
+			FROM Template t 
+				JOIN t.nlpatternCollection n
+				JOIN n.expansionPatternCollection x
+				JOIN t.checkedOutById c
+				JOIN t.underConstructionById u
+				JOIN t.tagsCollection g
+			WHERE 
+				t.isActive = true
+				AND
+				((c.email = 'nobody') OR (NOT c.email = :userId))	
+				AND 
+				((u.email = 'nobody') OR (u.email = :userId))
+				AND
+				(x.text = :text)
+				AND
+				(g.label IN :tags)
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<hint name="eclipselink.query-results-cache.expiry" value="120000" />
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+		<hint name="eclipselink.read-only" value="true" />
+	</named-query>
+        
+	<named-query name="Template.findByNLPattern-Expansions-and-User-and-Tag">
+		<query>
+			SELECT t 
+			FROM Template t 
+				JOIN t.nlpatternCollection n
+				JOIN n.expansionPatternCollection x
+				JOIN t.checkedOutById c
+				JOIN t.underConstructionById u
+				JOIN t.tagsCollection g
+			WHERE 
+				t.isActive = true
+				AND
+				((c.email = 'nobody') OR (NOT c.email = :userId))	
+				AND 
+				((u.email = 'nobody') OR (u.email = :userId))
+				AND
+				(x.text IN :texts)
+				AND
+				(g.label IN :tags)
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<hint name="eclipselink.query-results-cache.expiry" value="120000" />
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+		<hint name="eclipselink.read-only" value="true" />
+	</named-query>
+
+        
+        <named-query name="Template.findByNlpattern_id">
+		<query>
+			SELECT t 
+			FROM Template t 
+				JOIN t.nlpatternCollection n
+			WHERE 
+				n.id = :patternId
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<hint name="eclipselink.query-results-cache.expiry" value="120000" />
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+		<hint name="eclipselink.read-only" value="true" />
+	</named-query>
+                
+        
+<!--			SELECT t.id, n.text
+			FROM Template t 
+				JOIN nlpattern n on n.template_id = t.id
+    			     join lexeme_Usage u on u.nl_Pattern_id = n.id
+				join lexeme l on u.lexeme_id = l.id
+				where l.text='the' -->
+        
+        <named-query name="Template.findByLexeme-and-User-and-Tag">
+		<query>
+			SELECT t 
+			FROM Template t 
+				JOIN t.nlpatternCollection n
+                                JOIN n.lexemeCollection l
+                                JOIN t.checkedOutById c
+				JOIN t.underConstructionById u
+				JOIN t.tagsCollection g
+			WHERE 
+				t.isActive = true
+				AND
+				((c.email = 'nobody') OR (NOT c.email = :userId))	
+				AND 
+				((u.email = 'nobody') OR (u.email = :userId))
+				AND l.text = :string
+				AND
+				(g.label IN :tags)
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<hint name="eclipselink.query-results-cache.expiry" value="120000" />
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+		<hint name="eclipselink.read-only" value="true" />
+	</named-query>
+	
+</entity-mappings>

@@ -4,7 +4,6 @@
  */
 package com.cyc.kb;
 
-import com.cyc.kb.config.KBAPIConfiguration;
 import org.opencyc.api.CycAccess;
 import org.opencyc.cycobject.CycObject;
 
@@ -22,14 +21,10 @@ public class TestConstants {
 
   public static void ensureInitialized() throws Exception {
 
+    KBObject.setShouldTranscriptOperations(false);
     if (TestConstants.cyc == null) {
       TestConstants.cyc = CycAccess.getNewCycAccessInteractively(TestConstants.HOSTNAME, TestConstants.PORT);
       CycAccess.setCurrent(TestConstants.cyc);
-      
-      KBAPIConfiguration.setShouldTranscriptOperations(false);
-      // Example usage of KBAPIConfiguration methods
-      //KBAPIConfiguration.setCurrentCyclist("(#$UserOfProgramFn #$OWLImporter-Cyc #$ChrisDeaton)");
-      //KBAPIConfiguration.setProject(KBIndividual.get("DreamcatcherProject"));
     }
     universalVocabularyMt = new ImmutableContext("UniversalVocabularyMt");
     baseKB = new ImmutableContext("BaseKB");
@@ -43,6 +38,10 @@ public class TestConstants {
 
     private ImmutableContext(String cycName) throws Exception {
       super(cycName);
+    }
+
+    public void setCore(CycObject core) {
+      throw new UnsupportedOperationException();
     }
 
     @Override //Because we want to allow equality with mutable contexts.

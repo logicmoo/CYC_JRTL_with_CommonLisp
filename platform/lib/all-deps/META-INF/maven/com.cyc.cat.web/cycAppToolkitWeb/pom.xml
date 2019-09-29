@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.cyc.cat.web</groupId>
+  <artifactId>cycAppToolkitWeb</artifactId>
+  <packaging>jar</packaging>
+
+  <parent>
+    <groupId>com.cyc.parentPom</groupId>
+    <artifactId>parentPom</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../../../com.cyc.parentPom</relativePath>
+  </parent>
+  
+  <build>
+    <resources>
+      <!-- We must include sources for any files that we want GWT to be able to compile to JavaScript -->
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+            <include>com/cyc/cat/web/kea/**</include>
+         </includes>
+         <excludes>
+           <exclude>com/cyc/cat/web/kea/servlet/**</exclude>
+         </excludes>
+      </resource>
+      <!-- Include CycAppToolkitWeb.gwt.xml -->
+      <resource>
+         <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+  </build>
+  
+  <dependencies>
+    <!--
+    <dependency>
+      <groupId>com.cyc.library.xml</groupId>
+      <artifactId>textProcessing</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.cyc.webservice.client</groupId>
+      <artifactId>genericRestfulWSClient</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.cyc.library.xml</groupId>
+      <artifactId>cycConcept</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.cyc.library</groupId>
+      <artifactId>opencyc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.cyc.webservice.client</groupId>
+      <artifactId>openCycWSClients</artifactId>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>com.cyc.cat.common</groupId>
+      <artifactId>cycAppToolkitCommon</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.extras</groupId>
+      <artifactId>glassfish-embedded-all</artifactId>
+      <version>3.0.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>6.0</version>
+    </dependency>
+  </dependencies>
+</project>

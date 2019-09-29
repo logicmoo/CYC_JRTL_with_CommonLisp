@@ -1,0 +1,6 @@
+#java_headers()
+
+$visibility interface $name {
+
+#interface_methods( $methods )
+}

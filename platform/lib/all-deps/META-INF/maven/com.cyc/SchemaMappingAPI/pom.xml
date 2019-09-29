@@ -1,0 +1,182 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>com.cyc</groupId>
+  <artifactId>SchemaMappingAPI</artifactId>
+  <!-- Change packaging to "war" to deploy as RESTful service -->
+  <packaging>jar</packaging>
+  
+  <parent>
+    <groupId>com.cyc.parentPom</groupId>
+    <artifactId>parentPom</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../../com.cyc.parentPom</relativePath>
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <svnRevisionNumberPluginVersion>1.13</svnRevisionNumberPluginVersion>
+    <!-- maven.build.timestamp doesn't make it through to the filtering mechanism,
+         so we need to store it in another property. Details: 
+         http://java.dzone.com/tips/stamping-version-number-and
+    -->
+    <timestamp>${maven.build.timestamp}</timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+  </properties>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.cyc.library.mapi.plugins</groupId>
+        <artifactId>ModelGeneratorMavenPlugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!--
+          The configuration parameters for ModelGeneratorMavenPlugin and their default values.
+          Details may be found at http://wiki.cyc.com/wiki/index.php/MAPI_Demo#Parameters
+          
+                    <forceRegenerate>false</forceRegenerate>
+                    <validateCMD>true</validateCMD>
+                    <cmdPath>src/main/resources/CycModelDescription.xml</cmdPath>
+                    <srcPath>target/generated-sources/mapi</srcPath>
+                    <cyc>localhost:3600</cyc>
+                    <generateWS>false</generateWS>
+                    <generateUI>false</generateUI>
+                    -->
+                    <cyc>localhost:3600</cyc>
+                    
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/mapi</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+      
+            <!-- Required for RESTful services -->
+            <!--
+            <plugin>
+              <groupId>org.eclipse.jetty</groupId>
+              <artifactId>jetty-maven-plugin</artifactId>
+              <configuration>
+                <scanIntervalSeconds>2</scanIntervalSeconds>
+                <stopPort>9966</stopPort>
+                <stopKey>SKSIAPI</stopKey>
+              </configuration>
+            </plugin>
+            -->
+            <plugin>
+              <groupId>com.google.code.maven-svn-revision-number-plugin</groupId>
+              <artifactId>svn-revision-number-maven-plugin</artifactId>
+              <version>${svnRevisionNumberPluginVersion}</version> 
+              <executions>
+                <execution>
+                  <goals>
+                    <goal>revision</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+            
+            
+            <!--
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <version>2.16</version>
+              <configuration>
+                <enableAssertions>true</enableAssertions>
+              </configuration>
+            </plugin>
+            -->
+            
+            
+            
+            
+            <!--
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <executions>
+                <execution>
+                  <goals>
+                    <goal>exec</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <executable>java</executable>
+                <!- -
+                <commandlineArgs>-ea</commandlineArgs>
+                - ->
+              </configuration>
+            </plugin>
+            
+            -->
+            
+            
+            
+        </plugins>
+        
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+            <includes>
+              <include>**/BuildInfo.properties</include>
+            </includes>
+          </resource>
+        </resources>
+    </build>
+  
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.cyc.library.mapi.plugins</groupId>
+            <artifactId>ModelGeneratorMavenPlugin</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cyc.library</groupId>
+            <artifactId>opencyc</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cyc</groupId>
+            <artifactId>query</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cyc.library</groupId>
+            <artifactId>KBAPI</artifactId>
+        </dependency>
+    <dependency>
+	<groupId>postgresql</groupId>
+	<artifactId>postgresql</artifactId>
+	<version>9.1-901.jdbc4</version>
+    </dependency>
+  </dependencies>
+</project>

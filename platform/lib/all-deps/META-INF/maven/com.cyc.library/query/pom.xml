@@ -1,0 +1,137 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+    
+  <!--     <parent> -->
+  <!--         <groupId>com.cyc.parentPom</groupId> -->
+  <!--         <artifactId>parentPom</artifactId> -->
+  <!--         <version>0.0.1-SNAPSHOT</version> -->
+  <!--         <relativePath>../../com.cyc.parentPom</relativePath> -->
+  <!--     </parent> -->
+    
+    
+  <artifactId>query</artifactId>
+  <packaging>jar</packaging>
+    
+    <parent>
+		<groupId>com.cyc.library</groupId>
+  		<artifactId>cyc-core-api</artifactId>
+  		<version>1.0.0-Preview-SNAPSHOT</version>
+  		<relativePath>../CycCoreAPI/</relativePath>
+	</parent>
+    
+  <build>
+    <plugins>
+
+      <!-- Uncomment this plugin to get copyright info in header -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+        	
+        	<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-javadoc-plugin</artifactId>
+        		<configuration>
+        			<excludePackageNames>
+                   		com.cyc.inference,
+                   		com.cyc.inference.async,
+                   		com.cyc.answer.justification
+                   	</excludePackageNames>
+               </configuration>
+        	</plugin>
+        	
+        	<plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+		<version>0.8.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaIncludes>
+                                <include>jaxb/proofView/*.xsd</include>
+                                <include>jaxb/formulaTemplate/*.xsd</include>
+                            </schemaIncludes>
+                            <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-formulaTemplate.episode</episodeFile>
+                        </configuration>
+                        <id>jaxb-generate-formulaTemplate</id>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaIncludes>
+                                <include>jaxb/queryResultSet/*.xsd</include>
+                            </schemaIncludes>
+                            <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-queryResultSet.episode</episodeFile>
+                            <generatePackage>com.cyc.xml</generatePackage>
+                        </configuration>
+                        <id>jaxb-generate-queryResultSet</id>
+                    </execution>
+                </executions>
+                <configuration>
+                    <catalog>src/main/resources/jaxb/catalog.xml</catalog>
+                    <catalogResolver>org.jvnet.jaxb2.maven2.resolver.tools.ClasspathCatalogResolver</catalogResolver>
+                    <forceRegenerate>true</forceRegenerate>
+                    <generateDirectory>${project.build.directory}/generated-sources/xjc</generateDirectory>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+  
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <slf4jVersion>1.7.5</slf4jVersion>
+  </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4jVersion}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4jVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+        	<groupId>com.cyc</groupId>
+        	<artifactId>cyc-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cyc.library</groupId>
+            <artifactId>KBAPI</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.htmlparser.jericho</groupId>
+            <artifactId>jericho-html</artifactId>
+            <version>3.3</version>
+            <type>jar</type>
+        </dependency>
+        
+
+    </dependencies>
+    <name>Query API</name>
+</project>

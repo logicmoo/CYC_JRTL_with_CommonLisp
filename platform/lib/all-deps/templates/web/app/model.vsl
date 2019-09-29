@@ -1,0 +1,8 @@
+Ext.define('${app_name}.model.${class}', {
+  extend: 'Ext.data.Model',
+  fields: [
+    {name: 'name', type: 'string'},
+    {name: 'displayName', type: 'string'}#foreach($field in ${model_fields}),
+    {name: '${field.Predicate}', type: '${field.DataType}'}#end
+  ]
+});

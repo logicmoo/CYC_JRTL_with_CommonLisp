@@ -77,30 +77,35 @@ makeWorkspace( String name )
 
     frame.addInternalFrameListener(this);
 
-    actionPerformed( e )
-    {
-        this.com = e.getActionCommand();
-        if ( com.equals("Workspace Editor") )
-            workspaceEditor( interpreter, name );
-        else if ( com.equals("Capture System in/out/err") )
-            captureSysIO();
-        else if ( com.equals("Close") ) {
-            frame.setClosed(true);
-        }
-    }
+	actionPerformed( e )
+	{
+		this.com = e.getActionCommand();
+		if ( com.equals("Capture System in/out/err") )
+			captureSysIO();
+		else if ( com.equals("Return System in/out/err") )
+			returnSysIO();
+		else if	( com.equals("Close") )	{
+			frame.setClosed(true);
+		}
+	}
 
-    this.menubar = new JMenuBar();
-    this.menu=new JMenu("File");
-    this.mi=new JMenuItem("Workspace Editor");
-    mi.addActionListener(this);
-    menu.add(mi);
-    mi=new JMenuItem("Capture System in/out/err");
-    mi.addActionListener(this);
-    menu.add(mi);
-    mi=new JMenuItem("Close");
-    mi.addActionListener(this);
-    menu.add(mi);
-    menubar.add(menu);
+	this.menubar = new JMenuBar();
+	this.menu=new JMenu("File");
+
+	this.mi_capture = new JMenuItem("Capture System in/out/err");
+	mi_capture.addActionListener(this);
+	menu.add(mi_capture);
+
+	this.mi_return = new JMenuItem("Return System in/out/err");
+	mi_return.addActionListener(this);
+	menu.add(mi_return);
+
+	JMenuItem  mi=new JMenuItem("Close");
+	mi.addActionListener(this);
+	menu.add(mi);
+
+	menubar.add(menu);
+
 
     menu = fontMenu(console);
     menubar.add(menu);
@@ -126,15 +131,27 @@ makeWorkspace( String name )
     this.sysOut = System.out;
     this.sysErr = System.err;
 
+    updateMenu() {
+    	super.mi_return.setEnabled(super.haveSysIO);
+    	super.mi_capture.setEnabled(!super.haveSysIO);
+    }
+
+    //updateMenu();
+
+
     captureSysIO() {
     	if(super.haveSysIO) return;
-		this.sysIn = System.in;
+
+    	this.sysIn = System.in;
 		this.sysOut = System.out;
 		this.sysErr = System.err;
-    	super.haveSysIO = true; // old scoping rules
+
         System.setIn( console.getInputStream() );
         System.setOut( console.getOut() );
         System.setErr( console.getErr() );
+    	super.haveSysIO = true; // old scoping rules
+
+        super.updateMenu();
     }
 
     returnSysIO() {
@@ -143,7 +160,9 @@ makeWorkspace( String name )
         System.setIn( sysIn );
         System.setOut( sysOut );
         System.setErr( sysErr );
+        super.updateMenu();
     }
+
 
     BeanShellCntrl.addConsole(this, this.console);
 

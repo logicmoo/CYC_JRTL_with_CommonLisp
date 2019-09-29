@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  <!--
+  If you need to do any application initialization (for example, to ensure that
+  certain constants exist in the KB) you may wish to call the relevant code from the
+  init() method of a servlet, defined here.
+  -->
+  <!--
+  <servlet>
+    <servlet-name>MAPIInitializer</servlet-name>
+    <servlet-class>foo.bar.SomeHttpServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+  -->
+  
+#foreach( $servlet in $servlets )
+  <servlet>
+    <servlet-name>$servlet.Name</servlet-name>
+    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>com.sun.jersey.config.property.packages</param-name>
+      <param-value>${servlet.Package}</param-value>
+    </init-param>
+    <init-param>
+      <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+#end
+
+#foreach( $servlet in $servlets )
+  <servlet-mapping>
+    <servlet-name>$servlet.Name</servlet-name>
+    <url-pattern>/${servlet.Name}/*</url-pattern>
+  </servlet-mapping>
+#end
+
+  <!-- Cyc params -->
+  <context-param>
+    <param-name>cyc.host</param-name>
+    <param-value>localhost</param-value>
+  </context-param>
+  <context-param>
+    <param-name>cyc.port</param-name>
+    <param-value>3600</param-value>
+  </context-param>
+  <!--
+  <context-param>
+    <param-name>inference.cleanup.delay</param-name>
+    <param-value>1200</param-value>
+  </context-param>
+  <context-param>
+    <!- - FIXME: change to false for deployment - ->
+    <param-name>cyc.allowUserSpecifiedServers</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  -->
+  
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+</web-app>

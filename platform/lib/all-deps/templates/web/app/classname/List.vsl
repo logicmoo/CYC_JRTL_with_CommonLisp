@@ -1,0 +1,16 @@
+Ext.define('${app_name}.view.${class}.List', {
+  extend: 'Ext.grid.Panel',
+  alias : 'widget.${class}list',
+  title : 'All ${classes}',
+  
+  store : '${classes}',
+  
+  initComponent: function() {
+    this.columns = [
+      {header: '${class}',  dataIndex: 'displayName',  flex: 1}#foreach($predicate in ${class_obj.MethodPredicates}),
+      {header: '${predicate}', dataIndex: '${predicate}', flex: 1}#end
+    ];
+    
+    this.callParent(arguments);
+  }
+});

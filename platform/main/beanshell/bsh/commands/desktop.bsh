@@ -167,14 +167,14 @@ desktop()
 			if(c.contains("workspace")) makeWorkspace( ""+ super.windowCount++);
 			else if(c.contains("subl")) embedComponent(new com.cyc.tool.subl.ui.SubLReaderPanel(com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment.currentEnvironment()) , "SubLisp Console: "+ super.windowCount++);
 			else if(c.contains("lisp")) makeConsole( "Lisp Console: "+ super.windowCount++);
-			else if(c.contains("class browser")) classBrowser();
+			else if(c.contains("class browser")) classBrowser();			
 		}
 		else if	( c.equals("save workspace") )
 			JOptionPane.showInternalMessageDialog( pane, "Unimplemented" );
 		else if	( c.equals("exit") )
 			shutdown();
 	}
-
+	
     this.pane=new JDesktopPane();
 
     this.popup=new JPopupMenu("Root Menu");
@@ -187,19 +187,19 @@ desktop()
     mi=new JMenuItem("Save Workspace");
     mi.addActionListener(this);
     popup.add( mi );
-
+	
 	mi=new JMenuItem("New SubLisp Thread");
 	mi.addActionListener(this);
 	popup.add( mi );
-
+	
 	mi=new JMenuItem("New Prolog Thread");
 	mi.addActionListener(this);
 	popup.add( mi );
-
+	
 	mi=new JMenuItem("New Lisp Thread");
 	mi.addActionListener(this);
 	popup.add( mi );
-
+	
     mi=new JMenuItem("Exit");
     mi.addActionListener(this);
     popup.add( mi );

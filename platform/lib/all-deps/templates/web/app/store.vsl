@@ -1,0 +1,25 @@
+Ext.define('${app_name}.store.${classes}', {
+  extend: 'Ext.data.Store',
+  model : '${app_name}.model.${class}',
+  autoLoad: true,
+  
+  proxy: {
+    type: 'ajax',
+    api: {
+## FIXME: this
+      url:    '/ws/dreamcatcherwell/list/',
+      read:   '/ws/dreamcatcherwell/list/',
+      update: '/ws/dreamcatcherwell/list/'
+/*
+      read:   '/ws/dreamcatcherwell/name/SAPI-test_Well3/',
+      update: '/ws/dreamcatcherwell/name/SAPI-test_Well3/'
+*/
+    },
+    reader: {
+      type: 'json',
+##      root: '${classes}',
+      root: 'results',
+      successProperty: 'success'
+    }
+  }
+});

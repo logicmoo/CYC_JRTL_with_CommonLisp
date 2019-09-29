@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.cyc.webservice.client</groupId>
+	<artifactId>openCycWSClients</artifactId>
+
+	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>com.cyc.parentPom</groupId>
+		<artifactId>parentPom</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../../../com.cyc.parentPom</relativePath>
+	</parent>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>generatedSrc</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.cyc.library.xml</groupId>
+			<artifactId>textProcessing</artifactId>
+
+		</dependency>
+		<dependency>
+			<groupId>com.cyc.webservice.client</groupId>
+			<artifactId>genericRestfulWSClient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.cyc.library.xml</groupId>
+			<artifactId>cycConcept</artifactId>
+
+		</dependency>
+		<dependency>
+			<groupId>com.cyc.library</groupId>
+			<artifactId>opencyc</artifactId>
+
+		</dependency>
+	</dependencies>
+</project>

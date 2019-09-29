@@ -7,7 +7,7 @@ import bsh.ClassPathException;
 import bsh.util.JConsole;
 import bsh.util.NameCompletionTable;
 /**
-    Open the class browser.
+    Embed a component
 */
 
 
@@ -33,7 +33,7 @@ embedComponent(JComponent browser0, String nameB)
         if ( !name.startsWith("internalFrame") )
             throw new Error("method: "+name);
     }
-    
+
     internalFrameClosing( e ) {
         // really need foo=void;...
         //bsh.system.desktop.classbrowser = null;

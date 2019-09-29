@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.cyc.library</groupId>
+  <artifactId>SemanticAPI</artifactId>
+  <packaging>jar</packaging>
+  
+    <parent>
+    <groupId>com.cyc.parentPom</groupId>
+    <artifactId>parentPom</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../../com.cyc.parentPom</relativePath>
+  </parent>
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>com.cyc.library</groupId>
+  		<artifactId>opencyc</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.10</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-lang</groupId>
+  		<artifactId>commons-lang</artifactId>
+  		<version>2.6</version>
+  	</dependency>
+  </dependencies>
+    <build>
+      <plugins> <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- switch on dependency-driven aggregation -->
+                            <includeDependencySources>true</includeDependencySources>
+                            <sourceFileExcludes>
+                                <exclude>**/generated-sources/**/package-info.java</exclude>
+                            </sourceFileExcludes>
+                            <dependencySourceExcludes>
+                                <dependencySourceExclude>com.google.code.findbugs:jsr305</dependencySourceExclude>
+                                <dependencySourceExclude>commons-lang:commons-lang</dependencySourceExclude>
+                            </dependencySourceExcludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>resource-bundles</id>
+                        <phase>package</phase>
+                        <goals>
+                            <!-- produce source artifact for main project sources -->
+                            <goal>resource-bundle</goal>
+
+                        </goals>
+                        <configuration>
+                            <detectOfflineLinks>false</detectOfflineLinks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>       
+      </plugins>
+  </build>
+</project>

@@ -1,0 +1,202 @@
+#java_headers()
+
+$visibility class $name #class_extends( $superclass ) #class_implements( $interfaces ) {
+  
+  // Constructors
+  
+  private ${name}() {}
+  
+  public static ${name} get() {
+    if (PROVIDER == null) {
+      PROVIDER = new ${name}();
+    }
+    return PROVIDER;
+  }
+  
+  
+  // Public
+  
+  /**
+   * Create a set of ${class_obj.PrimaryImpl.Name} from an InferenceResultSet.
+   * @param resultSet the InferenceResultSet from which to populate the CycModelObject
+   * @param column The column to use to populate the ${class_obj.PrimaryImpl.Name}. If column
+   * is <code>null</code> <strong>and</strong> the InferenceResultSet has exactly one column, that column
+   * will be used.
+   * @return
+   * @throws ModelAPIException
+   * @throws Exception 
+   */
+  public Set<${class_obj.PrimaryImpl.Name}> createSet(final InferenceResultSet resultSet, final CycVariable column) throws ModelAPIException, Exception {
+    final CycVariable bindingVar = (column != null) ? column : findBindingVariable(resultSet);
+    final Set<${class_obj.PrimaryImpl.Name}> results = new HashSet<${class_obj.PrimaryImpl.Name}>();
+    while (resultSet.next()) {
+      final CycObject name = resultSet.getCycObject(bindingVar);
+      results.add(new ${class_impl}(name.toString()));
+    }
+    return results;
+  }
+  
+  public List<${class_obj.PrimaryImpl.Name}> find(final Query query, final CycVariable column, Comparator<${class_obj.PrimaryImpl.Name}> comparator) throws TimeOutException, CycApiException, IOException, ModelAPIException, Exception {
+    final List<${class_obj.PrimaryImpl.Name}> results;
+    query.performInference();
+    final InferenceResultSet rs = query.getResultSet();
+    results = new ArrayList(createSet(query.getResultSet(), column));
+    Collections.sort(results, comparator);
+    return results;
+  }
+  
+  public List<${class_obj.PrimaryImpl.Name}> find(final Query query, final CycVariable var) throws TimeOutException, CycApiException, IOException, ModelAPIException, Exception {
+    return find(query, var, getDefaultComparator());
+  }
+  
+  public List<${class_obj.PrimaryImpl.Name}> find(final Query query, Comparator<${class_obj.PrimaryImpl.Name}> comparator) throws TimeOutException, CycApiException, IOException, ModelAPIException, Exception {
+    return find(query, null, comparator);
+  }
+  
+  public List<${class_obj.PrimaryImpl.Name}> find(final Query query) throws TimeOutException, CycApiException, IOException, ModelAPIException, Exception {
+    return find(query, getDefaultComparator());
+  }
+  
+  
+  // Protected
+  
+  protected Comparator<${class_obj.PrimaryImpl.Name}> getDefaultComparator() {
+    return DEFAULT_COMPARATOR;
+  }
+  
+  
+  // Internal
+  
+  private static ${name} PROVIDER;
+  private static Comparator<${class_obj.PrimaryImpl.Name}> DEFAULT_COMPARATOR = new Comparator<${class_obj.PrimaryImpl.Name}>() {
+    @Override
+    public int compare(${class_obj.PrimaryImpl.Name} o1, ${class_obj.PrimaryImpl.Name} o2) {
+      return o1.getInstance().toString().compareTo(o2.getInstance().toString());
+    }
+  };
+}
+#*
+#java_headers()
+
+$visibility class $name #class_extends( $superclass ) #class_implements( $interfaces ) {
+  
+  // Constructors
+  
+  public $name(ContextMap contexts, ${class_obj.PrimaryImpl.InstanceType} ${class_obj.PrimaryImpl.InstanceName}) throws Exception {
+    //super(contexts, ${class_obj.PrimaryImpl.InstanceName}, getCore());
+    super(contexts);
+
+    ${class_obj.MembershipLogic}
+
+#foreach( $method in $class_obj.Methods )
+    this.#predicate_prop( $method.Name ) = new Predicate("${method.CycName}");
+#end
+  }
+  
+  public $name(Context ctx, ${class_obj.PrimaryImpl.InstanceType} ${class_obj.PrimaryImpl.InstanceName}) throws Exception {
+    this(new SimpleContextMap(ctx), ${class_obj.PrimaryImpl.InstanceName});
+  }
+  
+  public $name(String contextName, String ${class_obj.PrimaryImpl.InstanceName}Str) throws Exception {
+    this(Context.get(contextName), new ${class_obj.PrimaryImpl.InstanceType}(${class_obj.PrimaryImpl.InstanceName}Str));
+  }
+  
+  public $name(${class_obj.PrimaryImpl.InstanceType} ${class_obj.PrimaryImpl.InstanceName}) throws Exception {
+    this(getDefaultContexts(), ${class_obj.PrimaryImpl.InstanceName});
+  }
+  
+  public $name(String ${class_obj.PrimaryImpl.InstanceName}Str) throws Exception {
+    this(new ${class_obj.PrimaryImpl.InstanceType}(${class_obj.PrimaryImpl.InstanceName}Str));
+  }
+
+  // The NL find is a factory method, instead of a constructor, 
+  // since it is more appropriate to return null when something is not found.
+  public static $name createObject(Context ctx, String ${class_obj.PrimaryImpl.InstanceName}NLStr) throws Exception {
+    try {
+      ${class_obj.PrimaryImpl.InstanceType} ${class_obj.PrimaryImpl.InstanceName} = new ${class_obj.PrimaryImpl.InstanceType} (ctx, ${class_obj.PrimaryImpl.InstanceName}NLStr, ${name}.getCore());
+      return new $name(new SimpleContextMap(ctx), ${class_obj.PrimaryImpl.InstanceName});
+    } catch (KBApiException kae) {
+      return null;
+    }
+  }
+  
+  // Static
+  
+  public static ${class_obj.PrimaryImpl.CoreType} getCore() throws Exception {
+    if (core == null){
+     core = new ${class_obj.PrimaryImpl.CoreType}("${class_obj.PrimaryImpl.Name}");
+    }
+    return core;
+  }
+  
+  public static ContextMap getDefaultContexts() throws Exception {
+    if (defaultContexts == null) {
+      defaultContexts = new SimpleContextMap(
+              "${class_obj.ContextMap.CollectionContext}", 
+              "${class_obj.ContextMap.PredicateContext}");
+    }
+    return defaultContexts;
+  }
+  
+  // TODO: Decide if we need the following two methods. They don't hurt, but should 
+  // we expose lower level API (KBIndividual, KBCollection) to be accessible so easily?
+  // If the user is using these frequently then there is an issue with the API.
+  // Another point: Functionally the methods based on predicates defined here is 
+  // all you can do with this concept. Ideally there should not be a need for accessing
+  // lower level API core. We should probably make these private or protected
+  public static java.util.Collection<${class_obj.PrimaryImpl.InstanceType}> getAll${class_obj.PrimaryImpl.InstanceType}s(Context context) throws Exception {
+    // TODO: This logic might get more complicated, at the least, different for genls
+    // and other types of relations (genlPreds, genlMts)
+    return getCore().getInstances(${class_obj.PrimaryImpl.InstanceType}.class, context);
+  }
+  
+  public static java.util.Collection<${class_obj.PrimaryImpl.InstanceType}> getAll${class_obj.PrimaryImpl.InstanceType}s(ContextMap contexts) throws Exception {
+    return getAll${class_obj.PrimaryImpl.InstanceType}s(contexts.getCollectionContext());
+  }
+  
+  public static List<${class_obj.PrimaryImpl.Name}> getAllObjects(ContextMap contexts) throws Exception {
+    java.util.Collection<${class_obj.PrimaryImpl.InstanceType}> insts = getAll${class_obj.PrimaryImpl.InstanceType}s(contexts);
+    List<${class_obj.PrimaryImpl.Name}> all = new ArrayList<${class_obj.PrimaryImpl.Name}>();
+    
+    for (${class_obj.PrimaryImpl.InstanceType} inst : insts){
+      all.add(new ${name}(contexts, inst));
+    }
+    return all;
+  }
+  
+  
+  // Public
+  
+#mapi_class_methods( $methods )
+
+  public ${class_obj.PrimaryImpl.InstanceType} getInstance() {
+    return this.instance;
+  }
+
+  public String getName() {
+    return getInstance().stringApiValue();
+  }
+
+  public String getDisplayName() {
+    return getInstance().toString();
+  }
+
+  @Override
+  public String toString() {
+    return getDisplayName();
+  }
+
+  
+  // Internal
+  
+  private static ${class_obj.PrimaryImpl.CoreType} core = null;
+  final private ${class_obj.PrimaryImpl.InstanceType} instance;
+  private static ContextMap defaultContexts = null;
+
+  // TODO: Check if we can make these static. They won't change after the
+  // class is generated
+#foreach( $method in $class_obj.Methods )
+  final private Predicate #predicate_prop( ${method.Name} );
+#end
+}
+*#

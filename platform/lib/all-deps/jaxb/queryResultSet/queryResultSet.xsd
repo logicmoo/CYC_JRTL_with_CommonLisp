@@ -1,0 +1,78 @@
+<schema
+  xmlns='http://www.w3.org/2001/XMLSchema'
+  targetNamespace='http://www.opencyc.org/xml/queryResultSet/'
+  xmlns:queryResultSet='http://www.opencyc.org/xml/queryResultSet/'
+  xmlns:jaxb='http://java.sun.com/xml/ns/jaxb' jaxb:version='2.0'>
+
+    
+  <annotation>
+    <appinfo>
+      <jaxb:schemaBindings>
+        <jaxb:package name='org.opencyc.xml.queryResultSet'/>
+      </jaxb:schemaBindings>
+    </appinfo>
+  </annotation>
+ 
+  <element name='queryResult'>    
+    <complexType>
+      <all>
+        <element ref='queryResultSet:answers'/>
+        <element ref='queryResultSet:status'/>
+      </all>
+      <attribute name='inference' type='integer' use='required'/>
+      <attribute name='store' type='integer' use='required'/>
+    </complexType>
+  </element>
+ 
+  <element name='answers'>    
+    <complexType>
+      <sequence minOccurs='0' maxOccurs='unbounded'>
+        <element ref='queryResultSet:answer'/>
+      </sequence>
+    </complexType>
+  </element>
+  
+  <element name='answer'> 
+    <complexType>   
+      <all>
+        <element ref='queryResultSet:cycl' minOccurs='0'/>
+        <element ref='queryResultSet:nl' minOccurs='0'/>
+        <element ref='queryResultSet:bindings' minOccurs='0'/>
+      </all>
+      <attribute name='id' type='integer' use='required'/>
+    </complexType>
+  </element>
+ 
+  <element name='bindings'>    
+    <complexType>
+      <sequence minOccurs='0' maxOccurs='unbounded'>
+        <element ref='queryResultSet:binding'/>
+      </sequence>
+    </complexType>
+  </element>
+ 
+  <element name='binding'>    
+    <complexType>
+      <all>
+        <element ref='queryResultSet:variable'/>
+        <element ref='queryResultSet:value'/>
+      </all>
+    </complexType>
+  </element>
+  
+  <element name='value'> 
+    <complexType>   
+      <all>
+        <element ref='queryResultSet:cycl' minOccurs='0'/>
+        <element ref='queryResultSet:nl' minOccurs='0'/>
+      </all>
+    </complexType>
+  </element>
+  
+  <element name='status' type='string'/>
+  <element name='variable' type='string'/>
+  <element name='cycl' type='string'/>  
+  <element name='nl' type='string'/>
+</schema>
+
+

@@ -4,7 +4,7 @@
 ;; so this only loads once as it changed the homedir
 (let ((file (merge-pathnames "larkc-home.lisp"
                      #.(directory-namestring *load-truename*))))
- (when (probe-file file)
+ (when (cl:probe-file file)
   (cl:load file)))
 
 (defpackage "COMMON-LISP-USER" (:nicknames "USER" "CL-USER"))
@@ -94,7 +94,7 @@
  )
 
 
-(setf (symbol-plist 'SUBLISP::CSETQ) (symbol-plist 'cl::setq))
+;; (setf (symbol-plist 'SUBLISP::CSETQ) (symbol-plist 'cl::setq))
 
 ;; makes constant names slightly friendlier to prolog
 ;; #+CYC-EXTERNAL
@@ -135,8 +135,8 @@
 
 
 
-(cl-imports-cyc)
-(cyc-imports-cl)
+;;(cl-imports-cyc)
+;;(cyc-imports-cl)
 
 ;;#+USE-CYC
 ;;(let ((*PACKAGE* (find-package :CYC))) (sl:load "e2c/larkc_prolog.lisp"))

@@ -1,0 +1,86 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cyc.library</groupId>
+    <artifactId>opencyc</artifactId>
+    <name>opencycMaven</name>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.cyc.parentPom</groupId>
+        <artifactId>parentPom</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../com.cyc.parentPom</relativePath>
+    </parent>
+
+    <properties>
+      <svnRevisionNumberPluginVersion>1.13</svnRevisionNumberPluginVersion>
+      <!-- maven.build.timestamp doesn't make it through to the filtering mechanism,
+           so we need to store it in another property. Details: 
+           http://java.dzone.com/tips/stamping-version-number-and
+      -->
+      <timestamp>${maven.build.timestamp}</timestamp>
+      <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+    </properties>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <!-- plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>bundle-sources</id>
+                        <phase>package</phase>
+                        <goals -->
+                            <!-- produce source artifact for main project sources -->
+                            <!--goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin-->
+            <plugin>
+              <groupId>com.google.code.maven-svn-revision-number-plugin</groupId>
+              <artifactId>svn-revision-number-maven-plugin</artifactId>
+              <version>${svnRevisionNumberPluginVersion}</version> 
+              <executions>
+                <execution>
+                  <goals>
+                    <goal>revision</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+        </plugins>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+            <includes>
+              <include>**/BuildInfo.properties</include>
+            </includes>
+          </resource>
+        </resources>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

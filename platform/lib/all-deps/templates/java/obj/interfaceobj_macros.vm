@@ -1,0 +1,21 @@
+#* Java interface-related macros. 
+   This file is loaded by com.cyc.library.mapi.templates.InterfaceTemplate.
+*#
+
+
+##  interface_methods  ---------------------------------------------
+
+#macro( mapi_interface_methods $methods )
+#foreach( $method in $methods )
+#if ($method.BelongsToClass != "static")
+#method_javadoc( $method )
+  #mapi_method_signature( $method );
+
+#method_javadoc( $method )
+  #method_signature( $method );
+#end
+#if( $foreach.hasNext )
+
+#end
+#end
+#end

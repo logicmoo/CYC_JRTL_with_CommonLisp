@@ -1,0 +1,223 @@
+#java_headers()
+
+$visibility class $name #class_extends( $superclass ) #class_implements( $interfaces ) {
+  
+  // Constructors
+  
+  public $name(ContextMap contexts, ${class_obj.PrimaryImpl.InstanceType} ${class_obj.PrimaryImpl.InstanceName}) throws ModelAPIException {
+    //super(contexts, ${class_obj.PrimaryImpl.InstanceName}, getCore());
+    #if( $superclass == "AbstractCycModelObject")
+    super(contexts);
+    #else
+    super(contexts, ${class_obj.PrimaryImpl.InstanceName});
+    #end
+#*
+    this.instance = ${class_obj.PrimaryImpl.InstanceName};
+    
+    // This if statement is the logic that verifies membership in a class (isa, genls, genlPreds, etc)
+    if (!individual.checkSuperType(contexts.getCollectionContext(), ${name}.getCore())) {
+      // only if its a new constant, which we don't have a way of knowing with current SAPI,
+      // assert it as a DreamcatcherWell
+      //assignSupertypes(core);
+      this.instance.superTypes(contexts.getCollectionContext(), ${name}.getCore());
+      this.instance.superTypes(Context.get("UniversalVocabularyMt"), ${name}.getCore());
+    }
+*#
+
+    try { 
+      ${class_obj.MembershipLogic}
+
+#foreach( $method in $class_obj.Methods )
+      this.#predicate_prop( $method.Name ) = Relation.get("${method.CycName}");
+#end
+    } catch (Exception e) {
+      throw new ModelAPIException(e.getMessage(), e);
+    }
+  }
+  
+  public $name(Context ctx, ${class_obj.PrimaryImpl.InstanceType} ${class_obj.PrimaryImpl.InstanceName}) throws ModelAPIException {
+    this(new SimpleContextMap(ctx), ${class_obj.PrimaryImpl.InstanceName});
+  }
+  
+  public $name(String contextName, String ${class_obj.PrimaryImpl.InstanceName}Str) throws KBApiException, ModelAPIException {
+    this(Context.get(contextName), ${class_obj.PrimaryImpl.InstanceType}.get(${class_obj.PrimaryImpl.InstanceName}Str));
+  }
+  
+  public $name(${class_obj.PrimaryImpl.InstanceType} ${class_obj.PrimaryImpl.InstanceName}) throws ModelAPIException {
+    this(getDefaultContexts(), ${class_obj.PrimaryImpl.InstanceName});
+  }
+  
+  public $name(String ${class_obj.PrimaryImpl.InstanceName}Str) throws KBApiException, ModelAPIException {
+    this(${class_obj.PrimaryImpl.InstanceType}.findOrCreate(${class_obj.PrimaryImpl.InstanceName}Str));
+  }
+
+#if (${class_obj.PrimaryImpl.RelationType} == "isa")
+  // The NL find is a factory method, instead of a constructor, 
+  // since it is more appropriate to return null when something is not found.
+  public static $name createObject(Context ctx, String ${class_obj.PrimaryImpl.InstanceName}NLStr) throws ModelAPIException {
+    try {
+      ${class_obj.PrimaryImpl.InstanceType} ${class_obj.PrimaryImpl.InstanceName} = ${class_obj.PrimaryImpl.InstanceType}.findOrCreate(${class_obj.PrimaryImpl.InstanceName}NLStr, ${name}.getCore(), ctx);
+      return new $name(new SimpleContextMap(ctx), ${class_obj.PrimaryImpl.InstanceName});
+    } catch (KBApiException kae) {
+      return null;
+    }
+  }
+#else
+  /*
+  The following method is intended to find a specialization or quotedIsa of $name class. But the KB API/NL underneath it only
+  support getting instances currently. 
+  public static $name createObject(Context ctx, String ${class_obj.PrimaryImpl.InstanceName}NLStr) throws ModelAPIException
+  */
+#end
+  
+  // Static
+  
+  public static ${class_obj.PrimaryImpl.CoreType} getCore() throws ModelAPIException {
+    if (core == null){
+      try {
+        core = ${class_obj.PrimaryImpl.CoreType}.get("${class_obj.PrimaryImpl.CycName}");
+      } catch (KBApiException e) {  
+        throw new ModelAPIException(e.getMessage(), e);
+      }
+    }
+    return core;
+  }
+  
+  public static ContextMap getDefaultContexts() throws ModelAPIException {
+    if (defaultContexts == null) {
+      try {
+        defaultContexts = new SimpleContextMap(
+                "${class_obj.ContextMap.CollectionContext}", 
+                "${class_obj.ContextMap.RelationContext}");
+
+      } catch (Exception e) {
+        throw new ModelAPIException(e.getMessage(), e);
+      }
+    }
+    return defaultContexts;
+  }
+  
+  // TODO: Decide if we need the following two methods. They don't hurt, but should 
+  // we expose lower level API (KBIndividual, KBCollection) to be accessible so easily?
+  // If the user is using these frequently then there is an issue with the API.
+  // Another point: Functionally the methods based on predicates defined here is 
+  // all you can do with this concept. Ideally there should not be a need for accessing
+  // lower level API core. We should probably make these private or protected
+  public static java.util.Collection<${class_obj.PrimaryImpl.InstanceType}> getAll${class_obj.PrimaryImpl.InstanceType}s(Context context) throws ModelAPIException {
+    // TODO: This logic might get more complicated, at the least, different for genls
+    // and other types of relations (genlPreds, genlMts)
+    try {
+      return getCore().<${class_obj.PrimaryImpl.InstanceType}>getInstances(context);
+    } catch (Exception e) {
+      throw new ModelAPIException(e.getMessage(), e);
+    } 
+  }
+  
+  public static java.util.Collection<${class_obj.PrimaryImpl.InstanceType}> getAll${class_obj.PrimaryImpl.InstanceType}s(ContextMap contexts) throws ModelAPIException {
+    return getAll${class_obj.PrimaryImpl.InstanceType}s(contexts.getCollectionContext());
+  }
+  
+  public static List<? extends ${class_obj.PrimaryImpl.Name}> getAllObjects(ContextMap contexts) throws ModelAPIException {
+    java.util.Collection<${class_obj.PrimaryImpl.InstanceType}> insts = getAll${class_obj.PrimaryImpl.InstanceType}s(contexts);
+    List<${class_obj.PrimaryImpl.Name}> all = new ArrayList<${class_obj.PrimaryImpl.Name}>();
+    
+    for (${class_obj.PrimaryImpl.InstanceType} inst : insts){
+      all.add(new ${name}(contexts, inst));
+    }
+    return all;
+  }
+  
+  
+  // Public
+  
+#*
+  @Override
+  public List<${class_obj.PrimaryImpl.Name}> allSibling${class_obj.PrimaryImpl.Name}s(Context context) throws Exception {
+    List<KBIndividual> inds = getCore().subTypes(context, KBIndividual.class);
+    List<${class_obj.PrimaryImpl.Name}> siblings = new ArrayList<${class_obj.PrimaryImpl.Name}>();
+    //Context uvmt = Context.get("UniversalVocabularyMt");
+    for (KBIndividual ind : inds){
+      siblings.add(new ${name}(contexts, ind));
+    }
+    return siblings;
+  }
+  
+  @Override
+  public List<${class_obj.PrimaryImpl.Name}> allSibling${class_obj.PrimaryImpl.Name}s() throws Exception {
+    return allSibling${class_obj.PrimaryImpl.Name}s(contexts.getCollectionContext());
+  }
+  *#
+#mapi_class_methods( $methods )
+
+  @Override
+  public ${class_obj.PrimaryImpl.InstanceType} getInstance() {
+    return this.instance;
+  }
+
+  public String getName() {
+    return getInstance().stringApiValue();
+  }
+
+  public String getDisplayName() {
+    return getInstance().toString();
+  }
+
+  @Override
+  public String toString() {
+    return getDisplayName();
+  }
+
+  //@Override
+  //@todo manage the overrides appropriately. If MAPI.x.class extends MAPI.y.class we need an override
+  //but given we don't have toNLString() in AbstractCycModelObject, we don't need override if 
+  // it extends ACMO.
+  public String toNLString() {
+    try {
+      return getInstance().toNLString();
+    } catch (KBApiException ex) {
+      return "";
+    }
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if ((obj != null) && (obj instanceof ${name})) {
+      final ${name} mobj = (${name}) obj;
+      return this.getInstance().equals(mobj.getInstance());
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return this.getInstance().hashCode();
+  }
+
+  public static boolean hasAsInstance(${class_obj.PrimaryImpl.InstanceType} kbobj) throws ModelAPIException {
+    try {
+      return kbobj.isInstanceOf(getCore(), getDefaultContexts().getCollectionContext());
+    } catch (KBApiException e) {
+      throw new ModelAPIException(e.getMessage(), e);
+    }
+  }
+  
+  public void delete() throws ModelAPIException {
+    try {
+      getInstance().delete();
+    } catch (Exception e){
+      throw new ModelAPIException(e.getMessage(), e);
+    }
+  }
+
+  // Internal
+  
+  private static ${class_obj.PrimaryImpl.CoreType} core = null;
+  final private ${class_obj.PrimaryImpl.InstanceType} instance;
+  private static ContextMap defaultContexts = null;
+
+  // TODO: Check if we can make these static. They won't change after the
+  // class is generated
+#foreach( $method in $class_obj.Methods )
+  final private Relation #predicate_prop( ${method.Name} );
+#end
+}

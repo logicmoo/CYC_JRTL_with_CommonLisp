@@ -6,14 +6,11 @@
 bsh.help.exit = "usage: exit()";
 
 exit() {
-        this.interpreter.eof = true;
-    // shutdown Java VM unless flagged
-    if ( bsh.system.shutdownOnExit != false )
-		org.logicmoo.system.BeanShellCntrl.exit(0);
+    exit(0);
 }
 
 exit(int n) {
-        this.interpreter.eof = true;
+    this.interpreter.eof = true;
 	// shutdown Java VM unless flagged
 	if ( bsh.system.shutdownOnExit != false )
 		org.logicmoo.system.BeanShellCntrl.exit(n);

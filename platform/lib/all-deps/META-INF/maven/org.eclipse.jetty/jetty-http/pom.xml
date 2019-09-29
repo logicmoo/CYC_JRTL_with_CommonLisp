@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>jetty-project</artifactId>
     <groupId>org.eclipse.jetty</groupId>
-    <version>8.0.4.v20111024</version>
+    <version>8.2.0.v20160908</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.jetty</groupId>
   <artifactId>jetty-http</artifactId>
   <name>Jetty :: Http Utility</name>
+  <url>http://www.eclipse.org/jetty</url>
   <properties>
     <bundle-symbolic-name>${project.groupId}.http</bundle-symbolic-name>
   </properties>
@@ -18,9 +19,8 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>${servlet.spec.groupId}</groupId>
-      <artifactId>${servlet.spec.artifactId}</artifactId>
-      <version>${servlet.spec.version}</version>
+      <groupId>org.eclipse.jetty.orbit</groupId>
+      <artifactId>javax.servlet</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -42,7 +42,7 @@
             </goals>
             <configuration>
               <instructions>
-                <Import-Package>javax.net.*,*</Import-Package>
+                <Import-Package>javax.servlet.*;version="2.6.0",javax.net.*,*</Import-Package>
               </instructions>
             </configuration>
            </execution>

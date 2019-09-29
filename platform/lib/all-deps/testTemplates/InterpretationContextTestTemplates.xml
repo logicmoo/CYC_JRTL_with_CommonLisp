@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ebmtTemplates
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://ws.opencyc.org/xsd/EBMT http://ws.opencyc.org/xsd/EBMT.xml"
+  xmlns="http://ws.opencyc.org/xsd/EBMT">
+  <template>
+    <examples>
+      <example>This document was written by Michael Witbrock</example>
+    </examples>
+    <anaphoricReference>$LinguisticExpressionPeg-CompleteUtterance#1</anaphoricReference>
+    <nlPattern class="4100">This document [is|was|has been] [written|authored] by $Person#2</nlPattern>
+    <cyclPattern>
+        (#$informationArtifactAuthor 
+           (#$DocumentOfTextStringFn $LinguisticExpressionPeg-CompleteUtterance#1)
+           $Person#2)
+    </cyclPattern>
+  </template>
+    
+</ebmtTemplates>

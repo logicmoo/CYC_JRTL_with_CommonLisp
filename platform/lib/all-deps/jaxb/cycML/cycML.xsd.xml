@@ -1,0 +1,309 @@
+<schema
+  xmlns='http://www.w3.org/2000/10/XMLSchema'
+  targetNamespace='http://www.opencyc.org/xml/'
+  xmlns:opencyc='http://www.opencyc.org/xml/'>
+
+ <element name='CycLConstant'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:uri'/>
+    <element ref='opencyc:namespace'/>
+    <element ref='opencyc:name'/>
+    <element ref='opencyc:guid'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='CycLReifiableNonAtomicTerm'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:argument-list'/>
+    <element ref='opencyc:Function-Denotational'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='CycLReifiedNonAtomicTerm'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:argument-list'/>
+    <element ref='opencyc:Function-Denotational'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='ELNonAtomicTerm'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:argument-list'/>
+    <element ref='opencyc:Function-Denotational'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='Function-Denotational'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:CycLConstant'/>
+    <element ref='opencyc:CycLReifiableNonAtomicTerm'/>
+    <element ref='opencyc:CycLReifiedNonAtomicTerm'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='and'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='argument-list'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:CycLConstant'/>
+    <element ref='opencyc:CycLReifiableNonAtomicTerm'/>
+    <element ref='opencyc:CycLReifiedNonAtomicTerm'/>
+    <element ref='opencyc:ELNonAtomicTerm'/>
+    <element ref='opencyc:number'/>
+    <element ref='opencyc:function'/>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:string'/>
+    <element ref='opencyc:variable'/>
+    <element ref='opencyc:symbol'/>
+    <element ref='opencyc:sentence'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='implies'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='constant'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:name'/>
+    <element ref='opencyc:guid'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='equiv'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='forAll'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:variable'/>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='function'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:number'/>
+    <element ref='opencyc:function'/>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:string'/>
+    <element ref='opencyc:variable'/>
+    <element ref='opencyc:symbol'/>
+    <element ref='opencyc:sentence'/>
+   </choice>
+   <attribute name='reified' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='guid'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='name'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='namespace'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='not'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='number'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='or'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='package'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='predicate'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:function'/>
+    <element ref='opencyc:variable'/>
+    <element ref='opencyc:symbol'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='sentence'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:sentence'/>
+    <element ref='opencyc:and'/>
+    <element ref='opencyc:or'/>
+    <element ref='opencyc:xor'/>
+    <element ref='opencyc:equiv'/>
+    <element ref='opencyc:implies'/>
+    <element ref='opencyc:not'/>
+    <element ref='opencyc:thereExistAtLeast'/>
+    <element ref='opencyc:thereExistAtMost'/>
+    <element ref='opencyc:thereExistExactly'/>
+    <element ref='opencyc:thereExists'/>
+    <element ref='opencyc:forAll'/>
+    <element ref='opencyc:variable'/>
+    <element ref='opencyc:function'/>
+    <element ref='opencyc:predicate'/>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:number'/>
+    <element ref='opencyc:string'/>
+    <element ref='opencyc:symbol'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='string'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='symbol'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:name'/>
+    <element ref='opencyc:package'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='thereExistAtLeast'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:variable'/>
+    <element ref='opencyc:number'/>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+    <element ref='opencyc:function'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='thereExistAtMost'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:variable'/>
+    <element ref='opencyc:number'/>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+    <element ref='opencyc:function'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='thereExistExactly'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:variable'/>
+    <element ref='opencyc:number'/>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+    <element ref='opencyc:function'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='thereExists'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:variable'/>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+    <element ref='opencyc:function'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='uri'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='variable'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='xor'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='opencyc:constant'/>
+    <element ref='opencyc:sentence'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='date'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='time'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+</schema>

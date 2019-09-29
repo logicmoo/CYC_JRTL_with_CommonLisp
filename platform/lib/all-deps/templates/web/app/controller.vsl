@@ -1,0 +1,35 @@
+Ext.define('${app_name}.controller.${classes}', {
+  extend: 'Ext.app.Controller',
+  stores: ['${classes}'],
+  models: ['${class}'],
+  views: [
+    '${class}.List',
+    '${class}.Edit'
+  ],
+  
+  init: function() {
+    this.control({
+      'viewport > ${class}list': {
+        itemdblclick: this.edit${class}
+      },
+      '${class}edit button[action=save]' : {
+        click: this.update${class}
+      }
+    })
+  },
+  
+  edit${class}: function(grid, record) {
+    var view = Ext.widget('${class}edit');
+    view.down('form').loadRecord(record);
+  },
+  
+  update${class}: function(button) {
+    var win    = button.up('window'),
+        form   = win.down('form'),
+        record = form.getRecord(),
+        values = form.getValues();
+    record.set(values);
+    win.close();
+    this.get${classes}Store().sync();
+  }
+});

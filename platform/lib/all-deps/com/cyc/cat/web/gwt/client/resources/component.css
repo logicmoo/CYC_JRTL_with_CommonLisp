@@ -1,0 +1,163 @@
+
+/*  =============================  GWT classes  =============================  */
+/*
+.gwt-DisclosurePanel .header {
+  height: 2em;
+}
+
+.gwt-DisclosurePanel .header td {
+  vertical-align: top;
+}
+*/
+/*
+.gwt-Tree td {
+  vertical-align: top;
+  height: 2em;
+}
+*/
+/*
+.gwt-Tree {
+  border: solid 1px green;
+  padding 5px;
+}
+
+.gwt-Tree td {
+  background-color:green;
+  vertical-align: top;
+  padding: 0;
+}
+
+.gwt-TreeItem {
+background-color:blue;
+}
+
+.gwt-TreeItem td {
+background-color:yellow;
+}
+*/
+/*
+.gwt-TreeItem {
+	border: solid 1px blue;
+	padding: 3px;
+}
+
+.gwt-Tree img {
+	width: 10px;
+	height: 10px;
+  border: solid 1px yellow;
+}
+
+td.gwt-TreeItem {
+  border: solid 1px red;
+  padding: 1px;
+}
+*/
+/*
+.gwt-TabLayoutPanel {
+  margin: 2px;
+}
+*/
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+  -moz-border-top-left-radius: 5px;
+  border-top-left-radius: 5px;
+  -moz-border-top-right-radius: 5px;
+  border-top-right-radius: 5px;
+}
+/*
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent  {
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 2px;
+}
+*/
+.gwt-Button {
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+
+/*  =============================  WebCAT components  =============================  */
+
+.webCat-statusLabel {
+	 text-align: center;
+  background-color: lemonchiffon;
+  font-style: italic;
+  margin-bottom: 1em;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  /* for IE */
+  filter:alpha(opacity=90);
+  /* CSS3 standard */
+  opacity:0.9;
+}
+
+.webCat-statusLabelError {
+  background-color: darkred;
+  color: white;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.webCat-statusLabel {
+  -moz-border-radius: 0;
+  border-radius: 0;
+  background-color: #b4daed;
+}
+
+.webCat-statusLabelError {
+  background-color: darkred;
+}
+
+/*
+	content: "\2713  "; Light check mark
+	content: "\2714  "; Heavy check mark
+	content: "\2610  "; Ballot box
+	content: "\2611  "; Ballot box w/ check mark
+*/
+.webCat-toggleMenuItem:before {
+  content: "\2610  ";
+  visibility: visible;
+}
+.webCat-checkedMenuItem:before {
+  content: "\2611  ";
+	 visibility: visible;
+}
+
+
+/*  =============================  Optional classes  =============================  */
+
+.webCat-paddedMenu .gwt-MenuItem:before {
+  content: "\2610  ";
+  visibility: hidden;
+}
+.webCat-unpaddedMenu .gwt-MenuItem:before {
+  content: "";
+}
+
+.webCat-clickableLabel {
+   color: darkred;
+   text-decoration: none;
+}
+
+.webCat-clickableLabel:hover {
+  background-color: lemonchiffon;
+}
+
+.webCat-borderedScrollPanel {
+  border: 1px solid #999;
+  overflow: scroll;
+}
+
+.webCat-searchField {
+	-moz-border-radius: 8px;
+  border-radius: 8px;
+}
+
+.webCat-searchFieldDefaultText {
+  font-style: italic;
+  color: #999;
+}
+
+.webCat-resizableField {
+	resize: horizontal;
+}

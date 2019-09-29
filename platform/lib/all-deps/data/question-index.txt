@@ -1,0 +1,171 @@
+//DON'T USE THIS FILE ANY MORE
+//USE THE XML ONE IN THE PROJECT WITH THE APPROPRIATE TOOLS
+What date did $IntelligentAgent#3 open $PartiallyTangible#5 ?	(thereExists ?OPENING (and (isa ?OPENING OpeningSomething) (performedBy ?OPENING $IntelligentAgent#3) (objectActedOn ?OPENING $PartiallyTangible#5) (dateOfEvent ?OPENING ?WHEN)))
+Who was $Person#2 's high school track coach ?	(thereExists ?HIGHSCHOOL (thereExists ?TRACKTEAM (and (isa ?HIGHSCHOOL HighSchool) (isa ?TRACKTEAM TrackTeam) (schoolSportsTeam ?HIGHSCHOOL ?TRACKTEAM) (hasMembers ?TRACKTEAM $Person#2) (hasCoach ?TRACKTEAM ?COACH))))
+What is the shape of a porpoises ' $ExtrudedBodyPart#7 ?	(thereExists ?PORPOISE (thereExists $ExtrudedBodyPart#7 (and (isa ?PORPOISE Porpoise) (anatomicalParts ?PORPOISE $ExtrudedBodyPart#7) (commonShape ?TOOTH ?SHAPE))))
+What is the number of $Organism-Whole#5 thought to live in North America ?	(populationLevelOfTypeInEcosystem $Organism-Whole#5 ContinentOfNorthAmerica ?AMOUNT)
+$GeographicalRegion#0 is a part of what European country ?	(and (isa ?COUNTRY EuropeanCountry) (geographicalSubRegions ?COUNTRY $GeographicalRegion#0))
+What was the date of $Event#5 ?	(dateOfEvent $Event#5 ?WHEN)
+Who was $UnitedStatesPresident#2 's Secretary of State ?	(thereExists ?APPOINTMENT (and (positionOfPersonInOrganization ?WHO USStateDepartment USSecretaryOfState-Federal) (isa ?APPOINTMENT AppointingSomeoneToAPosition) (performedBy ?APPOINTMENT $UnitedStatesPresident#2) (appointee ?APPOINTMENT ?WHO)))
+How long does it take to fly from $City#8 to $City#10 ?	(averageDurationForType-Mean (SubcollectionWithRelationToFn (SubcollectionWithRelationToFn CommercialPassengerFlight toLocation $City#10) fromLocation $City#8) ?DURATION)
+How many lives were lost in $TerroristAttack#6 ?	(deathToll $TerroristAttack#6 HomoSapiens ?AMOUNT)
+What is $GeographicalRegion#2 's population ?	(numberOfInhabitants $GeographicalRegion#2 ?AMOUNT)
+What is the population of $GeographicalRegion#2 ?	(numberOfInhabitants $GeographicalRegion#2 ?AMOUNT)
+What is $IndependentCountry#5 's population ?	(numberOfInhabitants $IndependentCountry#5 ?AMOUNT)
+What is the population of $IndependentCountry#5 ?	(numberOfInhabitants $IndependentCountry#5 ?AMOUNT)
+What is $City#5 's population ?	(numberOfInhabitants $City#5 ?AMOUNT)
+What is the population of $City#5 ?	(numberOfInhabitants $City#5 ?AMOUNT)
+How long does it take to travel from $City#8 to $City#10 by car ?	(averageDurationForType-Mean (SubcollectionWithRelationToFn (SubcollectionWithRelationToFn (TransportViaFn Car) toLocation $City#10) fromLocation $City#8) ?DURATION)
+Who created $DevisedPracticeOrWork#2 ?	(creatorOfCW ?WHO $DevisedPracticeOrWork#2)
+How long is $SpatialThing#3 ?	(lengthOfObject $SpatialThing#3 ?LENGTH)
+What is $Person#2 's middle name ?	(middleName $Person#2 ?WHAT)
+What is the capital of $GeopoliticalEntity#5 ?	(capitalCity $GeopoliticalEntity#5 ?WHAT)
+What is the capital of $State-UnitedStates#5 ?	(capitalCity $State-UnitedStates#5 ?WHAT)
+What is the capital of $IndependentCountry#5 ?	(capitalCity $IndependentCountry#5 ?WHAT)
+How tall is $PolyDimensionalThing#3 ?	(heightOfObject $PolyDimensionalThing#3 ?HEIGHT)
+What two companies produce $PartiallyTangible#4 ?	(makesProductType ?COMPANY $PartiallyTangible#4)
+What is the date of the official opening of the channel tunnel between the U.K. and France ?	(thereExists ?OPENING (and (isa ?OPENING OpeningAFacility) (objectActedOn ?OPENING ChannelTunnel) (dateOfEvent ?OPENING ?WHEN)))
+How tall is $Building#3 ? 	(heightOfObject $Building#3 ?HEIGHT)
+How far is $City#3 from $City#5 ?	(distanceBetween (TerritoryFn $City#3) (TerritoryFn $City#5) ?DISTANCE)
+What is the infant mortality rate of $IndependentCountry#6 ?	(infantMortalityRate $IndependentCountry#6 ?RATE)
+What languages are spoken in $Country#5 ?	(languagesSpokenHere $Country#5 ?LANGUAGE)
+What monarchies exist in $Continent#4 ?	(and (isa ?COUNTRY Monarchy) (properGeographicalSubRegions $Continent#4 ?COUNTRY))
+What countries in $InternationalOrganizationOfCountries#4 are monarchies ?	(and (internationalOrganizationMemberCountries $InternationalOrganizationOfCountries#4 ?COUNTRY) (isa ?COUNTRY Monarchy))
+In what year was $LegalCorporation#4 founded ?	(foundingDate $LegalCorporation#4 ?WHEN)
+What countries does $Country#3 border on ?	(bordersOn (TerritoryFn $Country#3) (TerritoryFn ?COUNTRY))
+What bands play $MusicalComposition-Rock#3 ?	(styleOfArtist ?BAND $MusicalComposition-Rock#3)
+Who is the president of $Country#5 ?	(president $Country#5 ?WHO)
+What is the highest point in $Country#6 ?	(highestPointInRegion (TerritoryFn $Country#6) ?HIGHEST)
+Who explored $Mountain#2 ?	(exploredBy $Mountain#2 ?WHO)
+What state is $USCity#3 in ?	(cityInState $USCity#3 ?STATE)
+What country is $State-Geopolitical#3 in ?	(nationOfState ?NATION $State-Geopolitical#3)
+Where did $Person#2 die ?	(placeOfDeath $Person#2 ?WHERE)
+Where was $Person#2 born ?	(birthPlace $Person#2 ?WHERE)
+How high is $Mountain#3 ?	(altitudeOfHighestPointInRegion $Mountain#3 ?HEIGHT)
+What $CommercialServiceOrganization#1 are located in which cities ?|(and (isa  ?ORG $CommercialServiceOrganization#1) (orgPresentInCity ?ORG ?CITY))
+What $ServiceEstablishment#1 are located in which cities ?|(and (isa ?ORG $ServiceEstablishment#1) (orgPresentInCity ?ORG ?CITY))
+What $CommercialServiceOrganization#1 are located in $City#5 ?|(and (isa  ?ORG $CommercialServiceOrganization#1) (orgPresentInCity ?ORG $City#5))
+What $ServiceEstablishment#1 are located in $City#5 ?|(and (isa ?ORG $ServiceEstablishment#1) (orgPresentInCity ?ORG $City#5))
+What $ServiceEstablishment#1 are located in $USCity#5 ?|(and (isa ?ORG $ServiceEstablishment#1) (orgPresentInCity ?ORG $USCity#5))
+What $ServiceOrganization#1 are in $City#4 ?|(and (isa ?ORG $ServiceOrganizaton#1) (orgPresentInCity ?ORG $City#4))
+What $MediaOrganization#1 are in $City#4 ?|(and (isa ?ORG $MediaOrganization#1) (orgPresentInCity ?ORG $City#4))
+//Acquisitions
+What companies has $PubliclyHeldCorporation#3 acquired ?|(and (isa ?X Business)(cmuRTW-Acquired  $PubliclyHeldCorporation#3 ?X))
+What companies have been acquired by $PubliclyHeldCorporation#6|(and (isa ?X Business) (cmuRTW-Acquired  $PubliclyHeldCorporation#6 ?X))
+//Team Players
+What team does $HumanAdult#3 play for ?|(sportsTeamPlayers ?TEAM $HumanAdult#3)
+Who does $HumanAdult#2 play for ?|(sportsTeamPlayers ?TEAM $HumanAdult#2)
+Whom does $HumanAdult#2 play for ?|(sportsTeamPlayers ?TEAM $HumanAdult#2)
+What team does $FamousHuman#3 play for ?|(sportsTeamPlayers ?TEAM $FamousHuman#3)
+Who does $FamousHuman#2 play for ?|(sportsTeamPlayers ?TEAM $FamousHuman#2)
+Whom does $FamousHuman#2 play for ?|(sportsTeamPlayers ?TEAM $FamousHuman#2)
+Who plays for $ProfessionalSportsTeam#3 ?|(sportsTeamPlayers $ProfessionalSportsTeam#3  ?PLAYER)
+//Headquarters and Offices
+Where is the headquarters of $Organization#5 ?|(and (isa ?PLACE City)(hasHeadquartersInRegion $Organization#5 ?PLACE))
+Where are the headquarters of $Organization#5 ?|(and (isa ?PLACE City)(hasHeadquartersInRegion $Organization#5 ?PLACE))
+Where does $LegalCorporation#2 have offices ?|(orgPresentInCity $LegalCorporation#2 ?PLACE)
+
+//AI Test questions
+Can $SolidTangibleThing#1 fly ?|(sentenceTruth   (typeBehaviorCapable-PerformedBy  $SolidTangibleThing#1 Locomotion-Air) ?T)
+Can $TerrestrialOrganism#1 fly ?|(sentenceTruth   (typeBehaviorCapable-PerformedBy  $TerrestrialOrganism#1 Locomotion-Air) ?T)
+Can a $Bird#2 fly ?|(sentenceTruth   (typeBehaviorCapable-PerformedBy  $Bird#2 Locomotion-Air) ?T)
+
+//Geograpical
+Where is $City#2 ?| (and ( or (isa  ?WHERE Country) (isa  ?WHERE State-Geopolitical)) (objectFoundInLocation $City#2 ?WHERE))
+Where is $USCity#2 ?| (and (isa  ?WHERE State-Geopolitical) (objectFoundInLocation $USCity#2 ?WHERE))
+//Where is $Individual#2 ?|(and (or (isa ?WHERE City)(isa ?WHERE Country) (isa  ?WHERE State-Geopolitical))  (objectFoundInLocation $Individual#2 ?WHERE))
+Where is $Country#2 ?	(and (isa ?WHERE LandMass) (objectFoundInLocation $Country#2 ?WHERE))
+Where is $IndependentCountry#2 ?	(and (isa ?WHERE LandMass) (objectFoundInLocation $IndependentCountry#2 ?WHERE))
+Where is $CelestialBody#2 ?|(objectFoundInLocation $CelestialBody#2 ?WHERE)
+
+
+//Media
+Who plays in $PopularMusicBand#3 ?|(hasMembers $PopularMusicBand#3 ?WHO) 
+Who is in $PopularMusicBand#3 ?|(hasMembers $PopularMusicBand#3 ?WHO) 
+Who was in $PopularMusicBand#3 ?|(hasMembers $PopularMusicBand#3 ?WHO) 
+What kind of music does $PopularMusicBand#5 play ?|(styleOfArtist $PopularMusicBand#5 ?STYLE)
+What style of music does $PopularMusicBand#5 play ?|(styleOfArtist $PopularMusicBand#5 ?STYLE)
+What does $PopularMusicBand#2 play ?|(styleOfArtist $PopularMusicBand#2 ?STYLE)
+What band is $PopularMusicStar#3 in ?|(hasMembers ?BAND $PopularMusicStar#3) 
+What band was $PopularMusicStar#3 in ?|(hasMembers ?BAND $PopularMusicStar#3) 
+What band does $PopularMusicStar#3 play in ?|(hasMembers ?BAND $PopularMusicStar#3) 
+What band did $PopularMusicStar#3 play in ?|(hasMembers ?BAND $PopularMusicStar#3) 
+
+What kind of music does $MusicalPerformer#5 play ?|(styleOfArtist $MusicalPerformer#5 ?STYLE)
+
+
+//Science
+
+What is the molecular mass of $InanimateObject#6 ?|(#$molecularWeight $InanimateObject#6 ?WHAT)
+What is the molecular weight of $InanimateObject#6 ?|(#$molecularWeight $InanimateObject#6 ?WHAT)
+What is the atomic number of $InanimateObject#5 ?|(#$atomicNumber $InanimateObject#5 ?WHAT)
+What is the atomic weight of $InanimateObject#6 ?|(#$atomicWeight $InanimateObject#6 ?WHAT)
+What is the atomic mass of $InanimateObject#6 ?|(#$atomicWeight $InanimateObject#6 ?WHAT)
+
+What is the atomic number of $NonMetal#5 ?|(#$atomicNumber $NonMetal#5 ?WHAT)
+What is the atomic weight of $NonMetal#6 ?|(#$atomicWeight $NonMetal#6 ?WHAT)
+What is the atomic mass of $NonMetal#6 ?|(#$atomicWeight $NonMetal#6 ?WHAT)
+What is the atomic number of $UnalloyedMetal#5 ?|(#$atomicNumber $UnalloyedMetal#5 ?WHAT)
+What is the atomic weight of $UnalloyedMetal#6 ?|(#$atomicWeight $UnalloyedMetal#6 ?WHAT)
+What is the atomic mass of $UnalloyedMetal#6 ?|(#$atomicWeight $UnalloyedMetal#6 ?WHAT)
+
+What are the steps in $CellDivision#5 ?|(properSubEventTypes $CellDivision#5 ?STAGE) 
+What are the steps in the $BiologicalProcess-CellularLevel#5 ?|(properSubEventTypes  $BiologicalProcess-CellularLevel#5 ?STAGE) 
+What are the steps in $BiologicalProcess-CellularLevel#4 ?|(properSubEventTypes  $BiologicalProcess-CellularLevel#4 ?STAGE) 
+What are the stages in $CellDivision#5 ?|(properSubEventTypes $CellDivision#5 ?STAGE) 
+What are the stages in the $BiologicalProcess-CellularLevel#5 ?|(properSubEventTypes  $BiologicalProcess-CellularLevel#5 ?STAGE) 
+What are the stages in $BiologicalProcess-CellularLevel#4 ?|(properSubEventTypes  $BiologicalProcess-CellularLevel#4 ?STAGE) 
+What are the phases in $CellDivision#5 ?|(properSubEventTypes $CellDivision#5 ?STAGE) 
+What are the phases in the $BiologicalProcess-CellularLevel#5 ?|(properSubEventTypes  $BiologicalProcess-CellularLevel#5 ?STAGE) 
+What are the phases in $BiologicalProcess-CellularLevel#4 ?|(properSubEventTypes  $BiologicalProcess-CellularLevel#4 ?STAGE) 
+What are the steps in $BiologicalGrowthEvent#4 ?|(properSubEventTypes  $BiologicalGrowthEvent#4 ?STAGE) 
+What are the stages in $BiologicalGrowthEvent#4 ?|(properSubEventTypes  $BiologicalGrowthEvent#4 ?STAGE) 
+What are the phases in $BiologicalGrowthEvent#4 ?|(properSubEventTypes  $BiologicalGrowthEvent#4 ?STAGE) 
+
+
+//Business
+Who has $PubliclyHeldCorporation#2 sued recently ?|(thereExists ?X (and  (isa ?X Lawsuit) (plaintiffs ?X $PubliclyHeldCorporation#2) (defendants ?X ?DEF)))
+Whom has $PubliclyHeldCorporation#2 sued recently ?|(thereExists ?X (and  (isa ?X Lawsuit) (plaintiffs ?X $PubliclyHeldCorporation#2) (defendants ?X ?DEF)))
+Who has $PubliclyHeldCorporation#2 sued ?|(thereExists ?X (and  (isa ?X Lawsuit) (plaintiffs ?X $PubliclyHeldCorporation#2) (defendants ?X ?DEF)))
+Whom has $PubliclyHeldCorporation#2 sued ?|(thereExists ?X (and  (isa ?X Lawsuit) (plaintiffs ?X $PubliclyHeldCorporation#2) (defendants ?X ?DEF)))
+Who has $PrivatelyHeldCorporation#2 sued recently ?|(thereExists ?X (and  (isa ?X Lawsuit) (plaintiffs ?X $PrivatelyHeldCorporation#2) (defendants ?X ?DEF)))
+Whom has $PrivatelyHeldCorporation#2 sued recently ?|(thereExists ?X (and  (isa ?X Lawsuit) (plaintiffs ?X $PrivatelyHeldCorporation#2) (defendants ?X ?DEF)))
+Who has $PrivatelyHeldCorporation#2 sued ?|(thereExists ?X (and  (isa ?X Lawsuit) (plaintiffs ?X $PrivatelyHeldCorporation#2) (defendants ?X ?DEF)))
+Whom has $PrivatelyHeldCorporation#2 sued ?|(thereExists ?X (and  (isa ?X Lawsuit) (plaintiffs ?X $PrivatelyHeldCorporation#2) (defendants ?X ?DEF)))
+
+Who is the CEO of $LegalCorporation#5 ?	(companyHasCEO $LegalCorporation#5 ?WHO)
+Who is CEO of $LegalCorporation#4 ?	(companyHasCEO $LegalCorporation#4 ?WHO)
+Who is the CFO of $LegalCorporation#5 ?	(companyHasCFO $LegalCorporation#5 ?WHO)
+Who is CFO of $LegalCorporation#4 ?	(companyHasCFO $LegalCorporation#4 ?WHO)
+Who is the COO of $LegalCorporation#5 ?	(companyHasCOO $LegalCorporation#5 ?WHO)
+Who is COO of $LegalCorporation#4 ?	(companyHasCOO $LegalCorporation#4 ?WHO)
+
+What does $LegalCorporation#2 manufacture ?	(makesProductType $LegalCorporation#2 ?PRODUCT)
+What does $LegalCorporation#2 make ?	(makesProductType $LegalCorporation#2 ?PRODUCT)
+What does $LegalCorporation#2 produce ?	(makesProductType $LegalCorporation#2 ?PRODUCT)
+
+
+Who is the CEO of $PubliclyHeldCorporation#5 ?	(companyHasCEO $PubliclyHeldCorporation#5 ?WHO)
+Who is CEO of $PubliclyHeldCorporation#4 ?	(companyHasCEO $PubliclyHeldCorporation#4 ?WHO)
+Who is the CFO of $PubliclyHeldCorporation#5 ?	(companyHasCFO $PubliclyHeldCorporation#5 ?WHO)
+Who is CFO of $PubliclyHeldCorporation#4 ?	(companyHasCFO $PubliclyHeldCorporation#4 ?WHO)
+Who is the COO of $PubliclyHeldCorporation#5 ?	(companyHasCOO $PubliclyHeldCorporation#5 ?WHO)
+Who is COO of $PubliclyHeldCorporation#4 ?	(companyHasCOO $PubliclyHeldCorporation#4 ?WHO)
+
+What does $PubliclyHeldCorporation#2 manufacture ?	(makesProductType $PubliclyHeldCorporation#2 ?PRODUCT)
+What does $PubliclyHeldCorporation#2 make ?	(makesProductType $PubliclyHeldCorporation#2 ?PRODUCT)
+What does $PubliclyHeldCorporation#2 produce ?	(makesProductType $PubliclyHeldCorporation#2 ?PRODUCT)
+
+
+//Business Edgar
+What are the reported assets for $PubliclyHeldCorporation#6 for the last four quarters ?|(edgarValueForPeriodEnding $PubliclyHeldCorporation#6 FiscalQuarter ?DATE EDGARConcept-Assets ?REPORTED_ASSETS)
+
+What are the reported assets for $PubliclyHeldCorporation#6 , Inc. for the last four quarters ?|(edgarValueForPeriodEnding $PubliclyHeldCorporation#6 FiscalQuarter ?DATE EDGARConcept-Assets ?REPORTED_ASSETS)
+
+What was the net income for $PubliclyHeldCorporation#5 for the last four quarters ?|(edgarValueForPeriodEnding $PubliclyHeldCorporation#5 FiscalQuarter ?DATE EDGARConcept-NetIncom ?NET_INCOME)
+What is the net income for $PubliclyHeldCorporation#5 for the last four quarters ?|(edgarValueForPeriodEnding $PubliclyHeldCorporation#5 FiscalQuarter ?DATE EDGARConcept-NetIncom ?NET_INCOME)
+What was the net income for $PubliclyHeldCorporation#5 , Inc. for the last four quarters ?|(edgarValueForPeriodEnding $PubliclyHeldCorporation#5 FiscalQuarter ?DATE EDGARConcept-NetIncom ?NET_INCOME)
+What is the net income for $PubliclyHeldCorporation#5 , Inc. for the last four quarters ?|(edgarValueForPeriodEnding $PubliclyHeldCorporation56 FiscalQuarter ?DATE EDGARConcept-NetIncom ?NET_INCOME)
+
+//DON'T USE THIS FILE ANY MORE
+//USE THE XML ONE IN THE PROJECT WITH THE APPROPRIATE TOOLS

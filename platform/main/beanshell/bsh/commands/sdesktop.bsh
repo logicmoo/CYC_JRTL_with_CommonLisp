@@ -167,8 +167,9 @@ sdesktop()
 	actNow(String c) {
 		if(c.startsWith("new")) {
 			if(c.contains("workspace")) makeWorkspace( ""+ super.windowCount++);
-			else if(c.contains("subl")) embedComponent(new com.cyc.tool.subl.ui.SubLReaderPanel(com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment.currentEnvironment()) , "SubLisp Console: "+ super.windowCount++);
 			else if(c.contains("lisp")) makeConsole( "Lisp Console: "+ super.windowCount++);
+			else if(c.contains("prolog")) makeConsole( "Prolog Console: "+ super.windowCount++);
+			else if(c.contains("subl")) embedComponent(new com.cyc.tool.subl.ui.SubLReaderPanel(com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment.currentEnvironment()) , "SubLisp Console: "+ super.windowCount++);
 			else if(c.contains("class browser")) classBrowser();
 		}
 		else if	( c.equals("save workspace") )
@@ -260,10 +261,11 @@ sdesktop()
 	//org.logicmoo.system.BeanShellCntrl.bp();
 
 	//if(org.logicmoo.system.BeanShellCntrl.needIOConsole) {
-	//org.logicmoo.system.BeanShellCntrl.needIOConsole = false;
-	makeConsole( "System IO: "+windowCount++	);
+	 //   org.logicmoo.system.BeanShellCntrl.needIOConsole = false;
+	//	makeConsole( "System IO: "+windowCount++	);
     //}
-	frame.setSize(800,600);
+
+	frame.setSize(1200,600);
 	frame.show();
 
 	Util.endSplashScreen();
@@ -272,7 +274,7 @@ sdesktop()
 	workSpace.frame.selected=true;
 
 	// start next terminal
-	// makeConsole( "Lisp Console: "+windowCount++	);
+	makeConsole( "Lisp Console: "+windowCount++	);
 
 	//if(!org.logicmoo.system.BeanShellCntrl.noInitCyc) actNow("new subl");
 

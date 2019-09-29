@@ -1,0 +1,199 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.cyc</groupId>
+  <artifactId>cyc-base</artifactId>
+  <packaging>jar</packaging>
+  <name>BaseAPI</name>
+  
+  <parent>
+    <groupId>com.cyc.library</groupId>
+    <artifactId>cyc-core-api</artifactId>
+    <version>1.0.0-Preview-SNAPSHOT</version>
+    <relativePath>../CycCoreAPI</relativePath>
+  </parent>
+  
+  <description>Base Java API for connecting to a Cyc server &amp; handling HL data.</description>
+  <organization>
+    <name>Cycorp, Inc</name>
+    <url>http://www.cyc.com</url>
+  </organization>
+  
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://cycorp.atlassian.net/</url>
+  </issueManagement>
+    
+  <build>
+    <plugins>
+      <!-- Uncomment this plugin to get copyright info in header -->
+      <!-- <plugin> -->
+      <!--   <groupId>org.codehaus.mojo</groupId> -->
+      <!--   <artifactId>license-maven-plugin</artifactId> -->
+      <!-- </plugin> -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>bundle-sources</id>
+            <phase>package</phase>
+            <goals>
+              <!- - produce source artifact for main project sources - ->
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      -->
+     
+      <plugin>
+        <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
+        <artifactId>serviceloader-maven-plugin</artifactId>
+        <version>1.0.2</version>
+        <configuration>
+          <services>
+            <param>com.cyc.base.CycAccessManager</param>
+          </services>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
+        <version>0.8.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>jaxb/cycML/*.xsd</include>
+              </schemaIncludes>
+              <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-cycML.episode</episodeFile>
+              <generatePackage>com.cyc.baseclient.xml.cycml</generatePackage>
+            </configuration>
+            <id>jaxb-generate-cycML</id>
+          </execution>
+        </executions>
+        <configuration>
+          <catalog>src/main/resources/jaxb/catalog.xml</catalog>
+          <catalogResolver>org.jvnet.jaxb2.maven2.resolver.tools.ClasspathCatalogResolver</catalogResolver>
+          <forceRegenerate>true</forceRegenerate>
+          <generateDirectory>${project.build.directory}/generated-sources/xjc</generateDirectory>
+          <verbose>true</verbose>
+        </configuration>
+      </plugin>
+    </plugins>
+    <!--
+    <testSourceDirectory>src/test/java</testSourceDirectory>
+    -->
+  </build>
+    
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <configuration>
+          <!-- See http://maven.apache.org/plugins/maven-javadoc-plugin/javadoc-mojo.html -->
+          <author>false</author>
+          <excludePackageNames>com.cyc.baseclient:org.opencyc.*</excludePackageNames>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <id>default</id>
+            <configuration>
+            </configuration>
+            <reports>
+              <report>javadoc</report>
+              <!--
+              <report>test-javadoc</report>
+              -->
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.7</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <!-- 
+              See https://maven.apache.org/plugins/maven-project-info-reports-plugin/ 
+              -->
+              <report>index</report>
+              <report>help</report>
+              <report>plugin-management</report>
+              <report>distribution-management</report>
+              <report>dependency-info</report>
+              <!--
+              <report>scm</report>
+              -->
+              <report>mailing-list</report>
+              <report>issue-tracking</report>
+              <!--
+              <report>cim</report>
+              -->
+              <report>plugins</report>
+              <report>license</report>
+              <!--
+              <report>project-team</report>
+              -->
+              <report>summary</report>
+              <report>dependencies</report>
+              <report>dependency-convergence</report>
+              <report>dependency-management</report>
+              <report>modules</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+  
+  <dependencies>
+    <dependency>
+      <groupId>axis</groupId>
+      <artifactId>axis</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xerces</artifactId>
+      <version>2.4.0</version>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.10.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.2.6</version>
+    </dependency>
+  </dependencies>
+  
+</project>

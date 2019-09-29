@@ -30,13 +30,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
  *
  */
 public class IOSecurityManager extends SecurityManager {
-
+	static public boolean disable = true;
 	static private boolean allowCompiler = true;
 	static private String mayRead = null;
-	final static public WorkQueue workQueue = WorkQueue.getWorkerQueue("IOSecurityManager");
+	final static private WorkQueue workQueue = WorkQueue.getWorkerQueue("IOSecurityManager");
 	private static final Class<?>[] PARAMS = new Class[] { String.class, String.class };
-
-	//private static final IOSecurityManager delegated = new IOSecurityManager(true);
 
 	/**
 	 * @param f
@@ -72,10 +70,6 @@ public class IOSecurityManager extends SecurityManager {
 		return p;
 	}
 
-	static public void execute(Runnable r) {
-		IOSecurityManager.workQueue.execute(r);
-	}
-
 	// calls check read
 	private static boolean exists(File f) {
 		String wasMayRead = IOSecurityManager.mayRead;
@@ -88,6 +82,8 @@ public class IOSecurityManager extends SecurityManager {
 	}
 
 	public static void install() {
+		if (disable)
+			return;
 		final SecurityManager securityManager = System.getSecurityManager();
 		if (securityManager instanceof IOSecurityManager)
 			return;
@@ -120,13 +116,9 @@ public class IOSecurityManager extends SecurityManager {
 	//	}
 
 	private final List<APermission> revokedPermissions;
-
 	private java.security.Permissions granted;
-
 	private SecurityManager origSm;
-
 	private boolean active;
-
 	private final boolean delegateToOldSM;
 
 	private Lookup LKP;
@@ -318,6 +310,7 @@ public class IOSecurityManager extends SecurityManager {
 			return;
 
 		super.checkWrite(filename);
+
 		super.checkRead(filename);
 		if (this.isOkToWrite(filename))
 			return;
@@ -1061,7 +1054,7 @@ public class IOSecurityManager extends SecurityManager {
 			Class<? extends java.security.Permission> clazz = Class.forName(permission.getClassName()).asSubclass(java.security.Permission.class);
 			String name = permission.getName();
 			String actions = permission.getActions();
-			Constructor<? extends java.security.Permission> ctr = clazz.getConstructor(IOSecurityManager.PARAMS);
+			Constructor<? extends java.security.Permission> ctr = clazz.getConstructor(PARAMS);
 			return (java.security.Permission) ctr.newInstance(name, actions);
 		} catch (Exception var6) {
 			return new UnresolvedPermission((String) permission.getClassName(), permission.getName(), permission.getActions(), (java.security.cert.Certificate[]) null);
@@ -1508,5 +1501,4 @@ public class IOSecurityManager extends SecurityManager {
 			return ("Permission: " + this.className + " (\"" + this.name + "\", \"" + this.actions + "\")");
 		}
 	}
-
 }

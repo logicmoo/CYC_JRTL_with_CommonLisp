@@ -1,0 +1,23 @@
+#* General Java-related macros. 
+   This file is loaded by com.cyc.library.mapi.templates.JavaTemplate.
+*#
+
+
+##  method_arguments_string  ---------------------------------------------
+
+#macro( mapi_method_arguments_string $method )
+#set( $argString = "Context ctx" )
+#foreach( $arg in $method.Arguments )
+  #set( $argString = $argString + ", " + $arg.Type + " " + $arg.Name)
+#end
+$argString#end
+
+
+##  method_signature  ---------------------------------------------
+
+#macro( mapi_method_signature $method )
+#set( $returnType = "#method_return_type( $method )" )
+#set( $argString = "#mapi_method_arguments_string( $method )" )
+#set( $throws = "#method_throws_string( $method )" )
+$method.BelongsToClass $method.Visibility $returnType $method.getName()($argString) $throws#end
+

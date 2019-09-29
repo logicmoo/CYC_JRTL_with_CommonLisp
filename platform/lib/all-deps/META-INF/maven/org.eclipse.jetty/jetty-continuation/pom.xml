@@ -2,12 +2,13 @@
   <parent>
     <groupId>org.eclipse.jetty</groupId>
     <artifactId>jetty-project</artifactId>
-    <version>8.0.4.v20111024</version>
+    <version>8.2.0.v20160908</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jetty-continuation</artifactId>
   <name>Jetty :: Continuation</name>
   <description>Asynchronous API</description>
+  <url>http://www.eclipse.org/jetty</url>
   <properties>
     <bundle-symbolic-name>${project.groupId}.continuation</bundle-symbolic-name>
   </properties>
@@ -24,7 +25,7 @@
             </goals>
             <configuration>
               <instructions>
-                <Import-Package>javax.servlet.*;version="[2.5,3.1)",org.mortbay.log.*;version="[6.1,7)";resolution:=optional,org.mortbay.util.ajax.*;version="[6.1,7)";resolution:=optional,*</Import-Package>
+                <Import-Package>javax.servlet.*;version="2.6.0",org.mortbay.log.*;version="[6.1,7)";resolution:=optional,org.mortbay.util.ajax.*;version="[6.1,7)";resolution:=optional,*</Import-Package>
               </instructions>
             </configuration>
            </execution>
@@ -64,11 +65,11 @@
   </build>
   <dependencies>
     <dependency>
-     <groupId>${servlet.spec.groupId}</groupId>
-     <artifactId>${servlet.spec.artifactId}</artifactId>
-     <version>${servlet.spec.version}</version>
-     <scope>provided</scope>
-    </dependency>
+      <groupId>org.eclipse.jetty.orbit</groupId> 
+      <artifactId>javax.servlet</artifactId>
+      <version>3.0.0.v201112011016</version>
+      <scope>provided</scope>
+    </dependency> 
     <dependency>
       <groupId>org.mortbay.jetty</groupId> 
       <artifactId>jetty-util</artifactId>

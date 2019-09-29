@@ -2,12 +2,13 @@
   <parent>
     <groupId>org.eclipse.jetty</groupId>
     <artifactId>jetty-project</artifactId>
-    <version>8.0.4.v20111024</version>
+    <version>8.2.0.v20160908</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jetty-webapp</artifactId>
   <name>Jetty :: Webapp Application Support</name>
   <description>Jetty web application support</description>
+  <url>http://www.eclipse.org/jetty</url>
   <properties>
     <bundle-symbolic-name>${project.groupId}.webapp</bundle-symbolic-name>
   </properties>
@@ -52,6 +53,11 @@
             <goals>
               <goal>manifest</goal>
             </goals>
+            <configuration>
+              <instructions>
+                <Import-Package>javax.servlet.*;version="2.6.0",*</Import-Package>
+              </instructions>
+            </configuration>
           </execution>
         </executions>
       </plugin>

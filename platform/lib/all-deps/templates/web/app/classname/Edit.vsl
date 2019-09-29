@@ -1,0 +1,61 @@
+Ext.define('${app_name}.view.${class}.Edit', {
+  extend: 'Ext.window.Window',
+  alias : 'widget.${class}edit',
+  
+  title : 'Edit ${class}',
+  layout: 'fit',
+  autoShow: true,
+  
+  initComponent: function() {
+    this.items = [
+      {
+        xtype: 'form',
+        items: [
+          {
+            xtype: 'displayfield',
+            fieldLabel: '${class}',
+            name : 'displayName',
+          },
+#foreach($field in ${model_fields})
+          {
+#if( ${field.DataType} == "date" )
+            xtype: 'datefield',
+#else
+            xtype: 'textfield',
+#end
+            fieldLabel: '${field.Predicate}',
+            name : '${field.Predicate}'
+          }#if( $foreach.hasNext ),
+#end
+#end
+#*
+          {
+            xtype: 'textfield',
+            name : 'name',
+            fieldLabel: 'Name'
+          },
+          {
+            xtype: 'textfield',
+            name : 'wellObservedToBeInProductionOnDate',
+            fieldLabel: 'Observed to be in production on date'
+          }
+*#
+        ]
+      }
+    ];
+    
+    this.buttons = [
+      {
+        text:   'Save',
+        action: 'save'
+      },
+      {
+        text:  'Cancel',
+        scope: this,
+        handler: this.close
+      }
+    ];
+    
+    this.callParent(arguments);
+  }
+});

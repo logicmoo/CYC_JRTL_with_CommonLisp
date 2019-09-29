@@ -1,0 +1,27 @@
+Ext.application({
+  name: '${app_name}',
+  appFolder: '${app_folder}',
+  
+  controllers: [
+#foreach($summary in $class_summaries)
+    '${summary.ClassesName}'#if( $foreach.hasNext ),
+#end
+#end
+  ],
+  
+  launch: function() {
+    Ext.create('Ext.container.Viewport', {
+      layout: 'fit',
+      items: [
+#foreach($summary in $class_summaries)
+        {
+          xtype: '${summary.ClassName}list',
+          title: '${summary.ClassesName}',
+          html : 'List of ${summary.ClassesName.toLowerCase()} here'
+        }#if( $foreach.hasNext ),
+#end
+#end
+      ]
+    });
+  }
+});

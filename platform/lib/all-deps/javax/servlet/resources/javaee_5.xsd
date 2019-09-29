@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <xsd:schema
      targetNamespace="http://java.sun.com/xml/ns/javaee"
      xmlns:javaee="http://java.sun.com/xml/ns/javaee"
@@ -9,7 +8,7 @@
      version="5">
   <xsd:annotation>
     <xsd:documentation>
-      @(#)javaee_5.xsds	1.65 06/02/17
+      @(#)javaee_5.xsds	1.63 06/02/07
     </xsd:documentation>
   </xsd:annotation>
 
@@ -1245,8 +1244,8 @@ Deployment File may indicate one of the following:
 		  - an optional persistence unit name.  If not specified,
                     the default persistence unit is assumed.
 		  - an optional specification as to whether
-		    the persistence context type is Transaction or
-		    Extended.  If not specified, Transaction is assumed.
+		    the persistence context is Transactional or
+		    Extended.  If not specificed, Transactional is assumed.
                   - an optional list of persistence properties
 		  - optional injection targets
 
@@ -1351,14 +1350,14 @@ Deployment File may indicate one of the following:
 
 	The value of the persistence-context-type element must be
 	one of the following:
-	    Transaction
+	    Transactional
             Extended
 
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
       <xsd:restriction base="javaee:string">
-	<xsd:enumeration value="Transaction"/>
+	<xsd:enumeration value="Transactional"/>
 	<xsd:enumeration value="Extended"/>
       </xsd:restriction>
     </xsd:simpleContent>

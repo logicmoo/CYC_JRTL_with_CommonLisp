@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="com.cyc_ScgRepositoryData_jar_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <!-- queries -->
+    <mapping-file>META-INF/jpql/template.xml</mapping-file>
+    <mapping-file>META-INF/jpql/nlpattern.xml</mapping-file>
+    <mapping-file>META-INF/jpql/expansion.xml</mapping-file>
+    <mapping-file>META-INF/jpql/lexeme.xml</mapping-file>
+    <mapping-file>META-INF/jpql/typedVariable.xml</mapping-file>
+    <mapping-file>META-INF/jpql/lexicalPattern.xml</mapping-file>
+    <mapping-file>META-INF/jpql/skeleton.xml</mapping-file>
+    <mapping-file>META-INF/jpql/interpretationJudgment.xml</mapping-file>
+    <mapping-file>META-INF/jpql/tag.xml</mapping-file>
+    <mapping-file>META-INF/jpql/systemInfo.xml</mapping-file>
+    <!-- entities -->
+    <class>com.cyc.library.scgrepositorydata.SkeletonPattern</class>
+    <class>com.cyc.library.scgrepositorydata.Tag</class>
+    <class>com.cyc.library.scgrepositorydata.ExpansionPattern</class>
+    <class>com.cyc.library.scgrepositorydata.TemplateExample</class>
+    <class>com.cyc.library.scgrepositorydata.AnaphoricReference</class>
+    <class>com.cyc.library.scgrepositorydata.LexicalPattern</class>
+    <class>com.cyc.library.scgrepositorydata.TypedVariable</class>
+    <class>com.cyc.library.scgrepositorydata.Lexeme</class>
+    <class>com.cyc.library.scgrepositorydata.Template</class>
+    <class>com.cyc.library.scgrepositorydata.Nlpattern</class>
+    <class>com.cyc.library.scgrepositorydata.Comment</class>
+    <class>com.cyc.library.scgrepositorydata.TemplateUser</class>
+    <class>com.cyc.library.scgrepositorydata.SystemInfo</class>
+    <class>com.cyc.library.scgrepositorydata.InterpretationJudgment</class>
+    <class>com.cyc.library.scgrepositorydata.MatchedString</class>
+    <class>com.cyc.library.scgrepositorydata.MatchedCycl</class>
+    <properties>  
+      <!-- Don't change the value of this in this file.  If you need to override the default, do it through a properties file.  See SCGRepositoryDataUtil for more details. -->
+<!--       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/scg-repo-v2"/> -->
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://scgrepo.cyc.local:1527/scg-repo-v2"/> 
+           <!--<property name="javax.persistence.jdbc.url" value="jdbc:derby://basilisk.cyc.com:1527/scg-repo-v2"/>  -->
+      <!-- drivers
+        <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+        <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+      -->
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+      <property name="javax.persistence.jdbc.user" value="APP"/>
+      <property name="javax.persistence.jdbc.password" value="APP"/>
+      <!-- SEE http://wiki.eclipse.org/EclipseLink/Examples/JPA/Logging -->
+      <!--  LOG LEVELS:
+      	OFF – disables logging.
+		You may want to set logging to OFF during production to avoid the overhead of logging.
+		SEVERE – logs exceptions indicating that EclipseLink cannot continue, as well as any exceptions generated during login. This includes a stack trace.
+		WARNING – logs exceptions that do not force EclipseLink to stop, including all exceptions not logged with severe level. This does not include a stack trace.
+		INFO – logs the login/logout per sever session, including the user name. After acquiring the session, detailed information is logged.
+		CONFIG – logs only login, JDBC connection, and database information. You may want to use the CONFIG log level at deployment time.
+		FINE – logs SQL.	You may want to use this log level during debugging and testing, but not at production time.
+		FINER – similar to WARNING. Includes stack trace. You may want to use this log level during debugging and testing, but not at production time.
+		FINEST – includes additional low level information. You may want to use this log level during debugging and testing, but not at production time.
+		ALL – logs at the same level as FINEST.
+	  -->
+      <property name="eclipselink.logging.level" value="CONFIG"/>
+      <property name="eclipselink.logging.level.sql" value="CONFIG"/>
+      <property name="eclipselink.logging.parameters" value="true"/>
+      <property name="eclipselink.logging.timestamp" value="true"/>
+      <property name="eclipselink.logging.session" value="false"/>
+      <property name="eclipselink.logging.thread" value="false"/>
+      <!--
+      <property name="eclipselink.logging.file" value="derby.query.log"/>
+      <property name="eclipselink.jdbc.native-sql" value="true"/>
+      <property name="eclipselink.jdbc.cache-statements" value="true"/>
+      <property name="eclipselink.jdbc.cache-statements.size" value="200"/>
+      <property name="eclipselink.deploy-on-startup" value="true"/>
+      -->
+      <!-- 
+      	Profiling:
+      	SEE http://wiki.eclipse.org/Optimizing_the_EclipseLink_Application_(ELUG)#How_to_Configure_the_EclipseLink_Performance_Profiler
+	      <property name="eclipselink.profiler" value="PerformanceMonitor"/>
+	      <property name="eclipselink.profiler" value="PerformanceProfiler"/>
+              <property name="eclipselink.profiler" value="QueryMonitor"/>
+        <property name="eclipselink.profiler" value="PerformanceMonitor"/>
+ -->
+    </properties>
+  </persistence-unit>
+</persistence>

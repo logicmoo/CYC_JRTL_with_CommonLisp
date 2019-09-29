@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ebmtTemplates
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://ws.opencyc.org/xsd/EBMT http://ws.opencyc.org/xsd/EBMT.xml"
+  xmlns="http://ws.opencyc.org/xsd/EBMT">
+  <template>
+    <examples>
+      <example>Where was Barack Obama born?</example>
+    </examples>
+    <nlPattern class="4100">Where was $Person#2 born ?</nlPattern>
+    <cyclPattern>(#$birthPlace $Person#2 ?WHERE)</cyclPattern>
+    <microTheory>#$CurrentWorldDataCollectorMt-NonHomocentric</microTheory>
+    <inferenceMode type=":MINIMAL"/>
+  </template>
+  <template>
+    <examples>
+      <example>Barack Obama was born in 1961</example>
+    </examples>
+    <nlPattern class="110900">$Person#0 was born in $NonNegativeInteger#4</nlPattern>
+    <cyclPattern>(#$birthDate $Person#0 (#$YearFn $NonNegativeInteger#4))</cyclPattern>
+    <type>#$CycLSentence-Assertible</type>
+    <microTheory>#$CurrentWorldDataCollectorMt-NonHomocentric</microTheory>
+    <inferenceMode type=":MINIMAL"/>
+  </template>
+  <template>
+    <examples>
+      <example>Barack Obama born August 4, 1961</example>
+      <example>Barack Obama born on August 4, 1961</example>
+    </examples>
+    <nlPattern class="110900">$Person#0 was born [on|{}] $Date#12</nlPattern>
+    <cyclPattern>(#$birthDate $Person#0 $Date#12)</cyclPattern>
+    <type>#$CycLSentence-Assertible</type>
+    <microTheory>#$CurrentWorldDataCollectorMt-NonHomocentric</microTheory>
+    <inferenceMode type=":MINIMAL"/>
+  </template>
+  <template>
+    <examples>
+      <example>broken radio</example>
+    </examples>
+    <nlPattern class="190023">[broken|busted|malfunctioning] $Artifact#1</nlPattern>
+    <cyclPattern>
+      (#$equalSymbols ?DEV  (#$CollectionIntersection2Fn #$NonFunctionalObject $Artifact#1))
+    </cyclPattern>
+    <type>$Artifact#1</type>
+    <variable>?DEV</variable>
+  </template>
+  <template>
+    <nlPattern class="190021">$ManufacturingCompany#0 ['s|{}] $Artifact#1</nlPattern>
+    <cyclPattern>
+      (#$equalSymbols ?DEV  (#$SubcollectionOfWithRelationToFn $Artifact#1 #$madeBy $ManufacturingCompany#0))
+    </cyclPattern>
+    <type>$Artifact#1</type>
+    <variable>?DEV</variable>
+  </template>
+  <template>
+    <examples>
+      <example>router from Dell, Inc.</example>
+      <example>network router from Dell</example>
+    </examples>
+    <nlPattern class="190021">$Artifact#0 from $ManufacturingCompany#1</nlPattern>
+    <cyclPattern>
+      (#$equalSymbols ?DEV  (#$SubcollectionOfWithRelationToFn $Artifact#0 #$madeBy $ManufacturingCompany#1))
+    </cyclPattern>
+    <type>$Artifact#0</type>
+    <variable>?DEV</variable>
+  </template>
+</ebmtTemplates>

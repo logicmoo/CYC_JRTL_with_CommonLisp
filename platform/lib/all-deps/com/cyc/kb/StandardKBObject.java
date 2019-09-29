@@ -32,7 +32,7 @@ abstract class StandardKBObject extends KBObject {
       if (!isValidCore(core)) {
         String msg = "The term \"" + core.toString() + "\" is not a " + getTypeString() + ".";
         log.fine(msg);
-        throw new KBTypeException(msg);
+        throw new KBApiException(msg);
       }
     } catch (Exception ex) {
       throw new KBApiException(ex);
@@ -123,8 +123,9 @@ abstract class StandardKBObject extends KBObject {
                   throw ex;
                 }
               }
-              String factString = "(#$isa " + tempCore.stringApiValue() + " " + getTypeString() + ")";
-              Assertion.assertSentence(factString, "#$UniversalVocabularyMt");
+              String factString = "(#$isa " + tempCore.stringApiValue() + " " + getTypeString()
+                      + ")";
+              assertSentence(factString, "#$UniversalVocabularyMt");
             }
           }
         }
@@ -135,7 +136,7 @@ abstract class StandardKBObject extends KBObject {
 
         KBStatus status = KBObjectFactory.getStatus(name, this.getClass());
         if (status == KBStatus.EXISTS_WITH_COMPATIBLE_TYPE && lookup == LookupType.FIND_OR_CREATE) {
-          Assertion.assertSentence("(#$isa " + tempCore.cyclify() + " " + getTypeString() + ")", "#$UniversalVocabularyMt"); //@todo where should this really be asserted???
+          assertSentence("(#$isa " + tempCore.cyclify() + " " + getTypeString() + ")", "#$UniversalVocabularyMt"); //@todo where should this really be asserted???
           core = tempCore;
         } else if (status == KBStatus.EXISTS_WITH_COMPATIBLE_TYPE) {
           throw new KBTypeException(tempCore + " is not a " + this.getClass());
@@ -171,14 +172,15 @@ abstract class StandardKBObject extends KBObject {
     return tempCore;
   }
 
-  final void setCore(CycObject cycObj) throws KBTypeException, KBApiException {
+  @Override
+  void setCore(CycObject cycObj) throws KBApiException {
     try {
       if (isValidCore(cycObj)) {
         core = cycObj;
       } else {
         String msg = "The term \"" + cycObj.toString() + "\" is not a " + getTypeString() + ".";
         log.fine(msg);
-        throw new KBTypeException(msg);
+        throw new KBApiException(msg);
       }
     } catch (CycApiException ex) {
       throw new KBApiException(ex);

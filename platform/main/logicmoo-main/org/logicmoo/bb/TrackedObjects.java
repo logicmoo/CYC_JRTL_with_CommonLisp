@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.Startup;
+import org.logicmoo.system.WorkQueue;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
@@ -47,6 +49,33 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
  * @author Henrik Kniberg
  */
 public class TrackedObjects implements VetoableChangeListener, PropertyChangeListener, Serializable {
+
+	static WorkQueue listenersQueue = null;
+	private static Thread notificationThread;
+
+	// Background CYC Inits
+	static public void executeNotify(Runnable r) {
+		if (listenersQueue == null) {
+			listenersQueue = WorkQueue.getWorkerQueue("notification");
+			executeNotify(() -> {
+				final Thread currentThread = Thread.currentThread();
+				currentThread.setName("notificationThread");
+				notificationThread = currentThread;
+			});
+		} else {
+			final Thread currentThread = Thread.currentThread();
+			if (currentThread == notificationThread) {
+				try {
+					r.run();
+				} catch (Throwable e) {
+					Startup.uncaughtException(e);
+				}
+				return;
+			}
+		}
+		listenersQueue.execute(r);
+	}
+
 	// ==== Static variables ===================
 	// private static Category cat = Category.getInstance(BeanBowl.class);
 
@@ -144,7 +173,7 @@ public class TrackedObjects implements VetoableChangeListener, PropertyChangeLis
 	 * @param obj
 	 */
 	public void notifyAdd(final String named, final Object obj) {
-		invokeAndWait(new Runnable() {
+		executeNotify(new Runnable() {
 			@Override
 			public void run() {
 
@@ -153,6 +182,11 @@ public class TrackedObjects implements VetoableChangeListener, PropertyChangeLis
 					// @temp
 					((BeansContextListener) it.next()).beanAdded(named, obj);
 				}
+			}
+
+			@Override
+			public String toString() {
+				return "add:" + named + " " + (obj == null ? "<NULL>" : (obj.getClass()));
 			}
 		});
 	}
@@ -169,7 +203,7 @@ public class TrackedObjects implements VetoableChangeListener, PropertyChangeLis
 	}
 
 	public void notifyRemoval(final String named, final Object obj) {
-		invokeAndWait(new Runnable() {
+		executeNotify(new Runnable() {
 			@Override
 			public void run() {
 
@@ -179,9 +213,13 @@ public class TrackedObjects implements VetoableChangeListener, PropertyChangeLis
 					((BeansContextListener) it.next()).beanRemoved(named, obj);
 				}
 			}
+
+			@Override
+			public String toString() {
+				return "rem:" + named + " " + (obj == null ? "<NULL>" : (obj.getClass()));
+			}
 		});
 	}
-
 
 	/**
 	 * Removes the given bean, if it is inside this bowl. If not, nothing
@@ -217,14 +255,12 @@ public class TrackedObjects implements VetoableChangeListener, PropertyChangeLis
 					// catch, so I don't need to do setSelectedBean(null)
 					wrapper.setSelected(false);
 				} catch (PropertyVetoException err) {
-					Errors.error(
-							"In BeanBowl.removeBean(...) I was unable to deselect the removed bean. I'll ignore the problem, i.e. leave it selected and remove it anyway.",
-							err);
+					Errors.error("In BeanBowl.removeBean(...) I was unable to deselect the removed bean. I'll ignore the problem, i.e. leave it selected and remove it anyway.", err);
 				}
 			}
 
 			// notify bowlListeners
-			notifyRemoval(name,obj);
+			notifyRemoval(name, obj);
 			return true;
 		} else {
 			return false;
@@ -370,18 +406,17 @@ public class TrackedObjects implements VetoableChangeListener, PropertyChangeLis
 
 			bowlListeners.add(l);
 		}
-		invokeAndWait(new Runnable() {
+		executeNotify(new Runnable() {
 			@Override
 			public void run() {
 				sendAllToListener(l);
 			}
+
+			@Override
+			public String toString() {
+				return "sendAllToListener" + l;
+			}
 		});
-	}
-
-	static void invokeAndWait(Runnable runnable) {
-		runnable.run();
-
-		//org.appdapter.gui.browse.Utility.invokeAndWait(runnable);
 	}
 
 	// notify bowlListener newcomer
@@ -445,17 +480,13 @@ public class TrackedObjects implements VetoableChangeListener, PropertyChangeLis
 					try {
 						setSelectedBean(object);
 					} catch (PropertyVetoException err) {
-						Errors.error(
-								"The BeanBowl was notified that a bean has been selected, and when trying to update the internal state a PropertyVetoException occurred",
-								err);
+						Errors.error("The BeanBowl was notified that a bean has been selected, and when trying to update the internal state a PropertyVetoException occurred", err);
 					}
 				} else if (newValue.equals(new Boolean(false))) {
 					try {
 						setSelectedBean(null);
 					} catch (PropertyVetoException err) {
-						Errors.error(
-								"The BeanBowl was notified that a bean has been deselected, and when trying to update the internal state a PropertyVetoException occurred",
-								err);
+						Errors.error("The BeanBowl was notified that a bean has been deselected, and when trying to update the internal state a PropertyVetoException occurred", err);
 					}
 				}
 			}

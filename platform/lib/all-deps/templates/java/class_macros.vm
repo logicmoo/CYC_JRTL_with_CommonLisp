@@ -1,0 +1,46 @@
+#* Java class-related macros. 
+   This file is loaded by com.cyc.library.mapi.templates.ClassTemplate.
+*#
+
+##  class_extends  ---------------------------------------------
+
+#macro( class_extends $superclass )
+#if( $superclass )extends $superclass#end
+#end
+
+
+##  class_implements  ---------------------------------------------
+
+#macro( class_implements $interfaces )
+#if( !$interfaces.isEmpty() )
+#set( $string = "implements " )
+#foreach( $interface in $interfaces )
+#set( $string = $string + $interface )
+#if( $foreach.hasNext )
+  #set( $string = $string + ", " )
+#end
+#end
+$string#end
+#end
+
+
+##  class_method  ---------------------------------------------
+
+#macro( class_method $method )
+#method_javadoc( $method )
+  #method_signature( $method ) {
+    // Some method
+  }
+#end
+
+
+##  class_methods  ---------------------------------------------
+
+#macro( class_methods $methods )
+#foreach( $method in $methods )
+#class_method( $method )
+#if( $foreach.hasNext )
+
+#end
+#end
+#end

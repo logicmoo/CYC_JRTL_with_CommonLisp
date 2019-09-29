@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : customization.xml
+    Created on : June 8, 2011, 6:20 PM
+    Author     : nwinant
+    Description: Customizes bindings in xjc-generated classes.
+                 Specifically:
+                 - Generated classes implement Serializable.
+-->
+
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
+	version="2.1">
+	<globalBindings>
+		<xjc:serializable uid="1" />
+	</globalBindings>
+</bindings>

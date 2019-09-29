@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.cyc.library</groupId>
+	<artifactId>opencycExtensions</artifactId>
+	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>com.cyc.parentPom</groupId>
+		<artifactId>parentPom</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../../com.cyc.parentPom</relativePath>
+	</parent>
+
+	<dependencies>
+		<!--dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency-->
+		<!--dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.0.1</version>
+		</dependency-->
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xerces</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.10.0</version>
+		</dependency>
+		<!--dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis</artifactId>
+
+		</dependency-->
+		<!--dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis-jaxrpc</artifactId>
+			<version>1.4</version>
+		</dependency-->
+
+		<dependency>
+			<groupId>vowlidator</groupId>
+			<artifactId>vowlidator</artifactId>
+			<version>0-unknown</version>
+		</dependency>
+		<dependency>
+			<groupId>com.cyc.library</groupId>
+			<artifactId>opencyc</artifactId>
+		</dependency>
+		<dependency>
+	  <groupId>com.sun.xml.bind</groupId>
+	  <artifactId>jaxb-impl</artifactId>
+	  <version>2.2.6</version>
+	 </dependency>
+
+	</dependencies>
+
+</project>

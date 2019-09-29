@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd ">
+
+	<named-query name="TypedVariable.find-all-by-User-and-Tags">
+		<query>
+			SELECT DISTINCT v.text
+			FROM TypedVariable v 
+				JOIN v.nlpatternCollection n
+				JOIN n.tagsCollection g
+			WHERE 
+				((n.checkedOutByUserEmail = 'nobody') OR (NOT n.checkedOutByUserEmail = :userId))	
+				AND 
+				((n.underConstructionByUserEmail = 'nobody') OR (n.underConstructionByUserEmail = :userId))
+				AND
+				(g.label IN :tags)
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<!-- hint name="eclipselink.query-results-cache.expiry" value="120000" / -->
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+	</named-query>
+	
+	<named-query name="TypedVariable.find-all-by-User">
+		<query>
+			SELECT DISTINCT v.text
+			FROM TypedVariable v 
+				JOIN v.nlpatternCollection n
+			WHERE 
+				((n.checkedOutByUserEmail = 'nobody') OR (NOT n.checkedOutByUserEmail = :userId))	
+				AND 
+				((n.underConstructionByUserEmail = 'nobody') OR (n.underConstructionByUserEmail = :userId))
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<!--hint name="eclipselink.query-results-cache.expiry" value="120000" / -->
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+	</named-query>
+
+	<named-query name="TypedVariable.find-all-by-SkeletonTexts-and-User-and-Tags">
+		<query>
+                    SELECT v
+                    FROM TypedVariable v 
+                        JOIN v.nlpatternCollection n
+                        JOIN n.skeletonPatternCollection s
+                         JOIN n.tagsCollection g
+                    WHERE 
+                        s.text IN :texts
+                        AND
+                        ((n.checkedOutByUserEmail = 'nobody') OR (NOT n.checkedOutByUserEmail = :userId))	
+			AND 
+			((n.underConstructionByUserEmail = 'nobody') OR (n.underConstructionByUserEmail = :userId))
+                        AND
+			(g.label IN :tags)
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<!--hint name="eclipselink.query-results-cache.expiry" value="120000" /-->
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+
+	</named-query>
+
+        <!--named-query name="TypedVariable.find-all-by-SkeletonText-and-User-and-Tags">
+		<query>
+                    SELECT v
+                    FROM TypedVariable v 
+                        JOIN v.nlpatternCollection n
+                        JOIN n.skeletonPatternCollection s
+                         JOIN n.tagsCollection g
+                    WHERE 
+                        s.text = :text
+                        AND
+                        ((n.checkedOutByUserEmail = 'nobody') OR (NOT n.checkedOutByUserEmail = :userId))	
+			AND 
+			((n.underConstructionByUserEmail = 'nobody') OR (n.underConstructionByUserEmail = :userId))
+                        AND
+			(g.label IN :tags)
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<hint name="eclipselink.query-results-cache.expiry" value="120000" />
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+
+	</named-query-->
+
+        <named-query name="TypedVariable.find-all-by-SkeletonIds-and-User-and-Tags">
+		<query>
+                    SELECT v.text
+                    <!--SELECT DISTINCT v-->
+                    FROM TypedVariable v
+                        JOIN v.nlpatternCollection n
+                        JOIN n.skeletonPatternCollection s
+                        JOIN n.tagsCollection g
+                    WHERE 
+                        s.id IN :ids
+                        AND
+                        ((n.checkedOutByUserEmail = 'nobody') OR (NOT n.checkedOutByUserEmail = :userId))	
+				AND 
+				((n.underConstructionByUserEmail = 'nobody') OR (n.underConstructionByUserEmail = :userId))
+                        AND
+				(g.label IN :tags)
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<!--hint name="eclipselink.query-results-cache.expiry" value="120000" /-->
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+
+	</named-query>
+
+        <named-query name="TypedVariable.find-all-by-SkeletonId-and-User-and-Tags">
+		<query>
+                    SELECT v.text
+                    <!--SELECT DISTINCT v-->
+                    FROM TypedVariable v
+                        JOIN v.nlpatternCollection n
+                        JOIN n.skeletonPatternCollection s
+                        JOIN n.tagsCollection g
+                    WHERE 
+                        s.id = :id
+                        AND
+                        ((n.checkedOutByUserEmail = 'nobody') OR (NOT n.checkedOutByUserEmail = :userId))	
+				AND 
+				((n.underConstructionByUserEmail = 'nobody') OR (n.underConstructionByUserEmail = :userId))
+                        AND
+				(g.label IN :tags)
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<!--hint name="eclipselink.query-results-cache.expiry" value="120000" /-->
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+
+	</named-query>
+
+
+	<named-query name="TypedVariable.find-all-by-SkeletonText-and-User-and-Tags">
+		<query>
+			SELECT distinct v.text
+			FROM TypedVariable v  
+				JOIN v.nlpatternCollection n
+				JOIN n.skeletonPatternCollection s
+                                JOIN n.tagsCollection g
+			WHERE 
+				s.text = :text
+                                AND
+                                ((n.checkedOutByUserEmail = 'nobody') OR (NOT n.checkedOutByUserEmail = :userId))	
+                                AND	
+				((n.underConstructionByUserEmail = 'nobody') OR (n.underConstructionByUserEmail = :userId))
+                        AND
+                                (g.label IN :tags)  			
+		</query>
+		<hint name="eclipselink.query-results-cache" value="true" />
+		<!--hint name="eclipselink.query-results-cache.expiry" value="120000" /-->
+		<hint name="eclipselink.query-results-cache.size" value="5000" />
+	</named-query>
+
+</entity-mappings>

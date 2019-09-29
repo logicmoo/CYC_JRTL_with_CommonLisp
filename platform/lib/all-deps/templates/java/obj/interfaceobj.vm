@@ -1,0 +1,31 @@
+#java_headers()
+
+$visibility interface $name extends $iface_obj.ExtendsInterface
+
+#*
+#if(!$lists.isEmpty($iface_obj.ExtendsInterfaces))
+  $lists.get($iface_obj.ExtendsInterfaces, 0)
+#else
+  CycModelObject
+#end
+*#
+
+#*
+#foreach( $ext in $iface_obj.ExtendsInterfaces )
+    ,$ext
+#end
+*#
+
+{
+#*
+  public List<$name> allSibling${name}s(Context ctx) throws Exception;
+
+  public List<$name> allSibling${name}s() throws Exception;
+*#
+
+  // TODO: Not sure why this is not working. It just dumps ${instanceType} in source code
+  public $iface_obj.InstanceType getInstance();
+  // public KBIndividual getInstance();
+
+#mapi_interface_methods( $methods )
+}

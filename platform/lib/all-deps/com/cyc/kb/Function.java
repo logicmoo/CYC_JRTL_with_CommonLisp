@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Date;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.opencyc.api.CycAccess;
 
@@ -468,10 +467,10 @@ Since the comment already says it's a findOrCreate method, make it actually beha
       for (Object aArg : args) {
         if (aArg instanceof KBObject) {
           natArgs.add(((KBObject) aArg).getCore());
-          log.log(Level.FINE, "Arg: {0}", aArg.toString());
+          log.fine("Arg: " + aArg.toString());
         } else if (aArg instanceof String) {
           natArgs.add(aArg);
-          log.log(Level.FINE, "Arg: {0}", aArg.toString());
+          log.fine("Arg: " + aArg.toString());
         } else if (aArg instanceof Date) {
           DateConverter.getInstance();
           CycObject co = DateConverter.toCycDate((Date) aArg);

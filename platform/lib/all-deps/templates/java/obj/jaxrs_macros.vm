@@ -1,0 +1,20 @@
+#* JAX-RS class-related macros. 
+   This file is loaded by com.cyc.library.mapi.templates.ClassTemplate.
+*#
+
+
+##  jaxrs_method_request_type  ---------------------------------------------
+
+#macro( jaxrs_method_request_type $method )
+#if( $method.FType == "SET" )
+@POST
+#else
+@GET
+#end
+#end
+
+
+##  jaxrs_queryparam  ---------------------------------------------
+
+#macro( jaxrs_queryparam $arg )
+@QueryParam("${arg.Name}") $arg.Type $arg.Name#end

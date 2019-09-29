@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+Copyright (c) 2006 Erik Bengtson and others. All rights reserved. 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Contributors:
+2006 Andy Jefferson - added annotations, persistence props
+    ...
+-->
+<plugin id="org.datanucleus.jpa" name="DataNucleus JPA" provider-name="DataNucleus">
+    <extension-point id="annotations" name="Annotations" schema="schema/annotations.exsd"/>
+
+    <!-- PERSISTENCE PROPERTIES -->
+    <extension point="org.datanucleus.persistence_properties">
+        <persistence-property name="javax.persistence.provider"/>
+        <persistence-property name="javax.persistence.TransactionType"
+            internal-name="datanucleus.TransactionType"
+            validator="org.datanucleus.properties.CorePropertyValidator"/>
+        <persistence-property name="datanucleus.jpa.level" value="DataNucleus"
+            validator="org.datanucleus.jpa.JPAPropertyValidator"/>
+        <persistence-property name="javax.persistence.jdbc.driver"
+            internal-name="datanucleus.ConnectionDriverName"/>
+        <persistence-property name="javax.persistence.jdbc.url"
+            internal-name="datanucleus.ConnectionURL"/>
+        <persistence-property name="javax.persistence.jdbc.user"
+            internal-name="datanucleus.ConnectionUserName"/>
+        <persistence-property name="javax.persistence.jdbc.password"
+            internal-name="datanucleus.ConnectionPassword"/>
+        <persistence-property name="javax.persistence.query.timeout"
+            internal-name="datanucleus.query.timeout" value="0"
+            validator="org.datanucleus.properties.IntegerPropertyValidator"/>
+        <persistence-property name="datanucleus.metadata.allowLoadAtRuntime" value="false"
+            validator="org.datanucleus.properties.BooleanPropertyValidator"/>
+        <persistence-property name="datanucleus.jpa.addClassTransformer" value="true"
+            validator="org.datanucleus.properties.BooleanPropertyValidator"/>
+    </extension>
+
+    <!-- ANNOTATIONS -->
+    <extension point="org.datanucleus.annotations">
+        <annotations annotation-class="javax.persistence.Entity" reader="org.datanucleus.jpa.metadata.JPAAnnotationReader"/>
+        <annotations annotation-class="javax.persistence.MappedSuperclass" reader="org.datanucleus.jpa.metadata.JPAAnnotationReader"/>
+        <annotations annotation-class="javax.persistence.Embeddable" reader="org.datanucleus.jpa.metadata.JPAAnnotationReader"/>
+        <annotations annotation-class="org.datanucleus.jpa.annotations.PersistenceAware" reader="org.datanucleus.jpa.metadata.JPAAnnotationReader"/>
+    </extension>
+
+    <!-- CALLBACK HANDLER -->
+    <extension point="org.datanucleus.callbackhandler">
+        <callback-handler class-name="org.datanucleus.jpa.JPACallbackHandler" name="JPA"/>
+    </extension>
+
+    <!-- METADATA HANDLERS -->
+    <extension point="org.datanucleus.metadata_handler">
+        <handler class-name="org.datanucleus.jpa.metadata.JPAMetaDataHandler" name="JPA"
+            entity-resolver="org.datanucleus.metadata.xml.PluginEntityResolver"/>
+    </extension>
+    
+    <!-- METADATA MANAGER -->
+    <extension point="org.datanucleus.metadata_manager">
+       <metadata-manager class="org.datanucleus.jpa.metadata.JPAMetaDataManager" name="JPA"/>
+    </extension>
+
+    <!-- PERSISTENCE APIS -->
+    <extension point="org.datanucleus.api_adapter">
+        <api-adapter name="JPA" class-name="org.datanucleus.jpa.JPAAdapter"/>
+    </extension>
+    <extension point="org.datanucleus.metadata_entityresolver">
+        <entityresolver identity="http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
+             type="SYSTEM" url="/org/datanucleus/jpa/jpa_orm_1_0.xsd"/>
+        <entityresolver identity="http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
+             type="SYSTEM" url="/org/datanucleus/jpa/jpa_orm_2_0.xsd"/>
+        <entityresolver url="/org/datanucleus/jpa/jpa_orm_2_0.xsd"/>
+        <entityresolver url="/org/datanucleus/jpa/jpa_orm_1_0.xsd"/>
+    </extension>
+</plugin>
