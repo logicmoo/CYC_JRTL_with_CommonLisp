@@ -13,10 +13,9 @@ before_script:
   - sudo apt-get update -q
   - sudo apt-get install swi-prolog-nox
 
-language: java
+# language: java
 
 script:
-  - jdk_switcher use openjdk8
   - cd platform
   - ant
   - ant
