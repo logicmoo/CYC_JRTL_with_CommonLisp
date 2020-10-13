@@ -1,11 +1,11 @@
 addons:
   apt:
     packages:
-      - oracle-java8-installer
+      - openjdk-8-jre-headless
 
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 
 before_script:
@@ -16,7 +16,7 @@ before_script:
 language: java
 
 script:
-  - jdk_switcher use oraclejdk8
+  - jdk_switcher use openjdk8
   - cd platform
   - ant
   - ant
